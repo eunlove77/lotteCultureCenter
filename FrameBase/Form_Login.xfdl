@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Login" width="1920" height="720" titletext="New Form" border="1px solid" color="black" onload="Form_Login_onload">
+    <Layouts>
+      <Layout height="720" width="1920">
+        <Edit id="editId" taborder="0" left="975" top="253" width="190" height="42" maxlength="10"/>
+        <Static id="Static00" taborder="1" text="ID" left="835" top="244" width="120" height="60"/>
+        <Static id="Static01" taborder="2" text="PW" left="835" top="295" width="120" height="60"/>
+        <Edit id="editPw" taborder="3" left="975" top="305" width="190" height="42" password="true" maxlength="20" onkeydown="editPw_onkeydown"/>
+        <Button id="LoginBtn" taborder="4" text="로그인" left="835" top="370" width="330" height="50" onclick="LoginBtn_onclick"/>
+        <Static id="Error_msg" taborder="5" left="836" top="443" width="329" height="60" font="18px/normal &quot;Malgun Gothic&quot;" color="red"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.Form_Login_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	console.log(this.application.Loing_svc);
+	//this.fn_setSize(this.divLayer);
+};
+
+this.LoginBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+	var id = this.editId.value;
+	var pw = this.editPw.value;
+	
+	if(id == undefined){
+		this.alert("아이디를 입력해주세요.");
+		this.editId.setFocus();
+	}else if(pw == undefined){
+		this.alert("비밀번호를 입력해주세요.");
+		this.editPw.setFocus();
+	}else{	
+	
+		this.ds_login.setColumn(0, "id", id);
+		this.ds_login.setColumn(0, "pw", pw);
+	
+		var strSvcId    = "login";
+		var strSvcUrl   = this.application.Loing_svc + "::setLogin.do";
+		var inData      = "loginInfo=ds_login";
+		var outData     = "gdsLoginInfo=output1";
+		var strArg      = "";
+		var callBackFnc = "fnCallback";
+		var isAsync     = true;
+
+		this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+				strSvcUrl ,       // trabsaction을 요청할 주소
+				inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+				outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+				strArg,         // 입력값으로 보낼 arguments, a=b
+				callBackFnc,       // transaction의 결과를 받을 Function 이름
+				isAsync);         // 비동기통신 여부 [생략가능]
+	}
+};
+
+this.fn_logout = function(){
+	
+	var strSvcId    = "logout";
+	var strSvcUrl   = this.application.Loing_svc + "::setLogout.do";
+	var inData      = "";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+}
+
+
+//처리콜백 함수
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorMsg + "[Code : " + errorCode + "]");
+	//this.Error_msg.set_text(errorMsg + "[Code : " + errorCode + "]");
+	
+    return;
+  }
+
+	switch(svcID)
+	{
+		case "login":      
+			this.loginSuccess();	
+			this.gfn_codeList(this.application.Admin_svc);
+		break;
+		case "logout":			
+			this.application.gfn_initFrame();
+		break;
+	}
+};
+
+
+
+this.editPw_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+		this.LoginBtn.click();
+	}
+	
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.loginSuccess = function(){
+
+	
+	//framset 사이즈 변경
+	this.application.gfn_setFrameSize();
+	
+	this.application.gfn_menu(this.application.Menu_svc);
+	
+	this.fn_setAdminInfo();
+}
+
+this.fn_setAdminInfo = function(){
+	var loginInfoDs = this.application.gdsLoginInfo;
+	var branch = "";
+	var adminName = "";
+
+	branch = loginInfoDs.getColumn(0, "branch");
+	adminName = loginInfoDs.getColumn(0, "name");
+	
+	nexacro.setPrivateProfile("branch", branch);
+	nexacro.setPrivateProfile("name", adminName);
+	
+	this.application.TopFrame.form.txtBranch.set_text("[" + branch + "]");
+	this.application.TopFrame.form.txtName.set_text(adminName);
+}
+]]></Script>
+    <Objects>
+      <Dataset id="ds_login">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="pw" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

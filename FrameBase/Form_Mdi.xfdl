@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Mdi" width="1280" height="50" titletext="New Form" onload="Form_Mdi_onload" background="#f2f2f2" border="0px none">
+    <Layouts>
+      <Layout height="50" mobileorientation="landscape" width="1280">
+        <Tab id="tabMdi" taborder="0" tabindex="0" left="30" top="20" height="30" onchanged="tabMdi_onchanged" showtabbuttonicon="false" showextrabutton="true" onextrabuttonclick="tabMdi_onextrabuttonclick" canchange="tabMdi_canchange" ondrag="tabMdi_ondrag" ondrop="tabMdi_ondrop" cursor="default" onmousemove="tabMdi_onmousemove" width="1240" minwidth="" maxwidth="700" tabbuttonwidth="150">
+          <Tabpages>
+            <Tabpage id="Tabpage1" text="Tabpage1"/>
+          </Tabpages>
+        </Tab>
+        <Button id="btnCloseAll" taborder="1" left="1226" top="10" width="48" height="30" text="전체닫기" onclick="btnCloseAll_onclick"/>
+        <Button id="Button00" taborder="2" text="&lt;" left="0" top="0" width="20" height="49" onclick="Button00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.leftMenuShow = true;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.Form_Mdi_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	this.tabMdi.removeTabpage(0);
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_AddTabPage = function(pvWinId, pvMenuNm)
+{
+	this.tabMdi.insertTabpage(pvWinId, -1, "", pvMenuNm);
+};
+
+this.fn_DeleteTabpage = function(pvWinId)
+{
+	var nCnt = this.tabMdi.getTabpageCount();
+	for(var i=0; i<nCnt; i++)
+	{
+		if(this.tabMdi.tabpages[i].name == pvWinId)
+		{
+			this.tabMdi.removeTabpage(i); 
+			this.application.LeftFrame.form.fn_delOpenMenu(pvWinId);
+			return;
+		}
+	}
+};
+
+
+this.fn_ActiveTabPage = function(pvWinId)
+{
+	var nCnt = this.tabMdi.getTabpageCount();
+	if(nCnt > 0)
+	{
+		this.application.TopFrame.form.fn_closeMain();
+	}
+	
+	for(var i=0; i<nCnt; i++)
+	{	
+		if(this.tabMdi.tabpages[i].name == pvWinId)
+		{
+			this.tabMdi.set_tabindex(i);
+			
+			return;
+		}
+	}
+};
+
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+
+this.tabMdi_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
+{
+	var sWinId = obj.tabpages[e.postindex].name;
+	
+	this.application.WorkFrame[sWinId].form.setFocus();
+};
+
+this.tabMdi_onextrabuttonclick = function(obj:nexacro.Tab,e:nexacro.TabMouseEventInfo)
+{
+	var sWinId = obj.tabpages[e.index].name;
+	obj.removeTabpage(e.index);
+	
+	this.application.WorkFrame[sWinId].form.close();
+
+	this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
+};
+
+
+this.btnCloseAll_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var WorkFrame = this.application.WorkFrame.all;
+	for(var i=WorkFrame.length-1; i>=0; i--) 
+	{
+		WorkFrame[i].form.parent.param.TAB_CLOSE = true;		
+		WorkFrame[i].form.close();
+		this.tabMdi.removeTabpage(i);
+	}
+};
+
+this.tabMdi_canchange = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
+{
+	//console.log(obj);
+	//console.log(e);
+};
+
+this.tabMdi_ondrag = function(obj:nexacro.Tab,e:nexacro.DragEventInfo)
+{
+	obj.dragTabIndex = obj.tabindex;
+	obj.set_cursor("move");
+	return true;
+};
+
+this.tabMdi_ondrop = function(obj:nexacro.Tab,e:nexacro.DragEventInfo)
+{
+	var dragTabIndex = obj.dragTabIndex;
+	var dropTabIndex = obj.getIndex(e.canvasx, e.canvasy);
+	
+	this.tabMdi.moveTabpage(dragTabIndex, dropTabIndex);
+	
+	obj.set_cursor("default");
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.leftMenuShow){
+		this.application.HFSet00.set_separatesize("0,*");
+		this.leftMenuShow = false;
+		this.Button00.set_text(">");
+	}else{
+		this.application.HFSet00.set_separatesize("280,*");
+		this.leftMenuShow = true;
+		this.Button00.set_text("<");
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

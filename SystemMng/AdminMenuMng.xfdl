@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AdminMenuMng" width="1280" height="1000" titletext="관리자 메뉴 관리" onload="AdminMenuMng_onload" onclose="AdminMenuMng_onclose">
+    <Layouts>
+      <Layout height="1000" width="1280">
+        <Static text="Home" width="220" height="60" id="navigator" left="1050" top="10" taborder="0"/>
+        <Button id="btnCreateRoot" taborder="1" text="최상위 생성" left="10" top="25" width="120" height="50" onclick="btnCreateRoot_onclick"/>
+        <Button id="btnCreateChild" taborder="2" text="하위 생성" left="150" top="25" width="120" height="50" onclick="btnCreateChild_onclick"/>
+        <Button id="btnDelete" taborder="3" text="삭제" left="290" top="25" width="120" height="50" onclick="btnDelete_onclick"/>
+        <Grid id="GridMenuList" taborder="4" left="10" top="85" width="520" height="630" binddataset="gdsMenu" treeusecheckbox="false" treeinitstatus="collapse,all" oncellclick="GridCodeList_oncellclick" autoenter="none">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="516"/>
+              </Columns>
+              <Rows>
+                <Row size="24"/>
+              </Rows>
+              <Band id="body">
+                <Cell text="bind:menuNm" displaytype="treeitemcontrol" edittype="tree" checkboxfalsevalue="N" checkboxtruevalue="Y" treelevel="bind:dpth"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="txtMenuNmLabel" taborder="5" text="메뉴명" left="555" top="85" width="120" height="30"/>
+        <Div id="Div00" taborder="9" text="Div00" left="555" top="125" width="715" height="30">
+          <Layouts>
+            <Layout>
+              <Static id="txtSiteUrl" taborder="0" text="사이트 URL" left="0" top="0" width="120" height="30"/>
+              <Edit id="editSiteUrl" taborder="1" left="150" top="0" width="565" height="30"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Edit id="editMenuNm" taborder="8" left="705" top="85" width="565" height="30"/>
+        <Button id="btnSave" taborder="6" text="변경사항 저장" left="1150" top="430" width="120" height="50" onclick="btnSave_onclick"/>
+        <Grid id="Grid00" taborder="7" left="10" top="720" width="1260" height="270" binddataset="gdsMenu">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="menuSeq"/>
+                <Cell col="1" text="parntSeq"/>
+                <Cell col="2" text="pstn"/>
+                <Cell col="3" text="lftVal"/>
+                <Cell col="4" text="rhtVal"/>
+                <Cell col="5" text="dpth"/>
+                <Cell col="6" text="menuGb"/>
+                <Cell col="7" text="menuNm"/>
+                <Cell col="8" text="menuCntn"/>
+                <Cell col="9" text="admLink"/>
+                <Cell col="10" text="userLink"/>
+                <Cell col="11" text="userWndYn"/>
+                <Cell col="12" text="userUseYn"/>
+                <Cell col="13" text="pagePath"/>
+                <Cell col="14" text="pageId"/>
+                <Cell col="15" text="childCnt"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:menuSeq"/>
+                <Cell col="1" text="bind:parntSeq"/>
+                <Cell col="2" text="bind:pstn"/>
+                <Cell col="3" text="bind:lftVal"/>
+                <Cell col="4" text="bind:rhtVal"/>
+                <Cell col="5" text="bind:dpth"/>
+                <Cell col="6" text="bind:menuGb"/>
+                <Cell col="7" text="bind:menuNm"/>
+                <Cell col="8" text="bind:menuCntn"/>
+                <Cell col="9" text="bind:admLink"/>
+                <Cell col="10" text="bind:userLink"/>
+                <Cell col="11" text="bind:userWndYn"/>
+                <Cell col="12" text="bind:userUseYn"/>
+                <Cell col="13" text="bind:pagePath"/>
+                <Cell col="14" text="bind:pageId"/>
+                <Cell col="15" text="bind:childCnt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="Div01" taborder="10" text="Div01" left="555" top="165" width="715" height="30">
+          <Layouts>
+            <Layout>
+              <Static id="txtPagePathLabel" taborder="0" text="관리자 페이지 경로" left="0" top="0" width="120" height="30"/>
+              <Edit id="editPagePath" taborder="1" left="150" top="0" width="565" height="30"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="11" text="Div02" left="555" top="205" width="715" height="30">
+          <Layouts>
+            <Layout>
+              <Static id="txtPageIdLabel" taborder="0" text="관리자 페이지 ID" left="0" top="0" width="120" height="30"/>
+              <Edit id="editPageId" taborder="1" left="150" top="0" width="565" height="30"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="12" text="Div03" left="555" top="245" width="715" height="30">
+          <Layouts>
+            <Layout>
+              <Static id="txtWndYnLabel" taborder="0" text="새창여부" left="0" top="0" width="120" height="30"/>
+              <Radio id="radioWndYn" taborder="1" left="150" top="0" width="280" height="30" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">N</Col>
+                      <Col id="datacolumn">본창</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">Y</Col>
+                      <Col id="datacolumn">새창</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Radio>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div04" taborder="13" text="Div04" left="555" top="280" width="715" height="60">
+          <Layouts>
+            <Layout>
+              <Static id="txtUseYnLabel" taborder="0" text="노출여부" left="0" top="0" width="120" height="30"/>
+              <Radio id="radioUseYn" taborder="1" left="150" top="0" width="280" height="30" direction="vertical" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">Y</Col>
+                      <Col id="datacolumn">노출</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">N</Col>
+                      <Col id="datacolumn">미노출</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Radio>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.AdminMenuMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	var objOwnerFrame = this.getOwnerFrame();
+	
+	var menuNm = objOwnerFrame.param.MENU_NM;
+	
+	this.navigator.set_text( this.navigator.text + " > " + menuNm );
+	
+};
+
+
+this.btnCreateRoot_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridMenu = this.GridMenuList;	
+	var objDs = objGridMenu.getBindDataset();	
+	
+	var newRow = objDs.addRow();
+
+ 	objDs.setColumn(newRow, "parntSeq", 1);
+ 	objDs.setColumn(newRow, "pstn", 0);
+ 	objDs.setColumn(newRow, "dpth", 1);
+ 	objDs.setColumn(newRow, "menuGb", "drive");
+ 	objDs.setColumn(newRow, "menuNm", "NewNode");
+	objDs.setColumn(newRow, "userWndYn", "N");
+	objDs.setColumn(newRow, "userUseYn", "Y");
+
+};
+
+
+this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var strSvcId    = "menu_save";
+	var strSvcUrl   = this.application.Menu_svc + "::updateMenu.do";
+	var inData      = "menuInfoList=gdsMenu:U";
+	var outData     = "gdsMenu=output1";
+	var strArg      = "";
+	var callBackFnc = "fn_callback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]		
+};
+
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{
+    
+		this.alert(errorCode+"\n"+errorMsg);
+	
+		switch(svcID)
+		{
+			case "menu_save":			
+				//this.GridCodeList.getBindDataset().reset();	
+			break;
+		}
+	
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "menu_save":
+			this.alert("변경되었습니다.");			
+		break; 
+	}
+}
+
+
+this.btnCreateChild_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridMenu = this.GridMenuList;	
+	var objDs = objGridMenu.getBindDataset();	
+	
+	var menuSeq = objDs.getColumn(objDs.rowposition, "menuSeq");
+	var dpth = objDs.getColumn(objDs.rowposition, "dpth");
+	var lftVal = objDs.getColumn(objDs.rowposition, "lftVal");
+	var rhtVal = objDs.getColumn(objDs.rowposition, "rhtVal");
+	
+	if(!this.gfn_isNull(menuSeq)){	
+		if((dpth + 1) < 5){
+					
+			var tmpChildCnt = 0;
+			for(var i = 0 ; i < objDs.getRowCount() ; i++){
+				var tmpLftVal = objDs.getColumn(i, "lftVal");
+				var tmpRhtVal = objDs.getColumn(i, "rhtVal");
+				
+				if(tmpLftVal > lftVal && tmpRhtVal < rhtVal){
+					tmpChildCnt = tmpChildCnt + 1;
+				}			
+			}
+			
+			var newRow = objDs.insertRow(objDs.rowposition + tmpChildCnt + 1);
+			
+			objDs.setColumn(newRow, "parntSeq", menuSeq);
+			objDs.setColumn(newRow, "pstn", tmpChildCnt);
+			objDs.setColumn(newRow, "dpth", dpth + 1);
+			objDs.setColumn(newRow, "menuGb", "folder");
+			objDs.setColumn(newRow, "menuNm", "NewNode");
+			objDs.setColumn(newRow, "userWndYn", "N");
+			objDs.setColumn(newRow, "userUseYn", "Y");
+			
+			this.editMenuNm.setFocus();
+		}else{
+			this.alert("하위 메뉴 생성 불가");
+		}
+	}else{
+		this.alert("신규 메뉴는 하위 메뉴를 생성하실 수 없습니다.");
+	}
+};
+
+this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridMenu = this.GridMenuList;	
+	var objDs = objGridMenu.getBindDataset();	
+	var menuSeq = objDs.getColumn(objDs.rowposition, "menuSeq");
+	var rowType = objDs.getRowType(objDs.rowposition);
+	
+	var childCnt = 0;
+	
+	if(rowType == 1){
+		for(var i = 0 ; i < objDs.getRowCount() ; i++){
+			var tmpParntSeq = objDs.getColumn(i, "parntSeq");
+			
+			if(tmpParntSeq == menuSeq){
+				childCnt = childCnt + 1;
+			}			
+		}
+		
+		if(childCnt > 0){
+			this.alert("하위 노드가 존재합니다.");
+		}else{
+			objDs.deleteRow(objDs.rowposition);
+		}
+	}else if(rowType == 2){
+		objDs.deleteRow(objDs.rowposition);
+	}
+
+};
+
+
+this.AdminMenuMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+{
+	var objGridMenu = this.GridMenuList;	
+	var objDs = objGridMenu.getBindDataset();
+	
+	objDs.reset();
+
+};
+]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="editMenuNm" propid="value" datasetid="gdsMenu" columnid="menuNm"/>
+      <BindItem id="item1" compid="Div00.form.editSiteUrl" propid="value" datasetid="gdsMenu" columnid="userLink"/>
+      <BindItem id="item4" compid="Div01.form.editPagePath" propid="value" datasetid="gdsMenu" columnid="pagePath"/>
+      <BindItem id="item5" compid="Div02.form.editPageId" propid="value" datasetid="gdsMenu" columnid="pageId"/>
+      <BindItem id="item2" compid="Div03.form.radioWndYn" propid="value" datasetid="gdsMenu" columnid="userWndYn"/>
+      <BindItem id="item3" compid="Div04.form.radioUseYn" propid="value" datasetid="gdsMenu" columnid="userUseYn"/>
+    </Bind>
+  </Form>
+</FDL>

@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Board_Reg_Sample" width="1280" height="1060" titletext="New Form" onload="Board_Reg_Sample_onload">
+    <Layouts>
+      <Layout height="1060" width="1280">
+        <Edit id="Edit00" taborder="0" left="180" top="50" width="840" height="30"/>
+        <Button id="Button00" taborder="1" text="저장" left="900" top="990" width="120" height="50" onclick="Button00_onclick"/>
+        <Grid id="Grid00" taborder="2" left="60" top="1160" width="960" height="90" binddataset="ds_detail">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="title"/>
+                <Cell col="1" text="thnlFileId"/>
+                <Cell col="2" text="atchFileId"/>
+                <Cell col="3" text="seq"/>
+                <Cell col="4" text="cntn"/>
+                <Cell col="5" text="cntn1"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:title"/>
+                <Cell col="1" text="bind:thnlFileId"/>
+                <Cell col="2" text="bind:atchFileId"/>
+                <Cell col="3" text="bind:seq"/>
+                <Cell col="4" text="bind:cntn"/>
+                <Cell col="5" text="bind:cntn1"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button01" taborder="3" text="목록" left="760" top="990" width="120" height="50" onclick="Button01_onclick"/>
+        <Static id="Static00" taborder="4" text="썸네일" left="60" top="90" width="50" height="40"/>
+        <Grid id="Grid01" taborder="5" left="60" top="1075" width="960" height="70" binddataset="ds_thnl_file">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="146"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="atchFileId"/>
+                <Cell col="1" text="fileSeq"/>
+                <Cell col="2" text="phyPath"/>
+                <Cell col="3" text="saveFileNm"/>
+                <Cell col="4" text="realFileNm"/>
+                <Cell col="5" text="fileExtn"/>
+                <Cell col="6" text="fileSize"/>
+                <Cell col="7" text="webPath"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:atchFileId"/>
+                <Cell col="1" text="bind:fileSeq"/>
+                <Cell col="2" text="bind:phyPath"/>
+                <Cell col="3" text="bind:saveFileNm"/>
+                <Cell col="4" text="bind:realFileNm"/>
+                <Cell col="5" text="bind:fileExtn"/>
+                <Cell col="6" text="bind:fileSize"/>
+                <Cell col="7" text="bind:webPath"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button02" taborder="6" text="파일선택" left="240" top="95" width="100" height="30" onclick="Button02_onclick"/>
+        <Static id="Static01" taborder="7" text="Static01" left="130" top="92" width="100" height="36"/>
+        <Static id="Static02" taborder="8" text="제목" left="60" top="50" width="120" height="30"/>
+        <Static id="Static03" taborder="9" text="첨부파일" left="60" top="145" width="120" height="35"/>
+        <Grid id="Grid02" taborder="10" left="60" top="195" width="960" height="135" binddataset="ds_atch_file" oncellclick="Grid02_oncellclick" oncelldblclick="Grid02_oncelldblclick" onheadclick="Grid02_onheadclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48" band="left"/>
+                <Column size="174"/>
+                <Column size="109"/>
+                <Column size="48"/>
+                <Column size="48"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="36"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="bind:chk" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="1" text="파일명"/>
+                <Cell col="2" text="파일크기"/>
+                <Cell col="3"/>
+                <Cell col="4"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="checkboxcontrol" edittype="expr:dataset.getRowType(currow) == 2 ? 'none' : 'checkbox'" checkboxfalsevalue="N" checkboxtruevalue="Y" text="bind:chk"/>
+                <Cell col="1" text="bind:realFileNm"/>
+                <Cell col="2" text="bind:fileSize" expr="dataset.parent.gfn_cutFileSize(fileSize)"/>
+                <Cell col="3" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                <Cell col="4" expr="expr:dataset.getRowType(currow) "/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button03" taborder="11" text="파일선택" left="120" top="148" width="120" height="31" onclick="Button03_onclick"/>
+        <Grid id="Grid03" taborder="12" left="60" top="1260" width="960" height="130" binddataset="gdsFileDown">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="saveFileNm"/>
+                <Cell col="1" text="realFileNm"/>
+                <Cell col="2" text="phyPath"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:saveFileNm"/>
+                <Cell col="1" text="bind:realFileNm"/>
+                <Cell col="2" text="bind:phyPath"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button04" taborder="13" text="파일 다운로드" left="900" top="156" width="120" height="28" onclick="Button04_onclick"/>
+        <WebBrowser id="WebBrowser00" taborder="14" left="60" top="340" width="960" height="640" onusernotify="WebBrowser00_onusernotify"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::lib_base.xjs";
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.domain = "";
+this.param = null;
+this.thnlFileId = "";
+this.atchFileId = "";
+this.editorInit = false;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.Board_Reg_Sample_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.domain = this.application.getVariable("domain");
+	
+	this.param = this.parent.param;
+	this.editorInit = false;
+	
+	if(this.param.seq != ""){	
+		this.ds_detail.setColumn(0, "seq", this.param.seq);
+		this.fn_detail();
+	}
+		
+	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
+	
+	this.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html")
+};
+
+
+this.fn_detail = function ()
+{	
+	var strSvcId	= "detail"
+	var strSvcUrl   = this.application.Admin_svc + "::/sample/selectSampleDtl.do";
+	var inData      = "detail=ds_detail";
+	var outData     = "ds_detail=detail ds_thnl_file=thnlFile ds_atch_file=atchFileList";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+};
+
+this.fn_save = function ()
+{		
+	this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.WebBrowser00));
+	
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::sample/insertSample.do";
+	var inData      = "data=ds_detail updateFileData=ds_atch_file:U";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+
+};
+
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+    return;
+  }
+
+  switch(svcID)
+  {
+    case "save":
+		this.alert("저장되었습니다.");
+		this.fn_list();
+		break;
+	case "detail":    
+		this.Static01.set_text( this.ds_thnl_file.getColumn(0, "realFileNm"));
+	
+		this.thnlFileId = this.gfnUndefinedConvertEmpty(this.ds_detail.getColumn(0, "thnlFileId"));
+		this.atchFileId = this.gfnUndefinedConvertEmpty(this.ds_detail.getColumn(0, "atchFileId"));
+		
+		for(var i = 0 ; i < this.ds_atch_file.getRowCount() ; i++){
+			this.ds_atch_file.addColumn("chk", "String", 256);
+			this.ds_atch_file.setColumn(i, "chk","N");
+		}
+		
+		break;
+  }
+};
+
+
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
+};
+
+this.fn_checkValidation = function(){
+	
+	if(this.gfn_isNull(this.Edit00.value)){
+		this.alert("제목을 입력하세요");
+		this.Edit00.setFocus();
+		return;
+	}else if( this.gfn_isNull(this.param.seq) &&  this.FileUpTransfer00.filelist.length == 0 ){
+		// 만약 썸네일이 필요일때
+		this.alert("썸네일을 선택해주세요.");
+		this.Button02.setFocus();
+		return;
+	}else{								
+		
+		// 수정화면
+		if(!this.gfn_isNull(this.param.seq)){
+			var thnlFileList = this.FileUpTransfer00.filelist;
+			var atchFileList = this.FileUpTransfer01.filelist;
+
+			if( thnlFileList.length > 0 ){
+				this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?fileGb=thnlFileId&atchFileId=' + this.thnlFileId);		
+			}else if( thnlFileList.length == 0 && atchFileList.length > 0){
+				this.FileUpTransfer01.upload(this.domain + '/admin/file/fileupload.do?fileGb=atchFileId&atchFileId=' + this.atchFileId)
+			}else{
+				this.fn_save();
+			}
+		
+		}else{
+			this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?fileGb=thnlFileId&atchFileId=' + this.thnlFileId);		
+		}
+		
+	}	
+}
+
+this.FileUpTransfer00_onprogress = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferProgressEventInfo)
+{
+	trace(e.loaded);
+	trace(e.total);
+	console.log(e.loaded);
+	console.log(e.total);    
+};
+
+this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventinfo)
+{	
+	var objCallDs = e.datasets[0];
+	var thnlFileId = objCallDs.getColumn(0,"thnlFileId");
+	
+	this.ds_detail.setColumn(0, "thnlFileId", thnlFileId);
+
+	var atchFileList = this.FileUpTransfer01.filelist;
+		
+	// 업로드할 첨부파일이 있을 경우
+	if(atchFileList.length > 0){		
+		this.FileUpTransfer01.upload(this.domain + '/admin/file/fileupload.do?fileGb=atchFileId&atchFileId=' + this.atchFileId)
+		
+	}else{
+		this.fn_save();
+	}
+	
+};
+
+this.FileUpTransfer00_onerror = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferErrorEventInfo)
+{
+
+	trace("FileTrans Error");
+	trace(e);    
+	trace("---------------");
+};
+
+
+
+this.FileUpTransfer01_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
+{
+	var objCallDs = e.datasets[0];
+	var atchFileId = objCallDs.getColumn(0,"atchFileId");
+
+	this.ds_detail.setColumn(0, "atchFileId", atchFileId);
+
+	this.fn_save();
+};
+
+
+this.FileUpTransfer01_onerror = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferErrorEventInfo)
+{
+	trace("FileTrans Error");
+	trace(e);    
+	trace("---------------");
+};
+
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list();
+};
+
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//this.ThnlFileDialog.open("썸네일", FileDialog.MULTILOAD);
+	this.ThnlFileDialog.open("썸네일", FileDialog.LOAD);
+};
+
+this.ThnlFileDialog_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
+{
+	this.addFileList(e.virtualfiles, "thnl");
+};
+
+
+
+this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.AtchFileDialog.open("첨부파일", FileDialog.MULTILOAD);
+};
+
+this.AtchFileDialog_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
+{
+	this.addFileList(e.virtualfiles, "atch");
+};
+
+
+this.addFileList = function(filelist, gb){
+
+	for(var i = 0, len = filelist.length, vFile; i < len ; i++){
+		vFile = filelist[i];
+		
+		if(gb == "thnl"){
+			vFile.addEventHandler("onsuccess", this.ThnlFile_onsuccess, this);
+			vFile.addEventHandler("onerror", this.ThnlFile_onerror, this);
+		}else if(gb == "atch"){
+			vFile.addEventHandler("onsuccess", this.AtchFile_onsuccess, this);
+			vFile.addEventHandler("onerror", this.AtchFile_onerror, this);		
+		}
+		
+		vFile.open(null, 1);
+	}
+
+}
+
+
+this.ThnlFile_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileEventInfo)
+{
+
+    switch (e.reason)
+    {
+        case 1:
+            obj.getFileSize();
+            break;
+        case 9:
+			this.ds_thnl_file.reset();
+		
+            var nRowIdx = this.ds_thnl_file.addRow();
+            this.ds_thnl_file.setColumn(nRowIdx, 4, obj.filename);
+            this.ds_thnl_file.setColumn(nRowIdx, 6, e.filesize);
+
+			this.Static01.set_text(obj.filename);
+			
+            this.FileUpTransfer00.addFile(obj.filename, obj);
+	
+            break;
+    }
+}
+
+this.ThnlFile_onerror = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileErrorEventInfo)
+{
+    trace("errortype: "+e.errortype);
+    trace("errormsg: "+e.errormsg);
+    trace("statuscode: "+e.statuscode);
+}
+
+
+
+this.AtchFile_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileEventInfo)
+{
+    switch (e.reason)
+    {
+        case 1:
+            obj.getFileSize();
+            break;
+        case 9:
+			if(this.ds_atch_file.getColCount() == 0){
+				this.ds_atch_file.addColumn("atchFileId", "STRING", 256);
+				this.ds_atch_file.addColumn("fileSeq", "STRING", 256);
+				this.ds_atch_file.addColumn("phyPath", "STRING", 256);
+				this.ds_atch_file.addColumn("saveFileNm", "STRING", 256);
+				this.ds_atch_file.addColumn("realFileNm", "STRING", 256);
+				this.ds_atch_file.addColumn("fileExtn", "STRING", 256);
+				this.ds_atch_file.addColumn("fileSize", "STRING", 256);
+				this.ds_atch_file.addColumn("webPath", "STRING", 256);
+				this.ds_atch_file.addColumn("chk", "STRING", 256);
+			}
+		
+            var nRowIdx = this.ds_atch_file.addRow();
+			
+			
+            this.ds_atch_file.setColumn(nRowIdx, 4, obj.filename);			
+            this.ds_atch_file.setColumn(nRowIdx, 6, e.filesize);
+
+            this.FileUpTransfer01.addFile(obj.filename, obj);
+			
+            break;
+    }
+}
+
+this.AtchFile_onerror = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileErrorEventInfo)
+{
+    trace("errortype: "+e.errortype);
+    trace("errormsg: "+e.errormsg);
+    trace("statuscode: "+e.statuscode);
+}
+
+this.fn_list = function(){
+	this.parent.set_url("Sample::Board_Sample.xfdl");	
+}
+
+
+
+this.Grid02_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 0){
+		this.gfn_headCheckBox(obj, "chk");
+	}	
+};
+
+
+this.Grid02_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var fileId = "";
+	var fileName = "";
+	var filePath = "";
+	var saveFileNm = "";
+	var webPath = "";
+	
+	var delResult = -1;
+	
+	var objGridDs = obj.getBindDataset();
+	
+	fileId = objGridDs.getColumn(e.row, "atchFileId");
+	fileName = objGridDs.getColumn(e.row, "realFileNm");
+	filePath = objGridDs.getColumn(e.row, "phyPath");
+	saveFileNm = objGridDs.getColumn(e.row, "saveFileNm");
+	webPath = objGridDs.getColumn(e.row, "webPath");
+	
+	if(e.cell == 3){		
+		if(!this.gfn_isNull(fileId)){
+			this.ds_atch_file.deleteRow(e.row);
+		}else{
+			delResult = this.FileUpTransfer01.removeFile(fileName);
+			if(delResult > -1){
+				this.ds_atch_file.deleteRow(e.row);
+			}
+		}		
+	}
+};
+
+
+this.Grid02_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell > 0){		
+		if(this.ds_atch_file.getRowType(e.row) != 2){
+			this.ds_atch_file.setColumn(e.row, "chk", "Y");
+			this.gfn_fileDown(this.ds_atch_file, this.FileDownTransfer00);
+		}		
+	}	
+};
+
+
+this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.gfn_fileDown(this.ds_atch_file, this.FileDownTransfer00);
+};
+
+// 
+// this.FileDownTransfer00_onsuccess = function(obj:nexacro.FileDownTransfer,e:nexacro.FileDownTransferEventInfo)
+// {
+// 	var sMsg = e.targetfullpath +"\n"+  e.url;  
+// 	this.alert(sMsg);
+// };
+// 
+// this.FileDownTransfer00_onerror = function(obj:nexacro.FileDownTransfer,e:nexacro.FileDownTransferErrorEventInfo)
+// {
+// 	var sMsg = ">>>>>>>>>>>>>>>>>>>>>>>>>>  ERROR >>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+//   sMsg += "statuscode: "+e.statuscode+"\n";
+//   sMsg += "requesturi: "+e.requesturi+"\n";
+//   sMsg += "locationuri: "+e.locationuri+"\n" ;
+//   sMsg += "errormsg: "+e.errormsg+"\n";
+//   
+//   this.alert(sMsg);
+// };
+
+this.fn_get_edit_body = function(wbObj){
+	
+	var _win = wbObj.getProperty("window");
+	
+	var len = _win.callMethod("getTextValueLen");
+	var bodyValue = _win.callMethod("getData");
+	
+	trace("editor body length : " + len);
+	//console.log("editor body length : " + len);
+	
+	if(_win)
+    {
+        _win.destroy();
+        _win = null;
+    }    
+
+	return bodyValue;
+}
+
+this.WebBrowser00_onusernotify = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+{	
+	if( this.editorInit == false && e.userdata == "LC"){			
+		this.editorInit = true;
+		
+		var _win = this.WebBrowser00.getProperty("window");	 			
+		
+		_win.callMethod("setData", this.ds_detail.getColumn(0, "cntn"));
+		
+		if(_win)
+		{
+			_win.destroy();
+			_win = null;
+		}    
+	} 		
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="thnlFileId" type="STRING" size="256"/>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="seq" type="STRING" size="256"/>
+          <Column id="cntn" type="STRING" size="2000"/>
+          <Column id="cntn1" type="STRING" size="2000"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="atchFileId"/>
+            <Col id="thnlFileId"/>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_thnl_file">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <FileDialog id="ThnlFileDialog" onclose="ThnlFileDialog_onclose"/>
+      <FileUpTransfer id="FileUpTransfer00" onerror="FileUpTransfer00_onerror" onprogress="FileUpTransfer00_onprogress" onsuccess="FileUpTransfer00_onsuccess"/>
+      <Dataset id="ds_atch_file">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <FileDialog id="AtchFileDialog" onclose="AtchFileDialog_onclose"/>
+      <FileUpTransfer id="FileUpTransfer01" onerror="FileUpTransfer01_onerror" onsuccess="FileUpTransfer01_onsuccess"/>
+      <FileDownTransfer id="FileDownTransfer00" onsuccess="FileDownTransfer00_onsuccess" onerror="FileDownTransfer00_onerror"/>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Edit00" propid="value" datasetid="ds_detail" columnid="title"/>
+    </Bind>
+  </Form>
+</FDL>

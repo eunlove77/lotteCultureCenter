@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CodeMng" width="1280" height="770" titletext="New Form" onactivate="CodeMng_onactivate" ondeactivate="CodeMng_ondeactivate" onload="CodeMng_onload" onclose="CodeMng_onclose">
+    <Layouts>
+      <Layout height="770" width="1280">
+        <Grid id="GridCodeList" taborder="0" left="10" top="85" width="520" height="675" binddataset="gdsCode" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" oncellclick="GridCodeList_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="517"/>
+              </Columns>
+              <Rows>
+                <Row size="24"/>
+              </Rows>
+              <Band id="body">
+                <Cell text="bind:cdNm" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:dpth" treestartlevel="0" editautoselect="false"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="txtCdIdLabel" taborder="8" text="그룹코드" left="555" top="85" width="120" height="30"/>
+        <Static id="txtCdLabel" taborder="9" text="코드" left="555" top="135" width="120" height="30"/>
+        <Static id="txtCdNmLabel" taborder="10" text="코드명" left="555" top="185" width="120" height="30"/>
+        <Edit id="editCdId" taborder="4" left="705" top="85" width="570" height="30" visible="true" readonly="true"/>
+        <Edit id="editCd" taborder="5" left="705" top="135" width="570" height="30" readonly="true"/>
+        <Static id="txtUseYnLabel" taborder="11" text="노출여부" left="555" top="245" width="120" height="30"/>
+        <Radio id="radioUseYn" taborder="7" left="705" top="245" width="280" height="30" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+          <Dataset id="innerdataset">
+            <ColumnInfo>
+              <Column id="codecolumn" size="256"/>
+              <Column id="datacolumn" size="256"/>
+            </ColumnInfo>
+            <Rows>
+              <Row>
+                <Col id="codecolumn">Y</Col>
+                <Col id="datacolumn">노출</Col>
+              </Row>
+              <Row>
+                <Col id="codecolumn">N</Col>
+                <Col id="datacolumn">미노출</Col>
+              </Row>
+            </Rows>
+          </Dataset>
+        </Radio>
+        <Button id="btnCreateRoot" taborder="1" text="최상위 생성" left="10" top="25" width="120" height="50" onclick="btnCreateRoot_onclick"/>
+        <Button id="btnCreateChild" taborder="2" text="하위 생성" left="150" top="25" width="120" height="50" onclick="btnCreateChild_onclick"/>
+        <Button id="btnDelete" taborder="3" text="삭제" left="290" top="25" width="120" height="50" onclick="btnDelete_onclick"/>
+        <Edit id="editCdNm" taborder="6" left="705" top="185" width="570" height="30"/>
+        <Button id="btnSave" taborder="12" text="변경사항 저장" left="1155" top="295" width="120" height="50" onclick="btnSave_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+
+this.CodeMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+};
+
+
+this.CodeMng_onactivate = function(obj:nexacro.Form,e:nexacro.ActivateEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();	
+	
+	//objDs.reset();	
+	
+	
+};
+
+
+this.CodeMng_ondeactivate = function(obj:nexacro.Form,e:nexacro.ActivateEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();	
+	
+	//objDs.applyChange();
+};
+
+this.btnCreateRoot_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();	
+	
+	var tmpCdOrd;
+	
+	for(var i = 0 ; i < objDs.getRowCount() ; i++){
+		var tmpDpth = objDs.getColumn(i, "dpth");		
+		if(tmpDpth == "0"){
+			tmpCdOrd = objDs.getColumn(i, "cdOrd");	
+		}	
+	}
+	
+	tmpCdOrd++;
+	
+	var newRow = objDs.addRow();
+
+ 	objDs.setColumn(newRow, "cdId", "");
+ 	objDs.setColumn(newRow, "cd", "CODE_" + tmpCdOrd);
+ 	objDs.setColumn(newRow, "cdNm", "임시코드명" + tmpCdOrd);
+ 	objDs.setColumn(newRow, "cdOrd", tmpCdOrd);
+ 	objDs.setColumn(newRow, "dpth", 0);
+	objDs.setColumn(newRow, "useYn", "Y");
+
+};
+
+
+this.btnCreateChild_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();	
+	
+	var cd = objDs.getColumn(objDs.rowposition, "cd");
+	var dpth = objDs.getColumn(objDs.rowposition, "dpth");
+	
+	if((dpth + 1) < 2){
+	
+		var tmpCdOrd = 1;
+		for(var i = 0 ; i < objDs.getRowCount() ; i++){
+			var tmpCdId = objDs.getColumn(i, "cdId");
+			var tmpDpth = objDs.getColumn(i, "dpth");
+			
+			if(dpth < tmpDpth && tmpCdId == cd){
+				tmpCdOrd = objDs.getColumn(i, "cdOrd") + 1;
+			}			
+		}
+
+		var newRow = objDs.insertRow(objDs.rowposition + tmpCdOrd);
+
+		objDs.setColumn(newRow, "cdId", cd);
+		objDs.setColumn(newRow, "cd", cd + "_" + tmpCdOrd);
+		objDs.setColumn(newRow, "cdNm", "임시코드명" + tmpCdOrd);
+		objDs.setColumn(newRow, "cdOrd", tmpCdOrd);
+		objDs.setColumn(newRow, "dpth", dpth + 1);
+		objDs.setColumn(newRow, "useYn", "Y");
+	}else{
+		this.alert("생성 불가");
+	}
+};
+
+this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();
+	var cd = objDs.getColumn(objDs.rowposition, "cd");
+	var dtph = objDs.getColumn(objDs.rowposition, "dpth");
+	
+	var childCnt = 0;
+	for(var i = 0 ; i < objDs.getRowCount() ; i++){
+		var tmpCdId = objDs.getColumn(i, "cdId");
+		var tmpDpth = objDs.getColumn(i, "dpth");
+		
+		if(dtph < tmpDpth && tmpCdId == cd){
+			childCnt = childCnt + 1;
+		}			
+	}
+	
+	if(childCnt > 0){
+		this.alert("하위 노드가 존재합니다.");
+	}else{
+		objDs.deleteRow(objDs.rowposition);
+	}
+	
+};
+
+this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var strSvcId    = "code_save";
+	var strSvcUrl   = this.application.Admin_svc + "::code/updateCode.do";
+	var inData      = "codeInfoList=gdsCode:U";
+	var outData     = "gdsCode=output1";
+	var strArg      = "";
+	var callBackFnc = "fn_callback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]			
+};
+
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{
+    
+		this.alert(errorCode+"\n"+errorMsg);
+	
+		switch(svcID)
+		{
+			case "code_save":			
+				this.GridCodeList.getBindDataset().reset();	
+			break;
+		}
+	
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "code_save":
+			this.alert("변경되었습니다.");
+			this.GridCodeList.getBindDataset().applyChange();				
+		break; 
+	}
+}
+
+this.GridCodeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();	
+	var cd = objDs.getColumn(objDs.rowposition, "cd");
+	var dtph = objDs.getColumn(objDs.rowposition, "dpth");
+	
+	var childCnt = 0;
+	for(var i = 0 ; i < objDs.getRowCount() ; i++){
+		var tmpCdId = objDs.getColumn(i, "cdId");
+		var tmpDpth = objDs.getColumn(i, "dpth");
+		
+		if(dtph < tmpDpth && tmpCdId == cd){
+			childCnt = childCnt + 1;
+		}			
+	}
+	
+	if(childCnt > 0){
+		this.editCd.set_readonly(true);
+	}else{
+		this.editCd.set_readonly(false);
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+
+
+this.CodeMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+{
+	var objGridCode = this.GridCodeList;	
+	var objDs = objGridCode.getBindDataset();
+	
+	objDs.reset();
+};
+
+]]></Script>
+    <Bind>
+      <BindItem id="item2" compid="editCdNm" propid="value" datasetid="gdsCode" columnid="cdNm"/>
+      <BindItem id="item1" compid="radioUseYn" propid="value" datasetid="gdsCode" columnid="useYn"/>
+      <BindItem id="item0" compid="editCd" propid="value" datasetid="gdsCode" columnid="cd"/>
+      <BindItem id="item3" compid="editCdId" propid="value" datasetid="gdsCode" columnid="cdId"/>
+    </Bind>
+    <Objects/>
+  </Form>
+</FDL>

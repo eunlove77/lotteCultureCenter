@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CheckBox_Sample" width="1280" height="720" titletext="New Form" onbindingvaluechanged="CheckBox_Sample_onbindingvaluechanged">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <TextArea id="TextArea00" taborder="1" left="65" top="284" width="533" height="96"/>
+        <Grid id="Grid00" taborder="0" left="223" top="50" width="375" height="185" binddataset="Dataset01">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="CheckBox00"/>
+                <Cell col="1" text="CheckBox01"/>
+                <Cell col="2" text="CheckBox02"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:CheckBox00"/>
+                <Cell col="1" text="bind:CheckBox01"/>
+                <Cell col="2" text="bind:CheckBox02"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <CheckBox id="CheckBox00" taborder="2" text="CheckBox00" left="54" top="66" width="150" height="20"/>
+        <CheckBox id="CheckBox01" taborder="3" text="CheckBox01" left="52" top="100" width="150" height="20"/>
+        <CheckBox id="CheckBox02" taborder="4" text="CheckBox02" left="55" top="140" width="150" height="20"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+
+this.CheckBox_Sample_onbindingvaluechanged = function(obj:nexacro.Form,e:nexacro.BindingValueChangedEventInfo)
+{
+	this.TextArea00.set_value("CheckBox00 : " + this.CheckBox00.isChecked() + " / " + this.CheckBox00.value);
+	this.TextArea00.insertText("\nCheckBox01 : " + this.CheckBox01.isChecked() + " / " + this.CheckBox01.value);
+	this.TextArea00.insertText("\nCheckBox02 : " + this.CheckBox02.isChecked() + " / " + this.CheckBox02.value);
+};
+]]></Script>
+    <Objects>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="Status" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Status">Yes</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="Dataset01">
+        <ColumnInfo>
+          <Column id="CheckBox00" type="STRING" size="256"/>
+          <Column id="CheckBox01" type="STRING" size="256"/>
+          <Column id="CheckBox02" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="CheckBox00">0</Col>
+            <Col id="CheckBox01">true</Col>
+            <Col id="CheckBox02">A</Col>
+          </Row>
+          <Row>
+            <Col id="CheckBox02">B</Col>
+            <Col id="CheckBox01">false</Col>
+            <Col id="CheckBox00">1</Col>
+          </Row>
+          <Row>
+            <Col id="CheckBox02">C</Col>
+            <Col id="CheckBox01">TRUE</Col>
+            <Col id="CheckBox00">TEST</Col>
+          </Row>
+          <Row>
+            <Col id="CheckBox02">D</Col>
+            <Col id="CheckBox01">FALSE</Col>
+            <Col id="CheckBox00">TRUE</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="CheckBox00" propid="value" datasetid="Dataset01" columnid="CheckBox00"/>
+      <BindItem id="item1" compid="CheckBox01" propid="value" datasetid="Dataset01" columnid="CheckBox01"/>
+      <BindItem id="item2" compid="CheckBox02" propid="value" datasetid="Dataset01" columnid="CheckBox02"/>
+    </Bind>
+  </Form>
+</FDL>

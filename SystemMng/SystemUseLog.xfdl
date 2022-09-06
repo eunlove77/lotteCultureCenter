@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="SystemUseLog" width="1280" height="720" titletext="New Form" onload="SystemUseLog_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtUseLogLabel" taborder="0" text="이용 로그" left="20" top="20" width="120" height="31"/>
+        <Static id="navigator" taborder="1" text="Home" left="1050" top="10" width="220" height="60"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.SystemUseLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	var objOwnerFrame = this.getOwnerFrame();
+	
+	var menuNm = objOwnerFrame.param.MENU_NM;
+	
+	this.navigator.set_text( this.navigator.text + " > " + menuNm );
+};
+]]></Script>
+  </Form>
+</FDL>
