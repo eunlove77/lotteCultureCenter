@@ -7,6 +7,7 @@
         <TextArea id="popupTextArea" taborder="1" left="20" top="35" height="155" width="360"/>
         <Button id="btnSend" taborder="2" text="send" left="92" width="90" height="30" onclick="btnSend_onclick" bottom="21"/>
         <Button id="btnCall" taborder="3" text="Call Method" left="190" width="90" height="30" onclick="btnCall_onclick" bottom="21"/>
+        <Button id="Button00" taborder="4" text="Button00" left="290" top="200" width="80" height="29" onclick="Button00_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**
@@ -18,6 +19,9 @@
 *  2019.07.18		nana			최초 생성
 *******************************************************************************
 */
+
+include "Base::popup.xjs";
+
 this.popup_modal_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {	
 	//get arguments
@@ -45,6 +49,28 @@ this.btnCall_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	//this.opener.getMethod_parent();
 	this.opener.config.objFunction.call();
 };
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//description Modal
+	var oArg = {				
+				test : "BBBB"
+				};
+				
+	this.gfn_showModal("popupModal2", oArg, "Sample::popup_modal2.xfdl", "popupCallBack2", this, 400, 250, true, true, null);
+
+};
+
+this.popupCallBack2 = function(sFormId, sArg)
+{
+	if(sFormId == 'popupModal2')
+	{
+		if(sArg == 'OK')
+		{
+			alert('modal call back');
+		}
+	}
+}
 ]]></Script>
   </Form>
 </FDL>
