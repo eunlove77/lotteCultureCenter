@@ -232,6 +232,28 @@
             </Format>
           </Formats>
         </Grid>
+        <Grid id="Grid04" taborder="25" left="785" top="720" width="375" height="270" binddataset="ds_grid_psnlztn">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="gridId"/>
+                <Cell col="1" text="format"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:gridId"/>
+                <Cell col="1" text="bind:format"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[
@@ -387,8 +409,6 @@ this.btnFomatSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	var objDs = this.ds_grid_psnlztn;
 	var format = this.GridAdminList.getCurFormatString();
 	
-	//var nRow = objDs.addRow();
-	
 	objDs.setColumn(0, "gridId", "ds_admin_list");
 	objDs.setColumn(0, "format", format);
 	
@@ -488,7 +508,8 @@ this.fn_personalization = function(strSvcId){
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	
-	if(strSvcId == "getPsnlztn"){
+	if(strSvcId == "getPsnlztn"){		
+		
 		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_admin_list");
 		
 		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
@@ -581,8 +602,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		this.alert("저장되었습니다.");
 		break;
 	case "getPsnlztn":
-		var format = this.ds_grid_psnlztn.getColumn(0, "format");
-		this.GridAdminList.set_formats(format);
+		var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+		
+		if(format !== undefined){			
+			this.GridAdminList.set_formats(format);
+		}
+		
 		break;
   }
 };
