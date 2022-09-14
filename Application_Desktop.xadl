@@ -2,15 +2,15 @@
 <ADL version="2.0">
   <Application id="Application_Desktop" screenid="Desktop_screen" onload="Application_onload" licenseurl="/admin/NexacroN_client_license.xml">
     <Layout>
-      <MainFrame id="mainframe" showtitlebar="true" showstatusbar="false" left="0" top="0" width="1920" height="1080" titletext="롯데문화센터">
-        <VFrameSet id="VFrameSet00" separatesize="50,50,*,30" border="0px none">
+      <MainFrame id="mainframe" showtitlebar="true" showstatusbar="false" left="0" top="0" width="1920" height="1080" titletext="롯데문화센터" resizable="true">
+        <VFrameSet id="VFrameSet00" separatesize="50,50,*,30" border="0px none" width="1366">
           <Frames>
             <ChildFrame id="TopFrame" formurl="FrameBase::Form_Top.xfdl" showtitlebar="false" border="0px none"/>
             <ChildFrame id="MenuFrame" formurl="FrameBase::Form_Menu.xfdl" showtitlebar="false" height="30" border="0px none"/>
-            <HFrameSet id="HFrameSet00" separatesize="280,*" color="#555555">
+            <HFrameSet id="HFrameSet00" separatesize="130,*" color="#555555">
               <Frames>
                 <ChildFrame id="LeftFrame" formurl="FrameBase::Form_Left.xfdl" dragmovetype="none" showtitlebar="false" color="#555555" border="0px none, 1px solid #c7c7c7, 0px none, 0px none"/>
-                <VFrameSet id="VFrameSet01" separatesize="50,0,*,0" border="0px none">
+                <VFrameSet id="VFrameSet01" separatesize="50,0,*,0" border="0px none" width="1366">
                   <Frames>
                     <ChildFrame id="MdiFrame" formurl="FrameBase::Form_Mdi.xfdl" showtitlebar="false" dragmovetype="none" border="0px none"/>
                     <ChildFrame id="MainFrame" formurl="FrameBase::Form_Main.xfdl" showtitlebar="false" border="0px none"/>
@@ -95,7 +95,6 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 	var arrSplit = strURL.split("//");
 	var currentIp = strURL.split("//")[1].split("/")[0];
 	
-	console.log(this.getVariable("domain"));
 };
 
 /**************************************************************************
@@ -129,7 +128,7 @@ this.gfn_setFrameSize = function(){
 	
 	//framset 사이즈 변경
 	this.VFSet00.set_separatesize("50,32,*,30");
-	this.HFSet00.set_separatesize("280,*");
+	this.HFSet00.set_separatesize("130,*");
 	this.VFSet01.set_separatesize("50,*,0,0");
 
 }
