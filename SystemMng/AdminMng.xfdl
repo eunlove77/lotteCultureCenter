@@ -3,7 +3,7 @@
   <Form id="AdminMng" width="1280" height="1000" titletext="관리자 목록" onload="AdminMng_onload">
     <Layouts>
       <Layout height="1000" width="1280">
-        <Static id="title" taborder="0" text="관리자 목록2224444" left="10" top="10" width="120" height="60" onclick="title_onclick"/>
+        <Static id="title" taborder="0" text="관리자 목록" left="10" top="10" width="120" height="60" onclick="title_onclick"/>
         <Static id="navigator" taborder="1" text="Home" left="1050" top="10" width="220" height="60"/>
         <Grid id="GridAdminList" taborder="2" left="10" top="190" width="1260" height="450" binddataset="ds_admin_list" showselection="false" onheadclick="GridAdminList_onheadclick" nodatatext="데이터가 없습니다." cellmovingtype="col" cellsizingtype="both" onheaddblclick="GridAdminList_onheaddblclick">
           <Formats>
@@ -28,7 +28,7 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y" text="N"/>
                 <Cell col="1" text="번호"/>
                 <Cell col="2" text="지점명" expandshow="hide"/>
-                <Cell col="3" text="아이디" expandshow="show" expandimage="url('theme://images/btn_expand.png')" expandsize="30"/>
+                <Cell col="3" text="아이디" expandshow="hide" expandsize="30"/>
                 <Cell col="4" text="이름"/>
                 <Cell col="5" text="부서"/>
                 <Cell col="6" text="휴대전화"/>
@@ -639,22 +639,37 @@ this.title_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
 };
 
 this.orderType = "desc";
+this.
 this.GridAdminList_onheaddblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {	
-	if(this.orderType == "desc"){		
-		this.ds_admin_list.set_keystring("S:id");
-		obj.setCellProperty("head", 3, "expandshow", "show");
-		obj.setCellProperty("head", 3, "expandimage", "theme://images/btn_WF_Popmenunext_D.png");
-		this.orderType="asc";
-	}else if(this.orderType == "asc"){
-		this.ds_admin_list.set_keystring("S:-id");
-		obj.setCellProperty("head", 3, "expandshow", "show");
-		obj.setCellProperty("head", 3, "expandimage", "theme://images/btn_expand.png");
-		this.orderType="";
-	}else{
-		obj.setCellProperty("head", 3, "expandshow", "hide");
-		this.orderType="desc";
-	}	
+	var sortColumnText = "아이디, 이름, 계정상태";
+	var columnId = "";
+	var txt = obj.getCellText(e.row, e.cell);
+	
+	if(sortColumnText.indexOf(txt) > -1){
+	
+		var ds = obj.getBindDataset();
+	
+		for(var i = 0 ; i < ds.getColCount() ; i++){
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+	
+		if(txt == "아이디") columnId = "id";
+		if(txt == "이름") columnId = "name";
+		if(txt == "계정상태") columnId = "useYn";
+		
+		if(this.orderType == "desc"){		
+			this.ds_admin_list.set_keystring("S:" + columnId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			this.ds_admin_list.set_keystring("S:-" + columnId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+	}
 };
 ]]></Script>
     <Objects>
