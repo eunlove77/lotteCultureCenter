@@ -4,13 +4,13 @@
     <Layouts>
       <Layout height="40" width="1600">
         <Static id="Static00" taborder="1" text="" left="10" top="7" width="67" height="25" font="bold 20px/normal &quot;Malgun Gothic&quot;" background="url('theme://images/hed_TF_logo.png') no-repeat center center" cssclass="sta_TF_Logo"/>
-        <Static id="Static01" taborder="0" text="로그아웃" top="11" width="45" height="16" right="20" cssclass="sta_TF_Util" fittocontents="width"/>
-        <Static id="Static02" taborder="2" top="16" height="8" cssclass="sta_TF_UtilLine" right="Static01:10" width="1"/>
+        <Static id="btnLogout" taborder="0" text="로그아웃" top="11" width="45" height="16" right="20" cssclass="sta_TF_Util" fittocontents="width" onclick="btnLogout_onclick"/>
+        <Static id="Static02" taborder="2" top="16" height="8" cssclass="sta_TF_UtilLine" right="btnLogout:10" width="1"/>
         <Static id="Static01_00" taborder="4" text="문화센터 바로가기" top="11" width="84" height="16" right="Static02:10" cssclass="sta_TF_Util" fittocontents="width"/>
         <Static id="Static02_00" taborder="3" top="16" height="8" cssclass="sta_TF_UtilLine" right="Static01_00:10" width="1"/>
         <Static id="Static01_00_00" taborder="5" text="도움말" top="11" width="31" height="16" right="Static02_00:10" cssclass="sta_TF_Util" fittocontents="width"/>
         <Static id="Static02_00_00" taborder="6" top="16" height="8" cssclass="sta_TF_UtilLine" right="Static01_00_00:10" width="1"/>
-        <Button id="Button00" taborder="7" text="[본사]홍길동님" top="11" height="16" fittocontents="width" cssclass="btn_TF_UserSetting" right="Static02_00_00:10" width="87"/>
+        <Button id="txtName" taborder="7" text="[본사]홍길동님" top="11" height="16" fittocontents="width" cssclass="btn_TF_UserSetting" right="Static02_00_00:10" width="87"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[
@@ -31,8 +31,7 @@ this.Form_Top_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	var branch = nexacro.getPrivateProfile("branch");
 	var adminName = nexacro.getPrivateProfile("name");
 	
-	this.txtBranch.set_text("[" + branch + "]");
-	this.txtName.set_text(adminName);
+	this.txtName.set_text("[" + branch + "]" + adminName);
 		
 };
 
@@ -56,11 +55,6 @@ this.fn_closeMain = function()
 	objVFrame01.set_separatesize("46,0,*,0");
 };
 
-
-this.Form_Top_onclick = function(obj:nexacro.Form,e:nexacro.ClickEventInfo)
-{
-	
-};
 ]]></Script>
     <Objects/>
   </Form>
