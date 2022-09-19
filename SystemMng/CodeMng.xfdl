@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="CodeMng" width="1280" height="770" titletext="New Form" onactivate="CodeMng_onactivate" ondeactivate="CodeMng_ondeactivate" onload="CodeMng_onload" onclose="CodeMng_onclose">
+  <Form id="CodeMng" width="1280" height="795" titletext="New Form" onactivate="CodeMng_onactivate" ondeactivate="CodeMng_ondeactivate" onload="CodeMng_onload" onclose="CodeMng_onclose">
     <Layouts>
-      <Layout height="770" width="1280">
-        <Grid id="GridCodeList" taborder="0" left="10" top="85" width="520" height="675" binddataset="gdsCode" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" oncellclick="GridCodeList_oncellclick" treeuseimage="false">
+      <Layout height="795" width="1280">
+        <Grid id="GridCodeList" taborder="0" left="10" top="36" width="400" height="750" binddataset="gdsCode" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" oncellclick="GridCodeList_oncellclick" treeuseimage="false">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="517"/>
+                <Column size="380"/>
               </Columns>
               <Rows>
                 <Row size="24"/>
@@ -18,35 +18,65 @@
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtCdIdLabel" taborder="8" text="그룹코드" left="555" top="85" width="120" height="30"/>
-        <Static id="txtCdLabel" taborder="9" text="코드" left="555" top="135" width="120" height="30"/>
-        <Static id="txtCdNmLabel" taborder="10" text="코드명" left="555" top="185" width="120" height="30"/>
-        <Edit id="editCdId" taborder="4" left="705" top="85" width="570" height="30" visible="true" readonly="true"/>
-        <Edit id="editCd" taborder="5" left="705" top="135" width="570" height="30" readonly="true"/>
-        <Static id="txtUseYnLabel" taborder="11" text="노출여부" left="555" top="245" width="120" height="30"/>
-        <Radio id="radioUseYn" taborder="7" left="705" top="245" width="280" height="30" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
-          <Dataset id="innerdataset">
-            <ColumnInfo>
-              <Column id="codecolumn" size="256"/>
-              <Column id="datacolumn" size="256"/>
-            </ColumnInfo>
-            <Rows>
-              <Row>
-                <Col id="codecolumn">Y</Col>
-                <Col id="datacolumn">노출</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">N</Col>
-                <Col id="datacolumn">미노출</Col>
-              </Row>
-            </Rows>
-          </Dataset>
-        </Radio>
-        <Button id="btnCreateRoot" taborder="1" text="최상위 생성" left="10" top="25" width="120" height="50" onclick="btnCreateRoot_onclick"/>
-        <Button id="btnCreateChild" taborder="2" text="하위 생성" left="150" top="25" width="120" height="50" onclick="btnCreateChild_onclick"/>
-        <Button id="btnDelete" taborder="3" text="삭제" left="290" top="25" width="120" height="50" onclick="btnDelete_onclick"/>
-        <Edit id="editCdNm" taborder="6" left="705" top="185" width="570" height="30"/>
-        <Button id="btnSave" taborder="12" text="변경사항 저장" left="1155" top="295" width="120" height="50" onclick="btnSave_onclick"/>
+        <Button id="btnCreateRoot" taborder="1" text="최상위 생성" left="10" top="10" width="90" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium"/>
+        <Button id="btnCreateChild" taborder="2" text="하위 생성" left="106" top="10" width="84" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium"/>
+        <Button id="btnDelete" taborder="3" text="삭제" left="196" top="10" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High"/>
+        <Div id="Div00" taborder="4" text="Div00" left="435" top="35" height="30" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="txtCdIdLabel" taborder="0" text="그룹코드" left="0" top="0" width="120" height="30"/>
+              <Edit id="editCdId" taborder="1" left="150" top="0" height="30" visible="true" readonly="true" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="5" text="Div01" left="435" top="78" height="30" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="txtCdLabel" taborder="0" text="코드" left="0" top="0" width="120" height="30"/>
+              <Edit id="editCd" taborder="1" left="150" top="0" height="30" readonly="true" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="6" text="Div02" left="435" top="119" height="30" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="txtCdNmLabel" taborder="0" text="코드명" top="0" width="120" height="30" left="0"/>
+              <Edit id="editCdNm" taborder="1" left="150" top="0" height="30" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="7" text="Div03" left="435" top="160" height="30" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="txtUseYnLabel" taborder="0" text="노출여부" left="0" top="0" width="120" height="30"/>
+              <Radio id="radioUseYn" taborder="1" left="150" top="0" width="280" height="30" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">Y</Col>
+                      <Col id="datacolumn">노출</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">N</Col>
+                      <Col id="datacolumn">미노출</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Radio>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div04" taborder="8" text="Div04" left="435" top="206" height="30" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Button id="btnSave" taborder="0" text="변경사항 저장" top="0" width="100" height="21" onclick="btnSave_onclick" cssclass="btn_WF_High" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[
@@ -261,10 +291,10 @@ this.CodeMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
 
 ]]></Script>
     <Bind>
-      <BindItem id="item2" compid="editCdNm" propid="value" datasetid="gdsCode" columnid="cdNm"/>
-      <BindItem id="item1" compid="radioUseYn" propid="value" datasetid="gdsCode" columnid="useYn"/>
-      <BindItem id="item0" compid="editCd" propid="value" datasetid="gdsCode" columnid="cd"/>
-      <BindItem id="item3" compid="editCdId" propid="value" datasetid="gdsCode" columnid="cdId"/>
+      <BindItem id="item3" compid="Div00.form.editCdId" propid="value" datasetid="gdsCode" columnid="cdId"/>
+      <BindItem id="item2" compid="Div01.form.editCd" propid="value" datasetid="gdsCode" columnid="cd"/>
+      <BindItem id="item0" compid="Div02.form.editCdNm" propid="value" datasetid="gdsCode" columnid="cdNm"/>
+      <BindItem id="item1" compid="Div03.form.radioUseYn" propid="value" datasetid="gdsCode" columnid="useYn"/>
     </Bind>
     <Objects/>
   </Form>

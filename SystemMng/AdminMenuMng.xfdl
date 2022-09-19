@@ -1,39 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="AdminMenuMng" width="1280" height="1000" titletext="관리자 메뉴 관리" onload="AdminMenuMng_onload" onclose="AdminMenuMng_onclose">
+  <Form id="AdminMenuMng" width="1280" height="795" titletext="관리자 메뉴 관리" onload="AdminMenuMng_onload" onclose="AdminMenuMng_onclose">
     <Layouts>
-      <Layout height="1000" width="1280">
-        <Static text="Home" width="220" height="60" id="navigator" left="1050" top="10" taborder="0"/>
-        <Button id="btnCreateRoot" taborder="1" text="최상위 생성" left="10" top="25" width="120" height="50" onclick="btnCreateRoot_onclick"/>
-        <Button id="btnCreateChild" taborder="2" text="하위 생성" left="150" top="25" width="120" height="50" onclick="btnCreateChild_onclick"/>
-        <Button id="btnDelete" taborder="3" text="삭제" left="290" top="25" width="120" height="50" onclick="btnDelete_onclick"/>
-        <Grid id="GridMenuList" taborder="4" left="10" top="85" width="520" height="630" binddataset="gdsMenu" treeusecheckbox="false" treeinitstatus="collapse,all" oncellclick="GridCodeList_oncellclick" autoenter="none" treeuseimage="false">
+      <Layout height="795" width="1280">
+        <Button id="btnCreateRoot" taborder="0" text="최상위 생성" left="10" top="10" width="90" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium"/>
+        <Button id="btnCreateChild" taborder="1" text="하위 생성" left="106" top="10" width="84" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium"/>
+        <Button id="btnDelete" taborder="2" text="삭제" left="196" top="10" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High"/>
+        <Grid id="GridMenuList" taborder="3" left="10" top="36" width="400" height="750" binddataset="gdsMenu" treeusecheckbox="false" treeinitstatus="collapse,all" oncellclick="GridCodeList_oncellclick" autoenter="none" treeuseimage="false">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="516"/>
+                <Column size="380"/>
               </Columns>
               <Rows>
                 <Row size="24"/>
               </Rows>
               <Band id="body">
-                <Cell text="bind:menuNm" displaytype="treeitemcontrol" edittype="tree" checkboxfalsevalue="N" checkboxtruevalue="Y" treelevel="bind:dpth"/>
+                <Cell text="bind:menuNm" displaytype="treeitemcontrol" edittype="tree" checkboxfalsevalue="N" checkboxtruevalue="Y" treelevel="bind:dpth" treestartlevel="1"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtMenuNmLabel" taborder="5" text="메뉴명" left="555" top="85" width="120" height="30"/>
-        <Div id="Div00" taborder="9" text="Div00" left="555" top="125" width="715" height="30">
+        <Div id="Div00" taborder="5" text="Div00" left="435" top="75" height="30" right="20" formscrolltype="none">
           <Layouts>
             <Layout>
               <Static id="txtSiteUrl" taborder="0" text="사이트 URL" left="0" top="0" width="120" height="30"/>
-              <Edit id="editSiteUrl" taborder="1" left="150" top="0" width="565" height="30"/>
+              <Edit id="editSiteUrl" taborder="1" left="150" top="0" height="30" right="0"/>
             </Layout>
           </Layouts>
         </Div>
-        <Edit id="editMenuNm" taborder="8" left="705" top="85" width="565" height="30"/>
-        <Button id="btnSave" taborder="6" text="변경사항 저장" left="1150" top="430" width="120" height="50" onclick="btnSave_onclick"/>
-        <Grid id="Grid00" taborder="7" left="10" top="720" width="1260" height="270" binddataset="gdsMenu">
+        <Grid id="Grid00" taborder="4" left="20" top="805" width="1260" height="270" binddataset="gdsMenu" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -97,23 +93,23 @@
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div01" taborder="10" text="Div01" left="555" top="165" width="715" height="30">
+        <Div id="Div01" taborder="6" text="Div01" left="435" top="115" height="30" right="20" formscrolltype="none">
           <Layouts>
             <Layout>
               <Static id="txtPagePathLabel" taborder="0" text="관리자 페이지 경로" left="0" top="0" width="120" height="30"/>
-              <Edit id="editPagePath" taborder="1" left="150" top="0" width="565" height="30"/>
+              <Edit id="editPagePath" taborder="1" left="150" top="0" height="30" right="0"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div02" taborder="11" text="Div02" left="555" top="205" width="715" height="30">
+        <Div id="Div02" taborder="7" text="Div02" left="435" top="155" height="30" right="20" formscrolltype="none">
           <Layouts>
             <Layout>
               <Static id="txtPageIdLabel" taborder="0" text="관리자 페이지 ID" left="0" top="0" width="120" height="30"/>
-              <Edit id="editPageId" taborder="1" left="150" top="0" width="565" height="30"/>
+              <Edit id="editPageId" taborder="1" left="150" top="0" height="30" right="0"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="12" text="Div03" left="555" top="245" width="715" height="30">
+        <Div id="Div03" taborder="8" text="Div03" left="435" top="195" width="825" height="30">
           <Layouts>
             <Layout>
               <Static id="txtWndYnLabel" taborder="0" text="새창여부" left="0" top="0" width="120" height="30"/>
@@ -138,7 +134,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div04" taborder="13" text="Div04" left="555" top="280" width="715" height="60">
+        <Div id="Div04" taborder="9" text="Div04" left="435" top="230" width="825" height="30">
           <Layouts>
             <Layout>
               <Static id="txtUseYnLabel" taborder="0" text="노출여부" left="0" top="0" width="120" height="30"/>
@@ -160,6 +156,21 @@
                   </Rows>
                 </Dataset>
               </Radio>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div05" taborder="10" text="Div05" left="435" top="270" height="30" right="20">
+          <Layouts>
+            <Layout>
+              <Button id="btnSave" taborder="0" text="변경사항 저장" top="0" width="100" height="21" onclick="btnSave_onclick" cssclass="btn_WF_High" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div06" taborder="11" text="Div06" left="435" top="35" height="30" right="20">
+          <Layouts>
+            <Layout>
+              <Static id="txtMenuNmLabel" taborder="0" text="메뉴명" left="0" top="0" width="120" height="30"/>
+              <Edit id="editMenuNm" taborder="1" left="150" top="0" height="30" right="0"/>
             </Layout>
           </Layouts>
         </Div>
@@ -186,9 +197,6 @@ this.AdminMenuMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	var objOwnerFrame = this.getOwnerFrame();
 	
 	var menuNm = objOwnerFrame.param.MENU_NM;
-	
-	this.navigator.set_text( this.navigator.text + " > " + menuNm );
-	
 };
 
 
@@ -338,12 +346,12 @@ this.AdminMenuMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
 };
 ]]></Script>
     <Bind>
-      <BindItem id="item0" compid="editMenuNm" propid="value" datasetid="gdsMenu" columnid="menuNm"/>
       <BindItem id="item1" compid="Div00.form.editSiteUrl" propid="value" datasetid="gdsMenu" columnid="userLink"/>
       <BindItem id="item4" compid="Div01.form.editPagePath" propid="value" datasetid="gdsMenu" columnid="pagePath"/>
       <BindItem id="item5" compid="Div02.form.editPageId" propid="value" datasetid="gdsMenu" columnid="pageId"/>
       <BindItem id="item2" compid="Div03.form.radioWndYn" propid="value" datasetid="gdsMenu" columnid="userWndYn"/>
       <BindItem id="item3" compid="Div04.form.radioUseYn" propid="value" datasetid="gdsMenu" columnid="userUseYn"/>
+      <BindItem id="item0" compid="Div06.form.editMenuNm" propid="value" datasetid="gdsMenu" columnid="menuNm"/>
     </Bind>
   </Form>
 </FDL>
