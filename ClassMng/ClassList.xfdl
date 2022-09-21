@@ -23,7 +23,7 @@
                         <Layout>
                           <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
                           <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:0" top="0" width="100" height="31"/>
-                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:10" top="0" width="100" height="31"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:10" top="0" width="100" height="31" onitemchanged="Div00_Div00_00_Div00_00_01_Combo01_onitemchanged" innerdataset="ds_semester_list" codecolumn="cd" datacolumn="cdNm"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -144,13 +144,13 @@
             <Layout>
               <Static id="Static00" taborder="0" text="강좌목록" left="0" top="16" width="48" height="14" fittocontents="none" cssclass="sta_WF_TitGray"/>
               <Static id="Static01" taborder="1" text="(0개)" left="Static00:9" top="16" width="50" height="14" fittocontents="width"/>
-              <Button id="Button00" taborder="2" text="저장" top="0" height="30" width="50" right="479"/>
-              <Button id="Button01" taborder="3" text="일괄변경" top="0" height="30" width="70" left="Button00:10"/>
-              <Button id="Button02" taborder="4" text="신규강좌" top="0" height="30" width="70" left="Button01:10"/>
-              <Button id="Button03" taborder="5" text="강좌복사" top="0" height="30" width="70" left="Button02:10"/>
-              <Button id="Button04" taborder="6" text="대기자 등록" top="0" height="30" width="60" wordWrap="char" left="Button03:10"/>
-              <Button id="Button05" taborder="7" text="출석부" top="0" height="30" width="60" left="Button04:10"/>
-              <Button id="Button06" taborder="8" text="엑셀" top="0" height="30" width="50" right="39"/>
+              <Button id="Button00" taborder="2" text="저장" top="0" height="30" width="50" right="509" cssclass="btn_WF_Medium"/>
+              <Button id="Button01" taborder="3" text="일괄변경" top="0" height="30" width="70" left="Button00:10" cssclass="btn_WF_Medium"/>
+              <Button id="Button02" taborder="4" text="신규강좌" top="0" height="30" width="70" left="Button01:10" cssclass="btn_WF_Medium"/>
+              <Button id="Button03" taborder="5" text="강좌복사" top="0" height="30" width="70" left="Button02:10" cssclass="btn_WF_Medium"/>
+              <Button id="Button04" taborder="6" text="대기자 등록" top="0" height="30" width="90" left="Button03:10" wordWrap="char" cssclass="btn_WF_Medium"/>
+              <Button id="Button05" taborder="7" text="출석부" top="0" height="30" width="60" left="Button04:10" cssclass="btn_WF_Medium"/>
+              <Button id="Button06" taborder="8" text="엑셀" top="0" height="30" width="50" left="Button05:10" cssclass="btn_WF_Medium"/>
               <Div id="Div00" taborder="9" text="Div00" left="0" top="52" width="1155" height="400">
                 <Layouts>
                   <Layout>
@@ -207,22 +207,113 @@
           <Column id="Column5" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_dw_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_semester_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classState_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classCtgy_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classGb_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classAprvState_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classTargetGb_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
 
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
-	var objOwnerFrame = this.getOwnerFrame();
-
-	// 권한 조회
-	//this.fn_get_auth(objOwnerFrame.param.MENU_ID);
+	this.application = nexacro.getApplication();
 	
+	// 코드 데이터
+	this.fn_code_list();
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_code_list = function()
+{	
+	var strSvcId    = "codeList";
+	var strSvcUrl   = this.application.Class_svc + "::codeList.do";
+	var inData      = "";
+	var outData     = "ds_dw_list=dwList ds_semester_list=semesterList ds_classState_list=classStateList ds_classCtgy_list=classCtgyList ";
+		outData		+= "ds_classGb_list=classGbList ds_classAprvState_list=classAprvStateList ds_classTargetGb_list=classTargetGbList";
+	var strArg      = "cdId=008||034||CODE_64||CODE_65||CODE_66||CODE_67||CODE_68";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+
+  switch(svcID)
+  {
+    case "codeList":
+	
+	break;
+  }
+};
+this.Div00_Div00_00_Div00_00_01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
 	
 };
 ]]></Script>
