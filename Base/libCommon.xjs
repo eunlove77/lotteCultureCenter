@@ -50,7 +50,8 @@ this.gfn_sessionCheck = function(){
             outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
             strArg,         // 입력값으로 보낼 arguments, a=b
             fnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]			
+            isAsync);         // 비동기통신 여부 [생략가능]				
+			
 }
 
 
@@ -66,8 +67,7 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 		switch(svcID)
 		{
 			case "session_check":	
-				nexacro.getApplication().gfn_initFrame();
-				//this.getOwnerFrame().form.go("Sample::Login_Test.xfdl");
+				nexacro.getApplication().gfn_initFrame();			
 			break;
 		}
 	
@@ -77,11 +77,8 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{    
 		case "session_check":
-			trace("로그인 성공");
-			//nexacro.getApplication().gfn_setFrameSize();
-			//nexacro.getApplication().gfn_menu(nexacro.getApplication().Menu_svc);
-			//this.gfn_codeList(nexacro.getApplication().Admin_svc);			
-			//this.getOwnerFrame().form.go("FrameBase::Form_Main.xfdl");
+			trace("세션 유지");
+			nexacro.getApplication().isAuth = true;
 		break; 
 	}
 };
