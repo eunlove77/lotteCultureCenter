@@ -41,13 +41,13 @@
           </Formats>
         </Grid>
         <Button id="btnCreateRoot" taborder="1" text="그룹코드 추가" top="140" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium" right="100" width="90"/>
-        <Button id="btnCreateChild" taborder="2" text="공통코드 추가" top="439" width="90" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium" right="100"/>
+        <Button id="btnCreateChild" taborder="2" text="공통코드 추가" top="489" width="90" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium" right="100"/>
         <Button id="btnDelete" taborder="3" text="삭제" top="140" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High" right="10"/>
         <Static id="txtMenuNm" taborder="4" text="메뉴명" left="10" top="10" height="41" right="10" font="bold 24px/normal &quot;Noto Sans KR&quot;" border="0px none, 0px none, 1px solid darkgray"/>
-        <Button id="btnDeleteDtl" taborder="5" text="삭제" top="439" height="21" onclick="btnDeleteDtl_onclick" cssclass="btn_WF_High" right="10" width="84"/>
-        <Edit id="searchQuery" taborder="6" left="100" top="65" width="500" height="30"/>
+        <Button id="btnDeleteDtl" taborder="5" text="삭제" top="489" height="21" onclick="btnDeleteDtl_onclick" cssclass="btn_WF_High" right="10" width="84"/>
+        <Edit id="searchQuery" taborder="6" left="100" top="65" width="500" height="30" onkeydown="searchQuery_onkeydown"/>
         <Static id="Static00" taborder="7" text="그룹코드/명" left="10" top="65" width="80" height="30"/>
-        <Grid id="GridCodeDtlList" taborder="8" left="10" top="470" height="264" autofittype="col" right="10" binddataset="ds_code_dtl">
+        <Grid id="GridCodeDtlList" taborder="8" left="10" top="520" height="264" autofittype="col" right="10" binddataset="ds_code_dtl">
           <Formats>
             <Format id="default">
               <Columns>
@@ -86,64 +86,6 @@
         </Grid>
         <Button id="btnSearch" taborder="9" text="조회" top="65" width="90" height="30" cssclass="btn_WF_Medium" fittocontents="none" left="searchQuery:10" onclick="btnSearch_onclick"/>
         <Button id="btnSave" taborder="10" text="저장" top="25" width="84" height="21" cssclass="btn_WF_High" fittocontents="none" right="10" onclick="btnSave_onclick"/>
-        <Grid id="Grid00" taborder="11" left="135" top="924" width="1125" height="270" binddataset="gdsCode">
-          <Formats>
-            <Format id="default">
-              <Columns>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-              </Columns>
-              <Rows>
-                <Row band="head" size="24"/>
-                <Row size="24"/>
-              </Rows>
-              <Band id="head">
-                <Cell text="cdId"/>
-                <Cell col="1" text="cd"/>
-                <Cell col="2" text="cdNm"/>
-                <Cell col="3" text="cdOrd"/>
-                <Cell col="4" text="dpth"/>
-                <Cell col="5" text="useYn"/>
-                <Cell col="6" text="regId"/>
-                <Cell col="7" text="regIp"/>
-                <Cell col="8" text="regDtm"/>
-                <Cell col="9" text="modId"/>
-                <Cell col="10" text="modIp"/>
-                <Cell col="11" text="modDtm"/>
-                <Cell col="12" text="nextChildOrd"/>
-                <Cell col="13" text="memo"/>
-              </Band>
-              <Band id="body">
-                <Cell text="bind:cdId"/>
-                <Cell col="1" text="bind:cd"/>
-                <Cell col="2" text="bind:cdNm"/>
-                <Cell col="3" text="bind:cdOrd"/>
-                <Cell col="4" text="bind:dpth"/>
-                <Cell col="5" text="bind:useYn"/>
-                <Cell col="6" text="bind:regId"/>
-                <Cell col="7" text="bind:regIp"/>
-                <Cell col="8" text="bind:regDtm"/>
-                <Cell col="9" text="bind:modId"/>
-                <Cell col="10" text="bind:modIp"/>
-                <Cell col="11" text="bind:modDtm"/>
-                <Cell col="12" text="bind:nextChildOrd"/>
-                <Cell col="13" text="bind:memo"/>
-              </Band>
-            </Format>
-          </Formats>
-        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -339,11 +281,14 @@ this.GridCodeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 
 this.btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.gfn_isNull(this.searchQuery.value)){
-		this.ds_code_mst.filter("");
-		this.alert("검색 내용을 입력해주세요.");
-	}else{
-		this.ds_code_mst.filter("cdNm=='" + this.searchQuery.value + "' || cd =='" + this.searchQuery.value + "'");
+	this.fn_search();
+};
+
+
+this.searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+		this.fn_search();
 	}
 };
 
@@ -397,6 +342,18 @@ this.fn_init_code = function(objDs, dpth, parentCd){
 	objDs.set_updatecontrol(true);
 }
 
+this.fn_search = function(){
+	if(this.gfn_isNull(this.searchQuery.value)){
+		this.ds_code_mst.filter("");		
+	}else{
+		//this.ds_code_mst.filter("cdNm=='" + this.searchQuery.value + "' || cd =='" + this.searchQuery.value + "'");
+		var strQuery = "";
+		strQuery += "cdNm.indexOf('" + this.searchQuery.value + "') > -1";
+		strQuery += "|| cd.indexOf('" + this.searchQuery.value + "') > -1";
+		
+		this.ds_code_mst.filter(strQuery);
+	}
+}
 
 ]]></Script>
     <Objects>
