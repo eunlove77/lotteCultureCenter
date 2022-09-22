@@ -1,85 +1,156 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="CodeMng" width="1280" height="795" titletext="New Form" onactivate="CodeMng_onactivate" ondeactivate="CodeMng_ondeactivate" onload="CodeMng_onload" onclose="CodeMng_onclose">
+  <Form id="CodeMng" width="1280" height="800" titletext="New Form" onactivate="CodeMng_onactivate" ondeactivate="CodeMng_ondeactivate" onload="CodeMng_onload" onclose="CodeMng_onclose">
     <Layouts>
-      <Layout height="795" width="1280">
-        <Grid id="GridCodeList" taborder="0" left="10" top="36" width="400" height="750" binddataset="gdsCode" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" oncellclick="GridCodeList_oncellclick" treeuseimage="false">
+      <Layout height="800" width="1280">
+        <Grid id="GridCodeList" taborder="0" left="10" top="166" height="264" binddataset="ds_code_mst" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" treeuseimage="false" right="10" autofittype="col" oncellclick="GridCodeList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="380"/>
+                <Column size="30" band="left"/>
+                <Column size="40" band="left"/>
+                <Column size="120" band="left"/>
+                <Column size="200" band="left"/>
+                <Column size="250"/>
+                <Column size="40"/>
+                <Column size="100"/>
               </Columns>
               <Rows>
-                <Row size="24"/>
+                <Row size="24" band="head"/>
+                <Row size="30"/>
               </Rows>
+              <Band id="head">
+                <Cell text="NO"/>
+                <Cell col="1" text="상태"/>
+                <Cell col="2" text="그룹코드 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
+                <Cell col="3" text="그룹코드명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
+                <Cell col="4" text="비고" textAlign="center"/>
+                <Cell col="5" text="사용여부"/>
+                <Cell col="6" text="변경일자"/>
+              </Band>
               <Band id="body">
-                <Cell text="bind:cdNm" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:dpth" treestartlevel="0" editautoselect="false"/>
+                <Cell text="expr:currow + 1"/>
+                <Cell col="1" expr="expr: dataset.getRowType(currow) == 1 ? '' : ( dataset.getRowType(currow) == 2 ? '추가' : ( dataset.getRowType(currow) == 4 ? '변경' : '' ) )"/>
+                <Cell col="2" text="bind:cd" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="3" text="bind:cdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="4" textAlign="left" edittype="text" text="bind:memo"/>
+                <Cell col="5" text="bind:useYn" displaytype="combotext" edittype="combo" combocodecol="useYn" combodatacol="useYn" combodataset="ds_yn"/>
+                <Cell col="6" text="bind:modDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Button id="btnCreateRoot" taborder="1" text="최상위 생성" left="10" top="10" width="90" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium"/>
-        <Button id="btnCreateChild" taborder="2" text="하위 생성" left="106" top="10" width="84" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium"/>
-        <Button id="btnDelete" taborder="3" text="삭제" left="196" top="10" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High"/>
-        <Div id="Div00" taborder="4" text="Div00" left="435" top="35" height="30" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="txtCdIdLabel" taborder="0" text="그룹코드" left="0" top="0" width="120" height="30"/>
-              <Edit id="editCdId" taborder="1" left="150" top="0" height="30" visible="true" readonly="true" right="0"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="Div01" taborder="5" text="Div01" left="435" top="78" height="30" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="txtCdLabel" taborder="0" text="코드" left="0" top="0" width="120" height="30"/>
-              <Edit id="editCd" taborder="1" left="150" top="0" height="30" readonly="true" right="0"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="Div02" taborder="6" text="Div02" left="435" top="119" height="30" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="txtCdNmLabel" taborder="0" text="코드명" top="0" width="120" height="30" left="0"/>
-              <Edit id="editCdNm" taborder="1" left="150" top="0" height="30" right="0"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="Div03" taborder="7" text="Div03" left="435" top="160" height="30" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="txtUseYnLabel" taborder="0" text="노출여부" left="0" top="0" width="120" height="30"/>
-              <Radio id="radioUseYn" taborder="1" left="150" top="0" width="280" height="30" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
-                <Dataset id="innerdataset">
-                  <ColumnInfo>
-                    <Column id="codecolumn" size="256"/>
-                    <Column id="datacolumn" size="256"/>
-                  </ColumnInfo>
-                  <Rows>
-                    <Row>
-                      <Col id="codecolumn">Y</Col>
-                      <Col id="datacolumn">노출</Col>
-                    </Row>
-                    <Row>
-                      <Col id="codecolumn">N</Col>
-                      <Col id="datacolumn">미노출</Col>
-                    </Row>
-                  </Rows>
-                </Dataset>
-              </Radio>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="Div04" taborder="8" text="Div04" left="435" top="206" height="30" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Button id="btnSave" taborder="0" text="변경사항 저장" top="0" width="100" height="21" onclick="btnSave_onclick" cssclass="btn_WF_High" right="0"/>
-            </Layout>
-          </Layouts>
-        </Div>
+        <Button id="btnCreateRoot" taborder="1" text="그룹코드 추가" top="140" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium" right="100" width="90"/>
+        <Button id="btnCreateChild" taborder="2" text="공통코드 추가" top="439" width="90" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium" right="100"/>
+        <Button id="btnDelete" taborder="3" text="삭제" top="140" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High" right="10"/>
+        <Static id="txtMenuNm" taborder="4" text="메뉴명" left="10" top="10" height="41" right="10" font="bold 24px/normal &quot;Noto Sans KR&quot;" border="0px none, 0px none, 1px solid darkgray"/>
+        <Button id="btnDeleteDtl" taborder="5" text="삭제" top="439" height="21" onclick="btnDeleteDtl_onclick" cssclass="btn_WF_High" right="10" width="84"/>
+        <Edit id="searchQuery" taborder="6" left="100" top="65" width="500" height="30"/>
+        <Static id="Static00" taborder="7" text="그룹코드/명" left="10" top="65" width="80" height="30"/>
+        <Grid id="GridCodeDtlList" taborder="8" left="10" top="470" height="264" autofittype="col" right="10" binddataset="ds_code_dtl">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="30" band="left"/>
+                <Column size="40" band="left"/>
+                <Column size="120" band="left"/>
+                <Column size="200" band="left"/>
+                <Column size="40"/>
+                <Column size="40"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="NO"/>
+                <Cell col="1" text="상태"/>
+                <Cell col="2" text="공통코드 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
+                <Cell col="3" text="공통코드명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
+                <Cell col="4" text="사용여부"/>
+                <Cell col="5" text="정렬순서"/>
+                <Cell col="6" text="변경일자"/>
+              </Band>
+              <Band id="body">
+                <Cell text="expr:currow + 1"/>
+                <Cell col="1" expr="expr: dataset.getRowType(currow) == 1 ? '' : ( dataset.getRowType(currow) == 2 ? '추가' : ( dataset.getRowType(currow) == 4 ? '변경' : '' ) )"/>
+                <Cell col="2" text="bind:cd" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="3" text="bind:cdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="4" text="bind:useYn" displaytype="combotext" edittype="combo" combodataset="ds_yn" combocodecol="useYn" combodatacol="useYn"/>
+                <Cell col="5" text="bind:cdOrd"/>
+                <Cell col="6" text="bind:modDtm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnSearch" taborder="9" text="조회" top="65" width="90" height="30" cssclass="btn_WF_Medium" fittocontents="none" left="searchQuery:10" onclick="btnSearch_onclick"/>
+        <Button id="btnSave" taborder="10" text="저장" top="25" width="84" height="21" cssclass="btn_WF_High" fittocontents="none" right="10" onclick="btnSave_onclick"/>
+        <Grid id="Grid00" taborder="11" left="135" top="924" width="1125" height="270" binddataset="gdsCode">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="cdId"/>
+                <Cell col="1" text="cd"/>
+                <Cell col="2" text="cdNm"/>
+                <Cell col="3" text="cdOrd"/>
+                <Cell col="4" text="dpth"/>
+                <Cell col="5" text="useYn"/>
+                <Cell col="6" text="regId"/>
+                <Cell col="7" text="regIp"/>
+                <Cell col="8" text="regDtm"/>
+                <Cell col="9" text="modId"/>
+                <Cell col="10" text="modIp"/>
+                <Cell col="11" text="modDtm"/>
+                <Cell col="12" text="nextChildOrd"/>
+                <Cell col="13" text="memo"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:cdId"/>
+                <Cell col="1" text="bind:cd"/>
+                <Cell col="2" text="bind:cdNm"/>
+                <Cell col="3" text="bind:cdOrd"/>
+                <Cell col="4" text="bind:dpth"/>
+                <Cell col="5" text="bind:useYn"/>
+                <Cell col="6" text="bind:regId"/>
+                <Cell col="7" text="bind:regIp"/>
+                <Cell col="8" text="bind:regDtm"/>
+                <Cell col="9" text="bind:modId"/>
+                <Cell col="10" text="bind:modIp"/>
+                <Cell col="11" text="bind:modDtm"/>
+                <Cell col="12" text="bind:nextChildOrd"/>
+                <Cell col="13" text="bind:memo"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 
 
@@ -87,7 +158,7 @@
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-
+this.tabObj = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -97,27 +168,14 @@ this.application = null;
 this.CodeMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
+	this.tabObj = obj;
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	
+	this.fn_init_code(this.ds_code_mst, "0");
+	
+	//this.gfnSetCheckBoxNoDataset(this.ds_code_dtl, this.GridCodeDtlList, 1); 	
 };
 
-
-this.CodeMng_onactivate = function(obj:nexacro.Form,e:nexacro.ActivateEventInfo)
-{
-	var objGridCode = this.GridCodeList;	
-	var objDs = objGridCode.getBindDataset();	
-	
-	//objDs.reset();	
-	
-	
-};
-
-
-this.CodeMng_ondeactivate = function(obj:nexacro.Form,e:nexacro.ActivateEventInfo)
-{
-	var objGridCode = this.GridCodeList;	
-	var objDs = objGridCode.getBindDataset();	
-	
-	//objDs.applyChange();
-};
 
 this.btnCreateRoot_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -135,57 +193,49 @@ this.btnCreateRoot_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	
 	tmpCdOrd++;
 	
-	var newRow = objDs.addRow();
+	var nRow = objDs.addRow();
 
- 	objDs.setColumn(newRow, "cdId", "");
- 	objDs.setColumn(newRow, "cd", "CODE_" + tmpCdOrd);
- 	objDs.setColumn(newRow, "cdNm", "임시코드명" + tmpCdOrd);
- 	objDs.setColumn(newRow, "cdOrd", tmpCdOrd);
- 	objDs.setColumn(newRow, "dpth", 0);
-	objDs.setColumn(newRow, "useYn", "Y");
+ 	objDs.setColumn(nRow, "cdId", "");
+ 	objDs.setColumn(nRow, "cd", "CODE_" + tmpCdOrd);
+ 	objDs.setColumn(nRow, "cdNm", "임시코드명" + tmpCdOrd);
+ 	objDs.setColumn(nRow, "cdOrd", tmpCdOrd);
+ 	objDs.setColumn(nRow, "dpth", 0);
+	objDs.setColumn(nRow, "useYn", "Y");
 
 };
 
 
 this.btnCreateChild_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var objGridCode = this.GridCodeList;	
+	var objGridMstCode = this.GridCodeList;	
+	var objGridCode = this.GridCodeDtlList;	
+	
+	var objMstDs = objGridMstCode.getBindDataset();	
 	var objDs = objGridCode.getBindDataset();	
 	
-	var cd = objDs.getColumn(objDs.rowposition, "cd");
-	var dpth = objDs.getColumn(objDs.rowposition, "dpth");
+	var cd = objMstDs.getColumn(objMstDs.rowposition, "cd");
+	var tmpCdOrd = objDs.getRowCount() + 1;
 	
-	if((dpth + 1) < 2){
-	
-		var tmpCdOrd = 1;
-		for(var i = 0 ; i < objDs.getRowCount() ; i++){
-			var tmpCdId = objDs.getColumn(i, "cdId");
-			var tmpDpth = objDs.getColumn(i, "dpth");
-			
-			if(dpth < tmpDpth && tmpCdId == cd){
-				tmpCdOrd = objDs.getColumn(i, "cdOrd") + 1;
-			}			
-		}
+	var nRow = objDs.insertRow(objDs.rowposition + tmpCdOrd);
 
-		var newRow = objDs.insertRow(objDs.rowposition + tmpCdOrd);
-
-		objDs.setColumn(newRow, "cdId", cd);
-		objDs.setColumn(newRow, "cd", cd + "_" + tmpCdOrd);
-		objDs.setColumn(newRow, "cdNm", "임시코드명" + tmpCdOrd);
-		objDs.setColumn(newRow, "cdOrd", tmpCdOrd);
-		objDs.setColumn(newRow, "dpth", dpth + 1);
-		objDs.setColumn(newRow, "useYn", "Y");
-	}else{
-		this.alert("생성 불가");
-	}
+	objDs.setColumn(nRow, "cdId", cd);
+	objDs.setColumn(nRow, "cd", cd + "_" + tmpCdOrd);
+	objDs.setColumn(nRow, "cdNm", "임시코드명" + tmpCdOrd);
+	objDs.setColumn(nRow, "cdOrd", tmpCdOrd);
+	objDs.setColumn(nRow, "dpth", 1);
+	objDs.setColumn(nRow, "useYn", "Y");
 };
 
 this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var objGridCode = this.GridCodeList;	
-	var objDs = objGridCode.getBindDataset();
-	var cd = objDs.getColumn(objDs.rowposition, "cd");
-	var dtph = objDs.getColumn(objDs.rowposition, "dpth");
+	var objGridMstCode = this.GridCodeList;	
+	var objGridCode = this.GridCodeDtlList;	
+	
+	var objMstDs = objGridMstCode.getBindDataset();
+	var objDs = objGridCode.getBindDataset();	
+	
+	var cd = objMstDs.getColumn(objMstDs.rowposition, "cd");
+	var dtph = objMstDs.getColumn(objMstDs.rowposition, "dpth");
 	
 	var childCnt = 0;
 	for(var i = 0 ; i < objDs.getRowCount() ; i++){
@@ -200,16 +250,26 @@ this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(childCnt > 0){
 		this.alert("하위 노드가 존재합니다.");
 	}else{
-		objDs.deleteRow(objDs.rowposition);
+		objMstDs.deleteRow(objMstDs.rowposition);
 	}
 	
 };
+
+
+this.btnDeleteDtl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objGridCode = this.GridCodeDtlList;		
+	var objDs = objGridCode.getBindDataset();
+	
+	objDs.deleteRow(objDs.rowposition);
+};
+
 
 this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var strSvcId    = "code_save";
 	var strSvcUrl   = this.application.Admin_svc + "::code/updateCode.do";
-	var inData      = "codeInfoList=gdsCode:U";
+	var inData      = "codeMstList=ds_code_mst:U codeDtlList=ds_code_dtl:U";
 	var outData     = "gdsCode=output1";
 	var strArg      = "";
 	var callBackFnc = "fn_callback";
@@ -235,7 +295,7 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 		switch(svcID)
 		{
 			case "code_save":			
-				this.GridCodeList.getBindDataset().reset();	
+				this.GridCodeList.getBindDataset().reset();					
 			break;
 		}
 	
@@ -246,40 +306,50 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 	{    
 		case "code_save":
 			this.alert("변경되었습니다.");
-			this.GridCodeList.getBindDataset().applyChange();				
+			
+			this.fn_init_code(this.ds_code_mst, "0");
+			this.ds_code_dtl.clearData();
 		break; 
 	}
 }
 
 this.GridCodeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var objGridCode = this.GridCodeList;	
-	var objDs = objGridCode.getBindDataset();	
-	var cd = objDs.getColumn(objDs.rowposition, "cd");
-	var dtph = objDs.getColumn(objDs.rowposition, "dpth");
+ 	var objGridCode = this.GridCodeList;	
+	var objGridDtlList = this.GridCodeDtlList;
 	
-	var childCnt = 0;
-	for(var i = 0 ; i < objDs.getRowCount() ; i++){
-		var tmpCdId = objDs.getColumn(i, "cdId");
-		var tmpDpth = objDs.getColumn(i, "dpth");
-		
-		if(dtph < tmpDpth && tmpCdId == cd){
-			childCnt = childCnt + 1;
-		}			
+ 	var objDs = objGridCode.getBindDataset();	
+ 	var cd = objDs.getColumn(objDs.rowposition, "cd");
+
+	var cellIndex = objGridDtlList.getBindCellIndex("body", "chk");
+	
+	if(objGridDtlList.getCellProperty("Head", cellIndex, "text") == "Y"){
+		objGridDtlList.setCellProperty("Head", cellIndex, "text", "N");
 	}
+
+	this.fn_init_code(this.ds_code_dtl, "1", cd);
 	
-	if(childCnt > 0){
-		this.editCd.set_readonly(true);
+//	objGridDtlList.setCellProperty("head", 1, "text", 0); 
+// 	for(var i = 0 ; i < this.ds_code_dtl.getRowCount() ; i++){
+// 		this.ds_code_dtl.checkarray[i] = 0; 
+// 		objGridDtlList.redrawExprCell(); 
+// 	}
+};
+
+
+this.btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_isNull(this.searchQuery.value)){
+		this.ds_code_mst.filter("");
+		this.alert("검색 내용을 입력해주세요.");
 	}else{
-		this.editCd.set_readonly(false);
+		this.ds_code_mst.filter("cdNm=='" + this.searchQuery.value + "' || cd =='" + this.searchQuery.value + "'");
 	}
 };
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
-
-
 
 this.CodeMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
 {
@@ -289,13 +359,87 @@ this.CodeMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
 	objDs.reset();
 };
 
+
+this.fn_init_code = function(objDs, dpth, parentCd){	
+	
+	var gdsCode = this.application.gdsCode;	
+	
+	objDs.clearData();
+	objDs.set_enableevent(false);
+	objDs.set_updatecontrol(false);
+	
+	for(var i = 0 ; i < gdsCode.getRowCount() ; i++){
+		if(gdsCode.getColumn(i, "dpth") == dpth){
+			
+			if(dpth == "0" || ( dpth == "1" && gdsCode.getColumn(i, "cdId") == parentCd)){
+				
+				var nRow = objDs.addRow();
+				
+				objDs.setColumn(nRow, "cdId", gdsCode.getColumn(i, "cdId"));
+				objDs.setColumn(nRow, "cd", gdsCode.getColumn(i, "cd"));
+				objDs.setColumn(nRow, "cdNm", gdsCode.getColumn(i, "cdNm"));
+				objDs.setColumn(nRow, "cdOrd", gdsCode.getColumn(i, "cdOrd"));
+				objDs.setColumn(nRow, "dpth", gdsCode.getColumn(i, "dpth"));
+				objDs.setColumn(nRow, "useYn", gdsCode.getColumn(i, "useYn"));
+				objDs.setColumn(nRow, "modDtm", gdsCode.getColumn(i, "modDtm"));
+				
+				if(dpth == "0"){
+					objDs.setColumn(nRow, "memo", gdsCode.getColumn(i, "memo"));
+				}				
+				
+				objDs.setRowType(nRow, Dataset.ROWTYPE_NORMAL);
+			}
+		}
+	}
+	
+	objDs.set_rowposition(0);
+	objDs.set_enableevent(true);
+	objDs.set_updatecontrol(true);
+}
+
+
 ]]></Script>
+    <Objects>
+      <Dataset id="ds_code_mst">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_code_dtl" cancolumnchange="ds_code_dtl_cancolumnchange" oncolumnchanged="ds_code_dtl_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_yn">
+        <ColumnInfo>
+          <Column id="useYn" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="useYn">Y</Col>
+          </Row>
+          <Row>
+            <Col id="useYn">N</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
     <Bind>
-      <BindItem id="item3" compid="Div00.form.editCdId" propid="value" datasetid="gdsCode" columnid="cdId"/>
-      <BindItem id="item2" compid="Div01.form.editCd" propid="value" datasetid="gdsCode" columnid="cd"/>
-      <BindItem id="item0" compid="Div02.form.editCdNm" propid="value" datasetid="gdsCode" columnid="cdNm"/>
-      <BindItem id="item1" compid="Div03.form.radioUseYn" propid="value" datasetid="gdsCode" columnid="useYn"/>
+      <BindItem id="item0" compid="searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
     </Bind>
-    <Objects/>
   </Form>
 </FDL>

@@ -8,7 +8,7 @@
             <Tabpage id="Tabpage1" text="Tabpage1"/>
           </Tabpages>
         </Tab>
-        <Button id="btnCloseAll" taborder="1" left="1226" top="10" width="48" height="30" text="전체닫기" onclick="btnCloseAll_onclick"/>
+        <Button id="btnCloseAll" taborder="1" left="1400" top="10" width="48" height="30" text="전체닫기" onclick="btnCloseAll_onclick" visible="false"/>
         <Button id="Button00" taborder="2" left="0" top="0" width="16" height="20" onclick="Button00_onclick" cssclass="btn_LF_MenuClose"/>
       </Layout>
     </Layouts>
@@ -79,18 +79,27 @@ this.fn_ActiveTabPage = function(pvWinId)
 this.tabMdi_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
 {
 	var sWinId = obj.tabpages[e.postindex].name;
-	
+
 	this.application.WorkFrame[sWinId].form.setFocus();
 };
 
 this.tabMdi_onextrabuttonclick = function(obj:nexacro.Tab,e:nexacro.TabMouseEventInfo)
 {
-	var sWinId = obj.tabpages[e.index].name;
-	obj.removeTabpage(e.index);
+	var sWinId = obj.tabpages[e.index].name;	
 	
 	this.application.WorkFrame[sWinId].form.close();
 
 	this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
+	
+	obj.removeTabpage(e.index);
+	
+	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
+	{	
+ 		if (nexacro.getPopupFrames()[i].opener.fvWinId == sWinId) 
+ 		{
+ 			nexacro.getPopupFrames()[i].form.close();
+ 		}
+	}	
 };
 
 

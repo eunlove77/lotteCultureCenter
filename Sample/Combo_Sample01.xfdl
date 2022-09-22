@@ -3,51 +3,93 @@
   <Form id="Combo_Sample01" width="1280" height="720" titletext="New Form" onload="Combo_Sample01_onload">
     <Layouts>
       <Layout height="720" mobileorientation="landscape" width="1280">
-        <Combo id="Combo00" taborder="0" text="apple" left="130" top="130" width="150" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="00">
-          <Dataset id="innerdataset">
-            <ColumnInfo>
-              <Column id="codecolumn" size="256"/>
-              <Column id="datacolumn" size="256"/>
-            </ColumnInfo>
-            <Rows>
-              <Row>
-                <Col id="codecolumn">00</Col>
-                <Col id="datacolumn">apple</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">01</Col>
-                <Col id="datacolumn">banana</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">02</Col>
-                <Col id="datacolumn">orange</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">03</Col>
-                <Col id="datacolumn">kiwi</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">04</Col>
-                <Col id="datacolumn">peach</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">05</Col>
-                <Col id="datacolumn">strawberry</Col>
-              </Row>
-            </Rows>
-          </Dataset>
-        </Combo>
+        <Combo id="Combo00" taborder="0" text="" left="40" top="59" width="160" height="21" value="" index="-1" innerdataset="ds_combo" codecolumn="code" datacolumn="data" acceptvaluetype="allowinvalid"/>
+        <Grid id="Grid00" taborder="1" left="40" top="95" width="180" height="155" binddataset="ds_combo">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="code"/>
+                <Cell col="1" text="data"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:code"/>
+                <Cell col="1" text="bind:data"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="Dataset00"/>
-      <DataObject id="DataObject00"/>
+      <Dataset id="ds_combo">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="data" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
 this.Combo_Sample01_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
-	this.alert("1");
+	this.application = nexacro.getApplication();
+
+	var strSvcId    = "combo";
+	var strSvcUrl   = this.application.Admin_svc + "::sample/selectComboList.do";
+	var inData      = "";
+	var outData     = "ds_combo=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+};
+
+
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	
+    return;
+  }
+
+  switch(svcID)
+  {   
+	case "combo":
+		
+		this.ds_combo.insertRow(0);
+		this.ds_combo.setColumn(0, "code", "");
+		this.ds_combo.setColumn(0, "data", "선택");
+		this.Combo00.set_index(0);
+		
+		break;
+	
+  }
 };
 ]]></Script>
+    <InitValue/>
   </Form>
 </FDL>

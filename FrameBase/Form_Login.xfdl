@@ -59,15 +59,15 @@ this.Form_Login_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 this.loginDiv_LoginBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-console.log(this.loginDiv.form.Div02.form.editId);
+
 	var id = this.loginDiv.form.Div02.form.editId.value;
 	var pw = this.loginDiv.form.Div02_00.form.editPw.value;
 	
-	if(id == undefined){
-		this.alert("아이디를 입력해주세요.");
+	if(id == undefined || id == ''){
+		this.alert("아이디를 입력하세요.");
 		this.loginDiv.form.Div02.form.editId.setFocus();
-	}else if(pw == undefined){
-		this.alert("비밀번호를 입력해주세요.");
+	}else if(pw == undefined || pw == ''){
+		this.alert("비밀번호를 입력하세요.");
 		this.loginDiv.form.Div02_00.form.editPw.setFocus();
 	}else{	
 	
@@ -115,14 +115,20 @@ this.fn_logout = function(){
 //처리콜백 함수
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorMsg + "[Code : " + errorCode + "]");
-	//this.Error_msg.set_text(errorMsg + "[Code : " + errorCode + "]");
 	
-    return;
-  }
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		if(errorCode == 30 || errorCode == 40)
+		{
+			this.parent.set_formurl("SystemMng::AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
+			nexacro.setPrivateProfile("lgnCd", errorCode ); 
+		}
+		this.alert(errorMsg + "[Code : " + errorCode + "]");
+		//this.Error_msg.set_text(errorMsg + "[Code : " + errorCode + "]");
+		
+		return;
+	}
 
 	switch(svcID)
 	{
@@ -166,12 +172,15 @@ this.fn_setAdminInfo = function(){
 	var loginInfoDs = this.application.gdsLoginInfo;
 	var branch = "";
 	var adminName = "";
+	var adminId = "";
 
 	branch = loginInfoDs.getColumn(0, "branch");
 	adminName = loginInfoDs.getColumn(0, "name");
-	
+	adminId = loginInfoDs.getColumn(0, "id");
+	console.log(adminId);
 	nexacro.setPrivateProfile("branch", branch);
 	nexacro.setPrivateProfile("name", adminName);
+	nexacro.setPrivateProfile("id", adminId);
 	
 	//this.application.TopFrame.form.txtName.set_text("[" + branch + "]" + adminName);
 }
