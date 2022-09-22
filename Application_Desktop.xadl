@@ -56,6 +56,9 @@ this.Session_svc = "";
 this.Menu_svc = "";
 this.Admin_svc = "";
 
+//세션여부
+this.isAuth = false;
+
 this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventInfo)
 {
 	//frameset 정의
@@ -90,8 +93,15 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 		this.Domain = this.getVariable("domain");
 	}
 	
-	this.gfn_sessionCheck(this.Session_svc, "gfn_sessionCallback");
-	
+	//세션 체크
+	this.gfn_sessionCheck()
+	if(this.isAuth)
+	{
+		//인증여부
+		this.gfn_codeList(this.Admin_svc);
+		this.gfn_menu(this.Menu_svc);
+	}
+
 	var objApp = nexacro.Application;
 	var strURL = objApp.xadl;
 	var arrSplit = strURL.split("//");
@@ -166,8 +176,6 @@ this.gfn_menuCallback = function(svcID,errorCode,errorMsg)
   }
 
 };
-
-
 // 즐겨찾기 메뉴
 this.gfn_favorite_menu = function(strSvc){
 
@@ -187,42 +195,5 @@ this.gfn_favorite_menu = function(strSvc){
 			callBackFnc,       // transaction의 결과를 받을 Function 이름
 			isAsync);         // 비동기통신 여부 [생략가능]
 
-}
-
-
-
-// 세션 확인 후 처리콜백 함수
-this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
-{
-
-	// 에러 시 화면 처리 내역
-	if(errorCode != 0)
-	{
-    
-		this.alert(errorCode+"\n"+errorMsg);
-	
-		switch(svcID)
-		{
-			case "session_check":	
-				this.gfn_initFrame();
-				//this.getOwnerFrame().form.go("Sample::Login_Test.xfdl");
-			break;
-		}
-	
-		return;
-	}
-
-	switch(svcID)
-	{    
-		case "session_check":
-			console.log("로그인 성공");
-			this.gfn_setFrameSize();
-			this.gfn_menu(this.Menu_svc);
-			this.gfn_favorite_menu(this.Admin_svc);
-			this.gfn_codeList(this.Admin_svc);			
-			//this.getOwnerFrame().form.go("FrameBase::Form_Main.xfdl");
-		break; 
-	}
-};
-]]></Script>
+}]]></Script>
 </ADL>
