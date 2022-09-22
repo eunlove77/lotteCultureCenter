@@ -1,18 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Script version="1.0" type="xscript5.1"><![CDATA[
+
+
+/**
+* Function Name : gfn_transaction
+* Description   : 공통 트랜잭션
+* Arguments     : 
+* Return        : 
+*/
+this.gfn_transaction = function(tranObj)
+{
+	//세션 체크
+	this.gfn_sessionCheck();
+	
+	this.transaction(
+			tranObj.strSvcId ,   					 // transaction을 구분하기 위한 svc id값
+            tranObj.strSvcUrl ,       				 // trabsaction을 요청할 주소
+            this.gfn_nvl(tranObj.inData) ,           // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            this.gfn_nvl(tranObj.outData) ,          // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            this.gfn_nvl(tranObj.strArg),            // 입력값으로 보낼 arguments, a=b
+            this.gfn_nvl(tranObj.callBackFnc),       // transaction의 결과를 받을 Function 이름
+            this.gfn_nvl(tranObj.isAsync) 			 // 비동기통신 여부 [생략가능]
+	);         		
+}
+
+
+
+
 /**
 * Function Name : gfn_sessionCheck
 * Description   : 서버 세션 검사
 * Arguments     : 
 * Return        : 
 */
-this.gfn_sessionCheck = function(strSvc, callBackFnc){
+this.gfn_sessionCheck = function(){
+	var sessionSvc = nexacro.getApplication().Session_svc;
+	var fnc = "gfn_sessionCallback";
+	
 	var strSvcId    = "session_check";
-	var strSvcUrl   = strSvc + "::check.do";
+	var strSvcUrl   = sessionSvc + "::check.do";
 	var inData      = "";
 	var outData     = "";
 	var strArg      = "";
-	//var callBackFnc = "fn_sessionCallback";
 	var isAsync     = false;
 
 	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
@@ -20,15 +49,14 @@ this.gfn_sessionCheck = function(strSvc, callBackFnc){
             inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
             outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
             strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            fnc,       // transaction의 결과를 받을 Function 이름
             isAsync);         // 비동기통신 여부 [생략가능]			
 }
 
 
-//처리콜백 함수
-this.fn_sessionCallback = function(svcID,errorCode,errorMsg)
-{
-
+// 세션 확인 후 처리콜백 함수
+this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
+{	
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
@@ -37,9 +65,8 @@ this.fn_sessionCallback = function(svcID,errorCode,errorMsg)
 	
 		switch(svcID)
 		{
-			case "session_check":			
-				//console.log(this);
-				//console.log(this.getOwnerFrame().form);
+			case "session_check":	
+				nexacro.getApplication().gfn_initFrame();
 				//this.getOwnerFrame().form.go("Sample::Login_Test.xfdl");
 			break;
 		}
@@ -50,11 +77,17 @@ this.fn_sessionCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{    
 		case "session_check":
-			console.log("로그인 성공");
+			trace("로그인 성공");
+			//nexacro.getApplication().gfn_setFrameSize();
+			//nexacro.getApplication().gfn_menu(nexacro.getApplication().Menu_svc);
+			//this.gfn_codeList(nexacro.getApplication().Admin_svc);			
 			//this.getOwnerFrame().form.go("FrameBase::Form_Main.xfdl");
 		break; 
 	}
 };
+
+
+
 
 /**
 * Function Name : gfn_codeList
@@ -133,6 +166,36 @@ this.gfn_isNull = function (pvVal)
 	}
 
 	return false;
+}
+
+
+
+/**
+* Function Name : gfn_nvl
+* Description   : 입력값 Null 
+* Arguments     : pvVal – 입력값
+* Return        : true/false 값이 Null일 경우 ""
+*/
+this.gfn_nvl = function (pvVal)
+{
+	if (new String(pvVal).valueOf() == "undefined") 
+	{
+		return "";
+	}
+	if (pvVal == null) 
+	{
+		return "";
+	}
+	if (("x" + pvVal == "xNaN") && (new String(pvVal.length).valueOf() == "undefined")) 
+	{
+		return "";
+	}
+	if (pvVal.length == 0) 
+	{
+		return "";
+	}
+
+	return pvVal;
 }
 
 /**
