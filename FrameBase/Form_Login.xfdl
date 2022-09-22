@@ -119,7 +119,11 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		if(errorCode == 30 || errorCode == 40)
+		if(errorCode == 10)
+		{
+			this.parent.set_formurl("SystemMng::AdminChkPhone.xfdl"); // 휴대폰 인증 페이지
+		}
+		else if(errorCode == 30 || errorCode == 40)
 		{
 			this.parent.set_formurl("SystemMng::AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
 			nexacro.setPrivateProfile("lgnCd", errorCode ); 
@@ -135,6 +139,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		case "login":      
 			this.loginSuccess();	
 			this.gfn_codeList(this.application.Admin_svc);
+			
 		break;
 		case "logout":			
 			this.application.gfn_initFrame();
@@ -159,13 +164,11 @@ this.editPw_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 
 this.loginSuccess = function(){
 
+	this.fn_setAdminInfo();
 	
 	//framset 사이즈 변경
 	this.application.gfn_setFrameSize();
-	
 	this.application.gfn_menu(this.application.Menu_svc);
-	
-	this.fn_setAdminInfo();
 }
 
 this.fn_setAdminInfo = function(){
@@ -181,6 +184,8 @@ this.fn_setAdminInfo = function(){
 	nexacro.setPrivateProfile("branch", branch);
 	nexacro.setPrivateProfile("name", adminName);
 	nexacro.setPrivateProfile("id", adminId);
+	
+	
 	
 	//this.application.TopFrame.form.txtName.set_text("[" + branch + "]" + adminName);
 }
