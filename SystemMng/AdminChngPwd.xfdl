@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_Login" width="1336" height="700" titletext="New Form" border="1px solid" color="black" onload="AdminChngPwd_onload" onsize="Form_Login_onsize">
+  <Form id="AdminChngPwd" width="1336" height="700" titletext="New Form" border="1px solid" color="black" onload="AdminChngPwd_onload" onsize="AdminChngPwd_onsize">
     <Layouts>
       <Layout height="700" width="1336">
         <Div id="chngPwdDiv" taborder="0" text="" left="238" top="100" width="860" height="490" background="#ffffff" borderRadius="12px" visible="true">
@@ -82,6 +82,8 @@ this.AdminChngPwd_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.chngPwdDiv.form.ChngStatic.set_visible(true);
 	}
 	
+	nexacro.removePrivateProfile("lgnCd");
+	
 };
 
 
@@ -162,9 +164,8 @@ this.newPwdChk_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
-
-this.Form_Login_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
-{	
+this.AdminChngPwd_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
+{
 	this.fn_resizeCenter(this.chngPwdDiv, e.cx);
 };
 
@@ -173,8 +174,6 @@ this.fn_resizeCenter = function(targetObj, pWidth){
 	var nCompX = (pWidth/2) - (nCompWidth/2);
 	targetObj.setOffsetLeft(nCompX);
 }
-
-
 ]]></Script>
     <Objects>
       <Dataset id="ds_password">
