@@ -203,6 +203,7 @@ this.gfn_showModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback,
 	if (this.gfn_isNull(bShowFrameTitle) || bShowFrameTitle == true) 
 	{
 		childFrame.set_showtitlebar(true);
+		childFrame.set_background("bisque");
 		childFrame.set_border("3 solid #351b6f");
 		childFrame.set_border("normal");
 	}else{
@@ -552,4 +553,111 @@ this.gfn_btn_auth = function(objDs, authType){
 	}else{
 		return false;
 	}
-}]]></Script>
+}
+
+
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+/**
+* @description 	   		: 그리드의 체크박스를 Dataset 없이 사용하는 함수
+* @param objDs	   		: 설정할 데이터셋
+* @param objGrd		   	: 설정할 그리드
+* @param nCheckCellIdx	: 체크박스로 사용할 그리드 Cell Index
+* @return          		: 없음
+*/
+this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
+{ 
+	//체크여부 정보를 담을 Array를 사용자 변수로 설정
+	objDs.checkarray = new Array(); 
+
+	//데이터셋 온로드이벤트 추가
+	objDs.addEventHandler("onload", this.gfnDataset_onload); 
+
+	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
+	objGrd.checkcell = nCheckCellIdx; 
+	
+	//그리드 Cell Click 이벤트 추가
+	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick); 
+	
+	//그리드 Head Click 이벤트 추가
+	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
+} 
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+/**
+* @description 	   : 데이터셋 onload 이벤트
+*/
+this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
+{ 
+	console.log("111");
+	console.log(e.reason);
+	if(e.reason==0) 
+	{ 
+		//데이터셋이 로드되면 checkarray 초기화
+		objDs.checkarray = new Array(); 
+	} 
+}; 
+
+/**
+* @description 	   : 그리드 oncellclick 이벤트
+*/
+this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
+{ 
+	var objDs; 
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell) 
+	{ 
+		objDs = obj.getBindDataset(); 
+		
+		if(objDs.checkarray[e.row]==1) 
+		{ 
+			//체크 해제
+			objDs.checkarray[e.row] = 0; 
+		}else 
+		{ 
+			//체크 설정
+			objDs.checkarray[e.row] = 1; 
+		}
+		
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell(); 
+	} 
+}; 
+
+/**
+* @description 	   : 그리드 onheadclick 이벤트
+*/
+this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
+{ 
+	var i; 
+	var objDs; 
+	var nChkVal; 
+	
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell) 
+	{ 
+		objDs = obj.getBindDataset(); 
+		nChkVal = obj.getCellText(-1, e.cell); 
+
+		if(nChkVal==1)nChkVal = 0; 
+		else nChkVal = 1; 
+		
+		//Head의 체크 상태 변경
+		obj.setCellProperty("head", e.cell, "text", nChkVal); 
+
+		//Body의 체크 상태 변경
+		for(i=0;i<objDs.rowcount;i++) 
+		{ 
+			objDs.checkarray[i] = nChkVal; 
+		} 
+		
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell(); 
+	} 
+}; 
+
+]]></Script>
