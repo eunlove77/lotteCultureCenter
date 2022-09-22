@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="favorite" width="21" height="21" titletext="New Form" onload="favorite_onload">
+    <Layouts>
+      <Layout height="21" width="21">
+        <Button id="btn_favorite" taborder="0" text="" left="0" top="0" width="21" height="21" cssclass="btn_WF_SquStarFav" onclick="btn_favorite_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.favorite_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{	
+	this.application = nexacro.getApplication();
+	var gdsFavoriteMenuDs = this.application.gdsFavoriteMenu;
+	
+	this.menuId = obj.parent.parent.parent.parent.parent.param.MENU_ID	
+	this.favoriteStatus = gdsFavoriteMenuDs.findRow("menuSeq", this.menuId) > -1 ? true : false;
+};
+
+this.btn_favorite_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var msg = '';
+	var funcNm = '';
+	
+	if(this.favoriteStatus){
+		msg = "즐겨찾기 메뉴에서 제거하시겠습니까?";
+		funcNm = "delete_favorite_menu";
+	} else {
+		msg =  "즐겨찾기 메뉴에 등록하시겠습니까?";
+		funcNm = "add_favorite_menu";
+	}
+	
+	if(confirm(msg)){
+		this[funcNm]();
+	}
+};
+
+this.add_favorite_menu = function(){
+	var ds = this.application.gdsFavoriteMenu;
+	var new_row = ds.addRow();
+	var userId = nexacro.getPrivateProfile("id");
+	
+	ds.setColumn(new_row, "id", userId);
+	ds.setColumn(new_row, "menuSeq", this.menuId);
+	
+	this.update_favorite_menu();
+}
+this.delete_favorite_menu = function(){
+	var ds = this.application.gdsFavoriteMenu;
+	
+	var row_num = ds.findRow("menuSeq", this.menuId);
+	ds.deleteRow(row_num);
+	
+	this.update_favorite_menu();
+}
+
+this.update_favorite_menu = function(){
+	var userId = nexacro.getPrivateProfile("id");
+	
+	var strSvcId	= "update_favorite_menu";
+	var strSvcUrl   = this.application.Admin_svc + "::favorite/update.do";
+	var inData      = "favoriteMenuList=gdsFavoriteMenu:U";
+	var outData     = "gdsFavoriteMenu=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback_favorite";
+	var isAsync     = true;
+	
+	console.log(inData);
+	console.log(outData);
+	
+	this.transaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc, isAsync);
+}
+
+this.fnCallback_favorite = function(svcID,errorCode,errorMsg){
+	if(errorCode == 0){
+		var msg = this.favoriteStatus ? "즐겨찾기 메뉴에서 제거되었습니다." : "즐겨찾기 메뉴 등록되었습니다.";
+		this.favoriteStatus = !this.favoriteStatus;
+		
+		alert(msg);
+		return;
+	} else {
+		// 에러 시 화면 처리 내역
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+}
+
+]]></Script>
+  </Form>
+</FDL>
