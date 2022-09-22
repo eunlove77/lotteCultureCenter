@@ -281,11 +281,13 @@ this.GridCodeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 
 this.btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.gfn_isNull(this.searchQuery.value)){
-		this.ds_code_mst.filter("");
-		this.alert("검색 내용을 입력해주세요.");
-	}else{
-		this.ds_code_mst.filter("cdNm=='" + this.searchQuery.value + "' || cd =='" + this.searchQuery.value + "'");
+	this.fn_search();
+};
+
+this.searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){	
+		this.fn_search();
 	}
 };
 
