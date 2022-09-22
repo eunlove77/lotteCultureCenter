@@ -79,18 +79,27 @@ this.fn_ActiveTabPage = function(pvWinId)
 this.tabMdi_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
 {
 	var sWinId = obj.tabpages[e.postindex].name;
-	
+
 	this.application.WorkFrame[sWinId].form.setFocus();
 };
 
 this.tabMdi_onextrabuttonclick = function(obj:nexacro.Tab,e:nexacro.TabMouseEventInfo)
 {
-	var sWinId = obj.tabpages[e.index].name;
-	obj.removeTabpage(e.index);
+	var sWinId = obj.tabpages[e.index].name;	
 	
 	this.application.WorkFrame[sWinId].form.close();
 
 	this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
+	
+	obj.removeTabpage(e.index);
+	
+	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
+	{	
+ 		if (nexacro.getPopupFrames()[i].opener.fvWinId == sWinId) 
+ 		{
+ 			nexacro.getPopupFrames()[i].form.close();
+ 		}
+	}	
 };
 
 
