@@ -167,38 +167,36 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 	var t_menuList = new Array();
 	var t_row_menuList = new Array();
 	var t_dpth = 99;
-	for(var i = 0 ; i < gdsMenuDs.getRowCount() ; i ++){
+	for(var i = 0 ; i < gdsMenuDs.getRowCount() ; i++){
 		var menuSeq = gdsMenuDs.getColumn(i, "menuSeq");
 		var dpth = gdsMenuDs.getColumn(i, "dpth");
 		var accYn = gdsMenuDs.getColumn(i, "accYn");
 		
-		if(accYn == "Y" && dpth > 2){
+		if(dpth <= 2){
+			t_menuList = new Array();
+			t_row_menuList = new Array();
+		} else if(accYn == "Y"){
 			if(dpth > t_dpth){
 				t_menuList.push(menuSeq);
 				t_row_menuList.push(i);
 			} else {
-				var n_favoriteMenuList = new Array();
-				var findMenuList = favoriteMenuList.filter(function(m_seq){
-						if(t_menuList.includes(m_seq)){
-							return true;
-						} else {
-							n_favoriteMenuList.push(m_seq);
-							return false;
-						}
-					});
-				favoriteMenuList = n_favoriteMenuList;
+				var n_favoriteMenuList = favoriteMenuList.filter((m_seq) => !t_menuList.includes(m_seq));
 				
-				if(findMenuList.length > 0){
+				if(favoriteMenuList.length != n_favoriteMenuList.length){
+					favoriteMenuList = n_favoriteMenuList;
 					resultMenuList = resultMenuList.concat(t_row_menuList);
-					t_menuList = new Array();
-					t_row_menuList = new Array();
-				} else {
+				}
+				
+				if(dpth != t_dpth){
 					t_menuList.pop();
 					t_row_menuList.pop();
 				}
+				t_menuList.pop();
+				t_row_menuList.pop();
+				t_menuList.push(menuSeq);
+				t_row_menuList.push(i);
 			}
 		}
-		
 		t_dpth = dpth;
 	}
 	
