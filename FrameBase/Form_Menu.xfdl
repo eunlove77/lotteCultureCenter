@@ -1,20 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_Menu" height="30" titletext="New Form" onload="Form_Menu_onload" scrolltype="none" width="1430">
+  <Form id="Form_Menu" height="30" onload="Form_Menu_onload" scrolltype="none" width="1430">
     <Layouts>
       <Layout height="30" width="1430">
-        <Button id="btnMenu01" taborder="0" text="고객센터" left="1070" top="0" width="120" height="30" onclick="btnMenu01_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu12" taborder="1" text="기본설정" left="0" top="0" width="120" height="30" onclick="btnMenu12_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu02_00" taborder="2" text="회원관리" left="119" top="0" width="120" height="30" onclick="btnMenu02_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu03" taborder="3" text="결제관리" left="357" top="0" width="120" height="30" onclick="btnMenu03_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu05" taborder="4" text="강사관리" left="595" top="0" width="120" height="30" onclick="btnMenu05_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu04" taborder="5" text="강좌관리" left="476" top="0" width="120" height="30" onclick="btnMenu04_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu06" taborder="6" text="지점관리" left="714" top="0" width="120" height="30" onclick="btnMenu06_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu07" taborder="7" text="컨텐츠관리" left="833" top="0" width="120" height="30" onclick="btnMenu07_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu08" taborder="8" text="마케팅관리" left="952" top="0" width="120" height="30" onclick="btnMenu08_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu09" taborder="9" text="통계" left="1190" top="0" width="120" height="30" onclick="btnMenu09_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu10" taborder="10" text="할인수단관리" left="238" top="0" width="120" height="30" onclick="btnMenu10_onclick" cssclass="btn_TF_MenuList"/>
-        <Button id="btnMenu13" taborder="11" text="즐겨찾기" left="1310" top="0" width="120" height="30" onclick="btnMenu13_onclick" cssclass="btn_TF_MenuList"/>
+        <Grid id="Grid00" taborder="0" left="0" top="0" height="30" cssclass="grd_TF_MenuList" right="0" binddataset="Dataset00" autofittype="col" onheadclick="Grid00_onheadclick" scrolltype="none" scrollbartype="none">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="기본설정" cursor="pointer" cssclass="btn"/>
+                <Cell col="1" text="회원관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="2" text="할인수단관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="3" text="결제관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="4" text="강좌관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="5" text="강사관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="6" text="지점관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="7" text="컨텐츠관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="8" text="마케팅관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="9" text="고객센터" cursor="pointer" cssclass="btn"/>
+                <Cell col="10" text="통계" cursor="pointer" cssclass="btn"/>
+                <Cell col="11" text="즐겨찾기" cursor="pointer" cssclass="btn"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+                <Cell col="3" text="bind:Column3"/>
+                <Cell col="4" text="bind:Column4"/>
+                <Cell col="5" text="bind:Column5"/>
+                <Cell col="6" text="bind:Column6"/>
+                <Cell col="7" text="bind:Column7"/>
+                <Cell col="8" text="bind:Column8"/>
+                <Cell col="9" text="bind:Column9"/>
+                <Cell col="10" text="bind:Column10"/>
+                <Cell col="11" text="bind:Column11"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -29,6 +69,7 @@ this.application = null;
 this.leftFrame = null;
 this.leftMenuShow = true;
 
+
 /**************************************************************************
  * FORM EVENT 영역
  **************************************************************************/
@@ -39,59 +80,7 @@ this.Form_Menu_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 };
 
-
-this.btnMenu01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{	
-	this.fn_showLeftSubMenu(obj, 74);	
-};
-this.btnMenu02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 45);	
-};
-this.btnMenu03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 52);
-};
-this.btnMenu04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 57);
-};
-this.btnMenu05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 64);	
-};
-this.btnMenu06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 70);
-};
-this.btnMenu07_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 136);
-};
-this.btnMenu08_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 165);
-};
-this.btnMenu09_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 82);
-};
-this.btnMenu10_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 37);
-};
-
-this.btnMenu12_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 3);
-};
-
-this.btnMenu13_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu_favorite(obj);
-};
-
-this.fn_showLeftSubMenu = function(_obj, topMenuSeq){
+this.fn_showLeftSubMenu = function(topMenuNm, topMenuSeq){
 
 	var gdsMenuDs = this.application.gdsMenu;
 	var leftMenuDs = this.leftFrame.form.ds_left_menu;
@@ -100,7 +89,9 @@ this.fn_showLeftSubMenu = function(_obj, topMenuSeq){
 	leftMenuDs.clearData();
 	leftMenuDs.set_enableevent(false);
 	
-	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", _obj.getDisplayText());	
+	
+	
+	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", topMenuNm);	
 	
 	for(var i = 0 ; i < gdsMenuDs.getRowCount() ; i ++){
 		var menuSeq = gdsMenuDs.getColumn(i, "menuSeq");
@@ -149,7 +140,7 @@ this.fn_showLeftSubMenu = function(_obj, topMenuSeq){
 	
 }
 
-this.fn_showLeftSubMenu_favorite = function(_obj){
+this.fn_showLeftSubMenu_favorite = function(topMenuNm){
 
 	var gdsMenuDs = this.application.gdsMenu;
 	var leftMenuDs = this.leftFrame.form.ds_left_menu;
@@ -162,7 +153,7 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 	
 	var resultMenuList = new Array();
 	
-	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", _obj.getDisplayText());
+	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", topMenuNm);
 
 	var t_menuList = new Array();
 	var t_row_menuList = new Array();
@@ -176,26 +167,26 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 			t_menuList = new Array();
 			t_row_menuList = new Array();
 		} else if(accYn == "Y"){
-			if(dpth > t_dpth){
-				t_menuList.push(menuSeq);
-				t_row_menuList.push(i);
-			} else {
+			if(dpth <= t_dpth){
 				var n_favoriteMenuList = favoriteMenuList.filter((m_seq) => !t_menuList.includes(m_seq));
 				
 				if(favoriteMenuList.length != n_favoriteMenuList.length){
 					favoriteMenuList = n_favoriteMenuList;
-					resultMenuList = resultMenuList.concat(t_row_menuList);
-				}
-				
-				if(dpth != t_dpth){
+					resultMenuList = resultMenuList.concat(t_row_menuList);		
+					
+					t_menuList = new Array();
+					t_row_menuList = new Array();
+				} else {
+					if(dpth != t_dpth){
+						t_menuList.pop();
+						t_row_menuList.pop();
+					}
 					t_menuList.pop();
 					t_row_menuList.pop();
 				}
-				t_menuList.pop();
-				t_row_menuList.pop();
-				t_menuList.push(menuSeq);
-				t_row_menuList.push(i);
 			}
+			t_menuList.push(menuSeq);
+			t_row_menuList.push(i);
 		}
 		t_dpth = dpth;
 	}
@@ -217,6 +208,54 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 	leftMenuDs.set_enableevent(true);
 
 }
+
+
+this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var menuNm = obj.getCellProperty("Head", e.cell, "text");
+	var menuSeq = this.Grid00.getCellValue(0, e.cell);
+	
+	if(menuSeq == "1000"){
+		this.fn_showLeftSubMenu_favorite(menuNm);
+	}else{
+		this.fn_showLeftSubMenu(menuNm, menuSeq);
+	}
+	
+};
 ]]></Script>
+    <Objects>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="STRING" size="256"/>
+          <Column id="Column6" type="STRING" size="256"/>
+          <Column id="Column7" type="STRING" size="256"/>
+          <Column id="Column8" type="STRING" size="256"/>
+          <Column id="Column9" type="STRING" size="256"/>
+          <Column id="Column10" type="STRING" size="256"/>
+          <Column id="Column11" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">3</Col>
+            <Col id="Column1">45</Col>
+            <Col id="Column2">37</Col>
+            <Col id="Column3">52</Col>
+            <Col id="Column4">57</Col>
+            <Col id="Column5">64</Col>
+            <Col id="Column6">70</Col>
+            <Col id="Column7">136</Col>
+            <Col id="Column8">165</Col>
+            <Col id="Column9">74</Col>
+            <Col id="Column10">82</Col>
+            <Col id="Column11">1000</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>
