@@ -214,14 +214,19 @@ this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 {
 	var menuNm = obj.getCellProperty("Head", e.cell, "text");
 	var menuSeq = this.Grid00.getCellValue(0, e.cell);
+
+	for(var i = 0 ; i < obj.getCellCount("Head") ; i++){
+		obj.setCellProperty("Head", i, "cssclass", "");	
+	}
+	obj.setCellProperty("Head", e.cell, "cssclass", "btnActive");	
 	
 	if(menuSeq == "1000"){
 		this.fn_showLeftSubMenu_favorite(menuNm);
 	}else{
 		this.fn_showLeftSubMenu(menuNm, menuSeq);
 	}
-	
 };
+
 ]]></Script>
     <Objects>
       <Dataset id="Dataset00">

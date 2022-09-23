@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_Menu" height="30" titletext="New Form" onload="Form_Menu_onload" scrolltype="none" width="1430">
+  <Form id="Form_Menu" height="30" onload="Form_Menu_onload" scrolltype="none" width="1430">
     <Layouts>
       <Layout height="30" width="1430">
-        <Grid id="Grid00" taborder="0" left="0" top="0" height="30" cssclass="grd_TF_MenuList" right="0" binddataset="Dataset00" autofittype="col">
+        <Grid id="Grid00" taborder="0" left="0" top="0" height="30" cssclass="grd_TF_MenuList" right="0" binddataset="Dataset00" autofittype="col" onheadclick="Grid00_onheadclick" scrolltype="none" scrollbartype="none">
           <Formats>
             <Format id="default">
               <Columns>
+                <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
@@ -29,25 +30,27 @@
                 <Cell col="2" text="할인수단관리" cursor="pointer" cssclass="btn"/>
                 <Cell col="3" text="결제관리" cursor="pointer" cssclass="btn"/>
                 <Cell col="4" text="강좌관리" cursor="pointer" cssclass="btn"/>
-                <Cell col="5" text="지점관리" cursor="pointer" cssclass="btn"/>
-                <Cell col="6" text="컨텐츠관리" cursor="pointer" cssclass="btn"/>
-                <Cell col="7" text="마케팅관리" cursor="pointer" cssclass="btn"/>
-                <Cell col="8" text="고객센터" cursor="pointer" cssclass="btn"/>
-                <Cell col="9" text="통계" cursor="pointer" cssclass="btn"/>
-                <Cell col="10" text="즐겨찾기" cursor="pointer" cssclass="btn"/>
+                <Cell col="5" text="강사관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="6" text="지점관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="7" text="컨텐츠관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="8" text="마케팅관리" cursor="pointer" cssclass="btn"/>
+                <Cell col="9" text="고객센터" cursor="pointer" cssclass="btn"/>
+                <Cell col="10" text="통계" cursor="pointer" cssclass="btn"/>
+                <Cell col="11" text="즐겨찾기" cursor="pointer" cssclass="btn"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:기본설정"/>
-                <Cell col="1" text="bind:회원관리"/>
-                <Cell col="2" text="bind:할인수단관리"/>
-                <Cell col="3" text="bind:결제관리"/>
-                <Cell col="4" text="bind:강좌관리"/>
-                <Cell col="5" text="bind:지점관리"/>
-                <Cell col="6" text="bind:컨텐츠관리"/>
-                <Cell col="7" text="bind:마케팅관리"/>
-                <Cell col="8" text="bind:고객센터"/>
-                <Cell col="9" text="bind:통계"/>
-                <Cell col="10" text="bind:즐겨찾기"/>
+                <Cell text="bind:Column0"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+                <Cell col="3" text="bind:Column3"/>
+                <Cell col="4" text="bind:Column4"/>
+                <Cell col="5" text="bind:Column5"/>
+                <Cell col="6" text="bind:Column6"/>
+                <Cell col="7" text="bind:Column7"/>
+                <Cell col="8" text="bind:Column8"/>
+                <Cell col="9" text="bind:Column9"/>
+                <Cell col="10" text="bind:Column10"/>
+                <Cell col="11" text="bind:Column11"/>
               </Band>
             </Format>
           </Formats>
@@ -66,6 +69,7 @@ this.application = null;
 this.leftFrame = null;
 this.leftMenuShow = true;
 
+
 /**************************************************************************
  * FORM EVENT 영역
  **************************************************************************/
@@ -76,59 +80,7 @@ this.Form_Menu_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 };
 
-
-this.btnMenu01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{	
-	this.fn_showLeftSubMenu(obj, 74);	
-};
-this.btnMenu02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 45);	
-};
-this.btnMenu03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 52);
-};
-this.btnMenu04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 57);
-};
-this.btnMenu05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 64);	
-};
-this.btnMenu06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 70);
-};
-this.btnMenu07_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 136);
-};
-this.btnMenu08_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 165);
-};
-this.btnMenu09_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 82);
-};
-this.btnMenu10_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 37);
-};
-
-this.btnMenu12_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu(obj, 3);
-};
-
-this.btnMenu13_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_showLeftSubMenu_favorite(obj);
-};
-
-this.fn_showLeftSubMenu = function(_obj, topMenuSeq){
+this.fn_showLeftSubMenu = function(topMenuNm, topMenuSeq){
 
 	var gdsMenuDs = this.application.gdsMenu;
 	var leftMenuDs = this.leftFrame.form.ds_left_menu;
@@ -137,7 +89,9 @@ this.fn_showLeftSubMenu = function(_obj, topMenuSeq){
 	leftMenuDs.clearData();
 	leftMenuDs.set_enableevent(false);
 	
-	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", _obj.getDisplayText());	
+	
+	
+	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", topMenuNm);	
 	
 	for(var i = 0 ; i < gdsMenuDs.getRowCount() ; i ++){
 		var menuSeq = gdsMenuDs.getColumn(i, "menuSeq");
@@ -186,7 +140,7 @@ this.fn_showLeftSubMenu = function(_obj, topMenuSeq){
 	
 }
 
-this.fn_showLeftSubMenu_favorite = function(_obj){
+this.fn_showLeftSubMenu_favorite = function(topMenuNm){
 
 	var gdsMenuDs = this.application.gdsMenu;
 	var leftMenuDs = this.leftFrame.form.ds_left_menu;
@@ -199,7 +153,7 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 	
 	var resultMenuList = new Array();
 	
-	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", _obj.getDisplayText());
+	this.leftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", topMenuNm);
 
 	var t_menuList = new Array();
 	var t_row_menuList = new Array();
@@ -209,17 +163,12 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 		var dpth = gdsMenuDs.getColumn(i, "dpth");
 		var accYn = gdsMenuDs.getColumn(i, "accYn");
 		
-		if(dpth <= 2){
-			t_menuList = new Array();
-			t_row_menuList = new Array();
-		} else if(accYn == "Y"){
+		if(accYn == "Y"){
 			if(dpth <= t_dpth){
 				var n_favoriteMenuList = favoriteMenuList.filter((m_seq) => !t_menuList.includes(m_seq));
-				
 				if(favoriteMenuList.length != n_favoriteMenuList.length){
 					favoriteMenuList = n_favoriteMenuList;
-					resultMenuList = resultMenuList.concat(t_row_menuList);		
-					
+					resultMenuList = resultMenuList.concat(t_row_menuList);
 					t_menuList = new Array();
 					t_row_menuList = new Array();
 				} else {
@@ -231,8 +180,13 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 					t_row_menuList.pop();
 				}
 			}
-			t_menuList.push(menuSeq);
-			t_row_menuList.push(i);
+			if(dpth <= 2){
+				t_menuList = new Array();
+				t_row_menuList = new Array();
+			} else {
+				t_menuList.push(menuSeq);
+				t_row_menuList.push(i);
+			}
 		}
 		t_dpth = dpth;
 	}
@@ -254,22 +208,58 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 	leftMenuDs.set_enableevent(true);
 
 }
+
+
+this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var menuNm = obj.getCellProperty("Head", e.cell, "text");
+	var menuSeq = this.Grid00.getCellValue(0, e.cell);
+
+	for(var i = 0 ; i < obj.getCellCount("Head") ; i++){
+		obj.setCellProperty("Head", i, "cssclass", "");	
+	}
+	obj.setCellProperty("Head", e.cell, "cssclass", "btnActive");	
+	
+	if(menuSeq == "1000"){
+		this.fn_showLeftSubMenu_favorite(menuNm);
+	}else{
+		this.fn_showLeftSubMenu(menuNm, menuSeq);
+	}
+};
+
 ]]></Script>
     <Objects>
       <Dataset id="Dataset00">
         <ColumnInfo>
-          <ConstColumn id="기본설정" type="STRING" size="30"/>
-          <ConstColumn id="회원관리" type="STRING" size="30"/>
-          <ConstColumn id="할인수단관리" type="STRING" size="30"/>
-          <ConstColumn id="결제관리" type="STRING" size="30"/>
-          <ConstColumn id="강좌관리" type="STRING" size="30"/>
-          <ConstColumn id="지점관리" type="STRING" size="30"/>
-          <ConstColumn id="컨텐츠관리" type="STRING" size="30"/>
-          <ConstColumn id="마케팅관리" type="STRING" size="30"/>
-          <ConstColumn id="고객센터" type="STRING" size="30"/>
-          <ConstColumn id="통계" type="STRING" size="30"/>
-          <ConstColumn id="즐겨찾기" type="STRING" size="30"/>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="STRING" size="256"/>
+          <Column id="Column6" type="STRING" size="256"/>
+          <Column id="Column7" type="STRING" size="256"/>
+          <Column id="Column8" type="STRING" size="256"/>
+          <Column id="Column9" type="STRING" size="256"/>
+          <Column id="Column10" type="STRING" size="256"/>
+          <Column id="Column11" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">3</Col>
+            <Col id="Column1">45</Col>
+            <Col id="Column2">37</Col>
+            <Col id="Column3">52</Col>
+            <Col id="Column4">57</Col>
+            <Col id="Column5">64</Col>
+            <Col id="Column6">70</Col>
+            <Col id="Column7">136</Col>
+            <Col id="Column8">165</Col>
+            <Col id="Column9">74</Col>
+            <Col id="Column10">82</Col>
+            <Col id="Column11">1000</Col>
+          </Row>
+        </Rows>
       </Dataset>
     </Objects>
   </Form>
