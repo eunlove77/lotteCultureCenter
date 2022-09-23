@@ -3,17 +3,17 @@
   <Application id="Application_Desktop" screenid="Desktop_screen" onload="Application_onload" licenseurl="/admin/NexacroN_client_license.xml">
     <Layout>
       <MainFrame id="mainframe" showtitlebar="true" showstatusbar="false" left="0" top="0" width="1920" height="1080" titletext="롯데문화센터" resizable="true">
-        <VFrameSet id="VFrameSet00" separatesize="50,50,*,30" border="0px none" width="1366">
+        <VFrameSet id="VFrameSet00" separatesize="46,30,*,30" border="0px none" width="1366">
           <Frames>
-            <ChildFrame id="TopFrame" formurl="FrameBase::Form_Top.xfdl" showtitlebar="false" border="0px none"/>
-            <ChildFrame id="MenuFrame" formurl="FrameBase::Form_Menu.xfdl" showtitlebar="false" height="30" border="0px none"/>
+            <ChildFrame id="TopFrame" formurl="FrameBase::Form_Top.xfdl" showtitlebar="false" border="0px none" dragmovetype="none"/>
+            <ChildFrame id="MenuFrame" formurl="FrameBase::Form_Menu.xfdl" showtitlebar="false" height="30" border="0px none" dragmovetype="none"/>
             <HFrameSet id="HFrameSet00" separatesize="150,*" color="#555555">
               <Frames>
                 <ChildFrame id="LeftFrame" formurl="FrameBase::Form_Left.xfdl" dragmovetype="none" showtitlebar="false" color="#555555" border="0px none, 1px solid #c7c7c7, 0px none, 0px none"/>
                 <VFrameSet id="VFrameSet01" separatesize="50,0,*,0" border="0px none" width="1366">
                   <Frames>
                     <ChildFrame id="MdiFrame" formurl="FrameBase::Form_Mdi.xfdl" showtitlebar="false" dragmovetype="none" border="0px none"/>
-                    <ChildFrame id="MainFrame" formurl="FrameBase::Form_Main.xfdl" showtitlebar="false" border="0px none"/>
+                    <ChildFrame id="MainFrame" formurl="FrameBase::Form_Main.xfdl" showtitlebar="false" border="0px none" dragmovetype="none"/>
                     <FrameSet id="WorkFrame" color="#555555" border="0px none"/>
                     <ChildFrame id="LoginFrame" formurl="FrameBase::Form_Login.xfdl" showtitlebar="false" dragmovetype="none"/>
                   </Frames>
@@ -82,14 +82,12 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 		this.Session_svc = "Session_svc_dev";
 		this.Menu_svc = "Menu_svc_dev";
 		this.Admin_svc = "Admin_svc_dev";
-		this.Class_svc = "Class_svc_dev";
 		this.Domain = this.getVariable("domain_dev");
 	}else{
 		this.Loing_svc = "Login_svc";
 		this.Session_svc = "Session_svc";
 		this.Menu_svc = "Menu_svc";
 		this.Admin_svc = "Admin_svc";
-		this.Class_svc = "Class_svc";
 		this.Domain = this.getVariable("domain");
 	}
 	
@@ -97,6 +95,8 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 	this.gfn_sessionCheck()
 	if(this.isAuth)
 	{
+		this.gfn_setFrameSize();
+		
 		//인증여부
 		this.gfn_codeList(this.Admin_svc);
 		this.gfn_menu(this.Menu_svc);

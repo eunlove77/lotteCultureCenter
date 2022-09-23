@@ -74,8 +74,8 @@
                         <Layout>
                           <Static id="Static00" taborder="0" text="전시상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
                           <CheckBox id="chkDisAll" taborder="3" text="전체" left="Static00:10" top="0" width="41" height="31" onclick="fn_checkboxAll"/>
-                          <CheckBox id="chkDis0" taborder="1" text="전시" left="chkDisAll:10" top="0" width="41" height="31" onclick="fn_checkbox" truevalue="Y" falsevalue="N"/>
-                          <CheckBox id="chkDis1" taborder="2" text="미전시" left="chkDis0:10" top="0" width="53" height="31" onclick="fn_checkbox" truevalue="Y" falsevalue="N"/>
+                          <CheckBox id="chkDis0" taborder="1" text="전시" left="chkDisAll:10" top="0" width="41" height="31" onclick="fn_checkbox" truevalue="Y"/>
+                          <CheckBox id="chkDis1" taborder="2" text="미전시" left="chkDis0:10" top="0" width="53" height="31" onclick="fn_checkbox" truevalue="N"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -136,6 +136,43 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" left="Static00:10" top="0" width="160" height="31" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" text="전체" value="">
+                            <Dataset id="innerdataset">
+                              <ColumnInfo>
+                                <Column id="codecolumn" size="256"/>
+                                <Column id="datacolumn" size="256"/>
+                              </ColumnInfo>
+                              <Rows>
+                                <Row>
+                                  <Col id="codecolumn"/>
+                                  <Col id="datacolumn">전체</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">1</Col>
+                                  <Col id="datacolumn">강좌코드</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">2</Col>
+                                  <Col id="datacolumn">강좌명</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">3</Col>
+                                  <Col id="datacolumn">옵션명</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">4</Col>
+                                  <Col id="datacolumn">강사명</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">5</Col>
+                                  <Col id="datacolumn">강사예명</Col>
+                                </Row>
+                              </Rows>
+                            </Dataset>
+                          </Combo>
+                          <Edit id="Edit00" taborder="2" left="Combo00:10" top="0" width="500" height="31"/>
+                          <Button id="Button00" taborder="3" text="검색" left="Edit00:10" top="0" width="120" height="31" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_Div00_00_14_Button00_onclick"/>
+                          <Button id="Button01" taborder="4" text="초기화" left="Button00:10" top="0" width="120" height="31" cssclass="btn_WF_Low" onclick="Div00_Div00_00_Div00_00_14_Button01_onclick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -149,7 +186,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="강좌목록" left="0" top="16" width="48" height="14" fittocontents="none" cssclass="sta_WF_TitGray"/>
-              <Static id="Static01" taborder="1" text="(0개)" left="Static00:9" top="16" width="50" height="14" fittocontents="width"/>
+              <Static id="Static01" taborder="1" text="(0개)" left="Static00:5" top="16" width="50" height="14" fittocontents="none"/>
               <Button id="Button00" taborder="2" text="저장" top="0" height="30" width="50" right="497" cssclass="btn_WF_Medium"/>
               <Button id="Button01" taborder="3" text="일괄변경" top="0" height="30" width="70" left="Button00:10" cssclass="btn_WF_Medium"/>
               <Button id="Button02" taborder="4" text="신규강좌" top="0" height="30" width="70" left="Button01:10" cssclass="btn_WF_Medium"/>
@@ -160,10 +197,11 @@
               <Div id="Div00" taborder="9" text="Div00" left="0" top="52" width="1168" height="400">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="0" left="0" top="0" width="100%" height="100%" autofittype="col" cssclass="grd_WF_TableType" binddataset="Dataset00" nodatatext="데이터가 없습니다.">
+                    <Grid id="Grid00" taborder="0" left="0" top="0" width="100%" height="100%" autofittype="col" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." binddataset="ds_class_list" extendsizetype="row" onheadclick="Div01_Div00_Grid00_onheadclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
+                            <Column size="48"/>
                             <Column size="80"/>
                             <Column size="80"/>
                             <Column size="80"/>
@@ -176,20 +214,22 @@
                             <Row size="24"/>
                           </Rows>
                           <Band id="head">
-                            <Cell text="N" edittype="checkbox" displaytype="checkboxcontrol"/>
-                            <Cell col="1" text="번호"/>
-                            <Cell col="2" text="지점명"/>
-                            <Cell col="3" text="강좌유형"/>
-                            <Cell col="4" text="강좌코드"/>
-                            <Cell col="5" text="강좌명"/>
+                            <Cell text="순번"/>
+                            <Cell col="1" text="data1"/>
+                            <Cell col="2" text="data2"/>
+                            <Cell col="3" text="data3"/>
+                            <Cell col="4" text="data4"/>
+                            <Cell col="5" text="data5"/>
+                            <Cell col="6" text="data6"/>
                           </Band>
                           <Band id="body">
-                            <Cell text="bind:Column0"/>
-                            <Cell col="1" text="bind:Column1"/>
-                            <Cell col="2" text="bind:Column2"/>
-                            <Cell col="3" text="bind:Column3"/>
-                            <Cell col="4" text="bind:Column4"/>
-                            <Cell col="5" text="bind:Column5"/>
+                            <Cell edittype="text" expr="dataset.getRowCount() - currow"/>
+                            <Cell col="1" text="bind:data1" edittype="text"/>
+                            <Cell col="2" text="bind:data2" edittype="text"/>
+                            <Cell col="3" text="bind:data3"/>
+                            <Cell col="4" text="bind:data4"/>
+                            <Cell col="5" text="bind:data5"/>
+                            <Cell col="6" text="bind:data6"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -203,14 +243,14 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_class_list">
+      <Dataset id="ds_class_list" oncolumnchanged="ds_class_list_oncolumnchanged">
         <ColumnInfo>
-          <Column id="Column0" type="STRING" size="256"/>
-          <Column id="Column1" type="STRING" size="256"/>
-          <Column id="Column2" type="STRING" size="256"/>
-          <Column id="Column3" type="STRING" size="256"/>
-          <Column id="Column4" type="STRING" size="256"/>
-          <Column id="Column5" type="STRING" size="256"/>
+          <Column id="data1" type="STRING" size="256"/>
+          <Column id="data2" type="STRING" size="256"/>
+          <Column id="data3" type="STRING" size="256"/>
+          <Column id="data4" type="STRING" size="256"/>
+          <Column id="data5" type="STRING" size="256"/>
+          <Column id="data6" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -261,6 +301,30 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="param1" type="STRING" size="256"/>
+          <Column id="param2" type="STRING" size="256"/>
+          <Column id="param3" type="STRING" size="256"/>
+          <Column id="param4" type="STRING" size="256"/>
+          <Column id="param5" type="STRING" size="256"/>
+          <Column id="param6" type="STRING" size="256"/>
+          <Column id="param7" type="STRING" size="256"/>
+          <Column id="param8" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="param1"></Col>
+            <Col id="param2"></Col>
+            <Col id="param3"></Col>
+            <Col id="param4"></Col>
+            <Col id="param5"></Col>
+            <Col id="param6"></Col>
+            <Col id="param7"></Col>
+            <Col id="param8"></Col>
+          </Row>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -281,10 +345,13 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	
+	this.init();
 	// 코드 데이터
 	this.fn_code_list();
 	//강좌 데이터
-	//this.fn_class_list();
+	this.fn_class_list();
+	
+	
 };
 
 
@@ -292,6 +359,19 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
+this.init = function() 
+{
+ 	this.Div01.form.Div00.form.Grid00.insertContentsCol("body", 0);	
+ 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "text", "bind:chk");
+ 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "displaytype", "checkboxcontrol");
+ 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "edittype"   , "checkbox");
+ 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "checkboxfalsevalue" , "N");
+	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "checkboxtruevalue" , "Y");
+	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "displaytype", "checkboxcontrol");
+	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "edittype"   , "checkbox");
+	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "checkboxfalsevalue" , "N");
+	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "checkboxtruevalue" , "Y");
+}
 
 this.fn_code_list = function()
 {	
@@ -300,7 +380,7 @@ this.fn_code_list = function()
 	
 	var tranObj = {
 		strSvcId : "codeList",
-		strSvcUrl : this.application.Class_svc + "::codeList.do",
+		strSvcUrl : this.application.Admin_svc + "::class/codeList.do",
 		inData : "",
 		outData : outData,
 		strArg : "cdId=008||034||CODE_64||CODE_65||CODE_66||CODE_67||CODE_68",
@@ -312,22 +392,18 @@ this.fn_code_list = function()
 };
 
 this.fn_class_list = function()
-{
-	var strSvcId    = "classList";
-	var strSvcUrl   = this.application.Class_svc + "::classList.do";
-	var inData      = "";
-	var outData     = "ds_class_list=classList";	
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = false;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+{	
+	var tranObj = {
+		strSvcId : "classList",
+		strSvcUrl : this.application.Admin_svc + "::class/classList.do",
+		inData : "search=ds_search",
+		outData : "ds_class_list=classList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true
+	}
+				
+	this.gfn_transaction(tranObj);
 }
 
 this.fnCallback = function(svcID, errorCode, errorMsg)
@@ -346,9 +422,22 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		this.fn_classState_add();
 		this.fn_classGb_add();
 		this.fn_classAprvState_add();
-		this.fn_semester_add();
+		this.fn_semester_set();
 		this.fn_dw_add();
 		this.fn_click_add(this);
+	break;
+	
+	case "classList":
+	this.Div01.form.Static01.set_text('(' + this.ds_class_list.getRowCount() + '개)');
+	this.Div01.form.Static01.set_fittocontents("width");
+	
+	this.ds_class_list.set_enableevent(false);
+	this.ds_class_list.addColumn("chk", "STRING", 1);
+	for(var i = 0 ; i < this.ds_class_list.getRowCount() ; i++){		
+		this.ds_class_list.setColumn(i, "chk","N");
+	}
+	this.ds_class_list.set_enableevent(true);
+	
 	break;
   }
 };
@@ -371,6 +460,17 @@ this.fn_classCtgy_add = function()
 		objComp.set_fittocontents("width");
 		objComp.show();	
 		content.push(id);
+		
+		this.ds_class_list.set_enableevent(false);
+		this.ds_search.addColumn(id, "STRING", 256);
+		this.ds_search.setColumn(0, id, "");		
+		
+		var objBindItem = new BindItem();
+		objBindItem.init("111" + i, objComp.name, "value", "ds_search", id);
+		this.addChild("111" + i, objBindItem);
+		objBindItem.bind();	
+		this.ds_class_list.set_enableevent(true);
+		
 	}
 }
 
@@ -460,8 +560,8 @@ this.fn_year_add = function()
 	this.Div00.form.Div00_00.form.Div00_00_01.form.Combo00.set_index(0);
 }
 
-//학기 추가
-this.fn_semester_add = function() 
+//학기 설정
+this.fn_semester_set = function() 
 {
 	var month = new nexacro.Date().getMonth()+1;
 	
@@ -645,6 +745,51 @@ this.Div00_Div00_00_Div00_00_13_MaskEdit01_onkeyup = function(obj:nexacro.MaskEd
 		obj.set_value("");
 	}
 };
+
+this.Div01_Div00_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	this.gfn_headCheckBox(obj, e.cell, "chk");	
+};
+
+this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if(this.ds_class_list.getColCount()-1 > e.col) 
+	{
+		this.ds_class_list.setColumn(e.row, "chk","Y");
+	}
+	
+};
+
+this.Div00_Div00_00_Div00_00_14_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_class_list();
+};
+
+this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var cnt = this.ds_search.getColCount();
+	this.ds_year_list.set_enableevent(false);
+	for(var i=0; i<cnt; i++)
+	{
+		this.ds_search.setColumn(0, i, "");
+	}
+	this.ds_year_list.set_enableevent(true);
+	
+	this.Div00.form.Div00_00.form.Div00_00_01.form.Combo00.set_index(0);
+	this.fn_semester_set();
+	
+	this.fn_class_list();
+};
 ]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div00_00.form.Div00_00_01.form.Combo00" propid="value" datasetid="ds_search" columnid="param1"/>
+      <BindItem id="item1" compid="Div00.form.Div00_00.form.Div00_00_01.form.Combo01" propid="value" datasetid="ds_search" columnid="param2"/>
+      <BindItem id="item2" compid="Div00.form.Div00_00.form.Div00_00_07.form.chkDis0" propid="value" datasetid="ds_search" columnid="param3"/>
+      <BindItem id="item3" compid="Div00.form.Div00_00.form.Div00_00_07.form.chkDis1" propid="value" datasetid="ds_search" columnid="param4"/>
+      <BindItem id="item4" compid="Div00.form.Div00_00.form.Div00_00_09.form.Calendar00" propid="value" datasetid="ds_search" columnid="param5"/>
+      <BindItem id="item5" compid="Div00.form.Div00_00.form.Div00_00_09.form.Calendar01" propid="value" datasetid="ds_search" columnid="param6"/>
+      <BindItem id="item6" compid="Div00.form.Div00_00.form.Div00_00_14.form.Combo00" propid="value" datasetid="ds_search" columnid="param7"/>
+      <BindItem id="item7" compid="Div00.form.Div00_00.form.Div00_00_14.form.Edit00" propid="value" datasetid="ds_search" columnid="param8"/>
+    </Bind>
   </Form>
 </FDL>
