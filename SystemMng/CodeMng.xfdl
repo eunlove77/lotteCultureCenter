@@ -86,7 +86,29 @@
         </Grid>
         <Button id="btnSearch" taborder="9" text="조회" top="82" width="90" height="30" cssclass="btn_WF_Medium" fittocontents="none" left="searchQuery:10" onclick="btnSearch_onclick"/>
         <Button id="btnSave" taborder="10" text="저장" top="35" width="84" height="21" cssclass="btn_WF_High" fittocontents="none" right="10" onclick="btnSave_onclick"/>
-        <Button id="Button04_00" taborder="11" text="" top="0" width="21" height="21" cssclass="btn_WF_SquStarFav" right="0"/>
+        <Div id="Div00" taborder="11" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Grid id="Grid00" taborder="12" left="131" top="853" width="375" height="270" binddataset="gdsFavoriteMenu">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="id"/>
+                <Cell col="1" text="menuSeq"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:id"/>
+                <Cell col="1" text="bind:menuSeq"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -106,18 +128,16 @@ this.tabObj = null;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
- 
-
-// this.CodeMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
-// {
-// 	this.application = nexacro.getApplication();
-// 	this.tabObj = obj;
-// 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
-// 	
-// 	this.fn_init_code(this.ds_code_mst, "0");
-// 	
-// 	//this.gfnSetCheckBoxNoDataset(this.ds_code_dtl, this.GridCodeDtlList, 1); 	
-// };
+this.CodeMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.tabObj = obj;
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	
+	this.fn_init_code(this.ds_code_mst, "0");
+	
+	//this.gfnSetCheckBoxNoDataset(this.ds_code_dtl, this.GridCodeDtlList, 1); 	
+};
 
 
 this.btnCreateRoot_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -343,6 +363,9 @@ this.fn_init_code = function(objDs, dpth, parentCd){
 }
 
 this.fn_search = function(){
+	
+	this.ds_code_dtl.clearData();
+	
 	if(this.gfn_isNull(this.searchQuery.value)){
 		this.ds_code_mst.filter("");		
 	}else{

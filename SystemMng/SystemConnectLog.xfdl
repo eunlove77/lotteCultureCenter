@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="SystemUseLog" width="1280" height="800" titletext="New Form" onload="SystemUseLog_onload">
+  <Form id="SystemConnectLog" width="1280" height="800" titletext="New Form" onload="SystemConnectLog_onload">
     <Layouts>
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Div id="Div02" taborder="2" text="Div01" left="10" top="txtMenuNm:20" height="33" cssclass="div_WF_CompWrap" right="10">
+        <Div id="Div02" taborder="2" text="Div01" left="10" top="82" height="33" cssclass="div_WF_CompWrap" right="10">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="발생일시" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -13,19 +13,17 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="row02" taborder="4" text="Div01" left="10" top="Div02:-1" height="33" right="10" formscrolltype="none">
+        <Div id="row02" taborder="3" text="Div01" left="10" top="114" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
               <Div id="Div03" taborder="0" text="Div01" width="500" height="33" cssclass="div_WF_CompWrap" top="0" left="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="활동타입" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkAll" taborder="1" text="전체" left="116" top="4" width="45" height="20"/>
-                    <CheckBox id="chkR" taborder="2" text="등록" left="chkAll:3" top="4" width="45" height="20"/>
-                    <CheckBox id="chkU" taborder="3" text="수정" left="chkR:3" top="4" width="45" height="20"/>
-                    <CheckBox id="chkD" taborder="4" text="삭제" left="chkU:3" top="4" width="45" height="20"/>
-                    <CheckBox id="chkS" taborder="5" text="조회" left="chkD:3" top="4" width="45" height="20"/>
-                    <CheckBox id="chkExcel" taborder="6" text="엑셀 다운로드" left="chkS:3" top="4" width="100" height="20"/>
+                    <Static id="Static00" taborder="0" text="로그타입" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkTypeAll" taborder="1" text="전체" left="116" top="4" width="45" height="20"/>
+                    <CheckBox id="chkType1" taborder="2" text="로그인" left="chkTypeAll:3" top="4" width="60" height="20"/>
+                    <CheckBox id="chkType2" taborder="3" text="로그아웃" left="chkType1:3" top="4" width="70" height="20"/>
+                    <CheckBox id="chkType3" taborder="4" text="로그인 실패" left="chkType2:3" top="4" width="80" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -61,7 +59,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div05" taborder="3" text="Div01" left="10" top="row02:-1" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+        <Div id="Div06" taborder="4" text="Div01" left="10" top="176" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -97,7 +95,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="5" left="10" top="230" binddataset="ds_log" autofittype="col" right="10" bottom="10">
+        <Grid id="Grid00" taborder="5" left="10" top="270" binddataset="ds_log" autofittype="col" right="10" bottom="10">
           <Formats>
             <Format id="default">
               <Columns>
@@ -107,7 +105,6 @@
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="200"/>
-                <Column size="80"/>
                 <Column size="200"/>
                 <Column size="150"/>
               </Columns>
@@ -121,28 +118,50 @@
                 <Cell col="2" text="지점"/>
                 <Cell col="3" text="아이디"/>
                 <Cell col="4" text="이름"/>
-                <Cell col="5" text="접속 메뉴"/>
-                <Cell col="6" text="활동타입"/>
-                <Cell col="7" text="IP"/>
-                <Cell col="8" text="발생일시"/>
+                <Cell col="5" text="로그타입"/>
+                <Cell col="6" text="IP"/>
+                <Cell col="7" text="접속일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:reqnId"/>
-                <Cell col="1" text="bind:Column0"/>
-                <Cell col="2" text="bind:Column1"/>
-                <Cell col="3" text="bind:Column2"/>
-                <Cell col="4" text="bind:Column3"/>
-                <Cell col="5" text="bind:Column4"/>
-                <Cell col="6" text="bind:Column5"/>
-                <Cell col="7" text="bind:Column6"/>
-                <Cell col="8" text="bind:Column7"/>
+                <Cell text="bind:Column0"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+                <Cell col="3" text="bind:Column3"/>
+                <Cell col="4" text="bind:Column4"/>
+                <Cell col="5" text="bind:Column5"/>
+                <Cell col="6" text="bind:Column6"/>
+                <Cell col="7" text="bind:Column7"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtTotal" taborder="6" left="10" top="206" width="80" height="21" border="1px solid red" text="총 100개"/>
+        <Static id="txtTotal" taborder="6" left="10" top="246" width="80" height="21" border="1px solid red" text="총 100개"/>
+        <Div id="Div05" taborder="7" text="Div01" left="10" top="146" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="업무시간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <CheckBox id="chkTimeAll" taborder="1" text="전체" left="116" top="4" width="45" height="20"/>
+              <CheckBox id="chkTime1" taborder="2" text="업무시간" left="chkTimeAll:3" top="4" width="70" height="20"/>
+              <CheckBox id="chkTime2" taborder="3" text="업무시간외" left="chkTime1:3" top="4" width="80" height="20"/>
+            </Layout>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_log">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="STRING" size="256"/>
+          <Column id="Column6" type="STRING" size="256"/>
+          <Column id="Column7" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
@@ -157,27 +176,12 @@ this.application = null;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.SystemUseLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.SystemConnectLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
 	
 };
 ]]></Script>
-    <Objects>
-      <Dataset id="ds_log">
-        <ColumnInfo>
-          <Column id="reqnId" type="STRING" size="256"/>
-          <Column id="Column0" type="STRING" size="256"/>
-          <Column id="Column1" type="STRING" size="256"/>
-          <Column id="Column2" type="STRING" size="256"/>
-          <Column id="Column3" type="STRING" size="256"/>
-          <Column id="Column4" type="STRING" size="256"/>
-          <Column id="Column5" type="STRING" size="256"/>
-          <Column id="Column6" type="STRING" size="256"/>
-          <Column id="Column7" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
-    </Objects>
   </Form>
 </FDL>
