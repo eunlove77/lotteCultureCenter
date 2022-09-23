@@ -176,26 +176,26 @@ this.fn_showLeftSubMenu_favorite = function(_obj){
 			t_menuList = new Array();
 			t_row_menuList = new Array();
 		} else if(accYn == "Y"){
-			if(dpth > t_dpth){
-				t_menuList.push(menuSeq);
-				t_row_menuList.push(i);
-			} else {
+			if(dpth <= t_dpth){
 				var n_favoriteMenuList = favoriteMenuList.filter((m_seq) => !t_menuList.includes(m_seq));
 				
 				if(favoriteMenuList.length != n_favoriteMenuList.length){
 					favoriteMenuList = n_favoriteMenuList;
-					resultMenuList = resultMenuList.concat(t_row_menuList);
-				}
-				
-				if(dpth != t_dpth){
+					resultMenuList = resultMenuList.concat(t_row_menuList);		
+					
+					t_menuList = new Array();
+					t_row_menuList = new Array();
+				} else {
+					if(dpth != t_dpth){
+						t_menuList.pop();
+						t_row_menuList.pop();
+					}
 					t_menuList.pop();
 					t_row_menuList.pop();
 				}
-				t_menuList.pop();
-				t_row_menuList.pop();
-				t_menuList.push(menuSeq);
-				t_row_menuList.push(i);
 			}
+			t_menuList.push(menuSeq);
+			t_row_menuList.push(i);
 		}
 		t_dpth = dpth;
 	}
