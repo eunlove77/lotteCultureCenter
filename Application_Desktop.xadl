@@ -3,7 +3,7 @@
   <Application id="Application_Desktop" screenid="Desktop_screen" onload="Application_onload" licenseurl="/admin/NexacroN_client_license.xml">
     <Layout>
       <MainFrame id="mainframe" showtitlebar="true" showstatusbar="false" left="0" top="0" width="1920" height="1080" titletext="롯데문화센터" resizable="true">
-        <VFrameSet id="VFrameSet00" separatesize="50,50,*,30" border="0px none" width="1366">
+        <VFrameSet id="VFrameSet00" separatesize="46,30,*,30" border="0px none" width="1366">
           <Frames>
             <ChildFrame id="TopFrame" formurl="FrameBase::Form_Top.xfdl" showtitlebar="false" border="0px none" dragmovetype="none"/>
             <ChildFrame id="MenuFrame" formurl="FrameBase::Form_Menu.xfdl" showtitlebar="false" height="30" border="0px none" dragmovetype="none"/>
@@ -97,6 +97,8 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 	this.gfn_sessionCheck()
 	if(this.isAuth)
 	{
+		this.gfn_setFrameSize();
+		
 		//인증여부
 		this.gfn_codeList(this.Admin_svc);
 		this.gfn_menu(this.Menu_svc);
