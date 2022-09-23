@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CouponList" width="1280" height="720" titletext="New Form" onload="CouponList_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="ds_log" autofittype="col" right="10" bottom="-70">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="40" band="left"/>
+                <Column size="50"/>
+                <Column size="100"/>
+                <Column size="200"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="200"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="150"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호" edittype="checkbox" displaytype="checkboxcontrol"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="쿠폰번호"/>
+                <Cell col="3" text="쿠폰명"/>
+                <Cell col="4" text="할인금액"/>
+                <Cell col="5" text="발급 방식"/>
+                <Cell col="6" text="사용 기간"/>
+                <Cell col="7" text="발급 상태"/>
+                <Cell col="8" text="등록자"/>
+                <Cell col="9" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:reqnId"/>
+                <Cell col="1" text="bind:Column0"/>
+                <Cell col="2" text="bind:Column1"/>
+                <Cell col="3" text="bind:Column2"/>
+                <Cell col="4" text="bind:Column3"/>
+                <Cell col="5" text="bind:Column4"/>
+                <Cell col="6" text="bind:Column5"/>
+                <Cell col="7" text="bind:Column6"/>
+                <Cell col="8" text="bind:Column7"/>
+                <Cell col="9"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" border="1px solid red" text="총 100개"/>
+        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" width="1264" height="139">
+          <Layouts>
+            <Layout>
+              <Div id="Div00_03" taborder="0" text="Div01" left="0" top="42" height="33" cssclass="div_WF_CompWrap" right="4">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="등록일" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00_04" taborder="1" text="Div01" left="0" top="74" height="33" cssclass="div_WF_CompWrap" right="4" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">-1</Col>
+                            <Col id="datacolumn">전체</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">쿠폰명</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">쿠폰설명</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">쿠폰번호</Col>
+                            <Col id="codecolumn">3</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+                    <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80"/>
+                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00_00" taborder="2" text="Div01" left="0" top="12" height="33" cssclass="div_WF_CompWrap" right="631" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">넥사크로 특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">3</Col>
+                            <Col id="datacolumn">자바스크립트 특강</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00_01" taborder="3" text="Div01" left="Div00_00:-1" top="12" height="33" cssclass="div_WF_CompWrap" right="4" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 방식" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">넥사크로 특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">3</Col>
+                            <Col id="datacolumn">자바스크립트 특강</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="delBtn" taborder="5" text="삭제" top="196" height="21" width="53" left="820" cssclass="btn_WF_High"/>
+        <Button id="excelDownBtn" taborder="6" text="엑셀 다운로드" top="196" height="21" width="98" left="delBtn:10" cssclass="btn_WF_Weak"/>
+        <Button id="closeBtn" taborder="7" text="발급 종료" top="196" height="21" width="83" left="excelDownBtn:10" wordWrap="char" cssclass="btn_WF_Medium"/>
+        <Button id="copyBtn" taborder="8" text="쿠폰 복사" top="196" height="21" width="75" left="closeBtn:10" cssclass="btn_WF_Weak"/>
+        <Button id="insBtn" taborder="9" text="쿠폰 신규등록" top="196" height="21" width="97" left="copyBtn:10" cssclass="btn_WF_Weak"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+};
+]]></Script>
+  </Form>
+</FDL>
