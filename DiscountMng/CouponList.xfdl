@@ -5,7 +5,7 @@
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="ds_log" autofittype="col" right="10" bottom="-70">
+        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="Dataset00" autofittype="col" right="10" bottom="10">
           <Formats>
             <Format id="default">
               <Columns>
@@ -52,10 +52,10 @@
           </Formats>
         </Grid>
         <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" border="1px solid red" text="총 100개"/>
-        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" width="1264" height="139">
+        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" height="139" right="9">
           <Layouts>
             <Layout>
-              <Div id="Div00_03" taborder="0" text="Div01" left="0" top="42" height="33" cssclass="div_WF_CompWrap" right="4">
+              <Div id="Div00_03" taborder="0" text="Div01" left="0" top="42" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="등록일" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -63,7 +63,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00_04" taborder="1" text="Div01" left="0" top="74" height="33" cssclass="div_WF_CompWrap" right="4" formscrolltype="none">
+              <Div id="Div00_04" taborder="1" text="Div01" left="0" top="74" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -128,7 +128,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00_01" taborder="3" text="Div01" left="Div00_00:-1" top="12" height="33" cssclass="div_WF_CompWrap" right="4" formscrolltype="none">
+              <Div id="Div00_01" taborder="3" text="Div01" left="Div00_00:0" top="12" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 방식" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -160,11 +160,11 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="delBtn" taborder="5" text="삭제" top="196" height="21" width="53" left="820" cssclass="btn_WF_High"/>
-        <Button id="excelDownBtn" taborder="6" text="엑셀 다운로드" top="196" height="21" width="98" left="delBtn:10" cssclass="btn_WF_Weak"/>
-        <Button id="closeBtn" taborder="7" text="발급 종료" top="196" height="21" width="83" left="excelDownBtn:10" wordWrap="char" cssclass="btn_WF_Medium"/>
-        <Button id="copyBtn" taborder="8" text="쿠폰 복사" top="196" height="21" width="75" left="closeBtn:10" cssclass="btn_WF_Weak"/>
-        <Button id="insBtn" taborder="9" text="쿠폰 신규등록" top="196" height="21" width="97" left="copyBtn:10" cssclass="btn_WF_Weak"/>
+        <Button id="insBtn" taborder="9" text="쿠폰 신규등록" top="196" height="21" cssclass="btn_WF_Weak" onclick="insBtn_onclick" right="10" width="101"/>
+        <Button id="copyBtn" taborder="8" text="쿠폰 복사" top="196" height="21" width="75" cssclass="btn_WF_Weak" right="insBtn:10"/>
+        <Button id="closeBtn" taborder="7" text="발급 종료" top="196" height="21" width="83" wordWrap="char" cssclass="btn_WF_Medium" right="copyBtn:10"/>
+        <Button id="excelDownBtn" taborder="6" text="엑셀 다운로드" top="196" height="21" width="98" cssclass="btn_WF_Weak" right="closeBtn:10"/>
+        <Button id="delBtn" taborder="5" text="삭제" top="196" height="21" width="53" cssclass="btn_WF_High" right="excelDownBtn:10"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -189,6 +189,16 @@ this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
 };
+
+this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.parent.param.TAB_CLOSE = false;
+	this.parent.param = {
+		seq : ""
+	};	
+	this.parent.set_url("DiscountMng::CouponDtl.xfdl");
+};
 ]]></Script>
+    <Objects/>
   </Form>
 </FDL>
