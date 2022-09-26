@@ -16,23 +16,23 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="3" text="Div01" left="0" top="199" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div01" taborder="3" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" text="123123" right="8" displaynulltext="쿠폰명"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" text="123123" right="10" displaynulltext="쿠폰명"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="4" text="Div01" left="0" top="231" height="64" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div02" taborder="4" text="Div01" left="0" top="Div01:-1" height="64" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰 설명" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <TextArea id="TextArea00" taborder="1" left="Static00:6" top="5" right="8" displaynulltext="쿠폰 설명" bottom="5"/>
+                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="5" right="10" displaynulltext="쿠폰 설명" bottom="5"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02_00" taborder="5" text="Div01" left="0" top="294" height="64" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div02_00" taborder="5" text="Div01" left="0" top="Div02:-1" height="64" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰 이미지" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
@@ -42,7 +42,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="1" text="Div00" left="45" top="Div00:10" height="421" right="45">
+        <Div id="Div01" taborder="1" text="Div00" left="45" top="Div00:10" height="570" right="45">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="쿠폰 등록정보" left="0" top="1" width="75" cssclass="sta_WF_TitGray" height="17"/>
@@ -51,36 +51,158 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 방식 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" bottom="0" innerdataset="ds_issuCd" codecolumn="cd" datacolumn="cdNm" direction="vertical" right="10" minwidth="" maxwidth="600"/>
+                    <Radio id="radioIssuCd" taborder="1" left="Static00:10" top="0" bottom="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" right="10" minwidth="" maxwidth="600" value="NORMAL" text="일반(수동)발급" index="0" onitemchanged="Div01_Div00_radioIssuCd_onitemchanged">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">NORMAL</Col>
+                            <Col id="datacolumn">일반(수동)발급</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">AUTO</Col>
+                            <Col id="datacolumn">자동발급</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">RANDOM</Col>
+                            <Col id="datacolumn">오프라인 난수발급</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="3" text="Div01" left="0" top="62" height="170" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div01" taborder="3" text="Div01" left="0" top="Div00:-1" height="170" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="ds_trgtCd" codecolumn="cd" datacolumn="cdNm" direction="vertical" maxwidth="400" minwidth=""/>
+                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="GRADE" text="회원등급별" index="0">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">GRADE</Col>
+                            <Col id="datacolumn">회원등급별</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">UPLOAD</Col>
+                            <Col id="datacolumn">엑셀업로드</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="4" text="Div01" left="0" top="231" height="64" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div02" taborder="7" text="Div01" left="0" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="0" visible="true">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Static id="Static01" taborder="1" text="개" left="290" top="5" width="120" height="21"/>
+                    <MaskEdit id="MaskEdit00" taborder="2" left="120" top="5" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" height="169" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="적용 강좌 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="CTGR" text="카테고리 지정" index="0">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">CTGR</Col>
+                            <Col id="datacolumn">카테고리 지정</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">CLASS</Col>
+                            <Col id="datacolumn">특정 강좌 지정</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <ListBox id="ListBox00" taborder="2" left="120" top="33" height="120" cssclass="lst_WF_ListBox" innerdataset="ds_category01" codecolumn="cd" datacolumn="cdNm" itemheight="30" width="160" scrollbarsize="15" onitemclick="Div01_Div03_ListBox00_onitemclick"/>
+                    <ListBox id="ListBox01" taborder="3" left="295" top="34" height="120" cssclass="lst_WF_ListBox" innerdataset="ds_category02" codecolumn="cd" datacolumn="cdNm" itemheight="30" width="160" scrollbarsize="15" onitemchanged="Div01_Div03_ListBox01_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="5" text="Div01" left="0" top="294" height="64" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div04" taborder="5" text="Div01" left="0" top="Div03:-1" height="64" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="할인 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="radioDiscount" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="AMOUNT" text="정액(원) 할인" index="0" onitemchanged="Div01_Div04_radioDiscount_onitemchanged">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">AMOUNT</Col>
+                            <Col id="datacolumn">정액(원) 할인</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">RATES</Col>
+                            <Col id="datacolumn">정률(%) 할인</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                    <Static id="Static01" taborder="2" text="원" left="MaskEdit00:10" top="32" width="120" height="21"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div04" taborder="6" text="Div01" left="0" top="357" height="64" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div05" taborder="6" text="Div01" left="0" top="Div04:-1" height="64" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="사용 기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="radioPeriod" taborder="1" left="119" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="PERIOD" text="기간으로 설정" index="0" onitemchanged="Div01_Div05_radioPeriod_onitemchanged">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">PERIOD</Col>
+                            <Col id="datacolumn">기간으로 설정</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">DEADLINE</Col>
+                            <Col id="datacolumn">발급일로 설정</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <Div id="Div00" taborder="2" left="Static00:0" top="30" width="235" height="30">
+                      <Layouts>
+                        <Layout>
+                          <Calendar id="Calendar00" taborder="0" left="10" top="3" width="100" height="21" value="20220727" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
+                          <Static id="Static01" taborder="1" text="~" left="Calendar00:4" top="3" width="9" height="20"/>
+                          <Calendar id="Calendar00_00" taborder="2" left="Static01:4" top="3" width="100" height="21" value="20220727" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01" taborder="3" left="Static00:0" top="26" width="352" height="30" visible="false">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="발급일로부터                                 일까지 사용 가능" left="10" top="5" width="312" usedecorate="false" height="21"/>
+                          <Edit id="Edit00" taborder="1" left="91" top="5" width="129" height="21"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
                   </Layout>
                 </Layouts>
               </Div>
@@ -96,7 +218,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰 발급 알림 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" bottom="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" right="10" minwidth="" maxwidth="400">
+                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" bottom="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" right="10" minwidth="" maxwidth="400" value="N" text="사용안함" index="0">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -131,40 +253,30 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_issuCd">
+      <Dataset id="ds_category01">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="10"/>
           <Column id="cdNm" type="STRING" size="50"/>
         </ColumnInfo>
         <Rows>
-          <Row>
-            <Col id="cd">NORMAL</Col>
-            <Col id="cdNm">일반(수동)발급</Col>
-          </Row>
-          <Row>
-            <Col id="cd">AUTO</Col>
-            <Col id="cdNm">자동발급</Col>
-          </Row>
-          <Row>
-            <Col id="cd">RANDOM</Col>
-            <Col id="cdNm">오프라인 난수발급</Col>
-          </Row>
+          <Row/>
         </Rows>
       </Dataset>
-      <Dataset id="ds_trgtCd">
+      <Dataset id="ds_category02">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="10"/>
           <Column id="cdNm" type="STRING" size="50"/>
         </ColumnInfo>
         <Rows>
-          <Row>
-            <Col id="cd">GRADE</Col>
-            <Col id="cdNm">회원등급별</Col>
-          </Row>
-          <Row>
-            <Col id="cd">UPLOAD</Col>
-            <Col id="cdNm">엑셀 업로드</Col>
-          </Row>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_cd">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="10"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
         </Rows>
       </Dataset>
     </Objects>
@@ -189,9 +301,109 @@ this.CouponDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	
+	var tranObj = {
+		strSvcId : "codeList",
+		strSvcUrl : this.application.Admin_svc + "::discount/coupon/codeList.do",
+		inData : "",
+		outData : "ds_category01=ctgrList",
+		strArg : "cdId=027",
+		callBackFnc : "fnCallback",
+		isAsync : false
+	}
+	
+	this.gfn_transaction(tranObj);
 	
 };
 
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+
+};
+
+this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postvalue == 'NORMAL')
+	{
+		this.Div01.form.Div01.set_height(170);	//발급 대상
+		this.Div01.form.Div02.set_height(0);	//발급 수량
+	}
+	else if(e.postvalue == 'RANDOM')
+	{
+		this.Div01.form.Div01.set_height(0);
+		this.Div01.form.Div02.set_height(33);
+	}
+	else
+	{
+		this.Div01.form.Div01.set_height(0);
+		this.Div01.form.Div02.set_height(0);
+	}
+	this.Div01.set_fittocontents("height");	
+	this.Div01.form.resetScroll();
+	this.resetScroll();
+};
+
+this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	this.Div01.form.Div04.form.MaskEdit00.set_value();
+	
+	if(e.postvalue == 'RATES')
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("both");
+		this.Div01.form.Div04.form.MaskEdit00.set_format("##");	//2자리 입력 제한
+		this.Div01.form.Div04.form.Static01.set_text("%");
+	}
+	else
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("decimal");
+		this.Div01.form.Div04.form.MaskEdit00.set_format("#,###");
+		this.Div01.form.Div04.form.Static01.set_text("원");
+	}
+};
+
+this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postvalue == 'DEADLINE')
+	{
+		this.Div01.form.Div05.form.Div00.set_visible(false);
+		this.Div01.form.Div05.form.Div01.set_visible(true);
+	}
+	else
+	{
+		this.Div01.form.Div05.form.Div00.set_visible(true);
+		this.Div01.form.Div05.form.Div01.set_visible(false);
+		this.Div01.form.Div05.form.Div01.form.Edit00.set_text();
+	}
+};
+
+this.Div01_Div03_ListBox00_onitemclick = function(obj:nexacro.ListBox,e:nexacro.ItemClickEventInfo)
+{
+	
+	var clickCdId = "028_"+e.itemvalue;
+
+	var tranObj = {
+		strSvcId : "codeList",
+		strSvcUrl : this.application.Admin_svc + "::discount/coupon/codeList.do",
+		inData : "",
+		outData : "ds_category02=ctgrList",
+		strArg : "cdId="+clickCdId,
+		callBackFnc : "fnCallback",
+		isAsync : false
+	}
+	
+	this.gfn_transaction(tranObj);
+};
+
+
+
+this.Div01_Div03_ListBox01_onitemchanged = function(obj:nexacro.ListBox,e:nexacro.ItemChangeEventInfo)
+{
+	
+};
 ]]></Script>
   </Form>
 </FDL>
