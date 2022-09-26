@@ -6,7 +6,8 @@
         <Button id="btn_favorite" taborder="0" text="" left="0" top="0" width="21" height="21" cssclass="btn_WF_SquStarFav" onclick="btn_favorite_onclick"/>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[this.application = null;
+    <Script type="xscript5.1"><![CDATA[include "Base::libCommon.xjs";
+this.application = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -58,28 +59,29 @@ this.delete_favorite_menu = function(){
 }
 
 this.update_favorite_menu = function(){
-	var userId = nexacro.getPrivateProfile("id");
+	var tranObj = {};
+	tranObj.strSvcId	= "update_favorite_menu";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::favorite/update.do";
+	tranObj.inData      = "favoriteMenuList=gdsFavoriteMenu:U";
+	tranObj.outData     = "gdsFavoriteMenu=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback_favorite";
+	tranObj.isAsync     = true;
 	
-	var strSvcId	= "update_favorite_menu";
-	var strSvcUrl   = this.application.Admin_svc + "::favorite/update.do";
-	var inData      = "favoriteMenuList=gdsFavoriteMenu:U";
-	var outData     = "gdsFavoriteMenu=output1";
-	var strArg      = "";
-	var callBackFnc = "fnCallback_favorite";
-	var isAsync     = true;
-	
-	console.log(inData);
-	console.log(outData);
-	
-	this.transaction(strSvcId, strSvcUrl, inData, outData, strArg, callBackFnc, isAsync);
+	this.gfn_transaction(tranObj);
 }
 
 this.fnCallback_favorite = function(svcID,errorCode,errorMsg){
 	if(errorCode == 0){
 		var msg = this.favoriteStatus ? "즐겨찾기 메뉴에서 제거되었습니다." : "즐겨찾기 메뉴 등록되었습니다.";
 		this.favoriteStatus = !this.favoriteStatus;
-		
 		alert(msg);
+		
+		var leftMenuNm = this.application.LeftFrame.form.LeftMenuGrid.getCellProperty("head", 0, "text")
+		if(leftMenuNm == "즐겨찾기"){
+			this.application.MenuFrame.form.fn_showLeftSubMenu_favorite(leftMenuNm);
+		}
+		
 		return;
 	} else {
 		// 에러 시 화면 처리 내역

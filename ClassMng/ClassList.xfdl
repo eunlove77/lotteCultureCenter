@@ -187,7 +187,7 @@
             <Layout>
               <Static id="Static00" taborder="0" text="강좌목록" left="0" top="16" width="48" height="14" fittocontents="none" cssclass="sta_WF_TitGray"/>
               <Static id="Static01" taborder="1" text="(0개)" left="Static00:5" top="16" width="50" height="14" fittocontents="none"/>
-              <Button id="Button00" taborder="2" text="저장" top="0" height="30" width="50" right="497" cssclass="btn_WF_Medium"/>
+              <Button id="Button00" taborder="2" text="저장" top="0" height="30" width="50" right="497" cssclass="btn_WF_Medium" onclick="Div01_Button00_onclick"/>
               <Button id="Button01" taborder="3" text="일괄변경" top="0" height="30" width="70" left="Button00:10" cssclass="btn_WF_Medium"/>
               <Button id="Button02" taborder="4" text="신규강좌" top="0" height="30" width="70" left="Button01:10" cssclass="btn_WF_Medium"/>
               <Button id="Button03" taborder="5" text="강좌복사" top="0" height="30" width="70" left="Button02:10" cssclass="btn_WF_Medium"/>
@@ -197,10 +197,11 @@
               <Div id="Div00" taborder="9" text="Div00" left="0" top="52" width="1168" height="400">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="0" left="0" top="0" width="100%" height="100%" autofittype="col" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." binddataset="ds_class_list" extendsizetype="row" onheadclick="Div01_Div00_Grid00_onheadclick">
+                    <Grid id="Grid00" taborder="0" left="0" top="0" width="100%" height="100%" autofittype="col" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." binddataset="ds_class_list" extendsizetype="row">
                       <Formats>
                         <Format id="default">
                           <Columns>
+                            <Column size="48"/>
                             <Column size="48"/>
                             <Column size="80"/>
                             <Column size="80"/>
@@ -214,22 +215,24 @@
                             <Row size="24"/>
                           </Rows>
                           <Band id="head">
-                            <Cell text="순번"/>
-                            <Cell col="1" text="data1"/>
-                            <Cell col="2" text="data2"/>
-                            <Cell col="3" text="data3"/>
-                            <Cell col="4" text="data4"/>
-                            <Cell col="5" text="data5"/>
-                            <Cell col="6" text="data6"/>
+                            <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
+                            <Cell col="1" text="순번"/>
+                            <Cell col="2" text="data1"/>
+                            <Cell col="3" text="data2"/>
+                            <Cell col="4" text="data3"/>
+                            <Cell col="5" text="data4"/>
+                            <Cell col="6" text="data5"/>
+                            <Cell col="7" text="data6"/>
                           </Band>
                           <Band id="body">
-                            <Cell edittype="text" expr="dataset.getRowCount() - currow"/>
-                            <Cell col="1" text="bind:data1" edittype="text"/>
-                            <Cell col="2" text="bind:data2" edittype="text"/>
-                            <Cell col="3" text="bind:data3"/>
-                            <Cell col="4" text="bind:data4"/>
-                            <Cell col="5" text="bind:data5"/>
-                            <Cell col="6" text="bind:data6"/>
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                            <Cell col="1" edittype="text" expr="dataset.getRowCount() - currow"/>
+                            <Cell col="2" text="bind:data1" edittype="text"/>
+                            <Cell col="3" text="bind:data2" edittype="text"/>
+                            <Cell col="4" text="bind:data3"/>
+                            <Cell col="5" text="bind:data4"/>
+                            <Cell col="6" text="bind:data5"/>
+                            <Cell col="7" text="bind:data6"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -243,7 +246,7 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_class_list" oncolumnchanged="ds_class_list_oncolumnchanged">
+      <Dataset id="ds_class_list" oncolumnchanged="ds_class_list_oncolumnchanged" updatecontrol="false">
         <ColumnInfo>
           <Column id="data1" type="STRING" size="256"/>
           <Column id="data2" type="STRING" size="256"/>
@@ -314,14 +317,14 @@
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="param1"></Col>
-            <Col id="param2"></Col>
-            <Col id="param3"></Col>
-            <Col id="param4"></Col>
-            <Col id="param5"></Col>
-            <Col id="param6"></Col>
-            <Col id="param7"></Col>
-            <Col id="param8"></Col>
+            <Col id="param1"/>
+            <Col id="param2"/>
+            <Col id="param3"/>
+            <Col id="param4"/>
+            <Col id="param5"/>
+            <Col id="param6"/>
+            <Col id="param7"/>
+            <Col id="param8"/>
           </Row>
         </Rows>
       </Dataset>
@@ -350,8 +353,6 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.fn_code_list();
 	//강좌 데이터
 	this.fn_class_list();
-	
-	
 };
 
 
@@ -361,16 +362,17 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 this.init = function() 
 {
- 	this.Div01.form.Div00.form.Grid00.insertContentsCol("body", 0);	
- 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "text", "bind:chk");
- 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "displaytype", "checkboxcontrol");
- 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "edittype"   , "checkbox");
- 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "checkboxfalsevalue" , "N");
-	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "checkboxtruevalue" , "Y");
-	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "displaytype", "checkboxcontrol");
-	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "edittype"   , "checkbox");
-	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "checkboxfalsevalue" , "N");
-	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "checkboxtruevalue" , "Y");
+	
+//  	this.Div01.form.Div00.form.Grid00.insertContentsCol("body", 0);	
+//  	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "text", "bind:chk");
+//  	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "displaytype", "checkboxcontrol");
+//  	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "edittype"   , "checkbox");
+//  	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "checkboxfalsevalue" , "N");
+// 	this.Div01.form.Div00.form.Grid00.setCellProperty("body", 0, "checkboxtruevalue" , "Y");
+// 	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "displaytype", "checkboxcontrol");
+// 	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "edittype"   , "checkbox");
+// 	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "checkboxfalsevalue" , "N");
+// 	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "checkboxtruevalue" , "Y");
 }
 
 this.fn_code_list = function()
@@ -395,9 +397,24 @@ this.fn_class_list = function()
 {	
 	var tranObj = {
 		strSvcId : "classList",
-		strSvcUrl : this.application.Admin_svc + "::class/classList.do",
+		strSvcUrl : this.application.Admin_svc + "::class/list.do",
 		inData : "search=ds_search",
 		outData : "ds_class_list=classList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true
+	}
+				
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_update = function()
+{	
+	var tranObj = {
+		strSvcId : "classUpdate",
+		strSvcUrl : this.application.Admin_svc + "::class/update.do",
+		inData : "classList=ds_class_list:U",
+		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true
@@ -430,14 +447,17 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	case "classList":
 	this.Div01.form.Static01.set_text('(' + this.ds_class_list.getRowCount() + '개)');
 	this.Div01.form.Static01.set_fittocontents("width");
+	this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div01.form.Div00.form.Grid00, 0); 
+// 	this.ds_class_list.set_enableevent(false);
+// 	this.ds_class_list.addColumn("chk", "STRING", 1);
+// 	for(var i = 0 ; i < this.ds_class_list.getRowCount() ; i++){		
+// 		this.ds_class_list.setColumn(i, "chk","N");
+// 	}
+// 	this.ds_class_list.set_enableevent(true);
+	break;
 	
-	this.ds_class_list.set_enableevent(false);
-	this.ds_class_list.addColumn("chk", "STRING", 1);
-	for(var i = 0 ; i < this.ds_class_list.getRowCount() ; i++){		
-		this.ds_class_list.setColumn(i, "chk","N");
-	}
-	this.ds_class_list.set_enableevent(true);
-	
+	case "classUpdate":
+	alert("저장되었습니다.");
 	break;
   }
 };
@@ -456,21 +476,20 @@ this.fn_classCtgy_add = function()
 		this.Div00.form.Div00_00.form.Div00_00_04.form.addChild(id, objComp);
 		objComp.set_text(list.getColumn(i, "cdNm"));		
 		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
+		objComp.set_falsevalue("");
 		objComp.set_fittocontents("width");
 		objComp.show();	
 		content.push(id);
 		
-		this.ds_class_list.set_enableevent(false);
+		this.ds_search.set_enableevent(false);
 		this.ds_search.addColumn(id, "STRING", 256);
-		this.ds_search.setColumn(0, id, "");		
+		this.ds_search.setColumn(0, id, "");	
+		this.ds_search.set_enableevent(true);
 		
 		var objBindItem = new BindItem();
-		objBindItem.init("111" + i, objComp.name, "value", "ds_search", id);
-		this.addChild("111" + i, objBindItem);
+		objBindItem.init(id, "Div00.form.Div00_00.form.Div00_00_04.form." + id, "value", "ds_search", id);
+		this.addChild(id, objBindItem);
 		objBindItem.bind();	
-		this.ds_class_list.set_enableevent(true);
-		
 	}
 }
 
@@ -488,12 +507,20 @@ this.fn_classState_add = function()
 		this.Div00.form.Div00_00.form.Div00_00_05.form.addChild(id, objComp);
 		objComp.set_text(list.getColumn(i, "cdNm"));		
 		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
-		objComp.set_fittocontents("width");
-		
+		objComp.set_falsevalue("");
+		objComp.set_fittocontents("width");	
 		objComp.show();	
 		content.push(id);
 		
+		this.ds_search.set_enableevent(false);
+		this.ds_search.addColumn(id, "STRING", 256);
+		this.ds_search.setColumn(0, id, "");	
+		this.ds_search.set_enableevent(true);
+		
+		var objBindItem = new BindItem();
+		objBindItem.init(id, "Div00.form.Div00_00.form.Div00_00_05.form." + id, "value", "ds_search", id);
+		this.addChild(id, objBindItem);
+		objBindItem.bind();	
 	}
 }
 
@@ -511,10 +538,20 @@ this.fn_classGb_add = function()
 		this.Div00.form.Div00_00.form.Div00_00_06.form.addChild(id, objComp);
 		objComp.set_text(list.getColumn(i, "cdNm"));		
 		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
+		objComp.set_falsevalue("");
 		objComp.set_fittocontents("width");
 		objComp.show();	
 		content.push(id);
+		
+		this.ds_search.set_enableevent(false);
+		this.ds_search.addColumn(id, "STRING", 256);
+		this.ds_search.setColumn(0, id, "");	
+		this.ds_search.set_enableevent(true);
+		
+		var objBindItem = new BindItem();
+		objBindItem.init(id, "Div00.form.Div00_00.form.Div00_00_06.form." + id, "value", "ds_search", id);
+		this.addChild(id, objBindItem);
+		objBindItem.bind();	
 	}
 }
 
@@ -532,10 +569,20 @@ this.fn_classAprvState_add = function()
 		this.Div00.form.Div00_00.form.Div00_00_08.form.addChild(id, objComp);
 		objComp.set_text(list.getColumn(i, "cdNm"));		
 		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
+		objComp.set_falsevalue("");
 		objComp.set_fittocontents("width");
 		objComp.show();	
 		content.push(id);
+		
+		this.ds_search.set_enableevent(false);
+		this.ds_search.addColumn(id, "STRING", 256);
+		this.ds_search.setColumn(0, id, "");	
+		this.ds_search.set_enableevent(true);
+		
+		var objBindItem = new BindItem();
+		objBindItem.init(id, "Div00.form.Div00_00.form.Div00_00_08.form." + id, "value", "ds_search", id);
+		this.addChild(id, objBindItem);
+		objBindItem.bind();	
 	}
 }
 
@@ -746,18 +793,14 @@ this.Div00_Div00_00_Div00_00_13_MaskEdit01_onkeyup = function(obj:nexacro.MaskEd
 	}
 };
 
-this.Div01_Div00_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-	this.gfn_headCheckBox(obj, e.cell, "chk");	
-};
-
 this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
 {
+	this.ds_year_list.set_enableevent(false);
 	if(this.ds_class_list.getColCount()-1 > e.col) 
 	{
 		this.ds_class_list.setColumn(e.row, "chk","Y");
 	}
-	
+	this.ds_year_list.set_enableevent(true);
 };
 
 this.Div00_Div00_00_Div00_00_14_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -778,7 +821,56 @@ this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e
 	this.Div00.form.Div00_00.form.Div00_00_01.form.Combo00.set_index(0);
 	this.fn_semester_set();
 	
+	this.chkAllInit(this.Div00.form);	
+
 	this.fn_class_list();
+};
+
+//체크박스 전체 초기화
+this.chkAllInit = function(pObj)
+{
+	var arrObj = pObj.components;
+	
+	for(var i=0; i<arrObj.length; i++)
+	{
+		if(arrObj[i] == "[object Div]"){
+			this.chkAllInit(arrObj[i].form);
+		}
+		else if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+		{				
+			arrObj[i].set_value(false);
+		}	
+	}
+}
+
+this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag = false;
+	var list = this.ds_class_list;
+
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			flag = true;
+			list.setRowType(i, "U");
+		}
+		else 
+		{
+			list.setRowType(i, 1)
+		}
+	}
+	//https://www.playnexacro.com/#show:learn:4603 참고
+	//this.Div01.form.Div00.form.Grid00.getCellValue(1, 0);
+
+	if(flag)
+	{
+		this.fn_update();
+	}
+	else
+	{
+		alert("1개의 강좌를 선택하세요.");
+	}
 };
 ]]></Script>
     <Bind>
