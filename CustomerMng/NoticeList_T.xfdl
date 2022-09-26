@@ -100,14 +100,14 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:noticeSeq" displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
-                <Cell col="1" text="bind:spotNm"/>
-                <Cell col="2" text="bind:title"/>
-                <Cell col="3" text="bind:regId"/>
-                <Cell col="4" text="bind:regDtm"/>
-                <Cell col="5" text="bind:lookupCnt"/>
-                <Cell col="6" text="bind:mtrdYn"/>
-                <Cell col="7"/>
-                <Cell col="8"/>
+                <Cell col="1" text="bind:ctgyCd"/>
+                <Cell col="2" text="bind:spotNm"/>
+                <Cell col="3" text="bind:title"/>
+                <Cell col="4" text="bind:regId"/>
+                <Cell col="5" text="bind:regDtm"/>
+                <Cell col="6" text="bind:lookupCnt"/>
+                <Cell col="7" text="bind:mtrdYn"/>
+                <Cell col="8" text="bind:stateCd"/>
               </Band>
             </Format>
           </Formats>
@@ -138,12 +138,12 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="7" text="Div01" left="20" top="208" width="1240" height="72">
+        <Div id="Div01" taborder="7" text="Div01" top="208" height="72" left="10" right="10">
           <Layouts>
             <Layout>
               <Static id="txtTotal" taborder="0" left="1" top="19" width="80" height="21" text="총 0개"/>
-              <Button id="BtnAdd" taborder="1" text="삭제" top="17" height="30" width="50" left="1189" cssclass="btn_WF_High"/>
-              <Button id="BtnDel" taborder="2" text="등록" top="17" height="30" width="50" right="63" cssclass="btn_WF_Medium"/>
+              <Button id="BtnDel" taborder="1" text="삭제" top="17" height="30" width="50" cssclass="btn_WF_High" right="10"/>
+              <Button id="BtnAdd" taborder="2" text="등록" top="17" height="30" width="50" right="BtnDel:12" cssclass="btn_WF_Medium" onclick="Div01_BtnAdd_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -223,7 +223,7 @@ this.NoticeList_T_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	
 	var objOwnerFrame = this.getOwnerFrame();
-	//this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	//var menuNm = objOwnerFrame.param.MENU_NM;
 	//this.navigator.set_text(this.navigator.text + " > " + menuNm);
 	// 코드 데이터
@@ -473,6 +473,19 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 };
 
 
+
+this.Div01_BtnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.param = {
+		seq : ""
+	}
+	this.parent.set_url("CustomerMng::NoticeReg.xfdl");
+};
+
+this.Div01_BtnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+};
 ]]></Script>
     <Bind>
       <BindItem id="item0" compid="row01.form.topDiv.form.topAll" propid="value" datasetid="ds_search" columnid="topAll"/>

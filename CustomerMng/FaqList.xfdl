@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="FaqList" width="1280" height="1000" titletext="New Form" onload="FaqList_onload">
+    <Layouts>
+      <Layout height="1000" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="Div02" taborder="2" text="Div01" left="10" top="82" height="33" cssclass="div_WF_CompWrap" right="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="기간설정" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Div id="periodDiv" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type01.xfdl" formscrolltype="none"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="row02" taborder="3" text="Div01" left="10" top="114" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="gbDiv" taborder="0" text="Div01" height="33" cssclass="div_WF_CompWrap" top="0" left="0" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="분류" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkTypeAll" taborder="1" text="전체" left="120" top="5" width="45" height="20" onclick="row02_gbDiv_chkTypeAll_onclick" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkType1" taborder="2" text="회원가입" left="chkTypeAll:45" top="5" width="69" height="20" onclick="row02_gbDiv_chkType1_onclick" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkType2" taborder="3" text="수강신청'취소" left="chkType1:45" top="5" width="99" height="20" onclick="row02_gbDiv_chkType2_onclick" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkType3" taborder="4" text="강좌'강사" left="chkType2:45" top="5" width="81" height="20" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkType4" taborder="5" text="지점'홈페이지" left="chkType3:45" top="5" width="92" height="20" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkType5" taborder="6" text="기타" left="chkType4:45" top="5" width="70" height="20" falsevalue="N" truevalue="Y"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="searchDiv" taborder="4" text="Div01" left="10" top="176" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">-1</Col>
+                      <Col id="datacolumn">전체</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">1</Col>
+                      <Col id="datacolumn">제목</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">2</Col>
+                      <Col id="datacolumn">작성자</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Combo>
+              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+              <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="searchDiv_btnSearch_onclick"/>
+              <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="searchDiv_btnInit_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="GridInquiryList" taborder="5" left="10" top="270" binddataset="ds_notice_list" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다.">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="300"/>
+                <Column size="80"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="N" edittype="checkbox" displaytype="checkboxcontrol" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="1" text="구분"/>
+                <Cell col="2" text="지점"/>
+                <Cell col="3" text="제목"/>
+                <Cell col="4" text="작성자"/>
+                <Cell col="5" text="등록일"/>
+                <Cell col="6" text="조회수"/>
+                <Cell col="7" text="상단 고정여부"/>
+                <Cell col="8" text="노출여부"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:noticeSeq" displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="1" text="bind:ctgyCd"/>
+                <Cell col="2" text="bind:spotNm"/>
+                <Cell col="3" text="bind:title"/>
+                <Cell col="4" text="bind:regId"/>
+                <Cell col="5" text="bind:regDtm"/>
+                <Cell col="6" text="bind:lookupCnt"/>
+                <Cell col="7" text="bind:mtrdYn"/>
+                <Cell col="8" text="bind:stateCd"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="row01" taborder="6" text="Div01" left="10" top="144" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="useDiv" taborder="0" text="Div01" width="500" height="33" cssclass="div_WF_CompWrap" top="0" left="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="노출 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="useAll" taborder="1" text="전체" left="120" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_useDiv_useAll_onclick"/>
+                    <CheckBox id="useN" taborder="2" text="미노출" left="300" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_useDiv_useN_onclick"/>
+                    <CheckBox id="useY" taborder="3" text="노출" left="210" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_useDiv_useY_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="topDiv" taborder="1" text="Div01" left="useDiv:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="TOP 선정여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="topAll" taborder="1" text="전체" left="120" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_topDiv_topAll_onclick"/>
+                    <CheckBox id="topY" taborder="2" text="선정" left="210" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_topDiv_topY_onclick"/>
+                    <CheckBox id="topN" taborder="3" text="미선정" left="300" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_topDiv_topN_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="7" text="Div01" top="208" height="72" left="10" right="10">
+          <Layouts>
+            <Layout>
+              <Static id="txtTotal" taborder="0" left="1" top="19" width="80" height="21" text="총 0개"/>
+              <Button id="BtnDel" taborder="1" text="삭제" top="17" height="30" width="50" cssclass="btn_WF_High" right="10"/>
+              <Button id="BtnAdd" taborder="2" text="등록" top="17" height="30" width="50" right="BtnDel:12" cssclass="btn_WF_Medium" onclick="Div01_BtnAdd_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_faq_list">
+        <ColumnInfo>
+          <Column id="inquirySeq" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="ctgyCd" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="memNum" type="STRING" size="256"/>
+          <Column id="stateCd" type="STRING" size="256"/>
+          <Column id="startDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="cntn" type="STRING" size="256"/>
+          <Column id="lookupCnt" type="INT" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="spotNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="q" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="useAll" type="STRING" size="256"/>
+          <Column id="useY" type="STRING" size="256"/>
+          <Column id="useN" type="STRING" size="256"/>
+          <Column id="topAll" type="STRING" size="256"/>
+          <Column id="topY" type="STRING" size="256"/>
+          <Column id="topN" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="strtDt" type="STRING" size="256"/>
+          <Column id="endDt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="useAll">N</Col>
+            <Col id="useY">N</Col>
+            <Col id="useN">N</Col>
+            <Col id="topAll">N</Col>
+            <Col id="topY">N</Col>
+            <Col id="topN">N</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="row01.form.topDiv.form.topAll" propid="value" datasetid="ds_search" columnid="topAll"/>
+      <BindItem id="item1" compid="row01.form.topDiv.form.topY" propid="value" datasetid="ds_search" columnid="topY"/>
+      <BindItem id="item2" compid="row01.form.topDiv.form.topN" propid="value" datasetid="ds_search" columnid="topN"/>
+      <BindItem id="item3" compid="row01.form.useDiv.form.useAll" propid="value" datasetid="ds_search" columnid="useAll"/>
+      <BindItem id="item4" compid="row01.form.useDiv.form.useN" propid="value" datasetid="ds_search" columnid="useN"/>
+      <BindItem id="item5" compid="row01.form.useDiv.form.useY" propid="value" datasetid="ds_search" columnid="useY"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.FaqList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+};
+]]></Script>
+  </Form>
+</FDL>
