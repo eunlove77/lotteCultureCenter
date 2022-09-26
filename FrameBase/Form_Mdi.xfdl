@@ -43,9 +43,9 @@ this.fn_DeleteTabpage = function(pvWinId)
 	for(var i=0; i<nCnt; i++)
 	{
 		if(this.tabMdi.tabpages[i].name == pvWinId)
-		{
-			this.tabMdi.removeTabpage(i); 
-			this.application.LeftFrame.form.fn_delOpenMenu(pvWinId);
+		{						
+			//this.tabMdi.removeTabpage(i); 
+			//this.application.LeftFrame.form.fn_delOpenMenu(pvWinId);
 			return;
 		}
 	}
@@ -92,6 +92,12 @@ this.tabMdi_onextrabuttonclick = function(obj:nexacro.Tab,e:nexacro.TabMouseEven
 	this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
 	
 	obj.removeTabpage(e.index);
+	
+	var nCnt = this.tabMdi.getTabpageCount();
+	if(nCnt == 0){
+		
+	}
+	
 	
 	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
 	{	
