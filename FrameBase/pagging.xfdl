@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="pagging" width="480" height="40" titletext="New Form" onload="pagging_onload">
+  <Form id="pagging" width="320" height="21" titletext="New Form" onload="pagging_onload">
     <Layouts>
-      <Layout height="40" width="480">
-        <Button id="btnFirst" taborder="0" left="0" top="0" width="36" bottom="0" onclick="Button_onclick" text="&lt;&lt;" visible="true"/>
-        <Button id="btnPrev" taborder="1" left="35" top="0" width="36" bottom="0" onclick="Button_onclick" text="&lt;" visible="true"/>
-        <Button id="btn0" taborder="2" text="1" left="70" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn1" taborder="3" text="2" left="104" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn2" taborder="4" text="3" left="138" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn3" taborder="5" text="4" left="172" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn4" taborder="6" text="5" left="206" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn5" taborder="7" text="6" left="240" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn6" taborder="8" text="7" left="274" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn7" taborder="9" text="8" left="308" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn8" taborder="10" text="9" left="342" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btn9" taborder="11" text="10" left="376" top="0" width="35" bottom="0" onclick="BtnNum_onclick" visible="true"/>
-        <Button id="btnNext" taborder="12" left="410" top="0" width="36" bottom="0" onclick="Button_onclick" text="&gt;" visible="true"/>
-        <Button id="btnLast" taborder="13" top="0" width="35" bottom="0" onclick="Button_onclick" right="0" text="&gt;&gt;" visible="true"/>
+      <Layout height="21" width="320">
+        <Button id="btnFirst" taborder="0" left="0" top="0" width="21" onclick="Button_onclick" visible="true" cssclass="btn_WF_PageFirst" height="21"/>
+        <Button id="btnPrev" taborder="1" left="btnFirst:2" top="0" width="21" onclick="Button_onclick" visible="true" cssclass="btn_WF_PagePrev" height="21"/>
+        <Button id="btn0" taborder="2" text="1" left="btnPrev:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn1" taborder="3" text="2" left="btn0:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn2" taborder="4" text="3" left="btn1:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn3" taborder="5" text="4" left="btn2:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn4" taborder="6" text="5" left="btn3:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn5" taborder="7" text="6" left="btn4:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn6" taborder="8" text="7" left="btn5:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_PageOrign" height="21"/>
+        <Button id="btn7" taborder="9" text="8" left="btn6:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" height="21" cssclass="btn_WF_PageOrign"/>
+        <Button id="btn8" taborder="10" text="9" left="btn7:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" height="21" cssclass="btn_WF_PageOrign"/>
+        <Button id="btn9" taborder="11" text="10" left="btn8:2" top="0" width="21" onclick="BtnNum_onclick" visible="true" height="21" cssclass="btn_WF_PageOrign"/>
+        <Button id="btnNext" taborder="12" left="btn9:2" top="0" width="21" onclick="Button_onclick" visible="true" cssclass="btn_WF_PageNext" height="21"/>
+        <Button id="btnLast" taborder="13" top="0" width="21" onclick="Button_onclick" visible="true" cssclass="btn_WF_PageLast" height="21" left="btnNext:2"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[
@@ -29,7 +29,7 @@ this.application = null;
 this.fv_pageCount = 10;
 
 // 페이지당 목록 객수
-this.fv_pageRowCount = 10;
+this.fv_pageRowCount = 20;
 
 this.fv_pagesCount;
 this.fv_totalCount;
@@ -75,12 +75,12 @@ this.Button_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	
 	this.parent.parent.fn_list(this.fv_pageIdx);	
+	
 };
 
 this.BtnNum_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var sPage = obj.text;	
-	this.parent.parent.fn_list(sPage);	
+	this.parent.parent.fn_list(obj.text);	
 };
 
 this.initPages = function(totalCount, pageRowCount)
@@ -107,28 +107,30 @@ this.initPages = function(totalCount, pageRowCount)
 this.setPage = function(sPage)
 {
 	var nPageNum;
-	
+
 	this.fv_pageIdx = nexacro.toNumber(sPage) - 1;
 	
-	
-	if(this.fv_pageIdx<0) this.fv_pageIdx = 0;
+	if(this.fv_pageIdx < 0) this.fv_pageIdx = 0;
 	else if(this.fv_pageIdx > this.fv_pagesCount-1) this.fv_pageIdx = this.fv_pagesCount-1;
 	
 	this.fv_listIdx = nexacro.floor(this.fv_pageIdx / this.fv_pageCount);		
 
 	for(i=0;i<this.fv_pageCount;i++)
-	{
+	{		
 		nPageNum = (this.fv_listIdx * this.fv_pageCount) + i + 1;
 		
 		objBtnPage = this.components["btn"+i];
 
+		objBtnPage.set_cssclass("btn_WF_PageOrign");	
+
 		if(nPageNum <= this.fv_pagesCount)
 		{
 			objBtnPage.set_text(nPageNum);
-			objBtnPage.set_visible(true);
-			
-			if(nPageNum == this.fv_pageIdx + 1) objBtnPage.set_enable(false);
-			else objBtnPage.set_enable(true);
+ 			objBtnPage.set_visible(true);
+ 			
+ 			if(nPageNum == this.fv_pageIdx + 1){				
+				objBtnPage.set_cssclass("btn_WF_PageActive");				
+			}
 			
 		}else
 		{
