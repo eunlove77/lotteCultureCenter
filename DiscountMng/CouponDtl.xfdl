@@ -3,7 +3,7 @@
   <Form id="CouponDtl" width="1280" height="720" titletext="New Form" onload="CouponDtl_onload">
     <Layouts>
       <Layout height="720" mobileorientation="landscape" width="1280">
-        <Div id="Div00" taborder="0" text="Div00" left="45" top="20" height="360" right="45">
+        <Div id="Div00" taborder="0" text="Div00" left="45" top="20" height="450" right="45">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="기본정보" left="0" top="1" width="48" cssclass="sta_WF_TitGray" height="17"/>
@@ -32,10 +32,11 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02_00" taborder="5" text="Div01" left="0" top="Div02:-1" height="64" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div03" taborder="5" text="Div01" left="0" top="Div02:-1" height="146" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰 이미지" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="111" top="3" width="1077" height="141" url="FrameBase::include/file_upload.xfdl" async="true"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -101,7 +102,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="7" text="Div01" left="0" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="0" visible="true">
+              <Div id="Div02" taborder="7" text="Div01" left="0" top="Div01:-1" height="0" cssclass="div_WF_CompWrap" right="0" visible="true">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
@@ -132,8 +133,9 @@
                         </Rows>
                       </Dataset>
                     </Radio>
-                    <ListBox id="ListBox00" taborder="2" left="120" top="33" height="120" cssclass="lst_WF_ListBox" innerdataset="ds_category01" codecolumn="cd" datacolumn="cdNm" itemheight="30" width="160" scrollbarsize="15" onitemclick="Div01_Div03_ListBox00_onitemclick"/>
-                    <ListBox id="ListBox01" taborder="3" left="295" top="34" height="120" cssclass="lst_WF_ListBox" innerdataset="ds_category02" codecolumn="cd" datacolumn="cdNm" itemheight="30" width="160" scrollbarsize="15" onitemchanged="Div01_Div03_ListBox01_onitemchanged"/>
+                    <Combo id="Combo00" taborder="2" text="" left="120" top="40" width="160" height="21" onitemchanged="Div01_Div03_Combo00_onitemchanged" innerdataset="ds_category01" codecolumn="cd" datacolumn="cdNm" displaynulltext="대분류"/>
+                    <Combo id="Combo01" taborder="3" text="Combo01" left="Combo00:10" top="40" width="160" height="21" innerdataset="ds_category02" codecolumn="cd" datacolumn="cdNm" displaynulltext="중분류"/>
+                    <Combo id="Combo02" taborder="4" left="Combo01:10" top="40" width="160" height="21" displaynulltext="소분류" value="" index="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -246,7 +248,7 @@
           <Layouts>
             <Layout>
               <Button id="cnclBtn" taborder="1" text="취소" left="42.35%" top="12" width="83" height="21" cssclass="btn_WF_Weak" fittocontents="width"/>
-              <Button id="insBtn" taborder="0" text="등록" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" left="cnclBtn:16.036000000000058"/>
+              <Button id="insBtn" taborder="0" text="등록" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" left="cnclBtn:16.036000000000058" onclick="Div03_insBtn_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -271,13 +273,28 @@
           <Row/>
         </Rows>
       </Dataset>
-      <Dataset id="ds_cd">
+      <Dataset id="ds_detail">
         <ColumnInfo>
-          <Column id="cdId" type="STRING" size="10"/>
+          <Column id="seq" type="STRING" size="256"/>
+          <Column id="spot" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="atchFileId" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_atch_file">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -288,8 +305,10 @@ include "Base::libCommon.xjs";
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
+this.param = null;
 this.application = null;
-
+this.atchFileDiv = this.Div00.form.Div03.form.Div00.form;	//파일첨부Div
+this.atchFileId  = ""; //파일첨부 atchFileId
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -300,6 +319,7 @@ this.application = null;
 this.CouponDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
+	this.param = this.parent.param;
 	
 	var tranObj = {
 		strSvcId : "codeList",
@@ -313,15 +333,63 @@ this.CouponDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfn_transaction(tranObj);
 	
+	if(this.param.seq != ""){	
+		this.ds_detail.setColumn(0, "seq", this.param.seq);
+		this.fn_detail();
+	}
+	
+	//파일첨부 세팅
+	this.atchFileDiv.fileExtn = "jpg,jpeg,gif,png";	//확장자(default : jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx)
+	this.atchFileDiv.fileMaxCnt = 1 	//최대 파일개수(default : 1)
+	this.atchFileDiv.fileMaxSize= 10 	//최대 파일크기(default : 10MB)
+	this.atchFileDiv.fileTxt.set_text("※ jpg,jpeg,gif,png 최대 10MB 1개만 등록 가능합니다."); //파일 안내 문구 
+
+	
+	//파일첨부 후 수행할 함수 전달
+	this.atchFileDiv.FileUpTransfer00.insertEventHandler("onsuccess", 0, this.onSuccess, this)
+	
+};
+
+this.fn_detail = function ()
+{	
+	var strSvcId	= "detail"
+	var strSvcUrl   = this.application.Admin_svc + "::/sample/selectSampleDtl.do";
+	var inData      = "detail=ds_detail";
+	var outData     = "ds_detail=detail ds_atch_file=atchFileList";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
 };
 
 this.fnCallback = function(svcID, errorCode, errorMsg)
 {
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorCode+"\n"+errorMsg);
-  }
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "save":
+			this.alert("저장되었습니다.");
+			this.fn_list();
+			break;
+		case "detail":    
+			//파일첨부 데이터복사
+			this.atchFileDiv.ds_atch_file.copyData(this.ds_atch_file);
+			this.atchFileId = this.gfnUndefinedConvertEmpty(this.ds_detail.getColumn(0, "atchFileId"));
+						
+			break;
+	}
 
 };
 
@@ -380,11 +448,10 @@ this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 	}
 };
 
-this.Div01_Div03_ListBox00_onitemclick = function(obj:nexacro.ListBox,e:nexacro.ItemClickEventInfo)
+this.Div01_Div03_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
+	var clickCdId = "028_"+e.postvalue;
 	
-	var clickCdId = "028_"+e.itemvalue;
-
 	var tranObj = {
 		strSvcId : "codeList",
 		strSvcUrl : this.application.Admin_svc + "::discount/coupon/codeList.do",
@@ -400,10 +467,62 @@ this.Div01_Div03_ListBox00_onitemclick = function(obj:nexacro.ListBox,e:nexacro.
 
 
 
-this.Div01_Div03_ListBox01_onitemchanged = function(obj:nexacro.ListBox,e:nexacro.ItemChangeEventInfo)
-{
-	
+this.Div03_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	this.fn_checkValidation();
 };
+
+this.fn_checkValidation = function(){
+
+	if( this.gfn_isNull(this.param.seq) &&  this.atchFileDiv.FileUpTransfer00.filelist.length == 0 ){	//파일첨부 필수일 경우
+		this.alert("쿠폰이미지를 선택해주세요.");
+		this.atchFileDiv.Button00.setFocus();
+		return;
+	}else{								
+		//파일첨부 업로드
+		// 수정일 경우
+		if(!this.gfn_isNull(this.param.seq)){
+			var atchFileList = this.atchFileDiv.FileUpTransfer00.filelist;
+			
+			if( atchFileList.length > 0 ){
+				this.atchFileDiv.FileUpTransfer00.upload(this.application.domain + '/admin/file/fileupload.do?fileGb=atchFileId&atchFileId='+this.atchFileId);
+			}
+		
+		}else{
+			this.atchFileDiv.FileUpTransfer00.upload(this.application.domain + '/admin/file/fileupload.do?fileGb=atchFileId&atchFileId='+this.atchFileId);
+		}
+		
+	}	
+}
+
+//파일첨부 완료 후 실행할 함수 (atchFileId 처리)
+this.onSuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
+{
+	this.atchFileId = e.datasets[0].getColumn(0,"atchFileId");
+	this.ds_detail.setColumn(0, "atchFileId", this.atchFileId);
+	
+	this.fn_save();
+};
+
+this.fn_save = function(){
+	this.ds_atch_file = this.atchFileDiv.ds_atch_file; //파일첨부 폼 데이터복사
+	
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::sample/insertSample.do";
+	var inData      = "data=ds_detail updateFileData=ds_atch_file:U";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+}
 ]]></Script>
   </Form>
 </FDL>

@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_FileUpload" left="0" top="0" width="790" height="140" titletext="New Form" border="" background="">
+    <Layouts>
+      <Layout height="140" width="790" stepcount="0">
+        <Static id="Static00" taborder="1" text="Drop Files Here" left="10" top="59" width="541" height="70" visible="true" background="aliceblue" color="dodgerblue" font="normal 30pt/normal &quot;Arial&quot;" textAlign="center" verticalAlign="middle" onclick="Static00_onclick"/>
+        <Grid id="Grid00" taborder="0" left="10" top="35" width="542" height="95" binddataset="ds_atch_file" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="380"/>
+                <Column size="100"/>
+                <Column size="60"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="파일명"/>
+                <Cell col="1" text="파일크기"/>
+                <Cell col="2" cssclass="btn_WF_High"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:realFileNm"/>
+                <Cell col="1" text="bind:fileSize" textAlign="right"/>
+                <Cell col="2" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="2" text="파일찾기" left="10" top="9" width="84" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="Button00_onclick"/>
+        <Static id="fileTxt" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" left="Button00:0" top="10" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <FileDialog id="FileDialog00" onclose="FileDialog00_onclose"/>
+      <FileUpTransfer id="FileUpTransfer00" onprogress="FileUpTransfer00_onprogress" onsuccess="FileUpTransfer00_onsuccess" onerror="FileUpTransfer00_onerror"/>
+      <Dataset id="ds_atch_file" onrowsetchanged="ds_atch_file_onrowsetchanged" onvaluechanged="ds_atch_file_onvaluechanged">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+
+this.fileExtn = "jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx" //확장자
+this.fileMaxCnt = 1  	//최대 파일개수
+this.fileMaxSize= 10 	//최대 파일크기 10MB
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.FileDialog00.open("Nexacro N", FileDialog.MULTILOAD);
+};
+
+this.FileDialog00_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
+{
+	this.addFileList(e.virtualfiles);
+};
+
+this.addFileList = function(filelist)
+{
+	if(this.fileMaxCnt < this.ds_atch_file.getRowCount() + filelist.length)
+	{
+		alert("파일은 최대 "+this.fileMaxCnt+"개 등록 가능합니다.");
+	}
+	else
+	{
+		for(var i = 0, len = filelist.length, vFile; i < len ; i++){
+			vFile = filelist[i];
+			
+			if(this.FileUpTransfer00.existFile(vFile))
+			{
+				alert("이미 등록한 파일입니다.");
+			}
+			else if(this.fileExtn.indexOf(vFile.filename.split('.').pop().toLowerCase()) < 0)
+			{
+				alert("등록가능한 확장자가 아닙니다.");
+			}
+			else
+			{
+				vFile.addEventHandler("onsuccess", this.FileList_onsuccess, this);
+				vFile.addEventHandler("onerror", this.FileList_onerror, this);	
+			}
+			vFile.open(null, 1);
+		}
+	}		
+}
+
+this.FileList_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileEventInfo)
+{
+	switch (e.reason)
+	{
+		case 1:
+			obj.getFileSize();
+			break;
+		case 9:
+			if(this.fileMaxSize * 1024 * 1024 < e.filesize)
+			{
+				alert("첨부파일은 최대 " + this.fileMaxSize + "MB까지 등록 가능합니다.");
+			}
+			else
+			{
+				if(this.ds_atch_file.getColCount() == 0){
+					this.ds_atch_file.addColumn("atchFileId", "STRING", 256);
+					this.ds_atch_file.addColumn("fileSeq", "STRING", 256);
+					this.ds_atch_file.addColumn("phyPath", "STRING", 256);
+					this.ds_atch_file.addColumn("saveFileNm", "STRING", 256);
+					this.ds_atch_file.addColumn("realFileNm", "STRING", 256);
+					this.ds_atch_file.addColumn("fileExtn", "STRING", 256);
+					this.ds_atch_file.addColumn("fileSize", "STRING", 256);
+					this.ds_atch_file.addColumn("webPath", "STRING", 256);
+				}
+			
+				var nRowIdx = this.ds_atch_file.addRow();
+				
+				this.ds_atch_file.setColumn(nRowIdx, "realFileNm", obj.filename);			
+				this.ds_atch_file.setColumn(nRowIdx, "fileSize", this.cutFileSize(e.filesize));
+
+				this.FileUpTransfer00.addFile(obj.filename, obj);
+			}
+			
+			break;
+	}
+}
+
+this.FileList_onerror = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileErrorEventInfo)
+{
+	trace("errortype: "+e.errortype);
+	trace("errormsg: "+e.errormsg);
+	trace("statuscode: "+e.statuscode);
+}
+
+this.cutFileSize = function(filesize)
+{
+	var sizeMB = nexacro.round(filesize / 1024 / 1024, 2); // 파일크기 MB로 환산 (2자리 반올림)
+	
+	return sizeMB + "MB";
+};
+
+this.Grid00_ondragenter = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
+{
+	if(e.datatype == "file")
+	{
+		this.Grid00.set_opacity(0.5);
+	}
+};
+
+this.Grid00_ondragleave = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
+{
+	this.Grid00.set_opacity(1);
+};
+
+this.Grid00_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.Grid00.set_opacity(1);
+	if(e.datatype == "file")
+	{
+		this.addFileList(e.filelist);
+	}
+};
+
+this.FileUpTransfer00_onprogress = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferProgressEventInfo)
+{
+	trace(e.loaded);
+	trace(e.total);
+	console.log(e.loaded);
+	console.log(e.total);    
+};
+
+// this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventinfo)
+// {	
+//
+// };
+
+this.FileUpTransfer00_onerror = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferErrorEventInfo)
+{
+
+	trace("FileTrans Error");
+	trace(e);    
+	trace("---------------");
+};
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var fileId = "";
+	var fileName = "";
+	var delResult = -1;
+	
+	var objGridDs = obj.getBindDataset();
+	
+	fileId = objGridDs.getColumn(e.row, "atchFileId");
+	fileName = objGridDs.getColumn(e.row, "realFileNm");
+	
+	if(e.cell == 2){		
+		if(!this.gfn_isNull(fileId)){
+			this.ds_atch_file.deleteRow(e.row);
+		}else{
+			delResult = this.FileUpTransfer00.removeFile(fileName);
+			if(delResult > -1){
+				this.ds_atch_file.deleteRow(e.row);
+			}
+		}		
+	}
+};
+
+// 기존 파일첨부 내역 사이즈 변환
+this.ds_atch_file_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{	
+	if(e.col == -1)
+	{
+		for(var i = 0, len = this.ds_atch_file.getRowCount(); i < len ; i++)
+		{
+			var fileSize = this.ds_atch_file.getColumn(i, "fileSize");
+			this.ds_atch_file.setColumn(i, "fileSize", this.cutFileSize(fileSize));
+		}
+	}
+};]]></Script>
+  </Form>
+</FDL>
