@@ -150,7 +150,10 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 			
 			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){
 				
-				if(application.gdsCode.getColumn(i, "cdId") == "018" && application.gdsCode.getColumn(i, "dpth") == "1"){
+				if(application.gdsCode.getColumn(i, "cdId") == "018" 
+					&& application.gdsCode.getColumn(i, "dpth") == "1"
+					&& application.gdsCode.getColumn(i, "cd") != "99"){
+					
 					nRow = application.gdsAuthCdList.addRow();
 					application.gdsAuthCdList.setColumn(nRow, "cd", application.gdsCode.getColumn(i, "cd"));
 					application.gdsAuthCdList.setColumn(nRow, "cdNm", application.gdsCode.getColumn(i, "cdNm"));
