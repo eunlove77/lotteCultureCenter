@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="AdminMng" width="1280" height="800" titletext="New Form" onload="AdminMng_onload">
+  <Form id="AdminMng" width="1280" height="1000" titletext="New Form" onload="AdminMng_onload">
     <Layouts>
-      <Layout height="800" width="1280">
+      <Layout height="1000" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Div id="periodDiv" taborder="2" text="Div01" left="10" top="82" height="33" cssclass="div_WF_CompWrap" right="10">
@@ -20,9 +20,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="계정상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="statusAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row02_statusDiv_statusAll_onclick" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="statusY" taborder="2" text="활성" left="statusAll:3" top="4" width="60" height="20" onclick="row02_statusDiv_statusY_onclick" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="statusN" taborder="3" text="비활성" left="statusY:3" top="4" width="70" height="20" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkUseAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row02_statusDiv_chkUseAll_onclick" value="false"/>
+                    <CheckBox id="chkUseY" taborder="2" text="활성" left="chkUseAll:3" top="4" width="60" height="20" onclick="fn_checkbox_click" value="false"/>
+                    <CheckBox id="chkUseN" taborder="3" text="비활성" left="chkUseY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -30,7 +30,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="spotCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" codecolumn="spotSeq" datacolumn="spotNm" index="0" value="" onitemchanged="row02_spotDiv_spotCd_onitemchanged"/>
+                    <Combo id="spotCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" codecolumn="spotCd" datacolumn="spotNm" index="0" value="" onitemchanged="row02_spotDiv_spotCd_onitemchanged"/>
                     <Combo id="deptList" taborder="0" text="" left="9" top="71" width="150" height="30" innerdataset="ds_dept_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="deptList_onitemchanged" index="0" value=""/>
                   </Layout>
                 </Layouts>
@@ -38,7 +38,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="searchDiv" taborder="4" text="Div01" left="10" top="177" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+        <Div id="Div06" taborder="4" text="Div01" left="10" top="177" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -50,7 +50,7 @@
                   </ColumnInfo>
                   <Rows>
                     <Row>
-                      <Col id="codecolumn">-1</Col>
+                      <Col id="codecolumn"/>
                       <Col id="datacolumn">전체</Col>
                     </Row>
                     <Row>
@@ -68,13 +68,13 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="273" height="21" text="123123"/>
+              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="273" height="21" text="123123" onkeydown="Div06_searchQuery_onkeydown"/>
               <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div06_btnSearch_onclick"/>
               <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div06_btnInit_onclick"/>
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick">
+        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -111,17 +111,17 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="bind:chk" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
-                <Cell col="1" text="bind:roleCd"/>
+                <Cell col="1" text="bind:athrNm"/>
                 <Cell col="2" text="bind:id"/>
-                <Cell col="3" text="bind:name"/>
-                <Cell col="4" text="bind:phone"/>
+                <Cell col="3" text="bind:fnm"/>
+                <Cell col="4" text="bind:hpNo"/>
                 <Cell col="5" text="bind:email"/>
-                <Cell col="6" text="bind:spotNm"/>
-                <Cell col="7" text="bind:deptNm"/>
-                <Cell col="8" text="bind:lastLgnDtm"/>
-                <Cell col="9" text="bind:lastLgnDtm"/>
-                <Cell col="10" text="bind:useYn" textAlign="center"/>
-                <Cell col="11" text="bind:useYn"/>
+                <Cell col="6" text="bind:brchNm"/>
+                <Cell col="7" text="bind:dptNm"/>
+                <Cell col="8" text="bind:apvlDtm"/>
+                <Cell col="9" text="bind:fnlLoginDtm"/>
+                <Cell col="10" text="bind:acntStatYn" textAlign="center"/>
+                <Cell col="11" text="bind:apvlStatYn"/>
               </Band>
             </Format>
           </Formats>
@@ -133,18 +133,18 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="승인상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="permitAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row03_permitDiv_permitAll_onclick" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="permitY" taborder="2" text="승인" left="permitAll:3" top="4" width="60" height="20" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="permitN" taborder="3" text="미승인" left="permitY:3" top="4" width="70" height="20" falsevalue="N" truevalue="Y"/>
+                    <CheckBox id="chkPermitAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row03_permitDiv_permitAll_onclick" value="false"/>
+                    <CheckBox id="chkPermitY" taborder="2" text="승인" left="chkPermitAll:3" top="4" width="60" height="20" value="false" onclick="fn_checkbox_click02"/>
+                    <CheckBox id="chkPermitN" taborder="3" text="미승인" left="chkPermitY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click02"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Div id="roleTypeDiv" taborder="1" text="Div01" height="33" cssclass="div_WF_CompWrap" top="0" left="permitDiv:-1" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="승인상태" left="-1" top="0" width="110" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="roleType1" taborder="1" text="슈퍼 관리자" left="116" top="4" width="83" height="20" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="roleType2" taborder="2" text="일반 관리자" left="roleType1:23" top="4" width="87" height="20" falsevalue="N" truevalue="Y"/>
+                    <Static id="Static00" taborder="0" text="권한" left="-1" top="0" width="110" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="roleType1" taborder="1" text="슈퍼 관리자" left="116" top="4" width="83" height="20" value="false"/>
+                    <CheckBox id="roleType2" taborder="2" text="일반 관리자" left="roleType1:23" top="4" width="87" height="20" value="false"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -155,11 +155,11 @@
           <Layouts>
             <Layout>
               <Static id="txtTotal" taborder="0" left="9" top="10" height="21" text="목록 (0)개" right="1169"/>
-              <Button id="btnPerminN" taborder="2" text="미승인" top="5" height="30" cssclass="btn_WF_High" right="219" width="60" onclick="Div01_btnPerminN_onclick"/>
-              <Button id="btnExlDown" taborder="1" text="엑셀 다운로드" top="5" height="30" cssclass="btn_WF_Low" right="297" width="101" onclick="Div01_btnExlDown_onclick"/>
-              <Button id="btnPerminY" taborder="3" text="승인" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="150" onclick="Div01_btnPerminY_onclick"/>
-              <Button id="btnSave" taborder="4" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_btnSave_onclick" visible="false"/>
-              <Button id="btnDel" taborder="5" text="삭제" top="5" height="30" cssclass="btn_WF_High" right="10" width="50" onclick="Div01_btnDel_onclick"/>
+              <Button id="btnPerminN" taborder="2" text="미승인" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnPerminN_onclick"/>
+              <Button id="btnExlDown" taborder="1" text="엑셀 다운로드" top="5" height="30" cssclass="btn_WF_Low" right="227" width="101" onclick="Div01_btnExlDown_onclick"/>
+              <Button id="btnPerminY" taborder="3" text="승인" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="80" onclick="Div01_btnPerminY_onclick"/>
+              <Button id="btnSave" taborder="4" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="426" onclick="Div01_btnSave_onclick" visible="false"/>
+              <Button id="btnDel" taborder="5" text="삭제" top="5" height="30" cssclass="btn_WF_High" width="50" onclick="Div01_btnDel_onclick" right="10"/>
             </Layout>
           </Layouts>
         </Div>
@@ -168,64 +168,43 @@
     <Objects>
       <Dataset id="ds_admin_list">
         <ColumnInfo>
-          <Column id="admSeq" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
-          <Column id="spotNm" type="STRING" size="256"/>
           <Column id="id" type="STRING" size="256"/>
-          <Column id="deptCd" type="STRING" size="256"/>
-          <Column id="deptNm" type="STRING" size="256"/>
-          <Column id="name" type="STRING" size="256"/>
+          <Column id="athrCd" type="STRING" size="256"/>
+          <Column id="athrNm" type="STRING" size="256"/>
+          <Column id="fnm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
-          <Column id="phone" type="STRING" size="256"/>
-          <Column id="useYn" type="STRING" size="256"/>
-          <Column id="tmpPwdIssuYn" type="STRING" size="256"/>
-          <Column id="lastLgnDtm" type="STRING" size="256"/>
-          <Column id="lastPwdModDtm" type="STRING" size="256"/>
-          <Column id="allwIp" type="STRING" size="256"/>
-          <Column id="authCd" type="STRING" size="256"/>
-          <Column id="roleCd" type="STRING" size="256"/>
-          <Column id="lgnFailCnt" type="STRING" size="256"/>
-          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="dptNm" type="STRING" size="256"/>
+          <Column id="acntStatYn" type="STRING" size="256"/>
+          <Column id="apvlStatYn" type="STRING" size="256"/>
+          <Column id="apvlDtm" type="STRING" size="256"/>
+          <Column id="fnlLoginDtm" type="STRING" size="256"/>
+          <Column id="prmtIpAddr" type="STRING" size="256"/>
+          <Column id="prmtIpAddrVdi" type="STRING" size="256"/>
           <Column id="chk" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
         <ColumnInfo>
-          <Column id="q" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="useType" type="STRING" size="256"/>
+          <Column id="permitType" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
-          <Column id="statusAll" type="STRING" size="256"/>
-          <Column id="statusY" type="STRING" size="256"/>
-          <Column id="statusN" type="STRING" size="256"/>
-          <Column id="pertmitAll" type="STRING" size="256"/>
-          <Column id="permitY" type="STRING" size="256"/>
-          <Column id="permitN" type="STRING" size="256"/>
-          <Column id="roleS" type="STRING" size="256"/>
-          <Column id="roleN" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
-          <Column id="strtDt" type="STRING" size="256"/>
-          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
-          <Row>
-            <Col id="statusAll">N</Col>
-            <Col id="statusY">N</Col>
-            <Col id="statusN">N</Col>
-          </Row>
-          <Row>
-            <Col id="pertmitAll">N</Col>
-            <Col id="permitY">N</Col>
-            <Col id="permitN">N</Col>
-          </Row>
-          <Row>
-            <Col id="roleS">N</Col>
-            <Col id="roleN">N</Col>
-          </Row>
+          <Row/>
         </Rows>
       </Dataset>
       <Dataset id="ds_spot_list">
         <ColumnInfo>
           <Column id="spotSeq" type="STRING" size="256"/>
           <Column id="spotNm" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_menu_auth">
@@ -245,6 +224,12 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_athr_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
 /**************************************************************************
@@ -258,7 +243,6 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.domain = "";
 this.excelImportExport = "";
-//var objPageingDs;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -266,7 +250,6 @@ this.excelImportExport = "";
 this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	//this.objPageingDs = this.application.gdsPageing;
 	
 	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
@@ -274,119 +257,87 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	this.row02.form.spotDiv.form.spotCd.set_index(0);
-	
 	// 권한 조회
 	this.fn_get_auth(objOwnerFrame.param.MENU_ID);
 	
 	// 코드 데이터
 	this.fn_data_list();
-};
-
-this.Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
+	
 	this.fn_list(1);
 };
 
+//리스트 검색버튼
+this.Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_searchValueInit();
+	
+	this.fn_list(1);
+};
+
+//엔터키 검색
+this.Div06_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_searchValueInit();
+		
+		this.fn_list(1);
+	}
+};
+
+//리스트 초기화 버튼
 this.Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.row02.form.statusDiv.form.statusAll.set_value("N");
-	this.row02.form.statusDiv.form.statusY.set_value("N");
-	this.row02.form.statusDiv.form.statusN.set_value("N");
+	
+	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
+	
+	objCalendar.strtDtm.set_value('');
+	objCalendar.endDtm.set_value('');
+	
+	this.Div06.form.searchField.set_index(0);
+	this.Div06.form.searchQuery.set_value('');
+	
+	//this.ds_notice_list.clearData();
+	//this.txtTotal.set_text("총 0개");	
+	
+	this.row02.form.statusDiv.form.chkUseAll.set_value(0);
+	this.row02.form.statusDiv.form.chkUseY.set_value(0);
+	this.row02.form.statusDiv.form.chkUseN.set_value(0);
 	this.row02.form.spotDiv.form.spotCd.set_index(0);
 	
-	this.row03.form.permitDiv.form.permitAll.set_value("N");
-	this.row03.form.permitDiv.form.permitY.set_value("N");
-	this.row03.form.permitDiv.form.permitN.set_value("N");
-	this.row03.form.roleTypeDiv.form.roleType1.set_value("N");
-	this.row03.form.roleTypeDiv.form.roleType2.set_value("N");
-	
-	this.searchDiv.form.searchField.set_index(0);
-	this.searchDiv.form.searchQuery.set_value("");
+	this.row03.form.permitDiv.form.chkPermitAll.set_value(0);
+	this.row03.form.permitDiv.form.chkPermitY.set_value(0);
+	this.row03.form.permitDiv.form.chkPermitN.set_value(0);
+	this.row03.form.roleTypeDiv.form.roleType1.set_value(0);
+	this.row03.form.roleTypeDiv.form.roleType2.set_value(0);
 };
 
-this.searchDiv_searchField_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
-{
-	if(obj.value =="")
-	{
-		this.searchDiv.form.searchQuery.text="";
-	}
-};
-
-this.row02_statusDiv_statusAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
+this.row02_statusDiv_chkUseAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{	
 	if(obj.isChecked())
-	{
-		this.row02.form.statusDiv.form.statusY.set_value("Y");
-		this.row02.form.statusDiv.form.statusN.set_value("Y");
-	}
-	else
-	{
-		this.row02.form.statusDiv.form.statusY.set_value("N");
-		this.row02.form.statusDiv.form.statusN.set_value("N");
-	}
-};
-
-this.row02_statusDiv_statusY_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked() && this.row02.form.statusDiv.form.statusN.isChecked())
-	{
-		this.row02.form.statusDiv.form.statusAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row02.form.statusDiv.form.statusAll.set_value("N");
-	}	
-};
-
-this.row02_statusDiv_statusN_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked() && this.row02.form.statusDiv.form.statusY.isChecked())
-	{
-		this.row02.form.statusDiv.form.statusAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row02.form.statusDiv.form.statusAll.set_value("N");
-	}	
+		{
+			obj.parent.chkUseY.set_value(1);
+			obj.parent.chkUseN.set_value(1);
+		}
+		else
+		{
+			obj.parent.chkUseY.set_value(0);
+			obj.parent.chkUseN.set_value(0);
+		}
 };
 
 this.row03_permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked())
-	{
-		this.row03.form.permitDiv.form.permitY.set_value("Y");
-		this.row03.form.permitDiv.form.permitN.set_value("Y");
-	}
-	else
-	{
-		this.row03.form.permitDiv.form.permitY.set_value("N");
-		this.row03.form.permitDiv.form.permitN.set_value("N");
-	}
-};
-
-this.row03_permitDiv_permitY_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked() && this.row03.form.permitDiv.form.permitN.isChecked())
-	{
-		this.row03.form.permitDiv.form.permitAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row03.form.permitDiv.form.permitAll.set_value("N");
-	}	
-};
-
-this.row03_permitDiv_permitN_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked() && this.row03.form.permitDiv.form.permitY.isChecked())
-	{
-		this.row03.form.permitDiv.form.permitAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row03.form.permitDiv.form.permitAll.set_value("N");
-	}	
+		{
+			obj.parent.chkPermitY.set_value(1);
+			obj.parent.chkPermitN.set_value(1);
+		}
+		else
+		{
+			obj.parent.chkPermitY.set_value(0);
+			obj.parent.chkPermitN.set_value(0);
+		}
 };
 
 //계정삭제
@@ -418,10 +369,17 @@ this.Div01_btnExlDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 {
 	//this.alert("버튼클릭 >>" + this.application.Domain + this.excelImportExport);
 	
-	this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
-	this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.GridAdminList, "Sheet1!A1");  	
-	this.ExcelExportObj.set_exportfilename("ExcelExport_Sample");
-	this.ExcelExportObj.exportData();  
+	if(this.GridAdminList.rowcount > 1)
+	{
+		this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
+		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.GridAdminList, "Sheet1!A1");  	
+		this.ExcelExportObj.set_exportfilename("ExcelExport_Sample");
+		this.ExcelExportObj.exportData(); 
+	}
+	else
+	{
+		this.alert("출력할 데이터가 없습니다");
+	}
 };
 
 this.GridAdminList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -439,14 +397,23 @@ this.fn_list = function (page)
 	// 버튼별 권한 제한시
 	if(this.gfn_btn_auth(this.ds_menu_auth, "accSrchYn")) return;
 
-	//this.objPageingDs.setColumn(0, "pageIndex", page);
-	this.ds_search.setColumn(0, "f", this.searchDiv.form.searchField.value);
-	//this.ds_search.setColumn(0, "q"  , this.searchQuery.text);
-
+	//this.ds_search.setColumn(0, "f", this.searchDiv.form.searchField.value);
+	
+	/*var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::adminMngList.do",
+		inData : "search=ds_search pageing=gdsPageing",
+		outData : "ds_log=output1 gdsPageing=output2",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true		
+	};
+	
+	this.gfn_transaction(tranObj);*/
 	var strSvcId    = "list";
 	var strSvcUrl   = this.application.Admin_svc + "::adminMngList.do";
-	var inData      = "search=ds_search pageing=gdsPageing";
-	var outData     = "ds_admin_list=output1 gdsPageing=output2";
+	var inData      = "search=ds_search";
+	var outData     = "ds_admin_list=output1";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
@@ -458,6 +425,7 @@ this.fn_list = function (page)
             strArg,         // 입력값으로 보낼 arguments, a=b
             callBackFnc,       // transaction의 결과를 받을 Function 이름
             isAsync);         // 비동기통신 여부 [생략가능]
+	
 };
 
 this.fn_data_list = function ()
@@ -465,7 +433,7 @@ this.fn_data_list = function ()
 	var strSvcId    = "dataList";
 	var strSvcUrl   = this.application.Admin_svc + "::getAdmDataList.do";
 	var inData      = "";
-	var outData     = "ds_spot_list=output1 ds_dept_list=output2";
+	var outData     = "ds_spot_list=output1 ds_dept_list=output2 ds_athr_list = output3";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
@@ -523,6 +491,48 @@ this.fn_get_auth = function(menuSeq){
             isAsync);         // 비동기통신 여부 [생략가능]
 }
 
+this.fn_searchValueInit = function() {
+
+	//this.alert("검색조건초기화");
+	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
+	var arrUseType = new Array();
+	var arrPermitType = new Array();
+	var arrRoleType = new Array();
+	
+	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	
+	if(this.row02.form.statusDiv.form.chkUseY.value ==true) arrUseType.push("'Y'");
+	if(this.row02.form.statusDiv.form.chkUseN.value ==true) arrUseType.push("'N'");
+	
+	//this.alert("사용여부 값 체크 > " + this.row02.form.statusDiv.form.chkUseY.value);
+	//this.alert("넘길값 체크 > " + arrUseType.valueOf());
+	
+	if(this.row03.form.permitDiv.form.chkPermitY == true) arrPermitType.push("'Y'");
+	if(this.row03.form.permitDiv.form.chkPermitN == true) arrPermitType.push("'N'");
+	//권한 처리예정
+	
+	this.ds_search.setColumn(0, "useType", arrUseType.join(","));
+	this.ds_search.setColumn(0, "permitType", arrPermitType.join(","));
+	this.ds_search.setColumn(0, "brchCd", this.row02.form.spotDiv.form.spotCd.value); 
+	this.ds_search.setColumn(0, "q", this.Div06.form.searchQuery.value);
+	this.ds_search.setColumn(0, "f", this.Div06.form.searchField.value);
+
+}
+
+this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
+	if(!obj.isChecked()){
+		//this.row02.form.Div03.form.chkAll.set_value(0);
+		this.row02.form.statusDiv.form.chkUseAll.set_value(0);
+	}
+}
+
+this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
+	if(!obj.isChecked()){
+		this.row03.form.permitDiv.form.chkPermitAll.set_value(0);
+	}
+}
+
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
   // 에러 시 화면 처리 내역
@@ -547,14 +557,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
         this.alert("조회된 결과가 없습니다.");
       }else{
 	  
- 		//var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
- 		//var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
- 		//var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
- 		
- 		//this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
- 		//this.pageingDiv.form.setPage(pageIndex);
-		
-		this.ds_admin_list.set_enableevent(false);
+ 		this.ds_admin_list.set_enableevent(false);
 		for(var i = 0 ; i < this.ds_admin_list.getRowCount() ; i++){
 			this.ds_admin_list.addColumn("chk", "String", 256);
 			this.ds_admin_list.setColumn(i, "chk","N");
@@ -570,21 +573,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		break;
   }
 };
-// this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-// {
-// 	var objDs = obj.getBindDataset();
-// 	var seq = objDs.getColumn(e.row, "admSeq");
-// 	
-// 	if(e.cell > 0){
-// 		this.parent.param = {
-// 			admSeq : seq
-// 		};	
-// 		
-// 		this.parent.parent.parent.param.TAB_CLOSE = false;
-// 		
-// 		this.parent.set_url("SystemMng::AdminMngDtl.xfdl");
-// 	}
-// };
+
 this.orderType = "desc";
 
 this.ExcelExportObj_onsuccess = function(obj:nexacro.DataObject,e:nexacro.DataObjectEventInfo)
@@ -632,26 +621,24 @@ this.ExcelExportObj_onerror = function(obj:nexacro.ExcelExportObject,e:nexacro.E
   trace(str);
 };
 
-this.row02_spotDiv_spotCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(obj.value != ""){
-		//this.ds_search.setColumn(0, "spotSeq", obj.value);
-		//this.fn_list();
-	}else{
-	}
+	var objDs = obj.getBindDataset();
+	var seq = objDs.getColumn(e.row, "admSeq");
+	
+	if(e.cell >0)
+	{
+		this.parent.param  = {
+			admSeq : seq
+		};
+		
+		this.parent.parent.parent.param.TAB_CLOSE = false;
+		
+		this.parent.set_url("SystemMng::AdminMngDtl.xfdl");
+	}	
 };
+
+this.orderType = "desc";
 ]]></Script>
-    <Bind>
-      <BindItem id="item0" compid="row02.form.statusDiv.form.statusY" propid="value" datasetid="ds_search" columnid="statusY"/>
-      <BindItem id="item1" compid="row02.form.statusDiv.form.statusAll" propid="value" datasetid="ds_search" columnid="statusAll"/>
-      <BindItem id="item2" compid="row02.form.statusDiv.form.statusN" propid="value" datasetid="ds_search" columnid="statusN"/>
-      <BindItem id="item3" compid="row02.form.spotDiv.form.spotCd" propid="value" datasetid="ds_search" columnid="spotCd"/>
-      <BindItem id="item4" compid="row03.form.permitDiv.form.permitAll" propid="value" datasetid="ds_search" columnid="pertmitAll"/>
-      <BindItem id="item5" compid="row03.form.permitDiv.form.permitY" propid="value" datasetid="ds_search" columnid="permitY"/>
-      <BindItem id="item6" compid="row03.form.permitDiv.form.permitN" propid="value" datasetid="ds_search" columnid="permitN"/>
-      <BindItem id="item7" compid="row03.form.roleTypeDiv.form.roleType1" propid="value" datasetid="ds_search" columnid="roleS"/>
-      <BindItem id="item8" compid="row03.form.roleTypeDiv.form.roleType2" propid="value" datasetid="ds_search" columnid="roleN"/>
-      <BindItem id="item9" compid="searchDiv.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
-    </Bind>
   </Form>
 </FDL>

@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AdminMngDtl" width="1280" height="720" titletext="New Form" onload="AdminMngDtl_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="Static00" taborder="0" text="관리자 상세" left="20" top="20" width="120" height="31"/>
+        <Static id="txtNameLabel" taborder="1" text="이름" left="20" top="70" width="120" height="40"/>
+        <Static id="txtDeptNmLabel" taborder="2" text="부서명" left="20" top="110" width="120" height="40"/>
+        <Static id="txtIdLabel" taborder="3" text="아이디" left="20" top="150" width="120" height="40"/>
+        <Static id="txtPw" taborder="4" text="비밀번호" left="20" top="190" width="120" height="44"/>
+        <Static id="txtEmail" taborder="5" text="이메일" left="20" top="239" width="120" height="43"/>
+        <Static id="allowIp" taborder="6" text="허용 IP" left="20" top="289" width="120" height="40"/>
+        <Static id="Static01" taborder="7" text="계정상태" left="20" top="340" width="120" height="40"/>
+        <Div id="Div00" taborder="8" text="Div00" left="20" top="405" width="1231" height="110" border="1px solid, 0px none, 0px none">
+          <Layouts>
+            <Layout>
+              <Button id="btnList" taborder="0" text="목록" left="0" top="14" width="120" height="50" onclick="btnList_onclick"/>
+              <Button id="btnModify" taborder="1" text="수정" left="1110" top="14" width="120" height="50" onclick="btnModify_onclick"/>
+              <Button id="btnDelete" taborder="2" text="삭제" left="970" top="14" width="120" height="50" onclick="btnDelete_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="txtName" taborder="9" left="190" top="70" width="120" height="40"/>
+        <Edit id="editEmail" taborder="10" left="190" top="239" width="1050" height="40"/>
+        <Edit id="editAllowIp" taborder="11" left="190" top="289" width="1050" height="40"/>
+        <Static id="txtId" taborder="12" left="190" top="150" width="120" height="40"/>
+        <Static id="txtDeptNm" taborder="13" left="190" top="110" width="120" height="40" text=""/>
+        <Radio id="useYn" taborder="14" left="190" top="339" width="190" height="40" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+          <Dataset id="innerdataset">
+            <ColumnInfo>
+              <Column id="codecolumn" size="256"/>
+              <Column id="datacolumn" size="256"/>
+            </ColumnInfo>
+            <Rows>
+              <Row>
+                <Col id="codecolumn">Y</Col>
+                <Col id="datacolumn">활성</Col>
+              </Row>
+              <Row>
+                <Col id="codecolumn">N</Col>
+                <Col id="datacolumn">비활성</Col>
+              </Row>
+            </Rows>
+          </Dataset>
+        </Radio>
+        <Grid id="Grid00" taborder="15" left="20" top="485" width="860" height="205" binddataset="ds_detail">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="admSeq"/>
+                <Cell col="1" text="id"/>
+                <Cell col="2" text="name"/>
+                <Cell col="3" text="email"/>
+                <Cell col="4" text="useYn"/>
+                <Cell col="5" text="allwIp"/>
+                <Cell col="6" text="deptNm"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:admSeq"/>
+                <Cell col="1" text="bind:id"/>
+                <Cell col="2" text="bind:name"/>
+                <Cell col="3" text="bind:email"/>
+                <Cell col="4" text="bind:useYn"/>
+                <Cell col="5" text="bind:allwIp"/>
+                <Cell col="6" text="bind:deptNm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.param = null
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.AdminMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.param = this.parent.param;
+	this.ds_detail.setColumn(0, "admSeq", this.param.admSeq);
+	
+	this.fn_detail("detail");
+};
+
+this.btnList_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.set_url("SystemMng::AdminMng.xfdl");	
+};
+
+this.btnModify_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("수정하시겠습니까?")){
+		this.fn_detail("modify");
+	}	
+};
+
+
+this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("삭제하시겠습니까?")){
+		this.fn_detail("delete");
+	}		
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_detail = function (strSvcId)
+{	
+
+	var strSvcUrl   = "";
+	var inData      = "detail=ds_detail";
+	var outData     = "ds_detail=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	if(strSvcId == "detail"){
+		strSvcUrl = "Admin_svc::adminMngDtl.do";
+	}else if(strSvcId == "modify"){
+		strSvcUrl = "Admin_svc::updateAdminMng.do";
+	}else if(strSvcId == "delete"){
+		strSvcUrl = "Admin_svc::deleteAdminMng.do";
+	}
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+};
+
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{
+		case "detail":
+      
+		break;
+		
+		case "modify":
+			this.alert("수정되었습니다.");
+			this.parent.set_url("SystemMng::AdminMng.xfdl");	
+		break;
+		
+		case "delete":
+			this.alert("삭제되었습니다.");
+			this.parent.set_url("SystemMng::AdminMng.xfdl");	
+		break;
+	
+	}
+};
+
+
+
+]]></Script>
+    <Objects>
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="admSeq" type="STRING" size="256"/>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="allwIp" type="STRING" size="256"/>
+          <Column id="deptNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="txtName" propid="text" datasetid="ds_detail" columnid="name"/>
+      <BindItem id="item1" compid="txtId" propid="text" datasetid="ds_detail" columnid="id"/>
+      <BindItem id="item2" compid="editEmail" propid="value" datasetid="ds_detail" columnid="email"/>
+      <BindItem id="item3" compid="editAllowIp" propid="value" datasetid="ds_detail" columnid="allwIp"/>
+      <BindItem id="item4" compid="txtDeptNm" propid="text" datasetid="ds_detail" columnid="deptNm"/>
+      <BindItem id="item5" compid="useYn" propid="value" datasetid="ds_detail" columnid="useYn"/>
+    </Bind>
+  </Form>
+</FDL>

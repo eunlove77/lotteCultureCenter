@@ -119,11 +119,11 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		if(errorCode == 10)
+		if(errorCode == 20)
 		{
 			this.parent.set_formurl("SystemMng::AdminChkPhone.xfdl"); // 휴대폰 인증 페이지
 		}
-		else if(errorCode == 30 || errorCode == 40)
+		else if(errorCode == 40 || errorCode == 50)
 		{
 			this.parent.set_formurl("SystemMng::AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
 			nexacro.setPrivateProfile("lgnCd", errorCode ); 
@@ -136,10 +136,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
 	switch(svcID)
 	{
-		case "login":      
+		case "login":     
+			this.alert(errorMsg);
 			this.loginSuccess();	
 			this.gfn_codeList(this.application.Admin_svc);
-			
 		break;
 		case "logout":			
 			this.application.gfn_initFrame();
