@@ -12,7 +12,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="권한(직무) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="roleCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value=""/>
+                    <Combo id="roleCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_detail" codecolumn="athrCd" datacolumn="athrNm" readonly="true"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -20,7 +20,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이름" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="txtName" taborder="1" left="119" top="5" width="292" height="23"/>
+                    <Static id="txtName" taborder="1" left="119" top="5" width="292" height="23" onclick="Div00_Div01_txtName_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -44,7 +44,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이메일" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="txtEmail" taborder="1" left="119" top="5" width="292" height="23"/>
+                    <Static id="txtEmail" taborder="1" left="119" top="5" width="292" height="23" onclick="Div00_Div04_txtEmail_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -60,7 +60,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="spotCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value=""/>
+                    <Combo id="spotCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_detail" codecolumn="brchCd" datacolumn="brchNm" readonly="false"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -68,7 +68,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="부서 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="deptCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_dept_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="deptCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_detail" codecolumn="dptNm" datacolumn="dptNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -92,7 +92,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="계정상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="Static01" taborder="1" text="Static01" left="119" top="5" width="292" height="23"/>
+                    <Static id="Static01" taborder="1" left="119" top="5" width="292" height="23"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -100,7 +100,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="승인상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Radio id="radioPermitYn" taborder="1" left="119" top="0" bottom="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130">
+                    <Radio id="radioPermitYn" taborder="1" left="119" top="0" bottom="0" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130" codecolumn="codecolumn" datacolumn="datacolumn" innerdataset="innerdataset">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -199,18 +199,19 @@
       </Dataset>
       <Dataset id="ds_detail">
         <ColumnInfo>
-          <Column id="admSeq" type="INT" size="256"/>
           <Column id="id" type="STRING" size="256"/>
-          <Column id="name" type="STRING" size="256"/>
+          <Column id="athrCd" type="STRING" size="256"/>
+          <Column id="athrNm" type="STRING" size="256"/>
+          <Column id="fnm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
-          <Column id="phone" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
-          <Column id="deptCd" type="STRING" size="256"/>
-          <Column id="useYn" type="STRING" size="256"/>
-          <Column id="allwIpNoml" type="STRING" size="256"/>
-          <Column id="allwIpVdi" type="STRING" size="256"/>
-          <Column id="spotNm" type="STRING" size="256"/>
-          <Column id="deptNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="dptNm" type="STRING" size="256"/>
+          <Column id="acntStatYn" type="STRING" size="256"/>
+          <Column id="apvlStatYn" type="STRING" size="256"/>
+          <Column id="prmtIpAddr" type="STRING" size="256"/>
+          <Column id="prmtIpAddrVdi" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -236,7 +237,9 @@ this.AdminMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.param = this.parent.param;
 	
-	this.ds_detail.setColumn(0, "admSeq", this.param.admSeq);
+	//this.ds_detail.setColumn(0, "admSeq", this.param.admSeq);
+	
+	this.ds_detail.setColumn(0, "id", this.param.id);
 	
 	this.fn_detail("detail");
 	
@@ -318,16 +321,24 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		break;
 	
 	}
-};]]></Script>
+};
+this.Div00_Div04_txtEmail_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	
+};
+]]></Script>
     <Bind>
-      <BindItem id="item0" compid="Div00.form.Div01.form.txtName" propid="text" datasetid="ds_detail" columnid="name"/>
+      <BindItem id="item0" compid="Div00.form.Div01.form.txtName" propid="text" datasetid="ds_detail" columnid="fnm"/>
       <BindItem id="item1" compid="Div00.form.Div02.form.txtId" propid="text" datasetid="ds_detail" columnid="id"/>
       <BindItem id="item2" compid="Div00.form.Div04.form.txtEmail" propid="text" datasetid="ds_detail" columnid="email"/>
-      <BindItem id="item3" compid="Div00.form.Div05.form.txtPhone" propid="text" datasetid="ds_detail" columnid="phone"/>
-      <BindItem id="item4" compid="Div00.form.Div06.form.spotCd" propid="value" datasetid="ds_detail" columnid="spotNm"/>
-      <BindItem id="item5" compid="Div00.form.Div07.form.deptCd" propid="value" datasetid="ds_detail" columnid="deptNm"/>
-      <BindItem id="item6" compid="Div00.form.Div08.form.Edit00" propid="value" datasetid="ds_detail" columnid="allwIpVdi"/>
-      <BindItem id="item7" compid="Div00.form.Div09.form.Edit00" propid="value" datasetid="ds_detail" columnid="allwIpNoml"/>
+      <BindItem id="item3" compid="Div00.form.Div05.form.txtPhone" propid="text" datasetid="ds_detail" columnid="hpNo"/>
+      <BindItem id="item4" compid="Div00.form.Div06.form.spotCd" propid="value" datasetid="ds_detail" columnid="brchNm"/>
+      <BindItem id="item5" compid="Div00.form.Div07.form.deptCd" propid="value" datasetid="ds_detail" columnid="dptNm"/>
+      <BindItem id="item6" compid="Div00.form.Div08.form.Edit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddrVdi"/>
+      <BindItem id="item7" compid="Div00.form.Div09.form.Edit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddr"/>
+      <BindItem id="item9" compid="Div00.form.Div10.form.Static01" propid="text" datasetid="ds_detail" columnid="acntStatYn"/>
+      <BindItem id="item10" compid="Div00.form.Div11.form.radioPermitYn" propid="acceptvaluetype" datasetid="ds_detail" columnid="apvlStatYn"/>
+      <BindItem id="item8" compid="Div00.form.Div00.form.roleCd" propid="value" datasetid="ds_detail" columnid="athrNm"/>
     </Bind>
   </Form>
 </FDL>
