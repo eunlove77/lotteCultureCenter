@@ -48,7 +48,7 @@
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="0" text="취소" top="17" height="30" width="50" left="10" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
-              <Button id="btnSave" taborder="1" text="등록" top="17" height="30" width="50" right="10" cssclass="btn_WF_Medium"/>
+              <Button id="btnSave" taborder="1" text="등록" top="17" height="30" width="50" right="10" cssclass="btn_WF_Medium" onclick="Div01_btnSave_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -77,7 +77,7 @@
         <Div id="row05" taborder="7" text="Div01" left="10" top="531" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Div id="spotDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="mtrdDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="상단 공지여부 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -108,7 +108,7 @@
         <Div id="row06" taborder="8" text="Div01" left="10" top="563" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Div id="spotDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="useDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="노출 여부 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -148,6 +148,20 @@
           <Column id="spotNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="noticeSeq" type="INT" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="cntn" type="STRING" size="2000"/>
+          <Column id="spotCd" type="STRING" size="2000"/>
+          <Column id="mtrdYn" type="STRING" size="2000"/>
+          <Column id="ctgyCd" type="STRING" size="2000"/>
+          <Column id="stateCd" type="STRING" size="2000"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -178,20 +192,14 @@ this.NoticeReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.editorInit = false;
 	
 	if(this.param.seq != ""){	
-		this.ds_detail.setColumn(0, "seq", this.param.seq);
+		this.ds_detail.setColumn(0, "seq", this.param.noticeSeq);
 		this.fn_detail();
 	}
 	
-	this.alert("에디터 체크 >" + this.domain + "/namo/index_custom_01.html");
-	this.row04.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html")
+	this.row04.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html")
 };
 
-this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_checkValidation();
-};
-
-this.row04_WebBrowser00_onusernotify = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+this.row04_form_WebBrowser00_onusernotify = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {
 	if( this.editorInit == false && e.userdata == "LC"){			
 		this.editorInit = true;
@@ -213,17 +221,23 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	this.fn_list();
 };
 
+
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
+};
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
 this.fn_list = function(){
-	this.parent.set_url("CustomerMng::NoticeList_T.xfdl");	
+	this.parent.set_url("CustomerMng::NoticeList.xfdl");	
 }
 
 this.fn_save = function ()
 {		
-	this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.WebBrowser00));
+	this.alert("세이브");
+	this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
 	
 	var strSvcId    = "save";
 	var strSvcUrl   = this.application.Admin_svc + "::/customer/insertNotice.do";
@@ -243,6 +257,47 @@ this.fn_save = function ()
 
 };
 
+this.fn_checkValidation = function(){
+	
+	if(this.gfn_isNull(this.row03.form.Edit00.value))
+	{
+		this.alert("제목을 입력하세요");
+		this.row03.form.Edit00.setFocus();
+		return;
+	}
+	else{								
+		// 수정화면
+		if(!this.gfn_isNull(this.param.seq))
+		{
+			this.fn_save();
+		}else
+		{
+			//this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?fileGb=thnlFileId&atchFileId=' + this.thnlFileId);	
+			this.fn_save();
+		}
+		
+	}	
+}
+
+this.fn_get_edit_body = function(wbObj){
+	
+	var _win = wbObj.getProperty("window");
+	
+	var len = _win.callMethod("getTextValueLen");
+	var bodyValue = _win.callMethod("getData");
+	
+	trace("editor body length : " + len);
+	//console.log("editor body length : " + len);
+	
+	if(_win)
+    {
+        _win.destroy();
+        _win = null;
+    }    
+
+	return bodyValue;
+}
+
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
   // 에러 시 화면 처리 내역
@@ -261,34 +316,15 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   }
 };
 
-this.fn_checkValidation = function(){
-	
-	if(this.gfn_isNull(this.Edit00.value))
-	{
-		this.alert("제목을 입력하세요");
-		this.row03.form.Edit00.setFocus();
-		return;
-	}else
-	{								
-		// 수정화면
-		if(!this.gfn_isNull(this.param.seq))
-		{
-			this.fn_save();
-		}else
-		{
-			//this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?fileGb=thnlFileId&atchFileId=' + this.thnlFileId);		
-		}
-		
-	}	
-}
-
-
-
-
 
 ]]></Script>
     <Bind>
       <BindItem id="item0" compid="row03.form.Edit00" propid="value" datasetid="ds_detail" columnid="title"/>
+      <BindItem id="item1" compid="row01.form.gbDiv.form.radioGb" propid="value" datasetid="ds_detail" columnid="ctgyCd"/>
+      <BindItem id="item2" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="spotCd"/>
+      <BindItem id="item3" compid="row05.form.mtrdDiv.form.radioTop" propid="value" datasetid="ds_detail" columnid="mtrdYn"/>
+      <BindItem id="item4" compid="row04.form.WebBrowser00" propid="accessibilityaction" datasetid="ds_detail" columnid="cntn"/>
+      <BindItem id="item5" compid="row06.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="stateCd"/>
     </Bind>
   </Form>
 </FDL>
