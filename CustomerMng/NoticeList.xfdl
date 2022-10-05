@@ -5,71 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Div id="Div02" taborder="2" text="Div01" left="10" top="82" height="33" cssclass="div_WF_CompWrap" right="10">
-          <Layouts>
-            <Layout>
-              <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Div id="periodDiv" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type01.xfdl" formscrolltype="none"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="row02" taborder="3" text="Div01" left="10" top="144" height="33" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Div id="gbDiv" taborder="0" text="Div01" width="500" height="33" cssclass="div_WF_CompWrap" top="0" left="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkTypeAll" taborder="1" text="전체" left="120" top="7" width="45" height="20" onclick="row02_gbDiv_chkTypeAll_onclick" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="chkType1" taborder="2" text="공지사항" left="chkTypeAll:45" top="7" width="69" height="20" onclick="row02_gbDiv_chkType1_onclick" falsevalue="N" truevalue="Y"/>
-                    <CheckBox id="chkType2" taborder="3" text="이벤트" left="chkType1:21" top="7" width="70" height="20" onclick="row02_gbDiv_chkType2_onclick" falsevalue="N" truevalue="Y"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="spotDiv" taborder="1" text="Div01" left="gbDiv:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" codecolumn="spotSeq" datacolumn="spotNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="searchDiv" taborder="4" text="Div01" left="10" top="176" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
-                <Dataset id="innerdataset">
-                  <ColumnInfo>
-                    <Column id="codecolumn" size="256"/>
-                    <Column id="datacolumn" size="256"/>
-                  </ColumnInfo>
-                  <Rows>
-                    <Row>
-                      <Col id="codecolumn">-1</Col>
-                      <Col id="datacolumn">전체</Col>
-                    </Row>
-                    <Row>
-                      <Col id="codecolumn">1</Col>
-                      <Col id="datacolumn">제목</Col>
-                    </Row>
-                    <Row>
-                      <Col id="codecolumn">2</Col>
-                      <Col id="datacolumn">작성자</Col>
-                    </Row>
-                  </Rows>
-                </Dataset>
-              </Combo>
-              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
-              <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="searchDiv_btnSearch_onclick"/>
-              <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="searchDiv_btnInit_onclick"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Grid id="GridNoticeList" taborder="5" left="10" top="270" binddataset="ds_notice_list" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." onheadclick="GridNoticeList_onheadclick">
+        <Grid id="GridNoticeList" taborder="2" left="10" top="270" binddataset="ds_notice_list" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." onheadclick="GridNoticeList_onheadclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -100,7 +36,7 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:noticeSeq" displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
-                <Cell col="1" text="bind:ctgyCd"/>
+                <Cell col="1" text="bind:ctgyNm"/>
                 <Cell col="2" text="bind:spotNm"/>
                 <Cell col="3" text="bind:title"/>
                 <Cell col="4" text="bind:regId"/>
@@ -112,38 +48,104 @@
             </Format>
           </Formats>
         </Grid>
-        <Div id="row01" taborder="6" text="Div01" left="10" top="114" height="33" right="10" formscrolltype="none">
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="225" height="45" right="10">
           <Layouts>
             <Layout>
-              <Div id="useDiv" taborder="0" text="Div01" width="500" height="33" cssclass="div_WF_CompWrap" top="0" left="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="노출 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="useAll" taborder="1" text="전체" left="120" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_useDiv_useAll_onclick"/>
-                    <CheckBox id="useN" taborder="2" text="미노출" left="300" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_useDiv_useN_onclick"/>
-                    <CheckBox id="useY" taborder="3" text="노출" left="210" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_useDiv_useY_onclick"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="topDiv" taborder="1" text="Div01" left="useDiv:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="상단 공지 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="topAll" taborder="1" text="전체" left="120" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_topDiv_topAll_onclick"/>
-                    <CheckBox id="topY" taborder="2" text="고정" left="210" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_topDiv_topY_onclick"/>
-                    <CheckBox id="topN" taborder="3" text="미고정" left="300" top="1" width="80" height="30" falsevalue="N" truevalue="Y" onclick="row01_topDiv_topN_onclick"/>
-                  </Layout>
-                </Layouts>
-              </Div>
+              <Button id="btnAdd" taborder="0" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_BtnAdd_onclick" visible="true"/>
+              <Button id="btnDel" taborder="1" text="삭제" top="5" height="30" cssclass="btn_WF_High" right="10" width="50" onclick="Div01_btnDel_onclick"/>
+              <Static id="Static00" taborder="3" text="목록" left="10" top="14" height="14" fittocontents="none" cssclass="sta_WF_TitGray" width="90"/>
+              <Static id="Static01" taborder="2" text="(0개)" left="Static00:-51" top="14" width="34" height="14" fittocontents="none" onclick="Div01_Static01_onclick"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="7" text="Div01" top="208" height="72" left="10" right="10">
+        <Div id="Div00_00" taborder="4" text="Div00" left="7" top="57" height="173" formscrolltype="both" right="0">
           <Layouts>
             <Layout>
-              <Static id="txtTotal" taborder="0" left="1" top="19" width="80" height="21" text="총 0개"/>
-              <Button id="BtnDel" taborder="1" text="삭제" top="17" height="30" width="50" cssclass="btn_WF_High" right="10"/>
-              <Button id="BtnAdd" taborder="2" text="등록" top="17" height="30" width="50" right="BtnDel:12" cssclass="btn_WF_Medium" onclick="Div01_BtnAdd_onclick"/>
+              <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
+              <Div id="conDiv" taborder="1" text="Div00" left="3" top="Static00:9" height="134" cssclass="div_WF_TableComp" right="8">
+                <Layouts>
+                  <Layout>
+                    <Div id="searchDiv" taborder="0" text="Div01" left="0" top="94" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="searchField" taborder="1" left="Static00:6" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" text="전체" value="">
+                            <Dataset id="innerdataset">
+                              <ColumnInfo>
+                                <Column id="codecolumn" size="256"/>
+                                <Column id="datacolumn" size="256"/>
+                              </ColumnInfo>
+                              <Rows>
+                                <Row>
+                                  <Col id="codecolumn"/>
+                                  <Col id="datacolumn">전체</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">1</Col>
+                                  <Col id="datacolumn">제목</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">2</Col>
+                                  <Col id="datacolumn">작성자</Col>
+                                </Row>
+                              </Rows>
+                            </Dataset>
+                          </Combo>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21"/>
+                          <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
+                          <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="periodDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                          <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type03.xfdl" formscrolltype="none"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="useDiv" taborder="2" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="632">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="노출 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkUseAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkUseY" taborder="1" text="노출" left="chkUseAll:6" top="5" width="41" height="20" onclick="fn_checkbox" truevalue="Y"/>
+                          <CheckBox id="chkUseN" taborder="2" text="미노출" left="chkUseY:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="N"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="topDiv" taborder="3" text="Div01" left="useDiv:0" top="32" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="상단 공지 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkTopAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkTopY" taborder="1" text="고정" left="chkTopAll:6" top="5" width="41" height="20" onclick="fn_checkbox" truevalue="Y"/>
+                          <CheckBox id="chkTopN" taborder="2" text="미고정" left="chkTopY:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="N"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="ctgyDiv" taborder="4" text="Div01" left="0" top="62" height="33" cssclass="div_WF_CompWrap" right="632">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkCtgyAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkCtgy1" taborder="1" text="공지사항" left="chkCtgyAll:6" top="5" width="70" height="20" onclick="fn_checkbox" truevalue="4"/>
+                          <CheckBox id="chkCtgy2" taborder="2" text="이벤트" left="chkCtgy1:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="8"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="spotDiv" taborder="5" text="Div01" left="ctgyDiv:0" top="62" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" codecolumn="spotSeq" datacolumn="spotNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
             </Layout>
           </Layouts>
         </Div>
@@ -169,6 +171,7 @@
           <Column id="modIp" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="spotNm" type="STRING" size="256"/>
+          <Column id="ctgyNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
@@ -182,6 +185,7 @@
           <Column id="topY" type="STRING" size="256"/>
           <Column id="topN" type="STRING" size="256"/>
           <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="ctgyCd" type="STRING" size="256"/>
           <Column id="strtDt" type="STRING" size="256"/>
           <Column id="endDt" type="STRING" size="256"/>
         </ColumnInfo>
@@ -223,25 +227,44 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	
 	var objOwnerFrame = this.getOwnerFrame();
+	
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	//var menuNm = objOwnerFrame.param.MENU_NM;
-	//this.navigator.set_text(this.navigator.text + " > " + menuNm);
+	
 	// 코드 데이터
 	this.fn_data_list();
 	// 목록 조회
-	this.fn_list(1);
+	//this.fn_list(1);
 };
 
 //조회버튼
-this.searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.fn_searchValueInit();
 	this.fn_list(1);
 };
 
 //초기화버튼
-this.searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.row01.form.useDiv.form.useAll.set_value("N");
+	var objCalendar = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form;
+	
+	objCalendar.strtDtm.set_value('');
+	objCalendar.endDtm.set_value('');
+	
+	this.Div00_00.form.conDiv.form.searchDiv.form.searchField.set_value('');
+	this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.set_value('');
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	
+	//this.alert("체크박스 초기화 클리어");
+	this.chkAllInit(this.Div00_00.form);
+	
+	
+	//this.Div06.form.searchQuery.set_value('');
+	
+	this.ds_notice_list.clearData();
+	//this.txtTotal.set_text("총 0개");
+	
+	/*this.row01.form.useDiv.form.useAll.set_value("N");
 	this.row01.form.useDiv.form.useY.set_value("N");
 	this.row01.form.useDiv.form.useN.set_value("N");
 	this.row01.form.topDiv.form.topAll.set_value("N");
@@ -251,135 +274,7 @@ this.searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 	this.row02.form.gbDiv.form.chkType1.set_value("N");
 	this.row02.form.gbDiv.form.chkType2.set_value("N");
 	//콤보박스 초기화
-	this.row02.form.spotDiv.form.ComboSpot.set_index(0);
-};
-
-//노출여부 필드
-this.row01_useDiv_useAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//전체
-	if(obj.isChecked())
-	{
-		this.row01.form.useDiv.form.useY.set_value("Y");
-		this.row01.form.useDiv.form.useN.set_value("Y");
-
-	}
-	else
-	{
-		this.row01.form.useDiv.form.useY.set_value("N");
-		this.row01.form.useDiv.form.useN.set_value("N");
-	}
-};
-
-this.row01_useDiv_useY_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//노출
-	if(obj.isChecked() && this.row01.form.useDiv.form.useN.isChecked())
-	{
-		this.row01.form.useDiv.form.useAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row01.form.useDiv.form.useAll.set_value("N");
-	}
-};
-
-this.row01_useDiv_useN_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//미노출
-	if(obj.isChecked() && this.row01.form.useDiv.form.useY.isChecked())
-	{
-		this.row01.form.useDiv.form.useAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row01.form.useDiv.form.useAll.set_value("N");
-	}
-};
-
-//공지여부 필드
-this.row01_topDiv_topAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//전체
-	if(obj.isChecked())
-	{
-		this.row01.form.topDiv.form.topY.set_value("Y");
-		this.row01.form.topDiv.form.topN.set_value("Y");
-	}
-	else
-	{
-		this.row01.form.topDiv.form.topY.set_value("N");
-		this.row01.form.topDiv.form.topN.set_value("N");
-	}
-};
-
-this.row01_topDiv_topY_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//노출
-	if(obj.isChecked() && this.row01.form.topDiv.form.topN.isChecked())
-	{
-		this.row01.form.topDiv.form.topAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row01.form.topDiv.form.topAll.set_value("N");
-	}
-};
-
-this.row01_topDiv_topN_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//미노출
-	if(obj.isChecked() && this.row01.form.topDiv.form.topY.isChecked())
-	{
-		this.row01.form.topDiv.form.topAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row01.form.topDiv.form.topAll.set_value("N");
-	}
-};
-
-//구분 필드
-
-this.row02_gbDiv_chkTypeAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//전체
-	if(obj.isChecked())
-	{
-		this.row02.form.gbDiv.form.chkType1.set_value("Y");
-		this.row02.form.gbDiv.form.chkType2.set_value("Y");
-	}
-	else
-	{
-		this.row02.form.gbDiv.form.chkType1.set_value("N");
-		this.row02.form.gbDiv.form.chkType2.set_value("N");
-	}
-};
-
-this.row02_gbDiv_chkType1_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//공지
-	if(obj.isChecked() && this.row02.form.gbDiv.form.chk2.isChecked())
-	{
-		this.row02.form.gbDiv.form.chkTypeAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row02.form.gbDiv.form.chkTypeAll.set_value("N");
-	}
-};
-
-this.row02_gbDiv_chkType2_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	//이벤트
-	if(obj.isChecked() && this.row02.form.gbDiv.form.chkType1.isChecked())
-	{
-		this.row02.form.gbDiv.form.chkTypeAll.set_value("Y");
-	}
-	else if(!obj.isChecked())
-	{
-		this.row02.form.gbDiv.form.chkTypeAll.set_value("N");
-	}
+	this.row02.form.spotDiv.form.ComboSpot.set_index(0);*/
 };
 
 this.GridNoticeList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -394,14 +289,6 @@ this.GridNoticeList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickE
  
  this.fn_list = function (page)
 {	
-	// 버튼별 권한 제한시
-	//if(this.gfn_btn_auth(this.ds_menu_auth, "accSrchYn")) return;
-
-	//this.objPageingDs.setColumn(0, "pageIndex", page);
-	
-	//this.ds_search.setColumn(0, "f", this.searchType.value);
-	//this.ds_search.setColumn(0, "q"  , this.searchQuery.text);
-
 	var strSvcId    = "list";
 	var strSvcUrl   = this.application.Admin_svc + "::/customer/noticeList.do";
 	var inData      = "search=ds_search";
@@ -438,6 +325,123 @@ this.fn_data_list = function ()
             isAsync);         // 비동기통신 여부 [생략가능]
 };
 
+this.fn_searchValueInit = function(){
+
+	var objCalendar = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form;
+	//var objCalendar = this.Div00_00.form.conDiv.form;
+	
+	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	
+	//if(this.row02.form.Div03.form.chkLogin.value == true) arrLogType.push("'L'");
+	//if(this.row02.form.Div03.form.chkLogout.value == true) arrLogType.push("'O'");
+	//if(this.row02.form.Div03.form.chkLoginFail.value == true) arrLogType.push("'F'");
+	
+	//this.ds_search.setColumn(0, "logType", arrLogType.join(","));
+	//this.ds_search.setColumn(0, "ctgyCd", this.Div00_00.form.conDiv.form.spotdiv.form.ComboSpot.value);
+	this.ds_search.setColumn(0, "spotCd", this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.value);
+	this.ds_search.setColumn(0, "f", this.Div00_00.form.conDiv.form.searchDiv.form.searchField.value);
+	this.ds_search.setColumn(0, "q", this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.value);
+}
+
+this.fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(true);
+			}
+			else
+			{
+				if(arrObj[i] == "[object CheckBox]")
+				{
+					arrObj[i].set_value(arrObj[i].truevalue);
+				}
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+			
+		}
+	}
+	
+}
+
+this.fn_checkbox = function(pObj) 
+{
+
+	//this.alert("체크 박스 클릭");
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+
+//체크박스 전체 초기화
+this.chkAllInit = function(pObj)
+{
+	var arrObj = pObj.components;
+	
+	for(var i=0; i<arrObj.length; i++)
+	{
+		if(arrObj[i] == "[object Div]"){
+			this.chkAllInit(arrObj[i].form);
+		}
+		else if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+		{				
+			arrObj[i].set_value(false);
+		}	
+	}
+}
+
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
   // 에러 시 화면 처리 내역
@@ -471,7 +475,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	  }
 	case "dataList":
 	
-		this.searchSpot.set_index(0);
+		//this.searchSpot.set_index(0);
 			
 		break;
   }
@@ -492,12 +496,7 @@ this.Div01_BtnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	
 };]]></Script>
     <Bind>
-      <BindItem id="item0" compid="row01.form.topDiv.form.topAll" propid="value" datasetid="ds_search" columnid="topAll"/>
-      <BindItem id="item1" compid="row01.form.topDiv.form.topY" propid="value" datasetid="ds_search" columnid="topY"/>
-      <BindItem id="item2" compid="row01.form.topDiv.form.topN" propid="value" datasetid="ds_search" columnid="topN"/>
-      <BindItem id="item3" compid="row01.form.useDiv.form.useAll" propid="value" datasetid="ds_search" columnid="useAll"/>
-      <BindItem id="item4" compid="row01.form.useDiv.form.useN" propid="value" datasetid="ds_search" columnid="useN"/>
-      <BindItem id="item5" compid="row01.form.useDiv.form.useY" propid="value" datasetid="ds_search" columnid="useY"/>
+      <BindItem id="item8" compid="Div00_00.form.conDiv.form.spotDiv.form.ComboSpot" propid="value" datasetid="gdsSpotCdList" columnid="cdNm"/>
     </Bind>
   </Form>
 </FDL>
