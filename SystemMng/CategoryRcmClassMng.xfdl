@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CategoryRcmClassMng" width="1280" height="800" titletext="New Form" onload="CategoryRcmClassMng_onload">
+    <Layouts>
+      <Layout height="800" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="Div00_00" taborder="2" text="Div00" left="7" top="56" height="194" formscrolltype="both" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00_00" taborder="1" text="Div00" left="3" top="44" height="150" cssclass="div_WF_TableComp" right="8">
+                <Layouts>
+                  <Layout>
+                    <Div id="ctgDiv" taborder="0" text="Div01" left="10" top="64" height="33" cssclass="div_WF_CompWrap" right="10">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" width="109"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="100" height="20"/>
+                          <Combo id="Combo02" taborder="3" text="Combo02" left="Combo01:6" top="5" width="100" height="20"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="semesterDiv" taborder="1" text="Div01" left="10" top="0" height="33" cssclass="div_WF_CompWrap" right="10">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="115" top="5" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="221" top="5" width="100" height="20" innerdataset="ds_semester_list" codecolumn="cd" datacolumn="cdNm"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="expsrDiv" taborder="2" text="Div01" left="10" top="32" height="33" cssclass="div_WF_CompWrap" right="10">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="노출설정" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Radio id="Radio00" taborder="1" left="119" top="4" width="350" height="22" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1">
+                            <Dataset id="innerdataset">
+                              <ColumnInfo>
+                                <Column id="codecolumn" size="256"/>
+                                <Column id="datacolumn" size="256"/>
+                              </ColumnInfo>
+                              <Rows>
+                                <Row>
+                                  <Col id="codecolumn">1</Col>
+                                  <Col id="datacolumn">판매순</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">2</Col>
+                                  <Col id="datacolumn">조회순</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">3</Col>
+                                  <Col id="datacolumn">장바구니</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">4</Col>
+                                  <Col id="datacolumn">카테고리 지정</Col>
+                                </Row>
+                              </Rows>
+                            </Dataset>
+                          </Radio>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="3" text="Div03" left="45" top="223" height="55" right="45">
+          <Layouts>
+            <Layout>
+              <Button id="cnclBtn" taborder="1" text="취소" left="42.35%" top="12" width="83" height="21" cssclass="btn_WF_Weak" fittocontents="width"/>
+              <Button id="insBtn" taborder="0" text="저장" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" left="cnclBtn:16.036000000000058" onclick="Div03_insBtn_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_rcdClass_list">
+        <ColumnInfo/>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="param1" type="STRING" size="256"/>
+          <Column id="param2" type="STRING" size="256"/>
+          <Column id="param3" type="STRING" size="256"/>
+          <Column id="param4" type="STRING" size="256"/>
+          <Column id="param5" type="STRING" size="256"/>
+          <Column id="param6" type="STRING" size="256"/>
+          <Column id="param7" type="STRING" size="256"/>
+          <Column id="param8" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="param1"/>
+            <Col id="param2"/>
+            <Col id="param3"/>
+            <Col id="param4"/>
+            <Col id="param5"/>
+            <Col id="param6"/>
+            <Col id="param7"/>
+            <Col id="param8"/>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_menu_auth">
+        <ColumnInfo>
+          <Column id="accYn" type="STRING" size="256"/>
+          <Column id="accSrchYn" type="STRING" size="256"/>
+          <Column id="accSaveYn" type="STRING" size="256"/>
+          <Column id="accDelYn" type="STRING" size="256"/>
+          <Column id="accPrtYn" type="STRING" size="256"/>
+          <Column id="accExlYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_spot_list">
+        <ColumnInfo>
+          <Column id="spotSeq" type="STRING" size="256"/>
+          <Column id="spotNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.CategoryRcmClassMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	var objOwnerFrame = this.getOwnerFrame();
+	
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+};]]></Script>
+  </Form>
+</FDL>
