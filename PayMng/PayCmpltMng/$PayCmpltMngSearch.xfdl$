@@ -1,0 +1,470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="PayCmpltMngSearch" width="1280" height="720" titletext="New Form" onload="PayCmpltMngSearch_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="Static00" taborder="0" text="▶ 검색" left="0" top="0" width="48" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="27" height="183" cssclass="div_WF_TableComp" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제일" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="Static00:10" top="5" height="25" right="0" url="FrameBase::include/date_type01.xfdl"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="650">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="spotCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_spot_list" codecolumn="spotCd" datacolumn="spotNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div02" left="629" height="33" cssclass="div_WF_CompWrap" top="32" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제채널" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <CheckBox id="payChannelAll" taborder="1" text="전체" left="Static00:10" top="5" width="105" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="3" text="Div03" left="0" top="64" height="48" cssclass="div_WF_CompWrap" right="650">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제수단" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
+                    <CheckBox id="payMethodAll" taborder="1" text="전체" left="Static00:10" top="2" width="105" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="4" text="Div04" left="629" top="64" height="48" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="strtYear" taborder="1" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown"/>
+                    <Combo id="strtSemester" taborder="2" text="Combo01" left="strtYear:1" top="12" width="100" height="20" innerdataset="ds_semester_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Static id="Static01" taborder="3" text="~" left="strtSemester:4" top="12" width="9" height="20"/>
+                    <Combo id="endYear" taborder="4" text="Combo02" left="Static01:4" top="12" width="100" height="20"/>
+                    <Combo id="endSemester" taborder="5" text="Combo03" left="endYear:1" top="12" width="100" height="20" innerdataset="ds_semester_list" codecolumn="cd" datacolumn="cdNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div05" taborder="5" text="Div05" left="0" top="111" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사은품수령 여부" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <CheckBox id="giftAll" taborder="1" text="전체" left="Static00:10" top="5" width="105" height="20" onclick="fn_giftAll_onclick"/>
+                    <CheckBox id="giftStatusY" taborder="2" text="Y" left="giftAll:10" top="5" width="105" height="20" onclick="fn_giftStatusY_onclick"/>
+                    <CheckBox id="giftStatusN" taborder="3" text="N" left="giftStatusY:10" top="5" width="105" height="20" onclick="fn_giftStatusN_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div06" taborder="6" text="Div06" left="0" top="143" height="33" cssclass="div_WF_CompWrap" right="0" onclick="fn_searchQuery_onkeydown">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="searchField" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="datacolumn">전체</Col>
+                            <Col id="codecolumn"/>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">주문번호</Col>
+                            <Col id="codecolumn">1</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">실수강자</Col>
+                            <Col id="codecolumn">2</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">강좌명</Col>
+                            <Col id="codecolumn">3</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원번호</Col>
+                            <Col id="codecolumn">4</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원명</Col>
+                            <Col id="codecolumn">5</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원 아이디</Col>
+                            <Col id="codecolumn">6</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Button id="btnInit" taborder="4" text="초기화" top="5" height="20" cssclass="btn_WF_Weak" right="10" width="100"/>
+                    <Button id="btnSearch" taborder="3" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="btnInit:10" onclick="fn_btnSearch_onclick"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:10" top="5" height="20" right="btnSearch:10" onkeydown="Div00_Div06_searchQuery_onkeydown"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+var objPageingDs;
+
+var parentFrm = this.parent.parent.parent.parent;
+
+this.PayCmpltMngSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.objPageingDs = this.application.gdsPageing;		
+	
+	var objOwnerFrame = this.getOwnerFrame();
+	
+	this.fn_data_list();
+};
+
+// 검색 초기 데이터 세팅
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::payMng/getPayCmpltDataList.do";
+	var inData      = "";
+	var outData     = "ds_pay_channel_list=output1 ds_spot_list=output2 ds_semester_list=output3 ds_pay_method_list=output4";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+};
+
+// 트랜잭션 이후 콜백
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	return;
+  }
+
+  switch(svcID)
+  {
+	case "dataList":
+		var chkboxFrm = this.Div00.form.Div02.form;
+		var objCheckbox;
+		
+		// 지점선택
+		this.Div00.form.Div01.form.spotCd.set_index(0);
+		
+		// 결제채널 체크박스 추가
+ 		for(var i=0;i<this.ds_pay_channel_list.getRowCount();i++){
+			if(i > 0){
+				objCheckbox = new CheckBox("payChannelStatus" + this.ds_pay_channel_list.getColumn(i, "cd"), chkboxFrm["payChannelStatus" + this.ds_pay_channel_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.payChannelAll.getOffsetTop(), 105, 20, null, null);
+			}else{
+				objCheckbox = new CheckBox("payChannelStatus" + this.ds_pay_channel_list.getColumn(i, "cd"), chkboxFrm.payChannelAll.getOffsetRight(), chkboxFrm.payChannelAll.getOffsetTop(), 105, 20, null, null);
+			}
+ 			
+ 			objCheckbox.set_text(this.ds_pay_channel_list.getColumn(i, "cdNm"));
+ 			chkboxFrm.addChild("payChannelStatus" + this.ds_pay_channel_list.getColumn(i, "cd"), objCheckbox);
+ 			objCheckbox.show();
+			
+			objCheckbox.setEventHandler("onclick", this.fn_payChannel_onclick, this);
+ 		}
+		
+		// 결제채널 전체 체크박스 클릭이벤트 추가
+ 		chkboxFrm.payChannelAll.setEventHandler("onclick", this.fn_payChannelAll_onclick, this);
+		
+		// 학기
+		var dsYearList = new Dataset();
+		dsYearList.name = "ds_year_list";
+		dsYearList.addColumn("cd", "string", 256);
+		dsYearList.addColumn("cdNm", "string", 256);
+		
+		this.addChild("ds_year_list", dsYearList);
+		
+		var currYear = new Date().getFullYear();
+		
+		this.ds_year_list.set_enableevent(false);
+		for(var i=0;i<16;i++){
+			this.ds_year_list.insertRow(i);
+			this.ds_year_list.setColumn(i, "cd", (currYear - i).toString());
+			this.ds_year_list.setColumn(i, "cdNm", (currYear - i) + "년");
+		}
+		this.ds_year_list.set_enableevent(true);
+		
+		
+		this.Div00.form.Div04.form.strtYear.setInnerDataset(this.ds_year_list);
+		this.Div00.form.Div04.form.strtYear.set_codecolumn("cd");
+		this.Div00.form.Div04.form.strtYear.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.strtYear.set_index(0);
+		this.Div00.form.Div04.form.endYear.setInnerDataset(this.ds_year_list);
+		this.Div00.form.Div04.form.endYear.set_codecolumn("cd");
+		this.Div00.form.Div04.form.endYear.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.endYear.set_index(0);
+		
+		this.Div00.form.Div04.form.strtSemester.set_index(0);
+		this.Div00.form.Div04.form.endSemester.set_index(0);
+		
+		// 결제수단 체크박스 추가
+		chkboxFrm = this.Div00.form.Div03.form;
+ 		for(var i=0;i<this.ds_pay_method_list.getRowCount();i++){
+			if(i > 0){
+				if(i < 3){
+					objCheckbox = new CheckBox("payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd"), chkboxFrm["payMethodStatus" + this.ds_pay_method_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.payMethodAll.getOffsetTop(), 105, 20, null, null);
+				}else if(i == 3){
+					objCheckbox = new CheckBox("payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd"), chkboxFrm.payMethodAll.getOffsetLeft(), chkboxFrm.payMethodAll.getOffsetTop() + 23, 105, 20, null, null);
+				}else{
+					objCheckbox = new CheckBox("payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd"), chkboxFrm["payMethodStatus" + this.ds_pay_method_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.payMethodAll.getOffsetTop() + 23, 105, 20, null, null);
+				}
+			}else{
+				objCheckbox = new CheckBox("payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd"), chkboxFrm.payMethodAll.getOffsetRight(), chkboxFrm.payMethodAll.getOffsetTop(), 105, 20, null, null);
+			}
+ 			
+ 			objCheckbox.set_text(this.ds_pay_method_list.getColumn(i, "cdNm"));
+ 			chkboxFrm.addChild("payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd"), objCheckbox);
+ 			objCheckbox.show();
+			
+			objCheckbox.setEventHandler("onclick", this.fn_payMethod_onclick, this);
+ 		}
+		
+		// 결제채널 전체 체크박스 클릭이벤트 추가
+ 		chkboxFrm.payMethodAll.setEventHandler("onclick", this.fn_payMethodAll_onclick, this);
+		
+		// 검색어 기준
+		this.Div00.form.Div06.form.searchField.set_index(0);
+		
+		break;
+  }
+};
+
+// 결제채널 단일 체크박스 클릭이벤트
+this.fn_payChannel_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	var allCheckYn = true;
+ 
+	for(var i=0;i<this.ds_pay_channel_list.getRowCount();i++){
+		if(!obj.parent.all["payChannelStatus"+this.ds_pay_channel_list.getColumn(i, "cd")].isChecked()){
+			allCheckYn = false;
+		}
+	}
+	
+	if(allCheckYn){
+		obj.parent.payChannelAll.set_value(1);
+	}else{
+		obj.parent.payChannelAll.set_value(0);
+	}
+};
+
+// 결제채널 검색조건 전체 체크박스 클릭이벤트
+this.fn_payChannelAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked())
+	{
+		for(var i=0;i<this.ds_pay_channel_list.getRowCount();i++){
+			obj.parent["payChannelStatus" + this.ds_pay_channel_list.getColumn(i, "cd")].set_value(1);
+		}
+	}
+	else
+	{
+		for(var i=0;i<this.ds_pay_channel_list.getRowCount();i++){
+			obj.parent["payChannelStatus" + this.ds_pay_channel_list.getColumn(i, "cd")].set_value(0);
+		}
+	}
+};
+
+// 결제수단 단일 체크박스 클릭이벤트
+this.fn_payMethod_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	var allCheckYn = true;
+ 
+	for(var i=0;i<this.ds_pay_method_list.getRowCount();i++){
+		if(!obj.parent.all["payMethodStatus"+this.ds_pay_method_list.getColumn(i, "cd")].isChecked()){
+			allCheckYn = false;
+		}
+	}
+	
+	if(allCheckYn){
+		obj.parent.payMethodAll.set_value(1);
+	}else{
+		obj.parent.payMethodAll.set_value(0);
+	}
+};
+
+// 결제수단 검색조건 전체 체크박스 클릭이벤트
+this.fn_payMethodAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked())
+	{
+		for(var i=0;i<this.ds_pay_method_list.getRowCount();i++){
+			obj.parent["payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd")].set_value(1);
+		}
+	}
+	else
+	{
+		for(var i=0;i<this.ds_pay_method_list.getRowCount();i++){
+			obj.parent["payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd")].set_value(0);
+		}
+	}
+};
+
+// 결제수단 Y 체크박스 클릭이벤트
+this.fn_giftStatusY_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.giftStatusN.isChecked()){
+		obj.parent.giftAll.set_value(1);
+	}else{
+		obj.parent.giftAll.set_value(0);
+	}
+};
+
+// 결제수단 N 체크박스 클릭이벤트
+this.fn_giftStatusN_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.giftStatusY.isChecked()){
+		obj.parent.giftAll.set_value(1);
+	}else{
+		obj.parent.giftAll.set_value(0);
+	}
+};
+
+// 사은품여부 검색조건 전체 체크박스 클릭이벤트
+this.fn_giftAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.giftStatusY.set_value(1);
+		obj.parent.giftStatusN.set_value(1);
+	}else{
+		obj.parent.giftStatusY.set_value(0);
+		obj.parent.giftStatusN.set_value(0);
+	}
+}
+
+// 검색 버튼 클릭이벤트
+this.fn_btnSearch_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	this.fn_searchValueInit();
+	parentFrm.fn_list();
+};
+
+// 검색어 입력필드 키 다운이벤트
+this.fn_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_searchValueInit();
+		parentFrm.fn_list();
+	}
+};
+
+// 검색 데이터 세팅
+this.fn_searchValueInit = function()
+{
+	var objCalendar = this.Div00.form.Div00.form.Div00.form; //캘린더
+	var arrPayChannel = new Array();
+	var arrPayMethod = new Array();
+	var arrGiftYn = new Array();
+	var arrUseType = new Array();
+	var arrPermitType = new Array();
+	var arrRoleType = new Array();
+	
+	// 결제채널
+	for(var i=0;i<this.ds_pay_channel_list.getRowCount();i++){
+		if(this.Div00.form.Div02.form["payChannelStatus" + this.ds_pay_channel_list.getColumn(i, "cd")].value == true){
+			arrPayChannel.push("'"+ this.ds_pay_channel_list.getColumn(i, "cd") +"'");
+		}
+	}
+	
+	// 결제수단
+	for(var i=0;i<this.ds_pay_method_list.getRowCount();i++){
+		if(this.Div00.form.Div03.form["payMethodStatus" + this.ds_pay_method_list.getColumn(i, "cd")].value == true){
+			arrPayMethod.push("'"+ this.ds_pay_method_list.getColumn(i, "cd") +"'");
+		}
+	}
+	
+	// 사은품 수령여부
+	if(this.Div00.form.Div05.form.giftStatusY.value == true) arrGiftYn.push("'Y'");
+	if(this.Div00.form.Div05.form.giftStatusN.value == true) arrGiftYn.push("'N'");
+	
+	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	this.ds_search.setColumn(0, "spotCd", this.Div00.form.Div01.form.spotCd.value);
+	this.ds_search.setColumn(0, "payChannel", arrPayChannel.join(","));
+	this.ds_search.setColumn(0, "payMethod", arrPayMethod.join(","));
+	this.ds_search.setColumn(0, "strtYear", this.Div00.form.Div04.form.strtYear.value);
+	this.ds_search.setColumn(0, "strtSemester", this.Div00.form.Div04.form.strtSemester.value);
+	this.ds_search.setColumn(0, "endYear", this.Div00.form.Div04.form.endYear.value);
+	this.ds_search.setColumn(0, "endSemester", this.Div00.form.Div04.form.endSemester.value);
+	this.ds_search.setColumn(0, "giftYn", arrGiftYn.join(","));
+	this.ds_search.setColumn(0, "f", this.Div00.form.Div06.form.searchField.value);
+	this.ds_search.setColumn(0, "q", this.Div00.form.Div06.form.searchQuery.value);
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_pay_channel_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_spot_list">
+        <ColumnInfo>
+          <Column id="spotSeq" type="STRING" size="256"/>
+          <Column id="spotNm" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_semester_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_pay_method_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="payChannel" type="STRING" size="256"/>
+          <Column id="payMethod" type="STRING" size="256"/>
+          <Column id="strtYear" type="STRING" size="256"/>
+          <Column id="strtSemester" type="STRING" size="256"/>
+          <Column id="endYear" type="STRING" size="256"/>
+          <Column id="endSemester" type="STRING" size="256"/>
+          <Column id="giftYn" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

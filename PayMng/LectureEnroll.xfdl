@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="LectureEnroll" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="title" taborder="0" text="수강등록" left="10" top="10" width="120" height="60"/>
+        <Static id="navigator" taborder="1" text="Home" left="1050" top="10" height="60" right="0"/>
+        <Div id="Div00" taborder="2" text="Div00" left="10" top="80" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="110" right="0" url="PayMng::LectureEnroll/MemberInfo.xfdl"/>
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="120" height="190" right="0" url="PayMng::LectureEnroll/LectureList.xfdl"/>
+              <Div id="Div02" taborder="2" text="Div02" left="0" top="320" height="230" right="0" url="PayMng::LectureEnroll/PayInfo.xfdl"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+var objPageingDs;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.PayCnclMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.objPageingDs = this.application.gdsPageing;		
+	
+	var objOwnerFrame = this.getOwnerFrame();
+	
+	var menuNm = objOwnerFrame.param.MENU_NM;
+	
+	this.navigator.set_text( this.navigator.text + " > " + menuNm );
+};]]></Script>
+  </Form>
+</FDL>

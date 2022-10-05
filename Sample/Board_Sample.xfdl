@@ -3,36 +3,33 @@
   <Form id="Board_Sample" width="1280" height="720" titletext="New Form" onload="Board_Sample_onload">
     <Layouts>
       <Layout height="720" width="1280">
-        <Grid id="Grid00" taborder="0" left="35" top="60" width="1025" height="270" binddataset="ds_list" oncellclick="Grid00_oncellclick" ondrag="Grid00_ondrag" ondrop="Grid00_ondrop">
+        <Grid id="Grid00" taborder="0" left="35" top="60" width="1025" height="270" binddataset="ds_list" oncellclick="Grid00_oncellclick" ondrag="Grid00_ondrag" ondrop="Grid00_ondrop" autofittype="col" autosizebandtype="body" cellsizingtype="none" onheaddblclick="Grid00_onheaddblclick" nodatatext="데이터가 없습니다.">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="153"/>
-                <Column size="164"/>
-                <Column size="165"/>
                 <Column size="80"/>
-                <Column size="48"/>
-                <Column size="48"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="title" expandshow="show" expandimage="url('theme://images/btn_expand.png')"/>
-                <Cell col="1" text="atchFileId"/>
-                <Cell col="2" text="thnlFileId"/>
-                <Cell col="3" text="seq"/>
-                <Cell col="4"/>
-                <Cell col="5"/>
+                <Cell text="제목"/>
+                <Cell col="1" text="첨부파일ID"/>
+                <Cell col="2" text="썸네일파일ID"/>
+                <Cell col="3" text="순번"/>
+                <Cell col="4" text="정렬"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:title"/>
                 <Cell col="1" text="bind:atchFileId"/>
                 <Cell col="2" text="bind:thnlFileId"/>
                 <Cell col="3" text="bind:seq"/>
-                <Cell col="4" expr="expr:dataset.getRowType(currow) "/>
-                <Cell col="5" text="bind:sort"/>
+                <Cell col="4" text="bind:sort"/>
               </Band>
             </Format>
           </Formats>
@@ -298,7 +295,7 @@ this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var outData     = "";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
-	var isAsync     = true;
+	var isAsync     = false;
 
 	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
             strSvcUrl ,       // trabsaction을 요청할 주소
@@ -308,6 +305,40 @@ this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
             callBackFnc,       // transaction의 결과를 받을 Function 이름
             isAsync);         // 비동기통신 여부 [생략가능]
 
+};
+
+this.orderType = "desc";
+
+this.Grid00_onheaddblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var sortColumnText = "제목, 순번, 정렬";
+	var columnId = "";
+	var txt = obj.getCellText(e.row, e.cell);
+	
+	if(sortColumnText.indexOf(txt) > -1){
+	
+		var ds = obj.getBindDataset();
+	
+		for(var i = 0 ; i < ds.getColCount() ; i++){
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+	
+		if(txt == "제목") columnId = "title";
+		if(txt == "순번") columnId = "seq";
+		if(txt == "정렬") columnId = "sort";
+		
+		if(this.orderType == "desc"){		
+			this.ds_list.set_keystring("S:" + columnId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			this.ds_list.set_keystring("S:-" + columnId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+	}
 };
 ]]></Script>
   </Form>
