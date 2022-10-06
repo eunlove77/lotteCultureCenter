@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="fileUploadForm" width="1280" height="720" titletext="New Form" onload="fileUploadForm_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="45" top="20" height="300" right="45">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="파일업로드 샘플" left="0" top="1" width="100" cssclass="sta_WF_TitGray" height="17"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div03" taborder="2" text="Div01" left="0" top="24" height="156" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="파일업로드" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="111" top="3" height="141" url="FrameBase::include/file_upload.xfdl" async="true" right="0"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_atch_file">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+this.atchFileDiv = this.Div00.form.Div03.form.Div00.form;	//파일첨부Div
+this.atchFileId  = ""; //파일첨부 atchFileId
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.fileUploadForm_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+
+	//파일첨부 세팅
+	this.atchFileDiv.fileExtn = "jpg,jpeg,gif,png";	//확장자(default : jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx)
+	this.atchFileDiv.fileMaxCnt = 1 	//최대 파일개수(default : 1)
+	this.atchFileDiv.fileMaxSize= 10 	//최대 파일크기(default : 10MB)
+	this.atchFileDiv.fileTxt.set_text("※ jpg,jpeg,gif,png 최대 10MB 1개만 등록 가능합니다."); //파일 안내 문구 
+	
+	//파일첨부 후 수행할 함수 전달
+	this.atchFileDiv.FileUpTransfer00.insertEventHandler("onsuccess", 0, this.onSuccess, this)
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "save":
+			this.alert("저장되었습니다.");
+			this.fn_list();
+			break;
+		case "detail":    
+			//파일첨부 데이터복사(수정화면 진입 시)
+			this.atchFileDiv.ds_atch_file.copyData(this.ds_atch_file);
+			this.atchFileId = this.gfnUndefinedConvertEmpty(this.ds_detail.getColumn(0, "atchFileId"));
+						
+			break;
+	}
+
+};
+
+this.Div03_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	this.fn_checkValidation();
+};
+
+this.fn_checkValidation = function(){
+	//유효성 체크
+	if( this.gfn_isNull(this.param.seq) &&  this.atchFileDiv.FileUpTransfer00.filelist.length != 0 ){	//파일첨부 필수일 경우
+		this.alert("파일을 첨부해주세요.");
+		this.atchFileDiv.Button00.setFocus();
+		return;
+	}else{								
+		//파일첨부 업로드
+		// 수정일 경우
+		if(!this.gfn_isNull(this.param.seq)){
+			var atchFileList = this.atchFileDiv.FileUpTransfer00.filelist;
+			
+			if( atchFileList.length > 0 ){
+				this.atchFileDiv.FileUpTransfer00.upload(this.application.domain + '/admin/file/fileupload.do?fileGb=atchFileId&atchFileId='+this.atchFileId);
+			}
+		
+		}else{
+			this.atchFileDiv.FileUpTransfer00.upload(this.application.domain + '/admin/file/fileupload.do?fileGb=atchFileId&atchFileId='+this.atchFileId);
+		}
+		
+	}	
+}
+
+//파일첨부 완료 후 실행할 함수 (atchFileId 처리)
+this.onSuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
+{
+	this.atchFileId = e.datasets[0].getColumn(0,"atchFileId");
+	this.ds_detail.setColumn(0, "atchFileId", this.atchFileId);
+	
+	this.fn_save();
+};
+
+this.fn_save = function(){
+	
+	this.ds_atch_file = this.atchFileDiv.ds_atch_file; //파일첨부 폼 데이터복사
+	
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::sample/insertSample.do";
+	var inData      = "data=ds_detail updateFileData=ds_atch_file:U";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+}]]></Script>
+  </Form>
+</FDL>
