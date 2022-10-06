@@ -1,18 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="CategoryList" width="1280" height="1000" titletext="New Form">
+  <Form id="CategoryList" width="1280" height="780" titletext="New Form" onload="CategoryList_onload">
     <Layouts>
-      <Layout height="1000" mobileorientation="landscape" width="1280">
+      <Layout height="780" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" text="Div00" left="7" top="86" right="10" bottom="10">
           <Layouts>
             <Layout>
-              <Button id="Button00" taborder="0" text="대분류 생성" left="0" top="0" width="85" height="30" cssclass="btn_WF_Medium"/>
-              <Button id="Button01" taborder="1" text="하위분류 생성" left="Button00:10" top="0" width="99" height="30" cssclass="btn_WF_Medium"/>
+              <Button id="Button00" taborder="0" text="대분류 생성" left="0" top="0" width="85" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button00_onclick"/>
+              <Button id="Button01" taborder="1" text="하위분류 생성" left="Button00:10" top="0" width="99" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button01_onclick"/>
               <Div id="Div00" taborder="2" text="Div00" left="0" top="Button00:10" right="0" bottom="0">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="0" left="0" top="0" width="375" bottom="0"/>
+                    <Grid id="Grid00" taborder="0" left="0" top="0" width="375" bottom="0" binddataset="ds_category_list" treeuseimage="false" treeusecheckbox="false" oncellposchanged="Div00_Div00_Grid00_oncellposchanged">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="375"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24"/>
+                          </Rows>
+                          <Band id="body">
+                            <Cell text="bind:name" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:dpth" treestartlevel="1"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
                     <Div id="Div00" taborder="1" text="Div00" left="Grid00:10" top="0" right="0" cssclass="div_WF_TableComp" bottom="0">
                       <Layouts>
                         <Layout>
@@ -28,7 +42,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="카테고리명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="6"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="20" right="6"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -96,16 +110,288 @@
                               </Layout>
                             </Layouts>
                           </Div>
+                          <Button id="Button00" taborder="8" text="저장" top="Div05:10" height="31" cssclass="btn_WF_Medium" width="80" right="0" onclick="Div00_Div00_Div00_Button00_onclick"/>
                         </Layout>
                       </Layouts>
                     </Div>
                   </Layout>
                 </Layouts>
               </Div>
+              <Button id="Button02" taborder="3" text="삭제" left="Button01:10" top="0" width="46" height="30" cssclass="btn_WF_High" onclick="Div00_Button02_onclick"/>
             </Layout>
           </Layouts>
         </Div>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_category_list" oncolumnchanged="ds_category_list_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="cateNm" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="dpth" type="INT" size="256"/>
+          <Column id="regNm" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modNm" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="menuSeq" type="INT" size="256"/>
+          <Column id="parntSeq" type="INT" size="256"/>
+          <Column id="lftVal" type="INT" size="256"/>
+          <Column id="rhtVal" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_category_dtl">
+        <ColumnInfo>
+          <Column id="cateNm" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="dpth" type="INT" size="256"/>
+          <Column id="regNm" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modNm" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="menuSeq" type="INT" size="256"/>
+          <Column id="parntSeq" type="INT" size="256"/>
+          <Column id="lftVal" type="INT" size="256"/>
+          <Column id="rhtVal" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.CategoryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	//강좌 데이터
+	this.fn_category_list();
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+ this.fn_category_list = function()
+{	
+	var tranObj = {
+		strSvcId : "categoryList",
+		strSvcUrl : this.application.Admin_svc + "::class/selectCtgyList.do",
+		inData : "",
+		outData : "ds_category_list=categoryList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true
+	}
+				
+	this.gfn_transaction(tranObj);
+}
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+  else
+  {
+	switch(svcID)
+	  {
+		case "categoryList":
+		break;
+		
+		case "categoryUpdate":
+			alert("저장되었습니다.");
+		break;
+		case "categoryDelete":
+			alert("삭제되었습니다.");
+		break;
+	  }
+  }
+
+  
+};
+
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objDs = this.ds_category_list;
+	var newRow = objDs.addRow();
+	
+	objDs.setColumn(newRow, "parntSeq", 1);
+ 	objDs.setColumn(newRow, "dpth", 1);
+ 	objDs.setColumn(newRow, "name", "신규 대분류");
+ 	objDs.setColumn(newRow, "cateNm", "신규 대분류");
+	objDs.setColumn(newRow, "useYn", "Y");
+	
+	var tranObj = {
+			strSvcId : "categoryInsert",
+			strSvcUrl : this.application.Admin_svc + "::class/insertCtgy.do",
+			inData : "categoryList=ds_category_list:U",
+			outData : "",
+			strArg : "",
+			callBackFnc : "",
+			isAsync : true
+	}
+	this.gfn_transaction(tranObj);
+};
+
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objDs = this.ds_category_list;
+	
+	var menuSeq = objDs.getColumn(objDs.rowposition, "menuSeq");
+	var dpth = objDs.getColumn(objDs.rowposition, "dpth");
+	var lftVal = objDs.getColumn(objDs.rowposition, "lftVal");
+	var rhtVal = objDs.getColumn(objDs.rowposition, "rhtVal");
+	var cateNm = objDs.getColumn(objDs.rowposition, "cateNm");
+	trace(menuSeq)
+	if(!this.gfn_isNull(menuSeq)){	
+		if((dpth + 1) < 4){
+					
+			var tmpChildCnt = 0;
+			for(var i = 0 ; i < objDs.getRowCount() ; i++){
+				var tmpLftVal = objDs.getColumn(i, "lftVal");
+				var tmpRhtVal = objDs.getColumn(i, "rhtVal");
+				
+				if(tmpLftVal > lftVal && tmpRhtVal < rhtVal){
+					tmpChildCnt = tmpChildCnt + 1;
+				}			
+			}
+			
+			var newRow = objDs.insertRow(objDs.rowposition + tmpChildCnt + 1);
+			
+			var name = (dpth == 1) ? "신규 중분류" : "신규 소분류";
+			var cateName = cateNm;
+			cateNm += (dpth == 1) ? " > 신규 중분류" : " > 신규 소분류";
+			
+			
+			objDs.setColumn(newRow, "parntSeq", menuSeq);
+			//objDs.setColumn(newRow, "pstn", tmpChildCnt);
+			objDs.setColumn(newRow, "dpth", dpth + 1);
+			objDs.setColumn(newRow, "name", name);
+			objDs.setColumn(newRow, "cateNm", cateNm);		
+			objDs.setColumn(newRow, "useYn", "Y");
+			
+			var tranObj = {
+					strSvcId : "categoryInsert",
+					strSvcUrl : this.application.Admin_svc + "::class/insertCtgy.do",
+					inData : "categoryList=ds_category_list:U",
+					outData : "",
+					strArg : "",
+					callBackFnc : "",
+					isAsync : true
+			}
+			this.gfn_transaction(tranObj);
+			
+			this.Div00.form.Div00.form.Div00.form.Div01.form.Edit00.setFocus();
+		}else{
+			this.alert("하위 카테고리 생성 불가");
+		}
+	}else{
+		this.alert("신규 카테고리는 하위 카테고리를 생성하실 수 없습니다.");
+	}
+};
+
+this.Div00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("저장하시겠습니까?")) 
+	{
+		var tranObj = {
+			strSvcId : "categoryUpdate",
+			strSvcUrl : this.application.Admin_svc + "::class/updateCtgy.do",
+			inData : "categoryDtl=ds_category_dtl:U",
+			outData : "ds_category_list=categoryList",
+			strArg : "",
+			callBackFnc : "fnCallback",
+			isAsync : true
+		}
+		this.gfn_transaction(tranObj);
+	}
+};
+
+this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objDs = this.ds_category_list;
+	
+	var menuSeq = objDs.getColumn(objDs.rowposition, "menuSeq");
+	var rowType = objDs.getRowType(objDs.rowposition);
+	
+	var childCnt = 0;
+	
+	var flag = false;
+	
+	if(rowType == 1){
+		for(var i = 0 ; i < objDs.getRowCount() ; i++){
+			var tmpParntSeq = objDs.getColumn(i, "parntSeq");
+			
+			if(tmpParntSeq == menuSeq){
+				childCnt = childCnt + 1;
+			}			
+		}
+		
+		if(childCnt > 0){
+			this.alert("하위 카테고리가 존재합니다.");
+		}else{
+			objDs.deleteRow(objDs.rowposition);
+			flag = true;
+		}
+	}else if(rowType == 2){
+		objDs.deleteRow(objDs.rowposition);
+		flag = true;
+	}
+	
+	if(flag)
+	{
+		var tranObj = {
+			strSvcId : "categoryDelete",
+			strSvcUrl : this.application.Admin_svc + "::class/deleteCtgy.do",
+			inData : "categoryList=ds_category_list:U",
+			outData : "",
+			strArg : "",
+			callBackFnc : "fnCallback",
+			isAsync : true
+		}
+		this.gfn_transaction(tranObj);
+	}
+
+};
+
+this.Div00_Div00_Grid00_oncellposchanged = function(obj:nexacro.Grid,e:nexacro.GridSelectEventInfo)
+{
+	this.ds_category_dtl.copyRow(0, this.ds_category_list, e.row);
+};
+
+this.ds_category_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	this.ds_category_dtl.copyRow(0, this.ds_category_list, e.row);
+};
+]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00.form.Static01" propid="text" datasetid="ds_category_list" columnid="cateNm"/>
+      <BindItem id="item1" compid="Div00.form.Div00.form.Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_category_list" columnid="name"/>
+      <BindItem id="item2" compid="Div00.form.Div00.form.Div00.form.Div07.form.Radio00" propid="value" datasetid="ds_category_list" columnid="useYn"/>
+      <BindItem id="item3" compid="Div00.form.Div00.form.Div00.form.Div03.form.Static01" propid="text" datasetid="ds_category_list" columnid="regNm"/>
+      <BindItem id="item4" compid="Div00.form.Div00.form.Div00.form.Div05.form.Static01" propid="text" datasetid="ds_category_list" columnid="modNm"/>
+      <BindItem id="item5" compid="Div00.form.Div00.form.Div00.form.Div04.form.Static01" propid="text" datasetid="ds_category_list" columnid="regDtm"/>
+      <BindItem id="item6" compid="Div00.form.Div00.form.Div00.form.Div06.form.Static01" propid="text" datasetid="ds_category_list" columnid="modDtm"/>
+    </Bind>
   </Form>
 </FDL>
