@@ -5,20 +5,20 @@
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="Dataset00" autofittype="col" right="10" bottom="10">
+        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="ds_coupon_list" autofittype="col" right="10" bottom="10" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
                 <Column size="40" band="left"/>
                 <Column size="50"/>
+                <Column size="300"/>
                 <Column size="100"/>
-                <Column size="200"/>
+                <Column size="110"/>
+                <Column size="170"/>
+                <Column size="80"/>
+                <Column size="110"/>
                 <Column size="100"/>
                 <Column size="100"/>
-                <Column size="200"/>
-                <Column size="100"/>
-                <Column size="100"/>
-                <Column size="150"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -27,31 +27,31 @@
               <Band id="head">
                 <Cell text="번호" edittype="checkbox" displaytype="checkboxcontrol"/>
                 <Cell col="1" text="번호"/>
-                <Cell col="2" text="쿠폰번호"/>
-                <Cell col="3" text="쿠폰명"/>
-                <Cell col="4" text="할인금액"/>
-                <Cell col="5" text="발급 방식"/>
-                <Cell col="6" text="사용 기간"/>
-                <Cell col="7" text="발급 상태"/>
+                <Cell col="2" text="쿠폰명"/>
+                <Cell col="3" text="할인금액"/>
+                <Cell col="4" text="발급 방식"/>
+                <Cell col="5" text="사용 기간"/>
+                <Cell col="6" text="발급 상태"/>
+                <Cell col="7" text="사용자수/발급자수"/>
                 <Cell col="8" text="등록자"/>
                 <Cell col="9" text="등록일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:reqnId"/>
-                <Cell col="1" text="bind:Column0"/>
-                <Cell col="2" text="bind:Column1"/>
-                <Cell col="3" text="bind:Column2"/>
-                <Cell col="4" text="bind:Column3"/>
-                <Cell col="5" text="bind:Column4"/>
-                <Cell col="6" text="bind:Column5"/>
-                <Cell col="7" text="bind:Column6"/>
-                <Cell col="8" text="bind:Column7"/>
-                <Cell col="9"/>
+                <Cell text="bind:reqnId" expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="3" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                <Cell col="4" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
+                <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;useCnt&quot;) + &quot;/&quot; + dataset.getColumn(currow, &quot;issueCnt&quot;)"/>
+                <Cell col="8" text="bind:rgprId"/>
+                <Cell col="9" text="bind:rgprDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" border="1px solid red" text="총 100개"/>
+        <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" text="총 100개"/>
         <Div id="Div01" taborder="4" text="Div01" left="7" top="66" height="139" right="9">
           <Layouts>
             <Layout>
@@ -59,7 +59,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="등록일" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none" innerdataset="ds_coupon_list" datecolumn=""/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -103,7 +103,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_search" codecolumn="issueStatCd" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -171,11 +171,13 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
+this.baseSvrUrl = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -188,17 +190,96 @@ this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
+	
+	this.fn_list(1);
 };
 
 this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.parent.parent.parent.param.TAB_CLOSE = false;
-	this.parent.param = {
-		seq : ""
-	};	
-	this.parent.set_url("DiscountMng::CouponDtl.xfdl");
+
+	var oArg = {
+				title : "쿠폰 등록",
+				cpnSeqno : ""
+				};
+	
+	this.gfn_openPopup("couponInsPop", oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null);
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_list = function (page)
+{	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "search=ds_search",
+		outData : "ds_coupon_list=couponList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);	
+};
+
+
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 2){		
+		var oArg = {
+				title : "쿠폰 상세",
+				cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno")
+				};
+	
+		this.gfn_openPopup("couponInsPop", oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null);
+	}
 };
 ]]></Script>
-    <Objects/>
+    <Objects>
+      <Dataset id="ds_coupon_list">
+        <ColumnInfo>
+          <Column id="cpnSeqno" type="INT" size="256"/>
+          <Column id="cpnNm" type="STRING" size="256"/>
+          <Column id="dcAmtClCd" type="STRING" size="256"/>
+          <Column id="dcAmt" type="INT" size="256"/>
+          <Column id="issueMthdClCd" type="STRING" size="256"/>
+          <Column id="usePrdClCd" type="STRING" size="256"/>
+          <Column id="useStDt" type="STRING" size="256"/>
+          <Column id="useEndDt" type="STRING" size="256"/>
+          <Column id="usePsblDd" type="STRING" size="256"/>
+          <Column id="issueStatCd" type="STRING" size="256"/>
+          <Column id="useCnt" type="INT" size="256"/>
+          <Column id="issueCnt" type="INT" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="issueStatCd" type="STRING" size="256"/>
+          <Column id="issueMthdClCd" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="issueStatCd" compid="Div01.form.Div00_00.form.ComboSpot" propid="value" datasetid="ds_search" columnid="issueStatCd"/>
+      <BindItem id="issueMthdClCd" compid="Div01.form.Div00_01.form.ComboSpot" propid="value" datasetid="ds_search" columnid="issueMthdClCd"/>
+      <BindItem id="strtDtm" compid="Div01.form.Div00_03.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDtm"/>
+      <BindItem id="endDtm" compid="Div01.form.Div00_03.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDtm"/>
+      <BindItem id="f" compid="Div01.form.Div00_04.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
+      <BindItem id="q" compid="Div01.form.Div00_04.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+    </Bind>
   </Form>
 </FDL>
