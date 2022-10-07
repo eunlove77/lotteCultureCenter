@@ -174,21 +174,24 @@ this.loginSuccess = function(){
 
 this.fn_setAdminInfo = function(){
 	var loginInfoDs = this.application.gdsLoginInfo;
-	var branch = "";
+	var brchCd = "";
+	var brchNm = "";
 	var adminName = "";
 	var adminId = "";
 
-	branch = loginInfoDs.getColumn(0, "branch");
+	brchCd = loginInfoDs.getColumn(0, "brchCd");
+	brchNm = loginInfoDs.getColumn(0, "brchNm");
 	adminName = loginInfoDs.getColumn(0, "name");
 	adminId = loginInfoDs.getColumn(0, "id");
 	console.log(adminId);
-	nexacro.setPrivateProfile("branch", branch);
+	nexacro.setPrivateProfile("brchCd", brchCd);
+	nexacro.setPrivateProfile("brchNm", brchNm);
 	nexacro.setPrivateProfile("name", adminName);
 	nexacro.setPrivateProfile("id", adminId);
 	
 	
 	
-	//this.application.TopFrame.form.txtName.set_text("[" + branch + "]" + adminName);
+	//this.application.TopFrame.form.txtName.set_text("[" + brchNm + "]" + adminName);
 }
 
 this.Form_Login_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)

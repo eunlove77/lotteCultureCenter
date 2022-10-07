@@ -8,8 +8,12 @@
 * Arguments     : 
 * Return        : 
 */
+this.isPopup = false;
+
 this.gfn_transaction = function(tranObj)
 {
+	//윈도우 팝업여부
+	this.isPopup = this.gfn_nvl(tranObj.isPopup);
 	//세션 체크
 	this.gfn_sessionCheck();
 	
@@ -24,8 +28,7 @@ this.gfn_transaction = function(tranObj)
             this.gfn_nvl(tranObj.callBackFnc),       // transaction의 결과를 받을 Function 이름
             this.gfn_nvl(tranObj.isAsync) 			 // 비동기통신 여부 [생략가능]
 		);   
-	}
-	      		
+	}	      		
 }
 
 
@@ -65,25 +68,32 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-    
 		this.alert(errorCode+"\n"+errorMsg);
-	
+		
+		//윈도우 팝업 여부 
+		if(this.isPopup) 
+		{
+			this.close();
+		}
+		
 		switch(svcID)
 		{
 			case "session_check":	
 				nexacro.getApplication().gfn_initFrame();
 			break;
 		}
-	
+		
 		return;
 	}
-
-	switch(svcID)
-	{    
-		case "session_check":
-			trace("세션 유지");
-			nexacro.getApplication().isAuth = true;
-		break; 
+	else 
+	{
+		switch(svcID)
+		{    
+			case "session_check":
+				trace("세션 유지");
+				nexacro.getApplication().isAuth = true;
+			break; 
+		}
 	}
 };
 

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popup_modal" width="400" height="250" onclose="popup_onclose">
+    <Layouts>
+      <Layout height="250" mobileorientation="landscape" width="400">
+        <GroupBox id="GroupBox03" text="다운로드 사유" taborder="0" enableevent="false" left="10" top="10" width="380" height="230"/>
+        <TextArea id="popupTextArea" taborder="1" left="20" top="35" height="155" width="360" onchanged="popupTextArea_onchanged"/>
+        <Button id="btnSubmit" taborder="2" text="저장" left="210" top="200" height="21" cssclass="btn_WF_Medium" fittocontents="none" onclick="btnSubmit_onclick" width="100"/>
+        <Button id="btnCancel" taborder="3" text="취소" left="88" top="200" height="21" cssclass="btn_WF_Weak" fittocontents="none" onclick="btnCancel_onclick" width="100"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  엑셀 다운로드 사유 입력 모달
+*  @MenuPath    
+*  @FileName	popup_exceldown.xfdl 
+*  @Desction	엑셀 다운로드 사유 입력 모달
+*******************************************************************************
+*  2022.09.29		조민석			최초 생성
+*******************************************************************************
+*/
+/*
+* 부모 form에 ExcelExportObject00, excelImportExport, Grid_Excel, excelFileName 필요
+*/
+include "Base::popup.xjs";
+include "Base::lib_date.xjs";
+
+this.popup_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+{
+	//call back
+	this.close("OK");
+};
+
+this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close("OK");
+};
+
+this.btnSubmit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var txt = this.popupTextArea.value;
+	if(txt === undefined ? true : !txt.replace(/\s/g, '')){
+		alert('다운로드 사유를 입력하세요');
+	} else {
+		this.close("OK");
+		this.excel_export();
+	}
+};
+
+this.excel_export = function(){
+	
+	var opener = this.opener;
+	
+	opener.ExcelExportObject00.set_exporturl(opener.application.Domain + opener.excelImportExport);
+	opener.ExcelExportObject00.addExportItem(nexacro.ExportItemTypes.GRID, opener.Grid_Excel, "Sheet1!A1");
+	opener.ExcelExportObject00.set_exportfilename(opener.excelFileName + this.gfnGetToDay());
+	opener.ExcelExportObject00.exportData();
+}
+]]></Script>
+  </Form>
+</FDL>
