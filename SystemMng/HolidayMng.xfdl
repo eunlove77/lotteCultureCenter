@@ -128,7 +128,7 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:hlidyDt" displaytype="date" edittype="expr:rgprId ? 'none' : 'date'" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:hlidyNm" edittype="expr:rgprId ? 'none' : 'text'"/>
-                <Cell col="3" text="bind:hlidyClCd" combodataset="holidayType" combocodecol="CD" combodatacol="CD_NM" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
+                <Cell col="3" text="bind:hlidyClCd" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
                 <Cell col="4" text="bind:brchCd" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
@@ -179,7 +179,7 @@
             </Format>
           </Formats>
         </Grid>
-        <Grid id="Grid01" taborder="8" left="466" top="815" width="280" height="207" binddataset="excelImportDs">
+        <Grid id="Grid01" taborder="8" left="440" top="820" width="324" height="200" binddataset="excelImportDs" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -189,20 +189,20 @@
                 <Column size="80"/>
               </Columns>
               <Rows>
-                <Row band="head" size="24"/>
+                <Row size="24" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="hlidyDt"/>
-                <Cell col="1" text="hlidyNm"/>
-                <Cell col="2" text="hlidyClCdNm"/>
-                <Cell col="3" text="brchCdNm"/>
+                <Cell text="휴일날짜"/>
+                <Cell col="1" text="휴일명"/>
+                <Cell col="2" text="휴일구분"/>
+                <Cell col="3" text="지점"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:hlidyDt"/>
-                <Cell col="1" text="bind:hlidyNm"/>
-                <Cell col="2" text="bind:hlidyClCdNm"/>
-                <Cell col="3" text="bind:brchCdNm"/>
+                <Cell text="bind:휴일날짜"/>
+                <Cell col="1" text="bind:휴일명"/>
+                <Cell col="2" text="bind:휴일구분"/>
+                <Cell col="3" text="bind:지점"/>
               </Band>
             </Format>
           </Formats>
@@ -295,11 +295,17 @@ this.fnCallback_holiday_list = function(svcID, errorCode, errorMsg){
 //엑셀 업로드 버튼
 this.btnExcelUp_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.excel_import();
+};
+//엑셀 업로드
+this.excel_import = function(){
+	var colCnt = this.excelImportDs.colcount;
+	var colChar = String.fromCharCode(65 + colCnt - 1);
+	
 	this.ExcelImportObject00.set_importtype(nexacro.ImportTypes.EXCEL);
 	this.ExcelImportObject00.set_importurl(this.application.Domain + this.excelImportExport);
-	this.ExcelImportObject00.importData("", "", "excelImportDs=output1");
-	
-};
+	this.ExcelImportObject00.importData("", "Head=!A1:"+ colChar +"1", "excelImportDs=output1");
+}
 
 this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -344,14 +350,14 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return false;
 	}
 	
-	this.update_holiday();
+	this.update_holiday("holidayDs");
 };
 
-this.update_holiday = function(){
+this.update_holiday = function(datasetName){
 	var tranObj = {};
 	tranObj.strSvcId	= "update_holiday";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::holiday/update.do";
-	tranObj.inData      = "holidayList=holidayDs:U";
+	tranObj.inData      = "holidayList="+ datasetName +":U";
 	tranObj.outData     = "holidayDs=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_holiday";
@@ -385,10 +391,13 @@ this.validation_check = function(){
 			var brchCd = this.holidayDs.getColumn(i, "brchCd");
 			var hlidyClCd = this.holidayDs.getColumn(i, "hlidyClCd");
 			
-			tf = this.gfnIsDate(hlidyDt);
-			tf = tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
-			tf = tf ? tf : !!brchCd;
-			tf = tf ? tf : !!hlidyClCd;
+			//키 중복 검사
+			var key_dup = this.holidayDs.findRow("hlidyDt", hlidyDt);
+			tf = key_dup != i ? this.holidayDs.getColumn(key_dup, "brchCd") != brchCd : true;
+			
+			tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
+			tf = !tf ? tf : !!brchCd;
+			tf = !tf ? tf : !!hlidyClCd;
 			
 			if(!tf){
 				msg += comma + j + "행";
@@ -397,11 +406,14 @@ this.validation_check = function(){
 		}
 	}
 	
-	result.tf = tf;
+	result.tf = msg.length > 0 ? false : true;
 	result.msg = msg;
 	
 	return result;
 }
+
+
+
 /**************************************************************************
  * 검색 영역
  **************************************************************************/
@@ -492,6 +504,7 @@ this.row02_Div04_ComboSpot_onitemchanged = function(obj:nexacro.Combo,e:nexacro.
 	
 };
 
+//엑셀 다운로드 버튼
 this.Div01_btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	//description Modal
@@ -502,9 +515,32 @@ this.Div01_btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEve
 	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
 };
 
+//엑셀 업로드 성공
 this.ExcelImportObject00_onsuccess = function(obj:nexacro.ExcelImportObject,e:nexacro.ExcelImportEventInfo)
 {
-	console.log(e);
+	//head 영역 삭제
+	this.excelImportDs.deleteRow(0);
+	
+	//유효성 검사
+	res = this.excel_import_validation_check();
+	var arr = [];
+	var rc = this.excelImportDs.rowcount;
+	
+	if(!res.tf){
+		var msg = "업로드한 엑셀에 문제가 있습니다.\n";
+		msg += res.msg;
+		
+		alert(msg);
+		
+		while(rc--) arr.push(rc);
+		this.excelImportDs.deleteMultiRows(arr);
+		return false;
+	}
+	
+	this.update_holiday('excelupdateDs');
+	
+	while(rc--) arr.push(rc);
+	this.excelImportDs.deleteMultiRows(arr);
 };
 
 this.ExcelImportObject00_onerror = function(obj:nexacro.ExcelImportObject,e:nexacro.ExcelImportErrorEventInfo)
@@ -566,7 +602,56 @@ this.row02_Div03_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickE
 		this.row02.form.Div03.form.chkClCd3.set_value(false);
 	}
 };
-]]></Script>
+
+/* 엑셀 업로드 유효성 검사 */
+this.excel_import_validation_check = function(){
+	var result = {};
+	var tf = true;
+	var msg = "";
+	
+	var rowcount = this.excelImportDs.rowcount;
+	var comma = "";
+	var gdsSpotCdList = this.application.gdsSpotCdList;
+	for(var i = 0, j = 1; i < rowcount; i++, j++){
+		var hlidyDt = this.excelImportDs.getColumn(i, "휴일날짜");
+		var hlidyNm = this.excelImportDs.getColumn(i, "휴일명");
+		var brchCdNm = this.excelImportDs.getColumn(i, "지점");
+		var hlidyTypeNm = this.excelImportDs.getColumn(i, "휴일구분");
+		
+		hlidyDt = hlidyDt.replace(/-/g, '');
+		//지점 검사
+		var brchCd_row = gdsSpotCdList.findRow("cdNm", brchCdNm);
+		var brchCd = brchCd_row > -1 ? gdsSpotCdList.getColumn(brchCd_row, "cd") : false;
+		
+		//키 중복 검사
+		var key_dup = this.holidayDs.findRow("hlidyDt", hlidyDt);
+		tf = key_dup > -1 ? this.holidayDs.getColumn(key_dup, "brchCd") != brchCd : true;
+		
+		//휴일 코드 검사
+		var hlidyType_row = this.holidayType.findRow("cdNm", hlidyTypeNm);
+		var hlidyClCd = hlidyType_row > -1 ? this.holidayType.getColumn(hlidyType_row, "cd") : false;
+		
+		tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
+		tf = !tf ? tf : !!brchCd;
+		tf = !tf ? tf : !!hlidyClCd;
+		
+		if(!tf){
+			msg += comma + j + "행";
+			comma = ", "
+		}
+		
+		var n_row = this.excelupdateDs.addRow();
+		this.excelupdateDs.setColumn(n_row, "hlidyDt", hlidyDt);
+		this.excelupdateDs.setColumn(n_row, "brchCd", brchCd);
+		this.excelupdateDs.setColumn(n_row, "hlidyNm", hlidyNm);
+		this.excelupdateDs.setColumn(n_row, "hlidyClCd", hlidyClCd);
+	}
+	
+	result.tf = msg.length > 0 ? false : true;;
+	result.msg = msg;
+	
+	return result;
+}]]></Script>
     <Objects>
       <Dataset id="holidayDs">
         <ColumnInfo>
@@ -584,30 +669,25 @@ this.row02_Div03_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickE
       </Dataset>
       <Dataset id="holidayType">
         <ColumnInfo>
-          <Column id="CD_ID" type="STRING" size="256"/>
-          <Column id="CD" type="STRING" size="256"/>
-          <Column id="CD_NM" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="CD_ID"/>
-            <Col id="CD"> </Col>
-            <Col id="CD_NM">선택</Col>
+            <Col id="cd"> </Col>
+            <Col id="cdNm">선택</Col>
           </Row>
           <Row>
-            <Col id="CD_ID">44</Col>
-            <Col id="CD">A</Col>
-            <Col id="CD_NM">평일</Col>
+            <Col id="cd">A</Col>
+            <Col id="cdNm">평일</Col>
           </Row>
           <Row>
-            <Col id="CD_ID">55</Col>
-            <Col id="CD">B</Col>
-            <Col id="CD_NM">휴일</Col>
+            <Col id="cd">B</Col>
+            <Col id="cdNm">휴일</Col>
           </Row>
           <Row>
-            <Col id="CD_ID">66</Col>
-            <Col id="CD">C</Col>
-            <Col id="CD_NM">공휴일</Col>
+            <Col id="cd">C</Col>
+            <Col id="cdNm">공휴일</Col>
           </Row>
         </Rows>
       </Dataset>
@@ -665,10 +745,18 @@ this.row02_Div03_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickE
       </Dataset>
       <Dataset id="excelImportDs">
         <ColumnInfo>
+          <Column id="휴일날짜" type="STRING" size="256"/>
+          <Column id="휴일명" type="STRING" size="256"/>
+          <Column id="휴일구분" type="STRING" size="256"/>
+          <Column id="지점" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="excelupdateDs">
+        <ColumnInfo>
           <Column id="hlidyDt" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
           <Column id="hlidyNm" type="STRING" size="256"/>
-          <Column id="hlidyClCdNm" type="STRING" size="256"/>
-          <Column id="brchCdNm" type="STRING" size="256"/>
+          <Column id="hlidyClCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
