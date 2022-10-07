@@ -23,7 +23,7 @@ this.gfn_initForm = function(objForm, objConfig)
 	objForm.config = objConfig;
 }
 
-this.gfn_showModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback, obj, nPopupWidth, nPopupHeight, bShowFrameTitle, bShowFrameStatus, sAlignType)
+this.gfn_showModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback, obj, nPopupWidth, nPopupHeight, bShowFrameTitle, bShowFrameStatus, sAlignType, titleName)
 {
 	// 현재 구동되는 정보를 업데이트 한다.
 	var childFrame = new ChildFrame();
@@ -96,6 +96,7 @@ this.gfn_showModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback,
 	// 동적으로 생성한 ChildFrame을 Modal Dialog로 보여줌.
 	childFrame.showModal(parentFrame, arrArguments, obj, popupCallback, true);
 	
+	childFrame.set_titletext(arrArguments.title);
 	/*
 	if (!this.gfn_isNull(bShowFrameTitle) || bShowFrameTitle) 
 	{
