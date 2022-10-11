@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CouponList" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="Div01" taborder="0" left="10" top="15" height="420" right="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" left="0" top="5" height="21" text="쿠폰 내역" width="200"/>
+              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_coupon_list" autofittype="col" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="50"/>
+                      <Column size="120"/>
+                      <Column size="300"/>
+                      <Column size="0"/>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                      <Column size="100"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호"/>
+                      <Cell col="1" text="발급 방식"/>
+                      <Cell col="2" text="쿠폰명"/>
+                      <Cell col="3" text="일시"/>
+                      <Cell col="4" text="할인 금액"/>
+                      <Cell col="5" text="발급일"/>
+                      <Cell col="6" text="만료일"/>
+                      <Cell col="7" text="사용 상태"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell expr="dataset.getRowCount() - currow"/>
+                      <Cell col="1" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="2" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                      <Cell col="3" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                      <Cell col="4"/>
+                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
+                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                      <Cell col="7"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>
