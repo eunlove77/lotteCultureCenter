@@ -1,42 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_FileUpload" left="0" top="0" width="790" height="140" titletext="New Form" border="" background="">
+  <Form id="Form_FileUpload" left="0" top="0" width="790" height="140" titletext="New Form" border="" background="" onload="Form_FileUpload_onload">
     <Layouts>
       <Layout height="140" width="790" stepcount="0">
-        <Static id="Static00" taborder="1" text="Drop Files Here" left="10" top="59" width="541" height="70" visible="true" background="aliceblue" color="dodgerblue" font="normal 30pt/normal &quot;Arial&quot;" textAlign="center" verticalAlign="middle" onclick="Static00_onclick"/>
-        <Grid id="Grid00" taborder="0" left="10" top="35" width="542" height="95" binddataset="ds_atch_file" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick">
+        <Static id="Static00" taborder="1" text="Drop Files Here" left="10" top="59" height="70" visible="true" background="aliceblue" color="dodgerblue" font="normal 30pt/normal &quot;Arial&quot;" textAlign="center" verticalAlign="middle" width="541"/>
+        <Grid id="Grid00" taborder="0" left="10" top="35" height="95" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick" width="542" binddataset="ds_atchFileList" autofittype="col">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="380"/>
+                <Column size="48"/>
+                <Column size="314"/>
+                <Column size="64"/>
                 <Column size="100"/>
                 <Column size="60"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
-                <Row size="24"/>
+                <Row size="33"/>
               </Rows>
               <Band id="head">
-                <Cell text="파일명"/>
-                <Cell col="1" text="파일크기"/>
-                <Cell col="2" cssclass="btn_WF_High"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="파일명"/>
+                <Cell col="2" text="확장자"/>
+                <Cell col="3" text="파일크기"/>
+                <Cell col="4" cssclass="btn_WF_High"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:realFileNm"/>
-                <Cell col="1" text="bind:fileSize" textAlign="right"/>
-                <Cell col="2" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                <Cell edittype="checkbox" text="expr:dataset.checkarray[currow]" displaytype="expr:atchFileId == '' ? 'none' : 'checkboxcontrol'"/>
+                <Cell col="1" text="bind:realFileNm"/>
+                <Cell col="2" text="bind:fileExtn"/>
+                <Cell col="3" text="bind:fileSize" textAlign="right"/>
+                <Cell col="4" displaytype="buttoncontrol" edittype="button" text="삭제"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
         <Button id="Button00" taborder="2" text="파일찾기" left="10" top="9" width="84" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="Button00_onclick"/>
-        <Static id="fileTxt" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" left="Button00:0" top="10" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true" fittocontents="width"/>
+        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" left="Button00:0" top="10" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true"/>
+        <Button id="Button01" taborder="4" text="파일 다운로드" left="564" top="35" width="99" height="25" cssclass="btn_WF_Low" onclick="Button01_onclick"/>
       </Layout>
     </Layouts>
     <Objects>
       <FileDialog id="FileDialog00" onclose="FileDialog00_onclose"/>
-      <FileUpTransfer id="FileUpTransfer00" onprogress="FileUpTransfer00_onprogress" onsuccess="FileUpTransfer00_onsuccess" onerror="FileUpTransfer00_onerror"/>
-      <Dataset id="ds_atch_file" onrowsetchanged="ds_atch_file_onrowsetchanged" onvaluechanged="ds_atch_file_onvaluechanged">
+      <FileUpTransfer id="FileUpTransfer00" onsuccess="FileUpTransfer00_onsuccess"/>
+      <Dataset id="ds_atchFileList">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <FileDownTransfer id="FileDownTransfer00"/>
+      <Dataset id="ds_atchFileDownList">
         <ColumnInfo>
           <Column id="atchFileId" type="STRING" size="256"/>
           <Column id="fileSeq" type="STRING" size="256"/>
@@ -57,17 +77,137 @@ include "Base::libCommon.xjs";
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
+this.domain = "";
+this.application = null;
 
-this.fileExtn = "jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx" //확장자
-this.fileMaxCnt = 1  	//최대 파일개수
-this.fileMaxSize= 10 	//최대 파일크기 10MB
+this.fileExtn = "jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx"; //확장자
+this.fileMaxCnt = 1;  	//최대 파일개수
+this.fileMaxSize= 10; 	//최대 파일크기 10MB
+this.fileTxt = "";
+this.isPass = false;
+this.atchFileId = "";
+this.callbackFunc = null;
+this._this = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
+this.Form_FileUpload_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.domain = this.application.getVariable("domain");
+	
+	this.gfnSetCheckBoxNoDataset(this.ds_atchFileList, this.Grid00, 0); 
+	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
+};
+
+
+/**************************************************************************
+ * 초기화 영역
+ **************************************************************************/
+this.fn_init = function(atchFileObj)
+{
+	if(atchFileObj != undefined) {
+		//처리
+		if(!this.gfn_isNull(atchFileObj.atchFileId))
+		{
+			this.atchFileId = atchFileObj.atchFileId;
+			this.fn_getAtchFileList(atchFileObj.atchFileId);
+		}
+		if(!this.gfn_isNull(atchFileObj.fileExtn))
+		{
+			this.fileExtn = atchFileObj.fileExtn
+		}
+		if(!this.gfn_isNull(atchFileObj.fileMaxCnt))
+		{
+			this.fileMaxCnt = atchFileObj.fileMaxCnt
+		}
+		if(!this.gfn_isNull(atchFileObj.fileMaxSize))
+		{
+			this.fileMaxSize = atchFileObj.fileMaxSize
+		}
+		if(!this.gfn_isNull(atchFileObj.fileTxt))
+		{
+			this.fileTxt = atchFileObj.fileTxt;
+		}
+		this._this = atchFileObj._this;
+		this.callbackFunc = atchFileObj.callbackFunc;
+		
+		this.FileUpTransfer00.removePostData("delFileSeq");
+		this.FileUpTransfer00.clearFileList();
+		this.fileStatic.set_text(this.fileTxt);
+	}
+	
+	this.isPass = false;
+	this.Grid00.setCellProperty("head", 0, "text", 0); 
+}
+
+/**************************************************************************
+ * callBackFnc
+ **************************************************************************/
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	else
+	{
+		switch(svcID)
+		{
+			case "atchFileList":
+				this.ds_atchFileResize();
+			break;
+		}
+	}
+}
+
+/**************************************************************************
+ * 파일 리스트 불러오기
+ **************************************************************************/
+
+this.fn_getAtchFileList = function(atchFileId)
+{
+	var tranObj = {
+		strSvcId : "atchFileList",
+		strSvcUrl : this.domain + "/admin/file/filelist.do",
+		inData : "",
+		outData : "ds_atchFileList=fileList",
+		strArg : "atchFileId=" + atchFileId,
+		callBackFnc : "fnCallback",
+		isAsync : false
+	}
+
+	this.gfn_transaction(tranObj);
+}
+
+/**************************************************************************
+ * validation 체크
+ **************************************************************************/
+this.fn_validation = function()
+{
+	return this.ds_atchFileList.getRowCount();
+}
+
+/**************************************************************************
+ * 파일 업로드
+ **************************************************************************/
+this.fn_upload = function()
+{
+	var atchFileList = this.FileUpTransfer00.filelist;
+	
+	// 업로드할 첨부파일이 있을 경우
+	if(atchFileList.length > 0 || this.FileUpTransfer00.getPostData("delFileSeq") != null)
+	{		
+		this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?atchFileId=' + this.atchFileId)
+	}else
+	{
+		this.isPass = true;
+		this.callbackFunc(this._this);
+	}
+}
+
 
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -81,7 +221,7 @@ this.FileDialog00_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialog
 
 this.addFileList = function(filelist)
 {
-	if(this.fileMaxCnt < this.ds_atch_file.getRowCount() + filelist.length)
+	if(this.fileMaxCnt < this.ds_atchFileList.getRowCount() + filelist.length)
 	{
 		alert("파일은 최대 "+this.fileMaxCnt+"개 등록 가능합니다.");
 	}
@@ -122,21 +262,13 @@ this.FileList_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFil
 			}
 			else
 			{
-				if(this.ds_atch_file.getColCount() == 0){
-					this.ds_atch_file.addColumn("atchFileId", "STRING", 256);
-					this.ds_atch_file.addColumn("fileSeq", "STRING", 256);
-					this.ds_atch_file.addColumn("phyPath", "STRING", 256);
-					this.ds_atch_file.addColumn("saveFileNm", "STRING", 256);
-					this.ds_atch_file.addColumn("realFileNm", "STRING", 256);
-					this.ds_atch_file.addColumn("fileExtn", "STRING", 256);
-					this.ds_atch_file.addColumn("fileSize", "STRING", 256);
-					this.ds_atch_file.addColumn("webPath", "STRING", 256);
-				}
 			
-				var nRowIdx = this.ds_atch_file.addRow();
+				var nRowIdx = this.ds_atchFileList.addRow();
 				
-				this.ds_atch_file.setColumn(nRowIdx, "realFileNm", obj.filename);			
-				this.ds_atch_file.setColumn(nRowIdx, "fileSize", this.cutFileSize(e.filesize));
+				this.ds_atchFileList.setColumn(nRowIdx, "atchFileId", "");
+				this.ds_atchFileList.setColumn(nRowIdx, "realFileNm", obj.filename);			
+				this.ds_atchFileList.setColumn(nRowIdx, "fileExtn", obj.filename.split('.').pop().toLowerCase());
+				this.ds_atchFileList.setColumn(nRowIdx, "fileSize", this.cutFileSize(e.filesize));
 
 				this.FileUpTransfer00.addFile(obj.filename, obj);
 			}
@@ -181,27 +313,6 @@ this.Grid00_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
 	}
 };
 
-this.FileUpTransfer00_onprogress = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferProgressEventInfo)
-{
-	trace(e.loaded);
-	trace(e.total);
-	console.log(e.loaded);
-	console.log(e.total);    
-};
-
-// this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventinfo)
-// {	
-//
-// };
-
-this.FileUpTransfer00_onerror = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferErrorEventInfo)
-{
-
-	trace("FileTrans Error");
-	trace(e);    
-	trace("---------------");
-};
-
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	var fileId = "";
@@ -213,29 +324,82 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	fileId = objGridDs.getColumn(e.row, "atchFileId");
 	fileName = objGridDs.getColumn(e.row, "realFileNm");
 	
-	if(e.cell == 2){		
+	if(e.cell == 4){		
 		if(!this.gfn_isNull(fileId)){
-			this.ds_atch_file.deleteRow(e.row);
+			var delFileSeq = this.FileUpTransfer00.getPostData("delFileSeq");
+			if(delFileSeq != null)
+			{
+				delFileSeq += ("," + this.ds_atchFileList.getColumn(e.row, "fileSeq"));
+			}
+			else
+			{
+				delFileSeq = this.ds_atchFileList.getColumn(e.row, "fileSeq");
+			}
+			
+			this.FileUpTransfer00.setPostData("delFileSeq", delFileSeq);
+			this.ds_atchFileList.deleteRow(e.row);
 		}else{
 			delResult = this.FileUpTransfer00.removeFile(fileName);
 			if(delResult > -1){
-				this.ds_atch_file.deleteRow(e.row);
+				this.ds_atchFileList.deleteRow(e.row);
 			}
 		}		
 	}
 };
 
-// 기존 파일첨부 내역 사이즈 변환
-this.ds_atch_file_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
-{	
-	if(e.col == -1)
+//기존 첨부파일 사이즈 변환
+this.ds_atchFileResize = function()
+{
+	this.ds_atchFileList.set_enableevent(false);
+	for(var i=0; i< this.ds_atchFileList.getRowCount(); i++)
 	{
-		for(var i = 0, len = this.ds_atch_file.getRowCount(); i < len ; i++)
+		var fileSize = this.ds_atchFileList.getColumn(i, "fileSize");
+		this.ds_atchFileList.setColumn(i, "fileSize", this.cutFileSize(fileSize));
+	}
+	this.ds_atchFileList.set_enableevent(true);
+};
+
+
+this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
+{
+	this.isPass = true;
+	this.atchFileId = e.datasets[0].getColumn(0,"atchFileId");
+	this.callbackFunc(this._this);
+};
+
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag = false;
+	var list = this.ds_atchFileList;
+	this.ds_atchFileDownList.clearData();
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
 		{
-			var fileSize = this.ds_atch_file.getColumn(i, "fileSize");
-			this.ds_atch_file.setColumn(i, "fileSize", this.cutFileSize(fileSize));
+			flag = true;
+			var rowIndex = this.ds_atchFileDownList.addRow();
+			this.ds_atchFileDownList.copyRow(rowIndex, this.ds_atchFileList, i);
 		}
 	}
-};]]></Script>
+
+	if(flag)
+	{
+		this.FileDownTransfer00.setPostData("fileInfo", this.ds_atchFileDownList.saveXML());		
+		if(this.ds_atchFileDownList.getRowCount() > 1){
+			this.FileDownTransfer00.set_downloadfilename("첨부파일.zip");
+		}else{
+			this.FileDownTransfer00.set_downloadfilename(this.ds_atchFileDownList.getColumn(0, "realFileNm"));
+		}
+		
+		this.FileDownTransfer00.download();
+	}
+	else
+	{
+		alert("다운로드 할 파일을 선택하세요.");
+	}
+};
+]]></Script>
   </Form>
 </FDL>
