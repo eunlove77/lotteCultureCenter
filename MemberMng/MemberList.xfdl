@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="MemberList" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="Div01" taborder="2" text="Div01" left="10" top="71" height="153" right="10" minwidth="680" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Div id="Div02" taborder="5" text="Div01" left="0" top="54" height="33" cssclass="div_WF_CompWrap" right="57.14%" formscrolltype="none" minwidth="330" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="회원 등급" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboGrade" taborder="1" text="특강" left="Static00:10" top="5" width="100" height="20" innerdataset="ds_search" codecolumn="issueStatCd" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">넥사크로 특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">3</Col>
+                            <Col id="datacolumn">자바스크립트 특강</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="6" text="Div01" left="0" top="86" height="33" cssclass="div_WF_CompWrap" right="57.14%" formscrolltype="none" minwidth="330" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연락처" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <MaskEdit id="MaskEdit00" taborder="1" left="Static00:10" top="5" width="60" height="21"/>
+                    <MaskEdit id="MaskEdit01" taborder="2" left="MaskEdit00:5" top="5" width="65" height="21"/>
+                    <MaskEdit id="MaskEdit02" taborder="3" left="MaskEdit01:5" top="5" width="65" height="21"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="0" text="Div01" left="Div02:0" top="54" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="가입일/최종접속일" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboDateType" taborder="2" text="특강" left="Static00:10" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">가입일</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">최종접속일</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Div id="Div00" taborder="1" text="Div00" left="ComboDateType:5" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none" innerdataset="ds_coupon_list" datecolumn=""/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div06" taborder="1" text="Div01" left="0" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="searchField" taborder="1" text="전체" left="Static00:10" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">-1</Col>
+                            <Col id="datacolumn">전체</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">회원번호</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">회원명</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원ID</Col>
+                            <Col id="codecolumn">3</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">4</Col>
+                            <Col id="datacolumn">연락처</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">5</Col>
+                            <Col id="datacolumn">이메일</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+                    <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80"/>
+                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00" taborder="2" text="Div01" left="0" top="22" height="33" cssclass="div_WF_CompWrap" right="57.14%" formscrolltype="none" minwidth="330" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboSpotType" taborder="1" text="특강" left="Static00:10" top="5" width="100" height="20" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" innerdataset="innerdataset">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">관심지점</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">MVG소속지점</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Combo id="ComboSpot" taborder="2" text="특강" left="ComboSpotType:5" top="5" width="100" height="20" innerdataset="ds_search" codecolumn="issueStatCd" datacolumn="datacolumn" index="0" value="1">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">넥사크로 특강</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">3</Col>
+                            <Col id="datacolumn">자바스크립트 특강</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="3" text="Div01" left="Div00:0" top="22" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="가입 구분" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboRegType" taborder="1" text="전체" left="Static00:10" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">-1</Col>
+                            <Col id="datacolumn">전체</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">PC</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">MO</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">3</Col>
+                            <Col id="datacolumn">데스크</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Static id="Static00" taborder="4" left="0" top="0" width="80" height="21" text="검색"/>
+              <Div id="Div01_00" taborder="7" text="Div01" left="Div04:0" top="86" height="33" cssclass="div_WF_CompWrap" right="2" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="SMS동의여부" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboAgrType" taborder="1" text="전체" left="Static00:10" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">-1</Col>
+                            <Col id="datacolumn">전체</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">Y</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">N</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="3" text="Div02" left="10" top="Div01:10" height="490" right="10" minwidth="680" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Grid id="Grid00" taborder="0" left="0" top="35" binddataset="ds_coupon_list" autofittype="col" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="40" band="left"/>
+                      <Column size="50"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="110"/>
+                      <Column size="150"/>
+                      <Column size="60"/>
+                      <Column size="90"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="60"/>
+                      <Column size="120"/>
+                      <Column size="120"/>
+                      <Column size="60"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호" edittype="checkbox" displaytype="checkboxcontrol"/>
+                      <Cell col="1" text="번호"/>
+                      <Cell col="2" text="회원번호"/>
+                      <Cell col="3" text="회원명"/>
+                      <Cell col="4" text="회원 ID"/>
+                      <Cell col="5" text="연락처"/>
+                      <Cell col="6" text="이메일"/>
+                      <Cell col="7" text="회원등급"/>
+                      <Cell col="8" text="MVG 소속지점"/>
+                      <Cell col="9" text="회원타입"/>
+                      <Cell col="10" text="관심지점"/>
+                      <Cell col="11" text="가입구분"/>
+                      <Cell col="12" text="가입일"/>
+                      <Cell col="13" text="최종접속일"/>
+                      <Cell col="14" text="회원상태"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:reqnId" expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                      <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="3" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                      <Cell col="4" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
+                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                      <Cell col="7" text="expr:dataset.getColumn(currow, &quot;useCnt&quot;) + &quot;/&quot; + dataset.getColumn(currow, &quot;issueCnt&quot;)"/>
+                      <Cell col="8" text="bind:rgprId"/>
+                      <Cell col="9" text="bind:rgprDtm"/>
+                      <Cell col="10"/>
+                      <Cell col="11"/>
+                      <Cell col="12"/>
+                      <Cell col="13"/>
+                      <Cell col="14"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Static id="txtTotal" taborder="1" left="0" top="10" width="80" height="21" text="총 100개"/>
+              <Button id="Button05_00" taborder="4" text="회원 통합" top="0" height="30" cssclass="btn_WF_Medium" width="80" right="210"/>
+              <Button id="Button05" taborder="2" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" width="107" left="Button05_00:10"/>
+              <Button id="Button06" taborder="3" text="SMS 발송" top="0" height="30" cssclass="btn_WF_Medium" left="Button05:10" right="5"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>
