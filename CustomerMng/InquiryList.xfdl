@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="InquiryList" width="1280" height="800" titletext="New Form" onload="InquiryList_onload">
+    <Layouts>
+      <Layout height="800" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Grid id="GridInquiryList" taborder="2" left="10" top="270" binddataset="inquiryDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." onheadclick="GridNoticeList_onheadclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="40" band="left"/>
+                <Column size="389"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="질문"/>
+                <Cell col="2" text="작성자"/>
+                <Cell col="3" text="이메일"/>
+                <Cell col="4" text="연락처"/>
+                <Cell col="5" text="등록일"/>
+                <Cell col="6" text="답변자"/>
+                <Cell col="7" text="답변여부"/>
+                <Cell col="8" text="답변일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:faqSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="2" text="bind:mbrId"/>
+                <Cell col="3" text="bind:email"/>
+                <Cell col="4" text="bind:hpNo"/>
+                <Cell col="5" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="6" text="bind:inqCnt"/>
+                <Cell col="7" text="bind:top5SlctYn"/>
+                <Cell col="8" text="bind:expsrYn"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="225" height="45" right="10">
+          <Layouts>
+            <Layout>
+              <Button id="btnAdd" taborder="0" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_BtnAdd_onclick" visible="true"/>
+              <Button id="btnDel" taborder="1" text="삭제" top="5" height="30" cssclass="btn_WF_High" right="10" width="50" onclick="Div01_btnDel_onclick"/>
+              <Static id="txtTotal" taborder="2" left="9" top="10" height="21" text="목록 (0)개" width="82"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div00_00" taborder="4" text="Div00" left="7" top="57" height="173" formscrolltype="both" right="0">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
+              <Div id="conDiv" taborder="1" text="Div00" left="3" top="Static00:9" height="134" cssclass="div_WF_TableComp" right="8">
+                <Layouts>
+                  <Layout>
+                    <Div id="searchDiv" taborder="0" text="Div01" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="searchField" taborder="1" left="Static00:6" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" text="전체" value="">
+                            <Dataset id="innerdataset">
+                              <ColumnInfo>
+                                <Column id="codecolumn" size="256"/>
+                                <Column id="datacolumn" size="256"/>
+                              </ColumnInfo>
+                              <Rows>
+                                <Row>
+                                  <Col id="codecolumn"/>
+                                  <Col id="datacolumn">전체</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">1</Col>
+                                  <Col id="datacolumn">제목</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">2</Col>
+                                  <Col id="datacolumn">작성자</Col>
+                                </Row>
+                              </Rows>
+                            </Dataset>
+                          </Combo>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21"/>
+                          <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
+                          <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="periodDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                          <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type03.xfdl" formscrolltype="none"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="typeDiv" taborder="2" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="632">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="문의 유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
+                          <CheckBox id="chkClCd1" taborder="1" text="문의1" left="chkAll:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="1"/>
+                          <CheckBox id="chkClCd2" taborder="2" text="문의2" left="chkClCd1:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="2"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="answerDiv" taborder="3" text="Div01" left="typeDiv:0" top="32" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="답변 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkAnsAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkAnsY" taborder="1" text="답변" left="chkAnsAll:6" top="5" width="41" height="20" onclick="fn_checkbox" truevalue="Y"/>
+                          <CheckBox id="chkAnsN" taborder="2" text="미 답변" left="chkAnsY:6" top="5" width="70" height="20" onclick="fn_checkbox" truevalue="N"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="inquiryDs">
+        <ColumnInfo>
+          <Column id="onlnQuesSeqno" type="INT" size="256"/>
+          <Column id="clCd" type="STRING" size="256"/>
+          <Column id="titNm" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="DATETIME" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="strtDt" type="STRING" size="256"/>
+          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="clCdAll" type="STRING" size="256"/>
+          <Column id="clCdList" type="STRING" size="256"/>
+          <Column id="answerYn" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="f">0</Col>
+            <Col id="clCdList"/>
+            <Col id="clCdAll"/>
+            <Col id="answerYn"/>
+            <Col id="endDt"/>
+            <Col id="strtDt"/>
+            <Col id="q"/>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="inquiryDs_format">
+        <ColumnInfo>
+          <Column id="onlnQuesSeqno" type="INT" size="256"/>
+          <Column id="clCd" type="STRING" size="256"/>
+          <Column id="titNm" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="DATETIME" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::lib_date.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.rowcount = 0;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.InquiryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
+	this.gfnSetCheckBoxNoDataset(this.inquiryDs, this.GridInquiryList, 0);
+	
+	this.fn_list(1);
+};
+
+//삭제버튼
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.inquiryDs.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 게시물을 선택하세요.");
+		return false;
+	}
+	if(!confirm("선택한 게시물을 삭제하시겠습니까?")){
+		return false;
+	}
+	
+	this.inquiryDs.deleteMultiRows(checked_array);
+	
+	for(i of checked_array){
+		check_array[i] = 0;
+	}
+
+	this.fn_delete();
+	
+};
+
+//검색버튼
+this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var strtDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm.value;
+	var endDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm.value;
+	
+	this.searchDs.setColumn(0, 'strtDt', strtDt);
+	this.searchDs.setColumn(0, 'endDt', endDt);
+	
+	this.fn_list();
+};
+
+//초기화 버튼
+this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.reset_search_form();
+	this.fn_list();
+};
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+//조회
+this.fn_list = function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "select_inquiry";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/inquiryList.do";
+	tranObj.inData      = "search=searchDs";
+	tranObj.outData     = "inquiryDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	
+	this.gfn_transaction(tranObj);
+}
+
+//체크박스 전체선택
+this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		var trueVal1 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.truevalue;
+		var trueVal2 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.truevalue;
+		
+		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(trueVal1);
+		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(trueVal2);
+		
+	} else {
+		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(false);
+		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(false);
+	}
+};
+
+//콜백
+this.fnCallback = function(svcID, errorCode, errorMsg){
+	
+	this.Div01.form.txtTotal.set_text("목록 (" + this.rowcount + ") 개");
+	
+	if(!this.inquiryDs.getColCount()){
+		this.inquiryDs.copyData(this.inquiryDs_format);
+	}
+	if(errorCode != 0){
+		// 에러 시 화면 처리 내역
+		this.alert(errorCode+"\n"+errorMsg);
+		
+		return;
+	}
+	
+	switch(svcID)
+	{
+    case "delete":
+		this.alert("삭제 완료");
+		this.fn_list(1);
+		break;
+		
+	}
+}
+
+//초기화
+this.reset_search_form = function(){
+	
+	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkAll.set_value(false);
+	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(false);
+	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(false);
+	
+	this.searchDs.setColumn(0, "strtDt", "");
+	this.searchDs.setColumn(0, "endDt", "");
+	this.searchDs.setColumn(0, "clCdAll", "");
+	this.searchDs.setColumn(0, "clCdList", "");
+	this.searchDs.setColumn(0, "f", 0);
+	this.searchDs.setColumn(0, "q", "");
+}
+
+//삭제
+this.fn_delete = function ()
+{		
+	var strSvcId    = "delete";
+	var strSvcUrl   = this.application.Admin_svc + "::/customer/deleteInquiry.do";
+	var inData      = "inquiryList=inquiryDs:U";
+	var outData     = "inquiryDs=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+		strSvcUrl ,       // trabsaction을 요청할 주소
+		inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+		outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+		strArg,         // 입력값으로 보낼 arguments, a=b
+		callBackFnc,       // transaction의 결과를 받을 Function 이름
+		isAsync);         // 비동기통신 여부 [생략가능]
+};
+]]></Script>
+  </Form>
+</FDL>
