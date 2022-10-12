@@ -29,11 +29,19 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div04" taborder="1" text="Div01" left="Div03:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div00" taborder="2" text="Div00" left="Div03:-1" top="0" height="33" width="232" cssclass="div_WF_CompWrap">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="권한(직무)" left="0" top="0" width="120" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="ComboAuthCd" taborder="1" left="125" top="5" width="100" height="20" innerdataset="gdsAuthCdList" codecolumn="cd" datacolumn="cdNm" index="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="1" text="Div01" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" left="116" top="5" width="100" height="20" index="-1" value="1" innerdataset="ds_spot_list" codecolumn="spotCd" datacolumn="spotNm"/>
+                    <Combo id="ComboSpot" taborder="1" left="116" top="5" width="100" height="20" index="-1" value="1" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -81,7 +89,6 @@
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
-                <Column size="80"/>
                 <Column size="200"/>
                 <Column size="80"/>
                 <Column size="150"/>
@@ -93,27 +100,25 @@
               </Rows>
               <Band id="head">
                 <Cell text="번호"/>
-                <Cell col="1" text="권한"/>
-                <Cell col="2" text="직무"/>
-                <Cell col="3" text="지점"/>
-                <Cell col="4" text="아이디"/>
-                <Cell col="5" text="이름"/>
-                <Cell col="6" text="접속 메뉴"/>
-                <Cell col="7" text="활동타입"/>
-                <Cell col="8" text="IP"/>
-                <Cell col="9" text="발생일시"/>
+                <Cell col="1" text="권한(직무)"/>
+                <Cell col="2" text="지점"/>
+                <Cell col="3" text="아이디"/>
+                <Cell col="4" text="이름"/>
+                <Cell col="5" text="접속 메뉴"/>
+                <Cell col="6" text="활동타입"/>
+                <Cell col="7" text="IP"/>
+                <Cell col="8" text="발생일시"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
                 <Cell col="1" text="bind:authNm"/>
-                <Cell col="2" text="bind:deptNm"/>
-                <Cell col="3" text="bind:spotNm"/>
-                <Cell col="4" text="bind:reqnId"/>
-                <Cell col="5" text="bind:reqnNm"/>
-                <Cell col="6" text="bind:trgtMenuNm" textAlign="left"/>
-                <Cell col="7" text="bind:prcsNm"/>
-                <Cell col="8" text="bind:reqnIp"/>
-                <Cell col="9" text="bind:occrDtm"/>
+                <Cell col="2" text="bind:spotNm"/>
+                <Cell col="3" text="bind:reqnId"/>
+                <Cell col="4" text="bind:reqnNm"/>
+                <Cell col="5" text="bind:trgtMenuNm" textAlign="left"/>
+                <Cell col="6" text="bind:prcsNm"/>
+                <Cell col="7" text="bind:reqnIp"/>
+                <Cell col="8" text="bind:occrDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -208,9 +213,13 @@ this.SystemUseLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
 	
 	// 코드 데이터
-	this.fn_data_list();
+	//this.fn_data_list();
 	
+	this.row02.form.Div00.form.ComboAuthCd.set_index(0);
+	this.row02.form.Div04.form.ComboSpot.set_index(0);
 	//this.fn_list();	
+	
+	this.pageingDiv.form.pageingCallObj = this;
 };
 
 
@@ -296,27 +305,6 @@ this.fn_list = function(page){
 	
 	this.gfn_transaction(tranObj);
 }
- 
-
-
-this.fn_data_list = function ()
-{	
-	var strSvcId    = "dataList";
-	var strSvcUrl   = this.application.Admin_svc + "::syslog/getCommonDataList.do";
-	var inData      = "";
-	var outData     = "ds_spot_list=output1";
-	var strArg      = "";
-	var callBackFnc = "fn_callback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
-};
 
 this.fn_callback = function(svcID,errorCode,errorMsg){
 	
@@ -349,10 +337,7 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				}	
 			}
 
-		break; 
-		case "dataList":
-			this.row02.form.Div04.form.ComboSpot.set_index(0);
-		break;
+		break; 		
 	}
 }
 
@@ -413,13 +398,6 @@ this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
         <Rows>
           <Row/>
         </Rows>
-      </Dataset>
-      <Dataset id="ds_spot_list">
-        <ColumnInfo>
-          <Column id="spotSeq" type="STRING" size="256"/>
-          <Column id="spotNm" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
-        </ColumnInfo>
       </Dataset>
     </Objects>
   </Form>

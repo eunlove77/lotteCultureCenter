@@ -6,16 +6,15 @@
         <Div id="loginDiv" taborder="1" text="" left="0" top="100" width="426" height="451" background="#ffffff" borderRadius="12px">
           <Layouts>
             <Layout>
-              <CheckBox id="CheckBox01" taborder="0" text="ID저장" left="54" width="105" height="20" top="351"/>
-              <Div id="Div02" taborder="1" text="" left="53" top="194" width="320" height="40" cssclass="edt_WF_LoginForm">
+              <Div id="Div02" taborder="0" text="" left="53" top="194" width="320" height="40" cssclass="edt_WF_LoginForm">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="" left="0" top="0" width="40" height="38" background="url('theme://images/edt_login_icon.png') no-repeat center center /13px 14px"/>
-                    <Edit id="editId" taborder="1" left="40" top="0" width="278" height="38" cssclass="edt_WF_Login" onsetfocus="Div02_Edit00_onsetfocus" displaynulltext="아이디를 입력해 주세요"/>
+                    <Edit id="editId" taborder="1" left="40" top="0" width="278" height="38" cssclass="edt_WF_Login" displaynulltext="아이디를 입력해 주세요"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02_00" taborder="2" text="" left="54" top="244" width="320" height="40" cssclass="edt_WF_LoginForm">
+              <Div id="Div02_00" taborder="1" text="" left="54" top="244" width="320" height="40" cssclass="edt_WF_LoginForm">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="" left="0" top="0" width="40" height="38" background="url('theme://images/edt_password_icon.png') no-repeat center center /15px 13px"/>
@@ -23,9 +22,11 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Button id="LoginBtn" taborder="3" text="LOGIN" left="54" top="303" width="320" height="40" cssclass="btn_WF_Login" onclick="loginDiv_LoginBtn_onclick"/>
-              <Static id="Static00" taborder="4" text="" left="156" top="70" width="115" height="42" background="url('theme://images/log_WF_Logo.png') no-repeat center center /115px 42px"/>
-              <Static id="Static01" taborder="5" text="매일 새로움과 즐거운 경험을 제공합니다" left="120" top="122" width="215" height="20"/>
+              <Button id="LoginBtn" taborder="2" text="LOGIN" left="54" top="303" width="320" height="40" cssclass="btn_WF_Login" onclick="loginDiv_LoginBtn_onclick"/>
+              <Static id="Static00" taborder="3" text="" left="156" top="70" width="115" height="42" background="url('theme://images/log_WF_Logo.png') no-repeat center center /115px 42px"/>
+              <Static id="Static01" taborder="4" text="매일 새로움과 즐거운 경험을 제공합니다" left="120" top="122" width="215" height="20"/>
+              <Static id="StaticReg" taborder="5" text="계정 생성요청" left="55" top="351" width="120" height="21" textDecoration="underline" cursor="pointer"/>
+              <Static id="StaticFind" taborder="6" text="비밀번호 찾기" left="252" top="351" width="120" height="21" textDecoration="underline" textAlign="right" cursor="pointer" onclick="loginDiv_StaticFind_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -121,12 +122,13 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	{
 		if(errorCode == 20)
 		{
-			this.parent.set_formurl("SystemMng::AdminChkPhone.xfdl"); // 휴대폰 인증 페이지
+			this.parent.set_formurl("SystemMng::Login/AdminChkPhone.xfdl"); // 휴대폰 인증 페이지
+			
 		}
 		else if(errorCode == 40 || errorCode == 50)
 		{
-			this.parent.set_formurl("SystemMng::AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
-			nexacro.setPrivateProfile("lgnCd", errorCode ); 
+			this.parent.set_formurl("SystemMng::Login/AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
+			this.parent.lgnCd = errorCode;
 		}
 		this.alert(errorMsg + "[Code : " + errorCode + "]");
 		//this.Error_msg.set_text(errorMsg + "[Code : " + errorCode + "]");
@@ -205,6 +207,11 @@ this.fn_resizeCenter = function(targetObj, pWidth){
 	targetObj.setOffsetLeft(nCompX);
 }
 
+
+this.loginDiv_StaticFind_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	this.parent.set_formurl("SystemMng::Login/AdminFindPwd.xfdl"); // 비밀번호 찾기 페이지
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_login">
