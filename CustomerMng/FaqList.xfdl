@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridFaqList" taborder="2" left="10" top="270" binddataset="faqDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." onheadclick="GridNoticeList_onheadclick">
+        <Grid id="GridFaqList" taborder="2" left="10" top="270" binddataset="faqDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." onheadclick="GridNoticeList_onheadclick" oncellclick="GridFaqList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -33,9 +33,9 @@
                 <Cell col="7" text="노출여부"/>
               </Band>
               <Band id="body">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                <Cell text="bind:faqSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:clNm"/>
-                <Cell col="2" text="bind:titNm"/>
+                <Cell col="2" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="3" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="4" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="5" text="bind:inqCnt"/>
@@ -105,7 +105,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="분류" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <CheckBox id="chkAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
                           <CheckBox id="chkClCd1" taborder="1" text="회원가입" left="chkAll:6" top="5" width="78" height="20" onclick="classified_ctgry_checkbox_onclick" truevalue="1"/>
                           <CheckBox id="chkClCd2" taborder="2" text="수강신청'취소" left="chkClCd1:6" top="5" height="20" truevalue="2" width="95" onclick="classified_ctgry_checkbox_onclick"/>
                           <CheckBox id="chkClCd3" taborder="4" text="강좌'강사" left="chkClCd2:6" top="5" height="20" truevalue="3" width="74" onclick="classified_ctgry_checkbox_onclick"/>
@@ -214,22 +214,22 @@
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
- * include 영역 
- **************************************************************************/
+* include 영역 
+**************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
 include "Base::popup.xjs";
 
 /**************************************************************************
- * FORM 변수 선언 영역
- **************************************************************************/
+* FORM 변수 선언 영역
+**************************************************************************/
 this.application = null;
 this.rowcount = 0;
 
 /**************************************************************************
- * FORM EVENT 영역(onload)
- **************************************************************************/
+* FORM EVENT 영역(onload)
+**************************************************************************/
 this.FaqList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -247,6 +247,8 @@ this.FaqList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.fn_list(1);
 };
+
+//등록버튼
 this.Div01_BtnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	
@@ -256,6 +258,53 @@ this.Div01_BtnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	this.parent.set_url("CustomerMng::FaqDtl.xfdl");
 };
 
+//삭제버튼
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.faqDs.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 게시물을 선택하세요.");
+		return false;
+	}
+	if(!confirm("선택한 게시물을 삭제하시겠습니까?")){
+		return false;
+	}
+	
+	this.faqDs.deleteMultiRows(checked_array);
+	for(i of checked_array){
+		check_array[i] = 0;
+	}
+	this.fn_delete();
+	//this.Grid00.redrawExprCell();
+	/*var objGrid = this.GridFaqList
+	var objDs = objGrid.getBindDataset();
+	
+	var chk = objDs.checkarray[e.row] = 0;
+	
+	this.alert("선택셀 >>" + chk);
+	
+	var checkCnt = this.gfn_check_length(objDs, chk);
+	
+	//var checkCnt = this.gfn_check_length(this.faqDs, "chk");	
+	
+	if(checkCnt > 0){
+	
+	if(this.confirm("해당 게시글을 삭제 하시겠습니까?"))
+	{
+	this.fn_delete();
+	}
+	}else{
+	this.alert("게시글을 한개 이상 선택해주세요.");
+	return false;
+	}*/
+};
+
+//검색버튼
 this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var strtDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm.value;
@@ -267,6 +316,53 @@ this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e
 	this.fn_list();
 };
 
+//구분 체크박스 클릭
+this.classified_ctgry_checkbox_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	var clCdList = '';
+	var comma = '';
+	
+	for(var i = 1; i <= 5; i++){
+		var item = obj.parent['chkClCd' + i];
+		if(item.isChecked()){
+			clCdList += comma + "'" + item.value + "'";
+			comma = ',';
+		}
+	}
+	
+	//this.alert("코드리스트 >>>> " + clCdList);
+	
+	this.searchDs.setColumn(0, "clCdList", clCdList);
+};
+
+//초기화 버튼
+this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.reset_search_form();
+	this.fn_list();
+};
+
+//그리드 상세 페이지 이동
+this.GridFaqList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 2)
+	{
+		var	faqSeqno = obj.getBindDataset().getColumn(e.row, "faqSeqno");
+		
+		//this.alert("seq>> " + faqSeqno);
+		this.parent.param = {
+			faqSeqno : faqSeqno
+		};
+		
+		this.parent.set_url("CustomerMng::FaqDtl.xfdl");
+	}
+};
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+//조회
 this.fn_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_faq";
@@ -274,13 +370,14 @@ this.fn_list = function(){
 	tranObj.inData      = "search=searchDs";
 	tranObj.outData     = "faqDs=output1";
 	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback_faq_list";
+	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	
 	this.gfn_transaction(tranObj);
 }
 
-this.fnCallback_faq_list = function(svcID, errorCode, errorMsg){
+//콜백
+this.fnCallback = function(svcID, errorCode, errorMsg){
 	
 	this.Div01.form.txtTotal.set_text("목록 (" + this.rowcount + ") 개");
 	
@@ -290,42 +387,31 @@ this.fnCallback_faq_list = function(svcID, errorCode, errorMsg){
 	if(errorCode != 0){
 		// 에러 시 화면 처리 내역
 		this.alert(errorCode+"\n"+errorMsg);
-
+		
 		return;
+	}
+	
+	switch(svcID)
+	{
+    case "delete":
+		this.alert("삭제 완료");
+		this.fn_list(1);
+		break;
+		
 	}
 }
 
-this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var objGrid = this.GridFaqList
-	var objDs = objGrid.getBindDataset();
-	var checkCnt = this.gfn_check_length(objDs, "chk");
-	
-	var checkCnt = this.gfn_check_length(this.faqDs, "chk");	
-	
-	this.alert("삭제카운트>> " + checkCnt);
-	if(checkCnt > 0){
-		
-		if(this.confirm("해당 게시글을 삭제 하시겠습니까?"))
-		{
-			this.fn_delete();
-		}
-	}else{
-		this.alert("게시글을 한개 이상 선택해주세요.");
-	}
-};
-
 /**************************************************************************
- * 그리드 체크박스 영역
- **************************************************************************/
+* 그리드 체크박스 영역
+**************************************************************************/
 this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
 { 
 	//체크여부 정보를 담을 Array를 사용자 변수로 설정
 	objDs.checkarray = new Array(); 
-
+	
 	//데이터셋 온로드이벤트 추가
 	objDs.addEventHandler("onload", this.gfnDataset_onload); 
-
+	
 	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
 	objGrd.checkcell = nCheckCellIdx; 
 	
@@ -375,13 +461,13 @@ this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 	{ 
 		objDs = obj.getBindDataset(); 
 		nChkVal = obj.getCellText(-1, e.cell); 
-
+		
 		if(nChkVal==1)nChkVal = 0; 
 		else nChkVal = 1; 
 		
 		//Head의 체크 상태 변경
 		obj.setCellProperty("head", e.cell, "text", nChkVal); 
-
+		
 		//Body의 체크 상태 변경
 		for(i=0;i<objDs.rowcount;i++) 
 		{ 
@@ -392,33 +478,9 @@ this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		obj.redrawExprCell(); 
 	} 
 };
-
-this.classified_ctgry_checkbox_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	var clCdList = '';
-	var comma = '';
-	
-	for(var i = 1; i <= 5; i++){
-		var item = obj.parent['chkClCd' + i];
-		if(item.isChecked()){
-			clCdList += comma + "'" + item.value + "'";
-			comma = ',';
-		}
-	}
-	
-	this.alert("코드리스트 >>>> " + clCdList);
-	
-	this.searchDs.setColumn(0, "clCdList", clCdList);
-};
-
-this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.reset_search_form();
-	this.fn_list();
-};
-
+//초기화
 this.reset_search_form = function(){
-
+	
 	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkAll.set_value(false);
 	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(false);
 	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(false);
@@ -433,15 +495,15 @@ this.reset_search_form = function(){
 	this.searchDs.setColumn(0, "f", 0);
 	this.searchDs.setColumn(0, "q", "");
 }
-
+//체크박스 전체선택
 this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked()){
-		var trueVal1 = Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.truevalue;
-		var trueVal2 = Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.truevalue;
-		var trueVal3 = Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd3.truevalue;
-		var trueVal4 = Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd4.truevalue;
-		var trueVal5 = Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd5.truevalue;
+		var trueVal1 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.truevalue;
+		var trueVal2 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.truevalue;
+		var trueVal3 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd3.truevalue;
+		var trueVal4 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd4.truevalue;
+		var trueVal5 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd5.truevalue;
 		
 		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(trueVal1);
 		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(trueVal2);
@@ -458,23 +520,24 @@ this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 	}
 };
 
+//삭제
 this.fn_delete = function ()
 {		
 	var strSvcId    = "delete";
-	var strSvcUrl   = this.application.Admin_svc + "::/customer/deleteNotice.do";
+	var strSvcUrl   = this.application.Admin_svc + "::/customer/deleteFaq.do";
 	var inData      = "faqList=faqDs:U";
 	var outData     = "faqDs=output1";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
-
+	
 	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+		strSvcUrl ,       // trabsaction을 요청할 주소
+		inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+		outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+		strArg,         // 입력값으로 보낼 arguments, a=b
+		callBackFnc,       // transaction의 결과를 받을 Function 이름
+		isAsync);         // 비동기통신 여부 [생략가능]
 };]]></Script>
     <Bind>
       <BindItem id="item0" compid="Div00_00.form.conDiv.form.searchDiv.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
