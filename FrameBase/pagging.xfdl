@@ -38,12 +38,16 @@ this.fv_listIdx;
 
 this.targetGridObj;
 
+this.pageingCallObj = null;
+
 this.pagging_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	var objPageingDs = this.application.gdsPageing;
 
 	this.fv_pageCount = objPageingDs.getColumn(0, "pageCnt");
+	
+
 };
 
 this.Button_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -74,13 +78,12 @@ this.Button_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		}
 	}
 	
-	this.parent.parent.fn_list(this.fv_pageIdx);	
-	
+	this.pageingCallObj.fn_list(this.fv_pageIdx);
 };
 
 this.BtnNum_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.parent.fn_list(obj.text);	
+	this.pageingCallObj.fn_list(obj.text);
 };
 
 this.initPages = function(totalCount, pageRowCount)

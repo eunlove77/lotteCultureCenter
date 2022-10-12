@@ -73,7 +73,10 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 		//윈도우 팝업 여부 
 		if(this.isPopup) 
 		{
-			this.close();
+			for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
+			{	
+				nexacro.getPopupFrames()[i].form.close();
+			}
 		}
 		
 		switch(svcID)
@@ -100,9 +103,10 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 //로컬스토리지 로그인정보 삭제
 this.gfn_removeLgnInfo = function()
 {
-  nexacro.removePrivateProfile("branch");
-  nexacro.removePrivateProfile("name");
-  nexacro.removePrivateProfile("id");
+    nexacro.removePrivateProfile("brchCd");
+	nexacro.removePrivateProfile("brchNm");
+	nexacro.removePrivateProfile("name");
+	nexacro.removePrivateProfile("id");
 };
 
 
@@ -691,4 +695,79 @@ this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 	} 
 }; 
 
-]]></Script>
+
+/**
+* @description 	   : 마스킹 함수
+
+* ID : this.gfn_setMasking("devadmin", 3) 							-> dev*****
+* 이름 	: this.gfn_setMasking("관리자", 1, 1)						-> 관*자
+* IP : this.gfn_setMasking("123.123.123.213", 8, 3, '.') 			-> 123.123.***.213
+* 카드번호 : this.gfn_setMasking("1234-1234-1234-1234", 10, 4, '-')	-> 1234-1234-****-1234 
+* 사업자번호 : this.gfn_setMasking("123-12-31234", 2, 4, '-') 		-> 12*-**-*1234
+*/
+this.gfn_setMasking = function(sValue, startIndex, maskLen, excpChar)
+{
+	var sReplaceValue;
+	var sMask = "";
+	var _startIndex = 0;
+	var _maskLen;
+	
+	if(!this.gfn_isNull(startIndex))
+	{
+		_startIndex = startIndex;
+	}
+	
+	sReplaceValue = nexacro.replaceAll(sValue, " ", "");
+	
+	_maskLen = this.gfn_isNull(maskLen) ? (sReplaceValue.length - _startIndex) : maskLen;
+	
+	for(var i = 0; i < sReplaceValue.length; i++)
+	{
+		if(i >= _startIndex && _maskLen > 0 && sReplaceValue[i] != excpChar)
+		{
+			sMask += "*";
+			_maskLen --;
+		}
+		else
+		{
+			sMask += sReplaceValue[i];
+		}
+	}
+
+	return sMask;
+}
+
+/**
+* @description 	   : 전화번호 가운데번호 마스킹
+*/
+this.gfn_setMaskingTel = function(sValue)
+{
+	var sReplaceValue;
+	
+	var sMask = "";
+	
+	sReplaceValue = nexacro.replaceAll(sValue, " ", "");
+	
+	if(sValue.substr(0, 2)=="02")
+	{
+		if(sReplaceValue.length==9)
+		{
+			sMask = sReplaceValue.substring(0, 2) + "***" + sReplaceValue.substring(5, 9);
+		}else
+		{
+			sMask = sReplaceValue.substring(0, 2) + "****" + sReplaceValue.substring(6, 10);
+		}
+	}
+	else
+	{
+		if(sReplaceValue.length==10)
+		{
+			sMask = sReplaceValue.substring(0, 3) + "***" + sReplaceValue.substring(6, 10);
+		}else
+		{
+			sMask = sReplaceValue.substring(0, 3) + "****" + sReplaceValue.substring(7, 11);
+		}
+	}
+	
+	return sMask;
+};]]></Script>
