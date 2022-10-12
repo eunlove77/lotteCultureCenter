@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AdminChkPhone" width="1336" height="700" titletext="New Form" border="1px solid" color="black" onload="AdminChkPhone_onload" onsize="AdminChkPhone_onsize" ontimer="AdminChkPhone_ontimer">
+    <Layouts>
+      <Layout height="700" width="1336">
+        <Div id="chkPhoneDiv" taborder="0" text="" left="238" top="100" width="860" height="490" background="#ffffff" borderRadius="12px" visible="true">
+          <Layouts>
+            <Layout>
+              <Button id="chkNumBtn" taborder="0" text="인증번호 확인" left="350" top="240" width="334" height="40" cssclass="btn_WF_Login" onclick="chngPwdDiv_chngPwdBtn_onclick"/>
+              <Static id="Static00" taborder="1" text="" left="133" top="145" width="115" height="42" background="url('theme://images/log_WF_Logo.png') no-repeat center center /115px 42px" positionstep="0"/>
+              <Static id="Static01" taborder="2" text="휴대폰 번호인증" left="98" top="191" width="184" height="54" font="18px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+              <Button id="sendAuthBtn" taborder="3" text="인증번호 전송" left="582" top="129" width="102" height="40" cssclass="btn_WF_Login" visible="true" onclick="chkPhoneDiv_sendAuthBtn_onclick"/>
+              <Edit id="hpNo" taborder="4" left="352" top="129" width="221" height="40" text="123123" displaynulltext="휴대폰 번호입력" inputtype="digit" readonly="true"/>
+              <Edit id="authNum" taborder="5" left="350" top="179" width="221" height="40" text="123123" displaynulltext="인증번호를 입력하세요." onkeydown="chkPhoneDiv_authNum_onkeydown"/>
+              <Static id="Static03" taborder="6" left="592" top="186" width="80" height="25" color="red" textAlign="left"/>
+              <Static id="Static04" taborder="7" left="352" top="221" width="220" height="19"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.limitTime = 0;
+this.authNo = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.AdminChkPhone_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.fn_resizeCenter(this.chkPhoneDiv, obj.getOffsetWidth());
+	
+	var strSvcId    = "chkPhoneNum";
+	var strSvcUrl   = this.application.Loing_svc + "::chkPhoneNum.do";
+	var inData      = "";
+	var outData     = "ds_phone=hpInfo";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+		
+};
+
+// 인증번호 전송 버튼
+this.chkPhoneDiv_sendAuthBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.limitTime = 300; //5분
+	this.setTimer(obj.timekey, 1000); //타이머 시작
+	
+	this.fn_makeAuthNo(); //인증번호 생성
+};
+
+// 인증번호 확인 버튼
+this.chngPwdDiv_chngPwdBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var authNum = this.chkPhoneDiv.form.authNum.value;
+	
+	if(this.limitTime < 0)
+	{
+		this.alert("인증 가능 시간을 초과하였습니다.");
+	}
+	else if(authNum == undefined || authNum == '')
+	{
+		this.alert("인증번호를 입력하세요.");
+		this.chkPhoneDiv.form.authNum.setFocus();
+	}
+	else if(authNum != this.authNo)
+	{
+		this.alert("인증번호가 일치하지 않습니다.");
+		this.chkPhoneDiv.form.authNum.setFocus();
+	}
+	else
+	{
+		var strSvcId    = "completeAuth";
+		var strSvcUrl   = this.application.Loing_svc + "::completeAuth.do";
+		var inData      = "";
+		var outData     = "";
+		var strArg      = "";
+		var callBackFnc = "fnCallback";
+		var isAsync     = true;
+
+		this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+				strSvcUrl ,       // trabsaction을 요청할 주소
+				inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+				outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+				strArg,         // 입력값으로 보낼 arguments, a=b
+				callBackFnc,       // transaction의 결과를 받을 Function 이름
+				isAsync);         // 비동기통신 여부 [생략가능]
+		
+	}
+	
+};
+
+//처리콜백 함수
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorMsg + "[Code : " + errorCode + "]");
+		
+		return;
+	}
+	else
+	{
+		switch(svcID)
+		{
+			case "chkPhoneNum":      
+				//전화번호 마스킹처리
+				this.ds_phone.setColumn(0, "hpNo", this.gfn_setMaskingTel(this.ds_phone.getColumn(0, "hpNo")));
+			break;
+			case "completeAuth":			
+				this.killTimer(obj.timekey);
+				if(this.parent.lgnCd == 'f')
+				{
+					this.alert("비밀번호를 재설정합니다.");
+					this.parent.set_formurl("SystemMng::Login/AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
+				}
+				else
+				{
+					this.alert("계정이 활성화되었습니다.");
+					this.parent.set_formurl("FrameBase::Form_Login.xfdl"); // 로그인 페이지
+				}
+				
+			break;
+		}
+		
+	}
+
+};
+
+this.chkPhoneDiv_authNum_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+		this.chkPhoneDiv.form.chkNumBtn.click();
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.AdminChkPhone_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
+{
+	this.fn_resizeCenter(this.chkPhoneDiv, e.cx);
+};
+
+this.fn_resizeCenter = function(targetObj, pWidth){
+	var nCompWidth = targetObj.getOffsetWidth();
+	var nCompX = (pWidth/2) - (nCompWidth/2);
+	targetObj.setOffsetLeft(nCompX);
+}
+
+this.AdminChkPhone_ontimer = function(obj:nexacro.Form,e:nexacro.TimerEventInfo)
+{
+	if(this.limitTime < 0)
+	{
+		this.authNo = "";
+		this.killTimer(obj.timekey);
+	}
+	else
+	{
+		this.fn_setTimer(this.limitTime--);
+	}
+};
+
+// 타이머세팅
+this.fn_setTimer = function(time){
+	var minutes = parseInt(time / 60, 10);
+	var seconds = parseInt(time % 60, 10);
+
+		minutes = minutes < 10 ? "0" + minutes : minutes;
+		seconds = seconds < 10 ? "0" + seconds : seconds;
+	
+	this.chkPhoneDiv.form.Static03.set_text(minutes + ":" + seconds);
+}
+
+// 인증번호 생성
+this.fn_makeAuthNo = function(){
+	var authNo = '';
+
+	for (var i = 0; i < 6; i++) {
+		authNo += Math.floor(Math.random() * 10)
+	}
+	
+	this.authNo = authNo;
+	this.chkPhoneDiv.form.Static04.set_text("인증번호(임시노출): " + authNo);
+
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_phone">
+        <ColumnInfo>
+          <Column id="hpNo" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="hpNo" compid="chkPhoneDiv.form.hpNo" propid="value" datasetid="ds_phone" columnid="hpNo"/>
+    </Bind>
+  </Form>
+</FDL>
