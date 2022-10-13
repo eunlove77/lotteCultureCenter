@@ -20,23 +20,23 @@
                         </ColumnInfo>
                         <Rows>
                           <Row>
-                            <Col id="codecolumn">1</Col>
+                            <Col id="codecolumn">01</Col>
                             <Col id="datacolumn">회원가입</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">2</Col>
+                            <Col id="codecolumn">02</Col>
                             <Col id="datacolumn">수강신청'취소</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">3</Col>
+                            <Col id="codecolumn">03</Col>
                             <Col id="datacolumn">강좌'강사</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">4</Col>
+                            <Col id="codecolumn">04</Col>
                             <Col id="datacolumn">지점'홈페이지</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">5</Col>
+                            <Col id="codecolumn">05</Col>
                             <Col id="datacolumn">기타</Col>
                           </Row>
                         </Rows>
@@ -157,7 +157,7 @@
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="clCd">1</Col>
+            <Col id="clCd">01</Col>
             <Col id="expsrYn">Y</Col>
             <Col id="top5SlctYn">Y</Col>
           </Row>
@@ -255,6 +255,28 @@ this.fn_checkValidation = function(){
 		this.fn_save();
 	}	
 }
+
+this.fn_save = function ()
+{		
+	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::customer/insertInquiry.do";
+	var inData      = "data=ds_detail";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+
+};
 
 this.fn_detail = function ()
 {	
