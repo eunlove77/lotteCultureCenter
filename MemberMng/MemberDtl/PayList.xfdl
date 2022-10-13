@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="PayList" width="1280" height="550" titletext="New Form">
+    <Layouts>
+      <Layout height="550" width="1280">
+        <Div id="Div00" taborder="0" left="10" top="15" height="500" right="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" left="0" top="5" height="21" text="결제 내역" width="200"/>
+              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_coupon_list" autofittype="none" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="40" band="left"/>
+                      <Column size="70"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="70"/>
+                      <Column size="120"/>
+                      <Column size="100"/>
+                      <Column size="150"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="150"/>
+                      <Column size="110"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="150"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="90"/>
+                      <Column size="90"/>
+                      <Column size="80"/>
+                      <Column size="120"/>
+                      <Column size="60"/>
+                      <Column size="60"/>
+                      <Column size="60"/>
+                      <Column size="60"/>
+                      <Column size="150"/>
+                      <Column size="100"/>
+                      <Column size="60"/>
+                      <Column size="60"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호" edittype="checkbox" displaytype="checkboxcontrol"/>
+                      <Cell col="1" text="주문번호"/>
+                      <Cell col="2" text="실수강자"/>
+                      <Cell col="3" text="지점명"/>
+                      <Cell col="4" text="강좌유형"/>
+                      <Cell col="5" text="학기"/>
+                      <Cell col="6" text="강좌코드"/>
+                      <Cell col="7" text="강좌명"/>
+                      <Cell col="8" text="강사명"/>
+                      <Cell col="9" text="옵션명"/>
+                      <Cell col="10" text="강좌료"/>
+                      <Cell col="11" text="추가금액"/>
+                      <Cell col="12" text="오프라인할인"/>
+                      <Cell col="13" text="오프라인 할인금액"/>
+                      <Cell col="14" text="등급할인명"/>
+                      <Cell col="15" text="등급할인금액"/>
+                      <Cell col="16" text="쿠폰명"/>
+                      <Cell col="17" text="쿠폰 할인금액"/>
+                      <Cell col="18" text="추가금액할인"/>
+                      <Cell col="19" text="주문금액"/>
+                      <Cell col="20" text="총 결제금액"/>
+                      <Cell col="21" text="결제수단"/>
+                      <Cell col="22" text="결제일시"/>
+                      <Cell col="23" text="결제채널"/>
+                      <Cell col="24" text="결제상태"/>
+                      <Cell col="25" text="강좌구분"/>
+                      <Cell col="26" text="강좌요일"/>
+                      <Cell col="27" text="강의기간"/>
+                      <Cell col="28" text="강의시간"/>
+                      <Cell col="29" text="강의횟수"/>
+                      <Cell col="30" text="폐강여부"/>
+                      <Cell col="31" text="환불규정 확인서명"/>
+                      <Cell col="32" text="사은품 수령여부"/>
+                      <Cell col="33" text="사은품 신청번호"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:reqnId" expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                      <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="3" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                      <Cell col="4" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
+                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                      <Cell col="7" text="expr:dataset.getColumn(currow, &quot;useCnt&quot;) + &quot;/&quot; + dataset.getColumn(currow, &quot;issueCnt&quot;)"/>
+                      <Cell col="8" text="bind:rgprId"/>
+                      <Cell col="9"/>
+                      <Cell col="10"/>
+                      <Cell col="11"/>
+                      <Cell col="12"/>
+                      <Cell col="13"/>
+                      <Cell col="14"/>
+                      <Cell col="15"/>
+                      <Cell col="16"/>
+                      <Cell col="17"/>
+                      <Cell col="18"/>
+                      <Cell col="19"/>
+                      <Cell col="20"/>
+                      <Cell col="21"/>
+                      <Cell col="22"/>
+                      <Cell col="23"/>
+                      <Cell col="24"/>
+                      <Cell col="25"/>
+                      <Cell col="26"/>
+                      <Cell col="27"/>
+                      <Cell col="28"/>
+                      <Cell col="29"/>
+                      <Cell col="30"/>
+                      <Cell col="31"/>
+                      <Cell col="32"/>
+                      <Cell col="33"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>

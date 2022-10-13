@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="LPointList" width="1280" height="550" titletext="New Form">
+    <Layouts>
+      <Layout height="550" width="1280">
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="15" height="95" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="10" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="보유 포인트" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Static id="Static01" taborder="1" text="Static01" left="Static00:10" top="0" bottom="0" width="257"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00_00" taborder="1" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="포인트 지급/차감" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Button id="btnSearch00" taborder="1" text="차감" left="375" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80"/>
+                    <Button id="btnSearch" taborder="2" text="지급" left="290" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="125" top="5" width="160" height="21" readonly="false"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="0" left="10" top="Div00:10" height="420" right="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" left="0" top="5" height="21" text="LPoint 내역" width="200"/>
+              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_coupon_list" autofittype="col" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="50"/>
+                      <Column size="100"/>
+                      <Column size="150"/>
+                      <Column size="0"/>
+                      <Column size="200"/>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호"/>
+                      <Cell col="1" text="구분"/>
+                      <Cell col="2" text="LPoint 승인코드"/>
+                      <Cell col="3" text="일시"/>
+                      <Cell col="4" text="일시"/>
+                      <Cell col="5" text="지점명"/>
+                      <Cell col="6" text="포인트 금액"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell expr="dataset.getRowCount() - currow"/>
+                      <Cell col="1" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="2" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                      <Cell col="3" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                      <Cell col="4"/>
+                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
+                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>

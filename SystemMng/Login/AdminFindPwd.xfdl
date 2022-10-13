@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AdminFindPwd" width="1280" height="720" titletext="New Form" onload="AdminFindPwd_onload" onsize="AdminFindPwd_onsize">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="findPwdDiv" taborder="0" text="" left="238" top="100" width="860" height="490" background="#ffffff" borderRadius="12px" visible="true">
+          <Layouts>
+            <Layout>
+              <Div id="Div02" taborder="0" text="" left="350" top="156" width="320" height="40" cssclass="edt_WF_LoginForm">
+                <Layouts>
+                  <Layout>
+                    <Edit id="fnm" taborder="1" left="0" top="0" displaynulltext="이름" positionstep="0" password="false" right="0" bottom="0" cssclass="edt_WF_Login"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02_00" taborder="1" text="" left="350" top="206" width="320" height="40" cssclass="edt_WF_LoginForm">
+                <Layouts>
+                  <Layout>
+                    <Edit id="admId" taborder="0" left="0" top="0" displaynulltext="아이디" positionstep="0" password="false" right="0" bottom="0" cssclass="edt_WF_Login" onkeydown="findPwdDiv_Div02_00_id_onkeydown"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="findPwdBtn" taborder="2" text="비밀번호 찾기" left="350" top="256" width="320" height="40" cssclass="btn_WF_Login" onclick="chngPwdDiv_chngPwdBtn_onclick"/>
+              <Static id="Static00" taborder="3" text="" left="133" top="167" width="115" height="42" background="url('theme://images/log_WF_Logo.png') no-repeat center center /115px 42px" positionstep="0"/>
+              <Static id="Static02" taborder="4" text="이름과 아이디를 입력하세요." left="83" top="253" width="215" height="35" onclick="loginDiv00_Static01_onclick" textAlign="center" visible="true"/>
+              <Static id="Static01" taborder="5" text="비밀번호 찾기" left="98" top="213" width="184" height="54" font="18px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.AdminFindPwd_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.fn_resizeCenter(this.findPwdDiv, obj.getOffsetWidth());
+	this.findPwdDiv.form.findPwdBtn.setFocus();
+};
+
+// 비밀번호 변경 버튼
+this.chngPwdDiv_chngPwdBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+	var fnm = this.findPwdDiv.form.Div02.form.fnm.value;
+	var admId  = this.findPwdDiv.form.Div02_00.form.admId.value;
+	
+	if(fnm == undefined || fnm == ''){
+		this.alert("이름을 입력하세요.");
+		this.findPwdDiv.form.Div02.form.fnm.setFocus();
+	}else if(admId == undefined || admId == ''){
+		this.alert("아이디를 입력하세요.");
+		this.findPwdDiv.form.Div02_00.form.admId.setFocus();
+	}else{	
+	
+		this.ds_admin_info.setColumn(0, "fnm", fnm);
+		this.ds_admin_info.setColumn(0, "id", admId);
+	
+		var strSvcId    = "findPwd";
+		var strSvcUrl   = this.application.Loing_svc + "::findPwd.do";
+		var inData      = "admInfo=ds_admin_info";
+		var outData     = "";
+		var strArg      = "";
+		var callBackFnc = "fnCallback";
+		var isAsync     = true;
+
+		this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+				strSvcUrl ,       // trabsaction을 요청할 주소
+				inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+				outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+				strArg,         // 입력값으로 보낼 arguments, a=b
+				callBackFnc,       // transaction의 결과를 받을 Function 이름
+				isAsync);         // 비동기통신 여부 [생략가능]
+	}
+};
+
+//처리콜백 함수
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorMsg + "[Code : " + errorCode + "]");
+	
+		return;
+	}
+	else
+	{
+		this.parent.lgnCd = "f";
+		this.parent.set_formurl("SystemMng::Login/AdminChkPhone.xfdl"); // 휴대폰인증 페이지
+	}
+
+};
+
+this.findPwdDiv_Div02_00_id_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+		this.findPwdDiv.form.findPwdBtn.click();
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.AdminFindPwd_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
+{
+	this.fn_resizeCenter(this.chngPwdDiv, e.cx);
+};
+
+this.fn_resizeCenter = function(targetObj, pWidth){
+	var nCompWidth = targetObj.getOffsetWidth();
+	var nCompX = (pWidth/2) - (nCompWidth/2);
+	targetObj.setOffsetLeft(nCompX);
+}
+]]></Script>
+    <Objects>
+      <Dataset id="ds_admin_info">
+        <ColumnInfo>
+          <Column id="fnm" type="STRING" size="256"/>
+          <Column id="id" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

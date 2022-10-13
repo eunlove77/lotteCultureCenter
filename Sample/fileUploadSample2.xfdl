@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="fileUploadSample2" width="1280" height="720" titletext="New Form" onload="fileUploadSample2_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="45" top="20" height="300" right="45">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="파일업로드 샘플" left="0" top="1" width="100" cssclass="sta_WF_TitGray" height="17"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div03" taborder="2" text="Div01" left="0" top="24" height="156" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="파일업로드" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="111" top="3" height="141" async="true" right="0" url="FrameBase::include/file_upload.xfdl"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div00_00" taborder="1" text="Div00" left="45" top="230" height="300" right="45">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="파일업로드 샘플2" left="0" top="1" width="100" cssclass="sta_WF_TitGray" height="17"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div03" taborder="2" text="Div01" left="0" top="24" height="156" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="파일업로드" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="111" top="3" height="141" async="true" right="0" url="FrameBase::include/file_upload.xfdl"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button00" taborder="3" text="저장" left="-5" top="190" width="120" height="50" onclick="Div00_00_Button00_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_fileUpload">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.atchFileUploadArr = [];
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.fileUploadSample2_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	var atchFileId = this.ds_fileUpload.getColumn(0, "atchFileId");
+	var atchFileObj = {
+		_this : this,
+		atchFileId : atchFileId,
+		fileExtn : "jpg,jpeg,gif,png",
+		fileMaxCnt : 10,
+		fileMaxSize : 10,
+		fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+		callbackFunc : this.fn_save
+	}
+	
+	var atchFileId2 = this.ds_fileUpload.getColumn(1, "atchFileId");
+	var atchFileObj2 = {
+		_this : this,
+		atchFileId : atchFileId2,
+		fileExtn : "jpg,jpeg,gif,png",
+		fileMaxCnt : 10,
+		fileMaxSize : 10,
+		fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+		callbackFunc : this.fn_save
+	}
+	
+	//접근할 변수 설정
+	this.atchFileUploadArr.push(this.Div00.form.Div03.form.Div00.form);
+	this.atchFileUploadArr.push(this.Div00_00.form.Div03.form.Div00.form);
+	
+	//첨부파일 초기화
+	this.atchFileUploadArr[0].fn_init(atchFileObj);
+	this.atchFileUploadArr[1].fn_init(atchFileObj2);
+};
+
+//유효성 검사
+this.fn_checkValidation = function()
+{
+	if(this.atchFileUploadArr[0].fn_validation() > 0 && this.atchFileUploadArr[1].fn_validation() > 0)
+	{
+		this.atchFileUploadArr[0].fn_upload(); 
+		this.atchFileUploadArr[1].fn_upload(); 
+	}
+	else
+	{	
+		this.alert("첨부파일을 등록해주세요.");
+	}
+}
+
+this.Div00_00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
+};
+
+this.fn_save = function(_this)
+{
+	if(_this.atchFileUploadArr[0].isPass && _this.atchFileUploadArr[1].isPass)
+	{
+		alert("저장완료");
+		_this.ds_fileUpload.setColumn(0, "atchFileId", _this.atchFileUploadArr[0].atchFileId);
+		_this.ds_fileUpload.setColumn(1, "atchFileId", _this.atchFileUploadArr[1].atchFileId);
+		
+		var atchFileObj = {
+			_this : _this,
+			atchFileId : _this.ds_fileUpload.getColumn(0, "atchFileId"),
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 10,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : _this.fn_save
+		}
+		
+		var atchFileObj2 = {
+			_this : _this,
+			atchFileId : _this.ds_fileUpload.getColumn(1, "atchFileId"),
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 10,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : _this.fn_save
+		}
+		
+		_this.atchFileUploadArr[0].fn_init(atchFileObj);
+		_this.atchFileUploadArr[1].fn_init(atchFileObj2);
+	}
+}
+
+
+
+
+]]></Script>
+  </Form>
+</FDL>
