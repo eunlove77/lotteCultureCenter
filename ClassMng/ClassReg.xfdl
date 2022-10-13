@@ -481,7 +481,7 @@
                               <Layout>
                                 <Static id="Static00" taborder="0" text="대표이미지" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" usedecorate="true" height="248"/>
                                 <Button id="Button00" taborder="1" text="저장된 이미지" left="Static00:16" top="5" width="99" height="20" cssclass="btn_WF_Medium"/>
-                                <Div id="Div00" taborder="2" text="Div00" top="Button00:15" height="150" left="Static00:6" url="FrameBase::include/file_upload.xfdl" width="800"/>
+                                <Div id="Div00" taborder="2" text="Div00" top="Button00:15" height="150" left="Static00:6" width="800" async="false"/>
                                 <Edit id="Edit00" taborder="3" left="Static00:16" top="Div00:10" height="30" displaynulltext="사진설명" maxlength="100" width="750"/>
                               </Layout>
                             </Layouts>
@@ -503,7 +503,7 @@
                                       <Div id="templateArea0" taborder="1" text="Div01" left="0" top="Div00:15" right="0" visible="true" bottom="40">
                                         <Layouts>
                                           <Layout>
-                                            <Div id="Div00" taborder="0" text="Div00" left="6" top="0" height="150" width="800"/>
+                                            <Div id="Div00" taborder="0" text="Div00" left="6" top="0" height="150" width="800" async="false"/>
                                             <TextArea id="TextArea00" taborder="1" left="16" top="Div00:0" right="16" bottom="0" displaynulltext="내용을 입력해주세요."/>
                                           </Layout>
                                         </Layouts>
@@ -544,6 +544,28 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="준비물/특이사항" left="0" top="0" width="110" height="98" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_material_list" autofittype="col" oncellclick="Div00_Div00_00_00_00_01_00_Div00_Div02_Grid00_oncellclick" oninput="Div00_Div00_00_00_00_01_00_Div00_Div02_Grid00_oninput">
+                                  <Formats>
+                                    <Format id="default">
+                                      <Columns>
+                                        <Column size="1101"/>
+                                        <Column size="48"/>
+                                      </Columns>
+                                      <Rows>
+                                        <Row size="24" band="head"/>
+                                        <Row size="35"/>
+                                      </Rows>
+                                      <Band id="head">
+                                        <Cell text="준비물/특이사항"/>
+                                        <Cell col="1"/>
+                                      </Band>
+                                      <Band id="body">
+                                        <Cell text="bind:material" displaytype="editcontrol" edittype="text"/>
+                                        <Cell col="1" displaytype="buttoncontrol" edittype="button" text="expr:currow== &quot;0&quot; ? &quot;+&quot; : &quot;-&quot;"/>
+                                      </Band>
+                                    </Format>
+                                  </Formats>
+                                </Grid>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -551,6 +573,8 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌키워드" left="0" top="0" width="110" height="98" cssclass="sta_WF_TableLabel"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="25" right="6" maxlength="100"/>
+                                <Static id="Static01" taborder="2" text="쉼표(,)를 구분자로 사용하여 최대 N개까지 등록이 가능합니다." left="Static00:0" top="Edit00:10" width="356" height="21" cssclass="sta_WF_CompText"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -578,6 +602,24 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="MVG관 전시설정" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel"/>
+                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="148" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+                                  <Dataset id="innerdataset">
+                                    <ColumnInfo>
+                                      <Column id="codecolumn" size="256"/>
+                                      <Column id="datacolumn" size="256"/>
+                                    </ColumnInfo>
+                                    <Rows>
+                                      <Row>
+                                        <Col id="datacolumn">사용안함</Col>
+                                        <Col id="codecolumn">N</Col>
+                                      </Row>
+                                      <Row>
+                                        <Col id="datacolumn">사용</Col>
+                                        <Col id="codecolumn">Y</Col>
+                                      </Row>
+                                    </Rows>
+                                  </Dataset>
+                                </Radio>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -585,6 +627,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="메모" left="0" top="0" height="98" width="110" cssclass="sta_WF_TableLabel"/>
+                                <TextArea id="TextArea00" taborder="1" left="Static00:6" top="6" bottom="6" right="6"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -594,7 +637,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Button id="Button00" taborder="8" text="취소" left="45%" top="Div00_00_00_01:30" width="70" height="30" cssclass="btn_WF_High"/>
+              <Button id="Button00" taborder="8" text="취소" left="45%" top="Div00_00_00_01:30" width="70" height="30" cssclass="btn_WF_High" onclick="Div00_Button00_onclick"/>
               <Button id="Button01" taborder="9" text="등록" left="Button00:15" top="Div00_00_00_01:30" width="70" cssclass="btn_WF_Medium" height="30"/>
             </Layout>
           </Layouts>
@@ -612,9 +655,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.domain = "";
 
-//대표이미지 파일첨부
-this.thnlFileDiv = this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div00.form.Div00.form;
-this.thnlFileId  = "";
+this.thnlFileUpload;
 
 this.contentArr = [];
 this.atchfileArr = [];
@@ -627,6 +668,8 @@ this.ClassReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {	
 	this.application = nexacro.getApplication();
 	this.domain = this.application.getVariable("domain");
+	//지점 초기화
+	this.ds_class_dtl.setColumn(0, "spotCd", nexacro.getPrivateProfile("brchCd"));
 	
 	//화면초기화
 	this.init();
@@ -657,14 +700,27 @@ this.init = function()
 	
 	this.Div00.form.Div00_00_00_00_00.set_height(520);
 	
+	//대표이미지
+	var thnlFileId = this.ds_class_dtl.getColumn(0, "thnlFileId");
+	var thnlFileObj = {
+		_this : this,
+		atchFileId : thnlFileId,
+		fileExtn : "jpg,jpeg,gif,png",
+		fileMaxCnt : 1,
+		fileMaxSize : 10,
+		fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+		callbackFunc : this.fn_save
+	}
+	this.thnlFileUpload = this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div00.form.Div00.form;
+	this.thnlFileUpload.set_url("FrameBase::include/file_upload.xfdl");
+	//대표이미지 초기화
+	this.thnlFileUpload.fn_init(thnlFileObj);
+	
 	//컨텐츠 초기화
 	var contentObj = {
 		divObj : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0,
-		contentType : "",
-		atchfileId : "",
-		content : "",
-		contentPc : "",
-		contentMo : "",
+		contentType : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.Div00.form.Radio00,
+		content : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.templateArea0.form.TextArea00,
 		ord : 0
 	}
 	this.contentArr.push(contentObj);
@@ -672,9 +728,21 @@ this.init = function()
 	this.ds_content_list.addRow();
 	this.ds_content_list.setColumn(0, "contentType", 0);
 	
-	//첨부파일 초기화
-	this.atchfileArr.push(this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.templateArea0.form.Div00);
+	//첨부파일
+	this.atchfileArr.push(this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.templateArea0.form.Div00.form);
 	this.atchfileArr[0].set_url("FrameBase::include/file_upload.xfdl");
+	var atchFileId = this.ds_content_list.getColumn(0, "atchFileId");
+	var atchFileObj = {
+		_this : this,
+		atchFileId : atchFileId,
+		fileExtn : "jpg,jpeg,gif,png",
+		fileMaxCnt : 10,
+		fileMaxSize : 10,
+		fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+		callbackFunc : this.fn_save
+	}
+	//첨부파일 초기화
+	this.atchfileArr[0].fn_init(atchFileObj);
 	
 	//에디터 초기화
 	var editorObj = {
@@ -687,13 +755,7 @@ this.init = function()
 	this.editorArr[0].divPcObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 	this.editorArr[0].divMoObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 	
-	//대표 이미지 초기값
-	this.thnlFileDiv.fileExtn = "jpg,jpeg,gif,png";	//확장자(default : jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx)
-	this.thnlFileDiv.fileMaxCnt = 1 	//최대 파일개수(default : 1)
-	this.thnlFileDiv.fileMaxSize= 10 	//최대 파일크기(default : 10MB)
-	this.thnlFileDiv.fileTxt.set_text("※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)"); //파일 안내 문구 
-	//파일첨부 후 수행할 함수 전달
-	this.thnlFileDiv.FileUpTransfer00.insertEventHandler("onsuccess", 0, this.onSuccess, this);
+	this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div02.form.Grid00.setRealRowSize(-1, 0);
 	
 	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
 
@@ -719,7 +781,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_classGb_set();
 			this.fn_classTargetGb_set();
 			this.fn_classTime_set();
-			this.fn_spot_set();
 			this.fn_optType_set();
 		break;
 		
@@ -771,12 +832,6 @@ this.fn_classTargetGb_set = function()
 this.fn_classGb_set = function()
 {
 	this.Div00.form.Div00.form.Div00.form.Div00_07.form.Radio00.set_fittocontents("width");
-}
-
-//지점 세팅
-this.fn_spot_set = function()
-{	
-	this.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_index("0001");
 }
 
 //강좌유형 설정
@@ -1087,13 +1142,6 @@ this.fn_schedule_init = function(pObj, pObjName)
  * 강좌 상세정보 영역
 **************************************************************************/
 
-//파일첨부 완료 후 실행할 함수 (atchFileId 처리)
-this.onSuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
-{
-	this.thnlFileId = e.datasets[0].getColumn(0,"atchFileId");
-	this.ds_class_dtl.setColumn(0, "thnlFileId", this.thnlFileId);
-};
-
 //에디터 데이터 불러오기
 this.fn_get_edit_body = function(wbObj){
 	
@@ -1246,9 +1294,10 @@ this.fn_content_add = function()
 		objAtchFile.init("objAtchFile" + ord, 6, 0, 800, 150);
 		objTemplateArea.form.addChild("objAtchFile" + ord, objAtchFile);	
 		objAtchFile.show();	
+		objAtchFile.set_async(false);
 		objAtchFile.form.set_url("FrameBase::include/file_upload.xfdl");
 		//첨부파일 추가
-		this.atchfileArr.push(objAtchFile);
+		this.atchfileArr.push(objAtchFile.form);
 		
 		var objTextArea = new TextArea();
 		objTextArea.init("objTextArea" + ord, 16, "objAtchFile" + ord + ":0", null, null, 16, 0);
@@ -1278,16 +1327,26 @@ this.fn_content_add = function()
 		//컨텐츠 추가
 		var contentObj = {
 			divObj : objComp,
-			contentType : "",
-			atchfileId : "",
-			content : "",
-			contentPc : "",
-			contentMo : "",
+			contentType : objCompSubRadio,
+			content : objTextArea,
 			ord : ord
 		}
 		this.contentArr.push(contentObj);
-		this.ds_content_list.addRow();
-		this.ds_content_list.setColumn(0, "contentType", 0);
+		var contentIndex = this.ds_content_list.addRow();
+		this.ds_content_list.setColumn(contentIndex, "contentType", 0);
+			
+		//첨부파일 초기화
+		var atchFileId = this.ds_content_list.getColumn(contentIndex, "atchFileId");
+		var atchFileObj = {
+			_this : this,
+			atchFileId : atchFileId,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 10,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		this.atchfileArr[contentIndex].fn_init(atchFileObj);
 	}
 	
 }
@@ -1316,6 +1375,14 @@ this.fn_content_remove = function(obj)
 
 	this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.Static00.set_height(598 + (600 * (this.contentArr.length -1)));
 	this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.resetScroll();
+}
+
+/**************************************************************************
+ * 저장 영역
+**************************************************************************/
+this.fn_save = function(_this)
+{
+
 }
 
 /**************************************************************************
@@ -1562,7 +1629,6 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oninput = function(obj:nexacro.G
 			obj.setEditingValue(obj.getEditingValue().substr(0, 50));
 		}
 	}
-	
 };
 
 this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -1593,6 +1659,43 @@ this.fn_content_remove_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEv
 	this.fn_content_remove(obj.parent.parent);
 }
 
+
+this.Div00_Div00_00_00_00_01_00_Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 1)
+	{
+		if(e.row == 0)
+		{
+			if(this.ds_material_list.getRowCount() < 10)
+			{
+				this.ds_material_list.addRow();
+			}
+		} 
+		else
+		{
+			this.ds_material_list.deleteRow(e.row);
+		}
+	}
+};
+
+this.Div00_Div00_00_00_00_01_00_Div00_Div02_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
+{
+	if(obj.currentcol == 0)
+	{
+		if(obj.getEditingValue() != "" && obj.getEditingValue() != undefined)
+		{		
+			obj.setEditingValue(obj.getEditingValue().substr(0, 100));
+		}
+	}
+};
+
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("강좌등록을 취소하시겠습니까?"))
+	{
+		this.close();
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_classCtgy_list">
@@ -1611,6 +1714,10 @@ this.fn_content_remove_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEv
           <Column id="optType" type="STRING" size="256"/>
           <Column id="thnlFileId" type="STRING" size="256"/>
           <Column id="preThnlFileYn" type="STRING" size="256"/>
+          <Column id="keyword" type="STRING" size="256"/>
+          <Column id="mvgYn" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row>
@@ -1620,6 +1727,7 @@ this.fn_content_remove_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEv
             <Col id="disYn">Y</Col>
             <Col id="optYn">N</Col>
             <Col id="optType">CODE_73_1</Col>
+            <Col id="mvgYn">N</Col>
           </Row>
         </Rows>
       </Dataset>
@@ -1751,6 +1859,14 @@ this.fn_content_remove_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEv
           </Row>
         </Rows>
       </Dataset>
+      <Dataset id="ds_material_list">
+        <ColumnInfo>
+          <Column id="material" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00" propid="value" datasetid="ds_class_dtl" columnid="ctgyCd"/>
@@ -1759,6 +1875,10 @@ this.fn_content_remove_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEv
       <BindItem id="item4" compid="Div00.form.Div00.form.Div00.form.Div00_08.form.Radio00" propid="value" datasetid="ds_class_dtl" columnid="disYn"/>
       <BindItem id="item1" compid="Div00.form.Div00_00_00_00_01.form.Div00.form.Div00.form.Radio00" propid="value" datasetid="ds_class_dtl" columnid="optYn"/>
       <BindItem id="item5" compid="Div00.form.Div00_00_00_00_01.form.Div00.form.Div01.form.Radio00" propid="value" datasetid="ds_class_dtl" columnid="optType"/>
+      <BindItem id="item6" compid="Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div03.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="keyword"/>
+      <BindItem id="item7" compid="Div00.form.Div00_00_00_01.form.Div00.form.Div01.form.Radio00" propid="value" datasetid="ds_class_dtl" columnid="mvgYn"/>
+      <BindItem id="item8" compid="Div00.form.Div00_00_00_01.form.Div00.form.Div02.form.TextArea00" propid="value" datasetid="ds_class_dtl" columnid="memo"/>
+      <BindItem id="item9" compid="Div00.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_class_dtl" columnid="spotCd"/>
     </Bind>
   </Form>
 </FDL>
