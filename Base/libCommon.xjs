@@ -415,7 +415,45 @@ this.gfn_setCellTelMaskFormat = function(sValue)
 	return sMask;
 };
 
+/**
+ * 숫자에 천단위 "," 적용
+ * @param {String} sNum		숫자형식 확인 대상 문자열
+ * @return {String} 결과값
+ */
+this.gfn_setComma = function(sNum)
+{
+	var ppos, sDigit, nEnd, nStart=0, sRet="";
 
+	if (this.gfn_isNull(sNum))		return "";
+	
+	sNum += "";
+
+	if (sNum.charAt(0) == "+" || sNum.charAt(0) == "-")
+	{
+		sRet += sNum.charAt(0);
+		nStart = 1;
+	}
+
+	ppos = sNum.indexOf(".", nStart);
+	if ( ppos < 0 )
+		nEnd = sNum.length;
+	else
+		nEnd = ppos;
+	sDigit = sNum.substr(nStart, nEnd-nStart);
+	for( pos = 0 ; pos < sDigit.length ; pos ++ )
+	{
+		if ( pos != 0 && (sDigit.length-pos)%3 == 0 )
+			sRet += ",";
+		sRet += sDigit.charAt(pos);
+	}
+	
+	sRet += sNum.substr(nEnd);
+	sRet = sRet;
+	
+	return sRet;
+	
+	
+}
 
 this.gfn_headCheckBox = function(obj, curCellIndex, strColName){
 	var headerCell = obj.getBindCellIndex("body", strColName);
