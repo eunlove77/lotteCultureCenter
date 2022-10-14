@@ -412,8 +412,6 @@ this.validation_check = function(){
 	return result;
 }
 
-
-
 /**************************************************************************
  * 검색 영역
  **************************************************************************/
@@ -422,83 +420,6 @@ this.Div02_searchField_onitemchanged = function(obj:nexacro.Combo,e:nexacro.Item
 	console.log('콤보');
 };
 
-/**************************************************************************
- * 그리드 체크박스 영역
- **************************************************************************/
-this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
-{ 
-	//체크여부 정보를 담을 Array를 사용자 변수로 설정
-	objDs.checkarray = new Array(); 
-
-	//데이터셋 온로드이벤트 추가
-	objDs.addEventHandler("onload", this.gfnDataset_onload); 
-
-	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
-	objGrd.checkcell = nCheckCellIdx; 
-	
-	//그리드 Cell Click 이벤트 추가
-	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick); 
-	
-	//그리드 Head Click 이벤트 추가
-	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
-} 
-this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
-{ 
-	if(e.reason==0) 
-	{ 
-		//데이터셋이 로드되면 checkarray 초기화
-		obj.checkarray = new Array(); 
-	} 
-}; 
-this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var objDs; 
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		
-		if(objDs.checkarray[e.row]==1) 
-		{ 
-			//체크 해제
-			objDs.checkarray[e.row] = 0; 
-		}else 
-		{ 
-			//체크 설정
-			objDs.checkarray[e.row] = 1; 
-		}
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-}; 
-this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var i; 
-	var objDs;
-	
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		nChkVal = obj.getCellText(-1, e.cell); 
-
-		if(nChkVal==1)nChkVal = 0; 
-		else nChkVal = 1; 
-		
-		//Head의 체크 상태 변경
-		obj.setCellProperty("head", e.cell, "text", nChkVal); 
-
-		//Body의 체크 상태 변경
-		for(i=0;i<objDs.rowcount;i++) 
-		{ 
-			objDs.checkarray[i] = nChkVal; 
-		} 
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-};
 this.row02_Div04_ComboSpot_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	
