@@ -1,13 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="SemesterReg" width="1280" height="720" titletext="New Form">
+  <Form id="SemesterReg" width="1280" height="720" titletext="New Form" onload="SemesterReg_onload">
     <Layouts>
       <Layout height="720" width="1280">
-        <Static id="txtMenuNm" taborder="0" text="학기등록" left="7" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div00" taborder="1" text="Div00" left="10" top="66" right="10" bottom="-2780">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="7" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="66" right="10" bottom="0">
           <Layouts>
             <Layout>
-              <Div id="Div01" taborder="0" text="Div00" left="0" top="84" right="0" height="200" minwidth="800" maxwidth="">
+              <Div id="Div00" taborder="1" text="Div00" left="0" top="0" height="110" formscrolltype="both" right="0" minwidth="800" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
+                    <Div id="Div00_00" taborder="1" text="Div01" top="30" height="33" cssclass="div_WF_CompWrap" left="0" right="870" minwidth="250" maxwidth="">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_00_Combo00_onitemchanged"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div00_01" taborder="2" text="Div01" top="30" height="33" cssclass="div_WF_CompWrap" left="Div00_00:-1" right="0" minwidth="550" maxwidth="">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="100" height="20" innerdataset="ds_semester_list" codecolumn="cd" datacolumn="cdNm"/>
+                          <Button id="Button00" taborder="3" text="검색" top="5" cssclass="btn_WF_Medium" height="20" width="80" right="116" onclick="Div00_Div00_Div00_01_Button00_onclick"/>
+                          <Button id="Button01" taborder="4" text="초기화" left="Button00:10" top="5" height="20" cssclass="btn_WF_Low" width="80" onclick="Div00_Div00_Div00_01_Button01_onclick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Button id="Button00" taborder="3" text="신규학기" top="Div00_01:10" height="30" width="100" right="0" cssclass="btn_WF_Medium" onclick="Div00_Div00_Button00_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="0" text="Div00" left="0" top="Div00:10" right="0" minwidth="800" maxwidth="" height="300" visible="false">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="[$지점코드$] $지점명$ 학기정보" left="0" top="10" width="200" height="14" cssclass="sta_WF_TitGray"/>
@@ -15,7 +42,8 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Static id="Static01" taborder="1" text="$년도$ $학기$" left="Static00:10" top="0" width="283" bottom="0"/>
+                          <Static id="Static01" taborder="1" text="0000년" left="Static00:10" top="0" width="39" height="31"/>
+                          <Static id="Static02" taborder="2" text="무슨학기" left="Static01:6" top="0" width="48" height="31"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -23,9 +51,9 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="학기기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="150" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar00_oncloseup"/>
+                          <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_01_Calendar00_oncloseup" dateformat="yyyy-MM-dd"/>
                           <Static id="Static01" taborder="3" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
-                          <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar01_oncloseup"/>
+                          <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_01_Calendar01_oncloseup" dateformat="yyyy-MM-dd"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -33,9 +61,9 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="접수기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar00_oncloseup"/>
+                          <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_02_Calendar00_oncloseup" dateformat="yyyy-MM-dd"/>
                           <Static id="Static01" taborder="3" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
-                          <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar01_oncloseup"/>
+                          <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_02_Calendar01_oncloseup" dateformat="yyyy-MM-dd"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -43,16 +71,16 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="기존회원 접수기간" left="0" top="0" width="150" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar00_oncloseup"/>
+                          <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_03_Calendar00_oncloseup" dateformat="yyyy-MM-dd"/>
                           <Static id="Static01" taborder="3" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
-                          <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar01_oncloseup"/>
+                          <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_03_Calendar01_oncloseup" dateformat="yyyy-MM-dd"/>
                         </Layout>
                       </Layouts>
                     </Div>
                     <Div id="Div00_04" taborder="5" text="Div01" top="104" height="80" cssclass="div_WF_CompWrap" left="0" right="0" minwidth="800" maxwidth="">
                       <Layouts>
                         <Layout>
-                          <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                          <Static id="Static00" taborder="0" text="요일별 &#13;&#10;강의횟수 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
                           <Div id="Div00" taborder="1" text="" left="Static00:0" top="-1" bottom="0" minwidth="99" maxwidth="" right="78.3%" border="0px none, 1px solid #e6e6e6, 0px none, 0px none">
                             <Layouts>
                               <Layout>
@@ -119,34 +147,7 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Button id="Button00" taborder="6" text="신규학기" top="0" height="30" width="100" right="20" cssclass="btn_WF_Medium"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Button id="Button01" taborder="1" text="저장" left="47.19%" top="Div01:29" width="70" cssclass="btn_WF_Medium" height="30"/>
-              <Div id="Div00" taborder="2" text="Div00" left="0" top="0" height="74" formscrolltype="both" right="0" minwidth="800" maxwidth="">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
-                    <Div id="Div00_00" taborder="1" text="Div01" top="30" height="33" cssclass="div_WF_CompWrap" left="0" right="870" minwidth="250" maxwidth="">
-                      <Layouts>
-                        <Layout>
-                          <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd"/>
-                        </Layout>
-                      </Layouts>
-                    </Div>
-                    <Div id="Div00_01" taborder="2" text="Div01" top="30" height="33" cssclass="div_WF_CompWrap" left="Div00_00:-1" right="0" minwidth="550" maxwidth="">
-                      <Layouts>
-                        <Layout>
-                          <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="100" height="20" innerdataset="ds_semester_list" codecolumn="cd" datacolumn="cdNm"/>
-                          <Button id="Button00" taborder="3" text="검색" top="5" cssclass="btn_WF_Medium" height="20" width="80" right="116"/>
-                          <Button id="Button01" taborder="4" text="초기화" left="Button00:10" top="5" height="20" cssclass="btn_WF_Low" width="80"/>
-                        </Layout>
-                      </Layouts>
-                    </Div>
+                    <Button id="Button01" taborder="6" text="저장" left="47.22%" top="Div00_04:20" width="70" cssclass="btn_WF_Medium" height="30" onclick="Div00_Div01_Button01_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -155,5 +156,595 @@
         </Div>
       </Layout>
     </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.atchFileUpload;
+
+this.initYy = "";
+this.initLectSmsterCd = 0;
+
+this.brchCd = "";
+this.flag = false;
+
+this.yy = "";
+this.lectSmsterCd = "";
+this.prevSmsterPrdEndDt = "";
+this.nextSmsterPrdStDt = "";
+
+this.lectNbcntArr = [
+						this.Div00.form.Div01.form.Div00_04.form.Div03_00_00_00.form.MaskEdit00
+						, this.Div00.form.Div01.form.Div00_04.form.Div00.form.MaskEdit00
+						, this.Div00.form.Div01.form.Div00_04.form.Div01.form.MaskEdit00
+						, this.Div00.form.Div01.form.Div00_04.form.Div02.form.MaskEdit00
+						, this.Div00.form.Div01.form.Div00_04.form.Div03.form.MaskEdit00
+						, this.Div00.form.Div01.form.Div00_04.form.Div03_00.form.MaskEdit00
+						, this.Div00.form.Div01.form.Div00_04.form.Div03_00_00.form.MaskEdit00	
+				   ]
+
+this.lectSmsterArr = ["봄학기", "여름학기", "가을학기", "겨울학기"]; 
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.SemesterReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.brchNm = nexacro.getPrivateProfile("brchNm");
+	
+	this.Div00.form.Div01.form.Static00.set_text("[" + this.brchCd + "] " + this.brchNm  + " 학기정보");
+	
+	this.init();
+	
+	//강의 학기정보 조회
+	this.fn_sesterInfo();
+	this.fn_year_add();
+	this.fn_semester_set();
+};
+
+/**************************************************************************
+ * 초기화 영역
+**************************************************************************/
+this.init = function()
+{
+	this.ds_semester_dtl.clearData();
+	this.ds_semester_dtl.addRow();
+	
+	this.ds_semester_dw_list.clearData();
+	for(var i=0; i<7; i++)
+	{
+		this.ds_semester_dw_list.addRow();
+		this.lectNbcntArr[i].set_value("");
+	}
+	
+}
+
+/**************************************************************************
+ * 트랜잭션 callback
+**************************************************************************/
+this.fnCallback = function(svcID, errorCode, errorMsg, sesterInfo, test)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+  else 
+  {
+	 switch(svcID)
+	  {
+		case "selectSester":
+			this.fn_sester_dtl();
+		break;
+		case "sesterInfo":
+		break;
+		case "insertSester":
+			alert("저장되었습니다.");
+			this.fn_sesterInfo();
+			if(this.prevSmsterPrdEndDt != "")
+			{
+				this.fn_year_add();
+				this.fn_semester_set();
+			}
+		break;
+		case "updateSester":
+			alert("저장되었습니다.");
+		break;
+	  }
+  }
+};
+
+/**************************************************************************
+ * 학기 정보 조회
+**************************************************************************/
+this.fn_sester_dtl = function()
+{
+	if(this.ds_semester_dtl.getColumn(0, "brchCd") != undefined)
+	{
+		this.Div00.form.Div01.set_visible(true);
+		
+		this.Div00.form.Div01.form.Div00_00.form.Static01.set_text(this.ds_semester_dtl.getColumn(0, "yy") + "년");
+		this.Div00.form.Div01.form.Div00_00.form.Static02.set_text(this.lectSmsterArr[this.ds_semester_dtl.getColumn(0, "lectSmsterCd")-1]);
+		
+		for(var i=0; i < this.ds_semester_dw_list.getRowCount(); i++)
+		{
+			this.lectNbcntArr[i].set_value(this.ds_semester_dw_list.getColumn(i, "lectNbcnt"));
+		}
+	}
+	else
+	{
+		this.Div00.form.Div01.set_visible(false);
+	}
+}
+
+
+
+this.fn_sesterInfo = function()
+{	
+	this.ds_search.setColumn(0, "brchCd", this.brchCd);
+	
+	var tranObj = {
+		strSvcId : "sesterInfo",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
+		inData : "search=ds_search",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		
+	}
+
+	this.gfn_transaction(tranObj);
+};
+
+this.fn_search = function()
+{	
+	this.init();
+	this.flag = true;
+	
+	var tranObj = {
+		strSvcId : "selectSester",
+		strSvcUrl : this.application.Admin_svc + "::class/selectSesterDtl.do",
+		inData : "search=ds_search",
+		outData : "ds_semester_dtl=sesterDtl ds_semester_dw_list=sesterDwList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		
+	}
+
+	this.gfn_transaction(tranObj);
+};
+
+//학기 새로고침
+this.fn_refresh = function()
+{
+	this.fn_sesterInfo();
+	this.fn_year_add();
+	this.fn_semester_set();
+}
+
+//학기 연도 추가
+this.fn_year_add = function() 
+{
+	var year = new nexacro.Date().getFullYear();
+	this.initYy = year;
+
+	if(this.yy != "")
+	{
+		year = nexacro.toNumber(this.yy);
+	}
+	
+
+	this.ds_year_list.clearData();
+
+	for(var i =0; i <= 15; i++) 
+	{
+		this.ds_year_list.addRow();
+		this.ds_year_list.setColumn(i, "cd", year-i);
+		this.ds_year_list.setColumn(i, "cdNm", (year-i) + "년");
+		
+	}
+
+	this.Div00.form.Div00.form.Div00_01.form.Combo00.set_index(0);
+}
+
+//학기 설정
+this.fn_semester_set = function() 
+{
+	if(this.lectSmsterCd != "")
+	{
+		var lectSmsterCd = nexacro.toNumber(this.lectSmsterCd);
+		this.Div00.form.Div00.form.Div00_01.form.Combo01.set_index(lectSmsterCd-1);
+	}
+	else
+	{
+		var month = new nexacro.Date().getMonth()+1;
+	
+		if(3 <= month && month <= 5)
+		{
+			//봄
+			this.initLectSmsterCd = 1;
+			this.Div00.form.Div00.form.Div00_01.form.Combo01.set_index(0);
+		}
+		else if(6 <= month && month <= 8)
+		{
+			//여름
+			this.initLectSmsterCd = 2;
+			this.Div00.form.Div00.form.Div00_01.form.Combo01.set_index(1);
+		}
+		else if(9 <= month && month <= 11)
+		{
+			//가을
+			this.initLectSmsterCd = 3;
+			this.Div00.form.Div00.form.Div00_01.form.Combo01.set_index(2);
+		}	
+		else
+		{
+			//겨울
+			this.initLectSmsterCd = 4;
+			this.Div00.form.Div00.form.Div00_01.form.Combo01.set_index(3);
+		}
+	}
+	
+}
+
+/**************************************************************************
+ * 학기 정보 생성
+**************************************************************************/
+
+this.fn_create = function()
+{
+	this.init();
+	this.flag = false;
+	
+	this.ds_semester_dtl.setColumn(0, "brchCd", this.brchCd);
+	for(var i=0; i<7; i++){
+		this.ds_semester_dw_list.setColumn(i, "brchCd", this.brchCd);
+	}
+
+	if(this.yy != "")
+	{
+		var yy = nexacro.toNumber(this.yy);
+		var lectSmsterCd = nexacro.toNumber(this.lectSmsterCd);
+		
+		if(lectSmsterCd == 4)
+		{
+			lectSmsterCd = 1;
+			yy++;
+		}
+		else
+		{
+			lectSmsterCd++;
+		}
+		
+		this.ds_semester_dtl.setColumn(0, "yy", yy);
+		this.ds_semester_dtl.setColumn(0, "lectSmsterCd", lectSmsterCd);
+		for(var i=0; i<7; i++){
+			this.ds_semester_dw_list.setColumn(i, "yy", yy);
+			this.ds_semester_dw_list.setColumn(i, "lectSmsterCd", lectSmsterCd);
+		}
+
+		this.Div00.form.Div01.form.Div00_00.form.Static01.set_text(yy+"년");
+		this.Div00.form.Div01.form.Div00_00.form.Static02.set_text(this.lectSmsterArr[lectSmsterCd-1]);
+	}
+	else
+	{		
+		this.ds_semester_dtl.setColumn(0, "yy", this.initYy);
+		this.ds_semester_dtl.setColumn(0, "lectSmsterCd", this.initLectSmsterCd);
+		for(var i=0; i<7; i++){
+			this.ds_semester_dw_list.setColumn(i, "yy", this.initYy);
+			this.ds_semester_dw_list.setColumn(i, "lectSmsterCd", this.initLectSmsterCd);
+		}
+		
+		this.Div00.form.Div01.form.Div00_00.form.Static01.set_text(this.initYy + "년");
+		this.Div00.form.Div01.form.Div00_00.form.Static02.set_text(this.lectSmsterArr[this.initLectSmsterCd-1]);
+	}
+	
+	this.Div00.form.Div01.set_visible(true);
+}
+
+//유효성검사
+this.fn_save_validation = function()
+{
+	for(var i=0; i < this.ds_semester_dtl.getRowCount(); i++)
+	{
+		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "smsterPrdStDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "smsterPrdStDt")) == "")
+		{
+			alert("학기기간 시작일을 입력하세요.");
+			return;
+		}
+		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt")) == "")
+		{
+			alert("학기기간 종료일을 입력하세요.");
+			return;
+		}
+		
+		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "rceptPrdStDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "rceptPrdStDt")) == "")
+		{
+			alert("접수기간 시작일을 입력하세요.");
+			return;
+		}
+		
+		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt")) == "")
+		{
+			alert("접수기간 종료일을 입력하세요.");
+			return;
+		}
+		if(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt") >= this.ds_semester_dtl.getColumn(0, "smsterPrdStDt"))
+		{
+			alert("학기기간은 접수기간 이전으로 설정할 수 없습니다.");
+			return;
+		}
+		
+		if(this.prevSmsterPrdEndDt != "")
+		{
+			if(this.prevSmsterPrdEndDt >= this.ds_semester_dtl.getColumn(0, "smsterPrdStDt"))
+			{
+				alert("이전학기 하기기간 이전으로 설정할 수 없습니다.");
+				return;
+			}
+		}
+		
+		if(this.nextSmsterPrdStDt != "")
+		{
+			if(this.nextSmsterPrdStDt <= this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt"))
+			{
+				alert("다음학기 학기기간 이후로 설정할 수 없습니다.");
+				return;
+			}
+		}
+	}
+	
+	var dwArr = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"]
+
+	for(var i=1; i < this.ds_semester_dw_list.getRowCount(); i++)
+	{
+		if(this.gfn_nvl(this.ds_semester_dw_list.getColumn(i, "lectNbcnt")) == "")
+		{
+			var dwStr = dwArr[i] + " 강의횟수를 입력하세요.";
+			alert(dwStr);
+			return;
+		}
+	}
+	
+	if(this.gfn_nvl(this.ds_semester_dw_list.getColumn(0, "lectNbcnt")) == "")
+	{
+		var dwStr = dwArr[0] + " 강의횟수를 입력하세요.";
+		alert(dwStr);
+		return;
+	}
+	
+	if(confirm("학기정보를 저장하시겠습니까?"))
+	{
+		this.fn_save();
+	}
+}
+
+//저장
+this.fn_save = function()
+{
+	var strSvcId = "insertSester";
+	var strSvcUrl = "::class/insertSester.do"
+	
+	if(this.flag)
+	{
+		strSvcId = "updateSester";
+		strSvcUrl = "::class/updateSester.do"
+	}
+
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : this.application.Admin_svc + strSvcUrl,
+		inData : "sesterDtl=ds_semester_dtl sesterDwList=ds_semester_dw_list",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		
+	}
+	this.gfn_transaction(tranObj);
+	
+	this.flag = true;
+}
+
+
+/**************************************************************************
+ * 이벤트 영역
+**************************************************************************/
+
+this.Div00_Div00_Div00_01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.fn_refresh();
+};
+
+this.Div00_Div00_Div00_01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_search();
+};
+
+this.Div00_Div00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.brchCd = obj.value;
+	this.Div00.form.Div01.form.Static00.set_text("[" + obj.value + "] " + obj.text + " 학기정보");
+	this.fn_sesterInfo();
+	this.fn_year_add();
+	this.fn_semester_set();
+};
+
+this.Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_create();
+};
+
+this.Div00_Div01_Div00_01_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00_01.form.Calendar01.value) != "" && this.Div00.form.Div01.form.Div00_01.form.Calendar01.value < obj.value)
+	{
+		obj.set_value("");
+	}
+};
+
+this.Div00_Div01_Div00_01_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00_01.form.Calendar00.value) != "" && obj.value < this.Div00.form.Div01.form.Div00_01.form.Calendar00.value)
+	{
+		this.Div00.form.Div01.form.Div00_01.form.Calendar00.set_value("");
+	}
+};
+this.Div00_Div01_Div00_02_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00_02.form.Calendar01.value) != "" && this.Div00.form.Div01.form.Div00_02.form.Calendar01.value < obj.value)
+	{
+		obj.set_value("");
+	}
+};
+
+this.Div00_Div01_Div00_02_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00_02.form.Calendar00.value) != "" && obj.value < this.Div00.form.Div01.form.Div00_02.form.Calendar00.value)
+	{
+		this.Div00.form.Div01.form.Div00_02.form.Calendar00.set_value("");
+	}
+};
+
+this.Div00_Div01_Div00_03_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00_03.form.Calendar01.value) != "" && this.Div00.form.Div01.form.Div00_03.form.Calendar01.value < obj.value)
+	{
+		obj.set_value("");
+	}
+};
+
+this.Div00_Div01_Div00_03_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00_03.form.Calendar00.value) != "" && obj.value < this.Div00.form.Div01.form.Div00_03.form.Calendar00.value)
+	{
+		this.Div00.form.Div01.form.Div00_03.form.Calendar00.set_value("");
+	}
+};
+
+this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var tranObj = {
+		strSvcId : "sesterOtherInfo",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterOtherInfo.do",
+		inData : "sesterDtl=ds_semester_dtl",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		
+	}
+	this.gfn_transaction(tranObj);
+	
+	//요일 정보 세팅
+	for(var i=0; i<7; i++)
+	{
+		this.ds_semester_dw_list.setColumn(i, "daywCd", i);
+		this.ds_semester_dw_list.setColumn(i, "lectNbcnt", this.lectNbcntArr[i].value);
+	}
+	
+	this.fn_save_validation();
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_semester_dtl">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="smsterPrdStDt" type="STRING" size="256"/>
+          <Column id="smsterPrdEndDt" type="STRING" size="256"/>
+          <Column id="rceptPrdStDt" type="STRING" size="256"/>
+          <Column id="rceptPrdEndDt" type="STRING" size="256"/>
+          <Column id="extngMbrRceptPrdStDt" type="STRING" size="256"/>
+          <Column id="extngMbrRceptPrdEndDt" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="DATETIME" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="DATETIME" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_semester_dw_list">
+        <ColumnInfo>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="daywCd" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="INT" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="DATETIME" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="DATETIME" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_semester_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">1</Col>
+            <Col id="cdNm">봄학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">2</Col>
+            <Col id="cdNm">여름학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">3</Col>
+            <Col id="cdNm">가을학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">4</Col>
+            <Col id="cdNm">겨울학기</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_year_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div00.form.Div00_00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
+      <BindItem id="item1" compid="Div00.form.Div00.form.Div00_01.form.Combo00" propid="value" datasetid="ds_search" columnid="yy"/>
+      <BindItem id="item2" compid="Div00.form.Div01.form.Div00_01.form.Calendar00" propid="value" datasetid="ds_semester_dtl" columnid="smsterPrdStDt"/>
+      <BindItem id="item3" compid="Div00.form.Div01.form.Div00_01.form.Calendar01" propid="value" datasetid="ds_semester_dtl" columnid="smsterPrdEndDt"/>
+      <BindItem id="item4" compid="Div00.form.Div01.form.Div00_02.form.Calendar00" propid="value" datasetid="ds_semester_dtl" columnid="rceptPrdStDt"/>
+      <BindItem id="item5" compid="Div00.form.Div01.form.Div00_02.form.Calendar01" propid="value" datasetid="ds_semester_dtl" columnid="rceptPrdEndDt"/>
+      <BindItem id="item6" compid="Div00.form.Div01.form.Div00_03.form.Calendar00" propid="value" datasetid="ds_semester_dtl" columnid="extngMbrRceptPrdStDt"/>
+      <BindItem id="item7" compid="Div00.form.Div01.form.Div00_03.form.Calendar01" propid="value" datasetid="ds_semester_dtl" columnid="extngMbrRceptPrdEndDt"/>
+      <BindItem id="item8" compid="Div00.form.Div00.form.Div00_01.form.Combo01" propid="value" datasetid="ds_search" columnid="lectSmsterCd"/>
+    </Bind>
   </Form>
 </FDL>
