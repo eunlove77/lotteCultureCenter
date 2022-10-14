@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="770" width="1280">
         <Combo id="deptList" taborder="0" text="" left="9" top="71" width="150" height="30" innerdataset="gdsAuthCdList" codecolumn="cd" datacolumn="cdNm" onitemchanged="deptList_onitemchanged" index="0" value=""/>
-        <Grid id="GridAuthList" taborder="1" left="10" top="105" height="645" binddataset="ds_menu_auth" nodatatext="부서를 선택해주세요." oncellclick="GridAuthList_oncellclick" treeusecheckbox="false" treeuseimage="false" autofittype="col" right="10" treeinitstatus="collapse,null">
+        <Grid id="GridAuthList" taborder="1" left="10" top="105" height="655" binddataset="ds_menu_auth" nodatatext="부서를 선택해주세요." oncellclick="GridAuthList_oncellclick" treeusecheckbox="false" treeuseimage="false" autofittype="col" right="10" treeinitstatus="collapse,null">
           <Formats>
             <Format id="default">
               <Columns>
@@ -15,6 +15,9 @@
                 <Column size="120"/>
                 <Column size="120"/>
                 <Column size="120"/>
+                <Column size="120"/>
+                <Column size="150"/>
+                <Column size="150"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -22,21 +25,27 @@
               </Rows>
               <Band id="head">
                 <Cell text="메뉴명"/>
-                <Cell col="1" text="접근가능여부"/>
-                <Cell col="2" text="검색가능여부"/>
-                <Cell col="3" text="저장가능여부"/>
-                <Cell col="4" text="삭제가능여부"/>
-                <Cell col="5" text="프린트가능여부"/>
-                <Cell col="6" text="엑셀다운가능여부"/>
+                <Cell col="1" text="VDI 메뉴접근가능여부"/>
+                <Cell col="2" text="메뉴접근가능여부"/>
+                <Cell col="3" text="검색가능여부"/>
+                <Cell col="4" text="저장가능여부"/>
+                <Cell col="5" text="삭제가능여부"/>
+                <Cell col="6" text="프린트가능여부"/>
+                <Cell col="7" text="알림톡발송가능여부"/>
+                <Cell col="8" text="엑셀다운가능여부(일반망)"/>
+                <Cell col="9" text="엑셀다운가능여부(VDI)"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:menuNm" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:dpth" expandshow="hide" treestartlevel="2"/>
-                <Cell col="1" text="bind:accYn" displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
-                <Cell col="2" text="bind:accSrchYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' ?  'checkbox' : 'none')"/>
-                <Cell col="3" text="bind:accSaveYn" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' ?  'checkbox' : 'none')" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
-                <Cell col="4" text="bind:accDelYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' ?  'checkbox' : 'none')"/>
-                <Cell col="5" text="bind:accPrtYn" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' ?  'checkbox' : 'none')" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
-                <Cell col="6" text="bind:accExlYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' ?  'checkbox' : 'none')"/>
+                <Cell col="1" text="bind:accVdiYn" displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="2" text="bind:accYn" displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="3" text="bind:accSrchYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')"/>
+                <Cell col="4" text="bind:accSaveYn" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="5" text="bind:accDelYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')"/>
+                <Cell col="6" text="bind:accPrtYn" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="7" text="bind:accAlrtYn" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell col="8" text="bind:accExlYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')"/>
+                <Cell col="9" text="bind:accVdiExlYn" checkboxfalsevalue="N" checkboxtruevalue="Y" displaytype="expr:childCnt &gt; 0 ? 'none' : 'checkboxcontrol'" edittype="expr:childCnt &gt; 0 ? 'none' : (accYn == 'Y' || accVdiYn == 'Y' ?  'checkbox' : 'none')"/>
               </Band>
             </Format>
           </Formats>
@@ -49,16 +58,19 @@
     <Objects>
       <Dataset id="ds_menu_auth">
         <ColumnInfo>
-          <Column id="deptCd" type="STRING" size="256"/>
+          <Column id="athrCd" type="STRING" size="256"/>
           <Column id="menuSeq" type="STRING" size="256"/>
           <Column id="deptNm" type="STRING" size="256"/>
           <Column id="menuNm" type="STRING" size="256"/>
+          <Column id="accVdiYn" type="STRING" size="256"/>
           <Column id="accYn" type="STRING" size="256"/>
           <Column id="accSrchYn" type="STRING" size="256"/>
           <Column id="accSaveYn" type="STRING" size="256"/>
           <Column id="accDelYn" type="STRING" size="256"/>
           <Column id="accPrtYn" type="STRING" size="256"/>
+          <Column id="accAlrtYn" type="STRING" size="256"/>
           <Column id="accExlYn" type="STRING" size="256"/>
+          <Column id="accVdiExlYn" type="STRING" size="256"/>
           <Column id="childCnt" type="STRING" size="256"/>
           <Column id="parntSeq" type="STRING" size="256"/>
           <Column id="lftVal" type="STRING" size="256"/>
@@ -68,7 +80,7 @@
       </Dataset>
       <Dataset id="ds_search">
         <ColumnInfo>
-          <Column id="deptCd" type="STRING" size="256"/>
+          <Column id="athrCd" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -101,14 +113,13 @@ this.AuthMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//this.fn_list();
 	
 	this.deptList.set_index(0);
-
 };
 
 
 this.deptList_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	if(obj.value != ""){
-		this.ds_search.setColumn(0, "deptCd", obj.value);
+		this.ds_search.setColumn(0, "athrCd", obj.value);
 		this.fn_list();
 	}else{
 		this.ds_menu_auth.clearData();
@@ -128,76 +139,79 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 this.GridAuthList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {	
-	//var accYnCellPos = obj.getBindCellIndex("body", "accYn");	
-	//var checkVal = obj.getCellValue(e.row, accYnCellPos);	
+	var accYnCellPos = obj.getBindCellIndex("body", "accYn");	
+	var accVdiYnCellPos = obj.getBindCellIndex("body", "accVdiYn");	
 	
 	var objDs = obj.getBindDataset();	
-	var checkVal, menuSeq, parntSeq, childCnt = -1;	
+	var checkVal1, checkVal2, menuSeq, parntSeq, childCnt = -1;	
 	
-	checkVal = objDs.getColumn(e.row, "accYn");
+	checkVal1 = objDs.getColumn(e.row, "accYn");
+	checkVal2 = objDs.getColumn(e.row, "accVdiYn");
 	childCnt = objDs.getColumn(e.row, "childCnt");
 	
-	if(checkVal == "N"){
+	if(checkVal1 == "N" && checkVal2 == "N"){
 		
 		if( childCnt == 0 ){
 			objDs.setColumn(e.row, "accSrchYn", "N");
 			objDs.setColumn(e.row, "accSaveYn", "N");
 			objDs.setColumn(e.row, "accDelYn", "N");
 			objDs.setColumn(e.row, "accPrtYn", "N");
+			objDs.setColumn(e.row, "accAlrtYn", "N");
 			objDs.setColumn(e.row, "accExlYn", "N");
+			objDs.setColumn(e.row, "accVdiExlYn", "N");
 		}else if( childCnt > 0 ){
-			this.fn_child_chk_clear(e.row, objDs);
+			this.fn_child_chk_clear(e.row, objDs, checkVal1, checkVal2);
 		}
-		
-	}else{
-		this.fn_parnt_chk(objDs, 3);
-		this.fn_parnt_chk(objDs, 2);
+	}else if(checkVal1 == "N"){
+		if( childCnt > 0 ){
+			this.fn_child_chk_clear(e.row, objDs, checkVal1, checkVal2);
+		}
+	}else if(checkVal2 == "N"){
+		if( childCnt > 0 ){
+			this.fn_child_chk_clear(e.row, objDs, checkVal1, checkVal2);
+		}
 	}
+	
+	for(var i = 0 ; i < objDs.getRowCount() ; i++){		
+		if(objDs.getColumn(e.row, "parntSeq") == objDs.getColumn(i, "menuSeq")){
+			
+			if(obj.getCellValue(e.row, accYnCellPos) == "Y"){
+				objDs.setColumn(i, "accYn", "Y");
+			}
+			if(obj.getCellValue(e.row, accVdiYnCellPos) == "Y"){
+				objDs.setColumn(i, "accVdiYn", "Y");
+			}
+		}
+	}
+
 };
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
- this.fn_parnt_chk = function(objDs, dpth){
-	var menuSeq
-	var checkYCnt, childCnt;
-	
-	for(var i = 0 ; i < objDs.getRowCount() ; i++){			
-		checkYCnt = 0;
-		childCnt = objDs.getColumn(i, "childCnt");
-		
-		if( dpth == objDs.getColumn(i, "dpth") && childCnt > 0 ){
-			menuSeq = objDs.getColumn(i, "menuSeq");
-				
-			for(var j = 0 ; j < objDs.getRowCount() ; j++){			
-				if( menuSeq == objDs.getColumn(j, "parntSeq") ){						
-					if( objDs.getColumn(j, "accYn") == "Y" ){
-						checkYCnt++;						
-					}
-				}
-			}
-			
-			if(childCnt == checkYCnt){
-				objDs.setColumn(i, "accYn", "Y");
-			}
-		}
-	}	
- }
- 
- this.fn_child_chk_clear = function(rowIndex, objDs){
+ this.fn_child_chk_clear = function(rowIndex, objDs, checkVal1, checkVal2){
 	var lftVal, rhtVal;
 	
 	lftVal = objDs.getColumn(rowIndex, "lftVal");
 	rhtVal = objDs.getColumn(rowIndex, "rhtVal");
 	
+	
+	
 	for(var i = 0 ; i < objDs.getRowCount() ; i++){		
 		if( lftVal < objDs.getColumn(i, "lftVal") && rhtVal > objDs.getColumn(i, "rhtVal") ){
-			objDs.setColumn(i, "accYn", "N");
-			objDs.setColumn(i, "accSrchYn", "N");
-			objDs.setColumn(i, "accSaveYn", "N");
-			objDs.setColumn(i, "accDelYn", "N");
-			objDs.setColumn(i, "accPrtYn", "N");
-			objDs.setColumn(i, "accExlYn", "N");
+			if(checkVal1 == "N") objDs.setColumn(i, "accYn", "N");
+			if(checkVal2 == "N") objDs.setColumn(i, "accVdiYn", "N");
+			
+			if(checkVal1 == "N" && checkVal2 == "N" ){
+				objDs.setColumn(i, "accSrchYn", "N");
+				objDs.setColumn(i, "accSaveYn", "N");
+				objDs.setColumn(i, "accDelYn", "N");
+				objDs.setColumn(i, "accPrtYn", "N");
+				objDs.setColumn(i, "accAlrtYn", "N");
+				objDs.setColumn(i, "accExlYn", "N");
+				objDs.setColumn(i, "accVdiExlYn", "N");
+			}
+			
 		}
 		
 	}
@@ -274,5 +288,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
 
 ]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="deptList" propid="value" datasetid="ds_search" columnid="athrCd"/>
+    </Bind>
   </Form>
 </FDL>
