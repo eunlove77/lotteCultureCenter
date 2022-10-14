@@ -79,7 +79,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="TOP5 선정여부 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Radio id="radioTop" taborder="1" left="117" top="-10" width="151" height="50" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1" onitemchanged="row02_00_spotDiv_Radio01_onitemchanged">
+                    <Radio id="radioTop" taborder="1" left="117" top="-10" width="151" height="50" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -210,7 +210,10 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_checkValidation();
+	if(this.confirm("저장 하시겠습니까"))
+	{
+		this.fn_checkValidation();
+	}
 };
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -248,35 +251,19 @@ this.fn_checkValidation = function(){
 	{
 		this.alert("제목을 입력하세요");
 		this.row03.form.Edit00.setFocus();
-		return;
+		return false;
+	}
+	else if(this.gfn_isNull(this.row04.form.TextArea00.value))
+	{
+		this.alert("내용을 입력하세요");
+		this.row04.form.TextArea00.setFocus();
+		return false;
 	}
 	else
 	{								
 		this.fn_save();
 	}	
 }
-
-this.fn_save = function ()
-{		
-	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
-	
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::customer/insertInquiry.do";
-	var inData      = "data=ds_detail";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-
-};
 
 this.fn_detail = function ()
 {	
