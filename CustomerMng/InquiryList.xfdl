@@ -10,12 +10,12 @@
             <Format id="default">
               <Columns>
                 <Column size="40" band="left"/>
-                <Column size="389"/>
+                <Column size="303"/>
                 <Column size="130"/>
                 <Column size="130"/>
                 <Column size="130"/>
                 <Column size="150"/>
-                <Column size="80"/>
+                <Column size="125"/>
                 <Column size="80"/>
                 <Column size="80"/>
               </Columns>
@@ -41,9 +41,9 @@
                 <Cell col="3" text="bind:email"/>
                 <Cell col="4" text="bind:hpNo"/>
                 <Cell col="5" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="6" text="bind:inqCnt"/>
-                <Cell col="7" text="bind:top5SlctYn"/>
-                <Cell col="8" text="bind:expsrYn"/>
+                <Cell col="6" text="expr:admId ? admNm + '('  + admId + ')' : ''"/>
+                <Cell col="7" text="bind:ansYn"/>
+                <Cell col="8" text="bind:ansDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -107,9 +107,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="문의 유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <CheckBox id="chkAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
-                          <CheckBox id="chkClCd1" taborder="1" text="문의1" left="chkAll:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="1"/>
-                          <CheckBox id="chkClCd2" taborder="2" text="문의2" left="chkClCd1:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="2"/>
+                          <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -142,6 +140,10 @@
           <Column id="hpNo" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprDtm" type="DATETIME" size="256"/>
+          <Column id="admId" type="STRING" size="256"/>
+          <Column id="admNm" type="STRING" size="256"/>
+          <Column id="ansDtm" type="DATETIME" size="256"/>
+          <Column id="ansYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
@@ -178,6 +180,15 @@
           <Column id="rgprDtm" type="DATETIME" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="clCdDs">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="10"/>
+          <Column id="cdNm" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -202,6 +213,19 @@ this.InquiryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.inquiryDs, this.GridInquiryList, 0);
+	
+	//공통 코드 조회
+	var tranObj = {
+		strSvcId : "codeList",
+		strSvcUrl : this.application.Admin_svc + "::/customer/codeList.do",
+		inData : "",
+		outData : "clCdDs=ctgrList",
+		strArg : "cdId=072",
+		callBackFnc : "fnCallback",
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);
 	
 	this.fn_list(1);
 };
@@ -239,8 +263,8 @@ this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e
 	var strtDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm.value;
 	var endDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm.value;
 	
-	this.searchDs.setColumn(0, 'strtDt', strtDt);
-	this.searchDs.setColumn(0, 'endDt', endDt);
+	this.ds_search.setColumn(0, 'strtDt', strtDt);
+	this.ds_search.setColumn(0, 'endDt', endDt);
 	
 	this.fn_list();
 };
@@ -276,7 +300,7 @@ this.fn_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_inquiry";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/inquiryList.do";
-	tranObj.inData      = "search=searchDs";
+	tranObj.inData      = "search=ds_search";
 	tranObj.outData     = "inquiryDs=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
@@ -289,15 +313,32 @@ this.fn_list = function(){
 this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked()){
-		var trueVal1 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.truevalue;
-		var trueVal2 = this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.truevalue;
+		var trueVal1 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.truevalue;
+		var trueVal2 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.truevalue;
+		var trueVal3 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.truevalue;
+		var trueVal4 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.truevalue;
+		var trueVal5 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.truevalue;
+		var trueVal6 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.truevalue;
+		var trueVal7 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.truevalue;
 		
-		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(trueVal1);
-		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(trueVal2);
+		
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.set_value(trueVal1);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.set_value(trueVal2);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.set_value(trueVal3);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.set_value(trueVal4);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.set_value(trueVal5);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.set_value(trueVal6);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.set_value(trueVal7);
+		
 		
 	} else {
-		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(false);
-		this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.set_value(false);
+		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.set_value(false);
 	}
 };
 
@@ -318,27 +359,38 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 	
 	switch(svcID)
 	{
-    case "delete":
-		this.alert("삭제 완료");
-		this.fn_list(1);
+	
+		case "codeList":
+			this.fn_set_clCd();
+			
 		break;
 		
+		case "delete":
+			this.alert("삭제 완료");
+			this.fn_list(1);
+		break;
 	}
 }
 
 //초기화
 this.reset_search_form = function(){
 	
-	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkAll.set_value(false);
-	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd1.set_value(false);
-	this.Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkAll.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.set_value(false);
+	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.set_value(false);
 	
-	this.searchDs.setColumn(0, "strtDt", "");
-	this.searchDs.setColumn(0, "endDt", "");
-	this.searchDs.setColumn(0, "clCdAll", "");
-	this.searchDs.setColumn(0, "clCdList", "");
-	this.searchDs.setColumn(0, "f", 0);
-	this.searchDs.setColumn(0, "q", "");
+	
+	this.ds_search.setColumn(0, "strtDt", "");
+	this.ds_search.setColumn(0, "endDt", "");
+	this.ds_search.setColumn(0, "clCdAll", "");
+	this.ds_search.setColumn(0, "clCdList", "");
+	this.ds_search.setColumn(0, "f", 0);
+	this.ds_search.setColumn(0, "q", "");
 }
 
 //삭제
@@ -361,6 +413,29 @@ this.fn_delete = function ()
 		isAsync);         // 비동기통신 여부 [생략가능]
 };
 
+//코드 체크박스 세팅
+this.fn_set_clCd = function()
+{
+	var content = ["chkAll"];
+	var list = this.clCdDs;
+	
+	for(var i=0; i < list.getRowCount(); i++) 
+	{
+		var id = "chkClCd" + i;
+		var objComp = new CheckBox();
+		objComp.init(id, content[i] + ":5", 6, 70, 18);
+		//this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
+		this.Div00_00.form.conDiv.form.typeDiv.form.addChild(id, objComp);
+		
+		objComp.set_text(list.getColumn(i, "cdNm"));		
+		objComp.set_truevalue(list.getColumn(i, "cd"));
+		objComp.set_falsevalue("");
+		objComp.show();	
+		content.push(id);
+		//this.Div00_00.form.conDiv.form.typeDiv.form.resetScroll();
+		//this.Div00.form.Div00.form.Div00.form.resetScroll()
+	}
+}
 /**************************************************************************
 * 그리드 체크박스 영역
 **************************************************************************/

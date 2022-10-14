@@ -91,6 +91,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="답변내용" left="0" top="0" width="109" height="155" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <TextArea id="TextArea00" taborder="1" left="121" top="9" width="1127" height="136"/>
             </Layout>
           </Layouts>
         </Div>
@@ -117,6 +118,8 @@
           <Column id="atchFileId" type="STRING" size="256"/>
           <Column id="rgprId" type="DATETIME" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="answrCont" type="STRING" size="256"/>
+          <Column id="chrgprNm" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -149,8 +152,22 @@ this.InquiryDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//if(this.param.onlnQuesSeqno != ""){	
 	this.ds_detail.setColumn(0, "onlnQuesSeqno", this.param.onlnQuesSeqno);
+	
+	var adminName = nexacro.getPrivateProfile("name");
+	var adminId = nexacro.getPrivateProfile("id");
+	
+	this.row010.form.Static01.set_text(adminName+"("+adminId+")");
+	
 	this.fn_detail();
-	//}
+	
+	//this.row11.form.TextArea00.set_readonly(true);
+	
+};
+
+//등록
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
 };
 
 //취소(목록)
@@ -165,6 +182,28 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.fn_list = function(){
 	this.parent.set_url("CustomerMng::InquiryList.xfdl");	
+};
+
+this.fn_save = function ()
+{		
+	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::customer/insertInquiry.do";
+	var inData      = "data=ds_detail";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+
 };
 
 this.fn_detail = function ()
@@ -202,7 +241,22 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		this.fn_list();
 		break;
   }
-};]]></Script>
+};
+
+//유효성 체크
+this.fn_checkValidation = function(){
+	
+	//if(this.gfn_isNull(this.row11.form.TextArea00.value))
+	//{
+	//	this.alert("답변 내용을 입력하세요");
+	//	this.row11.form.TextArea00.setFocus();
+	//	return;
+	//}
+	//else
+	//{								
+		this.fn_save();
+	//}	
+}]]></Script>
     <Bind>
       <BindItem id="item0" compid="row01.form.Static01" propid="text" datasetid="ds_detail" columnid="clNm"/>
       <BindItem id="item1" compid="row03.form.Static01" propid="text" datasetid="ds_detail" columnid="titNm"/>
@@ -212,6 +266,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
       <BindItem id="item5" compid="row07.form.Static01" propid="text" datasetid="ds_detail" columnid="rgprDtm"/>
       <BindItem id="item6" compid="row08.form.Static01" propid="text" datasetid="ds_detail" columnid="quesCont"/>
       <BindItem id="item7" compid="row09.form.Static01" propid="text" datasetid="ds_detail" columnid="atchFileId"/>
+      <BindItem id="item8" compid="row11.form.TextArea00" propid="value" datasetid="ds_detail" columnid="answrCont"/>
     </Bind>
   </Form>
 </FDL>
