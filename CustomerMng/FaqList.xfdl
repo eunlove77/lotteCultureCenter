@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridFaqList" taborder="2" left="10" top="270" binddataset="faqDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." onheadclick="GridNoticeList_onheadclick" oncellclick="GridFaqList_oncellclick">
+        <Grid id="GridFaqList" taborder="2" left="10" top="270" binddataset="faqDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridFaqList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -39,8 +39,8 @@
                 <Cell col="3" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="4" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="5" text="bind:inqCnt"/>
-                <Cell col="6" text="bind:top5SlctYn"/>
-                <Cell col="7" text="bind:expsrYn"/>
+                <Cell col="6" text="expr:dataset.getColumn(currow, &quot;top5SlctYn&quot;) == &quot;Y&quot; ? &quot;선정&quot; : &quot;미선정&quot;"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
               </Band>
             </Format>
           </Formats>
@@ -219,7 +219,6 @@
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
-include "Base::popup.xjs";
 
 /**************************************************************************
 * FORM 변수 선언 영역
@@ -280,28 +279,7 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 		check_array[i] = 0;
 	}
 	this.fn_delete();
-	//this.Grid00.redrawExprCell();
-	/*var objGrid = this.GridFaqList
-	var objDs = objGrid.getBindDataset();
 	
-	var chk = objDs.checkarray[e.row] = 0;
-	
-	this.alert("선택셀 >>" + chk);
-	
-	var checkCnt = this.gfn_check_length(objDs, chk);
-	
-	//var checkCnt = this.gfn_check_length(this.faqDs, "chk");	
-	
-	if(checkCnt > 0){
-	
-	if(this.confirm("해당 게시글을 삭제 하시겠습니까?"))
-	{
-	this.fn_delete();
-	}
-	}else{
-	this.alert("게시글을 한개 이상 선택해주세요.");
-	return false;
-	}*/
 };
 
 //검색버튼
@@ -349,7 +327,6 @@ this.GridFaqList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEven
 	{
 		var	faqSeqno = obj.getBindDataset().getColumn(e.row, "faqSeqno");
 		
-		//this.alert("seq>> " + faqSeqno);
 		this.parent.param = {
 			faqSeqno : faqSeqno
 		};
