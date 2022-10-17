@@ -162,6 +162,9 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 			console.log("코드 조회 성공");			
 			var nRow = "";
 			
+			application.gdsAuthCdList.insertRow();
+			application.gdsAuthCdList.setColumn(0, "cd", "");
+			application.gdsAuthCdList.setColumn(0, "cdNm", "선택");
 			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){
 				
 				if(application.gdsCode.getColumn(i, "cdId") == "018" 
@@ -174,15 +177,14 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 				}
 			}
 			
-			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){
-				
+			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){				
 				if(application.gdsCode.getColumn(i, "cdId") == "spotCd" && application.gdsCode.getColumn(i, "dpth") == "1"){
 					nRow = application.gdsSpotCdList.addRow();
 					application.gdsSpotCdList.setColumn(nRow, "cd", application.gdsCode.getColumn(i, "cd"));
 					application.gdsSpotCdList.setColumn(nRow, "cdNm", application.gdsCode.getColumn(i, "cdNm"));
 				}
 			}
-			
+
 			
 			
 		break; 
@@ -415,45 +417,7 @@ this.gfn_setCellTelMaskFormat = function(sValue)
 	return sMask;
 };
 
-/**
- * 숫자에 천단위 "," 적용
- * @param {String} sNum		숫자형식 확인 대상 문자열
- * @return {String} 결과값
- */
-this.gfn_setComma = function(sNum)
-{
-	var ppos, sDigit, nEnd, nStart=0, sRet="";
 
-	if (this.gfn_isNull(sNum))		return "";
-	
-	sNum += "";
-
-	if (sNum.charAt(0) == "+" || sNum.charAt(0) == "-")
-	{
-		sRet += sNum.charAt(0);
-		nStart = 1;
-	}
-
-	ppos = sNum.indexOf(".", nStart);
-	if ( ppos < 0 )
-		nEnd = sNum.length;
-	else
-		nEnd = ppos;
-	sDigit = sNum.substr(nStart, nEnd-nStart);
-	for( pos = 0 ; pos < sDigit.length ; pos ++ )
-	{
-		if ( pos != 0 && (sDigit.length-pos)%3 == 0 )
-			sRet += ",";
-		sRet += sDigit.charAt(pos);
-	}
-	
-	sRet += sNum.substr(nEnd);
-	sRet = sRet;
-	
-	return sRet;
-	
-	
-}
 
 this.gfn_headCheckBox = function(obj, curCellIndex, strColName){
 	var headerCell = obj.getBindCellIndex("body", strColName);
@@ -616,11 +580,18 @@ this.gfn_fileDown = function(objDs, fileDownTransfer){
 	}
 }
 
-this.gfn_btn_auth = function(objDs, authType){
+this.gfn_btn_auth = function(menuSeq, authType){
 	
-	var authYn = objDs.getColumn(0, authType);
+	var application = nexacro.getApplication();
+	var authYn = "";
 	
-	if(authYn == "N") { 
+	for(var i = 0 ; i < application.gdsMenu.rowcount ; i++){
+		if(application.gdsMenu.getColumn(i, "menuSeq") == menuSeq){
+			authYn = application.gdsMenu.getColumn(i, authType);
+		}
+	}
+	
+	if(authYn != "Y") { 
 		this.alert("권한이 부족합니다.");
 		return true;
 	}else{
