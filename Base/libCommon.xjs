@@ -163,6 +163,9 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 			console.log("코드 조회 성공");			
 			var nRow = "";
 			
+			application.gdsAuthCdList.insertRow();
+			application.gdsAuthCdList.setColumn(0, "cd", "");
+			application.gdsAuthCdList.setColumn(0, "cdNm", "선택");
 			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){
 				
 				if(application.gdsCode.getColumn(i, "cdId") == "018" 
@@ -175,15 +178,14 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 				}
 			}
 			
-			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){
-				
+			for(var i = 0 ; i < application.gdsCode.rowcount ; i++){				
 				if(application.gdsCode.getColumn(i, "cdId") == "spotCd" && application.gdsCode.getColumn(i, "dpth") == "1"){
 					nRow = application.gdsSpotCdList.addRow();
 					application.gdsSpotCdList.setColumn(nRow, "cd", application.gdsCode.getColumn(i, "cd"));
 					application.gdsSpotCdList.setColumn(nRow, "cdNm", application.gdsCode.getColumn(i, "cdNm"));
 				}
 			}
-			
+
 			
 			
 		break; 
@@ -617,11 +619,18 @@ this.gfn_fileDown = function(objDs, fileDownTransfer){
 	}
 }
 
-this.gfn_btn_auth = function(objDs, authType){
+this.gfn_btn_auth = function(menuSeq, authType){
 	
-	var authYn = objDs.getColumn(0, authType);
+	var application = nexacro.getApplication();
+	var authYn = "";
 	
-	if(authYn == "N") { 
+	for(var i = 0 ; i < application.gdsMenu.rowcount ; i++){
+		if(application.gdsMenu.getColumn(i, "menuSeq") == menuSeq){
+			authYn = application.gdsMenu.getColumn(i, authType);
+		}
+	}
+	
+	if(authYn != "Y") { 
 		this.alert("권한이 부족합니다.");
 		return true;
 	}else{
