@@ -1,0 +1,890 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CouponReg" width="1280" height="720" titletext="쿠폰정보" onload="CouponReg_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="45" top="70" height="333" right="45" minwidth="660" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="기본정보" left="0" top="1" width="48" cssclass="sta_WF_TitGray" height="17"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div10" taborder="5" text="Div01" left="0" top="29" height="33" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Static id="Static01" taborder="1" text="발급 대기" left="Static00:10" top="5" width="55" usedecorate="false" height="21" fittocontents="width"/>
+                    <Button id="btnSearch" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00" taborder="2" text="Div01" left="0" top="Div10:-1" height="170" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Div id="Div00" taborder="1" left="Static00:10" top="5" formscrolltype="none" text="" bottom="5" right="10">
+                      <Layouts>
+                        <Layout type="horizontal" flexwrap="wrap">
+                          <CheckBox id="chkSpotAll" taborder="0" text="전체" left="11" top="9" width="130" height="20" fittocontents="none" value="false"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="3" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="쿠폰명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" text="123123" right="10" displaynulltext="쿠폰명"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="4" text="Div01" left="0" top="Div01:-1" height="64" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="쿠폰 설명" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="5" right="10" displaynulltext="쿠폰 설명" bottom="5"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="1" text="Div00" left="45" top="Div00:10" height="640" right="45" minwidth="660" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="쿠폰 등록정보" left="0" top="1" width="75" cssclass="sta_WF_TitGray" height="17"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div00" taborder="2" text="Div01" left="0" top="30" height="33" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 방식 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Radio id="radioIssuCd" taborder="1" left="Static00:10" top="0" bottom="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" right="10" minwidth="" maxwidth="600" text="일반(수동)발급" index="0" onitemchanged="Div01_Div00_radioIssuCd_onitemchanged" value="NORMAL">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">NORMAL</Col>
+                            <Col id="datacolumn">일반(수동)발급</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">AUTO</Col>
+                            <Col id="datacolumn">자동발급</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">RANDOM</Col>
+                            <Col id="datacolumn">오프라인 난수발급</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="3" text="Div01" left="0" top="Div00:-1" height="270" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="radioTrgtMem" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="GRADE" text="회원등급별" index="0">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">GRADE</Col>
+                            <Col id="datacolumn">회원등급별</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">EXCEL</Col>
+                            <Col id="datacolumn">엑셀업로드</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <Grid id="Grid00" taborder="2" left="121" top="32" width="235" height="225" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="30"/>
+                            <Column size="100"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24" band="head"/>
+                            <Row size="24"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" text="회원 등급"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="dataset.checkarray[currow]"/>
+                            <Cell col="1" text="bind:grade"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="7" text="Div01" left="0" top="Div01:-1" height="0" cssclass="div_WF_CompWrap" right="0" visible="true" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Static id="Static01" taborder="1" text="개" left="290" top="5" width="120" height="21"/>
+                    <MaskEdit id="MaskEdit00" taborder="2" left="120" top="5" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" height="180" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="적용 강좌 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="radioTrgtLect" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="CTGR" text="카테고리 지정" index="0">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">CTGR</Col>
+                            <Col id="datacolumn">카테고리 지정</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">CLASS</Col>
+                            <Col id="datacolumn">특정 강좌 지정</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <Div id="Div00" taborder="2" text="Div00" left="Static00:0" top="26" right="0" bottom="0">
+                      <Layouts>
+                        <Layout>
+                          <Combo id="Combo00" taborder="0" text="" left="10" top="2" width="160" height="21" innerdataset="ds_category01" codecolumn="cd" datacolumn="cdNm" displaynulltext="대분류" onitemchanged="Div01_Div03_Div00_Combo00_onitemchanged"/>
+                          <Combo id="Combo01" taborder="1" left="Combo00:10" top="2" width="160" height="21" innerdataset="ds_category02" codecolumn="cd" datacolumn="cdNm" displaynulltext="중분류" onitemchanged="Div01_Div03_Div00_Combo01_onitemchanged"/>
+                          <Combo id="Combo02" taborder="2" left="Combo01:10" top="2" width="160" height="21" displaynulltext="소분류" value="" index="-1" innerdataset="ds_category03" codecolumn="cd" datacolumn="cdNm" onitemclick="Div01_Div03_Div00_Combo02_onitemclick" visible="false"/>
+                          <Grid id="Grid00" taborder="3" left="10" width="533" height="90" binddataset="ds_appl_ctgr" autofittype="col" bottom="10" oncellclick="Div01_Div03_Div00_Grid00_oncellclick">
+                            <Formats>
+                              <Format id="default">
+                                <Columns>
+                                  <Column size="150"/>
+                                  <Column size="150"/>
+                                  <Column size="150"/>
+                                  <Column size="50"/>
+                                </Columns>
+                                <Rows>
+                                  <Row size="24" band="head"/>
+                                  <Row size="24"/>
+                                </Rows>
+                                <Band id="head">
+                                  <Cell text="대분류"/>
+                                  <Cell col="1" cssclass="btn_WF_High" text="중분류"/>
+                                  <Cell col="2" text="소분류"/>
+                                  <Cell col="3"/>
+                                </Band>
+                                <Band id="body">
+                                  <Cell text="bind:lrclsCtegryNm" textAlign="center" controlautosizingtype="none"/>
+                                  <Cell col="1" displaytype="normal" edittype="none" text="bind:mdclsCtegryNm" controlautosizingtype="none"/>
+                                  <Cell col="2" text="bind:smclsCtegryNm" controlautosizingtype="none"/>
+                                  <Cell col="3" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                                </Band>
+                              </Format>
+                            </Formats>
+                          </Grid>
+                          <Static id="Static00" taborder="4" text="* 카테고리는 최대 10개까지 지정 가능합니다." left="10" top="26" width="250" height="21" color="gray"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="5" text="Div01" left="0" top="Div03:-1" height="64" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="할인 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="radioDiscount" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="AMOUNT" text="정액(원) 할인" index="0" onitemchanged="Div01_Div04_radioDiscount_onitemchanged">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">AMOUNT</Col>
+                            <Col id="datacolumn">정액(원) 할인</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">RATES</Col>
+                            <Col id="datacolumn">정률(%) 할인</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                    <Static id="Static01" taborder="2" text="원" left="MaskEdit00:10" top="32" width="120" height="21"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div05" taborder="6" text="Div01" left="0" top="Div04:-1" height="64" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사용 기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Radio id="radioPeriod" taborder="1" left="119" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="PERIOD" text="기간으로 설정" index="0" onitemchanged="Div01_Div05_radioPeriod_onitemchanged" enable="true" canitemchange="Div01_Div05_radioPeriod_onitemchanged">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">PERIOD</Col>
+                            <Col id="datacolumn">기간으로 설정</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">DEADLINE</Col>
+                            <Col id="datacolumn">발급일로 설정</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <Div id="Div00" taborder="2" left="Static00:0" top="30" width="235" height="30">
+                      <Layouts>
+                        <Layout>
+                          <Calendar id="strtDtm" taborder="0" left="10" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" enableevent="true" usesoftkeyboard="true" type="normal" editformat="yyyy-MM-dd" autoskip="false" oneditclick="Div01_Div05_Div00_strtDtm_oneditclick" onkeydown="Div01_Div05_Div00_strtDtm_oneditclick"/>
+                          <Static id="Static01" taborder="1" text="~" left="strtDtm:4" top="3" width="9" height="20"/>
+                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick" onkeydown="Div01_Div05_Div00_endDtm_oneditclick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01" taborder="3" left="Static00:0" top="26" width="352" height="30" visible="false">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="발급일로부터" left="10" top="5" width="81" usedecorate="false" height="21" fittocontents="width"/>
+                          <Edit id="Edit00" taborder="1" left="Static00:5" top="5" width="129" height="21"/>
+                          <Static id="Static01" taborder="2" text="일까지 사용 가능" left="Edit00:5" top="5" width="105" usedecorate="false" height="21"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="2" text="Div00" left="45" top="Div01:10" height="80" right="45" minwidth="660" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="알림정보" left="0" top="1" width="75" cssclass="sta_WF_TitGray" height="17"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div00" taborder="2" text="Div01" left="0" top="30" height="50" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="쿠폰 발급 알림 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Radio id="Radio00" taborder="1" left="Static00:10" top="0" bottom="22" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" right="10" minwidth="420" maxwidth="420" value="N" text="사용안함" index="0">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">N</Col>
+                            <Col id="datacolumn">사용안함</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">Y</Col>
+                            <Col id="datacolumn">사용</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
+                    <Static id="Static01" taborder="2" text="* 쿠폰 발급 알림은 마케팅 수신 동의 회원에게만 발송됩니다." left="Static00:10" top="24" width="350" height="21" color="gray"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div04" taborder="4" text="Div04" left="45" top="Div02:10" height="0" right="45" url="FrameBase::include/mdf_info.xfdl" visible="false"/>
+        <Div id="Div03" taborder="3" text="Div03" left="45" top="Div04:15" height="55" right="45" minwidth="400" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Button id="cnclBtn" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_Weak" onclick="Div03_cnclBtn_onclick"/>
+              <Button id="insBtn" taborder="0" text="등록" top="12" width="84" height="30" cssclass="btn_WF_Medium" left="cnclBtn:16.036000000000058" onclick="Div03_insBtn_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="txtMenuNm" taborder="5" text="쿠폰등록" left="10" top="20" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_category01">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="10"/>
+          <Column id="cdNm" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_category02" onload="ds_category02_onload">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="10"/>
+          <Column id="cdNm" type="STRING" size="50"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_category03" onload="ds_category03_onload"/>
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="cpnSeqno" type="STRING" size="13"/>
+          <Column id="cpnUsePsblBrch" type="STRING" size="256"/>
+          <Column id="cpnNm" type="STRING" size="100"/>
+          <Column id="cpnExpl" type="STRING" size="1000"/>
+          <Column id="dcAmtClCd" type="STRING" size="20"/>
+          <Column id="dcAmt" type="INT" size="5"/>
+          <Column id="issueMthdClCd" type="STRING" size="20"/>
+          <Column id="issueObjClCd" type="STRING" size="20"/>
+          <Column id="issueCqty" type="INT" size="3"/>
+          <Column id="applLectClCd" type="STRING" size="20"/>
+          <Column id="usePrdClCd" type="STRING" size="20"/>
+          <Column id="usePsblDd" type="INT" size="2"/>
+          <Column id="useStDt" type="STRING" size="20"/>
+          <Column id="useEndDt" type="STRING" size="20"/>
+          <Column id="issueStatCd" type="STRING" size="20"/>
+          <Column id="issueAlrtYn" type="STRING" size="1"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="dcAmtClCd">AMOUNT</Col>
+            <Col id="applLectClCd">CTGR</Col>
+            <Col id="issueMthdClCd">NORMAL</Col>
+            <Col id="issueObjClCd">GRADE</Col>
+            <Col id="usePrdClCd">PERIOD</Col>
+            <Col id="issueAlrtYn">N</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_random_list"/>
+      <Dataset id="ds_mem_grade" oncolumnchanged="ds_mem_grade_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_mem_excel"/>
+      <Dataset id="ds_appl_ctgr">
+        <ColumnInfo>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryNm" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryNm" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_appl_lect"/>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
+
+	var tranObj = {
+		strSvcId : "codeList",
+		strSvcUrl : this.baseSvrUrl + "codeList.do",
+		inData : "",
+		outData : "ds_category01=ctgrList",
+		strArg : "ctegryId=CTEGRY ctegryLvlNo=0",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		isPopup : true
+	}
+	
+	this.gfn_transaction(tranObj);
+	
+	if(this.parent.cpnSeqno != ""){	
+		if(this.parent.type == "detail")
+		{
+			this.ds_detail.setColumn(0, "cpnSeqno", this.parent.cpnSeqno);
+			this.txtMenuNm.set_text("쿠폰 상세");
+		}
+		
+		this.fn_detail();
+		this.Div04.set_height(95);
+		this.resetScroll()
+	}
+		
+	this.gfnSetCheckBoxNoDataset(this.ds_mem_grade, this.Div01.form.Div01.form.Grid00, 0); 
+};
+
+this.fn_detail = function ()
+{	
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.baseSvrUrl + "detail.do",
+		inData : "detail=ds_detail",
+		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applCtgrList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		
+		case "codeList":
+			this.fn_set_spot();			
+			break;
+		case "ctgrList":
+			break;
+		case "save":
+			this.alert("저장되었습니다.");
+			this.fn_list();
+			break;
+		case "detail":    
+			var brchCdArr = this.ds_detail.getColumn(0, "cpnUsePsblBrch").split("|");
+			var brchObj = this.Div00.form.Div00.form.Div00.form.components;
+			this.fn_sync_checkBox(brchObj, brchCdArr);
+
+			break;
+	}
+
+};
+
+//발급 방식 라디오 버튼
+this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	var discountItmChngInf = new nexacro.ItemChangeEventInfo();
+	
+	if(e.postvalue == 'NORMAL')
+	{
+		
+		this.Div01.form.Div02.set_height(0);	//발급 수량
+		this.Div01.form.Div01.set_height(270);	//발급 대상
+		this.Div01.form.Div05.form.Div01.form.Static00.set_text("발급일로부터");
+		this.Div01.form.Div05.form.radioPeriod.set_value("PERIOD");
+		this.Div01.form.Div05.form.radioPeriod.set_readonly(false);
+	}
+	else if(e.postvalue == 'RANDOM')
+	{
+		this.Div01.form.Div01.set_height(0);
+		this.Div01.form.Div02.set_height(33);
+		this.Div01.form.Div05.form.Div01.form.Static00.set_text("발급일로부터");
+		this.Div01.form.Div05.form.radioPeriod.set_value("PERIOD");
+		this.Div01.form.Div05.form.radioPeriod.set_readonly(true);
+	}
+	else
+	{
+		this.Div01.form.Div01.set_height(0);
+		this.Div01.form.Div02.set_height(0);
+		this.Div01.form.Div05.form.Div01.form.Static00.set_text("신규가입 일로부터");
+		this.Div01.form.Div05.form.radioPeriod.set_value("DEADLINE");
+		this.Div01.form.Div05.form.radioPeriod.set_readonly(true);
+	}
+	
+	discountItmChngInf.postvalue = this.Div01.form.Div05.form.radioPeriod.value;
+	this.Div01_Div05_radioPeriod_onitemchanged(this.Div01.form.Div05.form.radioPeriod, discountItmChngInf);
+		
+	this.Div01.set_fittocontents("height");	
+	this.Div01.form.Div05.form.Div01.form.resetScroll();
+	this.Div01.form.resetScroll();
+	this.resetScroll();
+};
+
+//할인 금액 라디오 버튼
+this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	this.Div01.form.Div04.form.MaskEdit00.set_value();
+	
+	if(e.postvalue == 'RATES')
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("both");
+		this.Div01.form.Div04.form.MaskEdit00.set_format("!##");	//2자리 입력 제한
+		this.Div01.form.Div04.form.Static01.set_text("%");
+	}
+	else
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("decimal");
+		this.Div01.form.Div04.form.MaskEdit00.set_format("!#,###");
+		this.Div01.form.Div04.form.Static01.set_text("원");
+	}
+};
+
+//사용기간 라디오 버튼 
+this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postvalue == 'DEADLINE')
+	{
+		this.Div01.form.Div05.form.Div00.set_visible(false);
+		this.Div01.form.Div05.form.Div01.set_visible(true);
+	}
+	else
+	{
+		this.Div01.form.Div05.form.Div00.set_visible(true);
+		this.Div01.form.Div05.form.Div01.set_visible(false);
+		this.Div01.form.Div05.form.Div01.form.Edit00.set_text();
+	}
+};
+
+//대분류 선택 시
+this.Div01_Div03_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var tranObj = {
+		strSvcId : "ctgrList",
+		strSvcUrl : this.baseSvrUrl + "codeList.do",
+		inData : "",
+		outData : "ds_category02=ctgrList",
+		strArg : "ctegryId="+e.postvalue+" ctegryLvlNo=1",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+	
+	this.gfn_transaction(tranObj);
+
+};
+
+//중분류 선택 시
+this.Div01_Div03_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+console.log(this.ds_category02)
+	var tranObj = {
+		strSvcId : "ctgrList",
+		strSvcUrl : this.baseSvrUrl + "codeList.do",
+		inData : "",
+		outData : "ds_category03=ctgrList",
+		strArg : "ctegryId="+e.postvalue+" ctegryLvlNo=2",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+	
+	this.gfn_transaction(tranObj);
+};
+
+//소분류 선택 시
+this.Div01_Div03_Div00_Combo02_onitemclick = function(obj:nexacro.Combo,e:nexacro.ItemClickEventInfo)
+{
+	if(this.ds_appl_ctgr.getRowCount() < 10)
+	{
+		var lrclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo00.value;
+		var mdclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo01.value;
+		var smclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo02.value;
+		
+		//중복체크
+ 		if(0 > this.ds_appl_ctgr.findRowExpr("lrclsCtegryCd=="+"'"+lrclsCtegryCd+"'"+" && mdclsCtegryCd=="+"'"+mdclsCtegryCd+"'"+" && smclsCtegryCd=="+"'"+smclsCtegryCd+"'"))
+ 		{
+ 			var nRowIdx = this.ds_appl_ctgr.addRow();
+				
+			this.ds_appl_ctgr.setColumn(nRowIdx, "lrclsCtegryCd", this.Div01.form.Div03.form.Div00.form.Combo00.value);			
+			this.ds_appl_ctgr.setColumn(nRowIdx, "lrclsCtegryNm", this.Div01.form.Div03.form.Div00.form.Combo00.text);
+			this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryCd", this.Div01.form.Div03.form.Div00.form.Combo01.value);
+			this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryNm", this.Div01.form.Div03.form.Div00.form.Combo01.text);
+			this.ds_appl_ctgr.setColumn(nRowIdx, "smclsCtegryCd", e.itemvalue);
+			this.ds_appl_ctgr.setColumn(nRowIdx, "smclsCtegryNm", e.itemtext);	
+ 		}
+ 		else
+		{
+			alert("이미 지정한 카테고리입니다."); 
+		}		
+	}
+	else
+	{
+		alert("카테고리는 최대 10개까지 지정 가능합니다.");
+	}	
+};
+
+//카테고리 그리드 삭제 버튼
+this.Div01_Div03_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objGridDs = obj.getBindDataset();
+	
+	if(e.cell == 3){		
+		this.ds_appl_ctgr.deleteRow(e.row);	
+	}
+};
+
+this.Div03_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	this.fn_checkValidation();
+};
+
+this.fn_checkValidation = function(){
+	//지점 선택여부
+	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
+	var spotStr = "";
+	var spotFlag = false;
+	
+	for(var i=0; i<spotObj.length; i++)
+	{
+		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
+		{		
+			spotFlag = true;
+			spotStr += spotObj[i].value + "|";
+		}	
+	}
+	
+	if(!spotFlag)
+	{
+		this.alert("지점을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.chkSpotAll.setFocus();
+		return;
+	}
+	if(this.gfn_isNull(this.Div00.form.Div01.form.Edit00.value))
+	{
+		this.alert("쿠폰명을 입력하세요.");
+		this.Div00.form.Div01.form.Edit00.setFocus();
+		return;
+	}
+	if(this.Div01.form.Div00.form.radioIssuCd == 'NORMAL')
+	{
+		if(this.Div01.form.Div01.form.radioTrgtMem.value != 'EXCEL')
+		{
+			//회원등급 선택여부
+			var gradeFlag = false;
+			
+			for(var i=0; i < this.ds_mem_grade.checkarray.length; i++){
+				if(this.ds_mem_grade.checkarray[i] == 1)
+				{
+					this.ds_mem_grade.setColumn(i, "chk", 1);
+					gradeFlag = true;
+				}
+			}
+			
+			if(!gradeFlag)
+			{
+				this.alert("대상 회원등급을 선택하세요.");
+				this.Div01.form.Div01.form.Grid00.setFocus();
+				return;
+			}
+		}
+		else
+		{
+			alert("파일 첨부 누락");
+		}
+				
+	}
+	else if(this.Div01.form.Div00.form.radioIssuCd == 'RANDOM' && this.gfn_isNull(this.Div01.form.Div02.form.MaskEdit00.value))
+	{
+		this.alert("발급 수량을 입력하세요.");
+		this.Div01.form.Div02.form.MaskEdit00.setFocus();
+		return;
+	}
+	
+	if(this.Div01.form.Div03.form.radioTrgtLect.value == 'CTGR' && this.ds_appl_ctgr.getRowCount() == 0)
+	{
+		this.alert("대상 카테고리를 선택하세요.");
+		this.Div01.form.Div03.form.Grid00.setFocus();
+		return;
+	}
+	
+	if(this.gfn_isNull(this.Div01.form.Div04.form.MaskEdit00.value))
+	{
+		this.alert("할인 금액(율)을 입력하세요.");
+		this.Div01.form.Div04.form.MaskEdit00.setFocus();
+		return;
+	}
+	
+	if(this.Div01.form.Div05.form.radioPeriod.value == 'PERIOD')
+	{
+		if(this.gfn_isNull(this.Div01.form.Div05.form.Div00.form.strtDtm.value))
+		{
+			this.alert("사용 시작일을 입력하세요.");
+			this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+			return;
+		}
+		else if(this.gfn_isNull(this.Div01.form.Div05.form.Div00.form.endDtm.value))
+		{
+			this.alert("사용 종료일을 입력하세요.");
+			this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+			return;
+		}
+	}
+	else if(this.gfn_isNull(this.Div01.form.Div05.form.Div01.form.Edit00.value))
+	{
+		this.alert("사용 가능일을 입력하세요.");
+		this.Div01.form.Div05.form.Div01.form.Edit00.setFocus();
+		return;
+	}
+	
+	this.ds_detail.setColumn(0, "cpnUsePsblBrch", spotStr);
+	this.fn_save();
+}
+
+
+this.fn_save = function(){
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.baseSvrUrl + "insert.do",
+		inData : "infoData=ds_detail applCtgrData=ds_appl_ctgr mbrGrdeData=ds_mem_grade",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+}
+
+//지점 체크박스 세팅
+this.fn_set_spot = function()
+{
+	var content = ["chkSpotAll"];
+	var list = this.application.gdsSpotCdList;
+	
+	for(var i=0; i < list.getRowCount(); i++) 
+	{
+		var id = "chkSpot" + i;
+		var objComp = new CheckBox();
+		objComp.init(id, content[i] + ":10", 9, 130, 20);
+		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
+		objComp.set_text("["+list.getColumn(i, "cd")+"]"+list.getColumn(i, "cdNm"));		
+		objComp.set_truevalue(list.getColumn(i, "cd"));
+		objComp.set_falsevalue("N");
+		objComp.show();	
+		content.push(id);
+		
+		this.Div00.form.Div00.form.Div00.form.resetScroll()
+	}
+}
+
+//캘린더 선택시 팝업 노출
+this.Div01_Div05_Div00_strtDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
+{
+ 	this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+};
+this.Div01_Div05_Div00_endDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
+{
+	this.Div01.form.Div05.form.Div00.form.endDtm.dropdown();
+};
+
+this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+//체크박스 동기화
+this.fn_sync_checkBox = function(chkBxObj, chkDataArr)
+{
+	for(var i=0; i<chkDataArr.length; i++)
+	{
+		for(var j=0; j<chkBxObj.length; j++)
+		{
+			if(chkBxObj[j] == "[object CheckBox]" && chkBxObj[j].name.indexOf("All") < 0)
+			{		
+				if(chkBxObj[j].truevalue == chkDataArr[i])
+				{
+					chkBxObj[j].set_value(chkDataArr[i]);
+				}
+			}	
+		}
+	}
+}
+
+//중분류 초기화
+this.ds_category02_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo)
+{
+	if(this.ds_category02.getRowCount() != 0)
+	{
+		this.ds_category02.insertRow(0);
+		this.ds_category02.setColumn(0, "cd", "");
+		this.ds_category02.setColumn(0, "cdNm", "전체");
+		this.Div01.form.Div03.form.Div00.form.Combo01.set_text("전체");+
+		
+		this.ds_category03.deleteAll();
+		this.ds_category03.addRow();
+		this.ds_category03.setColumn(0, "cd", "");
+		this.ds_category03.setColumn(0, "cdNm", "전체");
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
+	}
+};
+
+//소분류 초기화
+this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo)
+{
+	if(this.ds_category03.getColCount() == 0)
+	{
+		var smclsCtegryInf = new nexacro.ItemClickEventInfo();
+		
+		this.ds_category03.addColumn("cd", "STRING", 10);
+		this.ds_category03.addColumn("cdNm", "STRING", 50);
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);
+		
+		smclsCtegryInf.itemtext = "";
+		smclsCtegryInf.itemvalue = "";
+		
+		this.Div01_Div03_Div00_Combo02_onitemclick(this.Div01.form.Div03.form.Div00.form.Combo02,smclsCtegryInf);
+	}
+	else
+	{
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(true);
+		this.ds_category03.insertRow(0); 
+		this.ds_category03.setColumn(0, "cd", "");
+		this.ds_category03.setColumn(0, "cdNm", "전체");
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
+	}
+	
+};
+
+
+]]></Script>
+    <Bind>
+      <BindItem id="cpnNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="cpnNm"/>
+      <BindItem id="cpnExpl" compid="Div00.form.Div02.form.TextArea00" propid="value" datasetid="ds_detail" columnid="cpnExpl"/>
+      <BindItem id="issueMthdClCd" compid="Div01.form.Div00.form.radioIssuCd" propid="value" datasetid="ds_detail" columnid="issueMthdClCd"/>
+      <BindItem id="issueObjClCd" compid="Div01.form.Div01.form.radioTrgtMem" propid="value" datasetid="ds_detail" columnid="issueObjClCd"/>
+      <BindItem id="applLectClCd" compid="Div01.form.Div03.form.radioTrgtLect" propid="value" datasetid="ds_detail" columnid="applLectClCd"/>
+      <BindItem id="dcAmtClCd" compid="Div01.form.Div04.form.radioDiscount" propid="value" datasetid="ds_detail" columnid="dcAmtClCd"/>
+      <BindItem id="dcAmt" compid="Div01.form.Div04.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="dcAmt"/>
+      <BindItem id="usePrdClCd" compid="Div01.form.Div05.form.radioPeriod" propid="value" datasetid="ds_detail" columnid="usePrdClCd"/>
+      <BindItem id="usePsblDd" compid="Div01.form.Div05.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="usePsblDd"/>
+      <BindItem id="issueAlrtYn" compid="Div02.form.Div00.form.Radio00" propid="value" datasetid="ds_detail" columnid="issueAlrtYn"/>
+      <BindItem id="item0" compid="Div01.form.Div02.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="issueCqty"/>
+      <BindItem id="useStDt" compid="Div01.form.Div05.form.Div00.form.strtDtm" propid="value" datasetid="ds_detail" columnid="useStDt"/>
+      <BindItem id="useEndDt" compid="Div01.form.Div05.form.Div00.form.endDtm" propid="value" datasetid="ds_detail" columnid="useEndDt"/>
+      <BindItem id="rgprId" compid="Div04.form.Div00.form.Static01" propid="text" datasetid="ds_detail" columnid="rgprId"/>
+      <BindItem id="rgprDtm" compid="Div04.form.Div01.form.Static01" propid="text" datasetid="ds_detail" columnid="rgprDtm"/>
+      <BindItem id="mdfId" compid="Div04.form.Div02.form.Static01" propid="text" datasetid="ds_detail" columnid="mdfId"/>
+      <BindItem id="mdfDtm" compid="Div04.form.Div03.form.Static01" propid="text" datasetid="ds_detail" columnid="mdfDtm"/>
+      <BindItem id="item1" compid="Div04" propid="visible" datasetid="ds_detail" columnid="rgprId"/>
+    </Bind>
+  </Form>
+</FDL>

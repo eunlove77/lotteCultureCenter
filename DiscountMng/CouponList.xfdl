@@ -21,11 +21,11 @@
                 <Column size="100"/>
               </Columns>
               <Rows>
-                <Row size="24" band="head"/>
+                <Row size="40" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="번호" edittype="checkbox" displaytype="checkboxcontrol"/>
+                <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
                 <Cell col="1" text="번호"/>
                 <Cell col="2" text="쿠폰명"/>
                 <Cell col="3" text="할인금액"/>
@@ -37,22 +37,22 @@
                 <Cell col="9" text="등록일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:reqnId" expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell expr="dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" expr="dataset.getRowCount() - currow"/>
                 <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="3" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                <Cell col="3" text="expr:comp.parent.gfn_setComma(dataset.getColumn(currow, &quot;dcAmt&quot;)) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
                 <Cell col="4" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
                 <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
                 <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
-                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;useCnt&quot;) + &quot;/&quot; + dataset.getColumn(currow, &quot;issueCnt&quot;)"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;00&quot; ? &quot;-&quot; : (dataset.getColumn(currow, &quot;useCnt&quot;) + &quot;/&quot; + dataset.getColumn(currow, &quot;issueCnt&quot;))"/>
                 <Cell col="8" text="bind:rgprId"/>
                 <Cell col="9" text="bind:rgprDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" text="총 100개"/>
-        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" height="139" right="9">
+        <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" text="목록"/>
+        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" height="139" right="9" minwidth="680" maxwidth="">
           <Layouts>
             <Layout>
               <Div id="Div00_03" taborder="0" text="Div01" left="0" top="42" height="33" cssclass="div_WF_CompWrap" right="0">
@@ -67,7 +67,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                    <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="21" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -75,7 +75,7 @@
                         </ColumnInfo>
                         <Rows>
                           <Row>
-                            <Col id="codecolumn">-1</Col>
+                            <Col id="codecolumn"/>
                             <Col id="datacolumn">전체</Col>
                           </Row>
                           <Row>
@@ -94,16 +94,16 @@
                       </Dataset>
                     </Combo>
                     <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
-                    <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80"/>
-                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
+                    <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_04_btnSearch_onclick"/>
+                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div00_04_btnInit_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00_00" taborder="2" text="Div01" left="0" top="12" height="33" cssclass="div_WF_CompWrap" right="631" formscrolltype="none">
+              <Div id="Div00_00" taborder="2" text="Div01" left="0" top="12" height="33" cssclass="div_WF_CompWrap" right="49.92%" formscrolltype="none" minwidth="330" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_search" codecolumn="issueStatCd" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                    <Combo id="ComboSpot" taborder="1" text="전체" left="116" top="5" width="100" height="21" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -111,16 +111,20 @@
                         </ColumnInfo>
                         <Rows>
                           <Row>
-                            <Col id="codecolumn">1</Col>
-                            <Col id="datacolumn">특강</Col>
+                            <Col id="codecolumn"/>
+                            <Col id="datacolumn">전체</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">넥사크로 특강</Col>
+                            <Col id="codecolumn">00</Col>
+                            <Col id="datacolumn">발급대기</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">3</Col>
-                            <Col id="datacolumn">자바스크립트 특강</Col>
+                            <Col id="codecolumn">10</Col>
+                            <Col id="datacolumn">발급중</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">20</Col>
+                            <Col id="datacolumn">발급종료</Col>
                           </Row>
                         </Rows>
                       </Dataset>
@@ -132,7 +136,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 방식" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="130" height="21" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" onitemchanged="Div01_Div00_01_ComboSpot_onitemchanged">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -140,16 +144,20 @@
                         </ColumnInfo>
                         <Rows>
                           <Row>
-                            <Col id="codecolumn">1</Col>
-                            <Col id="datacolumn">특강</Col>
+                            <Col id="codecolumn"/>
+                            <Col id="datacolumn">전체</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">넥사크로 특강</Col>
+                            <Col id="codecolumn">NORMAL</Col>
+                            <Col id="datacolumn">일반(수동)발급</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">3</Col>
-                            <Col id="datacolumn">자바스크립트 특강</Col>
+                            <Col id="codecolumn">AUTO</Col>
+                            <Col id="datacolumn">자동발급</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">RANDOM</Col>
+                            <Col id="datacolumn">오프라인난수발급</Col>
                           </Row>
                         </Rows>
                       </Dataset>
@@ -160,11 +168,10 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="insBtn" taborder="9" text="쿠폰 신규등록" top="196" height="21" cssclass="btn_WF_Weak" onclick="insBtn_onclick" right="10" width="101"/>
-        <Button id="copyBtn" taborder="8" text="쿠폰 복사" top="196" height="21" width="75" cssclass="btn_WF_Weak" right="insBtn:10"/>
-        <Button id="closeBtn" taborder="7" text="발급 종료" top="196" height="21" width="83" wordWrap="char" cssclass="btn_WF_Medium" right="copyBtn:10"/>
-        <Button id="excelDownBtn" taborder="6" text="엑셀 다운로드" top="196" height="21" width="98" cssclass="btn_WF_Weak" right="closeBtn:10"/>
-        <Button id="delBtn" taborder="5" text="삭제" top="196" height="21" width="53" cssclass="btn_WF_High" right="excelDownBtn:10"/>
+        <Button id="insBtn" taborder="8" text="쿠폰 신규등록" top="191" height="30" cssclass="btn_WF_Medium" onclick="insBtn_onclick" right="10" width="101"/>
+        <Button id="copyBtn" taborder="7" text="쿠폰 복사" top="191" height="30" width="75" cssclass="btn_WF_Medium" right="insBtn:10" onclick="copyBtn_onclick"/>
+        <Button id="closeBtn" taborder="6" text="발급 종료" top="191" height="30" width="83" wordWrap="char" cssclass="btn_WF_High" right="copyBtn:10"/>
+        <Button id="excelDownBtn" taborder="5" text="엑셀 다운로드" top="191" height="30" width="98" cssclass="btn_WF_Weak" right="closeBtn:10"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -178,6 +185,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
+this.popCnt = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -193,18 +201,20 @@ this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
 	
 	this.fn_list(1);
+	
+	this.gfnSetCheckBoxNoDataset(this.ds_coupon_list, this.Grid00, 0); 
 };
 
 this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.parent.parent.parent.param.TAB_CLOSE = false;
-
+	this.popCnt ++;
+	
 	var oArg = {
-				title : "쿠폰 등록",
 				cpnSeqno : ""
 				};
 	
-	this.gfn_openPopup("couponInsPop", oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null);
+	this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, 600, 350, true, true, null, "쿠폰 등록");
 };
 
 /**************************************************************************
@@ -226,17 +236,98 @@ this.fn_list = function (page)
 	this.gfn_transaction(tranObj);	
 };
 
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			this.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_coupon_list.getCount()) + "개)")
+			break;
+		case "save":
+			this.alert("저장되었습니다.");
+			this.fn_list();
+			break;
+		case "detail":    
+						
+			break;
+	}
 
+};
 
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 2){		
+	if(e.cell == 2){	
+		this.popCnt ++;
 		var oArg = {
-				title : "쿠폰 상세",
+				type : "detail",
 				cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno")
 				};
 	
-		this.gfn_openPopup("couponInsPop", oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null);
+		if(obj.getBindDataset().getColumn(e.row, "issueStatCd") == "00")
+		{
+			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, 600, 350, true, true, null, "쿠폰 상세");
+		}
+		else
+		{
+			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null, "쿠폰 상세");
+		}		
+	}
+};
+
+this.Div01_Div00_04_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list(1);
+};
+
+this.Div01_Div00_04_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var cnt = this.ds_search.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		this.ds_search.setColumn(0, i, "");
+	}
+	this.fn_list(1);
+};
+
+this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var list = this.ds_coupon_list;
+	var chkCnt = 0;
+	var chkRow = -1;
+	
+	console.log(list.checkarray)
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkCnt ++;
+			chkRow = i;
+		}
+	}
+	
+	if(chkCnt == 0)
+	{
+		alert("항목을 선택하세요.");
+	}
+	else if(chkCnt > 1)
+	{
+		alert("1개만 선택하세요.");
+	}
+	else
+	{
+		this.popCnt ++;
+		var oArg = {
+				cpnSeqno : list.getColumn(chkRow, "cpnSeqno")
+				};
+	
+		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null, "쿠폰 복사");
 	}
 };
 ]]></Script>
@@ -269,7 +360,11 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
-          <Row/>
+          <Row>
+            <Col id="issueStatCd"/>
+            <Col id="issueMthdClCd"/>
+            <Col id="f"/>
+          </Row>
         </Rows>
       </Dataset>
     </Objects>
