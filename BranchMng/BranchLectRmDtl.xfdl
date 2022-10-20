@@ -19,7 +19,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="117" top="5" width="100" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="117" top="5" width="100" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -33,7 +33,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="노출 여부 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Radio id="radioUse" taborder="1" left="117" top="-10" width="151" height="50" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1">
+                    <Radio id="radioUse" taborder="1" left="117" top="-10" width="151" height="50" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1" text="노출" index="0">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -63,7 +63,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="강의실 코드 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Static id="Static01" taborder="1" text="Static01" left="119" top="2" width="101" height="28"/>
+              <Static id="Static01" taborder="1" left="119" top="2" width="101" height="28"/>
             </Layout>
           </Layouts>
         </Div>
@@ -99,7 +99,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="내외 구분 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Radio id="radioUse" taborder="1" left="117" top="-10" width="151" height="50" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1">
+                    <Radio id="radioUse" taborder="1" left="117" top="-10" width="151" height="50" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1" text="내부" index="0">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -135,40 +135,26 @@
       <Dataset id="ds_detail">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="2000"/>
-          <Column id="brchAreaCd" type="STRING" size="2000"/>
-          <Column id="brchImgFileId1" type="STRING" size="2000"/>
-          <Column id="brchImgFileId2" type="STRING" size="2000"/>
-          <Column id="brchImgFileId3" type="STRING" size="2000"/>
-          <Column id="brchImgFileId4" type="STRING" size="2000"/>
-          <Column id="brchImgFileId5" type="STRING" size="2000"/>
-          <Column id="telno" type="STRING" size="2000"/>
-          <Column id="bscAddr" type="STRING" size="2000"/>
-          <Column id="dtlAddr" type="STRING" size="2000"/>
-          <Column id="expsrYn" type="STRING" size="2000"/>
-          <Column id="lat" type="STRING" size="2000"/>
-          <Column id="lng" type="STRING" size="2000"/>
-          <Column id="lectRmCnt" type="INT" size="2000"/>
+          <Column id="lectRmCd" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="inoutClCd" type="STRING" size="256"/>
+          <Column id="araSqm" type="BIGDECIMAL" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
         </ColumnInfo>
-        <Row>
-          <Col id="expsrYn">Y</Col>
-        </Row>
-        <Rows/>
+        <Rows>
+          <Row>
+            <Col id="inoutClCd">I</Col>
+            <Col id="expsrYn">Y</Col>
+          </Row>
+        </Rows>
       </Dataset>
-      <Dataset id="spotAreaCdList">
+      <Dataset id="ds_lectRmCd">
         <ColumnInfo>
-          <Column id="cd" type="STRING" size="256"/>
-          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="lectRmCd" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
-    <Bind>
-      <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
-      <BindItem id="item7" compid="row05.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
-      <BindItem id="item9" compid="row07.form.Edit00" propid="value" datasetid="ds_detail" columnid="dtlAddr"/>
-      <BindItem id="item11" compid="row09.form.Edit00" propid="value" datasetid="ds_detail" columnid="lng"/>
-      <BindItem id="item13" compid="row11.form.Edit00" propid="value" datasetid="ds_detail" columnid="lectRmCnt"/>
-      <BindItem id="item1" compid="row08.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
-    </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
@@ -198,21 +184,142 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
 		
-	if(this.ds_detail.getRowCount() <1)
-	{
-		this.ds_detail.insertRow();
-	}
-	 
-	if(this.param.brchCd != ""){	
+	if(this.param.brchCd != "" && this.param.lectRmCd != ""){	
 	
 		this.ds_detail.setColumn(0, "brchCd", this.param.brchCd);
+		this.ds_detail.setColumn(0, "lectRmCd", this.param.lectRmCd);
 		//this.ds_detail.setColumn(0, "brchAreaCd", this.param.brchAreaCd);
-		
 		//this.alert("dtl입[" + this.param.brchCd + "]ddd2[" + this.param.brchAreaCd);
 		this.fn_detail();
 	}
+	else
+	{
+		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
+	}
+	
 };
 
+this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list();
+};
+
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+	{
+		this.fn_checkValidation();
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_list = function(){
+	this.parent.set_url("BranchMng::BranchLectRmList.xfdl");	
+}
+
+this.fn_save = function ()
+{		
+	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::branch/insertBranchLectRm.do";
+	var inData      = "data=ds_detail";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+			strSvcUrl ,       // trabsaction을 요청할 주소
+			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+			strArg,         // 입력값으로 보낼 arguments, a=b
+			callBackFnc,       // transaction의 결과를 받을 Function 이름
+			isAsync);         // 비동기통신 여부 [생략가능]
+
+};
+
+this.fn_checkValidation = function(){
+	
+	if(this.gfn_isNull(this.row07.form.Edit00.value))
+	{
+		this.alert("강의실명을 입력해주세요");
+		this.row07.form.Edit00.setFocus();
+		return false;
+	}
+	{								
+		this.fn_save();
+	}	
+}
+
+this.fn_detail = function ()
+{	
+	var strSvcId	= "detail"
+	var strSvcUrl   = this.application.Admin_svc + "::/branch/branchLectRmDtl.do";
+	var inData      = "detail=ds_detail";
+	var outData     = "ds_detail=output2";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+};
+
+this.fn_rmCdList = function()
+{
+	this.alert("코드조회")
+	var tranObj = {};
+	tranObj.strSvcId	= "cdList";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/branch/lectRmCd.do";
+	tranObj.inData      = "";
+	tranObj.outData     = "ds_lectRmCd=lectRmCd";
+	tranObj.strArg      = "cdId=BRANCH_LECTRM_SEQ";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+    return;
+  }
+
+  switch(svcID)
+  {
+	case "cdList":
+			//this.fn_set_spot();
+			
+			break;
+			
+    case "save":
+		this.alert("저장되었습니다.");
+		this.fn_list();
+		break;
+  }
+};
 ]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
+      <BindItem id="item1" compid="row06.form.Static01" propid="text" datasetid="ds_detail" columnid="lectRmCd"/>
+      <BindItem id="item2" compid="row07.form.Edit00" propid="value" datasetid="ds_detail" columnid="lectRmNm"/>
+      <BindItem id="item3" compid="row08.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="inoutClCd"/>
+      <BindItem id="item4" compid="row11.form.Edit00" propid="value" datasetid="ds_detail" columnid="araSqm"/>
+      <BindItem id="item5" compid="row09.form.Edit00" propid="value" datasetid="ds_detail" columnid="memoCont"/>
+      <BindItem id="item6" compid="row05.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
+    </Bind>
   </Form>
 </FDL>
