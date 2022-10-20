@@ -11,9 +11,9 @@
               <Columns>
                 <Column size="50"/>
                 <Column size="56"/>
-                <Column size="143"/>
-                <Column size="105"/>
-                <Column size="290"/>
+                <Column size="113"/>
+                <Column size="91"/>
+                <Column size="332"/>
                 <Column size="115"/>
                 <Column size="80"/>
                 <Column size="65"/>
@@ -37,15 +37,15 @@
                 <Cell col="9" text="등록일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:notcSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell text="bind:brchCd" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:rnum"/>
-                <Cell col="2" text="bind:brchNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="3" text="bind:bareaNm"/>
-                <Cell col="4" text="expr:dtlAddr ? bscAddr + dtlAddr : 'bscAddr '"/>
+                <Cell col="4" text="expr:dtlAddr ? bscAddr +',' + dtlAddr : 'bscAddr '"/>
                 <Cell col="5" text="bind:telno" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="6" text="bind:lectRmCnt"/>
                 <Cell col="7" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
-                <Cell col="8" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="8" text="expr:rgprId ? rgprNm : ''"/>
                 <Cell col="9" text="bind:rgprDtm"/>
               </Band>
             </Format>

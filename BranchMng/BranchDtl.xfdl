@@ -57,7 +57,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Static id="Static00" taborder="4" text="공지사항/이벤트 등록" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17"/>
+        <Static id="Static00" taborder="4" text="지점관리 등록" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17"/>
         <Static id="Static01" taborder="5" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="81" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="25" width="200"/>
         <Div id="row03" taborder="6" text="Div01" left="10" top="136" height="33" right="10" formscrolltype="none">
           <Layouts>
@@ -147,11 +147,7 @@
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="2000"/>
           <Column id="brchAreaCd" type="STRING" size="2000"/>
-          <Column id="brchImgFileId1" type="STRING" size="2000"/>
-          <Column id="brchImgFileId2" type="STRING" size="2000"/>
-          <Column id="brchImgFileId3" type="STRING" size="2000"/>
-          <Column id="brchImgFileId4" type="STRING" size="2000"/>
-          <Column id="brchImgFileId5" type="STRING" size="2000"/>
+          <Column id="brchImgFileId" type="STRING" size="2000"/>
           <Column id="telno" type="STRING" size="2000"/>
           <Column id="bscAddr" type="STRING" size="2000"/>
           <Column id="dtlAddr" type="STRING" size="2000"/>
@@ -160,10 +156,11 @@
           <Column id="lng" type="STRING" size="2000"/>
           <Column id="lectRmCnt" type="INT" size="2000"/>
         </ColumnInfo>
-        <Row>
-          <Col id="expsrYn">Y</Col>
-        </Row>
-        <Rows/>
+        <Rows>
+          <Row>
+            <Col id="expsrYn">Y</Col>
+          </Row>
+        </Rows>
       </Dataset>
       <Dataset id="spotAreaCdList">
         <ColumnInfo>
@@ -171,15 +168,19 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_fileUpload">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
       <BindItem id="item1" compid="row03.form.spotDiv.form.ComboSpotArea" propid="value" datasetid="ds_detail" columnid="brchAreaCd"/>
-      <BindItem id="item2" compid="row04.form.Div00" propid="text" datasetid="ds_detail" columnid="brchImgFileId1"/>
-      <BindItem id="item3" compid="row04.form.Div00_00" propid="text" datasetid="ds_detail" columnid="brchImgFileId2"/>
-      <BindItem id="item4" compid="row04.form.Div00_01" propid="text" datasetid="ds_detail" columnid="brchImgFileId3"/>
-      <BindItem id="item5" compid="row04.form.Div00_02" propid="text" datasetid="ds_detail" columnid="brchImgFileId4"/>
-      <BindItem id="item6" compid="row04.form.Div00_03" propid="text" datasetid="ds_detail" columnid="brchImgFileId5"/>
       <BindItem id="item7" compid="row05.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
       <BindItem id="item8" compid="row06.form.Edit00" propid="value" datasetid="ds_detail" columnid="bscAddr"/>
       <BindItem id="item9" compid="row07.form.Edit00" propid="value" datasetid="ds_detail" columnid="dtlAddr"/>
@@ -222,20 +223,17 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotAreaCdList.setColumn(0, "cd", "");
 	this.spotAreaCdList.setColumn(0, "cdNm", "전체");
 	
-	//this.alert("값체크" + this.param.faqSeqno);
-	
-	if(this.ds_detail.getRowCount() <1)
-	{
-		this.ds_detail.insertRow();
-	}
-	 
 	if(this.param.brchCd != ""){	
 	
 		this.ds_detail.setColumn(0, "brchCd", this.param.brchCd);
 		this.ds_detail.setColumn(0, "brchAreaCd", this.param.brchAreaCd);
-		
-		//this.alert("dtl입[" + this.param.brchCd + "]ddd2[" + this.param.brchAreaCd);
+		this.row02.form.spotDiv.form.ComboSpot.set_readonly(true);
 		this.fn_detail();
+	}
+	else
+	{
+		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
+		this.row03.form.spotDiv.form.ComboSpotArea.set_index(0);
 	}
 };
 
@@ -283,7 +281,19 @@ this.fn_save = function ()
 
 this.fn_checkValidation = function(){
 	
-	if(this.gfn_isNull(this.row06.form.Edit00.value))
+	if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+	{
+		this.alert("지점을 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row03.form.spotDiv.form.ComboSpotArea.value))
+	{
+		this.alert("지점권역코드를 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row06.form.Edit00.value))
 	{
 		this.alert("기본주소를 입력해주세요");
 		this.row06.form.Edit00.setFocus();
