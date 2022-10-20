@@ -3,7 +3,7 @@
   <Form id="Form_Mdi" width="1366" height="340" titletext="New Form" onload="Form_Mdi_onload" background="#f2f2f2" border="0px none" visible="true" scrolltype="none">
     <Layouts>
       <Layout height="340" mobileorientation="landscape" width="1366">
-        <Tab id="tabMdi" taborder="0" tabindex="0" left="30" top="10" height="300" onchanged="tabMdi_onchanged" showtabbuttonicon="false" showextrabutton="true" onextrabuttonclick="tabMdi_onextrabuttonclick" canchange="tabMdi_canchange" ondrag="tabMdi_ondrag" ondrop="tabMdi_ondrop" cursor="default" onmousemove="tabMdi_onmousemove" tabbuttonwidth="150" width="1366" minwidth="" tabbuttonheight="28">
+        <Tab id="tabMdi" taborder="0" tabindex="0" left="30" top="18" height="300" onchanged="tabMdi_onchanged" showtabbuttonicon="false" showextrabutton="true" onextrabuttonclick="tabMdi_onextrabuttonclick" canchange="tabMdi_canchange" ondrag="tabMdi_ondrag" ondrop="tabMdi_ondrop" cursor="default" onmousemove="tabMdi_onmousemove" tabbuttonwidth="150" width="1366" minwidth="" tabbuttonheight="28">
           <Tabpages>
             <Tabpage id="Tabpage1" text="Tabpage1"/>
           </Tabpages>
@@ -79,33 +79,36 @@ this.fn_ActiveTabPage = function(pvWinId)
 this.tabMdi_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
 {
 	var sWinId = obj.tabpages[e.postindex].name;
-
+console.log(this.application.WorkFrame[sWinId].form);
 	this.application.WorkFrame[sWinId].form.setFocus();
 };
 
 this.tabMdi_onextrabuttonclick = function(obj:nexacro.Tab,e:nexacro.TabMouseEventInfo)
 {
-	var sWinId = obj.tabpages[e.index].name;	
+	var sWinId = obj.tabpages[e.index].name;		
+	var _form = this.application.WorkFrame[sWinId].form;
 	
-	this.application.WorkFrame[sWinId].form.close();
-
+	// 탭이 포함되고 탭에 url 속성에서 다른 폼을 불러왔을 경우 부모폼에서 close 함수 호출시 오류 발생
+	// 부모에 포함된 탭객체 삭제 
+	delete _form.divWork.form.Tab00;	
+	
+	_form.close();
+	
 	this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
 	
 	obj.removeTabpage(e.index);
 	
-	var nCnt = this.tabMdi.getTabpageCount();
-	if(nCnt == 0){
-		
-	}
-	
-	
-	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
-	{	
- 		if (nexacro.getPopupFrames()[i].opener.fvWinId == sWinId) 
- 		{
- 			nexacro.getPopupFrames()[i].form.close();
- 		}
-	}	
+ 	var nCnt = this.tabMdi.getTabpageCount();
+ 	if(nCnt == 0){
+ 	}
+ 	
+ 	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
+ 	{	
+  		if (nexacro.getPopupFrames()[i].opener.fvWinId == sWinId) 
+  		{
+  			nexacro.getPopupFrames()[i].form.close();
+  		}
+ 	}	
 };
 
 
