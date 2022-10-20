@@ -12,11 +12,12 @@
                 <Column size="50"/>
                 <Column size="88"/>
                 <Column size="100"/>
-                <Column size="300"/>
+                <Column size="250"/>
+                <Column size="202"/>
+                <Column size="150"/>
                 <Column size="170"/>
-                <Column size="115"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="81"/>
+                <Column size="94"/>
                 <Column size="80"/>
               </Columns>
               <Rows>
@@ -28,22 +29,24 @@
                 <Cell col="1" text="구분"/>
                 <Cell col="2" text="지점"/>
                 <Cell col="3" text="제목"/>
-                <Cell col="4" text="작성자"/>
-                <Cell col="5" text="등록일"/>
-                <Cell col="6" text="조회수"/>
-                <Cell col="7" text="상단 고정여부"/>
-                <Cell col="8" text="노출여부"/>
+                <Cell col="4" text="게시기간"/>
+                <Cell col="5" text="작성자"/>
+                <Cell col="6" text="등록일"/>
+                <Cell col="7" text="조회수"/>
+                <Cell col="8" text="상단 고정여부"/>
+                <Cell col="9" text="노출여부"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:notcSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:cdNm"/>
                 <Cell col="2" text="bind:brchNm"/>
                 <Cell col="3" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="4" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="5" text="bind:rgprDtm" displaytype="expr: rgprId ? 'date' : 'none'" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="6" text="bind:inqCnt"/>
-                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;fixYn&quot;) == &quot;Y&quot; ? &quot;고정&quot; : &quot;미고정&quot;"/>
-                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
+                <Cell col="4" text="expr:postStDt? postStDt + '~' + postEndDt : ''"/>
+                <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="6" text="bind:rgprDtm" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="7" text="bind:inqCnt"/>
+                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;fixYn&quot;) == &quot;Y&quot; ? &quot;고정&quot; : &quot;미고정&quot;"/>
+                <Cell col="9" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
               </Band>
             </Format>
           </Formats>
@@ -60,15 +63,14 @@
         <Div id="Div00_00" taborder="4" text="Div00" left="7" top="57" height="173" formscrolltype="both" right="0">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="검색" left="0" top="12" width="24" cssclass="sta_WF_TitGray" height="14"/>
-              <Div id="conDiv" taborder="1" text="Div00" left="3" top="Static00:9" height="134" cssclass="div_WF_TableComp" right="8">
+              <Div id="conDiv" taborder="1" text="Div00" left="3" top="35" height="134" cssclass="div_WF_TableComp" right="8">
                 <Layouts>
                   <Layout>
                     <Div id="searchDiv" taborder="0" text="Div01" left="0" top="94" height="33" cssclass="div_WF_CompWrap" right="2">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="searchField" taborder="1" left="Static00:6" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" text="전체" value="">
+                          <Combo id="searchField" taborder="1" left="Static00:6" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="-1" value="-1" text="">
                             <Dataset id="innerdataset">
                               <ColumnInfo>
                                 <Column id="codecolumn" size="256"/>
@@ -76,7 +78,7 @@
                               </ColumnInfo>
                               <Rows>
                                 <Row>
-                                  <Col id="codecolumn">0</Col>
+                                  <Col id="codecolumn"/>
                                   <Col id="datacolumn">전체</Col>
                                 </Row>
                                 <Row>
@@ -159,6 +161,8 @@
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="clCd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="postStDt" type="STRING" size="256"/>
+          <Column id="postEndDt" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="inqCnt" type="INT" size="256"/>
@@ -173,8 +177,8 @@
       </Dataset>
       <Dataset id="searchDs">
         <ColumnInfo>
-          <Column id="strtDt" type="STRING" size="256"/>
-          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
           <Column id="clCdAll" type="STRING" size="256"/>
           <Column id="clCdList" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
@@ -183,13 +187,10 @@
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="f">0</Col>
+            <Col id="f"/>
             <Col id="clCdList"/>
             <Col id="clCdAll"/>
             <Col id="brchCd"/>
-            <Col id="endDt"/>
-            <Col id="strtDt"/>
-            <Col id="q"/>
           </Row>
         </Rows>
       </Dataset>
@@ -207,6 +208,8 @@
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="clCd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="postStDt" type="STRING" size="256"/>
+          <Column id="postEndDt" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="inqCnt" type="INT" size="256"/>
@@ -234,7 +237,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
-include "Base::lib_date.xjs";
+//include "Base::lib_date.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -253,19 +256,14 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	var objOwnerFrame = this.getOwnerFrame();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.noticeDs, this.GridNoticeList, 0);
-	//검색영역 DS 초기화
-	this.reset_search_form();
+	
 	this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
 	
-	// 코드 데이터
-	//this.fn_data_list();
-	// 목록 조회
-	this.fn_list(1);
+	this.fn_list();
 };
 
 //등록 버튼
@@ -304,32 +302,30 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 //검색버튼
 this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var strtDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm.value;
-	var endDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm.value;
-	
-	this.searchDs.setColumn(0, 'strtDt', strtDt);
-	this.searchDs.setColumn(0, 'endDt', endDt);
-	
 	this.fn_list();
 };
 
 //초기화버튼
 this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.reset_search_form();
+	var cnt = this.searchDs.getColCount();
+	
+	for(var i=0; i<cnt; i++)
+	{
+		this.searchDs.setColumn(0, i, "");
+	}
 	this.fn_list();
 	
 };
 
 this.reset_search_form = function(){
 	
-	this.searchDs.setColumn(0, "strtDt", "");
-	this.searchDs.setColumn(0, "endDt", "");
-	this.searchDs.setColumn(0, "clCdAll", "");
-	this.searchDs.setColumn(0, "clCdList", "");
-	this.searchDs.setColumn(0, "brchCd", "");
-	this.searchDs.setColumn(0, "f", 0);
-	this.searchDs.setColumn(0, "q", "");
+	var cnt = this.searchDs.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		this.searchDs.setColumn(0, i, "");
+	}
+	this.fn_list();
 }
 
 //그리드 상세 페이지 이동
@@ -358,7 +354,7 @@ this.fn_list = function ()
 	tranObj.strSvcId	= "list";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/noticeList.do";
 	tranObj.inData      = "search=searchDs";
-	tranObj.outData     = "noticeDs=output1";
+	tranObj.outData     = "noticeDs=noticeList";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -490,15 +486,6 @@ this.chkAllInit = function(pObj)
 this.fnCallback = function(svcID,errorCode,errorMsg)
 
 {
-  //목록 카운트
-  
-  this.Div01.form.txtTotal.set_text("목록("+this.noticeDs.rowcount+")개");
-  
-  if(!this.noticeDs.getColCount())
-  {
-	this.noticeDs.copyData(this.noticeDs_format);
-  }
-
   // 에러 시 화면 처리 내역
   if(errorCode != 0)
   {
@@ -508,14 +495,27 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
   switch(svcID)
   {
-   case "dataList":
-		//this.searchSpot.set_index(0);
+	case "list":
+			this.Div01.form.txtTotal.set_text("목록("+this.noticeDs.rowcount+")개");
+			if(!this.noticeDs.getColCount())
+			{
+				this.noticeDs.copyData(this.noticeDs_format);
+			}
+			if(this.noticeDs.rowcount < 1){
+				//this.alert("조회된 결과가 없습니다.");
+				this.noticeDs.clearData();
+			}
+			else
+			{
+			
+			}
+			
 	break;
-	
+    
 	case "delete":
 		this.alert("삭제완료");
 		this.fn_list(1);
-		break;
+	break;
   }
 
 };
@@ -599,10 +599,13 @@ this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 	} 
 };]]></Script>
     <Bind>
-      <BindItem id="item8" compid="Div00_00.form.conDiv.form.spotDiv.form.ComboSpot" propid="value" datasetid="searchDs" columnid="brchCd"/>
-      <BindItem id="item0" compid="Div00_00.form.conDiv.form.searchDiv.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
-      <BindItem id="item1" compid="Div00_00.form.conDiv.form.searchDiv.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
-      <BindItem id="item2" compid="Div00_00.form.conDiv.form.ctgyDiv.form.chkAll" propid="value" datasetid="searchDs" columnid="clCdAll"/>
+      <BindItem id="brchCd" compid="Div00_00.form.conDiv.form.spotDiv.form.ComboSpot" propid="value" datasetid="searchDs" columnid="brchCd"/>
+      <BindItem id="q" compid="Div00_00.form.conDiv.form.searchDiv.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
+      <BindItem id="f" compid="Div00_00.form.conDiv.form.searchDiv.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
+      <BindItem id="clCdAll" compid="Div00_00.form.conDiv.form.ctgyDiv.form.chkAll" propid="value" datasetid="searchDs" columnid="clCdAll"/>
+      <BindItem id="strtDtm" compid="Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
+      <BindItem id="endDtm" compid="Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm" propid="value" datasetid="searchDs" columnid="endDtm"/>
+      <BindItem id="clCdList" compid="Div00_00.form.conDiv.form.ctgyDiv.form.chkClCd2" propid="value" datasetid="searchDs" columnid="clCdList"/>
     </Bind>
   </Form>
 </FDL>
