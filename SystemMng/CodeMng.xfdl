@@ -57,7 +57,10 @@
                 <Column size="200" band="left"/>
                 <Column size="40"/>
                 <Column size="40"/>
-                <Column size="100"/>
+                <Column size="70"/>
+                <Column size="70"/>
+                <Column size="70"/>
+                <Column size="80"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -70,7 +73,10 @@
                 <Cell col="3" text="공통코드명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
                 <Cell col="4" text="사용여부"/>
                 <Cell col="5" text="정렬순서"/>
-                <Cell col="6" text="변경일자"/>
+                <Cell col="6" text="보조값1"/>
+                <Cell col="7" text="보조값2"/>
+                <Cell col="8" text="보조값3"/>
+                <Cell col="9" text="변경일자"/>
               </Band>
               <Band id="body">
                 <Cell text="expr:currow + 1"/>
@@ -79,7 +85,10 @@
                 <Cell col="3" text="bind:cdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
                 <Cell col="4" text="bind:useYn" displaytype="combotext" edittype="combo" combodataset="ds_yn" combocodecol="useYn" combodatacol="useYn"/>
                 <Cell col="5" text="bind:cdOrd"/>
-                <Cell col="6" text="bind:modDtm"/>
+                <Cell col="6" text="bind:cdVal1" edittype="normal"/>
+                <Cell col="7" text="bind:cdVal2" edittype="normal"/>
+                <Cell col="8" text="bind:cdVal3" edittype="normal"/>
+                <Cell col="9" text="bind:modDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -87,20 +96,10 @@
         <Button id="btnSearch" taborder="9" text="조회" top="82" width="90" height="30" cssclass="btn_WF_Medium" fittocontents="none" left="searchQuery:10" onclick="btnSearch_onclick"/>
         <Button id="btnSave" taborder="10" text="저장" top="35" width="84" height="21" cssclass="btn_WF_High" fittocontents="none" right="10" onclick="btnSave_onclick"/>
         <Div id="Div00" taborder="11" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="Grid00" taborder="12" left="23" top="837" width="787" height="270" binddataset="gdsMenu">
+        <Grid id="Grid00" taborder="12" left="10" top="840" width="810" height="270" binddataset="gdsCode">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
@@ -124,62 +123,42 @@
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="menuSeq"/>
-                <Cell col="1" text="parntSeq"/>
-                <Cell col="2" text="pstn"/>
-                <Cell col="3" text="lftVal"/>
-                <Cell col="4" text="rhtVal"/>
-                <Cell col="5" text="dpth"/>
-                <Cell col="6" text="menuGb"/>
-                <Cell col="7" text="menuNm"/>
-                <Cell col="8" text="menuCntn"/>
-                <Cell col="9" text="admLink"/>
-                <Cell col="10" text="userLink"/>
-                <Cell col="11" text="userWndYn"/>
-                <Cell col="12" text="userUseYn"/>
-                <Cell col="13" text="seoKwrd"/>
-                <Cell col="14" text="seoCntn"/>
-                <Cell col="15" text="gnbYn"/>
-                <Cell col="16" text="pagePath"/>
-                <Cell col="17" text="pageId"/>
-                <Cell col="18" text="childCnt"/>
-                <Cell col="19" text="accYn"/>
-                <Cell col="20" text="accVdiYn"/>
-                <Cell col="21" text="accSrchYn"/>
-                <Cell col="22" text="accSaveYn"/>
-                <Cell col="23" text="accDelYn"/>
-                <Cell col="24" text="accPrintYn"/>
-                <Cell col="25" text="accAlrtYn"/>
-                <Cell col="26" text="accXlsDwldYn"/>
+                <Cell text="cdId"/>
+                <Cell col="1" text="cd"/>
+                <Cell col="2" text="cdNm"/>
+                <Cell col="3" text="cdOrd"/>
+                <Cell col="4" text="dpth"/>
+                <Cell col="5" text="useYn"/>
+                <Cell col="6" text="regId"/>
+                <Cell col="7" text="regIp"/>
+                <Cell col="8" text="regDtm"/>
+                <Cell col="9" text="modId"/>
+                <Cell col="10" text="modIp"/>
+                <Cell col="11" text="modDtm"/>
+                <Cell col="12" text="nextChildOrd"/>
+                <Cell col="13" text="memo"/>
+                <Cell col="14" text="cdVal1"/>
+                <Cell col="15" text="cdVal2"/>
+                <Cell col="16" text="cdVal3"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:menuSeq"/>
-                <Cell col="1" text="bind:parntSeq"/>
-                <Cell col="2" text="bind:pstn"/>
-                <Cell col="3" text="bind:lftVal"/>
-                <Cell col="4" text="bind:rhtVal"/>
-                <Cell col="5" text="bind:dpth"/>
-                <Cell col="6" text="bind:menuGb"/>
-                <Cell col="7" text="bind:menuNm"/>
-                <Cell col="8" text="bind:menuCntn"/>
-                <Cell col="9" text="bind:admLink"/>
-                <Cell col="10" text="bind:userLink"/>
-                <Cell col="11" text="bind:userWndYn"/>
-                <Cell col="12" text="bind:userUseYn"/>
-                <Cell col="13" text="bind:seoKwrd"/>
-                <Cell col="14" text="bind:seoCntn"/>
-                <Cell col="15" text="bind:gnbYn"/>
-                <Cell col="16" text="bind:pagePath"/>
-                <Cell col="17" text="bind:pageId"/>
-                <Cell col="18" text="bind:childCnt"/>
-                <Cell col="19" text="bind:accYn"/>
-                <Cell col="20" text="bind:accVdiYn"/>
-                <Cell col="21" text="bind:accSrchYn"/>
-                <Cell col="22" text="bind:accSaveYn"/>
-                <Cell col="23" text="bind:accDelYn"/>
-                <Cell col="24" text="bind:accPrintYn"/>
-                <Cell col="25" text="bind:accAlrtYn"/>
-                <Cell col="26" text="bind:accXlsDwldYn"/>
+                <Cell text="bind:cdId"/>
+                <Cell col="1" text="bind:cd"/>
+                <Cell col="2" text="bind:cdNm"/>
+                <Cell col="3" text="bind:cdOrd"/>
+                <Cell col="4" text="bind:dpth"/>
+                <Cell col="5" text="bind:useYn"/>
+                <Cell col="6" text="bind:regId"/>
+                <Cell col="7" text="bind:regIp"/>
+                <Cell col="8" text="bind:regDtm"/>
+                <Cell col="9" text="bind:modId"/>
+                <Cell col="10" text="bind:modIp"/>
+                <Cell col="11" text="bind:modDtm"/>
+                <Cell col="12" text="bind:nextChildOrd"/>
+                <Cell col="13" text="bind:memo"/>
+                <Cell col="14" text="bind:cdVal1"/>
+                <Cell col="15" text="bind:cdVal2"/>
+                <Cell col="16" text="bind:cdVal3"/>
               </Band>
             </Format>
           </Formats>
@@ -423,6 +402,10 @@ this.fn_init_code = function(objDs, dpth, parentCd){
 				objDs.setColumn(nRow, "useYn", gdsCode.getColumn(i, "useYn"));
 				objDs.setColumn(nRow, "modDtm", gdsCode.getColumn(i, "modDtm"));
 				
+				objDs.setColumn(nRow, "cdVal1", gdsCode.getColumn(i, "cdVal1"));
+				objDs.setColumn(nRow, "cdVal2", gdsCode.getColumn(i, "cdVal2"));
+				objDs.setColumn(nRow, "cdVal3", gdsCode.getColumn(i, "cdVal3"));
+				
 				if(dpth == "0"){
 					objDs.setColumn(nRow, "memo", gdsCode.getColumn(i, "memo"));
 				}				
@@ -477,6 +460,9 @@ this.fn_search = function(){
           <Column id="useYn" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="chk" type="STRING" size="256"/>
+          <Column id="cdVal1" type="STRING" size="256"/>
+          <Column id="cdVal2" type="STRING" size="256"/>
+          <Column id="cdVal3" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_yn">

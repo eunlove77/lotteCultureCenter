@@ -27,15 +27,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00" taborder="2" left="Div03:-1" top="0" width="232" height="33" cssclass="div_WF_CompWrap">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="권한(직무)" left="0" top="0" width="120" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="ComboAuthCd" taborder="1" left="125" top="5" width="100" height="20" innerdataset="gdsAuthCdList" codecolumn="cd" datacolumn="cdNm" index="-1"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div04" taborder="1" text="Div01" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div04" taborder="1" text="Div01" left="Div03:0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -46,7 +38,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div06" taborder="4" text="Div01" left="10" top="176" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+        <Div id="Div06" taborder="4" text="Div01" left="10" top="146" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -107,11 +99,11 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
-                <Cell col="1" text="bind:authNm"/>
-                <Cell col="2" text="bind:spotNm"/>
+                <Cell col="1" text="bind:reqnAthrNm"/>
+                <Cell col="2" text="bind:reqnBrchNm"/>
                 <Cell col="3" text="bind:reqnId"/>
                 <Cell col="4" text="bind:reqnNm"/>
-                <Cell col="5" text="bind:prcsCd"/>
+                <Cell col="5" text="bind:prcsNm"/>
                 <Cell col="6" text="bind:reqnIp"/>
                 <Cell col="7" text="bind:occrDtm"/>
               </Band>
@@ -119,17 +111,47 @@
           </Formats>
         </Grid>
         <Static id="txtTotal" taborder="6" left="10" top="246" width="80" height="21" text="총 0개"/>
-        <Div id="Div05" taborder="7" text="Div01" left="10" top="146" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="Static00" taborder="0" text="업무시간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <CheckBox id="chkTimeAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="Div05_chkTimeAll_onclick"/>
-              <CheckBox id="chkTimeIn" taborder="2" text="업무시간" left="chkTimeAll:3" top="4" width="70" height="20" onclick="fn_checkbox_click02"/>
-              <CheckBox id="chkTimeOut" taborder="3" text="업무시간외" left="chkTimeIn:3" top="4" width="80" height="20" onclick="fn_checkbox_click02"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="pageingDiv" taborder="8" text="Div00" left="10" top="Grid00:10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl"/>
+        <Div id="pageingDiv" taborder="7" text="Div00" left="10" top="Grid00:10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl"/>
+        <Grid id="Grid01" taborder="8" left="3" top="805" width="777" height="270" binddataset="gdsOpenMenu">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="menuSeq"/>
+                <Cell col="1" text="parntSeq"/>
+                <Cell col="2" text="dpth"/>
+                <Cell col="3" text="menuNm"/>
+                <Cell col="4" text="admLink"/>
+                <Cell col="5" text="pagePath"/>
+                <Cell col="6" text="pageId"/>
+                <Cell col="7" text="winId"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:menuSeq"/>
+                <Cell col="1" text="bind:parntSeq"/>
+                <Cell col="2" text="bind:dpth"/>
+                <Cell col="3" text="bind:menuNm"/>
+                <Cell col="4" text="bind:admLink"/>
+                <Cell col="5" text="bind:pagePath"/>
+                <Cell col="6" text="bind:pageId"/>
+                <Cell col="7" text="bind:winId"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
@@ -137,19 +159,14 @@
         <ColumnInfo>
           <Column id="rnum" type="STRING" size="256"/>
           <Column id="logId" type="STRING" size="256"/>
-          <Column id="taskCd" type="STRING" size="256"/>
-          <Column id="srvcNm" type="STRING" size="256"/>
-          <Column id="fncNm" type="STRING" size="256"/>
           <Column id="trgtMenuNm" type="STRING" size="256"/>
           <Column id="prcsCd" type="STRING" size="256"/>
           <Column id="prcsNm" type="STRING" size="256"/>
-          <Column id="prcsTime" type="STRING" size="256"/>
           <Column id="reqnId" type="STRING" size="256"/>
           <Column id="reqnNm" type="STRING" size="256"/>
+          <Column id="reqnAthrNm" type="STRING" size="256"/>
+          <Column id="reqnBrchNm" type="STRING" size="256"/>
           <Column id="reqnIp" type="STRING" size="256"/>
-          <Column id="authNm" type="STRING" size="256"/>
-          <Column id="deptNm" type="STRING" size="256"/>
-          <Column id="spotNm" type="STRING" size="256"/>
           <Column id="occrDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
@@ -192,7 +209,6 @@ this.SystemConnectLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	// 코드 데이터
 	//this.fn_data_list();
 	
-	this.row02.form.Div00.form.ComboAuthCd.set_index(0);
 	this.row02.form.Div04.form.ComboSpot.set_index(0);
 
 	this.pageingDiv.form.pageingCallObj = this;
@@ -240,17 +256,6 @@ this.row02_Div03_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickE
 		obj.parent.chkLogin.set_value(0);
 		obj.parent.chkLogout.set_value(0);
 		obj.parent.chkLoginFail.set_value(0);		
-	}
-};
-
-this.Div05_chkTimeAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked()){
-		obj.parent.chkTimeIn.set_value(1);
-		obj.parent.chkTimeOut.set_value(1);		
-	}else{
-		obj.parent.chkTimeIn.set_value(0);
-		obj.parent.chkTimeOut.set_value(0);		
 	}
 };
 
@@ -313,20 +318,15 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 this.fn_searchValueInit = function(){
 	var objCalendar = this.Div02.form.Div00.form;
 	var arrLogType = new Array();
-	var arrTimeType = new Array();
 	
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
 	
-	if(this.row02.form.Div03.form.chkLogin.value == true) arrLogType.push("'L'");
-	if(this.row02.form.Div03.form.chkLogout.value == true) arrLogType.push("'O'");
-	if(this.row02.form.Div03.form.chkLoginFail.value == true) arrLogType.push("'F'");
-	
-	if(this.Div05.form.chkTimeIn.value == true) arrTimeType.push("'TIME_IN'");
-	if(this.Div05.form.chkTimeOut.value == true) arrTimeType.push("'TIME_OUT'");
+	if(this.row02.form.Div03.form.chkLogin.value == true) arrLogType.push("'LOGIN'");
+	if(this.row02.form.Div03.form.chkLogout.value == true) arrLogType.push("'LOGOUT'");
+	if(this.row02.form.Div03.form.chkLoginFail.value == true) arrLogType.push("'LOGIN_FAIL'");
 	
 	this.ds_search.setColumn(0, "logType", arrLogType.join(","));
-	this.ds_search.setColumn(0, "timeType", arrTimeType.join(","));
 	this.ds_search.setColumn(0, "spotCd", this.row02.form.Div04.form.ComboSpot.value);
 	this.ds_search.setColumn(0, "f", this.Div06.form.searchField.value);
 	this.ds_search.setColumn(0, "q", this.Div06.form.searchQuery.value);
@@ -337,18 +337,6 @@ this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 	if(!obj.isChecked()){
 		this.row02.form.Div03.form.chkAll.set_value(0);
 	}
-}
-
-this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.Div05.form.chkTimeAll.set_value(0);
-	}
-}
-
-
-this.test = function(page){
-	console.log(page);
-}
-]]></Script>
+}]]></Script>
   </Form>
 </FDL>

@@ -245,6 +245,8 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.objOwnerFrame = this.getOwnerFrame();
 	
+	console.log(this.objOwnerFrame.param.MENU_ID);
+	console.log(obj.parent.parent);
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	// 코드 데이터
@@ -386,33 +388,18 @@ this.fn_list = function (page)
 
 	//this.ds_search.setColumn(0, "f", this.searchDiv.form.searchField.value);
 	
-	/*var tranObj = {
+	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.application.Admin_svc + "::adminMngList.do",
-		inData : "search=ds_search pageing=gdsPageing",
-		outData : "ds_log=output1 gdsPageing=output2",
+		inData : "search=ds_search",
+		outData : "ds_admin_list=output1",
 		strArg : "",
-		callBackFnc : "fn_callback",
-		isAsync : true		
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.objOwnerFrame.param.MENU_ID
 	};
 	
-	this.gfn_transaction(tranObj);*/
-	var strSvcId    = "list";
-	var strSvcUrl   = this.application.Admin_svc + "::adminMngList.do";
-	var inData      = "search=ds_search";
-	var outData     = "ds_admin_list=output1";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
-	
+	this.gfn_transaction(tranObj);
 };
 
 this.fn_data_list = function ()

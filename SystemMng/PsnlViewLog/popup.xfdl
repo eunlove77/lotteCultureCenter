@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popup" width="400" height="300" titletext="New Form" onload="popup_onload">
+    <Layouts>
+      <Layout height="300" width="400">
+        <Static id="Static00" taborder="0" text="▶ 조회 쿼리" left="10" top="10" width="120" height="21"/>
+        <Static id="queryContent" taborder="1" left="10" top="39" border="1px solid #000" right="10" bottom="10" padding="10px"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	if (this.getOwnerFrame().query != null) 
+	{
+		this.queryContent.set_text(this.getOwnerFrame().query);
+	}
+	
+	
+	
+};]]></Script>
+  </Form>
+</FDL>

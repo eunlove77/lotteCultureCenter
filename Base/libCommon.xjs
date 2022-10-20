@@ -19,6 +19,11 @@ this.gfn_transaction = function(tranObj)
 	
 	if(nexacro.getApplication().isAuth)
 	{
+		console.log(this.gfn_nvl(tranObj.menuSeq));
+		if(this.gfn_nvl(tranObj.menuSeq) != ""){
+			tranObj.strSvcUrl += "?menuSeq=" + tranObj.menuSeq;
+		}
+	
 		this.transaction(
 			tranObj.strSvcId ,   					 // transaction을 구분하기 위한 svc id값
             tranObj.strSvcUrl ,       				 // trabsaction을 요청할 주소
