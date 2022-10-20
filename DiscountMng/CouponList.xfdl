@@ -40,11 +40,11 @@
                 <Cell expr="dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" expr="dataset.getRowCount() - currow"/>
                 <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="3" text="expr:comp.parent.gfn_setComma(dataset.getColumn(currow, &quot;dcAmt&quot;)) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
-                <Cell col="4" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
-                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
-                <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
-                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;00&quot; ? &quot;-&quot; : (dataset.getColumn(currow, &quot;useCnt&quot;) + &quot;/&quot; + dataset.getColumn(currow, &quot;issueCnt&quot;))"/>
+                <Cell col="3" expr="comp.parent.gfn_setComma(dcAmt) + (dcAmtClCd == &quot;RATES&quot; ? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                <Cell col="4" expr="issueMthdClCd == &quot;AUTO&quot; ? &quot;자동발급&quot; : issueMthdClCd == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                <Cell col="5" expr="usePrdClCd == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + usePsblDd + &quot;일간&quot;) : (useStDt + &quot; ~ &quot; + useEndDt)"/>
+                <Cell col="6" expr="issueStatCd == &quot;10&quot; ? &quot;발급중&quot; : issueStatCd == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                <Cell col="7" expr="issueStatCd == &quot;00&quot; ? &quot;-&quot; : (useCnt + &quot;/&quot; + issueCnt)"/>
                 <Cell col="8" text="bind:rgprId"/>
                 <Cell col="9" text="bind:rgprDtm"/>
               </Band>
