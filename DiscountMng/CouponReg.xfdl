@@ -256,9 +256,9 @@
                     <Div id="Div00" taborder="2" left="Static00:0" top="30" width="235" height="30">
                       <Layouts>
                         <Layout>
-                          <Calendar id="strtDtm" taborder="0" left="10" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" enableevent="true" usesoftkeyboard="true" type="normal" editformat="yyyy-MM-dd" autoskip="false" oneditclick="Div01_Div05_Div00_strtDtm_oneditclick" onkeydown="Div01_Div05_Div00_strtDtm_oneditclick"/>
+                          <Calendar id="strtDtm" taborder="0" left="10" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" enableevent="true" usesoftkeyboard="true" type="normal" editformat="yyyy-MM-dd" autoskip="false" oneditclick="Div01_Div05_Div00_strtDtm_oneditclick"/>
                           <Static id="Static01" taborder="1" text="~" left="strtDtm:4" top="3" width="9" height="20"/>
-                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick" onkeydown="Div01_Div05_Div00_endDtm_oneditclick"/>
+                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -445,6 +445,8 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}
 		
 	this.gfnSetCheckBoxNoDataset(this.ds_mem_grade, this.Div01.form.Div01.form.Grid00, 0); 
+	this.Div01.form.Div05.form.Div00.form.strtDtm.calendaredit.set_readonly(true);	//캘린더 키인 막기
+	this.Div01.form.Div05.form.Div00.form.endDtm.calendaredit.set_readonly(true);	//캘린더 키인 막기
 };
 
 this.fn_detail = function ()
@@ -731,13 +733,13 @@ this.fn_checkValidation = function(){
 		if(this.gfn_isNull(this.Div01.form.Div05.form.Div00.form.strtDtm.value))
 		{
 			this.alert("사용 시작일을 입력하세요.");
-			this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+			this.Div01.form.Div05.form.Div00.form.strtDtm.setFocus();
 			return;
 		}
 		else if(this.gfn_isNull(this.Div01.form.Div05.form.Div00.form.endDtm.value))
 		{
 			this.alert("사용 종료일을 입력하세요.");
-			this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+			this.Div01.form.Div05.form.Div00.form.endDtm.setFocus();
 			return;
 		}
 	}
@@ -792,7 +794,8 @@ this.fn_set_spot = function()
 //캘린더 선택시 팝업 노출
 this.Div01_Div05_Div00_strtDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
 {
- 	this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+	this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+	
 };
 this.Div01_Div05_Div00_endDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
 {
@@ -890,7 +893,6 @@ this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 	}
 	
 };
-
 
 ]]></Script>
     <Bind>
