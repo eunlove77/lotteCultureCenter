@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="date_type02" width="430" height="21" titletext="New Form">
+  <Form id="date_type02" width="430" height="21" titletext="New Form" onload="date_type02_onload">
     <Layouts>
       <Layout height="21" width="430">
         <Calendar id="strtDtm" taborder="0" left="0" top="0" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
@@ -18,6 +18,11 @@
 include "Base::lib_date.xjs";
 include "Base::lib_base.xjs";
 
+this.date_type02_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.strtDtm.calendaredit.set_readonly(true);
+	this.endDtm.calendaredit.set_readonly(true);
+};
 
 this.btnDay1_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -46,6 +51,7 @@ this.btnDay4_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.strtDtm.set_value(this.gfnAddDate(this.gfnGetToDay(), day));
 	this.endDtm.set_value(this.gfnGetToDay());
 };
+
 ]]></Script>
   </Form>
 </FDL>
