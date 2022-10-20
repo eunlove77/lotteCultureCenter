@@ -41,8 +41,8 @@
                 <Cell col="3" text="bind:email"/>
                 <Cell col="4" text="bind:hpNo"/>
                 <Cell col="5" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="6" text="expr:admId ? admNm + '('  + admId + ')' : ''"/>
-                <Cell col="7" text="bind:ansYn"/>
+                <Cell col="6" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;ansYn&quot;) == &quot;Y&quot; ? &quot;답변완료&quot; : &quot;미답변&quot;"/>
                 <Cell col="8" text="bind:ansDtm"/>
               </Band>
             </Format>
@@ -283,7 +283,6 @@ this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 	{
 		var	onlnQuesSeqno = obj.getBindDataset().getColumn(e.row, "onlnQuesSeqno");
 		
-		this.alert("seq>> " + onlnQuesSeqno);
 		this.parent.param = {
 			onlnQuesSeqno : onlnQuesSeqno
 		};

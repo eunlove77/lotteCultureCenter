@@ -79,36 +79,33 @@ this.fn_ActiveTabPage = function(pvWinId)
 this.tabMdi_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
 {
 	var sWinId = obj.tabpages[e.postindex].name;
-console.log(this.application.WorkFrame[sWinId].form);
+
 	this.application.WorkFrame[sWinId].form.setFocus();
 };
 
 this.tabMdi_onextrabuttonclick = function(obj:nexacro.Tab,e:nexacro.TabMouseEventInfo)
 {
-	var sWinId = obj.tabpages[e.index].name;		
-	var _form = this.application.WorkFrame[sWinId].form;
+	var sWinId = obj.tabpages[e.index].name;	
 	
-	// 탭이 포함되고 탭에 url 속성에서 다른 폼을 불러왔을 경우 부모폼에서 close 함수 호출시 오류 발생
-	// 부모에 포함된 탭객체 삭제 
-	delete _form.divWork.form.Tab00;	
-	
-	_form.close();
-	
+	this.application.WorkFrame[sWinId].form.close();
+
 	this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
 	
 	obj.removeTabpage(e.index);
 	
- 	var nCnt = this.tabMdi.getTabpageCount();
- 	if(nCnt == 0){
- 	}
- 	
- 	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
- 	{	
-  		if (nexacro.getPopupFrames()[i].opener.fvWinId == sWinId) 
-  		{
-  			nexacro.getPopupFrames()[i].form.close();
-  		}
- 	}	
+	var nCnt = this.tabMdi.getTabpageCount();
+	if(nCnt == 0){
+		
+	}
+	
+	
+	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
+	{	
+ 		if (nexacro.getPopupFrames()[i].opener.fvWinId == sWinId) 
+ 		{
+ 			nexacro.getPopupFrames()[i].form.close();
+ 		}
+	}	
 };
 
 
