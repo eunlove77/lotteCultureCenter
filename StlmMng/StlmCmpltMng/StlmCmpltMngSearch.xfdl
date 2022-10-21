@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="StlmCmpltMngSearch" width="1280" height="720" titletext="New Form" onload="StlmCmpltMngSearch_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="Static00" taborder="0" text="▶ 검색" left="0" top="0" width="48" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="27" height="183" cssclass="div_WF_TableComp" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제일" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Div id="stlmDtmDiv" taborder="1" text="Div00" left="Static00:10" top="5" height="25" right="0" url="FrameBase::include/date_type01.xfdl"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="650">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div02" left="629" height="33" cssclass="div_WF_CompWrap" top="32" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제채널" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <CheckBox id="stlmChnlAll" taborder="1" text="전체" left="Static00:10" top="5" width="105" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="3" text="Div03" left="0" top="64" height="48" cssclass="div_WF_CompWrap" right="650">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제수단" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
+                    <CheckBox id="stlmMthdAll" taborder="1" text="전체" left="Static00:10" top="2" width="105" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="4" text="Div04" left="629" top="64" height="48" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="strtYy" taborder="1" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown"/>
+                    <Combo id="strtSmsterCd" taborder="2" text="Combo01" left="strtYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Static id="Static01" taborder="3" text="~" left="strtSmsterCd:4" top="12" width="9" height="20"/>
+                    <Combo id="endYy" taborder="4" text="Combo02" left="Static01:4" top="12" width="100" height="20"/>
+                    <Combo id="endSmsterCd" taborder="5" text="Combo03" left="endYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div05" taborder="5" text="Div05" left="0" top="111" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사은품수령 여부" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <CheckBox id="fgftRecpAll" taborder="1" text="전체" left="Static00:10" top="5" width="105" height="20" onclick="fn_fgftRecpAll_onclick"/>
+                    <CheckBox id="fgftRecpStatusY" taborder="2" text="Y" left="fgftRecpAll:10" top="5" width="105" height="20" onclick="fn_fgftRecpStatusY_onclick"/>
+                    <CheckBox id="fgftRecpStatusN" taborder="3" text="N" left="fgftRecpStatusY:10" top="5" width="105" height="20" onclick="fn_fgftRecpStatusN_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div06" taborder="6" text="Div06" left="0" top="143" height="33" cssclass="div_WF_CompWrap" right="0" onclick="fn_searchQuery_onkeydown">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="searchField" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="datacolumn">전체</Col>
+                            <Col id="codecolumn"/>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">주문번호</Col>
+                            <Col id="codecolumn">1</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">실수강자</Col>
+                            <Col id="codecolumn">2</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">강좌명</Col>
+                            <Col id="codecolumn">3</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원번호</Col>
+                            <Col id="codecolumn">4</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원명</Col>
+                            <Col id="codecolumn">5</Col>
+                          </Row>
+                          <Row>
+                            <Col id="datacolumn">회원 아이디</Col>
+                            <Col id="codecolumn">6</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Button id="btnInit" taborder="4" text="초기화" top="5" height="20" cssclass="btn_WF_Weak" right="10" width="100" onclick="Div00_Div06_btnInit_onclick"/>
+                    <Button id="btnSearch" taborder="3" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="btnInit:10" onclick="fn_btnSearch_onclick"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:10" top="5" height="20" right="btnSearch:10" onkeydown="Div00_Div06_searchQuery_onkeydown" text="aaaa"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+var parentFrm = this.parent.parent.parent.parent;
+
+this.initSmsterCdIndex = 0;
+this.initBrchCdIndex = 0;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.StlmCmpltMngSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+};
+
+// 검색 초기 데이터 세팅
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getStlmCmpltDataList.do";
+	var inData      = "brchCdList=gdsSpotCdList";
+	var outData     = "ds_stlm_chnl_list=output1 ds_smster_list=output2 ds_stlm_mthd_list=output3";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+// 트랜잭션 이후 콜백
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	return;
+  }
+
+  switch(svcID)
+  {
+	case "dataList":
+		var chkboxFrm;
+		var objCheckbox;
+		
+		//캘린더
+		var objCalendar = this.Div00.form.Div00.form.stlmDtmDiv.form;
+		objCalendar.btnDay2_onclick();
+		
+		// 지점선택
+		this.Div00.form.Div01.form.brchCd.set_index(0);
+		
+		// 결제채널 체크박스 추가
+		chkboxFrm = this.Div00.form.Div02.form;
+ 		for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
+			if(i > 0){
+				objCheckbox = new CheckBox("stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd"), chkboxFrm["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.stlmChnlAll.getOffsetTop(), 105, 20, null, null);
+			}else{
+				objCheckbox = new CheckBox("stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd"), chkboxFrm.stlmChnlAll.getOffsetRight(), chkboxFrm.stlmChnlAll.getOffsetTop(), 105, 20, null, null);
+			}
+ 			
+ 			objCheckbox.set_text(this.ds_stlm_chnl_list.getColumn(i, "cdNm"));
+ 			chkboxFrm.addChild("stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd"), objCheckbox);
+ 			objCheckbox.show();
+			
+			objCheckbox.setEventHandler("onclick", this.fn_stlm_chnl_onclick, this);
+			objCheckbox.set_value(1);
+ 		}
+		
+		// 결제채널 전체 체크박스 클릭이벤트 추가
+ 		chkboxFrm.stlmChnlAll.setEventHandler("onclick", this.fn_stlmChnlAll_onclick, this);
+		chkboxFrm.stlmChnlAll.set_value(1);
+		
+		// 학기
+		var dsYyList = new Dataset();
+		dsYyList.name = "ds_yy_list";
+		dsYyList.addColumn("cd", "string", 256);
+		dsYyList.addColumn("cdNm", "string", 256);
+		
+		this.addChild("ds_yy_list", dsYyList);
+		
+		var currYear = new Date().getFullYear();
+		
+		this.ds_yy_list.set_enableevent(false);
+		for(var i=0;i<16;i++){
+			this.ds_yy_list.insertRow(i);
+			this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
+			this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
+		}
+		this.ds_yy_list.set_enableevent(true);
+		
+		
+		this.Div00.form.Div04.form.strtYy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div04.form.strtYy.set_codecolumn("cd");
+		this.Div00.form.Div04.form.strtYy.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.strtYy.set_index(0);
+		this.Div00.form.Div04.form.endYy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div04.form.endYy.set_codecolumn("cd");
+		this.Div00.form.Div04.form.endYy.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.endYy.set_index(0);
+		
+		// 학기
+		for(var i=0;i<this.ds_smster_list.getRowCount();i++){
+			if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
+				this.initSmsterCdIndex = i;
+				this.Div00.form.Div04.form.strtSmsterCd.set_index(this.initSmsterCdIndex);
+				this.Div00.form.Div04.form.endSmsterCd.set_index(this.initSmsterCdIndex);
+			}
+		}
+		
+		// 결제수단 체크박스 추가
+		chkboxFrm = this.Div00.form.Div03.form;
+ 		for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
+			if(i > 0){
+				if(i < 3){
+					objCheckbox = new CheckBox("stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd"), chkboxFrm["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.stlmMthdAll.getOffsetTop(), 105, 20, null, null);
+				}else if(i == 3){
+					objCheckbox = new CheckBox("stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd"), chkboxFrm.stlmMthdAll.getOffsetLeft(), chkboxFrm.stlmMthdAll.getOffsetTop() + 23, 105, 20, null, null);
+				}else{
+					objCheckbox = new CheckBox("stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd"), chkboxFrm["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.stlmMthdAll.getOffsetTop() + 23, 105, 20, null, null);
+				}
+			}else{
+				objCheckbox = new CheckBox("stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd"), chkboxFrm.stlmMthdAll.getOffsetRight(), chkboxFrm.stlmMthdAll.getOffsetTop(), 105, 20, null, null);
+			}
+ 			
+ 			objCheckbox.set_text(this.ds_stlm_mthd_list.getColumn(i, "cdNm"));
+ 			chkboxFrm.addChild("stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd"), objCheckbox);
+ 			objCheckbox.show();
+			
+			objCheckbox.setEventHandler("onclick", this.fn_stlm_mthd_onclick, this);
+			objCheckbox.set_value(1);
+ 		}
+		
+		// 결제채널 전체 체크박스 클릭이벤트 추가
+ 		chkboxFrm.stlmMthdAll.setEventHandler("onclick", this.fn_stlmMthdAll_onclick, this);
+		chkboxFrm.stlmMthdAll.set_value(1);
+		
+		// 사은품 신청 여부 초기화
+		chkboxFrm = this.Div00.form.Div05.form;
+		chkboxFrm.fgftRecpAll.set_value(1);
+		chkboxFrm.fgftRecpStatusY.set_value(1);
+		chkboxFrm.fgftRecpStatusN.set_value(1);
+		
+		// 검색어 기준
+		this.Div00.form.Div06.form.searchField.set_index(0);
+		
+		break;
+  }
+};
+
+// 결제채널 단일 체크박스 클릭이벤트
+this.fn_stlm_chnl_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	var allCheckYn = true;
+ 
+	for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
+		if(!obj.parent.all["stlmChnlStatus"+this.ds_stlm_chnl_list.getColumn(i, "cd")].isChecked()){
+			allCheckYn = false;
+		}
+	}
+	
+	if(allCheckYn){
+		obj.parent.stlmChnlAll.set_value(1);
+	}else{
+		obj.parent.stlmChnlAll.set_value(0);
+	}
+};
+
+// 결제채널 검색조건 전체 체크박스 클릭이벤트
+this.fn_stlmChnlAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked())
+	{
+		for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
+			obj.parent["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].set_value(1);
+		}
+	}
+	else
+	{
+		for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
+			obj.parent["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].set_value(0);
+		}
+	}
+};
+
+// 결제수단 단일 체크박스 클릭이벤트
+this.fn_stlm_mthd_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	var allCheckYn = true;
+ 
+	for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
+		if(!obj.parent.all["stlmMthdStatus"+this.ds_stlm_mthd_list.getColumn(i, "cd")].isChecked()){
+			allCheckYn = false;
+		}
+	}
+	
+	if(allCheckYn){
+		obj.parent.stlmMthdAll.set_value(1);
+	}else{
+		obj.parent.stlmMthdAll.set_value(0);
+	}
+};
+
+// 결제수단 검색조건 전체 체크박스 클릭이벤트
+this.fn_stlmMthdAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked())
+	{
+		for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
+			obj.parent["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].set_value(1);
+		}
+	}
+	else
+	{
+		for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
+			obj.parent["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].set_value(0);
+		}
+	}
+};
+
+// 사은품 수령여부 Y 체크박스 클릭이벤트
+this.fn_fgftRecpStatusY_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.fgftRecpStatusN.isChecked()){
+		obj.parent.fgftRecpAll.set_value(1);
+	}else{
+		obj.parent.fgftRecpAll.set_value(0);
+	}
+};
+
+// 사은품 수령여부 N 체크박스 클릭이벤트
+this.fn_fgftRecpStatusN_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.fgftRecpStatusY.isChecked()){
+		obj.parent.fgftRecpAll.set_value(1);
+	}else{
+		obj.parent.fgftRecpAll.set_value(0);
+	}
+};
+
+// 사은품 수령여부 검색조건 전체 체크박스 클릭이벤트
+this.fn_fgftRecpAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.fgftRecpStatusY.set_value(1);
+		obj.parent.fgftRecpStatusN.set_value(1);
+	}else{
+		obj.parent.fgftRecpStatusY.set_value(0);
+		obj.parent.fgftRecpStatusN.set_value(0);
+	}
+}
+
+// 검색 버튼 클릭이벤트
+this.fn_btnSearch_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	this.fn_searchValueInit();
+	parentFrm.fn_list();
+};
+
+// 검색어 입력필드 키 다운이벤트
+this.fn_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_searchValueInit();
+		parentFrm.fn_list();
+	}
+};
+
+// 검색 데이터 세팅
+this.fn_searchValueInit = function()
+{
+	var objCalendar = this.Div00.form.Div00.form.stlmDtmDiv.form; //캘린더
+	var arrStlmChnl = new Array();
+	var arrStlmMthd = new Array();
+	var arrFgftRecpYn = new Array();
+	
+	// 결제채널
+	for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
+		if(this.Div00.form.Div02.form["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].value == true){
+			arrStlmChnl.push("'"+ this.ds_stlm_chnl_list.getColumn(i, "cd") +"'");
+		}
+	}
+	
+	// 결제수단
+	for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
+		if(this.Div00.form.Div03.form["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].value == true){
+			arrStlmMthd.push("'"+ this.ds_stlm_mthd_list.getColumn(i, "cd") +"'");
+		}
+	}
+	
+	// 사은품 수령여부
+	if(this.Div00.form.Div05.form.fgftRecpStatusY.value == true) arrFgftRecpYn.push("'Y'");
+	if(this.Div00.form.Div05.form.fgftRecpStatusN.value == true) arrFgftRecpYn.push("'N'");
+	
+	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	this.ds_search.setColumn(0, "brchCd", this.Div00.form.Div01.form.brchCd.value);
+	this.ds_search.setColumn(0, "stlmChnlCd", arrStlmChnl.join(","));
+	this.ds_search.setColumn(0, "stlmMthdCd", arrStlmMthd.join(","));
+	this.ds_search.setColumn(0, "strtYy", this.Div00.form.Div04.form.strtYy.value);
+	this.ds_search.setColumn(0, "strtSmsterCd", this.Div00.form.Div04.form.strtSmsterCd.value);
+	this.ds_search.setColumn(0, "endYy", this.Div00.form.Div04.form.endYy.value);
+	this.ds_search.setColumn(0, "endSmsterCd", this.Div00.form.Div04.form.endSmsterCd.value);
+	this.ds_search.setColumn(0, "fgftRecpYn", arrFgftRecpYn.join(","));
+	this.ds_search.setColumn(0, "searchField", this.Div00.form.Div06.form.searchField.value);
+	this.ds_search.setColumn(0, "searchQuery", this.Div00.form.Div06.form.searchQuery.value);
+};
+
+// 초기화 버튼 클릭
+this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objCalendar = this.Div00.form.Div00.form.stlmDtmDiv.form;
+	objCalendar.btnDay2_onclick();
+	
+	this.Div00.form.Div01.form.brchCd.set_index(0);
+	
+	var chkboxFrm;
+
+	chkboxFrm = this.Div00.form.Div02.form;
+	chkboxFrm.stlmChnlAll.set_value(1);
+	for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
+		chkboxFrm["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].set_value(1);
+	}
+	
+	chkboxFrm = this.Div00.form.Div03.form;
+	chkboxFrm.stlmMthdAll.set_value(1);
+	for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
+		chkboxFrm["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].set_value(1);
+	}
+	
+	this.Div00.form.Div04.form.strtYy.set_index(0);
+	this.Div00.form.Div04.form.endYy.set_index(0);
+	
+	this.Div00.form.Div04.form.strtSmsterCd.set_index(this.initSmsterCdIndex);
+	this.Div00.form.Div04.form.endSmsterCd.set_index(this.initSmsterCdIndex);
+	
+	this.Div00.form.Div05.form.fgftRecpAll.set_value(1);
+	this.Div00.form.Div05.form.fgftRecpStatusY.set_value(1);
+	this.Div00.form.Div05.form.fgftRecpStatusN.set_value(1);
+	
+	this.Div00.form.Div06.form.searchField.set_value('');
+	this.Div00.form.Div06.form.searchQuery.set_value('');
+	
+	parentFrm.Div00.form.Div01.form.Static01.set_text("(0개)");	
+	parentFrm.Div00.form.Div01.form.ds_stlm_cmplt_list.clearData();
+	parentFrm.Div00.form.Div01.form.ds_stlm_cmplt_excel_list.clearData();
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_stlm_chnl_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="2"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_smster_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="4"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="currSmsterCdYn" type="STRING" size="1"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_stlm_mthd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="4"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="stlmMthdCd" type="STRING" size="256"/>
+          <Column id="strtYy" type="STRING" size="256"/>
+          <Column id="strtSmsterCd" type="STRING" size="1"/>
+          <Column id="endYy" type="STRING" size="256"/>
+          <Column id="endSmsterCd" type="STRING" size="1"/>
+          <Column id="fgftRecpYn" type="STRING" size="256"/>
+          <Column id="searchField" type="STRING" size="256"/>
+          <Column id="searchQuery" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

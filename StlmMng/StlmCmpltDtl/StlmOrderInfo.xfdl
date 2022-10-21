@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="PayOrderInfo" width="1260" height="175" titletext="New Form">
+  <Form id="StlmOrderInfo" width="1260" height="175" titletext="New Form" onload="PayOrderInfo_onload">
     <Layouts>
       <Layout height="175" mobileorientation="landscape" width="1260">
         <Static id="Static00" taborder="0" text="▶ 주문자 정보" left="0" top="0" width="90" height="17" cssclass="sta_WF_TitGray"/>
@@ -12,7 +12,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· 주문번호" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="주문번호 표시" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="atlctRsvNo" taborder="1" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -20,7 +20,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· 주문일시" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="YYYY.MM.DD HH:MM:SS" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="appCmplDtm" taborder="1" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -28,7 +28,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· 회원번호" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="회원번호 표시" left="Static00:10" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="mbrNo" taborder="1" left="Static00:10" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -36,7 +36,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· 회원명" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="이름, 회원 ID, 회원등급표시" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="mbrNm" taborder="1" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -44,7 +44,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· 휴대전화" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="010-1234-1234" left="Static00:10" top="5" width="150" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="hp" taborder="1" left="Static00:10" top="5" width="150" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -52,7 +52,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· 이메일" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="kimki1124@easymedia.net" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="email" taborder="1" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -60,7 +60,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="· IP" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="123.123.123.123" left="Static00:10" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="rgprIp" taborder="1" left="Static00:10" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -76,5 +76,37 @@
         </Div>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_order_info">
+        <ColumnInfo>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="appCmplDtm" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="hp" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.PayOrderInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+};
+]]></Script>
   </Form>
 </FDL>

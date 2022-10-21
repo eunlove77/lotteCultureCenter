@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AdmMemoList" width="1280" height="429" titletext="New Form" onload="AdmMemoList_onload">
+    <Layouts>
+      <Layout height="429" width="1280">
+        <Grid id="Grid00" taborder="0" left="0" top="0" height="380" right="0" binddataset="ds_adm_memo_list" autofittype="col" autosizingtype="row">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48" band="left"/>
+                <Column size="1000"/>
+                <Column size="150"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="메모"/>
+                <Cell col="2" text="등록자"/>
+                <Cell col="3" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:memoCont" textAlign="left"/>
+                <Cell col="2" text="bind:rgprNm"/>
+                <Cell col="3" text="bind:rgprDtm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="pageingDiv" taborder="1" text="Div00" left="0" top="390" width="320" height="21" url="FrameBase::pagging.xfdl"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.atlctRsvNo = this.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.atlctRsvNo;
+this.menuSeq = this.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.menuSeq;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.AdmMemoList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.objPageingDs = this.application.gdsPageing;
+	
+	this.pageingDiv.form.pageingCallObj = this;
+	
+	this.fn_list(1);
+};
+
+this.fn_list = function(page)
+{
+	this.objPageingDs.setColumn(0, "pageIndex", page);
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stlmMng/admMemoList.do",
+		inData : "pageing=gdsPageing",
+		outData : "ds_adm_memo_list=output1 gdsPageing=output2",
+		strArg : "atlctRsvNo=" + this.atlctRsvNo,
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":
+ 			var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+ 			var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+ 			var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+ 			this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+ 			this.pageingDiv.form.setPage(pageIndex);
+		break;
+	}
+};]]></Script>
+    <Objects>
+      <Dataset id="ds_adm_memo_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="1000"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

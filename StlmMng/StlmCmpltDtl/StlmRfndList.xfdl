@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="StlmRfndList" width="1260" height="200" titletext="New Form" onload="PayCnclList_onload">
+    <Layouts>
+      <Layout height="200" mobileorientation="landscape" width="1260">
+        <Static id="Static05" taborder="0" text="▶ 취소/환불 목록" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
+        <Static id="Static06" taborder="1" text="(0개)" left="Static05:0" top="0" width="50" height="17" cssclass="sta_WF_TitGray"/>
+        <Button id="Button00" taborder="2" text="엑셀" top="0" height="21" cssclass="btn_WF_Medium" width="84" right="0" onclick="Button00_onclick"/>
+        <Div id="Div03" taborder="3" text="Div03" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
+          <Layouts>
+            <Layout>
+              <Grid id="Grid00" taborder="0" left="0" top="0" binddataset="ds_stlm_rfnd_list" nodatatext="데이터가 없습니다." autofittype="none" right="0" autosizebandtype="allband" autosizingtype="none" oncloseup="Div03_Grid00_oncloseup" bottom="0" oninput="Div03_Grid00_oninput">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="48" band="left"/>
+                      <Column size="150"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="120"/>
+                      <Column size="120"/>
+                      <Column size="120"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="200"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="120"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24" band="head"/>
+                      <Row size="26"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell/>
+                      <Cell col="1" colspan="27" text=""/>
+                      <Cell col="28" colspan="5" text="결제수단"/>
+                      <Cell col="33" colspan="7" text=""/>
+                      <Cell row="1" text="번호"/>
+                      <Cell row="1" col="1" text="취소(환불)일시"/>
+                      <Cell row="1" col="2" text="취소(환불)사유"/>
+                      <Cell row="1" col="3" text="실수강자"/>
+                      <Cell row="1" col="4" text="지점명"/>
+                      <Cell row="1" col="5" text="강좌유형"/>
+                      <Cell row="1" col="6" text="학기"/>
+                      <Cell row="1" col="7" text="강좌코드"/>
+                      <Cell row="1" col="8" text="강좌명"/>
+                      <Cell row="1" col="9" text="강사명"/>
+                      <Cell row="1" col="10" text="옵션명"/>
+                      <Cell row="1" col="11" text="강좌료"/>
+                      <Cell row="1" col="12" text="추가금액"/>
+                      <Cell row="1" col="13" text="오프라인 할인"/>
+                      <Cell row="1" col="14" text="오프라인 할인금액"/>
+                      <Cell row="1" col="15" text="등급할인명"/>
+                      <Cell row="1" col="16" text="등급할인금액"/>
+                      <Cell row="1" col="17" text="쿠폰명"/>
+                      <Cell row="1" col="18" text="쿠폰 할인금액"/>
+                      <Cell row="1" col="19" text="추가 금액 할인"/>
+                      <Cell row="1" col="20" text="주문금액"/>
+                      <Cell row="1" col="21" text="총 결제금액"/>
+                      <Cell row="1" col="22" text="결제상태"/>
+                      <Cell row="1" col="23" text="취소(환불)채널"/>
+                      <Cell row="1" col="24" text="취소(환불)구분"/>
+                      <Cell row="1" col="25" text="강좌료 수수료"/>
+                      <Cell row="1" col="26" text="추가금액 수수료"/>
+                      <Cell row="1" col="27" text="취소(환불)금액"/>
+                      <Cell row="1" col="28" text="신용카드"/>
+                      <Cell row="1" col="29" text="L.POINT"/>
+                      <Cell row="1" col="30" text="현금"/>
+                      <Cell row="1" col="31" text="상품권"/>
+                      <Cell row="1" col="32" text="기타"/>
+                      <Cell row="1" col="33" text="강좌구분"/>
+                      <Cell row="1" col="34" text="강좌요일"/>
+                      <Cell row="1" col="35" text="강의기간"/>
+                      <Cell row="1" col="36" text="강의시간"/>
+                      <Cell row="1" col="37" text="강의횟수"/>
+                      <Cell row="1" col="38" text="폐강여부"/>
+                      <Cell row="1" col="39" text="환불규정 확인서명"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:rnum"/>
+                      <Cell col="1" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" edittype="expr:dataset.getColumn(currow, &quot;rfndChnlCd&quot;) == &quot;D&quot; ? 'date' : 'none'" calendareditformat="yyyy-MM-dd HH:mm:ss "/>
+                      <Cell col="2" text="bind:rfndRsnCdNm"/>
+                      <Cell col="3" text="bind:fmlyCd" displaytype="combotext" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
+                      <Cell col="4" text="bind:brchCdNm"/>
+                      <Cell col="5" text="bind:lectTpCdNm"/>
+                      <Cell col="6" text="bind:yy"/>
+                      <Cell col="7" text="bind:lectSmsterCdNm"/>
+                      <Cell col="8" text="bind:lectCd"/>
+                      <Cell col="9" text="bind:tcNm"/>
+                      <Cell col="10" text="bind:optnNm"/>
+                      <Cell col="11" text="bind:lectAmt"/>
+                      <Cell col="12" text="bind:lectAddAmt"/>
+                      <Cell col="13" text="bind:oflnDcNm"/>
+                      <Cell col="14" text="bind:oflnDcAmt"/>
+                      <Cell col="15" text="bind:grdeDcNm"/>
+                      <Cell col="16" text="bind:grdeDcAmt"/>
+                      <Cell col="17" text="bind:cpnDcNm"/>
+                      <Cell col="18" text="bind:cpnDcAmt"/>
+                      <Cell col="19" text="bind:oflnAddDcAmt"/>
+                      <Cell col="20" text="bind:lectStlmAmt"/>
+                      <Cell col="21" text="bind:gsStlmAmt"/>
+                      <Cell col="22" text="bind:rfndStatCdNm"/>
+                      <Cell col="23" text="bind:rfndChnlCdNm"/>
+                      <Cell col="24" text="bind:rfndClCdNm"/>
+                      <Cell col="25" text="bind:lectAmtFee"/>
+                      <Cell col="26" text="bind:addAmtFee"/>
+                      <Cell col="27" text="bind:gsRfndScheAmt"/>
+                      <Cell col="28" text="bind:crdRfndAmt"/>
+                      <Cell col="29" text="bind:lpntRfndAmt"/>
+                      <Cell col="30" text="bind:cshRfndAmt"/>
+                      <Cell col="31" text="bind:ltteGiftRfndAmt"/>
+                      <Cell col="32" text="bind:etcRfndAmt"/>
+                      <Cell col="33" text="bind:lectClCdNm"/>
+                      <Cell col="34" text="bind:lectStDtmNm"/>
+                      <Cell col="35" text="bind:lectPeriod"/>
+                      <Cell col="36" text="bind:lectTimePeriod"/>
+                      <Cell col="37" text="bind:lectNbcnt"/>
+                      <Cell col="38" text="bind:lectStatCd"/>
+                      <Cell col="39" text="bind:rfndRuleCfmSignYn"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="Grid_Excel" taborder="4" left="0" top="240" height="270" right="0" binddataset="ds_stlm_rfnd_list" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48" band="left"/>
+                <Column size="150"/>
+                <Column size="120"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="120"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="200"/>
+                <Column size="120"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell/>
+                <Cell col="1" colspan="27" text=""/>
+                <Cell col="28" colspan="5" text="결제수단"/>
+                <Cell col="33" colspan="7" text=""/>
+                <Cell row="1" text="번호"/>
+                <Cell row="1" col="1" text="취소(환불)일시"/>
+                <Cell row="1" col="2" text="취소(환불)사유"/>
+                <Cell row="1" col="3" text="실수강자"/>
+                <Cell row="1" col="4" text="지점명"/>
+                <Cell row="1" col="5" text="강좌유형"/>
+                <Cell row="1" col="6" text="학기"/>
+                <Cell row="1" col="7" text="강좌코드"/>
+                <Cell row="1" col="8" text="강좌명"/>
+                <Cell row="1" col="9" text="강사명"/>
+                <Cell row="1" col="10" text="옵션명"/>
+                <Cell row="1" col="11" text="강좌료"/>
+                <Cell row="1" col="12" text="추가금액"/>
+                <Cell row="1" col="13" text="오프라인 할인"/>
+                <Cell row="1" col="14" text="오프라인 할인금액"/>
+                <Cell row="1" col="15" text="등급할인명"/>
+                <Cell row="1" col="16" text="등급할인금액"/>
+                <Cell row="1" col="17" text="쿠폰명"/>
+                <Cell row="1" col="18" text="쿠폰 할인금액"/>
+                <Cell row="1" col="19" text="추가 금액 할인"/>
+                <Cell row="1" col="20" text="주문금액"/>
+                <Cell row="1" col="21" text="총 결제금액"/>
+                <Cell row="1" col="22" text="결제상태"/>
+                <Cell row="1" col="23" text="취소(환불)채널"/>
+                <Cell row="1" col="24" text="취소(환불)구분"/>
+                <Cell row="1" col="25" text="강좌료 수수료"/>
+                <Cell row="1" col="26" text="추가금액 수수료"/>
+                <Cell row="1" col="27" text="취소(환불)금액"/>
+                <Cell row="1" col="28" text="신용카드"/>
+                <Cell row="1" col="29" text="L.POINT"/>
+                <Cell row="1" col="30" text="현금"/>
+                <Cell row="1" col="31" text="상품권"/>
+                <Cell row="1" col="32" text="기타"/>
+                <Cell row="1" col="33" text="강좌구분"/>
+                <Cell row="1" col="34" text="강좌요일"/>
+                <Cell row="1" col="35" text="강의기간"/>
+                <Cell row="1" col="36" text="강의시간"/>
+                <Cell row="1" col="37" text="강의횟수"/>
+                <Cell row="1" col="38" text="폐강여부"/>
+                <Cell row="1" col="39" text="환불규정 확인서명"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" edittype="expr:dataset.getColumn(currow, &quot;rfndChnlCd&quot;) == &quot;D&quot; ? 'date' : 'none'"/>
+                <Cell col="2" text="bind:rfndRsnCdNm"/>
+                <Cell col="3" text="bind:fmlyCd" displaytype="combotext" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
+                <Cell col="4" text="bind:brchCdNm"/>
+                <Cell col="5" text="bind:lectTpCdNm"/>
+                <Cell col="6" text="bind:yy"/>
+                <Cell col="7" text="bind:lectSmsterCdNm"/>
+                <Cell col="8" text="bind:lectCd"/>
+                <Cell col="9" text="bind:tcNm"/>
+                <Cell col="10" text="bind:optnNm"/>
+                <Cell col="11" text="bind:lectAmt"/>
+                <Cell col="12" text="bind:lectAddAmt"/>
+                <Cell col="13" text="bind:oflnDcNm"/>
+                <Cell col="14" text="bind:oflnDcAmt"/>
+                <Cell col="15" text="bind:grdeDcNm"/>
+                <Cell col="16" text="bind:grdeDcAmt"/>
+                <Cell col="17" text="bind:cpnDcNm"/>
+                <Cell col="18" text="bind:cpnDcAmt"/>
+                <Cell col="19" text="bind:oflnAddDcAmt"/>
+                <Cell col="20" text="bind:lectStlmAmt"/>
+                <Cell col="21" text="bind:gsStlmAmt"/>
+                <Cell col="22" text="bind:rfndStatCdNm"/>
+                <Cell col="23" text="bind:rfndChnlCdNm"/>
+                <Cell col="24" text="bind:rfndClCdNm"/>
+                <Cell col="25" text="bind:lectAmtFee"/>
+                <Cell col="26" text="bind:addAmtFee"/>
+                <Cell col="27" text="bind:gsRfndScheAmt"/>
+                <Cell col="28" text="bind:crdRfndAmt"/>
+                <Cell col="29" text="bind:lpntRfndAmt"/>
+                <Cell col="30" text="bind:cshRfndAmt"/>
+                <Cell col="31" text="bind:ltteGiftRfndAmt"/>
+                <Cell col="32" text="bind:etcRfndAmt"/>
+                <Cell col="33" text="bind:lectClCdNm"/>
+                <Cell col="34" text="bind:lectStDtmNm"/>
+                <Cell col="35" text="bind:lectPeriod"/>
+                <Cell col="36" text="bind:lectTimePeriod"/>
+                <Cell col="37" text="bind:lectNbcnt"/>
+                <Cell col="38" text="bind:lectStatCd"/>
+                <Cell col="39" text="bind:rfndRuleCfmSignYn"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_stlm_rfnd_list">
+        <ColumnInfo>
+          <Column id="rnum" type="INT" size="256"/>
+          <Column id="rfndDtm" type="STRING" size="256" description=""/>
+          <Column id="rfndRsnCdNm" type="STRING" size="256" description=""/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256" description=""/>
+          <Column id="brchCdNm" type="STRING" size="256"/>
+          <Column id="lectTpCdNm" type="STRING" size="256" description=""/>
+          <Column id="yy" type="STRING" size="256" description=""/>
+          <Column id="lectSmsterCd" type="STRING" size="256" description=""/>
+          <Column id="lectSmsterCdNm" type="STRING" size="256" description=""/>
+          <Column id="lectCd" type="STRING" size="256" description=""/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256" description=""/>
+          <Column id="optnNm" type="STRING" size="256" description=""/>
+          <Column id="lectAmt" type="INT" size="256" description=""/>
+          <Column id="lectAddAmt" type="INT" size="256" description=""/>
+          <Column id="oflnDcNm" type="STRING" size="256" description=""/>
+          <Column id="oflnDcAmt" type="INT" size="256" description=""/>
+          <Column id="grdeDcNm" type="STRING" size="256" description=""/>
+          <Column id="grdeDcAmt" type="INT" size="256" description=""/>
+          <Column id="cpnDcNm" type="STRING" size="256" description=""/>
+          <Column id="cpnDcAmt" type="INT" size="256" description=""/>
+          <Column id="oflnAddDcAmt" type="INT" size="256" description=""/>
+          <Column id="lectStlmAmt" type="INT" size="256" description=""/>
+          <Column id="gsStlmAmt" type="INT" size="256" description=""/>
+          <Column id="rfndStatCdNm" type="STRING" size="256" description=""/>
+          <Column id="rfndChnlCdNm" type="STRING" size="256" description=""/>
+          <Column id="rfndClCdNm" type="STRING" size="256" description=""/>
+          <Column id="lectAmtFee" type="INT" size="256" description=""/>
+          <Column id="addAmtFee" type="INT" size="256" description=""/>
+          <Column id="gsRfndScheAmt" type="INT" size="256" description=""/>
+          <Column id="crdRfndAmt" type="INT" size="256" description=""/>
+          <Column id="lpntRfndAmt" type="INT" size="256" description=""/>
+          <Column id="cshRfndAmt" type="INT" size="256" description=""/>
+          <Column id="ltteGiftRfndAmt" type="INT" size="256" description=""/>
+          <Column id="etcRfndAmt" type="INT" size="256" description=""/>
+          <Column id="lectClCdNm" type="STRING" size="256" description=""/>
+          <Column id="lectStDtmNm" type="STRING" size="256" description=""/>
+          <Column id="lectStDtm" type="STRING" size="256" description=""/>
+          <Column id="lectStHhCd" type="STRING" size="256" description=""/>
+          <Column id="lectNbcnt" type="INT" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="rfndRuleCfmSignYn" type="STRING" size="256"/>
+          <Column id="lectPeriod" type="STRING" size="256"/>
+          <Column id="lectTimePeriod" type="STRING" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="rfndChnlCd" type="STRING" size="256"/>
+          <Column id="stlmDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_fmly_cd_list">
+        <ColumnInfo>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <ExcelExportObject id="ExcelExportObject00"/>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.oldValue;
+this.targetColumn;
+this.excelFileName = "결제취소/환불_목록_";
+this.excelImportExport = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.PayCnclList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.excelImportExport = this.application.getVariable("excelImportExport");
+};
+
+// 환불(취소)일자, 실수강자 변경
+this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
+{
+	if(e.cell == "1"){
+		// 결제일시 변경
+		this.targetColumn = "rfndDtm";
+		var rfndDtm = e.value.substr(0,4) + "-" + e.value.substr(4, 2) + "-" + e.value.substr(6, 2) + " " + e.value.substr(8, 2) + ":" + e.value.substr(10, 2) + ":" + e.value.substr(12, 2);
+		this.oldValue = this.ds_stlm_rfnd_list.getColumn(e.row, this.targetColumn);
+		this.ds_stlm_rfnd_list.set_enableevent(false);
+		this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, rfndDtm);
+		this.ds_stlm_rfnd_list.set_enableevent(true);
+		
+		var stlmDtm = this.ds_stlm_rfnd_list.getColumn(e.row, "stlmDtm");
+		if(new Date(stlmDtm) > new Date(rfndDtm)){
+			// 결제일자보다 이른 날짜 선택한 경우
+			alert("결제일 이전보다 환불일을 선택 할 수 없습니다.");
+			this.ds_stlm_rfnd_list.set_enableevent(false);
+			this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, this.oldValue);
+			this.ds_stlm_rfnd_list.set_enableevent(true);
+			return;
+		}
+	}else if(e.cell == "3"){
+		// 실수강자 변경
+		this.targetColumn = "fmlyCd";
+		this.oldValue = this.ds_stlm_rfnd_list.getColumn(e.row, "fmlyCd");
+		this.ds_stlm_rfnd_list.set_enableevent(false);
+		this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, e.value);
+		this.ds_stlm_rfnd_list.set_enableevent(true);
+		
+		// 중복된 실수강자 체크 (실수강자가 동일 강좌에 중복)
+		var duplYn = false;
+		for(var i=0;i<this.ds_stlm_rfnd_list.getRowCount();i++){
+			if(i != e.row && (this.ds_stlm_rfnd_list.getColumn(i, this.targetColumn) == e.value) && (this.ds_stlm_rfnd_list.getColumn(i, "lectCd") == this.ds_stlm_rfnd_list.getColumn(e.row, "lectCd"))){
+				duplYn = true;
+			}
+		}
+		if(duplYn){
+			alert("해당 실수강자는 수강신청 내역이 존재합니다.");
+			this.ds_stlm_rfnd_list.set_enableevent(false);
+			this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, this.oldValue);
+			this.ds_stlm_rfnd_list.set_enableevent(true);
+			return;
+		}
+	}
+	
+	if(this.ds_stlm_rfnd_list.getRowType(e.row) == 4){
+		if(confirm("변경하시겠습니까?")){
+			var strSvcId    = "updateStlmRfndList";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStlmRfndList.do";
+			var inData      = "stlmRfndList=ds_stlm_rfnd_list:U";
+			var outData     = "this.ds_stlm_rfnd_list=output1";
+			var strArg      = "targetColumn=" + this.targetColumn;
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			
+			this.gfn_transaction(tranObj);
+		}else{
+			this.ds_stlm_rfnd_list.set_enableevent(false);
+			this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, this.oldValue);
+			this.ds_stlm_rfnd_list.set_enableevent(true);
+		}
+	}
+};
+
+// 환불(취소)일, 실수강자 변경 서버 요청 후 콜백
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		this.ds_stlm_rfnd_list.set_enableevent(false);
+		this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, this.oldValue);
+		this.ds_stlm_rfnd_list.set_enableevent(true);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "updateStlmRfndList":
+			alert("변경되었습니다.");
+			break;
+	}
+};
+
+this.Div03_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
+{
+	var curRow = obj.getSelectedDatasetRows();
+	if(obj.getCellPos() == 1){
+		this.oldValue = this.ds_stlm_rfnd_list.getColumn(curRow, "rfndDtm");
+		this.ds_stlm_rfnd_list.set_enableevent(false);
+		this.ds_stlm_rfnd_list.setColumn(curRow, "rfndDtm", this.oldValue);
+		this.ds_stlm_rfnd_list.set_enableevent(true);
+		obj.setEditingValue(this.oldValue);
+	}
+};
+
+// 엑셀 다운로드
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = {
+			title : "엑셀 다운로드 사유"
+			};
+	this.gfn_showModal("excelPopupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "excelPopupCallBack", this, 400, 250, true, false, null);
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="StlmCmpltList" width="1260" height="210" titletext="New Form" onload="PayCmpltList_onload">
+    <Layouts>
+      <Layout height="210" mobileorientation="landscape" width="1260">
+        <Static id="Static03" taborder="0" text="▶ 결제완료 목록" left="0" top="0" width="95" height="17" cssclass="sta_WF_TitGray"/>
+        <Static id="Static04" taborder="1" text="(0개)" left="Static03:0" top="0" width="50" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div02" taborder="2" text="Div02" left="0" top="31" height="160" cssclass="div_WF_TableComp" right="0">
+          <Layouts>
+            <Layout>
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="데이터가 없습니다." right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" oncloseup="Div02_Grid00_oncloseup" selecttype="row" readonly="false" oninput="Div02_Grid00_oninput">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="48" band="left"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="150"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="150"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="180"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="120"/>
+                      <Column size="120"/>
+                      <Column size="120"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="26"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호"/>
+                      <Cell col="1" text="실수강자"/>
+                      <Cell col="2" text="지점명"/>
+                      <Cell col="3" text="강좌유형"/>
+                      <Cell col="4" text="학기"/>
+                      <Cell col="5" text="강좌코드"/>
+                      <Cell col="6" text="강좌명"/>
+                      <Cell col="7" text="강사명"/>
+                      <Cell col="8" text="옵션명"/>
+                      <Cell col="9" text="강좌료"/>
+                      <Cell col="10" text="추가금액"/>
+                      <Cell col="11" text="오프라인 할인"/>
+                      <Cell col="12" text="오프라인 할인금액"/>
+                      <Cell col="13" text="등급할인명"/>
+                      <Cell col="14" text="등급할인금액"/>
+                      <Cell col="15" text="쿠폰명"/>
+                      <Cell col="16" text="쿠폰 할인금액"/>
+                      <Cell col="17" text="추가 금액 할인"/>
+                      <Cell col="18" text="주문금액"/>
+                      <Cell col="19" text="총 결제금액"/>
+                      <Cell col="20" text="결제수단"/>
+                      <Cell col="21" text="결제일시"/>
+                      <Cell col="22" text="결제채널"/>
+                      <Cell col="23" text="결제상태"/>
+                      <Cell col="24" text="강좌구분"/>
+                      <Cell col="25" text="강좌요일"/>
+                      <Cell col="26" text="강의기간"/>
+                      <Cell col="27" text="강의시간"/>
+                      <Cell col="28" text="강의횟수"/>
+                      <Cell col="29" text="폐강여부"/>
+                      <Cell col="30" text="환불규정 확인서명"/>
+                      <Cell col="31" text="사은품 신청여부"/>
+                      <Cell col="32" text="사은품 신청번호"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:rnum"/>
+                      <Cell col="1" text="bind:fmlyCd" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm" displaytype="combotext"/>
+                      <Cell col="2" text="bind:brchCdNm" suppress="0"/>
+                      <Cell col="3" text="bind:lectTpCdNm"/>
+                      <Cell col="4" text="bind:yy"/>
+                      <Cell col="5" text="bind:lectCd"/>
+                      <Cell col="6" text="bind:lectNm"/>
+                      <Cell col="7" text="bind:tcNm"/>
+                      <Cell col="8" text="expr:(dataset.getColumn(currow,&quot;optnNm&quot;) == null ? '' : dataset.getColumn(currow,&quot;optnNm&quot;)) == '' ? '-' : dataset.getColumn(currow,&quot;optnNm&quot;)"/>
+                      <Cell col="9" text="bind:lectAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="10" text="expr:dataset.getColumn(currow,&quot;lectAddAmt&quot;) == 0 ? '-' : dataset.getColumn(currow,&quot;lectAddAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow,&quot;lectAddAmt&quot;) == 0 ? 'normal' : 'mask'"/>
+                      <Cell col="11" text="expr:dataset.getColumn(currow,&quot;oflnDcNm&quot;) == null ? '-' : dataset.getColumn(currow,&quot;oflnDcNm&quot;)"/>
+                      <Cell col="12" text="expr:(dataset.getColumn(currow,&quot;oflnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;oflnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;oflnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                      <Cell col="13" text="expr:dataset.getColumn(currow,&quot;grdeDcNm&quot;) == null ? '-' : dataset.getColumn(currow,&quot;grdeDcNm&quot;)"/>
+                      <Cell col="14" text="expr:(dataset.getColumn(currow,&quot;grdeDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;grdeDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;grdeDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;grdeDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;grdeDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                      <Cell col="15" text="expr:dataset.getColumn(currow,&quot;cpnDcNm&quot;) == null ? '-' : dataset.getColumn(currow,&quot;cpnDcNm&quot;)"/>
+                      <Cell col="16" text="expr:(dataset.getColumn(currow,&quot;cpnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;cpnDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;cpnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;cpnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;cpnDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                      <Cell col="17" text="expr:(dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                      <Cell col="18" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="19" text="expr:dataset.getColumn(currow,&quot;gsStlmAmt&quot;) == 0 ? '-' : dataset.getColumn(currow,&quot;gsStlmAmt&quot;)" suppress="1" suppressalign="middle" verticalAlign="middle" displaytype="expr:dataset.getColumn(currow,&quot;gsStlmAmt&quot;) == 0 ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="20" text="bind:stlmMthdCdNm" suppress="1" suppressalign="middle"/>
+                      <Cell col="21" text="bind:stlmDtm" suppress="1" suppressalign="middle" displaytype="date" edittype="expr:dataset.getColumn(currow, &quot;stlmChnlCd&quot;) == &quot;D&quot; ? dataset.getRowCount() &gt; 1 ? dataset.getRowCount() % 2 == 1 ? ((currow == nexacro.floor((dataset.getRowCount() / 2))) ? 'date' : 'none') : ((currow == (dataset.getRowCount() / 2) - 1) ? 'date' : 'none') : 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardataset="ds_stlm_cmplt_list" calendardatecol="stlmDtm"/>
+                      <Cell col="22" text="bind:stlmChnlCdNm" suppress="1" suppressalign="middle"/>
+                      <Cell col="23" text="bind:stlmStatCdNm" suppress="1" suppressalign="middle"/>
+                      <Cell col="24" text="bind:lectClCdNm"/>
+                      <Cell col="25" text="bind:lectStDtmNm"/>
+                      <Cell col="26" text="bind:lectPeriod"/>
+                      <Cell col="27" text="bind:lectTimePeriod"/>
+                      <Cell col="28" text="bind:lectNbcnt"/>
+                      <Cell col="29" text="bind:lectStatCd"/>
+                      <Cell col="30" text="expr:dataset.getColumn(currow,&quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'" suppress="1" suppressalign="middle"/>
+                      <Cell col="31" text="expr:dataset.getColumn(currow,&quot;fgftRecpYn&quot;) == 'N' ? '-' : dataset.getColumn(currow,&quot;fgftRecpYn&quot;)"/>
+                      <Cell col="32" text="expr:dataset.getColumn(currow,&quot;fgftRecpYn&quot;) == 'Y' ? dataset.getColumn(currow,&quot;fgftAppNo&quot;) : '-'"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="Button02" taborder="3" text="엑셀" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button02_onclick"/>
+        <Button id="fgftAppl" taborder="4" text="사은품 신청" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="Button02:10" visible="false"/>
+        <Button id="Button04" taborder="5" text="관리자 취소" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button04_onclick"/>
+        <Button id="Button05" taborder="6" text="주문정보 수정" top="180" width="100" height="21" cssclass="btn_WF_Medium" right="Button04:10" onclick="Button05_onclick"/>
+        <Button id="Button06" taborder="7" text="강좌이강" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="Button05:10" onclick="Button06_onclick"/>
+        <Grid id="Grid_Excel" taborder="8" left="0" top="210" height="270" binddataset="ds_stlm_cmplt_list" right="0" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="120"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="180"/>
+                <Column size="120"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="실수강자"/>
+                <Cell col="2" text="지점명"/>
+                <Cell col="3" text="강좌유형"/>
+                <Cell col="4" text="학기"/>
+                <Cell col="5" text="강좌코드"/>
+                <Cell col="6" text="강좌명"/>
+                <Cell col="7" text="강사명"/>
+                <Cell col="8" text="옵션명"/>
+                <Cell col="9" text="강좌료"/>
+                <Cell col="10" text="추가금액"/>
+                <Cell col="11" text="오프라인 할인"/>
+                <Cell col="12" text="오프라인 할인금액"/>
+                <Cell col="13" text="등급할인명"/>
+                <Cell col="14" text="등급할인금액"/>
+                <Cell col="15" text="쿠폰명"/>
+                <Cell col="16" text="쿠폰 할인금액"/>
+                <Cell col="17" text="추가 금액 할인"/>
+                <Cell col="18" text="주문금액"/>
+                <Cell col="19" text="총 결제금액"/>
+                <Cell col="20" text="결제수단"/>
+                <Cell col="21" text="결제일시"/>
+                <Cell col="22" text="결제채널"/>
+                <Cell col="23" text="결제상태"/>
+                <Cell col="24" text="강좌구분"/>
+                <Cell col="25" text="강좌요일"/>
+                <Cell col="26" text="강의기간"/>
+                <Cell col="27" text="강의시간"/>
+                <Cell col="28" text="강의횟수"/>
+                <Cell col="29" text="폐강여부"/>
+                <Cell col="30" text="환불규정 확인서명"/>
+                <Cell col="31" text="사은품 신청여부"/>
+                <Cell col="32" text="사은품 신청번호"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:actlAtlctNpleNm"/>
+                <Cell col="2" text="bind:brchCdNm" suppress="0"/>
+                <Cell col="3" text="bind:lectTpCdNm"/>
+                <Cell col="4" text="bind:yy"/>
+                <Cell col="5" text="bind:lectCd"/>
+                <Cell col="6" text="bind:lectNm"/>
+                <Cell col="7" text="bind:tcNm"/>
+                <Cell col="8" text="expr:(dataset.getColumn(currow,&quot;optnNm&quot;) == null ? '' : dataset.getColumn(currow,&quot;optnNm&quot;)) == '' ? '-' : dataset.getColumn(currow,&quot;optnNm&quot;)"/>
+                <Cell col="9" text="bind:lectAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="10" text="expr:dataset.getColumn(currow,&quot;lectAddAmt&quot;) == 0 ? '-' : dataset.getColumn(currow,&quot;lectAddAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow,&quot;lectAddAmt&quot;) == 0 ? 'normal' : 'mask'"/>
+                <Cell col="11" text="expr:dataset.getColumn(currow,&quot;oflnDcNm&quot;) == null ? '-' : dataset.getColumn(currow,&quot;oflnDcNm&quot;)"/>
+                <Cell col="12" text="expr:(dataset.getColumn(currow,&quot;oflnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;oflnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;oflnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                <Cell col="13" text="expr:dataset.getColumn(currow,&quot;grdeDcNm&quot;) == null ? '-' : dataset.getColumn(currow,&quot;grdeDcNm&quot;)"/>
+                <Cell col="14" text="expr:(dataset.getColumn(currow,&quot;grdeDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;grdeDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;grdeDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;grdeDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;grdeDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                <Cell col="15" text="expr:dataset.getColumn(currow,&quot;cpnDcNm&quot;) == null ? '-' : dataset.getColumn(currow,&quot;cpnDcNm&quot;)"/>
+                <Cell col="16" text="expr:(dataset.getColumn(currow,&quot;cpnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;cpnDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;cpnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;cpnDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;cpnDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                <Cell col="17" text="expr:(dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;)) == 0 ? '-' : dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:(dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;) == null ? 0 : dataset.getColumn(currow,&quot;oflnAddDcAmt&quot;)) == 0 ? 'normal' : 'mask'"/>
+                <Cell col="18" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="19" text="expr:dataset.getColumn(currow,&quot;gsStlmAmt&quot;) == 0 ? '-' : dataset.getColumn(currow,&quot;gsStlmAmt&quot;)" suppress="1" suppressalign="first" verticalAlign="middle" displaytype="expr:dataset.getColumn(currow,&quot;gsStlmAmt&quot;) == 0 ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="20" text="bind:stlmMthdCdNm" suppress="1" suppressalign="first"/>
+                <Cell col="21" text="bind:stlmDtm" suppress="1" suppressalign="first" displaytype="date" edittype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="22" text="bind:stlmChnlCdNm" suppress="1" suppressalign="first"/>
+                <Cell col="23" text="bind:stlmStatCdNm" suppress="1" suppressalign="first"/>
+                <Cell col="24" text="bind:lectClCdNm"/>
+                <Cell col="25" text="bind:lectStDtmNm"/>
+                <Cell col="26" text="bind:lectPeriod"/>
+                <Cell col="27" text="bind:lectTimePeriod"/>
+                <Cell col="28" text="bind:lectNbcnt"/>
+                <Cell col="29" text="bind:lectStatCd"/>
+                <Cell col="30" text="expr:dataset.getColumn(currow,&quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'" suppress="1" suppressalign="first"/>
+                <Cell col="31" text="expr:dataset.getColumn(currow,&quot;fgftRecpYn&quot;) == 'N' ? '-' : dataset.getColumn(currow,&quot;fgftRecpYn&quot;)"/>
+                <Cell col="32" text="expr:dataset.getColumn(currow,&quot;fgftRecpYn&quot;) == 'Y' ? dataset.getColumn(currow,&quot;fgftAppNo&quot;) : '-'"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.cnt = 0;
+this.excelFileName = "결제완료_목록_";
+this.oldValue;
+this.targetColumn;
+this.excelImportExport = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.PayCmpltList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.excelImportExport = this.application.getVariable("excelImportExport");
+};
+
+this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 관리자 취소
+	if(this.lookup("admCnclDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
+		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 410);
+		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 410);
+		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 410);
+		var divObj = new Div("admCnclDiv");
+		divObj.set_left(0);
+		divObj.set_right(0);
+		divObj.set_top(495);
+		divObj.set_height(410);
+		divObj.set_url("PayMng::PayCmpltDtl/AdmCncl.xfdl");
+		
+		this.parent.parent.parent.form.addChild("admCnclDiv", divObj);
+		divObj.show();
+		
+		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 410); // div
+		this.parent.parent.parent.parent.resetScroll(); // form
+	}
+	
+	
+};
+
+this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 주문정보 수정
+	if(this.lookup("orderInfoModifyDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
+		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 550);
+		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 550);
+		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 550);
+		var divObj = new Div("orderInfoModifyDiv");
+		divObj.set_left(0);
+		divObj.set_right(0);
+		divObj.set_top(495);
+		divObj.set_height(550);
+		divObj.set_url("PayMng::PayCmpltDtl/OrderInfoModify.xfdl");
+		
+		this.parent.parent.parent.form.addChild("orderInfoModifyDiv", divObj);
+		divObj.show();
+		
+		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 550); // div
+		this.parent.parent.parent.parent.resetScroll(); // form
+	}
+};
+
+this.Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 강좌이강 팝업
+	//description Modal
+	var oArg = {
+				//objArguments : this.TextArea00,
+				test : "aaaaa"
+				};
+				
+	this.gfn_openPopup("popupOpen" + this.cnt, oArg, "PayMng::MoveLecture_popup.xfdl", this, 960, 480, true, true, null);
+};
+
+this.popupCallBack = function(sFormId, sArg)
+{
+	if(sFormId == 'popupModal')
+	{
+		if(sArg == 'OK')
+		{
+			alert('modal call back');
+		}
+	}
+};
+
+// 그리드 실수강자, 결제일자 수정이벤트
+this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
+{
+	if(e.cell == "1"){
+		// 실수강자 변경
+		this.targetColumn = "fmlyCd";
+		this.oldValue = this.ds_stlm_cmplt_list.getColumn(e.row, this.targetColumn);
+		this.ds_stlm_cmplt_list.set_enableevent(false);
+		this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, e.value);
+		this.ds_stlm_cmplt_list.set_enableevent(true);
+		
+		// 중복된 실수강자 체크 (실수강자가 동일 강좌에 중복)
+		var duplYn = false;
+		for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
+			if(i != e.row && (this.ds_stlm_cmplt_list.getColumn(i, this.targetColumn) == e.value) && (this.ds_stlm_cmplt_list.getColumn(i, "lectCd") == this.ds_stlm_cmplt_list.getColumn(e.row, "lectCd"))){
+				duplYn = true;
+			}
+		}
+		
+		if(duplYn){
+			alert("해당 실수강자는 수강신청 내역이 존재합니다.");
+			this.ds_stlm_cmplt_list.set_enableevent(false);
+			this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, this.oldValue);
+			this.ds_stlm_cmplt_list.set_enableevent(true);
+			return;
+		}
+	}else if(e.cell == "21"){
+		// 결제일시 변경
+		this.targetColumn = "stlmDtm";
+		this.oldValue = this.ds_stlm_cmplt_list.getColumn(e.row, this.targetColumn);
+		this.ds_stlm_cmplt_list.set_enableevent(false);
+		this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, e.value.substr(0,4) + "-" + e.value.substr(4, 2) + "-" + e.value.substr(6, 2) + " " + e.value.substr(8, 2) + ":" + e.value.substr(10, 2) + ":" + e.value.substr(12, 2));
+		this.ds_stlm_cmplt_list.set_enableevent(true);
+	}
+	
+	// 데이터셋이 변경되었을때만
+	if(this.ds_stlm_cmplt_list.getRowType(e.row) == 4){
+		if(confirm("변경하시겠습니까?")){
+			var strSvcId    = "updateStlmCmpltList";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStlmCmpltList.do";
+			var inData      = "stlmCmpltList=ds_stlm_cmplt_list:U";
+			var outData     = "this.ds_stlm_cmplt_list=output1";
+			var strArg      = "targetColumn=" + this.targetColumn + " oldValue=" + nexacro.wrapQuote(this.oldValue);
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			
+			this.gfn_transaction(tranObj);
+		}else{
+			this.ds_stlm_cmplt_list.set_enableevent(false);
+			this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, this.oldValue);
+			this.ds_stlm_cmplt_list.set_enableevent(true);
+		}
+	}
+};
+
+// 실수강자 변경 서버 요청 후 콜백
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		this.ds_stlm_cmplt_list.set_enableevent(false);
+		this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, this.oldValue);
+		this.ds_stlm_cmplt_list.set_enableevent(true);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "updateStlmCmpltList":
+			alert("변경되었습니다.");
+			break;
+	}
+};
+
+// 엑셀 다운로드
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = {
+			title : "엑셀 다운로드 사유"
+			};
+	this.gfn_showModal("excelPopupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "excelPopupCallBack", this, 400, 250, true, false, null);
+};
+
+// 그리드 calendar 입력 막기
+this.Div02_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
+{
+	var curRow = obj.getSelectedDatasetRows();
+	if(obj.getCellPos() == 21){
+		this.oldValue = this.ds_stlm_cmplt_list.getColumn(curRow, "stlmDtm");
+		this.ds_stlm_cmplt_list.set_enableevent(false);
+		this.ds_stlm_cmplt_list.setColumn(curRow, "stlmDtm", this.oldValue);
+		this.ds_stlm_cmplt_list.set_enableevent(true);
+		obj.setEditingValue(this.oldValue);
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_stlm_cmplt_list">
+        <ColumnInfo>
+          <Column id="rnum" type="INT" size="256" description="실수강자"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="INT" size="256"/>
+          <Column id="brchCdNm" type="STRING" size="256" description="지점명"/>
+          <Column id="lectTpCdNm" type="STRING" size="256" description="강좌유형"/>
+          <Column id="yy" type="STRING" size="256" description="학기"/>
+          <Column id="lectSmsterCdNm" type="STRING" size="256" description="강좌코드"/>
+          <Column id="lectCd" type="STRING" size="256" description="강좌명"/>
+          <Column id="lectNm" type="STRING" size="256" description="강사명"/>
+          <Column id="tcNm" type="STRING" size="256" description="옵션명"/>
+          <Column id="optnNm" type="STRING" size="256" description="강좌료"/>
+          <Column id="lectAmt" type="INT" size="256" description="추가금액"/>
+          <Column id="lectAddAmt" type="INT" size="256" description="오프라인 할인"/>
+          <Column id="oflnDcNm" type="STRING" size="256" description="오프라인 할인금액"/>
+          <Column id="oflnDcAmt" type="INT" size="256" description="등급할인명"/>
+          <Column id="grdeDcNm" type="STRING" size="256" description="등급할인금액"/>
+          <Column id="grdeDcAmt" type="INT" size="256" description="쿠폰명"/>
+          <Column id="cpnDcNm" type="STRING" size="256" description="쿠폰 할인금액"/>
+          <Column id="cpnDcAmt" type="INT" size="256" description="추가 금액 할인"/>
+          <Column id="oflnAddDcAmt" type="INT" size="256" description="주문금액"/>
+          <Column id="lectStlmAmt" type="INT" size="256" description="총 결제금액"/>
+          <Column id="gsStlmAmt" type="INT" size="256" description="결제수단"/>
+          <Column id="stlmMthdCdNm" type="STRING" size="256" description="결제일시"/>
+          <Column id="stlmDtm" type="DATE" size="256" description="결제채널"/>
+          <Column id="stlmChnlCdNm" type="STRING" size="256" description="결제상태"/>
+          <Column id="stlmStatCdNm" type="STRING" size="256" description="강좌구분"/>
+          <Column id="lectClCdNm" type="STRING" size="256" description="강좌요일"/>
+          <Column id="lectStDtmNm" type="STRING" size="256" description="강의기간"/>
+          <Column id="lectPeriod" type="STRING" size="256"/>
+          <Column id="lectTimePeriod" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="INT" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="rfndRuleCfmSignYn" type="STRING" size="256"/>
+          <Column id="fgftRecpYn" type="STRING" size="256"/>
+          <Column id="fgftAppNo" type="STRING" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_fmly_cd_list">
+        <ColumnInfo>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <ExcelExportObject id="ExcelExportObject00"/>
+    </Objects>
+  </Form>
+</FDL>

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AdmMemo" width="1280" height="750" titletext="New Form" onload="AdmMemo_onload">
+    <Layouts>
+      <Layout height="750" width="1280">
+        <Static id="Static07" taborder="0" text="▶ 관리자 메모 목록" left="0" top="0" width="120" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div05" taborder="1" text="Div05" left="0" top="27" height="453" cssclass="div_WF_TableComp" right="0">
+          <Layouts>
+            <Layout>
+              <Tab id="Tab00" taborder="0" tabindex="0" left="0" top="0" right="0" bottom="0" onchanged="Div05_Tab00_onchanged">
+                <Tabpages>
+                  <Tabpage id="Tabpage1" text="주문정보 변경 내역" border="0px none">
+                    <Layouts>
+                      <Layout>
+                        <Div id="Div00" taborder="0" text="Div00" left="0" top="0" right="0" bottom="0" url="StlmMng::StlmCmpltDtl/AdmMemo/OrderUpdateHistoryList.xfdl"/>
+                      </Layout>
+                    </Layouts>
+                  </Tabpage>
+                  <Tabpage id="Tabpage2" text="할인정보 변경 내역" border="0px none" async="true">
+                    <Layouts>
+                      <Layout>
+                        <Div id="Div00" taborder="0" text="Div00" left="0" top="0" bottom="0" right="0" url="StlmMng::StlmCmpltDtl/AdmMemo/DcUpdateHistoryList.xfdl"/>
+                      </Layout>
+                    </Layouts>
+                  </Tabpage>
+                  <Tabpage id="Tabpage3" text="주문금액 변경 내역" border="0px none" async="true">
+                    <Layouts>
+                      <Layout>
+                        <Div id="Div00" taborder="0" text="Div00" left="0" top="0" right="0" bottom="0" url="StlmMng::StlmCmpltDtl/AdmMemo/OrderAmtUpdateHistoryList.xfdl"/>
+                      </Layout>
+                    </Layouts>
+                  </Tabpage>
+                  <Tabpage id="Tabpage4" text="결제취소 내역" border="0px none">
+                    <Layouts>
+                      <Layout>
+                        <Div id="Div00" taborder="0" text="Div00" left="0" top="0" right="0" bottom="0" url="StlmMng::StlmCmpltDtl/AdmMemo/StlmRfndList.xfdl"/>
+                        <Div id="Div01" taborder="1" text="Div01" left="0" top="0" right="0" bottom="0" url="StlmMng::StlmCmpltDtl/AdmMemo/StlmRfndList.xfdl"/>
+                      </Layout>
+                    </Layouts>
+                  </Tabpage>
+                  <Tabpage id="Tabpage5" text="관리자 메모" border="0px none">
+                    <Layouts>
+                      <Layout>
+                        <Div id="Div00" taborder="0" text="Div00" left="0" top="0" right="0" bottom="0" url="StlmMng::StlmCmpltDtl/AdmMemo/AdmMemoList.xfdl"/>
+                      </Layout>
+                    </Layouts>
+                  </Tabpage>
+                </Tabpages>
+              </Tab>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="Static08" taborder="2" text="▶ 관리자 메모 등록" left="0" top="490" width="120" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div06" taborder="3" text="Div06" left="0" top="517" height="185" cssclass="div_WF_TableComp" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="등록자" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Static id="Static01" taborder="1" text="관리자 이름" left="Static00:0" top="5" width="200" height="20" cssclass="sta_WF_CompText"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="32" height="150" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="메모" left="0" top="0" width="200" height="148" cssclass="sta_WF_TableLabel"/>
+                    <TextArea id="memoCont" taborder="1" left="Static00:10" top="10" right="10" bottom="10" maxlength="500"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="Button01" taborder="4" text="저장" top="712" height="21" right="0" width="100" cssclass="btn_WF_Medium" onclick="Button01_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.atlctRsvNo = this.parent.parent.parent.parent.parent.atlctRsvNo;
+this.menuSeq = this.parent.parent.parent.parent.parent.menuSeq;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.AdmMemo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	// 관리자 메모 등록자
+	this.Div06.form.Div00.form.Static01.set_text(nexacro.getPrivateProfile("id") + "(" + nexacro.getPrivateProfile("name") + ")");
+};
+
+// 관리자 메모 등록
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("저장하시겠습니까?")){
+		this.ds_insert_memo.set_enableevent(false);
+		this.ds_insert_memo.insertRow(0);
+		this.ds_insert_memo.setColumn(0, "atlctRsvNo", this.atlctRsvNo);
+		this.ds_insert_memo.setColumn(0, "memoCont", this.Div06.form.Div01.form.memoCont.value);
+		this.ds_insert_memo.set_enableevent(true);
+		
+		var tranObj = {
+			strSvcId : "insert",
+			strSvcUrl : this.application.Admin_svc + "::stlmMng/insertAdmMemo.do",
+			inData : "admMemo=ds_insert_memo",
+			outData : "",
+			strArg : "",
+			callBackFnc : "fn_callback",
+			isAsync : true,
+			isPopup : true,
+			menuSeq : this.menuSeq
+		};
+		
+		this.gfn_transaction(tranObj);
+	}
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "insert":
+			this.Div06.form.Div01.form.memoCont.set_value('');
+ 			alert("저장되었습니다.");
+		break;
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_insert_memo">
+        <ColumnInfo>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="1000"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
