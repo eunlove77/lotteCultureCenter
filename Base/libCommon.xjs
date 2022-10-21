@@ -19,7 +19,6 @@ this.gfn_transaction = function(tranObj)
 	
 	if(nexacro.getApplication().isAuth)
 	{
-		console.log(this.gfn_nvl(tranObj.menuSeq));
 		if(this.gfn_nvl(tranObj.menuSeq) != ""){
 			tranObj.strSvcUrl += "?menuSeq=" + tranObj.menuSeq;
 		}
@@ -78,11 +77,18 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 		//윈도우 팝업 여부 
 		if(this.isPopup) 
 		{
-			this.close();
-			for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
-			{	
-				nexacro.getPopupFrames()[i].form.close();
-			}
+			//모달 && 윈도우 팝업 제거
+			for(var i=0; i < nexacro.getPopupFrames(this.opener).length; i++)
+			{
+				if(nexacro.getPopupFrames(this.opener)[i].opener.name != "Form_Work")
+				{
+					nexacro.getPopupFrames(this.opener)[i].opener.close();
+				}
+				else
+				{
+					nexacro.getPopupFrames(this.opener)[i].form.close();
+				}
+			}			
 		}
 		
 		switch(svcID)
@@ -690,8 +696,6 @@ this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx)
 */
 this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
 { 
-	console.log("111");
-	console.log(e.reason);
 	if(e.reason==0) 
 	{ 
 		//데이터셋이 로드되면 checkarray 초기화
