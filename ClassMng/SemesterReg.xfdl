@@ -74,6 +74,7 @@
                           <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_03_Calendar00_oncloseup" dateformat="yyyy-MM-dd"/>
                           <Static id="Static01" taborder="3" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
                           <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div01_Div00_03_Calendar01_oncloseup" dateformat="yyyy-MM-dd"/>
+                          <Button id="Button00" taborder="4" text="초기화" left="Calendar01:10" top="5" width="58" height="20" cssclass="btn_WF_Low" onclick="Div00_Div01_Div00_03_Button00_onclick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -216,6 +217,14 @@ this.SemesterReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 **************************************************************************/
 this.init = function()
 {
+	//캘린더 세팅
+	this.Div00.form.Div01.form.Div00_01.form.Calendar00.calendaredit.set_readonly(true);
+	this.Div00.form.Div01.form.Div00_01.form.Calendar01.calendaredit.set_readonly(true);
+	this.Div00.form.Div01.form.Div00_02.form.Calendar00.calendaredit.set_readonly(true);
+	this.Div00.form.Div01.form.Div00_02.form.Calendar01.calendaredit.set_readonly(true);
+	this.Div00.form.Div01.form.Div00_03.form.Calendar00.calendaredit.set_readonly(true);
+	this.Div00.form.Div01.form.Div00_03.form.Calendar01.calendaredit.set_readonly(true);
+	
 	this.ds_semester_dtl.clearData();
 	this.ds_semester_dtl.addRow();
 	
@@ -456,52 +465,75 @@ this.fn_create = function()
 //유효성검사
 this.fn_save_validation = function()
 {
-	for(var i=0; i < this.ds_semester_dtl.getRowCount(); i++)
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "smsterPrdStDt")))) == "")
 	{
-		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "smsterPrdStDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "smsterPrdStDt")) == "")
+		alert("학기기간 시작일을 선택하세요.");
+		this.Div00.form.Div01.form.Div00_01.form.Calendar00.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt")))) == "")
+	{
+		alert("학기기간 종료일을 선택하세요.");
+		this.Div00.form.Div01.form.Div00_01.form.Calendar01.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "rceptPrdStDt")))) == "")
+	{
+		alert("접수기간 시작일을 선택하세요.");
+		this.Div00.form.Div01.form.Div00_02.form.Calendar00.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt")))) == "")
+	{
+		alert("접수기간 종료일을 선택하세요.");
+		this.Div00.form.Div01.form.Div00_02.form.Calendar01.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "extngMbrRceptPrdStDt")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "extngMbrRceptPrdEndDt")))) != "")
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "extngMbrRceptPrdStDt")))) == "")
 		{
-			alert("학기기간 시작일을 입력하세요.");
-			return;
-		}
-		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt")) == "")
-		{
-			alert("학기기간 종료일을 입력하세요.");
+			alert("기존회원 접수기간 시작일을 선택하세요.");
+			this.Div00.form.Div01.form.Div00_03.form.Calendar00.setFocus();
 			return;
 		}
 		
-		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "rceptPrdStDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "rceptPrdStDt")) == "")
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "extngMbrRceptPrdEndDt")))) == "")
 		{
-			alert("접수기간 시작일을 입력하세요.");
+			alert("기존회원 접수기간 종료일을 선택하세요.");
+			this.Div00.form.Div01.form.Div00_03.form.Calendar01.setFocus();
 			return;
 		}
-		
-		if(this.gfn_nvl(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt")) == "" || nexacro.trim(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt")) == "")
+	}
+	
+	if(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt") >= this.ds_semester_dtl.getColumn(0, "smsterPrdStDt"))
+	{
+		alert("학기기간은 접수기간 이전으로 설정할 수 없습니다.");
+		this.Div00.form.Div01.form.Div00_01.form.Calendar00.setFocus();
+		return;
+	}
+	
+	if(this.prevSmsterPrdEndDt != "")
+	{
+		if(this.prevSmsterPrdEndDt >= this.ds_semester_dtl.getColumn(0, "smsterPrdStDt"))
 		{
-			alert("접수기간 종료일을 입력하세요.");
+			alert("이전학기 학기기간 이전으로 설정할 수 없습니다.");
+			this.Div00.form.Div01.form.Div00_01.form.Calendar00.setFocus();
 			return;
 		}
-		if(this.ds_semester_dtl.getColumn(0, "rceptPrdEndDt") >= this.ds_semester_dtl.getColumn(0, "smsterPrdStDt"))
+	}
+	
+	if(this.nextSmsterPrdStDt != "")
+	{
+		if(this.nextSmsterPrdStDt <= this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt"))
 		{
-			alert("학기기간은 접수기간 이전으로 설정할 수 없습니다.");
+			alert("다음학기 학기기간 이후로 설정할 수 없습니다.");
+			this.Div00.form.Div01.form.Div00_01.form.Calendar01.setFocus();
 			return;
-		}
-		
-		if(this.prevSmsterPrdEndDt != "")
-		{
-			if(this.prevSmsterPrdEndDt >= this.ds_semester_dtl.getColumn(0, "smsterPrdStDt"))
-			{
-				alert("이전학기 하기기간 이전으로 설정할 수 없습니다.");
-				return;
-			}
-		}
-		
-		if(this.nextSmsterPrdStDt != "")
-		{
-			if(this.nextSmsterPrdStDt <= this.ds_semester_dtl.getColumn(0, "smsterPrdEndDt"))
-			{
-				alert("다음학기 학기기간 이후로 설정할 수 없습니다.");
-				return;
-			}
 		}
 	}
 	
@@ -657,6 +689,12 @@ this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	}
 	
 	this.fn_save_validation();
+};
+
+this.Div00_Div01_Div00_03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_semester_dtl.setColumn(0, "extngMbrRceptPrdStDt", "");
+	this.ds_semester_dtl.setColumn(0, "extngMbrRceptPrdEndDt", "");
 };
 ]]></Script>
     <Objects>
