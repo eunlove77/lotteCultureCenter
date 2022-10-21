@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="VisualMng" width="1280" height="1000" titletext="New Form" onload="VisualMng_onload">
+  <Form id="MainBannerMng" width="1280" height="1000" titletext="New Form" onload="MainBannerMng_onload">
     <Layouts>
       <Layout height="1000" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -49,7 +49,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="GridVisualList" taborder="4" left="10" top="250" binddataset="ds_visual_list" autofittype="col" right="10" bottom="30" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick">
+        <Grid id="GridMainBannerList" taborder="4" left="10" top="250" binddataset="mainBannerDs" autofittype="col" right="10" bottom="30" nodatatext="데이터가 없습니다." oncellclick="GridMainBannerList_oncellclick" cssclass="grd_WF_TableType">
           <Formats>
             <Format id="default">
               <Columns>
@@ -67,7 +67,7 @@
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y" text="N"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" text="제목"/>
                 <Cell col="2" text="게시기간"/>
                 <Cell col="3" text="최초 등록자"/>
@@ -77,14 +77,14 @@
                 <Cell col="7" text="노출여부"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:seqno"/>
-                <Cell col="1" text="bind:tit"/>
-                <Cell col="2" text="bind:expsrStDtm"/>
+                <Cell text="bind:seqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="bind:tit" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="2" text="expr:expsrStDtm ?  expsrStDtm + ' ~ ' + expsrEndDtm: ''"/>
                 <Cell col="3" text="bind:rgprId"/>
                 <Cell col="4" text="bind:rgprDtm"/>
-                <Cell col="5" text="bind:mdfId"/>
-                <Cell col="6" text="bind:mdfDtm"/>
-                <Cell col="7" text="bind:expsrYn"/>
+                <Cell col="5" text="expr:mdfId ? mdfId : rgprId"/>
+                <Cell col="6" text="expr:mdfDtm ? mdfDtm : rgprDtm"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, 'expsrYn') == 'Y' ? '노출' : '미노출'"/>
               </Band>
             </Format>
           </Formats>
@@ -94,9 +94,8 @@
             <Layout>
               <Static id="txtTotal" taborder="0" left="9" top="10" height="21" text="목록 (0)개" right="1169"/>
               <Button id="btnUseN" taborder="1" text="미노출" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnPerminN_onclick"/>
-              <Button id="btnIns" taborder="2" text="등록" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="80" onclick="Div01_btnIns_onclick"/>
-              <Button id="btnUseY" taborder="3" text="노출" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="226" onclick="Div01_btnSave_onclick" visible="true"/>
-              <Button id="btnDel" taborder="4" text="삭제" top="5" height="30" cssclass="btn_WF_High" width="50" onclick="Div01_btnDel_onclick" right="10"/>
+              <Button id="btnAdd" taborder="2" text="등록" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="80" onclick="Div01_btnAdd_onclick"/>
+              <Button id="btnDel" taborder="3" text="삭제" top="5" height="30" cssclass="btn_WF_High" width="50" onclick="Div01_btnDel_onclick" right="10"/>
             </Layout>
           </Layouts>
         </Div>
@@ -113,7 +112,7 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_visual_list">
+      <Dataset id="mainBannerDs">
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
@@ -128,7 +127,7 @@
           <Column id="chk" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_search">
+      <Dataset id="searchDs">
         <ColumnInfo>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
@@ -137,8 +136,29 @@
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
-          <Row/>
+          <Row>
+            <Col id="f">0</Col>
+            <Col id="permitType"/>
+            <Col id="q"/>
+            <Col id="strtDtm"/>
+            <Col id="endDtm"/>
+          </Row>
         </Rows>
+      </Dataset>
+      <Dataset id="mainBannerDs_format">
+        <ColumnInfo>
+          <Column id="seqno" type="STRING" size="256"/>
+          <Column id="tit" type="STRING" size="256"/>
+          <Column id="expsrStDtm" type="STRING" size="256"/>
+          <Column id="expsrEndDtm" type="STRING" size="256"/>
+          <Column id="alwsExpsrYn" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
@@ -146,36 +166,37 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
+this.rowcount = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.VisualMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.MainBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	
+	this.param = this.parent.param;
 	var objOwnerFrame = this.getOwnerFrame();
-	
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	// 코드 데이터
-	//this.fn_data_list();
+	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
+	this.gfnSetCheckBoxNoDataset(this.mainBannerDs, this.GridMainBannerList, 0);
 	
 	this.fn_list(1);
 };
 
-//리스트 검색버튼
-this.Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+//등록 버튼
+this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-
-	this.fn_searchValueInit();
-	
-	this.fn_list(1);
+	this.parent.param = {
+		seqno : ""
+	}
+	this.parent.set_url("SystemMng::MainBannerMngDtl.xfdl");
 };
 
 //엔터키 검색
@@ -183,30 +204,50 @@ this.Div06_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventI
 {
 	if(e.keycode ==13)
 	{
-		this.fn_searchValueInit();
-		
 		this.fn_list(1);
 	}
 };
 
-//리스트 초기화 버튼
+//삭제 버튼
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.mainBannerDs.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 메인배너를 선택하세요.");
+		return false;
+	}
+	if(!confirm("선택한 메인배너를 삭제하시겠습니까?")){
+		return false;
+	}
+	
+	this.mainBannerDs.deleteMultiRows(checked_array);
+	for(i of checked_array){
+		check_array[i] = 0;
+	}
+	this.fn_delete();	
+};
+
+//검색버튼
+this.Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list();
+};
+
+//초기화버튼
 this.Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	
-	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
-	
-	objCalendar.strtDtm.set_value('');
-	objCalendar.endDtm.set_value('');
-	
-	this.Div06.form.searchField.set_index(0);
-	this.Div06.form.searchQuery.set_value('');
-	
-	//this.ds_notice_list.clearData();
-	//this.txtTotal.set_text("총 0개");	
+	this.reset_search_form();
+	this.fn_list();
+};
 
-	this.permitDiv.form.chkPermitAll.set_value(0);
-	this.permitDiv.form.chkPermitY.set_value(0);
-	this.permitDiv.form.chkPermitN.set_value(0);
+//미사용버튼
+this.Div01_btnPerminN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
 	
 };
 
@@ -224,48 +265,65 @@ this.permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.Click
 		}
 };
 
+//그리드 상세 페이지 이동
+this.GridMainBannerList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 1)
+	{
+		var	seqno = obj.getBindDataset().getColumn(e.row, "seqno");
+		
+		this.parent.param = {
+			seqno : seqno
+		};
+		
+		this.parent.set_url("SystemMng::MainBannerMngDtl.xfdl");
+	}
+};
+
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
 this.fn_list = function (page)
 {	
+	var tranObj = {};
+	tranObj.strSvcId	= "list";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/mainBannerList.do";
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.inData      = "search=searchDs";
+	tranObj.outData     = "mainBannerDs=mainBannerList";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
 	
-	var strSvcId    = "list";
-	var strSvcUrl   = this.application.Admin_svc + "::/main/visualMngList.do";
-	var inData      = "search=ds_search";
-	var outData     = "ds_visual_list=output1";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+	this.gfn_transaction(tranObj);		
 	
 };
 
-this.fn_searchValueInit = function() {
+//삭제
+this.fn_delete = function ()
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/deleteMainBanner.do";
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.inData      = "mainBannerList=mainBannerDs:U";
+	tranObj.outData     = "mainBannerDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	this.gfn_transaction(tranObj);	
+};
 
-	//this.alert("검색조건초기화");
-	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
-	var arrPermitType = new Array();
+//clear
+this.reset_search_form = function(){
 	
-	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
-	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
-	
-	if(this.permitDiv.form.chkPermitY == true) arrPermitType.push("'Y'");
-	if(this.permitDiv.form.chkPermitN == true) arrPermitType.push("'N'");
-	//권한 처리예정
-	
-	this.ds_search.setColumn(0, "permitType", arrPermitType.join(","));
-	this.ds_search.setColumn(0, "q", this.Div06.form.searchQuery.value);
-	this.ds_search.setColumn(0, "f", this.Div06.form.searchField.value);
-
+	var cnt = this.searchDs.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		this.searchDs.setColumn(0, i, "");
+	}
+	this.fn_list();
 }
 
 this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
@@ -282,45 +340,115 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   if(errorCode != 0)
   {
     this.alert(errorCode+"\n"+errorMsg);
-	
-	switch(svcID)
-	{
-		case "save":
-			this.ds_visual_list.reset();
-			break;
-	}
-	
-    return;
   }
 
   switch(svcID)
   {
-    case "list":
-      if(this.ds_visual_list.rowcount < 1){
-        this.alert("조회된 결과가 없습니다.");
-      }else{
-	  
- 		this.ds_visual_list.set_enableevent(false);
-		for(var i = 0 ; i < this.ds_admin_list.getRowCount() ; i++){
-			this.ds_visual_list.addColumn("chk", "String", 256);
-			this.ds_visual_list.setColumn(i, "chk","N");
-		}
-		this.ds_visual_list.set_enableevent(true);
-	  }
-	case "save":
-		this.alert("변경완료");
-		break;
+	case "list":
+			this.Div01.form.txtTotal.set_text("목록("+this.mainBannerDs.rowcount+")개");
+			if(!this.mainBannerDs.getColCount())
+			{
+				this.mainBannerDs.copyData(this.mainBannerDs_format);
+			}
+			if(this.mainBannerDs.rowcount < 1){
+				//this.alert("조회된 결과가 없습니다.");
+				this.mainBannerDs.clearData();
+			}
+	break;
+    
+	case "delete":
+		this.alert("삭제완료");
+		this.fn_list(1);
+	break;
   }
 };
 
 this.orderType = "desc";
-this.Div01_btnIns_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.parent.param = {
-		seq : ""
-	}
-	this.parent.set_url("SystemMng::VisualMngDtl.xfdl");
-};
+
+/**************************************************************************
+* 그리드 체크박스 영역
+**************************************************************************/
+this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
+{ 
+	//체크여부 정보를 담을 Array를 사용자 변수로 설정
+	objDs.checkarray = new Array(); 
+	
+	//데이터셋 온로드이벤트 추가
+	objDs.addEventHandler("onload", this.gfnDataset_onload); 
+	
+	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
+	objGrd.checkcell = nCheckCellIdx; 
+	
+	//그리드 Cell Click 이벤트 추가
+	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick); 
+	
+	//그리드 Head Click 이벤트 추가
+	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
+} 
+this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
+{ 
+	if(e.reason==0) 
+	{ 
+		//데이터셋이 로드되면 checkarray 초기화
+		obj.checkarray = new Array(); 
+	} 
+}; 
+this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
+{ 
+	var objDs; 
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell) 
+	{ 
+		objDs = obj.getBindDataset(); 
+		
+		if(objDs.checkarray[e.row]==1) 
+		{ 
+			//체크 해제
+			objDs.checkarray[e.row] = 0; 
+		}else 
+		{ 
+			//체크 설정
+			objDs.checkarray[e.row] = 1; 
+		}
+		
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell(); 
+	} 
+}; 
+this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
+{ 
+	var i; 
+	var objDs;
+	
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell) 
+	{ 
+		objDs = obj.getBindDataset(); 
+		nChkVal = obj.getCellText(-1, e.cell); 
+		
+		if(nChkVal==1)nChkVal = 0; 
+		else nChkVal = 1; 
+		
+		//Head의 체크 상태 변경
+		obj.setCellProperty("head", e.cell, "text", nChkVal); 
+		
+		//Body의 체크 상태 변경
+		for(i=0;i<objDs.rowcount;i++) 
+		{ 
+			objDs.checkarray[i] = nChkVal; 
+		} 
+		
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell(); 
+	} 
+}	
 ]]></Script>
+    <Bind>
+      <BindItem id="strtDtm" compid="periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
+      <BindItem id="endDtm" compid="periodDiv.form.Div00.form.endDtm" propid="value" datasetid="searchDs" columnid="endDtm"/>
+      <BindItem id="permitType" compid="permitDiv.form.chkPermitAll" propid="value" datasetid="searchDs" columnid="permitType"/>
+      <BindItem id="q" compid="Div06.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
+      <BindItem id="f" compid="Div06.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
+    </Bind>
   </Form>
 </FDL>
