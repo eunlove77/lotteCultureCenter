@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="OrderAmtUpdateHistoryList" width="1280" height="429" titletext="New Form" onload="OrderAmtUpdateHistoryList_onload">
+    <Layouts>
+      <Layout height="429" width="1280">
+        <Grid id="Grid00" taborder="0" left="0" top="0" height="380" right="0" binddataset="ds_order_amt_update_history_list" nodatatext="데이터가 없습니다.">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48" band="left"/>
+                <Column size="150"/>
+                <Column size="120"/>
+                <Column size="150"/>
+                <Column size="180"/>
+                <Column size="150"/>
+                <Column size="180"/>
+                <Column size="180"/>
+                <Column size="150"/>
+                <Column size="150"/>
+                <Column size="120"/>
+                <Column size="150"/>
+                <Column size="180"/>
+                <Column size="150"/>
+                <Column size="180"/>
+                <Column size="180"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="변경 전 총 결제금액"/>
+                <Cell col="2" text="변경 전 카드사"/>
+                <Cell col="3" text="변경 전 카드결제금액"/>
+                <Cell col="4" text="변경 전 엘포인트사용금액"/>
+                <Cell col="5" text="변경 전 현금결제금액"/>
+                <Cell col="6" text="변경 전 롯데상품권결제금액"/>
+                <Cell col="7" text="변경 전 타사상품권결제금액"/>
+                <Cell col="8" text="변경 전 기타결제금액"/>
+                <Cell col="9" text="변경 후 총 결제금액"/>
+                <Cell col="10" text="변경 후 카드사"/>
+                <Cell col="11" text="변경 후 카드결제금액"/>
+                <Cell col="12" text="변경 후 엘포인트사용금액"/>
+                <Cell col="13" text="변경 후 현금결제금액"/>
+                <Cell col="14" text="변경 후 롯데상품권결제금액"/>
+                <Cell col="15" text="변경 후 타사상품권결제금액"/>
+                <Cell col="16" text="변경 후 기타결제금액"/>
+                <Cell col="17" text="등록자"/>
+                <Cell col="18" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:chgBefStlmAmt"/>
+                <Cell col="2" text="bind:chgBefCrdcoCdNm"/>
+                <Cell col="3" text="bind:chgBefCrdStlmAmt"/>
+                <Cell col="4" text="bind:chgBefLpntUseAmt"/>
+                <Cell col="5" text="bind:chgBefCshStlmAmt"/>
+                <Cell col="6" text="bind:chgBefLtteGiftStlmAmt"/>
+                <Cell col="7" text="bind:chgBefOtgiftStlmAmt"/>
+                <Cell col="8" text="bind:chgBefEtcStlmAmt"/>
+                <Cell col="9" text="bind:gsStlmAmt"/>
+                <Cell col="10" text="bind:crdcoCdNm"/>
+                <Cell col="11" text="bind:crdStlmAmt"/>
+                <Cell col="12" text="bind:lpntUseAmt"/>
+                <Cell col="13" text="bind:cshStlmAmt"/>
+                <Cell col="14" text="bind:ltteGiftStlmAmt"/>
+                <Cell col="15" text="bind:otgiftStlmAmt"/>
+                <Cell col="16" text="bind:etcStlmAmt"/>
+                <Cell col="17" text="bind:rgprNm"/>
+                <Cell col="18" text="bind:rgprDtm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="pageingDiv" taborder="1" text="Div00" left="0" top="390" width="320" height="21" url="FrameBase::pagging.xfdl"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_order_amt_update_history_list">
+        <ColumnInfo>
+          <Column id="rnum" type="INT" size="256"/>
+          <Column id="chgBefStlmAmt" type="INT" size="256"/>
+          <Column id="chgBefCrdcoCdNm" type="STRING" size="256"/>
+          <Column id="chgBefCrdStlmAmt" type="INT" size="256"/>
+          <Column id="chgBefLpntUseAmt" type="INT" size="256"/>
+          <Column id="chgBefCshStlmAmt" type="INT" size="256"/>
+          <Column id="chgBefLtteGiftStlmAmt" type="INT" size="256"/>
+          <Column id="chgBefOtgiftStlmAmt" type="INT" size="256"/>
+          <Column id="chgBefEtcStlmAmt" type="INT" size="256"/>
+          <Column id="gsStlmAmt" type="INT" size="256"/>
+          <Column id="crdcoCdNm" type="STRING" size="256"/>
+          <Column id="crdStlmAmt" type="INT" size="256"/>
+          <Column id="lpntUseAmt" type="INT" size="256"/>
+          <Column id="cshStlmAmt" type="INT" size="256"/>
+          <Column id="ltteGiftStlmAmt" type="INT" size="256"/>
+          <Column id="otgiftStlmAmt" type="INT" size="256"/>
+          <Column id="etcStlmAmt" type="INT" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.atlctRsvNo = this.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.atlctRsvNo;
+this.menuSeq = this.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.menuSeq;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+this.OrderAmtUpdateHistoryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.objPageingDs = this.application.gdsPageing;
+	
+	this.pageingDiv.form.pageingCallObj = this;
+	
+	this.fn_list(1);
+};
+
+this.fn_list = function(page)
+{
+	this.objPageingDs.setColumn(0, "pageIndex", page);
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stlmMng/orderAmtUpdateHistoryList.do",
+		inData : "pageing=gdsPageing",
+		outData : "ds_order_amt_update_history_list=output1 gdsPageing=output2",
+		strArg : "atlctRsvNo=" + this.atlctRsvNo,
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":
+ 			var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+ 			var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+ 			var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+ 			this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+ 			this.pageingDiv.form.setPage(pageIndex);
+		break;
+	}
+};]]></Script>
+  </Form>
+</FDL>

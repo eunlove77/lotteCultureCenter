@@ -3,12 +3,12 @@
   <Form id="PaymentInfoDtl" width="1260" height="430" titletext="New Form">
     <Layouts>
       <Layout height="430" mobileorientation="landscape" width="1260">
-        <Tab id="Tab00" taborder="0" tabindex="0" left="0" top="0" width="605" height="59">
+        <Tab id="Tab00" taborder="0" tabindex="0" left="0" top="0" width="606" height="60">
           <Tabpages>
             <Tabpage id="Tabpage1" text="최초 주문정보" height="60" left="0" top="26" width="605">
               <Layouts>
                 <Layout>
-                  <Div id="Div00" taborder="0" text="Div00" left="-1" top="-1" width="604" height="33" cssclass="div_WF_CompWrap">
+                  <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="604" height="33" cssclass="div_WF_CompWrap">
                     <Layouts>
                       <Layout>
                         <Static id="Static00" taborder="0" text="· 총 강좌료" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
@@ -109,7 +109,126 @@
             </Layout>
           </Layouts>
         </Div>
+        <Button id="Button00" taborder="3" text="환불삭제" top="0" height="21" cssclass="btn_WF_Medium" right="0" width="84"/>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_first_order_mst">
+        <ColumnInfo>
+          <Column id="totalLectureAmt" type="INT" size="256"/>
+          <Column id="lectureDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureOfflineDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureGradeDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureCouponDiscountAmt" type="INT" size="256"/>
+          <Column id="totalAdditionalAmt" type="INT" size="256"/>
+          <Column id="additionalDiscountAmt" type="INT" size="256"/>
+          <Column id="additionalOfflineDiscountAmt" type="INT" size="256"/>
+          <Column id="lpointDiscountAmt" type="INT" size="256"/>
+          <Column id="totalPayAmt" type="INT" size="256"/>
+          <Column id="cardAmt" type="INT" size="256"/>
+          <Column id="cashAmt" type="INT" size="256"/>
+          <Column id="lotteGiftcardAmt" type="INT" size="256"/>
+          <Column id="otherGiftcardAmt" type="INT" size="256"/>
+          <Column id="etcAmt" type="INT" size="256"/>
+          <Column id="giftcardChangeAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_first_order_lecture_offline_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_first_order_lecture_grade_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_first_order_lecture_coupon_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_first_order_additional_offline_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_pay_method">
+        <ColumnInfo>
+          <Column id="payChannel" type="STRING" size="256"/>
+          <Column id="cardInfo" type="STRING" size="256"/>
+          <Column id="lpointInfo" type="STRING" size="256"/>
+          <Column id="cashInfo" type="STRING" size="256"/>
+          <Column id="lotteGiftcardInfo" type="STRING" size="256"/>
+          <Column id="otherGiftcardInfo" type="STRING" size="256"/>
+          <Column id="etcInfo" type="STRING" size="256"/>
+          <Column id="payRequestDtm" type="STRING" size="256"/>
+          <Column id="payConfirmDtm" type="STRING" size="256"/>
+          <Column id="posReceiptNumber" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_mst">
+        <ColumnInfo>
+          <Column id="totalLectureAmt" type="INT" size="256"/>
+          <Column id="lectureDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureOfflineDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureGradeDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureCouponDiscountAmt" type="INT" size="256"/>
+          <Column id="lectureRefundDeductionAmt" type="INT" size="256"/>
+          <Column id="totalAdditionalAmt" type="INT" size="256"/>
+          <Column id="additionalDiscountAmt" type="INT" size="256"/>
+          <Column id="additionalOfflineDiscountAmt" type="INT" size="256"/>
+          <Column id="additionalRefundDeductionAmt" type="INT" size="256"/>
+          <Column id="lpointDiscountAmt" type="INT" size="256"/>
+          <Column id="totalRefundAmt" type="INT" size="256"/>
+          <Column id="cardRefundAmt" type="INT" size="256"/>
+          <Column id="cashRefundAmt" type="INT" size="256"/>
+          <Column id="lotteGiftcardRefundAmt" type="INT" size="256"/>
+          <Column id="otherGiftcardRefundAmt" type="INT" size="256"/>
+          <Column id="etcRefundAmt" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_lecture_offline_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_lecture_grade_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_lecture_coupon_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_additional_offline_discount_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_refund_deduction_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_last_order_additional_refund_deduction_list">
+        <ColumnInfo>
+          <Column id="discountNm" type="STRING" size="256"/>
+          <Column id="discountAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[]]></Script>
   </Form>
 </FDL>

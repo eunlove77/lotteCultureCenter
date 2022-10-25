@@ -3,120 +3,821 @@
   <Form id="TecherList" width="1280" height="1000" titletext="New Form" onload="TecherList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
-        <Static id="navigator" taborder="0" text="Home" left="1050" top="10" width="220" height="60"/>
-        <Static id="Static01" taborder="1" text="최근접속일" left="11" top="61" width="120" height="33" onclick="Static01_onclick"/>
-        <Calendar id="strtDt" taborder="2" left="175" top="63" width="150" height="29"/>
-        <Calendar id="endDt" taborder="3" left="345" top="63" width="150" height="29"/>
-        <Combo id="searchType" taborder="4" text="전체" left="10" top="145" width="150" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="" onitemchanged="searchType_onitemchanged" height="35">
-          <Dataset id="innerdataset">
-            <ColumnInfo>
-              <Column id="codecolumn" size="256"/>
-              <Column id="datacolumn" size="256"/>
-            </ColumnInfo>
-            <Rows>
-              <Row>
-                <Col id="codecolumn"/>
-                <Col id="datacolumn">전체</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">1</Col>
-                <Col id="datacolumn">아이디</Col>
-              </Row>
-              <Row>
-                <Col id="codecolumn">2</Col>
-                <Col id="datacolumn">이름</Col>
-              </Row>
-            </Rows>
-          </Dataset>
-        </Combo>
-        <Edit id="searchQuery" taborder="5" left="180" top="145" width="330" height="35" onchanged="searchQuery_onchanged"/>
-        <Button id="searchBtn" taborder="6" text="검색" left="520" top="145" width="120" height="35" onclick="searchBtn_onclick"/>
-        <Button id="initBtn" taborder="7" text="초기화" left="650" top="145" width="120" height="35" onclick="initBtn_onclick"/>
-        <Static id="Static00" taborder="8" text="계정상태" left="11" top="104" width="120" height="33"/>
-        <CheckBox id="statusAll" taborder="9" text="전체" left="180" top="104" width="80" height="33" falsevalue="N" truevalue="Y" onclick="statusAll_onclick"/>
-        <CheckBox id="statusY" taborder="10" text="활성" left="270" top="104" width="80" height="33" falsevalue="N" truevalue="Y" onclick="statusY_onclick"/>
-        <CheckBox id="statusN" taborder="11" text="비활성" left="360" top="104" width="80" height="33" falsevalue="N" truevalue="Y" onclick="statusN_onclick"/>
-        <Grid id="Grid00" taborder="12" left="147" top="532" width="375" height="270" binddataset="gdsFavoriteMenu">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div01" taborder="5" text="Div01" left="10" top="90" right="10" height="33">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="희망지점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" left="Div00:-1" width="33%" height="100.00%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="등록일자" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Calendar id="rgprDtm" taborder="1" left="116" top="5" width="129" height="20" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" onchanged="Div01_Div01_rgprDtm_onchanged"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div01" left="828" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="희망요일" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="hopeDaywCd" taborder="1" text="" left="Static00:10" top="5" width="100" height="20" innerdataset="ds_day_cdList" codecolumn="cd" datacolumn="cdNm" index="0" value="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="7" text="Div01" left="10" top="Div01:-1" height="33" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="829">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="희망분야" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="lrclsCtegryCd" taborder="1" text="" left="116" top="5" width="100" height="20" index="-1" value="-1" usesoftkeyboard="false" innerdataset="ds_lgctgry_cdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="first_class_category_onchanged"/>
+                    <Combo id="mdclsCtegryCd" taborder="2" text="" left="226" top="5" width="100" height="20" innerdataset="ds_mdctgry_cdList" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="second_class_category_onchanged"/>
+                    <Combo id="smclsCtegryCd" taborder="3" text="" left="336" top="5" width="100" height="20" innerdataset="ds_smctgry_cdList" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100.00%" left="Div00:-1" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="희망시간" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="hopeSt" taborder="1" left="Static00:10" top="5" width="100" height="20" text="123123" maxlength="4"/>
+                    <Static id="Static01" taborder="3" text="~" left="hopeSt:5" top="4" width="20" height="21" textAlign="center"/>
+                    <Edit id="hopeEnd" taborder="2" left="Static01:5" top="5" width="108" height="20" text="123123" maxlength="4"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="6" text="Div01" left="10" top="Div02:-1" height="33" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="829">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="강사유형" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="tcTpCdAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" value="false" onchanged="techer_type_onchanged"/>
+                    <CheckBox id="tcTpCd1" taborder="2" text="개인" left="164" top="4" width="45" height="20" truevalue="1" onchanged="techer_type_onchanged"/>
+                    <CheckBox id="tcTpCd2" taborder="3" text="개인사업자" left="212" top="4" width="82" height="20" truevalue="2" onchanged="techer_type_onchanged"/>
+                    <CheckBox id="tcTpCd3" taborder="4" text="법인사업자" left="294" top="4" width="84" height="20" truevalue="3" onchanged="techer_type_onchanged"/>
+                    <CheckBox id="txfrBizprYn" taborder="5" text="면세사업자만" left="394" top="4" width="105" height="20" truevalue="Y" value="false" falsevalue="N"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" left="Div00:-1" height="100%" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="섭외점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="pbrltnBrchCd" taborder="1" text="" left="Static00:10" top="5" width="100" height="20" innerdataset="ds_spot_list" codecolumn="cd" datacolumn="cdNm" index="0" value="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div04" taborder="8" text="Div01" left="10" top="Div03:-1" height="33" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="수정요청" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="mdfreqAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" value="true" onchanged="modify_request_onchanged"/>
+                    <CheckBox id="mdfreqY" taborder="2" text="요청" left="164" top="4" width="45" height="20" value="true" onchanged="modify_request_onchanged"/>
+                    <CheckBox id="mdfreqN" taborder="3" text="미요청" left="212" top="4" width="82" height="20" onchanged="modify_request_onchanged" value="true"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="2" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" left="Div00:-1" width="32.94%" height="100%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연령" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="age" taborder="1" left="115" top="5" width="108" height="20" text="123123"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" left="Div01:-1" height="100%" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20" text="123123" right="10"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div05" taborder="1" text="Div01" left="10" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Button id="btnReset" taborder="4" text="초기화" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="79" onclick="reset_search_form"/>
+              <Button id="btnSearch" taborder="3" text="검색" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div05_btnSearch_onclick" right="btnReset:5" width="80"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" text="123123" left="221" right="btnSearch:5" maxlength="20"/>
+              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" width="100">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">0</Col>
+                      <Col id="datacolumn">전체</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">1</Col>
+                      <Col id="datacolumn">강사코드</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">2</Col>
+                      <Col id="datacolumn">강사명</Col>
+                    </Row>
+                    <Row>
+                      <Col id="datacolumn">예명</Col>
+                      <Col id="codecolumn">3</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">4</Col>
+                      <Col id="datacolumn">섭외자</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Combo>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_techer_list" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다)" autoenter="select">
           <Formats>
             <Format id="default">
               <Columns>
+                <Column size="40" band="left"/>
+                <Column size="40"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
               </Columns>
               <Rows>
-                <Row band="head" size="24"/>
-                <Row size="24"/>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
               </Rows>
               <Band id="head">
-                <Cell text="id"/>
-                <Cell col="1" text="menuSeq"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="강사코드"/>
+                <Cell col="3" text="강사명"/>
+                <Cell col="4" text="강사유형"/>
+                <Cell col="5" text="휴대전화"/>
+                <Cell col="6" text="섭외점"/>
+                <Cell col="7" text="연령"/>
+                <Cell col="8" text="수정요청"/>
+                <Cell col="9" text="희망지점1"/>
+                <Cell col="10" text="희망지점2"/>
+                <Cell col="11" text="대분류1"/>
+                <Cell col="12" text="중분류1"/>
+                <Cell col="13" text="소분류1"/>
+                <Cell col="14" text="대분류2"/>
+                <Cell col="15" text="중분류2"/>
+                <Cell col="16" text="소분류2"/>
+                <Cell col="17" text="희망요일"/>
+                <Cell col="18" text="희망시간"/>
+                <Cell col="19" text="섭외자"/>
+                <Cell col="20" text="등록일시"/>
+                <Cell col="21" text="수정일시"/>
+                <Cell col="22" text="승인일시"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:id"/>
-                <Cell col="1" text="bind:menuSeq"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="2" text="bind:tcTpCd"/>
+                <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm"/>
+                <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd"/>
+                <Cell col="5" text="bind:hpNo"/>
+                <Cell col="6" text="bind:pbrltnBrchCd" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="7" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
+                <Cell col="8" text="bind:mdfReqYn" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="9" text="bind:frstHopeBrchCd"/>
+                <Cell col="10" tooltiptext="bind:secHopeBrchCd"/>
+                <Cell col="11"/>
+                <Cell col="12"/>
+                <Cell col="13"/>
+                <Cell col="14"/>
+                <Cell col="15"/>
+                <Cell col="16"/>
+                <Cell col="17"/>
+                <Cell col="18"/>
+                <Cell col="19"/>
+                <Cell col="20" text="bind:appDt"/>
+                <Cell col="21" text="bind:mdfDtm"/>
+                <Cell col="22" text="bind:rgprDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div00" taborder="13" text="Div00" left="970" top="10" width="60" height="60" url="Sample::coFavoriteMenu.xfdl"/>
+        <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Static id="txtTotal" taborder="4" left="8" top="270" height="21" text="목록 (0)개" width="82"/>
+        <Button id="btnNewTecher" taborder="9" text="신규강사" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="72" onclick="btnNewTecher_onclick"/>
+        <Button id="btnSms" taborder="10" text="SMS" top="270" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="btnExcelUp_onclick" width="50" right="10"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::lib_date.xjs";
+include "Base::popup.xjs";
+
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-var objPageingDs;
+this.rowcount = 0;
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.TecherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.objPageingDs = this.application.gdsPageing;
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	var objOwnerFrame = this.getOwnerFrame();
+	//강사유형
+	this.Div03.form.Div00.form.tcTpCdAll.set_value(true);
+	this.techer_type_onchanged(this.Div03.form.Div00.form.tcTpCdAll);
 	
-	var menuNm = objOwnerFrame.param.MENU_NM;
+	this.set_dataset();
 	
-	this.navigator.set_text( this.navigator.text + " > " + menuNm );
+	this.select_techer_list();
+};
+/**************************************************************************
+ * 데이터 세팅
+ **************************************************************************/
+ this.set_dataset = function(){
+	//코드 데이터셋 설정
+	this.set_code_dataset();
 	
-	// 그리드 개인화
-	//this.fn_personalization("getPsnlztn");
+	//콤보박스 기본값 설정
+	var ds_list = [
+		{ds : 'ds_spot_list',	cdNm: '전체',
+		 id : ['Div01.form.Div00.form.hopeBrchCd'
+			, 'Div03.form.Div01.form.pbrltnBrchCd']},		//지점코드
+		{ds : 'ds_day_cdList',	cdNm: '전체',
+		 id : 'Div01.form.Div02.form.hopeDaywCd'},			//희망요일
+		{ds : 'ds_lgctgry_cdList',cdNm: '대분류',
+		 id : 'Div02.form.Div00.form.lrclsCtegryCd'}		//대분류
+	];
+	this.set_combobox_default(ds_list);
+ }
+ this.set_code_dataset= function(){
+	var ds_codes_list = [
+		{ds : 'ds_spot_list',	cd: "'spotCd'"},		//지점
+		{ds : 'ds_day_cdList',	cd: "'008'"},			//요일
+		{ds : 'ds_lgctgry_cdList', 	cd: "'027'"},		//대분류
+	];
+
+	for(var i = 0; i < ds_codes_list.length; i++){
+		this.set_dataset_from_code(ds_codes_list[i]);
+	}
+ }
+ this.set_dataset_from_code = function(info){
+	var gdsCode = this.application.gdsCode;
+	gdsCode.filter('cdId != cd && cdId == ' + info.cd);
+	this[info.ds].copyData(gdsCode, true);
+ }
+
+/**************************************************************************
+ * 검색, 초기화
+ **************************************************************************/
+this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.set_search_info();
+	this.select_techer_list();
+};
+this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.reset_search_form();
+	this.select_techer_list();
+};
+this.set_search_info = function(){
+	//검색조건 - 희망시간
+	var hopeSt = this.Div02.form.Div01.form.hopeSt.value;
+	var hopeEnd = this.Div02.form.Div01.form.hopeEnd.value;
+	if(hopeSt && hopeSt.length == 4){
+		this.ds_search.setColumn(0, 'hopeStHh', hopeSt.slice(0, 2));
+		this.ds_search.setColumn(0, 'hopeStMi', hopeSt.slice(2, 4));
+	}
+	if(hopeEnd && hopeEnd.length == 4){
+		this.ds_search.setColumn(0, 'hopeEndHh', hopeEnd.slice(0, 2));
+		this.ds_search.setColumn(0, 'hopeEndMi', hopeEnd.slice(2, 4));
+	}
 	
-	// 목록 조회
-	//this.fn_list(1);
-};]]></Script>
-    <Bind>
-      <BindItem id="item0" compid="strtDt" propid="value" datasetid="ds_search" columnid="strtDt"/>
-      <BindItem id="item1" compid="endDt" propid="value" datasetid="ds_search" columnid="endDt"/>
-      <BindItem id="item2" compid="searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
-      <BindItem id="item3" compid="statusAll" propid="value" datasetid="ds_search" columnid="statusAll"/>
-      <BindItem id="item4" compid="statusY" propid="value" datasetid="ds_search" columnid="statusY"/>
-      <BindItem id="item5" compid="statusN" propid="value" datasetid="ds_search" columnid="statusN"/>
-    </Bind>
+	//검색조건 - 휴대전화
+	var hpNo = this.Div04.form.Div02.form.hpNo.value;
+	var arr = this.parse_phone_number(hpNo);
+	
+	this.ds_search.setColumn(0, 'hpStNo', arr[0] ? arr[0] : '');
+	this.ds_search.setColumn(0, 'hpMidNo', arr[1] ? arr[1] : '');
+	this.ds_search.setColumn(0, 'hpLastNo', arr[2] ? arr[2] : '');
+
+}
+this.parse_phone_number = function(str){
+	if(!str) return [];
+	
+	var arr = str.split('-');
+	if(arr.length > 1){
+		if(arr[0].length == 4){
+			var tmp = arr[0];
+			arr[2] = arr[1];
+			arr[1] = arr[2];
+		}
+	} else {
+		if(str.length == 11){
+			arr[0] = str.slice(0, 3);
+			arr[1] = str.slice(3, 7);
+			arr[2] = str.slice(7, 11);
+		} else if(str.length == 8){
+			arr[1] = str.slice(0, 4);
+			arr[2] = str.slice(4, 8);
+		}
+	}
+	
+	return arr;
+}
+this.select_techer_list = function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "select_techer";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/list.do";
+	tranObj.inData      = "search=ds_search";
+	tranObj.outData     = "ds_techer_list=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback_techer_list";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);
+}
+this.fnCallback_techer_list = function(svcId, errorCode, errorMsg){
+	if(errorCode != 0){
+		// 에러 시 화면 처리 내역
+		this.alert(errorCode+"\n"+errorMsg);
+		return false;
+	}
+}
+this.reset_search_form = function(){
+	
+	this.ds_search.copyData(this.ds_search_default);
+	
+	//강사유형
+	this.Div03.form.Div00.form.tcTpCdAll.set_value(true);
+	this.techer_type_onchanged(this.Div03.form.Div00.form.tcTpCdAll);
+	
+	var ds_list = [{
+			ds: 'ds_mdctgry_cdList', cdNm: '중분류', 
+			id: 'Div02.form.Div00.form.mdclsCtegryCd'
+		}, {
+			ds: 'ds_smctgry_cdList', cdNm: '소분류',
+			id: 'Div02.form.Div00.form.smclsCtegryCd'
+	}];
+	this.ds_mdctgry_cdList.clearData();
+	this.ds_smctgry_cdList.clearData();
+	this.set_combobox_default(ds_list);
+	
+	//시간
+	this.Div02.form.Div01.form.hopeSt.set_value("");
+	this.Div02.form.Div01.form.hopeEnd.set_value("");
+	//수정요청
+	this.Div04.form.Div00.form.mdfreqAll.set_value(true);
+	this.Div04.form.Div00.form.mdfreqN.set_value(true);
+	this.Div04.form.Div00.form.mdfreqY.set_value(true);
+	
+	
+	//휴대전화
+	this.Div04.form.Div02.form.hpNo.set_value("");
+	
+	
+}
+/**************************************************************************
+ * 신규강사, SMS
+ **************************************************************************/
+ this.btnNewTecher_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = {
+				title : "강사 등록",
+				cpnSeqno : ""
+				};
+	
+	this.gfn_openPopup("techerInsPop", oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null);
+};
+/**************************************************************************
+ * 검색조건 변경 이벤트
+ **************************************************************************/
+this.techer_type_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
+	var value = '';
+	var obj_all = this.Div03.form.Div00.form.tcTpCdAll;
+	var obj_1 = this.Div03.form.Div00.form.tcTpCd1;
+	var obj_2 = this.Div03.form.Div00.form.tcTpCd2;
+	var obj_3 = this.Div03.form.Div00.form.tcTpCd3;
+	
+	switch(obj.name) {
+	case 'tcTpCdAll':
+		if(obj.value){
+			obj_1.set_value('1');
+			obj_2.set_value('2');
+			obj_3.set_value('3');
+		} else {
+			obj_1.set_value(false);
+			obj_2.set_value(false);
+			obj_3.set_value(false);
+		}
+		break;
+	default:
+		obj_all.set_value(false);
+		if(obj_1.value && obj_2.value && obj_3.value){
+			obj_all.set_value(true);
+			value = '';
+		} else {
+			var comma = '';
+			if(obj_1.isChecked()){
+				value += comma + obj_1.value;
+				comma = ',';
+			}
+			if(obj_2.isChecked()){
+				value += comma + obj_2.value;
+				comma = ',';
+			}
+			if(obj_3.isChecked()){
+				value += comma + obj_3.value;
+			}
+		}
+	}
+	this.ds_search.setColumn(0, 'tcTpCdList', value);
+}
+this.modify_request_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
+	var value = '';
+	var obj_chkAll = this.Div04.form.Div00.form.mdfreqAll;
+	var obj_chkY = this.Div04.form.Div00.form.mdfreqY;
+	var obj_chkN = this.Div04.form.Div00.form.mdfreqN;
+	switch(obj.name) {
+	case 'mdfreqAll':
+		if(obj.value){
+			obj_chkY.set_value(true);
+			obj_chkN.set_value(true);
+		} else {
+			obj_chkY.set_value(false);
+			obj_chkN.set_value(false);
+		}
+		value = '';
+		break;
+	default:
+		obj_chkAll.set_value(false);
+		if(obj_chkY.value && obj_chkN.value){
+			obj_chkAll.set_value(true);
+			value = '';
+		} else if(obj_chkY.value) {
+			value = 'Y';
+		} else if(obj_chkN.value){
+			value = 'N';
+		} else {
+			value = '';
+		}
+	}
+	this.ds_search.setColumn(0, 'tcmdfreqYn', value);
+}
+//카테고리
+this.first_class_category_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
+	var ds;
+	var ds_list = [{
+			ds: 'ds_mdctgry_cdList', cdNm: '중분류', cd: "'028_"+ obj.value +"'",
+			id: 'Div02.form.Div00.form.mdclsCtegryCd'
+		}, {
+			ds: 'ds_smctgry_cdList', cdNm: '소분류', cd: "'028_"+ obj.value +"'",
+			id: 'Div02.form.Div00.form.smclsCtegryCd'
+	}];
+	
+	//중분류 변경
+	this.set_dataset_from_code(ds_list[0]);
+	//소분류 변경
+	ds = this.ds_smctgry_cdList;
+	ds.clearData();
+	
+	this.set_combobox_default(ds_list);
+}
+this.second_class_category_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
+	var ds_list = [{
+		ds: 'ds_smctgry_cdList', cdNm: '소분류', cd: "'028_"+ obj.value +"'",
+		id: 'Div02.form.Div00.form.smclsCtegryCd'
+	}]
+	//소분류 변경
+	this.set_dataset_from_code(ds_list[0]);
+	this.set_combobox_default(ds_list);
+}
+/**************************************************************************
+ * UTIL
+ **************************************************************************/
+this.set_combobox_default = function(ds_list){	
+	for(var i = 0; i < ds_list.length; i++){
+		var info = ds_list[i];
+		var ds = this[info.ds];
+		ds.insertRow(0);
+		ds.setColumn(0, 'cd', '');
+		ds.setColumn(0, 'cdNm', info.cdNm);
+		
+ 		this.set_combobox_default_index(info);
+	}
+}
+this.set_combobox_default_index = function(info){
+	if(Array.isArray(info.id)){
+		for(var id of info.id){
+			this.get_componentById(id).set_index(0);
+			this.get_componentById(id).set_text(info.cdNm);
+		}
+	} else {
+		this.get_componentById(info.id).set_index(0);
+		this.get_componentById(info.id).set_text(info.cdNm);
+	}
+}
+this.get_componentById = function(str){
+	var comp = this;
+	var list = str.split('.');
+	for(var id of list){
+		comp = comp[id];
+	}
+	return comp;
+}]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
-          <Column id="q" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="hopeBrchCd" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="hopeDaywCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="hopeStHh" type="STRING" size="256"/>
+          <Column id="hopeStMi" type="STRING" size="256"/>
+          <Column id="hopeEndHh" type="STRING" size="256"/>
+          <Column id="hopeEndMi" type="STRING" size="256"/>
+          <Column id="tcTpCdList" type="STRING" size="256"/>
+          <Column id="txfrBizprYn" type="STRING" size="256"/>
+          <Column id="pbrltnBrchCd" type="STRING" size="256"/>
+          <Column id="tcmdfreqYn" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
-          <Column id="statusAll" type="STRING" size="256"/>
-          <Column id="statusY" type="STRING" size="256"/>
-          <Column id="statusN" type="STRING" size="256"/>
-          <Column id="strtDt" type="STRING" size="256"/>
-          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="statusAll">N</Col>
-            <Col id="statusY">N</Col>
-            <Col id="statusN">N</Col>
+            <Col id="apvlStatCd">2</Col>
+            <Col id="hopeDaywCd">1</Col>
+            <Col id="lrclsCtegryCd"/>
+            <Col id="txfrBizprYn">N</Col>
+            <Col id="f">0</Col>
+            <Col id="mdclsCtegryCd"> </Col>
+            <Col id="smclsCtegryCd"> </Col>
+            <Col id="pbrltnBrchCd"> </Col>
+            <Col id="hopeBrchCd"> </Col>
+            <Col id="rgprDtm"> </Col>
+            <Col id="hopeStHh"> </Col>
+            <Col id="hopeStMi"> </Col>
+            <Col id="hopeEndHh"> </Col>
+            <Col id="hopeEndMi"> </Col>
+            <Col id="tcTpCdList"></Col>
+            <Col id="tcmdfreqYn"> </Col>
+            <Col id="age"> </Col>
+            <Col id="hpStNo"> </Col>
+            <Col id="hpMidNo"> </Col>
+            <Col id="hpLastNo"> </Col>
+            <Col id="q"> </Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_techer_list">
+        <ColumnInfo>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcTpCd" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="txfrBizprYn" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="lscCd" type="STRING" size="256"/>
+          <Column id="pbrltnBrchCd" type="STRING" size="256"/>
+          <Column id="pbrltnChrgprNm" type="STRING" size="256"/>
+          <Column id="frstHopeBrchCd" type="STRING" size="256"/>
+          <Column id="secHopeBrchCd" type="STRING" size="256"/>
+          <Column id="frstLrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="frstMdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="frstSmclsCtegryCd" type="STRING" size="256"/>
+          <Column id="secLrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="secMdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="secSmclsCtegryCd" type="STRING" size="256"/>
+          <Column id="hopeDaywCd" type="STRING" size="256"/>
+          <Column id="hopeTime" type="STRING" size="256"/>
+          <Column id="mdfReqYn" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+          <Column id="appDt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_spot_list">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="nextChildOrd" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_lgctgry_cdList">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="nextChildOrd" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_day_cdList">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="nextChildOrd" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_mdctgry_cdList">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="nextChildOrd" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd"> </Col>
+            <Col id="cdNm">중분류</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_smctgry_cdList">
+        <ColumnInfo>
+          <Column id="cdId" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdOrd" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="nextChildOrd" type="STRING" size="256"/>
+          <Column id="memo" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd"> </Col>
+            <Col id="cdNm">소분류</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_search_default">
+        <ColumnInfo>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="hopeBrchCd" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="hopeDaywCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="hopeStHh" type="STRING" size="256"/>
+          <Column id="hopeStMi" type="STRING" size="256"/>
+          <Column id="hopeEndHh" type="STRING" size="256"/>
+          <Column id="hopeEndMi" type="STRING" size="256"/>
+          <Column id="tcTpCdList" type="STRING" size="256"/>
+          <Column id="txfrBizprYn" type="STRING" size="256"/>
+          <Column id="pbrltnBrchCd" type="STRING" size="256"/>
+          <Column id="tcmdfreqYn" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="apvlStatCd">2</Col>
+            <Col id="hopeDaywCd"></Col>
+            <Col id="lrclsCtegryCd"/>
+            <Col id="txfrBizprYn">N</Col>
+            <Col id="f">0</Col>
+            <Col id="mdclsCtegryCd"/>
+            <Col id="smclsCtegryCd"/>
+            <Col id="pbrltnBrchCd"/>
+            <Col id="hopeBrchCd"/>
+            <Col id="rgprDtm"/>
+            <Col id="hopeStHh"/>
+            <Col id="hopeStMi"/>
+            <Col id="hopeEndHh"/>
+            <Col id="hopeEndMi"/>
+            <Col id="tcTpCdList"></Col>
+            <Col id="tcmdfreqYn"/>
+            <Col id="age"/>
+            <Col id="hpStNo"/>
+            <Col id="hpMidNo"/>
+            <Col id="hpLastNo"/>
+            <Col id="q"/>
           </Row>
         </Rows>
       </Dataset>
     </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div01.form.Div01.form.rgprDtm" propid="value" datasetid="ds_search" columnid="rgprDtm"/>
+      <BindItem id="item1" compid="Div01.form.Div02.form.hopeDaywCd" propid="value" datasetid="ds_search" columnid="hopeDaywCd"/>
+      <BindItem id="item3" compid="Div02.form.Div00.form.mdclsCtegryCd" propid="value" datasetid="ds_search" columnid="mdclsCtegryCd"/>
+      <BindItem id="item4" compid="Div02.form.Div00.form.smclsCtegryCd" propid="value" datasetid="ds_search" columnid="smclsCtegryCd"/>
+      <BindItem id="item5" compid="Div03.form.Div01.form.pbrltnBrchCd" propid="value" datasetid="ds_search" columnid="pbrltnBrchCd"/>
+      <BindItem id="item6" compid="Div04.form.Div01.form.age" propid="value" datasetid="ds_search" columnid="age"/>
+      <BindItem id="item7" compid="Div05.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
+      <BindItem id="item8" compid="Div05.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item9" compid="Div01.form.Div00.form.hopeBrchCd" propid="value" datasetid="ds_search" columnid="hopeBrchCd"/>
+      <BindItem id="item2" compid="Div02.form.Div00.form.lrclsCtegryCd" propid="value" datasetid="ds_search" columnid="lrclsCtegryCd"/>
+      <BindItem id="item10" compid="Div03.form.Div00.form.txfrBizprYn" propid="value" datasetid="ds_search" columnid="txfrBizprYn"/>
+    </Bind>
   </Form>
 </FDL>

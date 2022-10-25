@@ -176,8 +176,8 @@
         <Div id="Div03" taborder="4" text="Div03" left="5" top="Div04:15" height="55" right="5" minwidth="400" maxwidth="">
           <Layouts>
             <Layout>
-              <Button id="cnclBtn" taborder="1" text="쿠폰 복사" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_Medium" onclick="Div03_cnclBtn_onclick"/>
-              <Button id="insBtn" taborder="0" text="목록" top="12" width="84" height="30" cssclass="btn_WF_Weak" left="cnclBtn:16.036000000000058" onclick="Div03_insBtn_onclick"/>
+              <Button id="copyBtn" taborder="1" text="쿠폰 복사" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_Medium" onclick="Div03_cnclBtn_onclick"/>
+              <Button id="cncl" taborder="0" text="목록" top="12" width="84" height="30" cssclass="btn_WF_Weak" left="copyBtn:16.036000000000058" onclick="Div03_cncl_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -289,7 +289,7 @@ this.fn_detail = function ()
 		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applCtgrList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : true,
+		menuSeq : this.parent.parent.parent.parent.parent.param.MENU_ID, 
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
@@ -307,7 +307,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "detail":    
 			this.fn_set_detail();
-			console.log(this.ds_detail);
 
 			break;
 	}
@@ -383,6 +382,11 @@ this.fn_sync_checkBox = function()
 	}
 }
 
+
+this.Div03_cncl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.parent.close();
+};
 ]]></Script>
   </Form>
 </FDL>

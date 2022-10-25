@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="OrderUpdateHistoryList" width="1280" height="429" titletext="New Form" onload="OrderUpdateHistoryList_onload">
+    <Layouts>
+      <Layout height="429" width="1280">
+        <Grid id="Grid00" taborder="0" left="0" top="0" height="380" right="0" binddataset="ds_order_update_history_list" autofittype="col" nodatatext="데이터가 없습니다.">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48" band="left"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="구분"/>
+                <Cell col="2" text="강좌명"/>
+                <Cell col="3" text="변경 전"/>
+                <Cell col="4" text="변경 후"/>
+                <Cell col="5" text="등록자"/>
+                <Cell col="6" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:chgClCdNm"/>
+                <Cell col="2" text="bind:lectNm"/>
+                <Cell col="3" text="bind:chgBefVal"/>
+                <Cell col="4" text="bind:chgAftVal"/>
+                <Cell col="5" text="bind:rgprNm"/>
+                <Cell col="6" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="pageingDiv" taborder="1" text="Div00" left="0" top="390" width="320" height="21" url="FrameBase::pagging.xfdl"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_order_update_history_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="chgClCdNm" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="chgBefVal" type="STRING" size="256"/>
+          <Column id="chgAftVal" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.atlctRsvNo = this.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.atlctRsvNo;
+this.menuSeq = this.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.menuSeq;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.OrderUpdateHistoryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.objPageingDs = this.application.gdsPageing;
+	
+	this.pageingDiv.form.pageingCallObj = this;
+	
+	this.fn_list(1);
+};
+
+this.fn_list = function(page)
+{
+	this.objPageingDs.setColumn(0, "pageIndex", page);
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stlmMng/orderUpdateHistoryList.do",
+		inData : "pageing=gdsPageing",
+		outData : "ds_order_update_history_list=output1 gdsPageing=output2",
+		strArg : "atlctRsvNo=" + this.atlctRsvNo,
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":
+ 			var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+ 			var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+ 			var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+ 			this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+ 			this.pageingDiv.form.setPage(pageIndex);
+		break;
+	}
+};]]></Script>
+  </Form>
+</FDL>

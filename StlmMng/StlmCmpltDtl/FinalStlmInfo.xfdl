@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="FinalPaymentInfo" width="1260" height="100" titletext="New Form" onload="FinalPaymentInfo_onload">
+  <Form id="FinalStlmInfo" width="1260" height="100" titletext="New Form">
     <Layouts>
       <Layout height="100" width="1260">
         <Static id="Static02" taborder="0" text="▶ 최종 결제정보" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
         <Div id="Div01" taborder="1" text="Div01" left="0" top="27" height="60" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" height="50" binddataset="ds_pay_info" nodatatext="데이터가 없습니다." right="0" autofittype="col">
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="50" binddataset="ds_final_stlm_info" nodatatext="데이터가 없습니다." right="0" autofittype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -23,8 +23,8 @@
                       <Cell col="1" text="총 환불금액"/>
                     </Band>
                     <Band id="body">
-                      <Cell text="bind:TOTAL_AMT" displaytype="decoratetext"/>
-                      <Cell col="1" text="bind:TOTAL_REFUND_AMT" displaytype="decoratetext"/>
+                      <Cell text="bind:gsStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+                      <Cell col="1" text="bind:gsRfndScheAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원" color="#ed5757" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -35,20 +35,13 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_pay_info">
+      <Dataset id="ds_final_stlm_info">
         <ColumnInfo>
-          <Column id="TOTAL_AMT" type="STRING" size="256" description="총 결제금액"/>
-          <Column id="TOTAL_REFUND_AMT" type="STRING" size="256" description="총 환불금액"/>
+          <Column id="gsStlmAmt" type="INT" size="256" description="총 결제금액"/>
+          <Column id="gsRfndScheAmt" type="INT" size="256" description="총 환불금액"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
-    <Script type="xscript5.1"><![CDATA[
-this.FinalPaymentInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
-{
-	this.ds_pay_info.insertRow(0);
-	this.ds_pay_info.setColumn(0, "TOTAL_AMT", "<b v='true'>170,000원</b>");
-	this.ds_pay_info.setColumn(0, "TOTAL_REFUND_AMT", "<b v='true'><fc v ='#ED5757'>0원</fc></b>");
-};
-]]></Script>
+    <Script type="xscript5.1"><![CDATA[]]></Script>
   </Form>
 </FDL>

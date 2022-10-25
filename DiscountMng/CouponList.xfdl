@@ -39,13 +39,13 @@
               <Band id="body">
                 <Cell expr="dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" expr="dataset.getRowCount() - currow"/>
-                <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="2" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" color="BLUE" cursor="pointer" textDecoration="underline"/>
                 <Cell col="3" expr="comp.parent.gfn_setComma(dcAmt) + (dcAmtClCd == &quot;RATES&quot; ? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
                 <Cell col="4" expr="issueMthdClCd == &quot;AUTO&quot; ? &quot;자동발급&quot; : issueMthdClCd == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
                 <Cell col="5" expr="usePrdClCd == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + usePsblDd + &quot;일간&quot;) : (useStDt + &quot; ~ &quot; + useEndDt)"/>
                 <Cell col="6" expr="issueStatCd == &quot;10&quot; ? &quot;발급중&quot; : issueStatCd == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
                 <Cell col="7" expr="issueStatCd == &quot;00&quot; ? &quot;-&quot; : (useCnt + &quot;/&quot; + issueCnt)"/>
-                <Cell col="8" text="bind:rgprId"/>
+                <Cell col="8" expr="rgprNm + &quot;(&quot; + rgprId + &quot;)&quot;"/>
                 <Cell col="9" text="bind:rgprDtm"/>
               </Band>
             </Format>
@@ -171,13 +171,57 @@
         <Button id="insBtn" taborder="8" text="쿠폰 신규등록" top="191" height="30" cssclass="btn_WF_Medium" onclick="insBtn_onclick" right="10" width="101"/>
         <Button id="copyBtn" taborder="7" text="쿠폰 복사" top="191" height="30" width="75" cssclass="btn_WF_Medium" right="insBtn:10" onclick="copyBtn_onclick"/>
         <Button id="closeBtn" taborder="6" text="발급 종료" top="191" height="30" width="83" wordWrap="char" cssclass="btn_WF_High" right="copyBtn:10"/>
-        <Button id="excelDownBtn" taborder="5" text="엑셀 다운로드" top="191" height="30" width="98" cssclass="btn_WF_Weak" right="closeBtn:10"/>
+        <Button id="excelDownBtn" taborder="5" text="엑셀 다운로드" top="191" height="30" width="98" cssclass="btn_WF_Weak" right="closeBtn:10" onclick="excelDownBtn_onclick"/>
+        <Grid id="Grid_Excel" taborder="9" left="10" top="730" binddataset="ds_coupon_list" autofittype="col" right="10" height="100">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50"/>
+                <Column size="300"/>
+                <Column size="100"/>
+                <Column size="110"/>
+                <Column size="170"/>
+                <Column size="80"/>
+                <Column size="110"/>
+                <Column size="100"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="40" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="쿠폰명"/>
+                <Cell col="2" text="할인금액"/>
+                <Cell col="3" text="발급 방식"/>
+                <Cell col="4" text="사용 기간"/>
+                <Cell col="5" text="발급 상태"/>
+                <Cell col="6" text="사용자수/발급자수"/>
+                <Cell col="7" text="등록자"/>
+                <Cell col="8" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell expr="dataset.getRowCount() - currow"/>
+                <Cell col="1" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" cursor="none"/>
+                <Cell col="2" expr="comp.parent.gfn_setComma(dcAmt) + (dcAmtClCd == &quot;RATES&quot; ? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                <Cell col="3" expr="issueMthdClCd == &quot;AUTO&quot; ? &quot;자동발급&quot; : issueMthdClCd == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                <Cell col="4" expr="usePrdClCd == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + usePsblDd + &quot;일간&quot;) : (useStDt + &quot; ~ &quot; + useEndDt)"/>
+                <Cell col="5" expr="issueStatCd == &quot;10&quot; ? &quot;발급중&quot; : issueStatCd == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                <Cell col="6" expr="issueStatCd == &quot;00&quot; ? &quot;-&quot; : (useCnt + &quot;/&quot; + issueCnt)"/>
+                <Cell col="7" expr="rgprNm + &quot;(&quot; + rgprId + &quot;)&quot;"/>
+                <Cell col="8" text="bind:rgprDtm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_date.xjs";
 include "Base::popup.xjs";
 
 /**************************************************************************
@@ -230,6 +274,7 @@ this.fn_list = function (page)
 		outData : "ds_coupon_list=couponList",
 		strArg : "",
 		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
 		isAsync : true
 	}
 	
@@ -301,8 +346,6 @@ this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var chkCnt = 0;
 	var chkRow = -1;
 	
-	console.log(list.checkarray)
-	
 	for(var i=0; i<list.getRowCount(); i++)
 	{
 		if(list.checkarray[i] == 1)
@@ -327,29 +370,45 @@ this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 				cpnSeqno : list.getColumn(chkRow, "cpnSeqno")
 				};
 	
-		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null, "쿠폰 복사");
+		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, 600, 350, true, true, null, "쿠폰 복사");
+	}
+};
+
+this.excelDownBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var list = this.ds_coupon_list;
+	var excelList = this.ds_coupon_excel;
+	var chkCnt = 0;
+	
+	excelList.deleteAll();
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			//체크행 엑셀데이터로 복사
+			excelList.addRow();
+			chkCnt++;
+		}
+	}
+	
+	if(chkCnt == 0)
+	{
+		alert("항목을 선택하세요.");
+	}
+	else
+	{
+		this.exportObj = new ExcelExportObject("Export00", this);
+		
+		this.exportObj.set_exporturl(this.application.Domain + this.application.getVariable("excelImportExport"));
+		this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid_Excel, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
+		this.exportObj.set_exportfilename("쿠폰_목록_" + this.gfnGetToDay());
+
+		this.exportObj.exportData();
 	}
 };
 ]]></Script>
     <Objects>
-      <Dataset id="ds_coupon_list">
-        <ColumnInfo>
-          <Column id="cpnSeqno" type="INT" size="256"/>
-          <Column id="cpnNm" type="STRING" size="256"/>
-          <Column id="dcAmtClCd" type="STRING" size="256"/>
-          <Column id="dcAmt" type="INT" size="256"/>
-          <Column id="issueMthdClCd" type="STRING" size="256"/>
-          <Column id="usePrdClCd" type="STRING" size="256"/>
-          <Column id="useStDt" type="STRING" size="256"/>
-          <Column id="useEndDt" type="STRING" size="256"/>
-          <Column id="usePsblDd" type="STRING" size="256"/>
-          <Column id="issueStatCd" type="STRING" size="256"/>
-          <Column id="useCnt" type="INT" size="256"/>
-          <Column id="issueCnt" type="INT" size="256"/>
-          <Column id="rgprId" type="STRING" size="256"/>
-          <Column id="rgprDtm" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="ds_search">
         <ColumnInfo>
           <Column id="issueStatCd" type="STRING" size="256"/>
@@ -366,6 +425,44 @@ this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
             <Col id="f"/>
           </Row>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_coupon_list">
+        <ColumnInfo>
+          <Column id="cpnSeqno" type="INT" size="256"/>
+          <Column id="cpnNm" type="STRING" size="256"/>
+          <Column id="dcAmtClCd" type="STRING" size="256"/>
+          <Column id="dcAmt" type="INT" size="256"/>
+          <Column id="issueMthdClCd" type="STRING" size="256"/>
+          <Column id="usePrdClCd" type="STRING" size="256"/>
+          <Column id="useStDt" type="STRING" size="256"/>
+          <Column id="useEndDt" type="STRING" size="256"/>
+          <Column id="usePsblDd" type="STRING" size="256"/>
+          <Column id="issueStatCd" type="STRING" size="256"/>
+          <Column id="useCnt" type="INT" size="256"/>
+          <Column id="issueCnt" type="INT" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_coupon_excel">
+        <ColumnInfo>
+          <Column id="cpnSeqno" type="INT" size="256"/>
+          <Column id="cpnNm" type="STRING" size="256"/>
+          <Column id="dcAmtClCd" type="STRING" size="256"/>
+          <Column id="dcAmt" type="INT" size="256"/>
+          <Column id="issueMthdClCd" type="STRING" size="256"/>
+          <Column id="usePrdClCd" type="STRING" size="256"/>
+          <Column id="useStDt" type="STRING" size="256"/>
+          <Column id="useEndDt" type="STRING" size="256"/>
+          <Column id="usePsblDd" type="STRING" size="256"/>
+          <Column id="issueStatCd" type="STRING" size="256"/>
+          <Column id="useCnt" type="INT" size="256"/>
+          <Column id="issueCnt" type="INT" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Bind>
