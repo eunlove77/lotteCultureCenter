@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="SignWindow" width="880" height="340" titletext="New Form" onload="SignWindow_onload">
+    <Layouts>
+      <Layout height="340" mobileorientation="landscape" width="880">
+        <Graphics id="Graphics00" taborder="0" left="0" top="0" height="300" border="1px solid #e6e6e6" right="0" onlbuttondown="Graphics00_onlbuttondown" onlbuttonup="Graphics00_onlbuttonup" onmousemove="Graphics00_onmousemove" background="#ffffff"/>
+        <Button id="Button01" taborder="2" text="재입력" left="500" width="100" cssclass="btn_WF_Weak" height="20" bottom="10" onclick="Button01_onclick"/>
+        <Button id="Button00" taborder="1" text="확인" height="20" cssclass="btn_WF_Medium" bottom="10" onclick="Button00_onclick" right="Button01:10" width="100"/>
+        <Button id="Button02" taborder="3" text="취소" width="100" cssclass="btn_WF_Weak" right="Button00:10" height="20" bottom="10"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.atchFileId = "";
+
+this.SignWindow_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	var objOwnerFrame = this.getOwnerFrame();
+};
+
+var bMouseButtonPressed = false;
+var preClientX;
+var preClientY;
+var nNum = 0;
+
+this.Graphics00_onlbuttondown = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	bMouseButtonPressed = true;
+	preClientX = e.clientx;
+	preClientY = e.clienty;
+};
+
+this.Graphics00_onlbuttonup = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	bMouseButtonPressed = false;
+};
+
+this.Graphics00_onmousemove = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	this.fn_drawLine(e);
+};
+
+this.fn_drawLine = function(e:nexacro.MouseEventInfo)
+{
+	var nowClientX = e.clientx;
+    var nowClientY = e.clienty;
+    if(bMouseButtonPressed)
+    {
+        var objGLine = new nexacro.GraphicsLine();
+        objGLine.set_x1(preClientX);
+        objGLine.set_x2(nowClientX);
+        objGLine.set_y1(preClientY);
+        objGLine.set_y2(nowClientY);
+        objGLine.set_strokepen('3px solid black'); 
+        this.Graphics00.addChild( "GraphicsControl_"+nNum, objGLine );
+        this.Graphics00.redraw();
+        
+        preClientX = nowClientX;
+        preClientY = nowClientY;
+        nNum++;
+    }
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 서명이미지 저장
+	
+	// Graphics의 배경을 하얗게 (서명이 잘보이게)
+	//this.Graphics00.set_background("#ffffff");
+	
+	if(this.Graphics00.getAllObjects().length > 0){
+		var rtn;
+ 	
+		if(system.navigatorname == "nexacro") {   // 전용브라우저
+			rtn = system.saveToImageBase64String(this.Graphics00, false, "PNG");
+		} else {
+			rtn = this.Graphics00._layer._canvas.toDataURL().src;
+		}
+		
+		var stream = rtn.split(",")[1];
+		this.ds_sign_image.insertRow(0);
+		this.ds_sign_image.setColumn(0, "filename", "test1.png");
+		this.ds_sign_image.setColumn(0, "stream", stream);
+		
+		var tranObj = {
+			strSvcId : "uploadSignImage",
+			strSvcUrl : this.application.Admin_svc + "::techerMng/uploadSignImage.do",
+			inData : "signImage=ds_sign_image",
+			outData : "",
+			strArg : "",
+			callBackFnc : "fnCallback",
+			isAsync : false
+		}
+		this.gfn_transaction(tranObj);
+	}else{
+		alert("서명을 입력해주세요.");
+	}
+};
+
+this.fnCallback = function(sId, nErrorCd, sErrorMsg)
+{
+	if(nErrorCd<0)
+	{
+		alert("["+nErrorCd+"]"+sErrorMsg);
+	}
+	else
+	{
+		if(sId=="uploadSignImage")
+		{
+			var p_ds = this.parent.ds;
+			p_ds.setColumn(0, "atchFileId", this.atchFileId);
+			this.get_image_detail(p_ds.name);
+		}
+	}
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 재입력
+	this.Graphics00.clear();
+	this.Graphics00.redraw();
+};
+this.get_image_detail = function(ds){
+	var tranObj = {};
+	tranObj.strSvcId	= "select_imageDtl";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/selectImgDtl.do";
+	tranObj.inData      = "img_detail=" + ds;
+	tranObj.outData     = ds + "=img_detail";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback_img";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);
+}
+this.fnCallback_img = function(sId, nErrorCd, sErrorMsg){
+	console.log('이미지 셀렉 완료');
+	this.close();
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_sign_image">
+        <ColumnInfo>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="stream" type="BLOB" size="3000"/>
+          <Column id="atchFileId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
