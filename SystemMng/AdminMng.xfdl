@@ -9,7 +9,25 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type01.xfdl" formscrolltype="none"/>
+              <Combo id="dateField" taborder="2" text="최종접속일" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" onitemchanged="searchDiv_searchField_onitemchanged">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">1</Col>
+                      <Col id="datacolumn">최종접속일</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">2</Col>
+                      <Col id="datacolumn">승인일</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Combo>
+              <Div id="Div00" taborder="1" text="Div00" left="dateField:5" top="5" height="24" right="0" url="FrameBase::include/date_type01.xfdl" formscrolltype="none"/>
             </Layout>
           </Layouts>
         </Div>
@@ -20,9 +38,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="계정상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkUseAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row02_statusDiv_chkUseAll_onclick" value="false"/>
-                    <CheckBox id="chkUseY" taborder="2" text="활성" left="chkUseAll:3" top="4" width="60" height="20" onclick="fn_checkbox_click" value="false"/>
-                    <CheckBox id="chkUseN" taborder="3" text="비활성" left="chkUseY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkAcntStatAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row02_statusDiv_chkAcntStatAll_onclick" value="false"/>
+                    <CheckBox id="chkAcntStatY" taborder="2" text="활성" left="chkAcntStatAll:3" top="4" width="60" height="20" onclick="fn_checkbox_click" value="false"/>
+                    <CheckBox id="chkAcntStatN" taborder="3" text="비활성" left="chkAcntStatY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -61,10 +79,6 @@
                       <Col id="codecolumn">2</Col>
                       <Col id="datacolumn">이름</Col>
                     </Row>
-                    <Row>
-                      <Col id="datacolumn">권한</Col>
-                      <Col id="codecolumn">3</Col>
-                    </Row>
                   </Rows>
                 </Dataset>
               </Combo>
@@ -74,50 +88,50 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick">
+        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="720">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="60" band="left"/>
+                <Column size="50" band="left"/>
                 <Column size="120"/>
                 <Column size="100"/>
                 <Column size="100"/>
                 <Column size="130"/>
-                <Column size="145"/>
                 <Column size="100"/>
                 <Column size="100"/>
                 <Column size="100"/>
                 <Column size="100"/>
                 <Column size="100"/>
-                <Column size="100"/>
+                <Column size="60"/>
+                <Column size="60"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" checkboxfalsevalue="N" checkboxtruevalue="Y" text="N"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" text="권한(직무)"/>
                 <Cell col="2" text="아이디" autosizecol="default"/>
                 <Cell col="3" text="이름"/>
                 <Cell col="4" text="휴대폰번호"/>
-                <Cell col="5" text="이메일주소"/>
-                <Cell col="6" text="지점"/>
-                <Cell col="7" text="부서명"/>
+                <Cell col="5" text="지점"/>
+                <Cell col="6" text="부서명"/>
+                <Cell col="7" text="생성일"/>
                 <Cell col="8" text="승인일"/>
                 <Cell col="9" text="최종접속일"/>
                 <Cell col="10" text="계정상태"/>
                 <Cell col="11" text="승인상태"/>
               </Band>
               <Band id="body">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="bind:chk" checkboxfalsevalue="N" checkboxtruevalue="Y"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:athrNm"/>
                 <Cell col="2" text="bind:id"/>
                 <Cell col="3" text="bind:fnm"/>
                 <Cell col="4" text="bind:hpNo"/>
-                <Cell col="5" text="bind:email"/>
-                <Cell col="6" text="bind:brchNm"/>
-                <Cell col="7" text="bind:dptNm"/>
+                <Cell col="5" text="bind:brchNm"/>
+                <Cell col="6" text="bind:dptNm"/>
+                <Cell col="7" text="bind:rgprDtm"/>
                 <Cell col="8" text="bind:apvlDtm"/>
                 <Cell col="9" text="bind:fnlLoginDtm"/>
                 <Cell col="10" text="bind:acntStatYn" textAlign="center"/>
@@ -133,9 +147,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="승인상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkPermitAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row03_permitDiv_permitAll_onclick" value="false"/>
-                    <CheckBox id="chkPermitY" taborder="2" text="승인" left="chkPermitAll:3" top="4" width="60" height="20" value="false" onclick="fn_checkbox_click02"/>
-                    <CheckBox id="chkPermitN" taborder="3" text="미승인" left="chkPermitY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click02"/>
+                    <CheckBox id="chkApvlStatAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row03_permitDiv_permitAll_onclick" value="false"/>
+                    <CheckBox id="chkApvlStatY" taborder="2" text="승인" left="chkApvlStatAll:3" top="4" width="60" height="20" value="false" onclick="fn_checkbox_click02"/>
+                    <CheckBox id="chkApvlStatN" taborder="3" text="미승인" left="chkApvlStatY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click02"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -143,26 +157,25 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="권한" left="-1" top="0" width="110" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="roleType1" taborder="1" text="슈퍼 관리자" left="116" top="4" width="83" height="20" value="false"/>
-                    <CheckBox id="roleType2" taborder="2" text="일반 관리자" left="roleType1:23" top="4" width="87" height="20" value="false"/>
+                    <CheckBox id="chkAthrCd99" taborder="1" text="슈퍼 관리자" left="116" top="4" width="83" height="20" value="false"/>
+                    <CheckBox id="chkAthrCd" taborder="2" text="일반 관리자" left="chkAthrCd99:23" top="4" width="87" height="20" value="false"/>
                   </Layout>
                 </Layouts>
               </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="7" text="Div01" left="10" top="224" height="49" right="10">
+        <Div id="Div01" taborder="7" text="Div01" left="70" top="234" height="30" right="10">
           <Layouts>
             <Layout>
-              <Static id="txtTotal" taborder="0" left="9" top="10" height="21" text="목록 (0)개" right="1169"/>
-              <Button id="btnPerminN" taborder="2" text="미승인" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnPerminN_onclick"/>
-              <Button id="btnExlDown" taborder="1" text="엑셀 다운로드" top="5" height="30" cssclass="btn_WF_Low" right="227" width="101" onclick="Div01_btnExlDown_onclick"/>
-              <Button id="btnPerminY" taborder="3" text="승인" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="80" onclick="Div01_btnPerminY_onclick"/>
-              <Button id="btnSave" taborder="4" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="426" onclick="Div01_btnSave_onclick" visible="false"/>
-              <Button id="btnDel" taborder="5" text="삭제" top="5" height="30" cssclass="btn_WF_High" width="50" onclick="Div01_btnDel_onclick" right="10"/>
+              <Button id="btnDel" taborder="3" text="삭제" top="0" height="30" cssclass="btn_WF_High" width="50" onclick="Div01_btnDel_onclick" right="0"/>
+              <Button id="btnPerminY" taborder="2" text="승인" top="0" height="30" width="50" cssclass="btn_WF_Medium" right="btnDel:5" onclick="Div01_btnPerminY_onclick"/>
+              <Button id="btnPerminN" taborder="1" text="미승인" top="0" height="30" cssclass="btn_WF_Low" right="btnPerminY:5" width="60" onclick="Div01_btnPerminN_onclick"/>
+              <Button id="btnExlDown" taborder="0" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Weak" right="btnPerminN:5" width="101" onclick="Div01_btnExlDown_onclick"/>
             </Layout>
           </Layouts>
         </Div>
+        <Static id="txtTotal" taborder="8" left="10" height="21" text="총 0개" width="80" top="249"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -183,16 +196,19 @@
           <Column id="fnlLoginDtm" type="STRING" size="256"/>
           <Column id="prmtIpAddr" type="STRING" size="256"/>
           <Column id="prmtIpAddrVdi" type="STRING" size="256"/>
-          <Column id="chk" type="STRING" size="256"/>
+          <Column id="lpntPpayPsblYn" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
         <ColumnInfo>
+          <Column id="dateField" type="STRING" size="256"/>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="useType" type="STRING" size="256"/>
-          <Column id="permitType" type="STRING" size="256"/>
+          <Column id="acntStatYn" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="apvlStatYn" type="STRING" size="256"/>
+          <Column id="athrGb" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
@@ -226,14 +242,14 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.domain = "";
 this.excelImportExport = "";
-this.objOwnerFrame = null;
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -243,11 +259,9 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
-	this.objOwnerFrame = this.getOwnerFrame();
-	
-	console.log(this.objOwnerFrame.param.MENU_ID);
-	console.log(obj.parent.parent);
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.gfnSetCheckBoxNoDataset(this.ds_admin_list, this.GridAdminList, 0);
 	
 	// 코드 데이터
 	this.fn_data_list();
@@ -280,38 +294,40 @@ this.Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	
 	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
 	
+	this.periodDiv.form.dateField.set_index(0);
+	
 	objCalendar.strtDtm.set_value('');
 	objCalendar.endDtm.set_value('');
 	
 	this.Div06.form.searchField.set_index(0);
 	this.Div06.form.searchQuery.set_value('');
 	
-	//this.ds_notice_list.clearData();
-	//this.txtTotal.set_text("총 0개");	
+	this.ds_admin_list.clearData();
+	this.txtTotal.set_text("총 0개");	
 	
-	this.row02.form.statusDiv.form.chkUseAll.set_value(0);
-	this.row02.form.statusDiv.form.chkUseY.set_value(0);
-	this.row02.form.statusDiv.form.chkUseN.set_value(0);
+	this.row02.form.statusDiv.form.chkAcntStatAll.set_value(0);
+	this.row02.form.statusDiv.form.chkAcntStatY.set_value(0);
+	this.row02.form.statusDiv.form.chkAcntStatN.set_value(0);
 	this.row02.form.spotDiv.form.spotCd.set_index(0);
 	
-	this.row03.form.permitDiv.form.chkPermitAll.set_value(0);
-	this.row03.form.permitDiv.form.chkPermitY.set_value(0);
-	this.row03.form.permitDiv.form.chkPermitN.set_value(0);
-	this.row03.form.roleTypeDiv.form.roleType1.set_value(0);
-	this.row03.form.roleTypeDiv.form.roleType2.set_value(0);
+	this.row03.form.permitDiv.form.chkApvlStatAll.set_value(0);
+	this.row03.form.permitDiv.form.chkApvlStatY.set_value(0);
+	this.row03.form.permitDiv.form.chkApvlStatN.set_value(0);
+	this.row03.form.roleTypeDiv.form.chkAthrCd99.set_value(0);
+	this.row03.form.roleTypeDiv.form.chkAthrCd.set_value(0);
 };
 
-this.row02_statusDiv_chkUseAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+this.row02_statusDiv_chkAcntStatAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {	
 	if(obj.isChecked())
 		{
-			obj.parent.chkUseY.set_value(1);
-			obj.parent.chkUseN.set_value(1);
+			obj.parent.chkAcntStatY.set_value(1);
+			obj.parent.chkAcntStatN.set_value(1);
 		}
 		else
 		{
-			obj.parent.chkUseY.set_value(0);
-			obj.parent.chkUseN.set_value(0);
+			obj.parent.chkAcntStatY.set_value(0);
+			obj.parent.chkAcntStatN.set_value(0);
 		}
 };
 
@@ -319,44 +335,59 @@ this.row03_permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro
 {
 	if(obj.isChecked())
 		{
-			obj.parent.chkPermitY.set_value(1);
-			obj.parent.chkPermitN.set_value(1);
+			obj.parent.chkApvlStatY.set_value(1);
+			obj.parent.chkApvlStatN.set_value(1);
 		}
 		else
 		{
-			obj.parent.chkPermitY.set_value(0);
-			obj.parent.chkPermitN.set_value(0);
+			obj.parent.chkApvlStatY.set_value(0);
+			obj.parent.chkApvlStatN.set_value(0);
 		}
+};
+
+this.Div01_btnPerminY_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	
+	this.fn_approval("승인", "Y");
+};
+
+this.Div01_btnPerminN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	
+		this.fn_approval("미승인", "N");
 };
 
 //계정삭제
 this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.gfn_btn_auth(this.objOwnerFrame.param.MENU_ID, "accDelYn")){return;}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
 	
-	var objGrid = this.GridAdminList
-	var objDs = objGrid.getBindDataset();
-	var checkCnt = this.gfn_check_length(objDs, "chk");	
+	var check_array = this.ds_admin_list.checkarray;
+	var checked_array = new Array();
 	
-	if(checkCnt > 0)
-	{
-		for(var i = 0 ; i < objDs.getRowCount() ; i++){
-			var tmpChk = objDs.getColumn(i, "chk");
-			
-			if(tmpChk == "Y"){
-				objDs.deleteRow(i);				
-			}
-		}	
-	}else{
-		this.alert("삭제 항목을 선택해주세요.");
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
 	}
 	
+	if(checked_array.length == 0){
+		alert("삭제할 게시물을 선택해주세요.");
+		return false;
+	}else{
+		if(confirm("선택한 게시물을 삭제하시겠습니까?")){
+	
+			this.ds_admin_list.deleteMultiRows(checked_array);
+			
+			this.fn_delete();
+		}
+	}
 };
 
 //엑셀 다운로드 버튼
 this.Div01_btnExlDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	//this.alert("버튼클릭 >>" + this.application.Domain + this.excelImportExport);
+{	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")){return;}
 	
 	if(this.GridAdminList.rowcount > 1)
 	{
@@ -371,11 +402,6 @@ this.Div01_btnExlDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 	}
 };
 
-this.GridAdminList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{	
-	//this.alert("그리드 헤드 클릭")
-	this.gfn_headCheckBox(obj, e.cell, "chk");	
-};
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -384,7 +410,7 @@ this.GridAdminList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 this.fn_list = function (page)
 {	
 	// 버튼별 권한 제한시
-	if(this.gfn_btn_auth(this.objOwnerFrame.param.MENU_ID, "accSrchYn")) return;
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 
 	//this.ds_search.setColumn(0, "f", this.searchDiv.form.searchField.value);
 	
@@ -396,7 +422,63 @@ this.fn_list = function (page)
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.objOwnerFrame.param.MENU_ID
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+
+this.fn_approval = function(gb, apvlStatYn){
+	var check_array = this.ds_admin_list.checkarray;
+	var checked_array = new Array();
+	
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert(gb + "할 게시물을 선택해주세요.");
+		return false;
+	}else{
+		if(confirm("선택한 게시물을 " + gb + "하시겠습니까?")){
+			
+			for(var i = 0 ; i < checked_array.length ; i++){
+				this.ds_admin_list.setColumn(checked_array[i], "apvlStatYn", apvlStatYn);
+			}
+			
+			var tranObj = {
+				strSvcId : "approval",
+				strSvcUrl : this.application.Admin_svc + "::updateAdminMng.do?svcId=approval",
+				inData : "adminList=ds_admin_list:U",
+				outData : "ds_admin_list=output1",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : true,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			
+			this.gfn_transaction(tranObj);
+			
+		}
+	}	
+}
+
+
+this.fn_delete = function ()
+{	
+	// 버튼별 권한 제한시
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")) return;
+
+	var tranObj = {
+		strSvcId : "delete",
+		strSvcUrl : this.application.Admin_svc + "::deleteAdminMng.do",
+		inData : "adminList=ds_admin_list:U",
+		outData : "ds_admin_list=output1",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
 	};
 	
 	this.gfn_transaction(tranObj);
@@ -407,7 +489,7 @@ this.fn_data_list = function ()
 	var strSvcId    = "dataList";
 	var strSvcUrl   = this.application.Admin_svc + "::getAdmDataList.do";
 	var inData      = "";
-	var outData     = "ds_spot_list=output1 ds_dept_list=output2 ds_athr_list = output3";
+	var outData     = "ds_spot_list=output1 ds_dept_list=output2";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
@@ -423,7 +505,7 @@ this.fn_data_list = function ()
 
 this.fn_save = function (strSvcId)
 {		
-	if(this.gfn_btn_auth(this.objOwnerFrame.param.MENU_ID, "accSaveYn")){ this.ds_admin_list.reset(); return; }
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){ this.ds_admin_list.reset(); return; }
 	
 	var strSvcUrl   = this.application.Admin_svc;
 	var inData      = "adminList=ds_admin_list:U";
@@ -451,41 +533,47 @@ this.fn_searchValueInit = function() {
 
 	//this.alert("검색조건초기화");
 	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
-	var arrUseType = new Array();
-	var arrPermitType = new Array();
-	var arrRoleType = new Array();
+	var arrAcntStatYn = new Array();
+	var arrApvlStatYn = new Array();
+	var arrAthrCd = new Array();
+	var athrGb = "";
 	
+	this.ds_search.setColumn(0, "dateField", this.periodDiv.form.dateField.value);
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
 	
-	if(this.row02.form.statusDiv.form.chkUseY.value ==true) arrUseType.push("'Y'");
-	if(this.row02.form.statusDiv.form.chkUseN.value ==true) arrUseType.push("'N'");
+	if(this.row02.form.statusDiv.form.chkAcntStatY.value ==true) arrAcntStatYn.push("'Y'");
+	if(this.row02.form.statusDiv.form.chkAcntStatN.value ==true) arrAcntStatYn.push("'N'");
 	
-	//this.alert("사용여부 값 체크 > " + this.row02.form.statusDiv.form.chkUseY.value);
-	//this.alert("넘길값 체크 > " + arrUseType.valueOf());
+	if(this.row03.form.permitDiv.form.chkApvlStatY.value == true) arrApvlStatYn.push("'Y'");
+	if(this.row03.form.permitDiv.form.chkApvlStatN.value == true) arrApvlStatYn.push("'N'");
 	
-	if(this.row03.form.permitDiv.form.chkPermitY == true) arrPermitType.push("'Y'");
-	if(this.row03.form.permitDiv.form.chkPermitN == true) arrPermitType.push("'N'");
-	//권한 처리예정
+	if(this.row03.form.roleTypeDiv.form.chkAthrCd99.value == true && this.row03.form.roleTypeDiv.form.chkAthrCd.value == true){
+		athrGb = 3;
+	}else if(this.row03.form.roleTypeDiv.form.chkAthrCd99.value == true){
+		athrGb = 2;
+	}else if(this.row03.form.roleTypeDiv.form.chkAthrCd.value == true){
+		athrGb = 1;
+	}
 	
-	this.ds_search.setColumn(0, "useType", arrUseType.join(","));
-	this.ds_search.setColumn(0, "permitType", arrPermitType.join(","));
+	this.ds_search.setColumn(0, "acntStatYn", arrAcntStatYn.join(","));
+	this.ds_search.setColumn(0, "apvlStatYn", arrApvlStatYn.join(","));
 	this.ds_search.setColumn(0, "brchCd", this.row02.form.spotDiv.form.spotCd.value); 
+	this.ds_search.setColumn(0, "athrGb", athrGb); 
 	this.ds_search.setColumn(0, "q", this.Div06.form.searchQuery.value);
 	this.ds_search.setColumn(0, "f", this.Div06.form.searchField.value);
 
 }
 
 this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		//this.row02.form.Div03.form.chkAll.set_value(0);
-		this.row02.form.statusDiv.form.chkUseAll.set_value(0);
+	if(!obj.isChecked()){		
+		this.row02.form.statusDiv.form.chkAcntStatAll.set_value(0);
 	}
 }
 
 this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
 	if(!obj.isChecked()){
-		this.row03.form.permitDiv.form.chkPermitAll.set_value(0);
+		this.row03.form.permitDiv.form.chkApvlStatAll.set_value(0);
 	}
 }
 
@@ -500,6 +588,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	{
 		case "save":
 			this.ds_admin_list.reset();
+		case "delete":
+			this.ds_admin_list.reset();			
+		case "approval":
+			this.ds_admin_list.reset();
 			break;
 	}
 	
@@ -512,69 +604,22 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
       if(this.ds_admin_list.rowcount < 1){
         this.alert("조회된 결과가 없습니다.");
       }else{
-	  
- 		this.ds_admin_list.set_enableevent(false);
-		for(var i = 0 ; i < this.ds_admin_list.getRowCount() ; i++){
-			this.ds_admin_list.addColumn("chk", "String", 256);
-			this.ds_admin_list.setColumn(i, "chk","N");
-		}
-		this.ds_admin_list.set_enableevent(true);
+		this.txtTotal.set_text("총 " + this.ds_admin_list.rowcount  + "개");
 	  }
-	case "dataList":
-		
+	  break;
+	case "dataList":		
 		this.row02.form.spotDiv.form.spotCd.set_index(0);
 		break;
 	case "save":
 		this.alert("변경완료");
 		break;
+	case "delete":
+		this.alert("삭제완료");
+		break;
+	case "approval":
+		this.alert("완료");
+		break;
   }
-};
-
-this.orderType = "desc";
-
-this.ExcelExportObj_onsuccess = function(obj:nexacro.DataObject,e:nexacro.DataObjectEventInfo)
-{
-	var str = "";
-
-	str += "\n=========== onsuccess event start=================";
-	str += "\ne.eventid : " + e.eventid;
-	str += "\ne.url: " +  e.url;  
-	str += "\ne.id :"+e.id;
-	str += "\ne.fromobject :"+e.fromobject;
-	str += "\ne.fromreferenceobject  :"+e.fromreferenceobject;
-
-	trace(str);
-};
-
-this.ExcelExportObj_onprogress = function(obj:nexacro.ExcelExportObject,e:nexacro.ExcelExportProgressEventInfo)
-{
-	var str = "";
-
-  str += "\n=========== onprogress event start================";
-  str += "\ne.eventid  :"+e.eventid;
-  str += "\ne.id :"+e.id;
-  str += "\ne.fromobject :"+e.fromobject;
-  str += "\ne.fromreferenceobject  :"+e.fromreferenceobject;
-  str += "\ne.itemindex :"+e.itemindex;
-  str += "\ne.itemtype :"+e.itemtype;
-  str += "\ne.recordindex :"+e.recordindex;  
-
-  trace(str);
-};
-
-this.ExcelExportObj_onerror = function(obj:nexacro.ExcelExportObject,e:nexacro.ExcelExportErrorEventInfo)
-{
-	 var str = "";
-
-  str += "\n=========== onerror event start===================";
-  str += "\ne.eventid :"+e.eventid;
-  str += "\ne.id :"+e.id;
-  str += "\ne.fromobject :"+e.fromobject;
-  str += "\ne.fromreferenceobject :"+e.fromreferenceobject;
-  str += "\ne.errorcode :"+e.errorcode;
-  str += "\ne.errormsg :"+e.errormsg;  
-
-  trace(str);
 };
 
 this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -595,8 +640,6 @@ this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 		this.parent.set_url("SystemMng::AdminMngDtl.xfdl");
 	}	
 };
-
-this.orderType = "desc";
 ]]></Script>
   </Form>
 </FDL>

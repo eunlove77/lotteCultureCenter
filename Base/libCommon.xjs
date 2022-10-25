@@ -18,10 +18,13 @@ this.gfn_transaction = function(tranObj)
 	this.gfn_sessionCheck();
 	
 	if(nexacro.getApplication().isAuth)
-	{
-		console.log(this.gfn_nvl(tranObj.menuSeq));
+	{		
 		if(this.gfn_nvl(tranObj.menuSeq) != ""){
-			tranObj.strSvcUrl += "?menuSeq=" + tranObj.menuSeq;
+			if(tranObj.strSvcUrl.indexOf("?") > -1){
+				tranObj.strSvcUrl += "&menuSeq=" + tranObj.menuSeq;
+			}else{
+				tranObj.strSvcUrl += "?menuSeq=" + tranObj.menuSeq;
+			}			
 		}
 	
 		this.transaction(

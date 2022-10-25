@@ -3,20 +3,20 @@
   <Form id="AdminMngDtl" width="1280" height="770" titletext="New Form" onload="AdminMngDtl_onload">
     <Layouts>
       <Layout height="770" mobileorientation="landscape" width="1280">
-        <Div id="Div00" taborder="0" text="Div00" left="500" top="20" height="470" right="40">
+        <Div id="Div00" taborder="0" text="Div00" left="430" top="20" height="390" right="10">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="상세/수정/승인" left="0" top="1" width="80" cssclass="sta_WF_TitGray" height="17"/>
-              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 필수입력항목" top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="90" onclick="Div00_Static01_onclick"/>
+              <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 필수입력항목" top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="10" width="80" onclick="Div00_Static01_onclick"/>
               <Div id="Div00" taborder="2" text="Div01" left="0" top="30" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="권한(직무) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="roleCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_detail" codecolumn="athrCd" datacolumn="athrNm" readonly="true"/>
+                    <Combo id="roleCd" taborder="1" text="" left="119" top="5" width="140" height="20" index="0" value="" innerdataset="ds_athr_list" codecolumn="cd" datacolumn="cdNm" readonly="false" onitemchanged="Div00_Div00_roleCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="3" text="Div01" left="0" top="62" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div01" taborder="11" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이름" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
@@ -24,83 +24,84 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="2" text="Div01" left="0" top="94" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div02" taborder="4" text="Div01" left="0" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="아이디" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="txtId" taborder="1" left="119" top="5" width="292" height="23"/>
+                    <Static id="Static00" taborder="0" text="아이디(사번)" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Static id="txtId" taborder="1" left="119" top="5" width="292" height="23" text=""/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="2" text="Div01" left="0" top="126" height="33" cssclass="div_WF_CompWrap" right="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="비밀번호" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Button id="btnPwdInit" taborder="1" text="초기화" left="119" top="3" width="60" height="25" cssclass="btn_WF_High"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div04" taborder="2" text="Div01" left="0" top="158" height="33" cssclass="div_WF_CompWrap" right="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="이메일" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="txtEmail" taborder="1" left="119" top="5" width="292" height="23" onclick="Div00_Div04_txtEmail_onclick"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div05" taborder="2" text="Div01" left="0" top="190" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div05" taborder="5" text="Div01" left="0" top="Div02:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대폰번호" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="txtPhone" taborder="1" left="119" top="5" width="292" height="23"/>
+                    <Static id="txtPhone" taborder="1" left="119" top="5" width="292" height="23" text=""/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div06" taborder="2" text="Div01" left="0" top="222" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div06" taborder="6" text="Div01" left="0" top="Div05:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="spotCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_detail" codecolumn="brchCd" datacolumn="brchNm" readonly="false"/>
+                    <Combo id="spotCd" taborder="1" text="" left="119" top="5" width="140" height="20" index="-1" value="" innerdataset="ds_brch_list" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div07" taborder="2" text="Div01" left="0" top="254" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div07" taborder="7" text="Div01" left="0" top="Div06:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="부서 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="deptCd" taborder="1" text="" left="119" top="5" width="145" height="20" index="0" value="" innerdataset="ds_detail" codecolumn="dptNm" datacolumn="dptNm"/>
+                    <Static id="txtDptNm" taborder="1" left="119" top="5" width="292" height="23" text=""/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div08" taborder="2" text="Div01" left="0" top="286" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div08" taborder="8" text="Div01" left="0" top="Div07:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="허용IP(VDI) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" text="123123" width="300"/>
+                    <MaskEdit id="MaskEdit00" taborder="1" left="119" top="5" width="140" height="21" format="###.###.###.###" type="string"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div09" taborder="2" text="Div01" left="0" top="318" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div09" taborder="9" text="Div01" left="0" top="Div08:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="허용IP(일반) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" text="123123" width="300"/>
+                    <MaskEdit id="MaskEdit00" taborder="1" left="119" top="5" width="140" height="21" format="###.###.###.###" type="string"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div10" taborder="2" text="Div01" left="0" top="350" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div10" taborder="10" text="Div01" left="0" top="Div09:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="계정상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="Static01" taborder="1" left="119" top="5" width="292" height="23"/>
+                    <Radio id="radioAcntStatYn" taborder="1" left="119" top="0" bottom="0" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130" codecolumn="codecolumn" datacolumn="datacolumn" innerdataset="innerdataset">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">Y</Col>
+                            <Col id="datacolumn">활성</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">N</Col>
+                            <Col id="datacolumn">비활성</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div11" taborder="2" text="Div01" left="0" top="382" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div11" taborder="3" text="Div01" left="0" top="Div10:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="승인상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Radio id="radioPermitYn" taborder="1" left="119" top="0" bottom="0" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130" codecolumn="codecolumn" datacolumn="datacolumn" innerdataset="innerdataset">
+                    <Radio id="radioApvlStatYn" taborder="1" left="119" top="0" bottom="0" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130" codecolumn="codecolumn" datacolumn="datacolumn" innerdataset="innerdataset">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -121,11 +122,11 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div11_00" taborder="14" text="Div01" left="0" top="414" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div12" taborder="12" text="Div01" left="0" top="Div11:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="지급하기 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Radio id="radioPaymentsYn" taborder="1" left="119" top="0" bottom="0" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130" codecolumn="codecolumn" datacolumn="datacolumn" innerdataset="innerdataset">
+                    <Static id="Static00" taborder="0" text="L.Point 지급 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Radio id="radioLpntPpayPsblYn" taborder="1" left="119" top="0" bottom="0" direction="vertical" minwidth="" maxwidth="300" text="승인" index="0" width="130" codecolumn="codecolumn" datacolumn="datacolumn" innerdataset="innerdataset">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -149,23 +150,24 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="1" text="Div03" top="486" height="47" right="45" left="500">
+        <Div id="Div03" taborder="1" text="Div03" top="Div00:5" height="21" right="10" left="430">
           <Layouts>
             <Layout>
-              <Button id="btnList" taborder="1" text="목록" left="10" top="12" height="21" cssclass="btn_WF_Weak" fittocontents="width" width="83" onclick="Div03_btnList_onclick"/>
-              <Button id="btnModify" taborder="0" text="등록" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div03_btnModify_onclick" right="10"/>
-              <Button id="btnDelete" taborder="2" text="삭제" left="btnList:17" top="12" width="83" height="21" cssclass="btn_WF_High" fittocontents="width" onclick="Div03_btnDelete_onclick"/>
-              <Static id="Static01" taborder="3" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 슈퍼관리자는 메뉴 선택에 상관없이 모든 메뉴를 관리할 수 있습니다." top="12" cssclass="sta_WF_TitGray" height="21" usedecorate="true" width="400" left="btnDelete:22"/>
+              <Button id="btnList" taborder="1" text="목록" left="0" top="0" height="21" cssclass="btn_WF_Weak" fittocontents="width" width="83" onclick="Div03_btnList_onclick"/>
+              <Button id="btnModify" taborder="0" text="저장" top="0" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div03_btnModify_onclick" right="0"/>
+              <Button id="btnDelete" taborder="2" text="삭제" left="btnList:5" top="0" width="83" height="21" cssclass="btn_WF_High" fittocontents="width" onclick="Div03_btnDelete_onclick"/>
+              <Static id="Static01" taborder="3" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 슈퍼관리자는 메뉴 선택에 상관없이 모든 메뉴를 관리할 수 있습니다." top="0" cssclass="sta_WF_TitGray" height="21" usedecorate="true" width="400" left="btnDelete:10"/>
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="500" top="540" height="200" binddataset="ds_auth_log" right="40">
+        <Grid id="GridAdmChg" taborder="2" left="430" top="530" binddataset="ds_adm_chg_list" right="10" bottom="10" autofittype="col">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="240"/>
-                <Column size="240"/>
-                <Column size="258"/>
+                <Column size="180"/>
+                <Column size="180"/>
+                <Column size="100"/>
+                <Column size="200"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -174,52 +176,47 @@
               <Band id="head">
                 <Cell text="이전권한"/>
                 <Cell col="1" text="변경권한"/>
-                <Cell col="2" text="변경일 / 변경자(ID)"/>
+                <Cell col="2" text="변경자(ID)"/>
+                <Cell col="3" text="변경일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:Column0"/>
-                <Cell col="1" text="bind:Column1"/>
-                <Cell col="2" text="bind:Column2"/>
+                <Cell expr="expr:befAthrCd == &quot;&quot; ? &quot;-&quot; : befAthrNm"/>
+                <Cell col="1" text="bind:chgAthrNm"/>
+                <Cell col="2" expr="expr:rgprNm + &quot;(&quot; + rgprId  + &quot;)&quot;"/>
+                <Cell col="3" text="bind:chgDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Grid id="GridMenuList" taborder="3" left="30" top="21" width="400" height="719" binddataset="gdsMenu" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" treeuseimage="false" autofittype="col">
+        <Grid id="GridMenuList" taborder="3" left="10" top="10" width="400" binddataset="ds_menu" treeusecheckbox="false" treeinitstatus="expand,all" autoenter="none" treeuseimage="false" autofittype="col" bottom="10" nodatatext="권한(직무)를 선택하세요.">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="380"/>
+                <Column size="80"/>
               </Columns>
               <Rows>
                 <Row size="24"/>
               </Rows>
               <Band id="body">
-                <Cell text="bind:menuNm" displaytype="treeitemcontrol" edittype="tree" checkboxfalsevalue="N" checkboxtruevalue="Y" treelevel="bind:dpth" treestartlevel="1"/>
+                <Cell text="bind:menuNm" displaytype="treeitemcontrol" edittype="tree" treestartlevel="1" treelevel="bind:dpth"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
+        <Static id="Static00" taborder="4" text="권한 변경이력" left="432" top="506" width="120" height="21"/>
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_spot_list">
-        <ColumnInfo>
-          <Column id="spotSeq" type="STRING" size="256"/>
-          <Column id="spotNm" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
-      <Dataset id="ds_dept_list">
+      <Dataset id="ds_brch_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_auth_log">
+      <Dataset id="ds_athr_list">
         <ColumnInfo>
-          <Column id="Column0" type="STRING" size="256"/>
-          <Column id="Column1" type="STRING" size="256"/>
-          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_detail">
@@ -237,10 +234,40 @@
           <Column id="apvlStatYn" type="STRING" size="256"/>
           <Column id="prmtIpAddr" type="STRING" size="256"/>
           <Column id="prmtIpAddrVdi" type="STRING" size="256"/>
+          <Column id="athrCd1" type="STRING" size="256"/>
+          <Column id="lpntPpayPsblYn" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_menu">
+        <ColumnInfo>
+          <Column id="menuNm" type="STRING" size="256"/>
+          <Column id="dpth" type="STRING" size="256"/>
+          <Column id="accYn" type="STRING" size="256"/>
+          <Column id="accVdiYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_chng_athr">
+        <ColumnInfo>
+          <Column id="athrCd" type="STRING" size="256"/>
+          <Column id="vdiYn" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_adm_chg_list">
+        <ColumnInfo>
+          <Column id="befAthrCd" type="STRING" size="256"/>
+          <Column id="befAthrNm" type="STRING" size="256"/>
+          <Column id="chgAthrCd" type="STRING" size="256"/>
+          <Column id="chgAthrNm" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="chgDtm" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
@@ -260,9 +287,8 @@ this.param = null
  **************************************************************************/
 this.AdminMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
+	this.application = nexacro.getApplication();
 	this.param = this.parent.param;
-	
-	//this.ds_detail.setColumn(0, "admSeq", this.param.admSeq);
 	
 	this.ds_detail.setColumn(0, "id", this.param.id);
 	
@@ -272,14 +298,37 @@ this.AdminMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 this.Div03_btnList_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.set_url("SystemMng::AdminMng.xfdl");
+	if(this.confirm("입력된 정보는 저장되지 않습니다.\n취소 후 목록으로 이동하시겠습니까?")){
+		this.parent.set_url("SystemMng::AdminMng.xfdl");
+	}
+	
 };
 
 this.Div03_btnModify_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("수정하시겠습니까?")){
-		this.fn_detail("modify");
+	var athrCd = this.Div00.form.Div00.form.roleCd.value;
+	var brchCd = this.Div00.form.Div06.form.spotCd.value;
+	var acntStatYn = this.Div00.form.Div10.form.radioAcntStatYn.value;
+	var apvlStatYn = this.Div00.form.Div11.form.radioApvlStatYn.value;
+	var lpntPpayPsblYn = this.Div00.form.Div12.form.radioLpntPpayPsblYn.value;
+	
+	if(this.gfn_isNull(athrCd)){
+		this.alert("권한(직무)를 선택해주세요.");
+	}else if(this.gfn_isNull(brchCd)){
+		this.alert("지점을 선택해주세요.");
+	}else if(this.gfn_isNull(acntStatYn)){
+		this.alert("계정상태를 선택해주세요.");
+	}else if(this.gfn_isNull(apvlStatYn)){
+		this.alert("승인상태를 선택해주세요.");
+	}else if(this.gfn_isNull(lpntPpayPsblYn)){
+		this.alert("L.Point 지급가능 여부를 선택해주세요.");
+	}else{
+		if(this.confirm("입력된 정보로 수정하시겠습니까?")){
+			this.fn_detail("modify");
+		}
 	}
+	
+	
 };
 
 this.Div03_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -289,6 +338,12 @@ this.Div03_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 	}
 };
 
+
+this.Div00_Div00_roleCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.fn_athr_menu(obj.value);
+};
+
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
@@ -296,29 +351,53 @@ this.Div03_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 this.fn_detail = function (strSvcId)
 {	
 
-	var strSvcUrl   = "";
+	var strSvcUrl   = this.application.Admin_svc;
 	var inData      = "detail=ds_detail";
-	var outData     = "ds_detail=output1";
+	var outData     = "ds_detail=output1 ds_athr_list=output2 ds_brch_list=output3 ds_adm_chg_list=output4";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 
 	if(strSvcId == "detail"){
-		strSvcUrl = "Admin_svc::adminMngDtl.do";
+		strSvcUrl += "::adminMngDtl.do";
 	}else if(strSvcId == "modify"){
-		strSvcUrl = "Admin_svc::updateAdminMng.do";
+		strSvcUrl += "::updateAdminMngDtl.do?svcId=" + strSvcId;
 	}else if(strSvcId == "delete"){
-		strSvcUrl = "Admin_svc::deleteAdminMng.do";
+		strSvcUrl += "::deleteAdminMngDtl.do";
 	}
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+			
+	var tranObj = {
+		strSvcId : strSvcId,
+ 		strSvcUrl : strSvcUrl,
+ 		inData : inData,
+ 		outData : outData,
+ 		strArg : strArg,
+ 		callBackFnc : callBackFnc,
+ 		isAsync : isAsync,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	this.gfn_transaction(tranObj);			
 };
+
+this.fn_athr_menu = function(athrCd){
+	
+		
+	this.ds_chng_athr.setColumn(0, "athrCd", athrCd);
+	this.ds_chng_athr.setColumn(0, "vdiYn", "N");
+	
+ 	var tranObj = {
+ 		strSvcId : "athrMenuList",
+ 		strSvcUrl : this.application.Menu_svc + "::menuList.do",
+ 		inData : "menuInfo=ds_chng_athr",
+ 		outData : "ds_menu=output1",
+ 		strArg : "",
+ 		callBackFnc : "fnCallback",
+ 		isAsync : true
+ 	};
+ 	
+ 	this.gfn_transaction(tranObj);
+
+}
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
@@ -331,8 +410,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
 	switch(svcID)
 	{
-		case "detail":
-      
+		case "detail":			
+			if(!this.gfn_isNull(this.ds_detail.getColumn(0, "athrCd"))){
+				this.fn_athr_menu( this.ds_detail.getColumn(0, "athrCd") );
+			}
 		break;
 		
 		case "modify":
@@ -344,27 +425,26 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.alert("삭제되었습니다.");
 			this.parent.set_url("SystemMng::AdminMng.xfdl");	
 		break;
+		case "athrMenuList":
+			this.ds_menu.filter("accYn=='Y'");
+		break;
 	
 	}
 };
-this.Div00_Div04_txtEmail_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
-{
-	
-};
+
 ]]></Script>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div01.form.txtName" propid="text" datasetid="ds_detail" columnid="fnm"/>
       <BindItem id="item1" compid="Div00.form.Div02.form.txtId" propid="text" datasetid="ds_detail" columnid="id"/>
-      <BindItem id="item2" compid="Div00.form.Div04.form.txtEmail" propid="text" datasetid="ds_detail" columnid="email"/>
       <BindItem id="item3" compid="Div00.form.Div05.form.txtPhone" propid="text" datasetid="ds_detail" columnid="hpNo"/>
-      <BindItem id="item4" compid="Div00.form.Div06.form.spotCd" propid="value" datasetid="ds_detail" columnid="brchNm"/>
-      <BindItem id="item5" compid="Div00.form.Div07.form.deptCd" propid="value" datasetid="ds_detail" columnid="dptNm"/>
-      <BindItem id="item6" compid="Div00.form.Div08.form.Edit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddrVdi"/>
-      <BindItem id="item7" compid="Div00.form.Div09.form.Edit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddr"/>
-      <BindItem id="item9" compid="Div00.form.Div10.form.Static01" propid="text" datasetid="ds_detail" columnid="acntStatYn"/>
-      <BindItem id="item10" compid="Div00.form.Div11.form.radioPermitYn" propid="acceptvaluetype" datasetid="ds_detail" columnid="apvlStatYn"/>
-      <BindItem id="item8" compid="Div00.form.Div00.form.roleCd" propid="value" datasetid="ds_detail" columnid="athrNm"/>
-      <BindItem id="item11" compid="Div00.form.Div11_00.form.radioPaymentsYn" propid="acceptvaluetype" datasetid="ds_detail" columnid="apvlStatYn"/>
+      <BindItem id="item4" compid="Div00.form.Div06.form.spotCd" propid="value" datasetid="ds_detail" columnid="brchCd"/>
+      <BindItem id="item10" compid="Div00.form.Div11.form.radioApvlStatYn" propid="value" datasetid="ds_detail" columnid="apvlStatYn"/>
+      <BindItem id="item11" compid="Div00.form.Div12.form.radioLpntPpayPsblYn" propid="value" datasetid="ds_detail" columnid="lpntPpayPsblYn"/>
+      <BindItem id="item2" compid="Div00.form.Div10.form.radioAcntStatYn" propid="value" datasetid="ds_detail" columnid="acntStatYn"/>
+      <BindItem id="item6" compid="Div00.form.Div00.form.roleCd" propid="value" datasetid="ds_detail" columnid="athrCd"/>
+      <BindItem id="item5" compid="Div00.form.Div07.form.txtDptNm" propid="text" datasetid="ds_detail" columnid="dptNm"/>
+      <BindItem id="item7" compid="Div00.form.Div08.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddrVdi"/>
+      <BindItem id="item8" compid="Div00.form.Div09.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddr"/>
     </Bind>
   </Form>
 </FDL>
