@@ -3,7 +3,7 @@
   <Form id="ClassReg" width="1280" height="5000" titletext="New Form" onload="ClassReg_onload">
     <Layouts>
       <Layout height="5000" mobileorientation="landscape" width="1280">
-        <Static id="txtMenuNm" taborder="0" text="강좌등록" left="7" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Static id="txtMenuNm" taborder="0" text="강좌등록" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
           <Layouts>
             <Layout>
@@ -277,7 +277,7 @@
                                         <Cell col="1" text="지점명"/>
                                         <Cell col="2" text="강좌코드"/>
                                         <Cell col="3" text="강좌명"/>
-                                        <Cell col="4" text="대체옵션명"/>
+                                        <Cell col="4" text="추가옵션명"/>
                                         <Cell col="5" text="총정원"/>
                                         <Cell col="6" text="강좌료"/>
                                         <Cell col="7" text="강의횟수"/>
@@ -356,7 +356,7 @@
                                         <Cell col="1" text="지점명"/>
                                         <Cell col="2" text="강좌코드"/>
                                         <Cell col="3" text="강좌명"/>
-                                        <Cell col="4" text="대체옵션명"/>
+                                        <Cell col="4" text="추가옵션명"/>
                                         <Cell col="5" text="총정원"/>
                                         <Cell col="6" text="강좌료"/>
                                         <Cell col="7" text="강의횟수"/>
@@ -778,6 +778,8 @@ include "Base::popup.xjs";
 this.application = null;
 this.domain = "";
 
+this.popCnt = 0;
+
 this.thnlFileUpload;
 
 this.contentArr = [];
@@ -1028,8 +1030,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 this.fn_code_list = function()
 {	
 	var outData = "ds_classType_list=classTypeList ds_classGb_list=classGbList ds_classTargetGb_list=classTargetGbList ";
-		outData += "ds_classOptType_list=classOptTypeList ds_classDispIcon_list=classDispIconList ds_classSemster_list=classSemsterList ";
-		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList ds_classRoom_list=classRoomList";
+		outData += "ds_classOptType_list=classOptTypeList ds_classDispIcon_list=classDispIconList ds_classSemster_list=classSemsterList ds_classRoom_list=classRoomList ";
+		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList";
 		
 	var tranObj = {
 		strSvcId : "codeList",
@@ -1919,10 +1921,9 @@ this.fn_save_validation = function()
 			return;
 		}
 	}
-	console.log(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))))
+
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) != "")
 	{
-		console.log("1111111")
 		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) == "")
 		{
 			alert("강의시간 시작시간을 선택하세요.");
@@ -2440,7 +2441,6 @@ this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexa
 	this.gfn_showModal("classImgListPopupModal", null, "ClassMng::ClassImgListPopup.xfdl", "", this, 800, 720, false, false, null);
 };
 
-this.popCnt = 0;
 this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.popCnt++;
