@@ -159,22 +159,18 @@ this.fn_img_set = function()
 		objImageViewer.set_image(this.ds_classImg_list.getColumn(i, "webPath"));
 		objImageViewer.set_stretch("fixaspectratio");
 		objImageViewer.atchFileId = this.ds_classImg_list.getColumn(i, "atchFileId");
-		objImageViewer.insertEventHandler("onkillfocus", 0, this.fn_onkillfocus, this);
-		objImageViewer.insertEventHandler("onsetfocus", 0, this.fn_onsetfocus, this);
+		objImageViewer.insertEventHandler("onclick", 0, this.fn_onclick, this);
 		this.imgArr.push(objImageViewer);
 	}
 }
 
-this.fn_onkillfocus = function(obj)
+this.fn_onclick = function(obj)
 {
-	obj.set_border("");
-}
-
-
-this.fn_onsetfocus = function(obj)
-{
+	for(var i=0; i < this.imgArr.length; i++)
+	{
+		this.imgArr[i].set_border("");
+	}
 	this.atchFileId = obj.atchFileId;
-	console.log(this.atchFileId)
 	obj.set_border("1px solid brown");
 }
 

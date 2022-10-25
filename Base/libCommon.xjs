@@ -688,6 +688,21 @@ this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx)
 	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
 } 
 
+this.gfnSetRadioNoDataset = function(objDs, objGrd, nCheckCellIdx) 
+{ 
+	//체크여부 정보를 담을 Array를 사용자 변수로 설정
+	objDs.checkarray = new Array(); 
+
+	//데이터셋 온로드이벤트 추가
+	objDs.addEventHandler("onload", this.gfnDataset_onload); 
+
+	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
+	objGrd.checkcell = nCheckCellIdx; 
+	
+	//그리드 Cell Click 이벤트 추가
+	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellradioclick); 
+} 
+
 /**************************************************************************
 * 각 COMPONENT 별 EVENT 영역
 **************************************************************************/
@@ -723,6 +738,26 @@ this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			//체크 설정
 			objDs.checkarray[e.row] = 1; 
 		}
+		
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell(); 
+	} 
+}; 
+
+this.gfnGrid_oncellradioclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
+{ 
+	var objDs; 
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell) 
+	{ 
+		objDs = obj.getBindDataset(); 
+		
+		for(var i=0; i<objDs.getRowCount(); i++)
+		{
+			objDs.checkarray[i] = 0;
+		}
+		
+		objDs.checkarray[e.row] = 1; 
 		
 		//Expr이 바로 반영되도록 실행
 		obj.redrawExprCell(); 
