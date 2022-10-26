@@ -666,7 +666,29 @@ this.Div00_Div00_Div00_Div00_01_01_Edit00_onkeyup = function(obj:nexacro.Edit,e:
 
 this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	if(this.gfn_nvl(this.parent.brchCd) != "") 
+	{
+		this.brchCd = this.parent.brchCd;
+	}
+	
+	if(this.gfn_nvl(this.parent.lectTpCd) != "") 
+	{
+		this.lectTpCd = this.parent.lectTpCd;
+	}
+	
 	this.init();
+	
+	if(this.gfn_nvl(this.parent.brchCd) != "") 
+	{
+		this.ds_gdsSpotCd_list.filter("cd==" + this.brchCd);
+	}
+	
+	if(this.gfn_nvl(this.parent.lectTpCd) != "") 
+	{
+		this.ds_classType_list.filter("cd==" + this.lectTpCd);
+		this.ds_search.setColumn(0, "lectTpCd", this.lectTpCd);
+	}
 };
 
 this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -687,6 +709,11 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	if(flag)
 	{
+		if(this.type == 2)
+		{
+			this.parent.dataset.clearData();
+		}
+		
 		for(var i=0; i < this.ds_class_list.getRowCount(); i++)
 		{
 			if(this.ds_class_list.checkarray[i] == 1)
@@ -718,10 +745,6 @@ this.Div00_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,
 	this.fn_semester_set();
 };
 
-this.Div00_Div00_Div00_Div00_01_01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
-{
-	
-};
 ]]></Script>
   </Form>
 </FDL>
