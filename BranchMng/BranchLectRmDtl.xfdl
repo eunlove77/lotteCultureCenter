@@ -87,7 +87,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="면적(평)" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28"/>
+              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28" inputfilter="none" inputtype="number"/>
               <Static id="Static00_00" taborder="2" text="평" left="280" top="0" width="19" height="31" usedecorate="true"/>
             </Layout>
           </Layouts>
@@ -188,12 +188,11 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 		this.ds_detail.setColumn(0, "brchCd", this.param.brchCd);
 		this.ds_detail.setColumn(0, "lectRmCd", this.param.lectRmCd);
-		//this.ds_detail.setColumn(0, "brchAreaCd", this.param.brchAreaCd);
-		//this.alert("dtl입[" + this.param.brchCd + "]ddd2[" + this.param.brchAreaCd);
 		this.fn_detail();
 	}
 	else
-	{
+	{	
+		//this.fn_rmCdList();
 		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
 	}
 	
@@ -209,6 +208,7 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
 	{
 		this.fn_checkValidation();
+		this.fn_rmCdList();
 	}
 };
 
@@ -222,34 +222,36 @@ this.fn_list = function(){
 
 this.fn_save = function ()
 {		
-	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.application.Admin_svc + "::/branch/insertBranchLectRm.do",
+		inData : "data=ds_detail",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
 	
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::branch/insertBranchLectRm.do";
-	var inData      = "data=ds_detail";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-
+	this.gfn_transaction(tranObj);
+	
 };
 
 this.fn_checkValidation = function(){
 	
-	if(this.gfn_isNull(this.row07.form.Edit00.value))
+	if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+	{
+		this.alert("지점을 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row07.form.Edit00.value))
 	{
 		this.alert("강의실명을 입력해주세요");
 		this.row07.form.Edit00.setFocus();
 		return false;
 	}
+	else
 	{								
 		this.fn_save();
 	}	
@@ -257,26 +259,23 @@ this.fn_checkValidation = function(){
 
 this.fn_detail = function ()
 {	
-	var strSvcId	= "detail"
-	var strSvcUrl   = this.application.Admin_svc + "::/branch/branchLectRmDtl.do";
-	var inData      = "detail=ds_detail";
-	var outData     = "ds_detail=output2";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.application.Admin_svc + "::/branch/branchLectRmDtl.do",
+		inData : "detail=ds_detail",
+		outData : "ds_detail=output2",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	
+	this.gfn_transaction(tranObj);
+	
 };
 
 this.fn_rmCdList = function()
 {
-	this.alert("코드조회")
 	var tranObj = {};
 	tranObj.strSvcId	= "cdList";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/branch/lectRmCd.do";
@@ -301,7 +300,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   switch(svcID)
   {
 	case "cdList":
-			//this.fn_set_spot();
+			//this.alert("22231" + this.ds_lectRmCd.getColumn(0, "lectRmCd")); 
+			this.row06.form.Static01.set_text(this.ds_lectRmCd.getColumn(0, "lectRmCd"));
 			
 			break;
 			
