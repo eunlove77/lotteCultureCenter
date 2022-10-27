@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="ClassDtl" width="1280" height="4000" titletext="New Form">
+  <Form id="ClassDtl" width="1280" height="4000" titletext="New Form" onload="ClassDtl_onload">
     <Layouts>
       <Layout height="4000" width="1280">
         <Static id="txtMenuNm" taborder="0" text="강좌상세" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -17,6 +17,29 @@
         </Tab>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[]]></Script>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ this.brchCd = "";
+ this.yy = "";
+ this.lectSmsterCd = "";
+ this.lectCd = "";
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+this.ClassDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//강좌 데이터 초기화
+	this.brchCd = this.parent.brchCd;
+	this.yy = this.parent.yy;
+    this.lectSmsterCd = this.parent.lectSmsterCd;
+	this.lectCd = this.parent.lectCd;
+};
+
+
+]]></Script>
+    <Objects/>
   </Form>
 </FDL>
