@@ -179,22 +179,22 @@
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
- * include 영역 
- **************************************************************************/
+* include 영역 
+**************************************************************************/
 include "Base::lib_base.xjs";
 include "Base::libCommon.xjs";
 
 /**************************************************************************
- * FORM 변수 선언 영역
- **************************************************************************/
+* FORM 변수 선언 영역
+**************************************************************************/
 this.application = null;
 this.domain = "";
 this.param = null;
 this.editorInit = false;
 
 /**************************************************************************
- * FORM EVENT 영역(onload)
- **************************************************************************/
+* FORM EVENT 영역(onload)
+**************************************************************************/
 this.NoticeReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -214,35 +214,21 @@ this.NoticeReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotCdList.setColumn(0, "cdNm", "전체");
 	
 	this.row04.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html")
-
-	/*if(this.ds_detail.getRowCount() <1)
-	  {
-		this.ds_detail.insertRow();
-	  }*/
+	this.row04.form.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	
+	this.row07.form.strtDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
+	this.row07.form.endDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
+	
 	if(this.param.notcSeqno != ""){	
 		
 		this.ds_detail.setColumn(0, "notcSeqno", this.param.notcSeqno);
 		this.fn_detail();
 	}
-	
-};
-
-/*에디터 세팅*/
-this.row04_form_WebBrowser00_onusernotify = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
-{
-	if( this.editorInit == false && e.userdata == "LC"){			
-		this.editorInit = true;
-		
-		var _win = this.row04.form.WebBrowser00.getProperty("window");	 			
-		
-		_win.callMethod("setData", this.ds_detail.getColumn(0, "notcCont"));
-		
-		if(_win)
-		{
-			_win.destroy();
-			_win = null;
-		}    
+	else
+	{
+		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
 	}
+	
 };
 
 /*취소버튼*/
@@ -259,75 +245,81 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 };
 
 /**************************************************************************
- * 사용자 FUNCTION 영역
- **************************************************************************/
+* 사용자 FUNCTION 영역
+**************************************************************************/
 
+//취소
 this.fn_list = function()
 {
 	this.parent.set_url("CustomerMng::NoticeList.xfdl");	
 }
 
+//상세조회
 this.fn_detail = function ()
 {	
-	var strSvcId	= "detail"
-	var strSvcUrl   = this.application.Admin_svc + "::/customer/noticeDtl.do";
-	var inData      = "detail=ds_detail";
-	var outData     = "ds_detail=output2";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+	var tranObj = {};
+	tranObj.strSvcId	= "detail";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/noticeDtl.do";
+	tranObj.inData      = "detail=ds_detail";
+	tranObj.outData     = "ds_detail=output2";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	
+	this.gfn_transaction(tranObj);		
+	
 };
 
+//저장
 this.fn_save = function ()
 {		
 	this.ds_detail.setColumn(0, "notcCont", this.fn_get_edit_body(this.row04.form.WebBrowser00));
 	
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::/customer/insertNotice.do";
-	var inData      = "data=ds_detail";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-
+	var tranObj = {};
+	tranObj.strSvcId	= "save";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/insertNotice.do";
+	tranObj.inData      = "data=ds_detail";
+	tranObj.outData     = "";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	
+	this.gfn_transaction(tranObj);	
 };
 
-this.fn_checkValidation = function(){
+//유효성 체크
+this.fn_checkValidation = function(flag){
 	
-	if(this.gfn_isNull(this.row03.form.Edit00.value))
+	if(this.gfn_isNull(this.row07.form.strtDtm.value))
+	{
+		this.alert("게시 시작일을 입력하세요");
+		this.row07.form.strtDtm.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row07.form.endDtm.value))
+	{
+		this.alert("게시 종료일을 입력하세요");
+		this.row07.form.endDtm.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+	{
+		this.alert("지점을 선택하세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row03.form.Edit00.value))
 	{
 		this.alert("제목을 입력하세요");
 		this.row03.form.Edit00.setFocus();
-		return;
+		return false;
 	}
 	else
-	{								
-		// 수정화면
-		if(!this.gfn_isNull(this.param.notcSeqno))
+	{	
+		if(this.confirm("해당 내용으로 저장하시겠습니까?"))
 		{
-			this.fn_save();
-		}else
-		{
-			//this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?fileGb=thnlFileId&atchFileId=' + this.thnlFileId);	
 			this.fn_save();
 		}
-		
 	}	
 }
 
@@ -346,33 +338,45 @@ this.fn_get_edit_body = function(wbObj){
         _win.destroy();
         _win = null;
     }    
-
+	
 	return bodyValue;
 }
 
+this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+{	
+	var content = "";	
+	
+	content = this.ds_detail.getColumn(0, "notcCont");
+	
+	var _win = obj.getProperty("window");	 
+	
+	_win.callMethod("setData", content);
+	
+	if(_win)
+	{
+		_win.destroy();
+		_win = null;
+	}  
+};
+
+//콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
-		
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
 	
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorCode+"\n"+errorMsg);
-    return;
-  }
-
-  switch(svcID)
-  {
+	switch(svcID)
+	{
     case "save":
 		this.alert("저장되었습니다.");
 		this.fn_list();
-		break;
-  }
-};
-
-
-
-]]></Script>
+	break;
+	}
+};]]></Script>
     <Bind>
       <BindItem id="item0" compid="row03.form.Edit00" propid="value" datasetid="ds_detail" columnid="titNm"/>
       <BindItem id="item1" compid="row01.form.gbDiv.form.radioGb" propid="value" datasetid="ds_detail" columnid="clCd"/>
