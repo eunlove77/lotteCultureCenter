@@ -41,7 +41,7 @@
                 <Cell col="1" text="bind:rnum"/>
                 <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="3" text="bind:bareaNm"/>
-                <Cell col="4" text="expr:dtlAddr ? bscAddr +',' + dtlAddr : 'bscAddr '"/>
+                <Cell col="4" text="bind:addr"/>
                 <Cell col="5" text="bind:telno" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="6" text="bind:lectRmCnt"/>
                 <Cell col="7" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
@@ -84,16 +84,24 @@
                                 </Row>
                                 <Row>
                                   <Col id="codecolumn">1</Col>
-                                  <Col id="datacolumn">제목</Col>
+                                  <Col id="datacolumn">주소</Col>
                                 </Row>
                                 <Row>
                                   <Col id="codecolumn">2</Col>
-                                  <Col id="datacolumn">작성자</Col>
+                                  <Col id="datacolumn">전화번호</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">3</Col>
+                                  <Col id="datacolumn">강의실 수</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">4</Col>
+                                  <Col id="datacolumn">등록자</Col>
                                 </Row>
                               </Rows>
                             </Dataset>
                           </Combo>
-                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21"/>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21" onkeydown="Div00_00_conDiv_searchDiv_searchQuery_onkeydown"/>
                           <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
                           <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
                         </Layout>
@@ -143,6 +151,7 @@
           <Column id="bareaNm" type="STRING" size="256"/>
           <Column id="bscAddr" type="STRING" size="256"/>
           <Column id="dtlAddr" type="STRING" size="256"/>
+          <Column id="addr" type="STRING" size="256"/>
           <Column id="telno" type="STRING" size="256"/>
           <Column id="lectRmCnt" type="INT" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
@@ -186,6 +195,7 @@
           <Column id="bareaNm" type="STRING" size="256"/>
           <Column id="bscAddr" type="STRING" size="256"/>
           <Column id="dtlAddr" type="STRING" size="256"/>
+          <Column id="addr" type="STRING" size="256"/>
           <Column id="telno" type="STRING" size="256"/>
           <Column id="lectRmCnt" type="INT" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
@@ -212,20 +222,20 @@
       <BindItem id="item3" compid="Div00_00.form.conDiv.form.spotAreaDiv.form.ComboSpotArea" propid="value" datasetid="searchDs" columnid="brchAreaCd"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
- * include 영역 
- **************************************************************************/
+* include 영역 
+**************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 
 /**************************************************************************
- * FORM 변수 선언 영역
- **************************************************************************/
+* FORM 변수 선언 영역
+**************************************************************************/
 this.application = null;
 this.rowcount = 0;
 
 /**************************************************************************
- * FORM EVENT 영역(onload)
- **************************************************************************/
+* FORM EVENT 영역(onload)
+**************************************************************************/
 this.BranchList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -241,7 +251,7 @@ this.BranchList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
-		
+	
 	this.spotAreaCdList.copyData(this.application.gdsSpotAreaCdList);
 	this.spotAreaCdList.insertRow(0);
 	this.spotAreaCdList.setColumn(0, "cd", "");
@@ -292,12 +302,20 @@ this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e
 	this.fn_list();
 };
 
+//엔터키 검색
+this.Div00_00_conDiv_searchDiv_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_list();
+	}
+};
+
 //초기화버튼
 this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.reset_search_form();
 	this.fn_list();
-	
 };
 
 this.reset_search_form = function(){
@@ -317,7 +335,7 @@ this.GridBranchList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickE
 		var	brchAreaCd = obj.getBindDataset().getColumn(e.row, "brchAreaCd");
 		
 		this.parent.param = {
-			 brchCd : brchCd
+			brchCd : brchCd
 			,brchAreaCd : brchAreaCd
 		};
 		
@@ -326,8 +344,8 @@ this.GridBranchList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickE
 };
 
 /**************************************************************************
- * 사용자 FUNCTION 영역
- **************************************************************************/
+* 사용자 FUNCTION 영역
+**************************************************************************/
 
 //조회
 this.fn_list = function ()
@@ -363,34 +381,41 @@ this.fn_delete = function ()
 this.fnCallback = function(svcID,errorCode,errorMsg)
 
 {
-  //목록 카운트
-  
-  this.Div01.form.txtTotal.set_text("목록("+this.branchDs.rowcount+")개");
-  
-  if(!this.branchDs.getColCount())
-  {
-	this.branchDs.copyData(this.branchDs_format);
-  }
-
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorCode+"\n"+errorMsg);
-	return;
-  }
-
-  switch(svcID)
-  {
-   case "dataList":
-		//this.searchSpot.set_index(0);
-	break;
+	//목록 카운트
 	
-	case "delete":
-		this.alert("삭제되었습니다.");
-		this.fn_list(1);
+	this.Div01.form.txtTotal.set_text("목록("+this.branchDs.rowcount+")개");
+	
+	if(!this.branchDs.getColCount())
+	{
+		this.branchDs.copyData(this.branchDs_format);
+	}
+	
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{	
+		case "list":
+			
+			if(this.branchDs.rowcount < 1){
+				this.alert("조회된 결과가 없습니다.");
+			}
 		break;
-  }
-
+		
+		case "dataList":
+			//this.searchSpot.set_index(0);
+			break;
+			
+		case "delete":
+			this.alert("삭제되었습니다.");
+			this.fn_list(1);
+			break;
+	}
+	
 };]]></Script>
   </Form>
 </FDL>

@@ -125,7 +125,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="강의실수" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28"/>
+              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28" inputtype="number"/>
               <Static id="Static00_00" taborder="2" text="실" left="280" top="0" width="19" height="31" usedecorate="true"/>
             </Layout>
           </Layouts>
@@ -249,10 +249,7 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
-	{
 		this.fn_checkValidation();
-	}
 };
 /**************************************************************************
 * 사용자 FUNCTION 영역
@@ -320,13 +317,15 @@ this.fn_checkValidation = function(){
 	}
 	else
 	{								
-		this.atchFileUpload.fn_upload(); 
+		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		{
+			this.atchFileUpload.fn_upload(); 
+		}
 	}	
 }
 
 this.fn_detail = function ()
 {	
-	
 	var tranObj = {
 		strSvcId : "detail",
 		strSvcUrl : this.application.Admin_svc + "::/branch/branchDtl.do",
