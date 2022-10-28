@@ -5,7 +5,7 @@
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="ds_coupon_list" autofittype="col" right="10" bottom="10" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="230" binddataset="ds_coupon_list" autofittype="col" right="10" bottom="10" oncellclick="Grid00_oncellclick" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)">
           <Formats>
             <Format id="default">
               <Columns>
@@ -46,7 +46,7 @@
                 <Cell col="6" expr="issueStatCd == &quot;10&quot; ? &quot;발급중&quot; : issueStatCd == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
                 <Cell col="7" expr="issueStatCd == &quot;00&quot; ? &quot;-&quot; : (useCnt + &quot;/&quot; + issueCnt)"/>
                 <Cell col="8" expr="rgprNm + &quot;(&quot; + rgprId + &quot;)&quot;"/>
-                <Cell col="9" text="bind:rgprDtm"/>
+                <Cell col="9" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
             </Format>
           </Formats>
@@ -258,7 +258,7 @@ this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 				cpnSeqno : ""
 				};
 	
-	this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, 600, 350, true, true, null, "쿠폰 등록");
+	this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 등록");
 };
 
 /**************************************************************************
@@ -316,11 +316,11 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	
 		if(obj.getBindDataset().getColumn(e.row, "issueStatCd") == "00")
 		{
-			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, 600, 350, true, true, null, "쿠폰 상세");
+			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 상세");
 		}
 		else
 		{
-			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, 600, 350, true, true, null, "쿠폰 상세");
+			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, null, null, true, true, null, "쿠폰 상세");
 		}		
 	}
 };
@@ -370,7 +370,7 @@ this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 				cpnSeqno : list.getColumn(chkRow, "cpnSeqno")
 				};
 	
-		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, 600, 350, true, true, null, "쿠폰 복사");
+		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 복사");
 	}
 };
 

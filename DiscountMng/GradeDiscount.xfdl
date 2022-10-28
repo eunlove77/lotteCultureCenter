@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="GradeDiscount" width="1280" height="720" titletext="New Form" onload="GradeDiscount_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="70" height="650" right="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="등급할인 설정" left="0" top="1" width="100" cssclass="sta_WF_TitGray" height="17"/>
+              <Div id="Div00" taborder="1" text="" left="0" top="28" height="120" cssclass="div_LF_FloatMenu" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="• 등급할인 유형은 정기강좌에만 적용 됩니다.&#13;&#10;• 등급할인은 전체 사용 가능 횟수와 등급할인 유형별로 각각 사용 가능한 할인횟수로 구성되며, 해당 사용자 계정의 조건에 따라 학기마다 사용가능한 등급할인 유형을 강좌별로 적용 합니다.  &#13;&#10;* 등급할인으로 구매할 수 있는 강좌 수로 할인횟수를 체크 합니다 &#13;&#10;ex) 전체 사용횟수 3회, 임직원 할인횟수가 2회, 평촌점 기존회원 할인횟수 2회 제한이라면 이번학기 수강신청 기간에 등급할인을 받을 수 있는 조건은 지점에 상관없이 강좌 3개만 가능 합니다.&#13;&#10;※ 학기마다 할인횟수와 전체사용 횟수는 리셋 됩니다.  " left="10" top="10" onclick="Div00_Static00_onclick" right="10" wordWrap="char" bottom="10"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="5" text="Div01" left="0" top="Div00:10" width="220" height="32">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static03" taborder="0" text="회" left="185" top="5" width="25" height="21"/>
+                    <MaskEdit id="MaskEdit00" taborder="1" left="100" top="0" width="80" height="30" format="99" type="number" limitbymask="integer" maskchar=" " displaynulltext="0 ~ 10" onkeyup="Div00_Div01_MaskEdit00_onkeyup"/>
+                    <Static id="Static02" taborder="2" text="• 전체 사용 횟수" left="0" top="5" width="100" height="21"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Grid id="Grid00" taborder="2" left="0" top="Div01:10" right="0" bottom="100" autofittype="col" binddataset="ds_discount_list" cellclickbound="control" oninput="Div00_Grid00_oninput">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                      <Column size="150"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="40" band="head"/>
+                      <Row size="40"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="등급할인(에누리)"/>
+                      <Cell col="1" text="적용지점"/>
+                      <Cell col="2" text="할인횟수(회)"/>
+                      <Cell col="3" text="할인율(%)"/>
+                      <Cell col="4" text="사용여부"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell suppress="0" text="bind:cdNm" expr="cdNm + &quot; 할인&quot;"/>
+                      <Cell col="1" text="bind:applBrchRngCd" displaytype="combocontrol" edittype="combo" combodataset="ds_appl_brch_cd" combocodecol="cd" combodatacol="cdNm" combodisplaynulltype="none"/>
+                      <Cell col="2" expandshow="hide" expandsize="16" maskeditpostfixtext="회" displaytype="maskeditcontrol" edittype="mask" maskeditformat="99" editinputtype="normal" editinputfilter="none" maskedittrimtype="none" text="bind:dcNbcnt" expr="dcNbcnt  ? dcNbcnt : ' '" tooltiptype="default,mouseleave" maskedittype="number" maskeditlimitbymask="integer" tooltiptext="범위 : 0 ~ 10 "/>
+                      <Cell col="3" suppress="0" maskeditpostfixtext="%" displaytype="maskeditcontrol" edittype="mask" text="bind:dcRt" maskeditformat="999" maskeditlimitbymask="integer" expr="dcRt  ? dcRt : ' '"/>
+                      <Cell col="4" suppress="0" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_use_yn_cd" combodatacol="cdNm" combocodecol="cd"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Button id="cnclBtn" taborder="3" text="취소" left="43.65%" width="76" cssclass="btn_WF_Weak" fittocontents="none" bottom="20" height="30" onclick="Div00_cnclBtn_onclick"/>
+              <Button id="insBtn" taborder="4" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.009999999999991" bottom="20" height="30" onclick="Div00_insBtn_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_discount_mst">
+        <ColumnInfo>
+          <Column id="allUseNbcnt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_discount_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="applBrchRngCd" type="STRING" size="256"/>
+          <Column id="dcNbcnt" type="STRING" size="256"/>
+          <Column id="dcRt" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_appl_brch_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">01</Col>
+            <Col id="cdNm">전점</Col>
+          </Row>
+          <Row>
+            <Col id="cd">02</Col>
+            <Col id="cdNm">관리점</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_use_yn_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">Y</Col>
+            <Col id="cdNm">사용</Col>
+          </Row>
+          <Row>
+            <Col id="cd">N</Col>
+            <Col id="cdNm">미사용</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.GradeDiscount_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.baseSvrUrl = this.application.Admin_svc + "::discount/grade/";
+	
+	this.fn_list();
+};
+
+Div01_MaskEdit00_onkeyup = function(obj:nexacro.MaskEdit,e:nexacro.KeyEventInfo)
+{
+	if(obj.value > 10)
+	{
+		obj.set_value("");
+		alert("전체 사용횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
+	}
+};
+
+this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
+{
+	if(e.cell == 2)
+	{
+		if(obj.getEditingValue() > 10)
+		{
+			obj.setEditValue("");
+			alert("할인횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
+		}
+	}
+	else if(e.cell == 3)
+	{
+		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
+		{
+			obj.setEditValue("");
+			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
+		}
+	}
+};
+
+this.Div00_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.fn_list()
+	}
+};
+
+this.Div00_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_list = function ()
+{	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "",
+		outData : "ds_discount_list=discountList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);	
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			this.ds_discount_mst.setColumn(0, "allUseNbcnt", this.ds_discount_list.getColumn(0, "allUseNbcnt"));
+			break;
+		case "save":
+			this.alert("저장되었습니다.");
+			break;
+	}
+
+};
+
+this.fn_checkValidation = function()
+{
+	if(this.gfn_isNull(this.Div00.form.Div01.form.MaskEdit00.value))
+	{
+		alert("전체 사용 횟수를 입력하세요.");
+		this.Div00.form.Div01.form.MaskEdit00.setFocus();
+		return;
+	}
+	else if(this.ds_discount_list.findRow("dcNbcnt", null) > -1 || this.ds_discount_list.findRow("dcNbcnt", "") > -1)
+	{
+		alert("할인횟수를 입력하세요");
+		return;
+	}
+	else if(this.ds_discount_list.findRow("dcRt", null) > -1 || this.ds_discount_list.findRow("dcRt", "") > -1)
+	{
+		alert("할인율을 입력하세요.");
+		return;
+	}
+	else
+	{
+		if(this.confirm("저장하시겠습니까?"))
+		{
+			this.fn_save()
+		}
+	}
+}
+
+this.fn_save = function()
+{
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.baseSvrUrl + "insert.do",
+		inData : "infoMst=ds_discount_mst infoDtl=ds_discount_list",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);	
+}
+]]></Script>
+    <Bind>
+      <BindItem id="allUseNbcnt" compid="Div00.form.Div01.form.MaskEdit00" propid="value" datasetid="ds_discount_mst" columnid="allUseNbcnt"/>
+    </Bind>
+  </Form>
+</FDL>
