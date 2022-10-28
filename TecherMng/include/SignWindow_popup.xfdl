@@ -19,12 +19,13 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.atchFileId = "";
+this.ownerFrame = null;
 
 this.SignWindow_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	
-	var objOwnerFrame = this.getOwnerFrame();
+	this.ownerFrame = this.opener.ownerFrame;
 };
 
 var bMouseButtonPressed = false;
@@ -98,7 +99,8 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 			outData : "",
 			strArg : "",
 			callBackFnc : "fnCallback",
-			isAsync : false
+			isAsync : false,
+			menuSeq : this.ownerFrame.param.MENU_ID,
 		}
 		this.gfn_transaction(tranObj);
 	}else{
@@ -132,18 +134,17 @@ this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 this.get_image_detail = function(ds){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_imageDtl";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/selectImgDtl.do";
-	tranObj.inData      = "img_detail=" + ds;
-	tranObj.outData     = ds + "=img_detail";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/selectFileDtl.do";
+	tranObj.inData      = "file_detail=" + ds;
+	tranObj.outData     = ds + "=file_detail";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_img";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.ownerFrame.param.MENU_ID;
 	
 	this.gfn_transaction(tranObj);
 }
 this.fnCallback_img = function(sId, nErrorCd, sErrorMsg){
-	console.log('이미지 셀렉 완료');
 	this.close();
 }]]></Script>
     <Objects>
