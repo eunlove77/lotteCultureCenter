@@ -154,7 +154,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="전시상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="114" height="20" direction="vertical" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn">
+                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="114" height="20" direction="vertical" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" columncount="-1" rowcount="-1">
                                   <Dataset id="innerdataset">
                                     <ColumnInfo>
                                       <Column id="codecolumn" size="256"/>
@@ -435,7 +435,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강의스케줄 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="128" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_scheduleTemp_list" autosizingtype="none" cellsizingtype="none" extendsizetype="none" autofittype="col" oncellclick="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncellclick" oncloseup="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncloseup" oninput="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oninput">
+                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_scheduleTemp_list" autosizingtype="none" cellsizingtype="none" extendsizetype="none" autofittype="col" oncellclick="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncellclick" oncloseup="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncloseup">
                                   <Formats>
                                     <Format id="default">
                                       <Columns>
@@ -511,7 +511,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00_00_00_00_01" taborder="5" text="Div00" left="0" top="Div00_00_00_00_00:15" height="240" right="0" minwidth="" minheight="">
+              <Div id="Div00_00_00_00_01" taborder="5" text="Div00" left="0" top="Div00_00_00_00_00:15" height="245" right="0" minwidth="" minheight="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="옵션정보" left="0" top="0" width="60" height="20" cssclass="sta_WF_TitGray"/>
@@ -810,7 +810,7 @@ this.ClassReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//화면초기화
 	this.init();
 	// 코드 데이터
-	this.fn_code_list();	
+	this.fn_code_list();
 };
 
 /**************************************************************************
@@ -1018,6 +1018,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "scheduleList":
+			this.ds_schedule_list.copyData(this.ds_scheduleTemp_list);
 			this.fn_schedule_set();
 		break;
 		
@@ -1116,31 +1117,25 @@ this.fn_classCtgyMiddle_chg = function(obj)
 //강좌 카테고리 세팅
 this.fn_classCtgy_set = function()
 {
-	this.ds_classCtgyLarge_list.set_enableevent(false);
 	this.ds_classCtgyLarge_list.insertRow(0);
 	this.ds_classCtgyLarge_list.setColumn(0, "cdId", "");
 	this.ds_classCtgyLarge_list.setColumn(0, "cd", "");
 	this.ds_classCtgyLarge_list.setColumn(0, "cdNm", "대분류");
 	this.Div00.form.Div00.form.Div00.form.Div00_02.form.Combo00.set_index(0);
-	this.ds_classCtgyLarge_list.set_enableevent(true);
-	
-	this.ds_classCtgyMiddle_list.set_enableevent(false);
+
+	this.ds_classCtgyMiddle_list.filter("cdId == ''");
 	this.ds_classCtgyMiddle_list.insertRow(0);
 	this.ds_classCtgyMiddle_list.setColumn(0, "cdId", "");
 	this.ds_classCtgyMiddle_list.setColumn(0, "cd", "");
 	this.ds_classCtgyMiddle_list.setColumn(0, "cdNm", "중분류");
 	this.Div00.form.Div00.form.Div00.form.Div00_02.form.Combo01.set_index(0);
-	this.ds_classCtgyMiddle_list.set_enableevent(true);
-	this.ds_classCtgyMiddle_list.filter("cdId == ''");
 	
-	this.ds_classCtgySmall_list.set_enableevent(false);
+	this.ds_classCtgySmall_list.filter("cdId == ''");
 	this.ds_classCtgySmall_list.insertRow(0);
 	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
 	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
 	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
 	this.Div00.form.Div00.form.Div00.form.Div00_02.form.Combo02.set_index(0);
-	this.ds_classCtgySmall_list.set_enableevent(true);
-	this.ds_classCtgySmall_list.filter("cdId == ''");
 }
 
 //강의실 세팅
@@ -1330,9 +1325,8 @@ this.fn_schedule_set = function(pObjName)
 		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div05.set_height(280);
 		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div05.form.Grid00.setRealRowSize(-1, 0);
 		
-		var h = 820 + scheduleCal;
+		var h = 830 + scheduleCal;
 		this.Div00.form.Div00_00_00_00_00.set_height(h);	
-		
 		this.Div00.form.resetScroll();
 	}
 }
@@ -1427,7 +1421,7 @@ this.fn_schedule_cal = function(obj)
 	
 		var calRow = this.ds_schedulePlan_list.extractRows("lectDt==" + obj._default_value);
 		
-		var arrDays = new Array("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일");	
+		var arrDays = new Array("", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일");	
 		
 		var year = obj.value.slice(0, 4)
 		var mon = obj.value.slice(4, 6)
@@ -1435,6 +1429,7 @@ this.fn_schedule_cal = function(obj)
 	
 		var objDate = new nexacro.Date(year+ "-" + mon + "-" + day);
 		var nDay = objDate.getDay();
+		nDay = (nDay == 0) ? 7 : nDay;
 		
 		this.ds_schedulePlan_list.setColumn(calRow, "lectDt", obj.value);
 		this.ds_schedulePlan_list.setColumn(calRow, "stDaywCd", nDay);
@@ -1544,8 +1539,8 @@ this.fn_schedule_init = function(pObj, pObjName)
 **************************************************************************/
 
 //에디터 데이터 불러오기
-this.fn_get_edit_body = function(wbObj){
-	
+this.fn_get_edit_body = function(wbObj)
+{
 	var _win = wbObj.getProperty("window");
 	
 	var len = _win.callMethod("getTextValueLen");
@@ -2157,17 +2152,14 @@ this.ds_scheduleTemp_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e
 		var objDate = new nexacro.Date(year+ "-" + mon + "-" + day);
 		var nDay = objDate.getDay();
 		
-		this.ds_scheduleTemp_list.set_enableevent(false);
-		
+		nDay = (nDay == 0) ? 7 : nDay;
 		this.ds_scheduleTemp_list.setColumn(e.row, "stDaywCd", nDay);
-		
-		this.ds_scheduleTemp_list.set_enableevent(true);
 	}
 };
 
 this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div03.fnDw = function(dw)
 {
-	var arrDays = new Array("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일");	
+	var arrDays = new Array("", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일");	
 	if(dw != undefined)
 	{
 		return arrDays[dw];
@@ -2195,9 +2187,7 @@ this.Div00_Div00_00_00_00_00_Div00_Div04_Button00_onclick = function(obj:nexacro
 				return flag
 			}
 		}
-		
-		this.ds_schedule_list.copyData(this.ds_scheduleTemp_list);
-		
+
 		var tranObj = {
 			strSvcId : "scheduleList",
 			strSvcUrl : this.application.Admin_svc + "::class/getScheduleTempList.do",
@@ -2243,7 +2233,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div00_Radio00_onitemchanged = function(obj:ne
 	
 	if(obj.value == "Y")
 	{
-		this.Div00.form.Div00_00_00_00_01.set_height(240);
+		this.Div00.form.Div00_00_00_00_01.set_height(245);
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div01.set_height(33);
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.set_height(150);
 	}
@@ -2396,19 +2386,6 @@ this.Div00_Div00_Div00_Div00_07_Radio00_onitemchanged = function(obj:nexacro.Rad
 	}
 	
 	this.Div00.form.resetScroll();
-};
-
-this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
-{
-	var curRow = obj.getSelectedDatasetRows();
-  
-	if(obj.getCellPos() == 1)  //해당 cell 의 index
-	{  
-		var oriValue =  this.ds_scheduleTemp_list.getColumn(curRow, "lectStDt");
-
-		this.ds_scheduleTemp_list.setColumn(curRow, "lectStDt", oriValue);
-		obj.setEditingValue(oriValue);
-	}
 };
 
 this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)

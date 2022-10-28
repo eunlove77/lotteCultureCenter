@@ -535,9 +535,9 @@ this.fn_save_validation = function()
 		}
 	}
 	
-	var dwArr = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"]
+	var dwArr = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
 
-	for(var i=1; i < this.ds_semester_dw_list.getRowCount(); i++)
+	for(var i=0; i < this.ds_semester_dw_list.getRowCount(); i++)
 	{
 		if(this.gfn_nvl(this.ds_semester_dw_list.getColumn(i, "lectNbcnt")) == "")
 		{
@@ -545,13 +545,6 @@ this.fn_save_validation = function()
 			alert(dwStr);
 			return;
 		}
-	}
-	
-	if(this.gfn_nvl(this.ds_semester_dw_list.getColumn(0, "lectNbcnt")) == "")
-	{
-		var dwStr = dwArr[0] + " 강의횟수를 입력하세요.";
-		alert(dwStr);
-		return;
 	}
 	
 	if(confirm("학기정보를 저장하시겠습니까?"))
@@ -684,7 +677,7 @@ this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	//요일 정보 세팅
 	for(var i=0; i<7; i++)
 	{
-		this.ds_semester_dw_list.setColumn(i, "daywCd", i);
+		this.ds_semester_dw_list.setColumn(i, "daywCd", i+1);
 		this.ds_semester_dw_list.setColumn(i, "lectNbcnt", this.lectNbcntArr[i].value);
 	}
 	
