@@ -590,7 +590,7 @@ this.TecherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.application.getVariable("domain");
-
+	
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.ds_tcmdfreq_list, this.Div03.form.tcmdfreq_Grid, 0);
 	
@@ -623,7 +623,7 @@ this.select_techer_info = function(){
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "select_techer_detail_callback";
 	tranObj.isAsync     = true;
-	/*tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;*/
+	tranObj.menuSeq 	= this.parent.ownerFrame.param.MENU_ID;
 	
 	this.gfn_transaction(tranObj);
 }
@@ -1008,6 +1008,7 @@ this.Div01_Div05_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
 		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
 		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
+		ownerFrame : this.getOwnerFrame()
 	};
 	this.gfn_openPopup("checkInfoPopup", oArg, "TecherMng::TecherInfoCheckWindow_popup.xfdl", this, 850, 550, true, true, null);
 };
@@ -1124,7 +1125,7 @@ this.submit_techer_info = function(){
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_techer";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.parent.ownerFrame.param.MENU_ID
 	
 	this.gfn_transaction(tranObj);
 }
@@ -1244,7 +1245,7 @@ this.get_file_detail = function(ds, svcId){
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.parent.ownerFrame.param.MENU_ID
 	
 	this.gfn_transaction(tranObj);
 }
@@ -1321,6 +1322,9 @@ this.Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="mdfNm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
       <Dataset id="ds_spot_list"/>
       <FileDialog id="FileDialog00" onclose="FileDialog00_onclose"/>

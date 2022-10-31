@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[// 년도 콤보박스 생성
+this.com_set_dataset_year = function(ds, startYear){
+	var today = new Date();
+	
+	ds.set_enableevent(false);
+	for(var i = today.getYear(); i >= startYear; i--){
+		var r = ds.addRow();
+		ds.setColumn(r, 'cd', i);
+		ds.setColumn(r, 'cdNm', i + '년');
+	}
+	ds.set_enableevent(true);
+}
+
+/************************************************************************
+ * ds_codes_list = [{
+		ds: this.ds_mdctgry_cdList, cd: "'spotCd'",
+	}];
+ ************************************************************************/
+//데이터셋 코드값 세팅 (1)
+this.com_set_code_dataset= function(ds_codes_list){
+
+	for(var i = 0; i < ds_codes_list.length; i++){
+		this.com_set_dataset_from_code(ds_codes_list[i]);
+	}
+}
+// (2)
+this.com_set_dataset_from_code = function(info){
+	var gdsCode = this.application.gdsCode;
+	gdsCode.filter('cdId != cd && cdId == ' + info.cd);
+	info.ds.copyData(gdsCode, true);
+}
+ /************************************************************************
+ * ds_list = [{
+		ds: this.ds_mdctgry_cdList, cdNm: '중분류',
+		obj: this.Div02.form.Div00.form.mdclsCtegryCd
+	}];
+ ************************************************************************/
+//콤보박스 기본값 설정 (1)
+this.com_set_combobox_default = function(ds_list){	
+	for(var i = 0; i < ds_list.length; i++){
+		var info = ds_list[i];
+		var ds = info.ds;
+		
+		ds.set_enableevent(false);
+		if(info.cdNm){
+			ds.insertRow(0);
+			ds.setColumn(0, 'cdId', '');
+			ds.setColumn(0, 'cd', '');
+			ds.setColumn(0, 'cdNm', info.cdNm);
+		}
+ 		this.com_set_combobox_default_index(info);
+		ds.set_enableevent(true);
+	}
+}
+// 콤보박스 인덱스 초기화 (2)
+this.com_set_combobox_default_index = function(info){
+	if(info.objs){
+		for(var obj of info.objs){
+			obj.set_index(0);
+			if(info.cdNm)
+				obj.set_text(info.cdNm);
+		}
+	} else {
+		info.obj.set_index(0);
+		if(info.cdNm)
+			info.obj.set_text(info.cdNm);
+	}
+}
+/**************************************************************************
+ * 동적 체크박스 추가 param: ds, Div
+ **************************************************************************/
+this.com_set_dynamic_checkbox_from_dataset = function(ds, p_div){
+	
+	var content = ["chkAll"];
+	for(var i=0; i < ds.rowcount; i++) 
+	{
+		var id = "chk" + i;
+		var obj = new CheckBox();
+		obj.init(id, content[i] + ":6", 5, 90, 20);
+		p_div.addChild(id, obj);
+		obj.set_text(ds.getColumn(i, "cdNm"));		
+		obj.set_truevalue(ds.getColumn(i, "cd"));
+		obj.set_falsevalue("");
+		obj.set_fittocontents("width");
+		obj.show();	
+		content.push(id);
+	}
+}
+/**************************************************************************
+ * 체크박스 클릭이벤트 추가 param: Form
+ **************************************************************************/
+this.com_fn_click_add = function(pObj)
+{
+	var arrObj = pObj.components;
+	for(var i=0; i<arrObj.length; i++)
+	{	
+		if(arrObj[i] == "[object Div]"){
+			this.com_fn_click_add(arrObj[i].form);
+		}
+		else 
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				arrObj[i].insertEventHandler("onclick", 0, this.fn_checkbox, this);
+			}
+		}
+	}	
+}
+this.com_fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(true);
+			}
+			else
+			{
+				if(arrObj[i] == "[object CheckBox]")
+				{
+					arrObj[i].set_value(arrObj[i].truevalue);
+				}
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+			
+		}
+	}
+	
+}
+this.com_fn_checkbox = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+/**************************************************************************
+ * 검색조건 초기화
+ **************************************************************************/
+this.com_reset_search_form = function(pObj){
+	var arrObj = pObj.components;
+	for(var i=0; i<arrObj.length; i++)
+	{	
+		if(arrObj[i] == "[object Div]"){
+			this.com_reset_search_form(arrObj[i].form);
+		}
+		else if(arrObj[i] == "[object Edit]" || arrObj[i] == "[object Calendar]"){
+			arrObj[i].set_text("");
+		}
+		else if(arrObj[i] == "[object Combo]"){
+			arrObj[i].set_index(0);
+		}
+		else if(arrObj[i] == "[object CheckBox]"){
+			var tv = arrObj[i].truevalue;
+			arrObj[i].set_value(tv ? tv : true);
+		}
+	}
+}
+/**************************************************************************
+ * 카테고리
+ **************************************************************************/
+this.ctgryObj = null;
+this.com_set_category = function(lgObj, mdObj, smObj){
+	this.ctgryObj = [lgObj, mdObj, smObj];
+	
+	var outData = "ds_classCtgyLarge_list=classCategoryLargeList "
+	outData += "ds_classCtgyMiddle_list=classCategoryMiddleList "
+	outData += "ds_classCtgySmall_list=classCategorySmallList";
+	
+	var tranObj = {
+		strSvcId : "codeList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
+		inData : "",
+		outData : outData,
+		strArg : "cdId=ctgy brchCd=" + this.brchCd,
+		callBackFnc : "com_set_category_callback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	this.gfn_transaction(tranObj);
+}
+//강좌 카테고리 세팅
+this.com_set_category_callback = function(svcId, errorCode, errorMsg)
+{
+	this.ds_classCtgyMiddle_list.filter("cdId == ''");
+	this.ds_classCtgySmall_list.filter("cdId == ''");
+
+	var ds_list = [{
+		ds: this.ds_classCtgyLarge_list, cdNm: '대분류', obj: this.ctgryObj[0]
+	}, {
+		ds: this.ds_classCtgyMiddle_list, cdNm: '중분류', obj: this.ctgryObj[1]
+	}, {
+		ds: this.ds_classCtgySmall_list, cdNm: '소분류', obj: this.ctgryObj[2]
+	}];
+	this.com_set_combobox_default(ds_list);
+}
+//카테고리 대분류 영역 변경
+this.com_fn_classCtgyLarge_chg = function(obj, middleObj, smallObj)
+{
+	this.ds_classCtgyMiddle_list.set_enableevent(false);
+	this.ds_classCtgyMiddle_list.deleteRow(0);
+	this.ds_classCtgyMiddle_list.filter("cdId == '" + obj.value + "'");
+
+	this.ds_classCtgyMiddle_list.insertRow(0);
+	this.ds_classCtgyMiddle_list.setColumn(0, "cdId", "");
+	this.ds_classCtgyMiddle_list.setColumn(0, "cd", "");
+	this.ds_classCtgyMiddle_list.setColumn(0, "cdNm", "중분류");
+	
+	this.ds_classCtgyMiddle_list.set_enableevent(true);
+	
+	middleObj.set_index(0);
+	smallObj.set_index(0);
+	
+	this.ds_classCtgySmall_list.filter("cdId == ''");
+	
+	this.ds_search.setColumn('mdclsCtegryCd', '');
+	this.ds_search.setColumn('smclsCtegryCd', '');
+}
+//카테고리 중분류 영역 변경
+this.com_fn_classCtgyMiddle_chg = function(obj, smallObj)
+{
+	this.ds_classCtgySmall_list.set_enableevent(false);
+	this.ds_classCtgySmall_list.deleteRow(0);
+	this.ds_classCtgySmall_list.filter("cdId == '" + obj.value + "'");
+	
+	this.ds_classCtgySmall_list.insertRow(0);
+	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
+
+	smallObj.set_index(0);
+	this.ds_classCtgySmall_list.set_enableevent(true);
+	
+	this.ds_search.setColumn('smclsCtegryCd', '');
+}
+//카테고리 초기화
+this.com_reset_category = function(lgObj, mdObj, smObj){
+	this.ds_classCtgyMiddle_list.filter("cdId == ''");
+	this.ds_classCtgySmall_list.filter("cdId == ''");
+}
+/**************************************************************************
+ * 학기 설정
+ **************************************************************************/
+this.com_reset_search_semester = function(obj){
+	var month = new nexacro.Date().getMonth()+1;
+	var obj = this.Div01.form.Div01.form.Combo01;
+	var index = 0;
+	
+	if(3 <= month && month <= 5) index = 0;	//봄
+	else if(6 <= month && month <= 8) index = 1; //여름
+	else if(9 <= month && month <= 11) index = 2; //가을
+	else index = 3; //겨울
+	
+	obj.set_index(index);
+}]]></Script>

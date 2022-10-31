@@ -220,10 +220,10 @@
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
                 <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
-                <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCdNm"/>
+                <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
                 <Cell col="5" text="bind:hpNo"/>
-                <Cell col="6" text="bind:pbrltnBrchCd" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="7" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
+                <Cell col="6" text="expr:mdfReqCount &gt; 0 ? '요청' : ''" calendardateformat="yyyy-MM-dd HH:mm:ss" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="7" text="bind:age"/>
                 <Cell col="8" text="bind:mdfReqYn" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="9" text="bind:frstHopeBrchCd"/>
                 <Cell col="10" tooltiptext="bind:secHopeBrchCd"/>
@@ -262,7 +262,6 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -274,7 +273,7 @@ this.TecherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//강사유형
 	this.Div03.form.Div00.form.tcTpCdAll.set_value(true);
 	this.techer_type_onchanged(this.Div03.form.Div00.form.tcTpCdAll);
-	
+
 	this.set_dataset();
 	
 };
@@ -443,7 +442,8 @@ this.reset_search_form = function(){
 {
 	var oArg = {
 				title : "강사 등록",
-				cpnSeqno : ""
+				cpnSeqno : "",
+				ownerFrame : this.getOwnerFrame()
 				};
 	
 	this.gfn_openPopup("techerInsPop", oArg, "TecherMng::TecherInsert.xfdl", this, 600, 350, true, true, null);
@@ -523,33 +523,76 @@ this.modify_request_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBox
 	}
 	this.ds_search.setColumn(0, 'tcmdfreqYn', value);
 }
-//카테고리
-this.first_class_category_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
-	var ds;
-	var ds_list = [{
-			ds: 'ds_mdctgry_cdList', cdNm: '중분류', cd: "'028_"+ obj.value +"'",
-			id: 'Div02.form.Div00.form.mdclsCtegryCd'
-		}, {
-			ds: 'ds_smctgry_cdList', cdNm: '소분류', cd: "'028_"+ obj.value +"'",
-			id: 'Div02.form.Div00.form.smclsCtegryCd'
-	}];
+/**************************************************************************
+ * 카테고리 분류 영역 변경
+ **************************************************************************/
+ this.first_class_category_onchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	//대분류
+	this.fn_classCtgyLarge_chg(obj);
+	this.fn_classCtgyMiddle_chg(obj);
+};
+
+this.second_class_category_onchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	//중분류
+	this.fn_classCtgyMiddle_chg(obj);
+};
+this.class_category_onchanged = function(obj)
+{
+	var md_ds = this.ds_classCtgyMiddle_list;
+	var md_obj = this.Div02.form.Div00.form.Combo01;
 	
-	//중분류 변경
-	this.set_dataset_from_code(ds_list[0]);
-	//소분류 변경
-	ds = this.ds_smctgry_cdList;
-	ds.clearData();
+	md_ds.filter("");
+	md_ds.clearData();
 	
-	this.set_combobox_default(ds_list);
+	var tranObj = {
+		strSvcId : "getCategoryList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
+		inData : "",
+		outData : "ds_classCtgyMiddle_list=classCategoryMiddleList",
+		strArg : "ctegryLvlNo=1 useYn=Y ctegryName=classCategoryMiddleList ctegryId=" + obj.value,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+
+	this.gfn_transaction(tranObj);
+	
+	md_ds.set_enableevent(false);
+	md_ds.insertRow(0);
+	md_ds.setColumn(0, "cdId", "");
+	md_ds.setColumn(0, "cd", "");
+	md_ds.setColumn(0, "cdNm", "중분류");
+	middle_obj.set_index(0);
+	md_ds.set_enableevent(true);
 }
-this.second_class_category_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
-	var ds_list = [{
-		ds: 'ds_smctgry_cdList', cdNm: '소분류', cd: "'028_"+ obj.value +"'",
-		id: 'Div02.form.Div00.form.smclsCtegryCd'
-	}]
-	//소분류 변경
-	this.set_dataset_from_code(ds_list[0]);
-	this.set_combobox_default(ds_list);
+
+this.fn_classCtgyMiddle_chg = function(obj)
+{
+	this.ds_classCtgySmall_list.filter("");
+	this.ds_classCtgySmall_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getCategoryList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
+		inData : "",
+		outData : "ds_classCtgySmall_list=classCategorySmallList",
+		strArg : "ctegryLvlNo=2 useYn=Y ctegryName=classCategorySmallList ctegryId=" + obj.value,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+
+	this.gfn_transaction(tranObj);
+	
+	this.ds_classCtgySmall_list.set_enableevent(false);
+	this.ds_classCtgySmall_list.insertRow(0);
+	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
+	this.Div00.form.Div00.form.Div00.form.Div00_02.form.Combo02.set_index(0);
+	this.ds_classCtgySmall_list.set_enableevent(true);
 }
 /************************************************************************
  * 그리드
@@ -560,7 +603,8 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
-				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo")
+				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
+				ownerFrame : this.getOwnerFrame()
 				};
 		this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
 	}
@@ -676,6 +720,8 @@ this.get_componentById = function(str){
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
           <Column id="appDt" type="STRING" size="256"/>
+          <Column id="mdfReqCount" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_spot_list">
@@ -831,6 +877,27 @@ this.get_componentById = function(str){
         </Rows>
       </Dataset>
       <Dataset id="ds_tcTp_list"/>
+      <Dataset id="ds_classCtgyLarge_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classCtgyMiddle_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classCtgySmall_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div01.form.rgprDtm" propid="value" datasetid="ds_search" columnid="rgprDtm"/>
