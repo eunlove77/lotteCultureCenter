@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="ClassWrite" width="1280" height="4500" titletext="New Form" onload="ClassWrite_onload">
+  <Form id="ClassWrite" width="1280" height="4500" titletext="강좌상세" onload="ClassWrite_onload">
     <Layouts>
       <Layout height="4500" width="1280">
         <Div id="Div00" taborder="1" text="Div00" left="10" top="10" right="10" bottom="10">
           <Layouts>
             <Layout>
-              <Button id="Button00_00_00" taborder="12" text="복사등록" top="0" width="80" height="30" cssclass="btn_WF_Medium" right="170"/>
-              <Button id="Button00_00" taborder="11" text="강좌승인" top="0" width="80" height="30" cssclass="btn_WF_Medium" right="Button00_00_00:15"/>
+              <Button id="Button00_00_01" taborder="13" text="취소" top="0" width="70" height="30" cssclass="btn_WF_High" right="85" onclick="Div00_Button00_00_01_onclick"/>
+              <Button id="Button00_00_00" taborder="12" text="복사등록" top="0" width="80" height="30" cssclass="btn_WF_Medium" right="Button00_00_01:15"/>
+              <Button id="Button00_00" taborder="11" text="강좌승인" top="0" width="80" height="30" cssclass="btn_WF_Medium" left="0" onclick="Div00_Button00_00_onclick"/>
               <Div id="Div01" taborder="10" text="Div01" left="0" top="Button00_00:15" height="33" right="0" cssclass="div_WF_TableComp">
                 <Layouts>
                   <Layout>
@@ -247,7 +248,8 @@
                                     </Rows>
                                   </Dataset>
                                 </Radio>
-                                <Button id="Button00" taborder="2" text="폐강" left="Radio00:15" top="5" width="60" height="20" cssclass="btn_WF_High"/>
+                                <Button id="Button00" taborder="2" text="폐강" left="Radio00:15" top="5" width="60" height="20" cssclass="btn_WF_High" onclick="Div00_Div00_Div00_Div03_Button00_onclick"/>
+                                <Static id="Static01" taborder="3" left="Radio00:15" top="0" bottom="0" right="0"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -850,8 +852,7 @@
               </Div>
               <Button id="Button00" taborder="8" text="취소" left="45.00%" width="70" height="30" cssclass="btn_WF_High" onclick="Div00_Button00_onclick" top="Div03:30"/>
               <Button id="Button01" taborder="9" text="등록" left="Button00:15" width="70" cssclass="btn_WF_Medium" height="30" onclick="Div00_Button01_onclick" top="Div03:30"/>
-              <Button id="Button00_00_01" taborder="13" text="취소" top="0" width="70" height="30" cssclass="btn_WF_High" right="85"/>
-              <Button id="Button00_00_02" taborder="14" text="저장" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0"/>
+              <Button id="Button00_00_02" taborder="14" text="저장" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Button00_00_02_onclick"/>
               <Div id="Div02" taborder="15" text="Div02" left="0" top="Div00_00_00_01:15" height="200" right="0">
                 <Layouts>
                   <Layout>
@@ -890,11 +891,12 @@
                         </Format>
                       </Formats>
                     </Grid>
-                    <Button id="Button00" taborder="2" text="완료" left="Static00:30" top="0" width="80" height="23" cssclass="btn_WF_Medium"/>
-                    <Button id="Button01" taborder="3" text="반려" left="Button00:15" top="0" width="80" height="23" cssclass="btn_WF_High"/>
+                    <Button id="Button00" taborder="2" text="완료" left="Static00:30" top="0" width="80" height="23" cssclass="btn_WF_Medium" onclick="Div00_Div02_Button00_onclick"/>
+                    <Button id="Button01" taborder="3" text="반려" left="Button00:15" top="0" width="80" height="23" cssclass="btn_WF_High" onclick="Div00_Div02_Button01_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
+              <Button id="Button02" taborder="17" text="강좌반려" left="Button00_00:15" top="0" width="80" height="30" cssclass="btn_WF_High" onclick="Div00_Button02_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -932,6 +934,8 @@ this.extngMbrRceptPrdStDt = "";
 this.extngMbrRceptPrdEndDt = "";
 
 this.taxFlag;
+
+this.updateFlag = "true";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -990,27 +994,43 @@ this.init = function()
 	}
 
 	this.thnlFileUpload = this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div00.form.Div00.form;
-	this.thnlFileUpload.set_url("FrameBase::include/file_upload.xfdl");
+	if(this.thnlFileUpload._url == '')
+	{
+		this.thnlFileUpload.set_url("FrameBase::include/file_upload.xfdl");
+	}
 	//대표이미지 초기화
 	this.thnlFileUpload.fn_init(thnlFileObj);
 	
 	//컨텐츠 초기화	
-	var contentObj = {
+	if(this.contentArr.length > 0)
+	{
+		while(this.contentArr.length > 1)
+		{
+			this.fn_content_remove(this.contentArr[this.contentArr.length-1].divObj, "");
+		}
+	} 
+	else 
+	{
+		var contentObj = {
 			divObj : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0,
 			contentType : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.Div00.form.Radio00,
 			content : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.templateArea0.form.TextArea00,
 			ord : 0
 		}
-	this.contentArr.push(contentObj);
-		
-	this.contentArr[0].contentType.set_value(0);
+		this.contentArr.push(contentObj);
+	}
+	this.contentArr[0].contentType.set_value(this.ds_content_list.getColumn(0, "lectContClVal"));
 	this.contentArr[0].content.set_value(this.ds_content_list.getColumn(0, "tempCont"));
 	this.fn_content_chg(this.contentArr[0].contentType.parent.parent.parent, this.ds_content_list.getColumn(0, "lectContClVal"));
 	
 	//첨부파일
 	this.atchfileArr = [];
 	this.atchfileArr.push(this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.templateArea0.form.Div00.form);
-	this.atchfileArr[0].set_url("FrameBase::include/file_upload.xfdl");
+	if(this.atchfileArr[0]._url == '')
+	{
+		this.atchfileArr[0].set_url("FrameBase::include/file_upload.xfdl");
+	}
+	
 	var atchFileId = this.ds_content_list.getColumn(0, "imgFileId");
 	var atchFileObj = {
 		_this : this,
@@ -1031,10 +1051,24 @@ this.init = function()
 		divMoObj : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.editorArea0.form.Tab00.Tabpage2.form.contentMo
 	}
 	this.editorArr.push(editorObj);
-	this.editorArr[0].divPcObj.set_url(this.domain + "/namo/index_custom_01.html");
-	this.editorArr[0].divPcObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	this.editorArr[0].divMoObj.set_url(this.domain + "/namo/index_custom_01.html");
-	this.editorArr[0].divMoObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	if(this.editorArr[0].divPcObj._url == 'about:blank')
+	{
+		this.editorArr[0].divPcObj.set_url(this.domain + "/namo/index_custom_01.html");
+		this.editorArr[0].divPcObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	}
+	else
+	{
+		this.editorArr[0].divPcObj.reload();
+	}
+	if(this.editorArr[0].divMoObj._url == 'about:blank')
+	{
+		this.editorArr[0].divMoObj.set_url(this.domain + "/namo/index_custom_01.html");
+		this.editorArr[0].divMoObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	}
+	else
+	{
+		this.editorArr[0].divMoObj.reload();
+	}
 		
 	//강좌명, 소개 초기화	
 	var lectNm = this.ds_class_dtl.getColumn(0, "lectNm");
@@ -1077,13 +1111,15 @@ this.init = function()
 	this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div02.form.Grid00.setRealRowSize(-1, 0);
 	
 	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
-
+	
 	//강의유형 설정
 	this.fn_classType_set(this.ds_class_dtl.getColumn(0, "lectTpCd"));
+
 	
 	//스케줄 설정
 	this.ds_scheduleTemp_list.copyData(this.ds_schedule_list);  
 	this.fn_schedule_set();
+	
 	
 	//옵션사용 설정
 	this.fn_classOptType_set(this.ds_class_dtl.getColumn(0, "optnUseYn"));
@@ -1093,6 +1129,12 @@ this.init = function()
 	
 	//수정요청 설정
 	this.fn_mdfreq_set();
+	
+	//승인상태 설정
+	this.fn_classApvl_set();
+	
+	//폐강 설정
+	this.fn_close_set();
 	
 	this.Div00.form.resetScroll();
 	this.parent.parent.Tabpage1.form.resetScroll();
@@ -1129,10 +1171,44 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_schedule_set();
 		break;
 		
-		case "insertClass":
-			this.alert("저장 되었습니다.");
-			this.close();
+		case "updateClass":
+			if(this.updateFlag == "true") 
+			{
+				this.alert("저장 되었습니다.");
+				this.parent.parent.parent.close();
+			}
+			else
+			{
+				this.alert("다시 시도해주세요.");
+				
+				this.ds_class_dtl.clearData();
+				this.ds_class_dtl.addRow();
+				this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
+				this.ds_class_dtl.setColumn(0, "yy", this.yy);
+				this.ds_class_dtl.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+				this.ds_class_dtl.setColumn(0, "lectCd", this.lectCd);
+				
+				this.fn_class_dtl();			
+				//화면초기화
+				this.init();
+				// 코드 데이터
+				this.fn_code_list();
+				this.Div00.form.Div00.form.Static00.setFocus();
+			}
+			
 		break;
+		
+		case "updateClassMdfreq":
+			if(this.ds_mdfreqUpdate_list.getColumn(0, "prcsStatCd") == "02")
+			{
+				alert("요청사항 완료 처리되었습니다.");
+			}
+			else
+			{
+				alert("요청사항 반려 처리되었습니다.");
+			}
+			this.Div00.form.Div02.form.Grid00.setCellProperty("head", 0, "text", 0);
+		 break;
 	  }
   }
 };
@@ -1187,6 +1263,51 @@ this.fn_class_dtl = function()
 /**************************************************************************
  * 기본정보 영역
 **************************************************************************/
+
+//승인상태 설정
+this.fn_classApvl_set = function()
+{
+	this.Div00.form.Button00_00.set_visible(false);
+	this.Div00.form.Button02.set_visible(false);
+	if(this.ds_class_dtl.getColumn(0, "apvlStatCd") == "01")
+	{
+		this.Div00.form.Button00_00.set_visible(true);
+	}
+	
+	if(this.ds_class_dtl.getColumn(0, "apvlStatCd") == "03")
+	{
+		this.Div00.form.Button00_00.set_visible(true);
+		this.Div00.form.Button02.set_visible(true);
+	}
+	
+	if(this.ds_class_dtl.getColumn(0, "apvlStatCd") == "03")
+	{
+		this.Div00.form.Button00_00.set_visible(true);
+	}
+}
+
+//폐강 설정
+this.fn_close_set = function()
+{
+	this.Div00.form.Div00.form.Div00.form.Div03.form.Static01.set_visible(false);
+	if(this.ds_class_dtl.getColumn(0, "lectStatCd") == "09")
+	{
+		this.Div00.form.Div00.form.Div00.form.Div03.form.Button00.set_visible(false);
+		this.Div00.form.Div00.form.Div00.form.Div03.form.Static01.set_visible(true);
+		
+		var closeString = "폐강일자 : " + this.ds_class_dtl.getColumn(0, "lectClosedDtm") + " | 사유 : " + this.ds_class_dtl.getColumn(0, "lectClosedRsnNm") + " | 환불조건 : " + this.ds_class_dtl.getColumn(0, "lectClosedRfndCndtNm");
+		this.Div00.form.Div00.form.Div00.form.Div03.form.Static01.set_text(closeString);
+		
+		this.Div00.form.Button00_00_01.set_right(0);
+		this.Div00.form.Button00_00_02.set_visible(false);
+		this.Div00.form.Button00_00.set_visible(false);
+		this.Div00.form.Button01.set_visible(false);
+		this.Div00.form.Button02.set_visible(false);
+		this.Div00.form.Div02.form.Button00.set_visible(false);
+		this.Div00.form.Div02.form.Button01.set_visible(false);
+	}
+}
+
 
 //카테고리 대분류 영역 변경
 this.fn_classCtgyLarge_chg = function(obj)
@@ -2108,7 +2229,7 @@ this.fn_content_add = function()
 }
 
 //강좌내용 삭제
-this.fn_content_remove = function(obj)
+this.fn_content_remove = function(obj, init)
 {
 	var searchIndex;
 	for(var i=0; i < this.contentArr.length; i++)
@@ -2118,7 +2239,10 @@ this.fn_content_remove = function(obj)
 			searchIndex=i;
 			this.contentArr[i].divObj.destroy();
 			
-			this.ds_content_list.deleteRow(searchIndex);
+			if(init == undefined)
+			{
+				this.ds_content_list.deleteRow(searchIndex);
+			}
 			this.contentArr.splice(searchIndex, 1);
 			this.atchfileArr.splice(searchIndex, 1);
 			this.editorArr.splice(searchIndex, 1);
@@ -2191,13 +2315,13 @@ this.fn_save = function(_this)
 			inData += "schedulePlanList=ds_schedulePlan_list optionList=ds_option_list contentList=ds_content_list unuslList=ds_unusl_list " 
 			inData += "cctList=ds_cct_list multtmsList=ds_multtms_list pblpmprcustList=ds_pblpmprcust_list" 
 		var tranObj = {
-			strSvcId : "insertClass",
-			strSvcUrl : this.application.Admin_svc + "::class/insertClass.do",
+			strSvcId : "updateClass",
+			strSvcUrl : this.application.Admin_svc + "::class/updateClass.do",
 			inData : inData,
 			outData : "",
 			strArg : "",
 			callBackFnc : "fnCallback",
-			isAsync : true,
+			isAsync : false,
 			isPopup : true
 			
 		}
@@ -2367,7 +2491,7 @@ this.fn_save_validation = function()
 		return;
 	}
 	
-	if(confirm("강좌등록을 등록하시겠습니까?"))
+	if(confirm("강좌등록을 수정하시겠습니까?"))
 	{
 		this.thnlFileUpload.fn_upload();
 		for(var i=0; i < this.atchfileArr.length; i++)
@@ -2375,6 +2499,106 @@ this.fn_save_validation = function()
 			this.atchfileArr[i].fn_upload();
 		}
 	}
+}
+
+//수정요청 업데이트
+this.fn_update_mdfreq = function(prcsStatCd)
+{
+	var flag = false;
+	this.ds_mdfreqUpdate_list.clearData();
+	for(var i=0; i<this.ds_mdfreq_list.getRowCount(); i++)
+	{
+		if(this.ds_mdfreq_list.checkarray[i] == 1)
+		{
+			flag = true;
+			var rowIndex = this.ds_mdfreqUpdate_list.addRow();
+			this.ds_mdfreqUpdate_list.copyRow(rowIndex, this.ds_mdfreq_list, i);
+			this.ds_mdfreqUpdate_list.setColumn(rowIndex, "prcsStatCd", prcsStatCd);
+		}
+	}
+	
+	if(flag)
+	{
+		var tranObj = {
+			strSvcId : "updateClassMdfreq",
+			strSvcUrl : this.application.Admin_svc + "::class/updateClassMdfreq.do",
+			inData : "mdfreqUpdateList=ds_mdfreqUpdate_list",
+			outData : "ds_mdfreq_list=mdfreqList",
+			strArg : "",
+			callBackFnc : "fnCallback",
+			isAsync : true,
+			isPopup : true
+		}
+
+		this.gfn_transaction(tranObj);
+	}
+	else
+	{
+		alert("대상을 선택하세요.");
+	}
+}
+
+//폐강신청 콜백
+this.fn_closeCallBack = function(_this)
+{
+	nexacro.getPopupFrames()[0].form.close();
+	_this.ds_class_dtl.clearData();
+	_this.ds_class_dtl.addRow();
+	_this.ds_class_dtl.setColumn(0, "brchCd", _this.brchCd);
+	_this.ds_class_dtl.setColumn(0, "yy", _this.yy);
+	_this.ds_class_dtl.setColumn(0, "lectSmsterCd", _this.lectSmsterCd);
+	_this.ds_class_dtl.setColumn(0, "lectCd", _this.lectCd);
+	
+	_this.fn_class_dtl();		
+
+	//화면초기화
+	_this.init();
+	// 코드 데이터
+	_this.fn_code_list();
+	_this.Div00.form.Div00.form.Static00.setFocus();
+	
+}
+
+//승인상태 업데이트
+this.updateClassApvlStat = function(stat)
+{
+	this.ds_class_dtl.setColumn(0, "apvlStatCd", stat);
+	var tranObj = {
+		strSvcId : "updateClassApvlStat",
+		strSvcUrl : this.application.Admin_svc + "::class/updateClassApvlStat.do",
+		inData : "classDtl=ds_class_dtl",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+
+	this.gfn_transaction(tranObj);
+	
+	if(stat == "02")
+	{
+		alert("승인 되었습니다.");
+	}
+	else
+	{
+		alert("반려 되었습니다.");
+	}
+	
+	this.ds_class_dtl.clearData();
+	this.ds_class_dtl.addRow();
+	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
+	this.ds_class_dtl.setColumn(0, "yy", this.yy);
+	this.ds_class_dtl.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+	this.ds_class_dtl.setColumn(0, "lectCd", this.lectCd);
+	
+	this.fn_class_dtl();		
+
+	//화면초기화
+	this.init();
+	// 코드 데이터
+	this.fn_code_list();
+	this.Div00.form.Div00.form.Static00.setFocus();
 }
 
 /**************************************************************************
@@ -2452,7 +2676,11 @@ this.Div00_Div00_Div00_Div01_05_Calendar01_onchanged = function(obj:nexacro.Cale
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.taxFlag = true;
-	this.gfn_showModal("classTaxPopupModal", null, "ClassMng::ClassTaxPopup.xfdl", "", this, 400, 350, false, false, null);
+	var arrArguments = {
+		title : "강좌상세"
+	}
+	
+	this.gfn_showModal("classTaxPopupModal", arrArguments, "ClassMng::ClassTaxPopup.xfdl", "", this, 400, 350, true, false, null);
 };
 
 this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -2632,14 +2860,6 @@ this.Div00_Div00_00_00_00_01_00_Div00_Div02_Grid00_oninput = function(obj:nexacr
 	}
 };
 
-this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(confirm("강좌등록을 취소하시겠습니까?"))
-	{
-		this.close();
-	}
-};
-
 this.Div00_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.brchCd = obj.value;
@@ -2718,22 +2938,13 @@ this.Div00_Div00_Div00_Div01_05_Button00_onclick = function(obj:nexacro.Button,e
 	this.ds_class_dtl.setColumn(0, "extngMbrRceptPrdEndDt", "");
 };
 
-this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	for(var i=0; i < this.contentArr.length; i++)
-	{		
-		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
-		this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
-		this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
-		this.ds_content_list.setColumn(i, "mbilCont", this.fn_get_edit_body(this.editorArr[i].divMoObj));
-	}
-	
-	this.fn_save_validation();
-};
-
 this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.gfn_showModal("classImgListPopupModal", null, "ClassMng::ClassImgListPopup.xfdl", "", this, 800, 720, false, false, null);
+	var arrArguments = {
+		title : "강좌상세"
+	}
+	
+	this.gfn_showModal("classImgListPopupModal", arrArguments, "ClassMng::ClassImgListPopup.xfdl", "", this, 800, 720, true, false, null);
 };
 
 this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -2848,6 +3059,79 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 		}
 	}
 };
+
+this.Div00_Div02_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_update_mdfreq("03");
+};
+
+this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_update_mdfreq("02");
+};
+
+this.Div00_Button00_00_01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.parent.close();
+};
+
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.parent.close();
+};
+
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	for(var i=0; i < this.contentArr.length; i++)
+	{		
+		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
+		this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
+		this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
+		this.ds_content_list.setColumn(i, "mbilCont", this.fn_get_edit_body(this.editorArr[i].divMoObj));
+	}
+	
+	this.fn_save_validation();
+};
+this.Div00_Button00_00_02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	for(var i=0; i < this.contentArr.length; i++)
+	{		
+		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
+		this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
+		this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
+		this.ds_content_list.setColumn(i, "mbilCont", this.fn_get_edit_body(this.editorArr[i].divMoObj));
+	}
+	
+	this.fn_save_validation();
+};
+
+this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var arrArguments = {
+		dataset : this.ds_class_dtl
+		, callbackfunc : this.fn_closeCallBack
+		, title : "강좌상세"
+		, _this : this
+	}
+	
+	this.gfn_showModal("classClosePopupModal", arrArguments, "ClassMng::ClassClosePopup.xfdl", "", this, 400, 350, true, false, null);
+};
+
+this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("승인 하시겠습니까?"))
+	{
+		this.updateClassApvlStat("02");
+	}
+};
+
+this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("반려 하시겠습니까?"))
+	{
+		this.updateClassApvlStat("01");
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_dtl">
@@ -2886,7 +3170,9 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
           <Column id="optnTypCd" type="STRING" size="256"/>
           <Column id="rfndOptnUseYn" type="STRING" size="256"/>
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
           <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
           <Column id="subsTcNm1" type="STRING" size="256"/>
           <Column id="subsTcHpNo1" type="STRING" size="256"/>
           <Column id="subsTcNm2" type="STRING" size="256"/>
@@ -2901,6 +3187,11 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
           <Column id="regDtm" type="STRING" size="256"/>
           <Column id="modId" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="lectClosedRsnCd" type="STRING" size="256"/>
+          <Column id="lectClosedRfndCndtCd" type="STRING" size="256"/>
+          <Column id="lectClosedDtm" type="STRING" size="256"/>
+          <Column id="lectClosedRsnNm" type="STRING" size="256"/>
+          <Column id="lectClosedRfndCndtNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classType_list">
@@ -3181,6 +3472,25 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
       </Dataset>
       <FileDownTransfer id="FileDownTransfer00"/>
       <Dataset id="ds_atchFile">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectMdfReqSeqno" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="reqCont" type="STRING" size="1000"/>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="prcsStatCd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="prcsStatNm" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_mdfreqUpdate_list">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
