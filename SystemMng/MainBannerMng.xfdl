@@ -9,15 +9,8 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type01.xfdl" formscrolltype="none"/>
-            </Layout>
-          </Layouts>
-        </Div>
-        <Div id="Div06" taborder="3" text="Div01" left="10" top="146" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
-          <Layouts>
-            <Layout>
-              <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" onitemchanged="searchDiv_searchField_onitemchanged">
+              <Div id="Div00" taborder="1" text="Div00" left="245" top="5" height="24" url="FrameBase::include/date_type01.xfdl" formscrolltype="none" right="40"/>
+              <Combo id="dateField" taborder="2" text="최종접속일" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1" right="Div00:5" onitemchanged="periodDiv_dateField_onitemchanged">
                 <Dataset id="innerdataset">
                   <ColumnInfo>
                     <Column id="codecolumn" size="256"/>
@@ -25,7 +18,36 @@
                   </ColumnInfo>
                   <Rows>
                     <Row>
-                      <Col id="codecolumn"/>
+                      <Col id="codecolumn">1</Col>
+                      <Col id="datacolumn">등록일</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">2</Col>
+                      <Col id="datacolumn">수정일</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">3</Col>
+                      <Col id="datacolumn">게시기간</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Combo>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div06" taborder="3" text="Div01" left="10" top="146" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" onitemchanged="searchDiv_searchField_onitemchanged">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">0</Col>
                       <Col id="datacolumn">전체</Col>
                     </Row>
                     <Row>
@@ -79,7 +101,7 @@
               <Band id="body">
                 <Cell text="bind:seqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:tit" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="2" text="expr:expsrStDtm ?  expsrStDtm + ' ~ ' + expsrEndDtm: ''"/>
+                <Cell col="2" text="expr:expsrStDt ?  expsrStDt + ' ~ ' + expsrEndDt: ''"/>
                 <Cell col="3" text="bind:rgprId"/>
                 <Cell col="4" text="bind:rgprDtm"/>
                 <Cell col="5" text="expr:mdfId ? mdfId : rgprId"/>
@@ -116,8 +138,8 @@
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
-          <Column id="expsrStDtm" type="STRING" size="256"/>
-          <Column id="expsrEndDtm" type="STRING" size="256"/>
+          <Column id="expsrStDt" type="STRING" size="256"/>
+          <Column id="expsrEndDt" type="STRING" size="256"/>
           <Column id="alwsExpsrYn" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
@@ -129,6 +151,7 @@
       </Dataset>
       <Dataset id="searchDs">
         <ColumnInfo>
+          <Column id="dateField" type="STRING" size="256"/>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
           <Column id="permitType" type="STRING" size="256"/>
@@ -137,6 +160,7 @@
         </ColumnInfo>
         <Rows>
           <Row>
+            <Col id="dateField">1</Col>
             <Col id="f">0</Col>
             <Col id="permitType"/>
             <Col id="q"/>
@@ -149,8 +173,8 @@
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
-          <Column id="expsrStDtm" type="STRING" size="256"/>
-          <Column id="expsrEndDtm" type="STRING" size="256"/>
+          <Column id="expsrStDt" type="STRING" size="256"/>
+          <Column id="expsrEndDt" type="STRING" size="256"/>
           <Column id="alwsExpsrYn" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
@@ -163,20 +187,20 @@
     </Objects>
     <Script type="xscript5.1"><![CDATA[
 /**************************************************************************
- * include 영역 
- **************************************************************************/
+* include 영역 
+**************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 
 /**************************************************************************
- * FORM 변수 선언 영역
- **************************************************************************/
+* FORM 변수 선언 영역
+**************************************************************************/
 this.application = null;
 this.rowcount = 0;
 
 /**************************************************************************
- * FORM EVENT 영역(onload)
- **************************************************************************/
+* FORM EVENT 영역(onload)
+**************************************************************************/
 this.MainBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -254,15 +278,15 @@ this.Div01_btnPerminN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 this.permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked())
-		{
-			obj.parent.chkPermitY.set_value(1);
-			obj.parent.chkPermitN.set_value(1);
-		}
-		else
-		{
-			obj.parent.chkPermitY.set_value(0);
-			obj.parent.chkPermitN.set_value(0);
-		}
+	{
+		obj.parent.chkPermitY.set_value(1);
+		obj.parent.chkPermitN.set_value(1);
+	}
+	else
+	{
+		obj.parent.chkPermitY.set_value(0);
+		obj.parent.chkPermitN.set_value(0);
+	}
 };
 
 //그리드 상세 페이지 이동
@@ -281,8 +305,8 @@ this.GridMainBannerList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 };
 
 /**************************************************************************
- * 사용자 FUNCTION 영역
- **************************************************************************/
+* 사용자 FUNCTION 영역
+**************************************************************************/
 
 this.fn_list = function (page)
 {	
@@ -295,6 +319,7 @@ this.fn_list = function (page)
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
 	this.gfn_transaction(tranObj);		
 	
@@ -312,6 +337,8 @@ this.fn_delete = function ()
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
 	this.gfn_transaction(tranObj);	
 };
 
@@ -323,6 +350,9 @@ this.reset_search_form = function(){
 	{
 		this.searchDs.setColumn(0, i, "");
 	}
+	this.searchDs.setColumn(0,"dateField", 1);
+	this.searchDs.setColumn(0, "f", 0);
+	
 	this.fn_list();
 }
 
@@ -330,125 +360,46 @@ this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInf
 	if(!obj.isChecked()){
 		
 		this.permitDiv.form.chkPermitAll.set_value(0);
-		//this.row03.form.permitDiv.form.chkPermitAll.set_value(0);
 	}
 }
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorCode+"\n"+errorMsg);
-  }
-
-  switch(svcID)
-  {
+	this.Div01.form.txtTotal.set_text("목록("+this.mainBannerDs.rowcount+")개");
+	if(!this.mainBannerDs.getColCount())
+	{
+		this.mainBannerDs.copyData(this.mainBannerDs_format);
+	}
+	
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
 	case "list":
-			this.Div01.form.txtTotal.set_text("목록("+this.mainBannerDs.rowcount+")개");
-			if(!this.mainBannerDs.getColCount())
-			{
-				this.mainBannerDs.copyData(this.mainBannerDs_format);
-			}
-			if(this.mainBannerDs.rowcount < 1){
-				//this.alert("조회된 결과가 없습니다.");
-				this.mainBannerDs.clearData();
-			}
-	break;
-    
+		if(this.mainBannerDs.rowcount < 1){
+			this.alert("조회된 결과가 없습니다.");
+		}
+		break;
+		
 	case "delete":
 		this.alert("삭제완료");
 		this.fn_list(1);
-	break;
-  }
+		break;
+	}
 };
 
-this.orderType = "desc";
-
-/**************************************************************************
-* 그리드 체크박스 영역
-**************************************************************************/
-this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
-{ 
-	//체크여부 정보를 담을 Array를 사용자 변수로 설정
-	objDs.checkarray = new Array(); 
-	
-	//데이터셋 온로드이벤트 추가
-	objDs.addEventHandler("onload", this.gfnDataset_onload); 
-	
-	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
-	objGrd.checkcell = nCheckCellIdx; 
-	
-	//그리드 Cell Click 이벤트 추가
-	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick); 
-	
-	//그리드 Head Click 이벤트 추가
-	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
-} 
-this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
-{ 
-	if(e.reason==0) 
-	{ 
-		//데이터셋이 로드되면 checkarray 초기화
-		obj.checkarray = new Array(); 
-	} 
-}; 
-this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var objDs; 
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		
-		if(objDs.checkarray[e.row]==1) 
-		{ 
-			//체크 해제
-			objDs.checkarray[e.row] = 0; 
-		}else 
-		{ 
-			//체크 설정
-			objDs.checkarray[e.row] = 1; 
-		}
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-}; 
-this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var i; 
-	var objDs;
-	
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		nChkVal = obj.getCellText(-1, e.cell); 
-		
-		if(nChkVal==1)nChkVal = 0; 
-		else nChkVal = 1; 
-		
-		//Head의 체크 상태 변경
-		obj.setCellProperty("head", e.cell, "text", nChkVal); 
-		
-		//Body의 체크 상태 변경
-		for(i=0;i<objDs.rowcount;i++) 
-		{ 
-			objDs.checkarray[i] = nChkVal; 
-		} 
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-}	
-]]></Script>
+this.orderType = "desc";]]></Script>
     <Bind>
       <BindItem id="strtDtm" compid="periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
       <BindItem id="endDtm" compid="periodDiv.form.Div00.form.endDtm" propid="value" datasetid="searchDs" columnid="endDtm"/>
       <BindItem id="permitType" compid="permitDiv.form.chkPermitAll" propid="value" datasetid="searchDs" columnid="permitType"/>
       <BindItem id="q" compid="Div06.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
       <BindItem id="f" compid="Div06.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
+      <BindItem id="dateField" compid="periodDiv.form.dateField" propid="value" datasetid="searchDs" columnid="dateField"/>
     </Bind>
   </Form>
 </FDL>
