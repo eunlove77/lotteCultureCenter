@@ -76,7 +76,7 @@
           </Layouts>
         </Div>
         <Static id="txtTotal" taborder="6" left="10" height="21" text="총 0개" width="80" top="249"/>
-        <Grid id="Grid00" taborder="7" left="10" top="276" right="10" bottom="40" autofittype="col" binddataset="ds_alrt_snd_list">
+        <Grid id="Grid00" taborder="7" left="10" top="276" right="10" bottom="40" autofittype="col" binddataset="ds_alrt_snd_list" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -128,6 +128,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -223,6 +224,16 @@ this.Div03_Div05_chkTpAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.Clic
 	}
 };
 
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{		
+	var oArg = {			
+		alrtSndSeqno : this.ds_alrt_snd_list.getColumn(e.row, "alrtSndSeqno")
+	,	sndr : this.ds_alrt_snd_list.getColumn(e.row, "sndId") + "(" + this.ds_alrt_snd_list.getColumn(e.row, "sndNm") + ")"
+	,	brchNm : this.ds_alrt_snd_list.getColumn(e.row, "brchNm")
+	,	menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	this.gfn_openPopup("popup", oArg, "AlrtMng::AlrtSendDtl.xfdl", this, 100, 100, true, true, null);
+};
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
@@ -257,7 +268,8 @@ this.fn_list = function(page){
 		outData : "ds_alrt_snd_list=output1 gdsPageing=output2",
 		strArg : "",
 		callBackFnc : "fn_callback",
-		isAsync : true		
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
 	};
 	
 	this.gfn_transaction(tranObj);
@@ -327,7 +339,6 @@ this.fn_searchValueInit = function() {
 
 }
 
-
 ]]></Script>
     <Objects>
       <Dataset id="ds_brch_cd">
@@ -339,6 +350,7 @@ this.fn_searchValueInit = function() {
       <Dataset id="ds_alrt_snd_list">
         <ColumnInfo>
           <Column id="rnum" type="STRING" size="256"/>
+          <Column id="alrtSndSeqno" type="STRING" size="256"/>
           <Column id="sndTpCd" type="STRING" size="256"/>
           <Column id="sndAtclCd" type="STRING" size="256"/>
           <Column id="sndAtclNm" type="STRING" size="256"/>
@@ -348,6 +360,7 @@ this.fn_searchValueInit = function() {
           <Column id="sndSuccessCnt" type="STRING" size="256"/>
           <Column id="sndFailCnt" type="STRING" size="256"/>
           <Column id="sndId" type="STRING" size="256"/>
+          <Column id="sndNm" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>

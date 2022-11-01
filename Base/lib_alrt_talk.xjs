@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[
+
+/**
+* Function Name : gfn_create_ds_for_rcv_talk
+* Description   : 알림톡 수동 발송시 수신 대상자 데이터셋 생성
+* Arguments     : 
+* Return        : 
+*/
+this.gfn_create_ds_for_rcv_talk = function(targetForm, targetDs, target_obj){
+
+	var ds = null;
+	var dsId = "ds_rcv_obj";
+	var nIndex = -1;
+	var nRow = -1;
+	
+	if(this[dsId] == undefined){
+		ds = new Dataset;
+		nIndex = ds.addColumn( "mbrNo", "string" );
+		nIndex = ds.addColumn( "korNm", "string" );
+		nIndex = ds.addColumn( "hpNo", "string" );
+		nIndex = ds.addColumn( "smsRcvAgrYn", "string" );
+		
+		targetForm.addChild(dsId, ds);
+	}else{
+		this[dsId].clearData();
+	}
+	 	
+	for(var i = 0; i < targetDs.checkarray.length; i++){
+		if(targetDs.checkarray[i] > 0){			
+			nRow = this[dsId].addRow();
+			this[dsId].setColumn(nRow, "mbrNo", targetDs.getColumn(i, target_obj.mbrNo));
+			this[dsId].setColumn(nRow, "korNm", targetDs.getColumn(i, target_obj.korNm));
+			this[dsId].setColumn(nRow, "smsRcvAgrYn", targetDs.getColumn(i, target_obj.smsRcvAgrYn));
+			this[dsId].setColumn(nRow, "hpNo", targetDs.getColumn(i, target_obj.hpNo));
+		}		
+	}
+	
+	return dsId;
+}]]></Script>

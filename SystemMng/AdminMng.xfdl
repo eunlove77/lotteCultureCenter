@@ -172,6 +172,7 @@
               <Button id="btnPerminY" taborder="2" text="승인" top="0" height="30" width="50" cssclass="btn_WF_Medium" right="btnDel:5" onclick="Div01_btnPerminY_onclick"/>
               <Button id="btnPerminN" taborder="1" text="미승인" top="0" height="30" cssclass="btn_WF_Low" right="btnPerminY:5" width="60" onclick="Div01_btnPerminN_onclick"/>
               <Button id="btnExlDown" taborder="0" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Weak" right="btnPerminN:5" width="101" onclick="Div01_btnExlDown_onclick"/>
+              <Button id="Button00" taborder="4" text="그리드 포맷 저장" left="794" top="0" width="120" height="30" cssclass="btn_WF_Medium" onclick="btnFomatSave_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -236,6 +237,15 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
 /**************************************************************************
@@ -263,6 +273,10 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfnSetCheckBoxNoDataset(this.ds_admin_list, this.GridAdminList, 0);
 	
+	// 그리드 개인화
+	this.fn_personalization("getPsnlztn");	
+
+
 	// 코드 데이터
 	this.fn_data_list();
 	
@@ -619,6 +633,9 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	case "approval":
 		this.alert("완료");
 		break;
+	case "setPsnlztn":
+		this.alert("저장되었습니다.");
+		break;
   }
 };
 
@@ -639,6 +656,56 @@ this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 		
 		this.parent.set_url("SystemMng::AdminMngDtl.xfdl");
 	}	
+};
+
+
+this.fn_personalization = function(strSvcId){
+	
+	var strSvcUrl   = this.application.Admin_svc;
+	var inData      = "";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	if(strSvcId == "getPsnlztn"){		
+		
+		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_admin_list");
+		
+		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
+		inData = "data=ds_grid_psnlztn";
+		outData = "ds_grid_psnlztn=output1";
+	}else if(strSvcId == "setPsnlztn"){
+		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
+		inData = "data=ds_grid_psnlztn";
+	}
+ 
+	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
+            strSvcUrl ,       // trabsaction을 요청할 주소
+            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+            strArg,         // 입력값으로 보낼 arguments, a=b
+            callBackFnc,       // transaction의 결과를 받을 Function 이름
+            isAsync);         // 비동기통신 여부 [생략가능]
+
+}
+
+
+
+this.GridAdminList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{	
+	this.gfn_headCheckBox(obj, e.cell, "chk");	
+};
+
+this.btnFomatSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.GridAdminList.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", "ds_admin_list");
+	objDs.setColumn(0, "format", format);
+	
+	this.fn_personalization("setPsnlztn");
 };
 ]]></Script>
   </Form>

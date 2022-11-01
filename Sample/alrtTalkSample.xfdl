@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="alrtTalkSample" width="1280" height="720" titletext="New Form" onload="alrtTalkSample_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="Static00" taborder="0" text="▶ 수신대상자" left="10" top="9" width="100" height="21" cssclass="sta_WF_TitGray"/>
+        <Grid id="Grid00" taborder="1" left="10" top="40" height="270" right="10" binddataset="Dataset00" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48" band="left"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="mbrNo"/>
+                <Cell col="2" text="name"/>
+                <Cell col="3" text="smsYn"/>
+                <Cell col="4" text="phoneNumber"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="bind:mbrNo"/>
+                <Cell col="2" text="bind:name"/>
+                <Cell col="3" text="bind:smsYn"/>
+                <Cell col="4" text="bind:phoneNumber"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button01" taborder="4" text="LMS 전송 팝업" top="316" height="30" cssclass="btn_WF_Medium" onclick="Button01_onclick" right="10" width="127"/>
+        <Button id="Button00_00" taborder="3" text="친구톡 전송 팝업" top="316" height="30" cssclass="btn_WF_Medium" onclick="Button00_00_onclick" right="Button01:10" width="139"/>
+        <Button id="Button00" taborder="2" text="알림톡 전송 팝업" top="316" height="30" cssclass="btn_WF_Medium" onclick="Button00_onclick" right="Button00_00:10" width="120"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="smsYn" type="STRING" size="256"/>
+          <Column id="phoneNumber" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="mbrNo">0001</Col>
+            <Col id="name">홍길동1</Col>
+            <Col id="smsYn">Y</Col>
+            <Col id="phoneNumber">010-8576-1319</Col>
+          </Row>
+          <Row>
+            <Col id="mbrNo">0002</Col>
+            <Col id="name">홍길동2</Col>
+            <Col id="smsYn">N</Col>
+            <Col id="phoneNumber">010-2222-3333</Col>
+          </Row>
+          <Row>
+            <Col id="mbrNo">0003</Col>
+            <Col id="name">홍길동3</Col>
+            <Col id="smsYn">Y</Col>
+            <Col id="phoneNumber">010-3333-4444</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::popup.xjs";
+include "Base::lib_alrt_talk.xjs";
+
+
+this.alrtTalkSample_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.gfnSetCheckBoxNoDataset(this.Dataset00, this.Grid00, 0); 	
+};
+
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	var column_obj = {
+		mbrNo : "mbrNo"
+	,	korNm : "name"
+	,	hpNo : "phoneNumber"
+	,	smsRcvAgrYn : "smsYn"
+	};
+
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.Dataset00, column_obj);
+	
+	if(this[dsId].rowcount > 0){	
+		var oArg = {			
+			alrtClCd : "03"	
+		,	menuSeq : this.getOwnerFrame().param.MENU_ID
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("popup", oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, 100, 100, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+	
+};	
+
+this.Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var column_obj = {
+		mbrNo : "mbrNo"
+	,	korNm : "name"
+	,	hpNo : "phoneNumber"
+	,	smsRcvAgrYn : "smsYn"
+	};
+
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.Dataset00, column_obj);
+	
+	if(this[dsId].rowcount > 0){
+		var oArg = {			
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("popup", oArg, "AlrtMng::AlrtSendPopFT.xfdl", this, 100, 100, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+ 	
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var column_obj = {
+		mbrNo : "mbrNo"
+	,	korNm : "name"
+	,	hpNo : "phoneNumber"
+	,	smsRcvAgrYn : "smsYn"
+	};
+
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.Dataset00, column_obj);
+	
+	if(this[dsId].rowcount > 0){
+		var oArg = {			
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("popup", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 100, 100, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

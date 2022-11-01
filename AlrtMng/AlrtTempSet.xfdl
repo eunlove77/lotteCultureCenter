@@ -23,7 +23,7 @@
                         </Columns>
                         <Rows>
                           <Row size="24" band="head"/>
-                          <Row size="30"/>
+                          <Row size="36"/>
                         </Rows>
                         <Band id="head">
                           <Cell text="발송항목"/>
@@ -59,6 +59,7 @@
                           <Column size="80"/>
                           <Column size="150"/>
                           <Column size="300"/>
+                          <Column size="100"/>
                         </Columns>
                         <Rows>
                           <Row size="24" band="head"/>
@@ -70,6 +71,7 @@
                           <Cell col="2" text="중복발송 체크"/>
                           <Cell col="3" text="발송 종류"/>
                           <Cell col="4" text="발송 내용"/>
+                          <Cell col="5" text="템플릿 코드"/>
                         </Band>
                         <Band id="body">
                           <Cell text="bind:sndAtclCdNm"/>
@@ -77,6 +79,7 @@
                           <Cell col="2" text="bind:dupSndPsblYn" displaytype="combotext" edittype="combo" combodataset="ds_dup_snd_psbl_yn" combocodecol="cd" combodatacol="cdNm"/>
                           <Cell col="3" text="bind:sndTtmExpl" edittype="text"/>
                           <Cell col="4" text="bind:sndTempCont" displaytype="textareacontrol" edittype="textarea"/>
+                          <Cell col="5" text="bind:tempCd" edittype="text"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -96,6 +99,7 @@
                           <Column size="80"/>
                           <Column size="150"/>
                           <Column size="300"/>
+                          <Column size="100"/>
                         </Columns>
                         <Rows>
                           <Row size="24" band="head"/>
@@ -107,6 +111,7 @@
                           <Cell col="2" text="중복발송 체크"/>
                           <Cell col="3" text="발송 종류"/>
                           <Cell col="4" text="발송 내용"/>
+                          <Cell col="5" text="템플릿 코드"/>
                         </Band>
                         <Band id="body">
                           <Cell text="bind:sndAtclCdNm"/>
@@ -114,6 +119,7 @@
                           <Cell col="2" text="bind:dupSndPsblYn" displaytype="combotext" edittype="combo" combodataset="ds_dup_snd_psbl_yn" combocodecol="cd" combodatacol="cdNm"/>
                           <Cell col="3" text="bind:sndTtmExpl" edittype="text"/>
                           <Cell col="4" text="bind:sndTempCont" displaytype="textareacontrol" edittype="textarea"/>
+                          <Cell col="5" text="bind:tempCd" edittype="text"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -133,6 +139,8 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::popup.xjs";
+include "Base::lib_alrt_talk.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -149,6 +157,8 @@ this.AlrtTempSet_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.fn_list("01");
+	
+	this.gfnSetCheckBoxNoDataset(this.Dataset00, this.Grid00, 0); 
 };
 
 this.Tab00_canchange = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
@@ -239,6 +249,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			break;
 	}
 };
+
 ]]></Script>
     <Objects>
       <Dataset id="ds_alrt_list">
