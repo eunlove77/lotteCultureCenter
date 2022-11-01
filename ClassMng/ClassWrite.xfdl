@@ -7,7 +7,7 @@
           <Layouts>
             <Layout>
               <Button id="Button00_00_01" taborder="13" text="취소" top="0" width="70" height="30" cssclass="btn_WF_High" right="85" onclick="Div00_Button00_00_01_onclick"/>
-              <Button id="Button00_00_00" taborder="12" text="복사등록" top="0" width="80" height="30" cssclass="btn_WF_Medium" right="Button00_00_01:15"/>
+              <Button id="Button00_00_00" taborder="12" text="복사등록" top="0" width="80" height="30" cssclass="btn_WF_Medium" right="Button00_00_01:15" onclick="Div00_Button00_00_00_onclick"/>
               <Button id="Button00_00" taborder="11" text="강좌승인" top="0" width="80" height="30" cssclass="btn_WF_Medium" left="0" onclick="Div00_Button00_00_onclick"/>
               <Div id="Div01" taborder="10" text="Div01" left="0" top="Button00_00:15" height="33" right="0" cssclass="div_WF_TableComp">
                 <Layouts>
@@ -935,7 +935,7 @@ this.extngMbrRceptPrdEndDt = "";
 
 this.taxFlag;
 
-this.updateFlag = "true";
+this.updateFlag = "1";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -956,6 +956,8 @@ this.ClassWrite_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.ds_class_dtl.setColumn(0, "yy", this.yy);
 	this.ds_class_dtl.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
 	this.ds_class_dtl.setColumn(0, "lectCd", this.lectCd);
+	
+	this.ds_class_list.copyData(this.ds_class_dtl);
 	
 	this.fn_class_dtl();
 	
@@ -1002,6 +1004,11 @@ this.init = function()
 	this.thnlFileUpload.fn_init(thnlFileObj);
 	
 	//컨텐츠 초기화	
+	if(this.ds_content_list.getRowCount() == 0)
+	{
+		this.ds_content_list.addRow();
+	}
+	
 	if(this.contentArr.length > 0)
 	{
 		while(this.contentArr.length > 1)
@@ -1019,9 +1026,11 @@ this.init = function()
 		}
 		this.contentArr.push(contentObj);
 	}
-	this.contentArr[0].contentType.set_value(this.ds_content_list.getColumn(0, "lectContClVal"));
+	
+	var lectContClVal = this.gfn_nvl(this.ds_content_list.getColumn(0, "lectContClVal")) == "" ? "0" : this.ds_content_list.getColumn(0, "lectContClVal");
+	this.contentArr[0].contentType.set_value(lectContClVal);
 	this.contentArr[0].content.set_value(this.ds_content_list.getColumn(0, "tempCont"));
-	this.fn_content_chg(this.contentArr[0].contentType.parent.parent.parent, this.ds_content_list.getColumn(0, "lectContClVal"));
+	this.fn_content_chg(this.contentArr[0].contentType.parent.parent.parent, lectContClVal);
 	
 	//첨부파일
 	this.atchfileArr = [];
@@ -1114,12 +1123,10 @@ this.init = function()
 	
 	//강의유형 설정
 	this.fn_classType_set(this.ds_class_dtl.getColumn(0, "lectTpCd"));
-
 	
 	//스케줄 설정
 	this.ds_scheduleTemp_list.copyData(this.ds_schedule_list);  
 	this.fn_schedule_set();
-	
 	
 	//옵션사용 설정
 	this.fn_classOptType_set(this.ds_class_dtl.getColumn(0, "optnUseYn"));
@@ -1172,7 +1179,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClass":
-			if(this.updateFlag == "true") 
+			if(this.updateFlag == "1") 
 			{
 				this.alert("저장 되었습니다.");
 				this.parent.parent.parent.close();
@@ -1195,7 +1202,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.fn_code_list();
 				this.Div00.form.Div00.form.Static00.setFocus();
 			}
-			
 		break;
 		
 		case "updateClassMdfreq":
@@ -1208,6 +1214,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				alert("요청사항 반려 처리되었습니다.");
 			}
 			this.Div00.form.Div02.form.Grid00.setCellProperty("head", 0, "text", 0);
+		 break;
+		 
+		 case "insertClassCopy":
+			alert("복사등록이 완료 되었습니다.");
 		 break;
 	  }
   }
@@ -1258,6 +1268,7 @@ this.fn_class_dtl = function()
 	}
 
 	this.gfn_transaction(tranObj);
+	this.ds_class_list.setColumn(0, "lectRpsntImgFileId", this.ds_class_dtl.getColumn(0, "lectRpsntImgFileId"));
 }
 
 /**************************************************************************
@@ -1503,6 +1514,8 @@ this.fn_classType_set = function(type)
 		if(type == "04")
 		{
 			this.Div00.form.Div00_00.set_height(260);
+			this.Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00.set_readonly(true);
+			
 		}
 		else if(type == "02")
 		{
@@ -2541,7 +2554,7 @@ this.fn_update_mdfreq = function(prcsStatCd)
 //폐강신청 콜백
 this.fn_closeCallBack = function(_this)
 {
-	nexacro.getPopupFrames()[0].form.close();
+    nexacro.getPopupFrames()[0].form.close();
 	_this.ds_class_dtl.clearData();
 	_this.ds_class_dtl.addRow();
 	_this.ds_class_dtl.setColumn(0, "brchCd", _this.brchCd);
@@ -2600,6 +2613,24 @@ this.updateClassApvlStat = function(stat)
 	this.fn_code_list();
 	this.Div00.form.Div00.form.Static00.setFocus();
 }
+
+//강좌 복사
+this.fn_save_copy = function()
+{
+	var tranObj = {
+		strSvcId : "insertClassCopy",
+		strSvcUrl : this.application.Admin_svc + "::class/insertClassCopy.do",
+		inData : "classList=ds_class_list",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+
+	this.gfn_transaction(tranObj);
+}
+
 
 /**************************************************************************
  * 이벤트 영역
@@ -3132,6 +3163,14 @@ this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		this.updateClassApvlStat("01");
 	}
 };
+
+this.Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("복사등록 하시겠습니까?"))
+	{
+		this.fn_save_copy();
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_dtl">
@@ -3372,9 +3411,11 @@ this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
       <Dataset id="ds_gradeDisc_list">
         <ColumnInfo>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
-          <Column id="mbrGrdeClCd" type="STRING" size="256"/>
+          <Column id="applBrchRngCd" type="STRING" size="256"/>
           <Column id="dcNbcnt" type="STRING" size="256"/>
           <Column id="dcRt" type="STRING" size="256"/>
+          <Column id="applStDt" type="STRING" size="256"/>
+          <Column id="applEndDt" type="STRING" size="256"/>
           <Column id="useYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
@@ -3509,6 +3550,7 @@ this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="realFileNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_class_list"/>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div01.form.Div00.form.Static01" propid="text" datasetid="ds_class_dtl" columnid="lectStatNm"/>
