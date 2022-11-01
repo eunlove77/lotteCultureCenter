@@ -206,6 +206,34 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" bottom="0" text="온라인강좌&#13;&#10;에누리적용"/>
+                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_gradeDisc_list" autosizingtype="none" autofittype="col">
+                                  <Formats>
+                                    <Format id="default">
+                                      <Columns>
+                                        <Column size="201"/>
+                                        <Column size="172"/>
+                                        <Column size="651"/>
+                                        <Column size="122"/>
+                                      </Columns>
+                                      <Rows>
+                                        <Row size="24" band="head"/>
+                                        <Row size="34"/>
+                                      </Rows>
+                                      <Band id="head">
+                                        <Cell text="에누리구분"/>
+                                        <Cell col="1" text="에누리율"/>
+                                        <Cell col="2" text="적용기간"/>
+                                        <Cell col="3" text="사용여부"/>
+                                      </Band>
+                                      <Band id="body">
+                                        <Cell text="bind:mbrGrdeNm"/>
+                                        <Cell col="1" text="expr:dcRt + '%'"/>
+                                        <Cell col="2"/>
+                                        <Cell col="3" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_gradeDisc" combocodecol="cd" combodatacol="cdNm"/>
+                                      </Band>
+                                    </Format>
+                                  </Formats>
+                                </Grid>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -1038,7 +1066,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 this.fn_code_list = function()
 {	
 	var outData = "ds_classType_list=classTypeList ds_classGb_list=classGbList ds_classTargetGb_list=classTargetGbList ";
-		outData += "ds_classOptType_list=classOptTypeList ds_classDispIcon_list=classDispIconList ds_classSemster_list=classSemsterList ds_classRoom_list=classRoomList ";
+		outData += "ds_classOptType_list=classOptTypeList ds_classDispIcon_list=classDispIconList ds_classSemster_list=classSemsterList ds_classRoom_list=classRoomList ds_gradeDisc_list=gradeDiscList ";
 		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList";
 		
 	var tranObj = {
@@ -1046,13 +1074,15 @@ this.fn_code_list = function()
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
 		outData : outData,
-		strArg : "cdId=CLASS_02||CLASS_03||CLASS_05||CLASS_06||CLASS_07||sester||ctgy||room useYn=Y brchCd=" + this.brchCd,
+		strArg : "cdId=CLASS_02||CLASS_03||CLASS_05||CLASS_06||CLASS_07||sester||ctgy||room||discount useYn=Y brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		isPopup : true
 	}
 
 	this.gfn_transaction(tranObj);
+	
+	console.log(this.ds_gradeDisc_list.getRowCount());
 };
 
 /**************************************************************************
@@ -2756,6 +2786,7 @@ this.Div00_Div00_00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.
       <Dataset id="ds_gradeDisc_list">
         <ColumnInfo>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeNm" type="STRING" size="256"/>
           <Column id="mbrGrdeClCd" type="STRING" size="256"/>
           <Column id="dcNbcnt" type="STRING" size="256"/>
           <Column id="dcRt" type="STRING" size="256"/>
@@ -2834,6 +2865,22 @@ this.Div00_Div00_00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.
           <Column id="optnTypNm" type="STRING" size="256"/>
           <Column id="rplcOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_gradeDisc">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">N</Col>
+            <Col id="cdNm">미사용</Col>
+          </Row>
+          <Row>
+            <Col id="cd">Y</Col>
+            <Col id="cdNm">사용</Col>
+          </Row>
+        </Rows>
       </Dataset>
     </Objects>
     <Bind>

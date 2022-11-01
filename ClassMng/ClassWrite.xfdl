@@ -257,6 +257,34 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" bottom="0" text="온라인강좌&#13;&#10;에누리적용"/>
+                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="1" binddataset="ds_gradeDisc_list" autosizingtype="none" autofittype="col">
+                                  <Formats>
+                                    <Format id="default">
+                                      <Columns>
+                                        <Column size="201"/>
+                                        <Column size="172"/>
+                                        <Column size="651"/>
+                                        <Column size="122"/>
+                                      </Columns>
+                                      <Rows>
+                                        <Row size="24" band="head"/>
+                                        <Row size="34"/>
+                                      </Rows>
+                                      <Band id="head">
+                                        <Cell text="에누리구분"/>
+                                        <Cell col="1" text="에누리율"/>
+                                        <Cell col="2" text="적용기간"/>
+                                        <Cell col="3" text="사용여부"/>
+                                      </Band>
+                                      <Band id="body">
+                                        <Cell text="bind:mbrGrdeNm"/>
+                                        <Cell col="1" text="expr:dcRt + '%'"/>
+                                        <Cell col="2"/>
+                                        <Cell col="3" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_gradeDisc" combocodecol="cd" combodatacol="cdNm"/>
+                                      </Band>
+                                    </Format>
+                                  </Formats>
+                                </Grid>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -3411,6 +3439,7 @@ this.Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
       <Dataset id="ds_gradeDisc_list">
         <ColumnInfo>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeNm" type="STRING" size="256"/>
           <Column id="applBrchRngCd" type="STRING" size="256"/>
           <Column id="dcNbcnt" type="STRING" size="256"/>
           <Column id="dcRt" type="STRING" size="256"/>
@@ -3551,6 +3580,22 @@ this.Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_class_list"/>
+      <Dataset id="ds_gradeDisc">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">N</Col>
+            <Col id="cdNm">미사용</Col>
+          </Row>
+          <Row>
+            <Col id="cd">Y</Col>
+            <Col id="cdNm">사용</Col>
+          </Row>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div01.form.Div00.form.Static01" propid="text" datasetid="ds_class_dtl" columnid="lectStatNm"/>
