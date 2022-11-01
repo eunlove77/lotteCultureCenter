@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div00" taborder="1" text="Div00" left="10" top="70" height="650" right="10">
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="70" height="660" right="10">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="등급할인 설정" left="0" top="1" width="100" cssclass="sta_WF_TitGray" height="17"/>
@@ -24,7 +24,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Grid id="Grid00" taborder="2" left="0" top="Div01:10" right="0" bottom="100" autofittype="col" binddataset="ds_discount_list" cellclickbound="control" oninput="Div00_Grid00_oninput">
+              <Grid id="Grid00" taborder="2" left="0" top="Div01:10" right="0" bottom="100" autofittype="col" binddataset="ds_discount_list" cellclickbound="control" oninput="Div00_Grid00_oninput" autoenter="select">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -55,8 +55,8 @@
                   </Format>
                 </Formats>
               </Grid>
-              <Button id="cnclBtn" taborder="3" text="취소" left="43.65%" width="76" cssclass="btn_WF_Weak" fittocontents="none" bottom="20" height="30" onclick="Div00_cnclBtn_onclick"/>
-              <Button id="insBtn" taborder="4" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.009999999999991" bottom="20" height="30" onclick="Div00_insBtn_onclick"/>
+              <Button id="cnclBtn" taborder="3" text="취소" left="43.65%" width="76" cssclass="btn_WF_Weak" fittocontents="none" onclick="Div00_cnclBtn_onclick" top="Grid00:50" height="30"/>
+              <Button id="insBtn" taborder="4" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.009999999999991" onclick="Div00_insBtn_onclick" top="Grid00:50" height="30"/>
             </Layout>
           </Layouts>
         </Div>
@@ -217,6 +217,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "list":
 			this.ds_discount_mst.setColumn(0, "allUseNbcnt", this.ds_discount_list.getColumn(0, "allUseNbcnt"));
+			this.Div00.form.Grid00.set_height(this.Div00.form.Grid00.getRealRowFullSize()+5);
+			this.Div00.set_height(Number(this.Div00.form.Grid00.height)+300);
+			this.resetScroll();
 			break;
 		case "save":
 			this.alert("저장되었습니다.");
