@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="MemberDtl" width="1280" height="720" titletext="회원상세">
+  <Form id="MemberDtl" width="1280" height="720" titletext="회원상세" onload="MemberDtl_onload">
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="회원상세" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -99,8 +99,8 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Button id="cnclBtn" taborder="12" text="취소" left="43.81%" width="79" cssclass="btn_WF_Weak" fittocontents="width" bottom="0" height="30"/>
-              <Button id="insBtn" taborder="13" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="width" left="cnclBtn:15.994000000000028" bottom="0" height="30"/>
+              <Button id="cnclBtn" taborder="12" text="취소" left="43.81%" width="79" cssclass="btn_WF_Weak" fittocontents="none" bottom="0" height="30" onclick="Div01_cnclBtn_onclick"/>
+              <Button id="insBtn" taborder="13" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.994000000000028" bottom="0" height="30"/>
               <Static id="Static01" taborder="14" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="0" width="200"/>
             </Layout>
           </Layouts>
@@ -116,11 +116,131 @@
         </Tab>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[
-this.Tab00_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+this.MemberDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.baseSvrUrl = this.application.Admin_svc + "::member/";
+	
+	if(this.parent.mbrNo != ""){
+		this.ds_detail.setColumn(0, "mbrNo", this.parent.mbrNo);
+		this.fn_detail();
+	}	
+};
+
+this.fn_detail = function ()
+{	
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.baseSvrUrl + "detail.do",
+		inData : "detail=ds_detail",
+		outData : "ds_detail=detail",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.parent.parent.param.MENU_ID,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+}
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "save":
+			this.alert("저장되었습니다.");
+
+			break;
+		case "detail":    
+			this.fn_set_detail();
+
+			break;
+	}
+
+};
+
+this.fn_save = function(){
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.baseSvrUrl + "insert.do",
+		inData : "infoData=ds_detail",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.parent.parent.param.MENU_ID,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+}
+
+this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+//상세화면 세팅
+this.fn_set_detail = function()
 {
 	
+}
+
+this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
 };
 ]]></Script>
+    <Objects>
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="membCustNo" type="STRING" size="256"/>
+          <Column id="mvgBlstrVal" type="STRING" size="256"/>
+          <Column id="joinCorsCd" type="STRING" size="256"/>
+          <Column id="joinDtm" type="STRING" size="256"/>
+          <Column id="lastLoginDtm" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div01.form.Div00.form.Static01" propid="text" datasetid="ds_detail" columnid="korNm"/>
+      <BindItem id="item1" compid="Div01.form.Div01.form.Static01" propid="text" datasetid="ds_detail" columnid="mbrId"/>
+      <BindItem id="item2" compid="Div01.form.Div02.form.Static01" propid="text" datasetid="ds_detail" columnid="mbrNo"/>
+      <BindItem id="item3" compid="Div01.form.Div03.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="membCustNo"/>
+      <BindItem id="item4" compid="Div01.form.Div04.form.Static01" propid="text" datasetid="ds_detail" columnid="mbrGrdeCd"/>
+      <BindItem id="item5" compid="Div01.form.Div05.form.Static01" propid="text" datasetid="ds_detail" columnid="mvgBlstrVal"/>
+      <BindItem id="item6" compid="Div01.form.Div07.form.Static01" propid="text" datasetid="ds_detail" columnid="joinCorsCd"/>
+      <BindItem id="item7" compid="Div01.form.Div08.form.Static01" propid="text" datasetid="ds_detail" columnid="joinDtm"/>
+      <BindItem id="item8" compid="Div01.form.Div09.form.Static01" propid="text" datasetid="ds_detail" columnid="lastLoginDtm"/>
+      <BindItem id="item9" compid="Div01.form.Div10.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="tcCdNo"/>
+    </Bind>
   </Form>
 </FDL>

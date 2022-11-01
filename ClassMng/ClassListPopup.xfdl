@@ -10,7 +10,7 @@
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="180" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="검색" left="0" top="0" width="24" height="14"/>
+                    <Static id="Static00" taborder="0" text="검색" left="0" top="0" width="24" height="20"/>
                     <Div id="Div00" taborder="1" text="Div00" top="Static00:10" height="150" left="0" right="0" cssclass="div_WF_TableComp">
                       <Layouts>
                         <Layout>
@@ -110,7 +110,7 @@
               <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:10" right="0" height="350">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" left="0" top="0" width="120" height="21"/>
+                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" left="0" top="0" width="120" height="20"/>
                     <Grid id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="데이터가 없습니다." autofittype="col">
                       <Formats>
                         <Format id="default">
@@ -313,6 +313,7 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.brchCd = "";
+this.brchCdArr = [];
 this.lectTpCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
@@ -329,7 +330,8 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	if(this.gfn_nvl(this.parent.brchCd) != "") 
 	{
-		this.brchCd = this.parent.brchCd;
+		this.brchCd = "";	
+		this.brchCdArr = nexacro.trim(this.parent.brchCd).split(",");
 	}
 	
 	if(this.gfn_nvl(this.parent.lectTpCd) != "") 
@@ -355,17 +357,6 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}
 	
 	this.init();
-	
-	if(this.gfn_nvl(this.parent.brchCd) != "") 
-	{
-		this.ds_gdsSpotCd_list.filter("cd==" + this.brchCd);
-	}
-	
-	if(this.gfn_nvl(this.parent.lectTpCd) != "") 
-	{
-		this.ds_classType_list.filter("cd==" + this.lectTpCd);
-		this.ds_search.setColumn(0, "lectTpCd", this.lectTpCd);
-	}
 };
 
 /**************************************************************************
@@ -376,13 +367,39 @@ this.init = function()
 {
 	this.ds_search.clearData();
 	this.ds_search.addRow();
-	this.ds_search.setColumn(0, "brchCd", this.brchCd);
-	this.ds_search.setColumn(0, "f", "");
-	this.ds_search.setColumn(0, "q", "");
 	
 	// 코드 데이터
 	this.fn_code_list();
 	
+	if(this.gfn_nvl(this.parent.brchCd) != "") 
+	{
+		var filterValue = "";
+		for(var i=0; i<this.brchCdArr.length; i++)
+		{
+			if(i == 0)
+			{
+				filterValue = "cd=='" + this.brchCdArr[i] + "'";
+			}
+			else
+			{
+				filterValue += "|| cd=='" + this.brchCdArr[i] + "'";
+			}
+		}
+		this.ds_gdsSpotCd_list.filter(filterValue);
+		this.brchCd = this.ds_gdsSpotCd_list.getColumn(0, "cd")
+	}
+	
+	if(this.gfn_nvl(this.parent.lectTpCd) != "") 
+	{
+		this.ds_classType_list.filter("cd==" + this.lectTpCd);
+	}
+	
+	//검색 초기화
+	this.ds_search.setColumn(0, "brchCd", this.brchCd);
+	this.ds_search.setColumn(0, "lectTpCd", this.lectTpCd);
+	this.ds_search.setColumn(0, "f", "");
+	this.ds_search.setColumn(0, "q", "");
+
 	//강의 학기정보 조회
 	this.fn_sesterInfo();
 	this.fn_year_add();
@@ -666,6 +683,7 @@ this.Div00_Div00_Div00_Div00_01_01_Edit00_onkeyup = function(obj:nexacro.Edit,e:
 
 this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.brchCd = nexacro.getPrivateProfile("brchCd");
 	this.init();
 };
 
@@ -687,6 +705,11 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	if(flag)
 	{
+		if(this.type == 2)
+		{
+			this.parent.dataset.clearData();
+		}
+		
 		for(var i=0; i < this.ds_class_list.getRowCount(); i++)
 		{
 			if(this.ds_class_list.checkarray[i] == 1)
@@ -718,10 +741,6 @@ this.Div00_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,
 	this.fn_semester_set();
 };
 
-this.Div00_Div00_Div00_Div00_01_01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
-{
-	
-};
 ]]></Script>
   </Form>
 </FDL>

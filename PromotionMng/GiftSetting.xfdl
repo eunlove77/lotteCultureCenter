@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="GiftSetting" width="1280" height="730" titletext="New Form">
+    <Layouts>
+      <Layout height="730" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="1" text="Div00" left="0" top="0" height="80" formscrolltype="both" right="0" minwidth="800" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지점정보" left="2" top="17" width="50" cssclass="sta_WF_TitGray" height="20"/>
+                    <Div id="Div00_00" taborder="1" text="Div01" top="40" height="33" cssclass="div_WF_CompWrap" left="0" right="0" minwidth="250" maxwidth="">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="지점선택" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Button id="btnReg" taborder="2" text="지점선택" top="0" height="30" cssclass="btn_WF_Medium" right="10" width="80"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="0" text="Div00" left="0" top="Div00:20" right="0" minwidth="800" maxwidth="" height="190" visible="true">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="강좌정보" left="2" top="10" width="100" height="20" cssclass="sta_WF_TitGray"/>
+                    <Grid id="Grid00" taborder="1" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" useselcolor="true" height="150">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="40" band="left"/>
+                            <Column size="150"/>
+                            <Column size="150"/>
+                            <Column size="150"/>
+                            <Column size="100"/>
+                            <Column size="300"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="40" band="head"/>
+                            <Row size="24"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
+                            <Cell col="1" text="지점명"/>
+                            <Cell col="2" text="카테고리"/>
+                            <Cell col="3" text="강좌코드"/>
+                            <Cell col="4" text="강좌유형"/>
+                            <Cell col="5" text="강좌명"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="2" color="#666666" expr="stDt + &quot; ~ &quot; + endDt"/>
+                            <Cell col="3"/>
+                            <Cell col="4"/>
+                            <Cell col="5"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                    <Button id="btnReg" taborder="2" text="삭제" top="0" height="30" cssclass="btn_WF_High" right="10" width="80"/>
+                    <Button id="btnReg00" taborder="3" text="강좌선택" top="0" height="30" cssclass="btn_WF_Medium" right="100" width="80"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01_00" taborder="2" text="Div00" left="0" top="Div01:20" right="0" minwidth="800" maxwidth="" height="340" visible="true">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사은품 정보" left="2" top="10" width="100" height="20" cssclass="sta_WF_TitGray"/>
+                    <Grid id="Grid00" taborder="1" left="0" top="40" autofittype="col" right="0" useselcolor="true" height="300" binddataset="ds_gift_list">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="40" band="left"/>
+                            <Column size="150"/>
+                            <Column size="200"/>
+                            <Column size="150"/>
+                            <Column size="150"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="40" band="head"/>
+                            <Row size="30"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
+                            <Cell col="1" text="구매조건"/>
+                            <Cell col="2" text="사은품명"/>
+                            <Cell col="3" text="온라인 재고"/>
+                            <Cell col="4" text="오프라인 재고"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combocontrol" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
+                            <Cell col="2" color="#666666" displaytype="editcontrol" edittype="text" text="bind:fgftNm"/>
+                            <Cell col="3" displaytype="maskeditcontrol" edittype="mask" maskeditformat="9,999" text="bind:onlnStkCnt" maskeditpostfixtext="개" expr="onlnStkCnt ? onlnStkCnt : ' '"/>
+                            <Cell col="4" displaytype="maskeditcontrol" edittype="mask" maskeditformat="9,999" text="bind:oflnStkCnt" maskeditpostfixtext="개" expr="oflnStkCnt ? oflnStkCnt : ' '"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                    <Button id="btnReg" taborder="2" text="삭제" top="0" height="30" cssclass="btn_WF_High" right="10" width="80"/>
+                    <Button id="btnReg00" taborder="3" text="추가" top="0" height="30" cssclass="btn_WF_Medium" right="100" width="80"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="cnclBtn" taborder="3" text="취소" left="42.94%" width="79" cssclass="btn_WF_Weak" fittocontents="none" bottom="20" height="30"/>
+              <Button id="insBtn" taborder="4" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:12.956000000000017" bottom="20" height="30"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_pch_cndt_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">1</Col>
+            <Col id="cdNm">1건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">2</Col>
+            <Col id="cdNm">2건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">3</Col>
+            <Col id="cdNm">3건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">4</Col>
+            <Col id="cdNm">4건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">5</Col>
+            <Col id="cdNm">5건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">6</Col>
+            <Col id="cdNm">6건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">7</Col>
+            <Col id="cdNm">7건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">8</Col>
+            <Col id="cdNm">8건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">9</Col>
+            <Col id="cdNm">9건</Col>
+          </Row>
+          <Row>
+            <Col id="cd">10</Col>
+            <Col id="cdNm">10건</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_gift_list">
+        <ColumnInfo>
+          <Column id="prmtnSeqno" type="STRING" size="256"/>
+          <Column id="fgftSeqno" type="STRING" size="256"/>
+          <Column id="pchCndtCnt" type="STRING" size="256"/>
+          <Column id="fgftNm" type="STRING" size="256"/>
+          <Column id="onlnStkCnt" type="STRING" size="256"/>
+          <Column id="oflnStkCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

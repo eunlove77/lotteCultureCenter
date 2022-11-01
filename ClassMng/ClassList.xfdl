@@ -10,7 +10,7 @@
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="260" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="검색" left="0" top="0" width="24" height="14"/>
+                    <Static id="Static00" taborder="0" text="검색" left="0" top="0" width="24" height="20"/>
                     <Div id="Div00" taborder="1" text="Div00" left="0" top="Static00:10" right="0" bottom="0" cssclass="div_WF_TableComp">
                       <Layouts>
                         <Layout>
@@ -18,7 +18,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd"/>
+                                <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div02_Div00_Div00_Div00_Combo00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -95,9 +95,9 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강의기간" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Calendar id="Calendar00" taborder="2" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar00_oncloseup" dateformat="yyyy-MM-dd"/>
+                                <Calendar id="Calendar00" taborder="2" left="Static00:6" top="5" width="100" height="20" dateformat="yyyy-MM-dd" oncloseup="Div02_Div00_Div00_Div00_00_01_Calendar00_oncloseup"/>
                                 <Static id="Static01" taborder="1" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
-                                <Calendar id="Calendar01" taborder="3" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div00_00_Div00_00_09_Calendar01_oncloseup" dateformat="yyyy-MM-dd"/>
+                                <Calendar id="Calendar01" taborder="3" left="Static01:6" top="5" width="100" height="20" dateformat="yyyy-MM-dd" oncloseup="Div02_Div00_Div00_Div00_00_01_Calendar01_oncloseup"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -149,7 +149,7 @@
                                         <Col id="datacolumn">토요일</Col>
                                       </Row>
                                       <Row>
-                                        <Col id="codecolumn">0</Col>
+                                        <Col id="codecolumn">7</Col>
                                         <Col id="datacolumn">일요일</Col>
                                       </Row>
                                     </Rows>
@@ -216,8 +216,8 @@
                                     </Rows>
                                   </Dataset>
                                 </Combo>
-                                <Edit id="Edit00" taborder="2" left="Combo00:6" top="5" width="500" height="20"/>
-                                <Button id="Button00" taborder="3" text="검색" left="Edit00:6" top="5" width="80" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_Div00_00_14_Button00_onclick"/>
+                                <Edit id="Edit00" taborder="2" left="Combo00:6" top="5" width="500" height="20" onkeyup="Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup"/>
+                                <Button id="Button00" taborder="3" text="검색" left="Edit00:6" top="5" width="80" height="20" cssclass="btn_WF_Medium" onclick="Div02_Div00_Div00_Div00_00_00_00_Button00_onclick"/>
                                 <Button id="Button01" taborder="4" text="초기화" left="Button00:6" top="5" width="80" height="20" cssclass="btn_WF_Low" onclick="Div00_Div00_00_Div00_00_14_Button01_onclick"/>
                               </Layout>
                             </Layouts>
@@ -231,8 +231,131 @@
               <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:10" right="0" bottom="0">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0"/>
-                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="20" width="79" height="14" left="0"/>
+                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" nodatatext="데이터가 없습니다." oncelldblclick="Div02_Div01_Grid00_oncelldblclick" oncellclick="Div02_Div01_Grid00_oncellclick">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="48"/>
+                            <Column size="78"/>
+                            <Column size="129"/>
+                            <Column size="113"/>
+                            <Column size="80"/>
+                            <Column size="185"/>
+                            <Column size="95"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="119"/>
+                            <Column size="171"/>
+                            <Column size="80"/>
+                            <Column size="95"/>
+                            <Column size="95"/>
+                            <Column size="116"/>
+                            <Column size="121"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="104"/>
+                            <Column size="170"/>
+                            <Column size="93"/>
+                            <Column size="80"/>
+                            <Column size="99"/>
+                            <Column size="158"/>
+                            <Column size="105"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="119"/>
+                            <Column size="130"/>
+                            <Column size="130"/>
+                            <Column size="130"/>
+                            <Column size="130"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24" band="head"/>
+                            <Row size="34"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" text="번호"/>
+                            <Cell col="2" text="지점명"/>
+                            <Cell col="3" text="강의유형"/>
+                            <Cell col="4" text="강좌코드"/>
+                            <Cell col="5" text="강좌명"/>
+                            <Cell col="6" text="강사명"/>
+                            <Cell col="7" text="총정원"/>
+                            <Cell col="8" text="수강인원"/>
+                            <Cell col="9" text="대기자수"/>
+                            <Cell col="10" text="강좌료"/>
+                            <Cell col="11" text="강의요일"/>
+                            <Cell col="12" text="강의횟수"/>
+                            <Cell col="13" text="시작시간"/>
+                            <Cell col="14" text="종료시간"/>
+                            <Cell col="15" text="강좌상태"/>
+                            <Cell col="16" text="승인상태"/>
+                            <Cell col="17" text="전시상태"/>
+                            <Cell col="18" text="연도"/>
+                            <Cell col="19" text="학기"/>
+                            <Cell col="20" text="강의기간"/>
+                            <Cell col="21" text="할인구분"/>
+                            <Cell col="22" text="할인율"/>
+                            <Cell col="23" text="강좌구분"/>
+                            <Cell col="24" text="강의실"/>
+                            <Cell col="25" text="지급구분"/>
+                            <Cell col="26" text="강사요율"/>
+                            <Cell col="27" text="지급횟차"/>
+                            <Cell col="28" text="지급차수"/>
+                            <Cell col="29" text="옵션사용"/>
+                            <Cell col="30" text="그룹여부"/>
+                            <Cell col="31" text="강사수정요청"/>
+                            <Cell col="32" text="등록자"/>
+                            <Cell col="33" text="등록일시"/>
+                            <Cell col="34" text="수정자"/>
+                            <Cell col="35" text="수정일시"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                            <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
+                            <Cell col="2" text="bind:brchNm"/>
+                            <Cell col="3" text="bind:lectTpNm"/>
+                            <Cell col="4" text="bind:lectCd"/>
+                            <Cell col="5" text="bind:lectNm" edittype="text" editmaxlength="100" displaytype="editcontrol"/>
+                            <Cell col="6" text="bind:tcNm"/>
+                            <Cell col="7" text="bind:gsCapaCnt"/>
+                            <Cell col="8"/>
+                            <Cell col="9" text="bind:tcNm"/>
+                            <Cell col="10" text="bind:lectAmt" displaytype="normal"/>
+                            <Cell col="11" text="bind:stringStDaywNm"/>
+                            <Cell col="12" text="bind:lectNbcnt"/>
+                            <Cell col="13" text="bind:lectSt"/>
+                            <Cell col="14" text="bind:lectEnd"/>
+                            <Cell col="15" text="bind:lectStatNm"/>
+                            <Cell col="16" text="bind:apvlStatNm"/>
+                            <Cell col="17" text="bind:dsplyStatCd" edittype="combo" displaytype="combocontrol" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="18" text="bind:yy"/>
+                            <Cell col="19" text="bind:lectSmsterNm"/>
+                            <Cell col="20" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
+                            <Cell col="21"/>
+                            <Cell col="22"/>
+                            <Cell col="23" text="bind:lectClNm"/>
+                            <Cell col="24" text="bind:lectRmCd" edittype="combo" displaytype="combocontrol" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="25" text="expr:ppayStdCd == '1' ? '정률' : '정액'"/>
+                            <Cell col="26" text="bind:ppayAmt"/>
+                            <Cell col="27" text="bind:ppayTms"/>
+                            <Cell col="28" text="bind:ppayordr"/>
+                            <Cell col="29" text="bind:optnTypNm"/>
+                            <Cell col="30" text="bind:groupYn"/>
+                            <Cell col="31" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
+                            <Cell col="32" text="bind:regId"/>
+                            <Cell col="33" text="bind:regDtm"/>
+                            <Cell col="34" text="bind:modId"/>
+                            <Cell col="35" text="bind:modDtm"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="16" width="79" height="20" left="0"/>
                     <Button id="Button00" taborder="1" text="엑셀" top="0" width="50" height="30" cssclass="btn_WF_Medium" right="0"/>
                     <Button id="Button00_00" taborder="2" text="출석부" top="0" width="60" height="30" cssclass="btn_WF_Medium" right="Button00:10"/>
                     <Button id="Button04" taborder="3" text="대기자 등록" top="0" height="30" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10"/>
@@ -249,15 +372,51 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_class_list" oncolumnchanged="ds_class_list_oncolumnchanged" updatecontrol="false">
+      <Dataset id="ds_class_list" updatecontrol="false">
         <ColumnInfo>
           <ConstColumn id="ConstColumn0" type="STRING" size="30"/>
-          <Column id="data1" type="STRING" size="256"/>
-          <Column id="data2" type="STRING" size="256"/>
-          <Column id="data3" type="STRING" size="256"/>
-          <Column id="data4" type="STRING" size="256"/>
-          <Column id="data5" type="STRING" size="256"/>
-          <Column id="data6" type="INT" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="apvlStatNm" type="STRING" size="256"/>
+          <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="lectRmCd" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="ppayStdCd" type="STRING" size="256"/>
+          <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="ppayTms" type="STRING" size="256"/>
+          <Column id="ppayordr" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="groupYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="mdfreqCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -368,12 +527,82 @@
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_gdsSpotCd_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classRoom">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_dis">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">Y</Col>
+            <Col id="cdNm">전시</Col>
+          </Row>
+          <Row>
+            <Col id="cd">N</Col>
+            <Col id="cdNm">미전시</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_classUpdate_list" updatecontrol="false">
+        <ColumnInfo>
+          <ConstColumn id="ConstColumn0" type="STRING" size="30"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="apvlStatNm" type="STRING" size="256"/>
+          <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="lectRmCd" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="ppayStdCd" type="STRING" size="256"/>
+          <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="ppayTms" type="STRING" size="256"/>
+          <Column id="ppayordr" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="groupYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -399,14 +628,28 @@ this.lectSmsterCd = "";
 this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.brchCd = nexacro.getPrivateProfile("brchCd");
-	this.fn_classBrch_set();
-	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+	//지점초기화
+	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.fn_classBrch_set();
+	
+	//캘린더 초기화
+	this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar00.calendaredit.set_readonly(true); 
+	this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar01.calendaredit.set_readonly(true); 
+	this.Div02.form.Div00.form.Div00.form.Div01_00_00.form.Calendar01.calendaredit.set_readonly(true); 
+	
+	//그리드초기화
 	this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div02.form.Div01.form.Grid00, 0); 
 	
 	this.init();	
+	
+	//체크박스 추가
+	this.fn_classState_add();
+	this.fn_classGb_add();
+	this.fn_classAprvState_add();
+	this.fn_classType_add();
 };
 
 /**************************************************************************
@@ -421,10 +664,12 @@ this.init = function()
 	this.ds_search.setColumn(0, "f", "");
 	this.ds_search.setColumn(0, "q", "");
 	this.ds_search.setColumn(0, "stDaywCd", "");
+	this.ds_search.setColumn(0, "chkDis0", "");
+	this.ds_search.setColumn(0, "chkDis1", "");
 	
 	// 코드 데이터
 	this.fn_code_list();
-	
+
 	//강의 학기정보 조회
 	this.fn_sesterInfo();
 	this.fn_year_add();
@@ -446,14 +691,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	 switch(svcID)
 	  {
 		case "codeList":
-			this.fn_classType_add();
-			this.fn_classState_add();
-			this.fn_classGb_add();
-			this.fn_classAprvState_add();
-			this.fn_click_add(this);
 			this.fn_classCtgy_set();
 			this.fn_classRoom_set();
-			this.fn_classBrch_set();
+			this.fn_click_add(this);
+		break;
+		
+		case "classUpdateList":
+			alert("저장되었습니다.");
 		break;
 	  }
   }
@@ -488,8 +732,10 @@ this.fn_code_list = function()
  * 검색 영역
  **************************************************************************/
 
-this.fn_class_list = function()
-{	
+this.fn_search = function()
+{
+	this.Div02.form.Div01.form.Grid00.setCellProperty("head", 0, "text", 0);
+	this.ds_class_list.clearData();
 	var tranObj = {
 		strSvcId : "classList",
 		strSvcUrl : this.application.Admin_svc + "::class/selectClassList.do",
@@ -497,11 +743,11 @@ this.fn_class_list = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		isAsync : false,
 	}
-				
+
 	this.gfn_transaction(tranObj);
+	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
 }
 
 //지점 세팅
@@ -802,6 +1048,7 @@ this.fn_semester_set = function()
 //강의실 세팅
 this.fn_classRoom_set = function()
 {
+	this.ds_classRoom.copyData(this.ds_classRoom_list);
 	this.ds_classRoom_list.insertRow(0);
 	this.ds_classRoom_list.setColumn(0, "cd", "");
 	this.ds_classRoom_list.setColumn(0, "cdNm", "전체");
@@ -927,44 +1174,56 @@ this.fn_checkbox = function(pObj)
 /**************************************************************************
  * 저장 영역
  **************************************************************************/
- 
+
+this.fn_update_validation = function()
+{
+	for(var i=0; i<this.ds_classUpdate_list.getRowCount(); i++)
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_classUpdate_list.getColumn(i, "lectNm")))) == "")
+		{
+			alert("강좌명 데이터를 확인하세요.");
+			return;
+		}
+	}
+	
+	this.fn_update();
+}
+
+
 this.fn_update = function()
 {	
 	var tranObj = {
-		strSvcId : "classUpdate",
-		strSvcUrl : this.application.Admin_svc + "::class/updateClass.do",
-		inData : "classList=ds_class_list:U",
+		strSvcId : "classUpdateList",
+		strSvcUrl : this.application.Admin_svc + "::class/updateClassList.do",
+		inData : "classList=ds_classUpdate_list",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : true,
+		isAsync : false,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
-	}
-				
+	}				
 	this.gfn_transaction(tranObj);
+	
 }
 
 this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var flag = false;
-	var list = this.ds_class_list;
-
-	for(var i=0; i<list.getRowCount(); i++)
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
 	{
-		if(list.checkarray[i] == 1)
+		if(this.ds_class_list.checkarray[i] == 1)
 		{
 			flag = true;
-			list.setRowType(i, "U");
-		}
-		else 
-		{
-			list.setRowType(i, 1)
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
 		}
 	}
 
 	if(flag)
 	{
-		this.fn_update();
+		this.fn_update_validation();
 	}
 	else
 	{
@@ -1023,6 +1282,88 @@ this.Div02_Div00_Div00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Com
 this.Div02_Div00_Div00_Div00_00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_classCtgyMiddle_chg(obj);
+};
+
+this.Div02_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.brchCd = this.ds_search.getColumn(0, "brchCd");
+	this.fn_sesterInfo();
+	this.fn_year_add();
+	this.fn_semester_set();
+	
+	var tranObj = {
+		strSvcId : "roomList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
+		inData : "",
+		outData : "ds_classRoom_list=classRoomList",
+		strArg : "cdId=room brchCd=" + this.brchCd,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	this.gfn_transaction(tranObj);
+	this.fn_classRoom_set();
+};
+
+this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.init();
+	this.chkAllInit(this.Div02.form.Div00.form);
+};
+
+this.Div02_Div00_Div00_Div00_00_01_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar01.value) != "" && this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar01.value < obj.value)
+	{
+		obj.set_value(this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar01.value);
+	}
+};
+
+this.Div02_Div00_Div00_Div00_00_01_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar00.value) != "" && obj.value < this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar00.value)
+	{
+		this.Div02.form.Div00.form.Div00.form.Div00_00_01.form.Calendar00.set_value(obj.value);
+	}
+};
+
+this.Div02_Div00_Div00_Div00_00_00_00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_search();
+};
+
+this.Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		this.fn_search();
+	}
+};
+
+this.Div02_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 4)
+	{
+		var arrArguments = {
+			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_class_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_class_list.getColumn(e.row, "lectCd")	
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+};
+
+this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 24)
+	{
+		this.ds_classRoom.copyData(this.ds_classRoom_list);
+		this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
+	}
 };
 ]]></Script>
     <Bind>

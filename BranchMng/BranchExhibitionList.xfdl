@@ -92,7 +92,7 @@
                               </Rows>
                             </Dataset>
                           </Combo>
-                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21"/>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21" onkeydown="Div00_00_conDiv_searchDiv_searchQuery_onkeydown"/>
                           <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
                           <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
                         </Layout>
@@ -212,20 +212,20 @@
       <BindItem id="item3" compid="Div00_00.form.conDiv.form.spotAreaDiv.form.ComboSpotArea" propid="value" datasetid="searchDs" columnid="brchAreaCd"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
- * include 영역 
- **************************************************************************/
+* include 영역 
+**************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 
 /**************************************************************************
- * FORM 변수 선언 영역
- **************************************************************************/
+* FORM 변수 선언 영역
+**************************************************************************/
 this.application = null;
 this.rowcount = 0;
 
 /**************************************************************************
- * FORM EVENT 영역(onload)
- **************************************************************************/
+* FORM EVENT 영역(onload)
+**************************************************************************/
 this.BranchExhibitionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -241,7 +241,7 @@ this.BranchExhibitionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEvent
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
-		
+	
 	this.spotAreaCdList.copyData(this.application.gdsSpotAreaCdList);
 	this.spotAreaCdList.insertRow(0);
 	this.spotAreaCdList.setColumn(0, "cd", "");
@@ -292,6 +292,15 @@ this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e
 	this.fn_list();
 };
 
+//엔터키 검색
+this.Div00_00_conDiv_searchDiv_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_list();
+	}
+};
+
 //초기화버튼
 this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -315,9 +324,8 @@ this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 	{
 		var	exhSeqno = obj.getBindDataset().getColumn(e.row, "exhSeqno");
 		
-		this.alert("키값" + exhSeqno);
 		this.parent.param = {
-			 exhSeqno : exhSeqno
+			exhSeqno : exhSeqno
 		};
 		
 		this.parent.set_url("BranchMng::BranchExhibitionDtl.xfdl");
@@ -325,8 +333,8 @@ this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 };
 
 /**************************************************************************
- * 사용자 FUNCTION 영역
- **************************************************************************/
+* 사용자 FUNCTION 영역
+**************************************************************************/
 
 //조회
 this.fn_list = function ()
@@ -339,141 +347,67 @@ this.fn_list = function ()
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
 	this.gfn_transaction(tranObj);		
 };
 
 //삭제
 this.fn_delete = function ()
-{		
-	var strSvcId    = "delete";
-	var strSvcUrl   = this.application.Admin_svc + "::/branch/deleteBranchExb.do";
-	var inData      = "BranchExhibitionList=branchExbDs:U";
-	var outData     = "branchExbDs=output1";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/branch/deleteBranchExb.do";
+	tranObj.inData      = "BranchExhibitionList=branchExbDs:U";
+	tranObj.outData     = "branchExbDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);
+	
 };
 
 //콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 
 {
-  //목록 카운트
-  
-  this.Div01.form.txtTotal.set_text("목록("+this.branchExbDs.rowcount+")개");
-  
-  if(!this.branchExbDs.getColCount())
-  {
-	this.branchExbDs.copyData(this.branchExbDs_format);
-  }
-
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorCode+"\n"+errorMsg);
-	return;
-  }
-
-  switch(svcID)
-  {
-   case "dataList":
-		//this.searchSpot.set_index(0);
-	break;
+	//목록 카운트
 	
-	case "delete":
-		this.alert("삭제되었습니다.");
-		this.fn_list(1);
+	this.Div01.form.txtTotal.set_text("목록("+this.branchExbDs.rowcount+")개");
+	
+	if(!this.branchExbDs.getColCount())
+	{
+		this.branchExbDs.copyData(this.branchExbDs_format);
+	}
+	
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			if(this.branchExbDs.rowcount < 1)
+			{
+				this.alert("조회된 결과가 없습니다.");
+			}
 		break;
-  }
-
-};
-
-/**************************************************************************
-* 그리드 체크박스 영역
-**************************************************************************/
-this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
-{ 
-	//체크여부 정보를 담을 Array를 사용자 변수로 설정
-	objDs.checkarray = new Array(); 
+		
+		case "dataList":
+			//this.searchSpot.set_index(0);
+		break;
+			
+		case "delete":
+			this.alert("삭제되었습니다.");
+			this.fn_list(1);
+		break;
+	}
 	
-	//데이터셋 온로드이벤트 추가
-	objDs.addEventHandler("onload", this.gfnDataset_onload); 
-	
-	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
-	objGrd.checkcell = nCheckCellIdx; 
-	
-	//그리드 Cell Click 이벤트 추가
-	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick); 
-	
-	//그리드 Head Click 이벤트 추가
-	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
-} 
-this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
-{ 
-	if(e.reason==0) 
-	{ 
-		//데이터셋이 로드되면 checkarray 초기화
-		obj.checkarray = new Array(); 
-	} 
-}; 
-this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var objDs; 
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		
-		if(objDs.checkarray[e.row]==1) 
-		{ 
-			//체크 해제
-			objDs.checkarray[e.row] = 0; 
-		}else 
-		{ 
-			//체크 설정
-			objDs.checkarray[e.row] = 1; 
-		}
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-}; 
-this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var i; 
-	var objDs;
-	
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		nChkVal = obj.getCellText(-1, e.cell); 
-		
-		if(nChkVal==1)nChkVal = 0; 
-		else nChkVal = 1; 
-		
-		//Head의 체크 상태 변경
-		obj.setCellProperty("head", e.cell, "text", nChkVal); 
-		
-		//Body의 체크 상태 변경
-		for(i=0;i<objDs.rowcount;i++) 
-		{ 
-			objDs.checkarray[i] = nChkVal; 
-		} 
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-};
-]]></Script>
+};]]></Script>
   </Form>
 </FDL>
