@@ -58,9 +58,10 @@ this.excel_export = function(){
 	{
 		this.exportObj = new ExcelExportObject("Export00", this.opener);
 	}
+	var grid_excel = opener.Grid_Excel ? opener.Grid_Excel : this.parent.gridExcel;
 	
 	this.exportObj.set_exporturl(opener.application.Domain + opener.excelImportExport);
-	this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, opener.Grid_Excel, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
+	this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, grid_excel, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
 	this.exportObj.set_exportfilename(opener.excelFileName + this.gfnGetToDay());
 
 	this.exportObj.exportData();
