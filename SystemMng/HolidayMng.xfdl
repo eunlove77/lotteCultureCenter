@@ -151,7 +151,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="false">
+        <Grid id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="true">
           <Formats>
             <Format id="default">
               <Columns>
@@ -173,13 +173,13 @@
               <Band id="body">
                 <Cell text="bind:hlidyDt" edittype="date" displaytype="date" textAlign="left" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="1" text="bind:hlidyNm" edittype="text" textAlign="left"/>
-                <Cell col="2" text="bind:hlidyClCd" combodataset="holidayType" edittype="combo" displaytype="combotext" combocodecol="CD" combodatacol="CD_NM" textAlign="left"/>
+                <Cell col="2" text="bind:hlidyClCd" combodataset="holidayType" edittype="combo" displaytype="combotext" combocodecol="cd" combodatacol="cdNm" textAlign="left"/>
                 <Cell col="3" text="bind:brchCd" edittype="combo" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" textAlign="left"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Grid id="Grid01" taborder="8" left="440" top="820" width="324" height="200" binddataset="excelImportDs" visible="false">
+        <Grid id="Grid01" taborder="8" left="440" top="820" width="324" height="200" binddataset="excelImportDs" visible="true">
           <Formats>
             <Format id="default">
               <Columns>
@@ -394,8 +394,8 @@ this.validation_check = function(){
 			var hlidyClCd = this.holidayDs.getColumn(i, "hlidyClCd");
 			
 			//키 중복 검사
-			var key_dup = this.holidayDs.findRow("hlidyDt", hlidyDt);
-			tf = key_dup != i ? this.holidayDs.getColumn(key_dup, "brchCd") != brchCd : true;
+			this.holidayDs.filter("hlidyDt == '" + hlidyDt + "'");
+			tf = this.holidayDs.rowcount > 1 ? false : true;
 			
 			tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
 			tf = !tf ? tf : !!brchCd;
@@ -407,6 +407,8 @@ this.validation_check = function(){
 			}
 		}
 	}
+	
+	this.holidayDs.filter("");
 	
 	result.tf = msg.length > 0 ? false : true;
 	result.msg = msg;
