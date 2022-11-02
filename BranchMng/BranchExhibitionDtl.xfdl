@@ -159,7 +159,7 @@
           <Column id="subTitNm" type="STRING" size="256"/>
           <Column id="evntStDt" type="STRING" size="256"/>
           <Column id="evntEndDt" type="STRING" size="256"/>
-          <Column id="webImgFileId" type="STRING" size="256"/>
+          <Column id="webImgFleId" type="STRING" size="256"/>
           <Column id="mbilImgFileId" type="STRING" size="256"/>
           <Column id="intrdnCont" type="STRING" size="256"/>
           <Column id="intrdnImgFileId" type="STRING" size="256"/>
@@ -189,6 +189,7 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.param = null;
+this.atchFileUploadArr = [];
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -212,6 +213,9 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	this.spotAreaCdList.setColumn(0, "cd", "");
 	this.spotAreaCdList.setColumn(0, "cdNm", "전체");
 	
+	this.row06.form.strtDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
+	this.row06.form.endDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
+	
 	if(this.param.exhSeqno != ""){	
 		
 		this.ds_detail.setColumn(0, "exhSeqno", this.param.exhSeqno);
@@ -221,6 +225,49 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	{
 		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
 		this.row03.form.spotDiv.form.ComboSpotArea.set_index(0);
+		
+		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
+		var atchFileObj = {
+			_this : this,
+			atchFileId : atchFileId,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 5개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		
+		var atchFileId2 = this.ds_detail.getColumn(0, "mbilImgFileId");
+		var atchFileObj2 = {
+			_this : this,
+			atchFileId : atchFileId2,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		
+		var atchFileId3 = this.ds_detail.getColumn(0, "intrdnImgFileId");
+		var atchFileObj3 = {
+			_this : this,
+			atchFileId : atchFileId3,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		
+		//접근할 변수 설정			
+		this.atchFileUploadArr.push(this.row07.form.Div00.form);
+		this.atchFileUploadArr.push(this.row08.form.Div00.form);
+		this.atchFileUploadArr.push(this.row10.form.Div00.form);
+		
+		//첨부파일 초기화
+		this.atchFileUploadArr[0].fn_init(atchFileObj);
+		this.atchFileUploadArr[1].fn_init(atchFileObj2);
+		this.atchFileUploadArr[2].fn_init(atchFileObj3);
 	}
 };
 
@@ -231,10 +278,7 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
-	{
-		this.fn_checkValidation();
-	}
+	this.fn_checkValidation();
 };
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -244,29 +288,33 @@ this.fn_list = function(){
 	this.parent.set_url("BranchMng::BranchExhibitionList.xfdl");	
 }
 
-this.fn_save = function ()
+this.fn_save = function (_this)
 {		
-	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	if(_this.atchFileUploadArr[0].isPass && _this.atchFileUploadArr[1].isPass && _this.atchFileUploadArr[2].isPass)
+	{	
+		_this.ds_detail.setColumn(0, "webImgFleId", _this.atchFileUploadArr[0].atchFileId);
+		_this.ds_detail.setColumn(0, "mbilImgFileId", _this.atchFileUploadArr[1].atchFileId);
+		_this.ds_detail.setColumn(0, "intrdnImgFileId", _this.atchFileUploadArr[2].atchFileId);
+		
+		var tranObj = {
+			strSvcId : "save",
+			strSvcUrl : _this.application.Admin_svc + "::/branch/insertBranchExb.do",
+			inData : "data=ds_detail",
+			outData : "",
+			strArg : "",
+			callBackFnc : "fnCallback",
+			isAsync : true,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		}
+		_this.gfn_transaction(tranObj);
+	}
 	
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::branch/insertBranchExb.do";
-	var inData      = "data=ds_detail";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-
 };
 
 this.fn_checkValidation = function(){
+	
+	var stDt = parseInt(this.row06.form.strtDtm.value);
+	var endDt = parseInt(this.row06.form.endDtm.value);
 	
 	if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
 	{
@@ -292,30 +340,60 @@ this.fn_checkValidation = function(){
 		this.row05.form.Edit00.setFocus();
 		return false;
 	}
+	else if(this.gfn_isNull(this.row06.form.strtDtm.value))
+	{
+		this.alert("행사 시작일을 입력하세요");
+		this.row06.form.strtDtm.setFocus();
+		return;
+	}
+	else if(this.gfn_isNull(this.row06.form.endDtm.value))
+	{
+		this.alert("행사 종료일을 입력하세요");
+		this.row06.form.endDtm.setFocus();
+		return;
+	}
+	else if(stDt > endDt)
+	{
+		this.alert("종료일이 시작일보다 이전일 수 없습니다");
+		this.row06.form.endDtm.setFocus();
+		return;
+	}
+	else if(this.atchFileUploadArr[0].fn_validation() < 1)
+	{
+		this.alert("썸네일(PC)을 등록해주세요");
+		return;
+	}
+	else if(this.atchFileUploadArr[1].fn_validation() < 1)
+	{
+		this.alert("썸네일(Mobile)을 등록해주세요");
+		return;
+	}
 	else
 	{								
-		this.fn_save();
+		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		{
+			this.atchFileUploadArr[0].fn_upload(); 
+			this.atchFileUploadArr[1].fn_upload();
+			this.atchFileUploadArr[2].fn_upload(); 
+		}
 	}	
-	//this.fn_save();
 }
 
 this.fn_detail = function ()
 {	
-	var strSvcId	= "detail"
-	var strSvcUrl   = this.application.Admin_svc + "::/branch/branchExbDtl.do";
-	var inData      = "detail=ds_detail";
-	var outData     = "ds_detail=output2";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.application.Admin_svc + "::/branch/branchExbDtl.do",
+		inData : "detail=ds_detail",
+		outData : "ds_detail=output2",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	
+	this.gfn_transaction(tranObj);
+	
 };
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
@@ -329,22 +407,69 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
   switch(svcID)
   {
+	case "detail":
+		
+		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
+		var atchFileObj = {
+			_this : this,
+			atchFileId : atchFileId,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 5개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		
+		var atchFileId2 = this.ds_detail.getColumn(0, "mbilImgFileId");
+		var atchFileObj2 = {
+			_this : this,
+			atchFileId : atchFileId2,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		
+		var atchFileId3 = this.ds_detail.getColumn(0, "intrdnImgFileId");
+		var atchFileObj3 = {
+			_this : this,
+			atchFileId : atchFileId3,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		
+		//접근할 변수 설정			
+		this.atchFileUploadArr.push(this.row07.form.Div00.form);
+		this.atchFileUploadArr.push(this.row08.form.Div00.form);
+		this.atchFileUploadArr.push(this.row10.form.Div00.form);
+		
+		//첨부파일 초기화
+		this.atchFileUploadArr[0].fn_init(atchFileObj);
+		this.atchFileUploadArr[1].fn_init(atchFileObj2);
+		this.atchFileUploadArr[2].fn_init(atchFileObj3);
+		
+	break;
+	
     case "save":
 		this.alert("저장되었습니다.");
 		this.fn_list();
-		break;
+	break;
   }
 };
 ]]></Script>
     <Bind>
-      <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
-      <BindItem id="item1" compid="row03.form.spotDiv.form.ComboSpotArea" propid="value" datasetid="ds_detail" columnid="brchAreaCd"/>
-      <BindItem id="item2" compid="row04.form.Edit00" propid="value" datasetid="ds_detail" columnid="mainTitNm"/>
-      <BindItem id="item3" compid="row05.form.Edit00" propid="value" datasetid="ds_detail" columnid="subTitNm"/>
-      <BindItem id="item4" compid="row06.form.strtDtm" propid="value" datasetid="ds_detail" columnid="evntStDt"/>
-      <BindItem id="item5" compid="row06.form.endDtm" propid="value" datasetid="ds_detail" columnid="evntEndDt"/>
-      <BindItem id="item6" compid="row09.form.TextArea00" propid="value" datasetid="ds_detail" columnid="intrdnCont"/>
-      <BindItem id="item7" compid="row11.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
+      <BindItem id="brchCd" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
+      <BindItem id="brchAreaCd" compid="row03.form.spotDiv.form.ComboSpotArea" propid="value" datasetid="ds_detail" columnid="brchAreaCd"/>
+      <BindItem id="mainTitNm" compid="row04.form.Edit00" propid="value" datasetid="ds_detail" columnid="mainTitNm"/>
+      <BindItem id="subTitNm" compid="row05.form.Edit00" propid="value" datasetid="ds_detail" columnid="subTitNm"/>
+      <BindItem id="evntStDt" compid="row06.form.strtDtm" propid="value" datasetid="ds_detail" columnid="evntStDt"/>
+      <BindItem id="evntEndDt" compid="row06.form.endDtm" propid="value" datasetid="ds_detail" columnid="evntEndDt"/>
+      <BindItem id="intrdnCont" compid="row09.form.TextArea00" propid="value" datasetid="ds_detail" columnid="intrdnCont"/>
+      <BindItem id="expsrYn" compid="row11.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
     </Bind>
   </Form>
 </FDL>
