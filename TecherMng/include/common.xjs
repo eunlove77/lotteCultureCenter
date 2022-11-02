@@ -302,4 +302,26 @@ this.com_reset_search_semester = function(obj){
 	else index = 3; //겨울
 	
 	obj.set_index(index);
+}
+/**************************************************************************
+ * 지점명 콤보박스 세팅
+ **************************************************************************/
+this.com_set_branch_list = function(){
+	for(var i = 0; i < this.ds_spot_list.rowcount; i++){
+		var cd = this.ds_spot_list.getColumn(i, 'cd');
+		var cdNm = this.ds_spot_list.getColumn(i, 'cdNm');
+		this.ds_spot_list.setColumn(i, 'cdNm', '[' + cd + '] ' + cdNm);
+	}
+	this.com_set_branch_on_user();
+}
+this.com_set_branch_on_user = function(){
+	var user_brchCd = this.application.gdsLoginInfo.getColumn(0, 'brchCd');
+	var user_brchCdNm = this.application.gdsLoginInfo.getColumn(0, 'brchCdNm');
+	var ds = this.ds_spot_list;
+	
+	if(user_brchCdNm != '본사'){
+		ds.filter('cd == "' + user_brchCd + '"');
+	}
+	
+	this.ds_search.setColumn(0, 'brchCd', user_brchCd ? user_brchCd : "");
 }]]></Script>

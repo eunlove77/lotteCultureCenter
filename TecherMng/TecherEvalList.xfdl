@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherLectureList" width="1280" height="1000" titletext="New Form" onload="TecherLectureList_onload">
+  <Form id="TecherEvalList" width="1280" height="1000" titletext="New Form" onload="TecherLectureList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -121,14 +121,6 @@
                       <Col id="datacolumn">강사예명</Col>
                       <Col id="codecolumn">4</Col>
                     </Row>
-                    <Row>
-                      <Col id="codecolumn">5</Col>
-                      <Col id="datacolumn">사업자번호</Col>
-                    </Row>
-                    <Row>
-                      <Col id="datacolumn">연령</Col>
-                      <Col id="codecolumn">6</Col>
-                    </Row>
                   </Rows>
                 </Dataset>
               </Combo>
@@ -140,17 +132,9 @@
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="40" band="left"/>
-                <Column size="40"/>
                 <Column size="100"/>
                 <Column size="100"/>
-                <Column size="130"/>
-                <Column size="130"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="100"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
@@ -169,64 +153,46 @@
                 <Row size="30"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" text="번호"/>
-                <Cell col="2" text="강사코드"/>
-                <Cell col="3" text="강사명"/>
-                <Cell col="4" text="강사유형"/>
-                <Cell col="5" text="휴대전화"/>
-                <Cell col="6" text="지점명"/>
-                <Cell col="7" text="연도"/>
-                <Cell col="8" text="학기"/>
-                <Cell col="9" text="강좌코드"/>
-                <Cell col="10" text="강좌명"/>
-                <Cell col="11" text="강좌유형"/>
-                <Cell col="12" text="강좌구분"/>
-                <Cell col="13" text="대분류"/>
-                <Cell col="14" text="중분류"/>
-                <Cell col="15" text="소분류"/>
-                <Cell col="16" text="지급기준"/>
-                <Cell col="17" text="금액/율"/>
-                <Cell col="18" text="강의기간"/>
-                <Cell col="19" text="배점평균"/>
-                <Cell col="20" text="평가평균"/>
-                <Cell col="21" text="등록일시"/>
-                <Cell col="22" text="수정일시"/>
+                <Cell text="강사코드"/>
+                <Cell col="1" text="강사명"/>
+                <Cell col="2" text="평점"/>
+                <Cell col="3" text="지점명"/>
+                <Cell col="4" text="연도"/>
+                <Cell col="5" text="학기"/>
+                <Cell col="6" text="강좌코드"/>
+                <Cell col="7" text="강좌명"/>
+                <Cell col="8" text="강좌유형"/>
+                <Cell col="9" text="강좌구분"/>
+                <Cell col="10" text="회원번호"/>
+                <Cell col="11" text="작성자"/>
+                <Cell col="12" text="한줄평"/>
+                <Cell col="13" text="등록일시"/>
+                <Cell col="14" text="수정일시"/>
               </Band>
               <Band id="body">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
-                <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
-                <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
-                <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd"/>
-                <Cell col="5" text="bind:hpNo"/>
-                <Cell col="6" text="bind:pbrltnBrchCd" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="7" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
-                <Cell col="8" text="bind:mdfReqYn" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="9" text="bind:frstHopeBrchCd"/>
-                <Cell col="10" tooltiptext="bind:secHopeBrchCd"/>
+                <Cell text="bind:tcCdNo" color="blue" textDecoration="underline"/>
+                <Cell col="1" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
+                <Cell col="2" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd"/>
+                <Cell col="3" text="bind:pbrltnBrchCd" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="4" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
+                <Cell col="5" text="bind:mdfReqYn" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="6" text="bind:frstHopeBrchCd" color="blue" textDecoration="underline"/>
+                <Cell col="7" tooltiptext="bind:secHopeBrchCd" textDecoration="underline" color="blue"/>
+                <Cell col="8"/>
+                <Cell col="9"/>
+                <Cell col="10"/>
                 <Cell col="11"/>
                 <Cell col="12"/>
-                <Cell col="13"/>
-                <Cell col="14"/>
-                <Cell col="15"/>
-                <Cell col="16"/>
-                <Cell col="17"/>
-                <Cell col="18"/>
-                <Cell col="19"/>
-                <Cell col="20" text="bind:appDt"/>
-                <Cell col="21" text="bind:mdfDtm"/>
-                <Cell col="22" text="bind:rgprDtm"/>
+                <Cell col="13" text="bind:mdfDtm"/>
+                <Cell col="14" text="bind:rgprDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="10" text="강사별 출강 목록" left="20" top="265" width="100" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+        <Static id="Static00" taborder="8" text="강사평가 목록" left="20" top="265" width="100" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
         <Static id="txtTotal" taborder="4" left="Static00:5" top="270" height="21" text="(0개)" width="52"/>
-        <Button id="btnLcthistConf" taborder="8" text="출강이력확인서" top="270" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="72" onclick="btnLcthistConf_onclick"/>
-        <Button id="btnSms" taborder="9" text="SMS" top="270" height="21" cssclass="btn_WF_Low" fittocontents="width" width="50" right="10" onclick="btnSms_onclick"/>
-        <Button id="test" taborder="11" text="테스트버튼" left="182" top="256" width="116" height="24" onclick="test_onclick"/>
+        <Button id="test" taborder="9" text="테스트버튼" left="182" top="256" width="116" height="24" onclick="test_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -241,6 +207,7 @@ include "TecherMng::include/common.xjs";
  **************************************************************************/
 this.application = null;
 this.brchCd = "";
+this.popCnt = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -269,15 +236,15 @@ this.TecherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 this.set_dataset = function(){
 	var ds_codes_list = [
 		{ds : this.ds_spot_list,		cd: "'spotCd'"},	//지점
-		{ds : this.ds_tcTp_list,		cd: "'CODE_62'"},	//강사유형
 		{ds : this.ds_semester_list,	cd: "'034'"},		//학기구분
 		{ds : this.ds_classGb_list,	cd: "'006'"},			//강좌구분
 		{ds : this.ds_classCtgy_list,	cd: "'CLASS_02'"},	//강좌유형
+		{ds : this.ds_tcTp_list,		cd: "'CODE_62'"},	//강사유형
 	];
 	//코드 데이터셋 설정
 	this.com_set_code_dataset(ds_codes_list);
 	
-	//지점명 콤보박스 세팅
+	//지점 콤보박스 세팅
 	this.com_set_branch_list();
 	
 	//카테고리 설정
@@ -312,6 +279,7 @@ this.set_dynamic_checkbox = function()
 	this.com_fn_click_add(this);
 }
 
+
 /**************************************************************************
  * 카테고리 분류 영역 변경
  **************************************************************************/
@@ -336,7 +304,7 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();	//검색 데이터 세팅
-	this.get_techer_lecture_list();
+	this.get_techer_evaluation_list();
 };
 //초기화 버튼 
 this.reset_search_form = function(){
@@ -353,14 +321,11 @@ this.reset_search_form = function(){
 	
 	//날짜기준 학기
 	this.com_reset_search_semester(this.Div01.form.Div01.form.Combo01);
-	
-	//this.ds_search.copyData(this.ds_search_default);
-	//휴대전화
-	this.Div03.form.Div02.form.hpNo.set_value("");
+
 }
 this.set_search_info = function(){
 	//검색조건 - 휴대전화
-	var hpNo = this.Div04.form.Div02.form.hpNo.value;
+	var hpNo = this.Div03.form.Div02.form.hpNo.value;
 	var arr = this.parse_phone_number(hpNo);
 	
 	this.ds_search.setColumn(0, 'hpStNo', arr[0] ? arr[0] : '');
@@ -391,11 +356,11 @@ this.parse_phone_number = function(str){
 	return arr;
 }
 
-this.get_techer_lecture_list = function()
+this.get_techer_evaluation_list = function()
 {	
 	var tranObj = {
-		strSvcId : "techer_lecture_list",
-		strSvcUrl : this.application.Admin_svc + "::class/selectClassList.do",
+		strSvcId : "techer_evaluation_list",
+		strSvcUrl : this.application.Admin_svc + "::techerMng/tceval/list.do",
 		inData : "search=ds_search",
 		outData : "ds_class_list=ouput1",
 		strArg : "",
@@ -414,30 +379,33 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		this.alert(errorCode+"\n"+errorMsg);
 	}
 };
-
 /**************************************************************************
- * 출강이력 확인서, SMS
+ * 그리드
  **************************************************************************/
-this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var check_array = this.ds_tclect_list.checkarray;
-	var checked_array = new Array();
-	for(var i = 0; i < check_array.length; i++){
-		if(check_array[i] > 0) checked_array.push(i);
+	//강사정보
+	if(e.cell == 0 || e.cell == 1){	
+		this.popCnt ++;
+		var oArg = {
+				type : "detail",
+				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
+				ownerFrame : this.getOwnerFrame()
+				};
+		//this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
 	}
-	
-	if(checked_array.length == 0){
-		alert("대상을 선택하세요.");
-		return false;
-	}else if(checked_array.length > 1){
-		alert("대상을 1명만 선택하세요.");
-		return false;
+	//강좌정보
+	else if(e.cell == 6 || e.cell == 7){	
+		this.popCnt ++;
+		var oArg = {
+				type : "detail",
+				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
+				ownerFrame : this.getOwnerFrame()
+				};
+		//this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
 	}
 };
-this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	
-};
+
 /**************************************************************************
  * UTIL
  **************************************************************************/
