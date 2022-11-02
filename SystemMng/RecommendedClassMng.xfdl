@@ -5,43 +5,54 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridRcdClsList" taborder="2" left="10" top="280" binddataset="ds_search" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick">
+        <Grid id="GridRcdClsList" taborder="2" left="10" top="280" binddataset="rcdClassDs" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" cssclass="grd_WF_TableType">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="48"/>
-                <Column size="48"/>
+                <Column size="40"/>
+                <Column size="100"/>
+                <Column size="90"/>
+                <Column size="170"/>
+                <Column size="110"/>
                 <Column size="80"/>
                 <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="50"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
+                <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
-                <Cell col="1" text="순번"/>
-                <Cell col="2" text="data1"/>
-                <Cell col="3" text="data2"/>
-                <Cell col="4" text="data3"/>
-                <Cell col="5" text="data4"/>
-                <Cell col="6" text="data5"/>
-                <Cell col="7" text="data6"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="강좌코드"/>
+                <Cell col="2" text="지점"/>
+                <Cell col="3" text="카테고리"/>
+                <Cell col="4" text="강좌명"/>
+                <Cell col="5" text="등록자"/>
+                <Cell col="6" text="등록일"/>
+                <Cell col="7" text="노출여부"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:lectCd" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="bind:lectCd"/>
+                <Cell col="2" text="bind:brchCd"/>
+                <Cell col="3" text="bind:ctgy"/>
+                <Cell col="4" text="bind:lectCd" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="6" text="bind:rgprDtm"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, 'expsrYn') == 'Y' ? '노출' : '미노출'"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div00_00" taborder="3" text="Div00" left="7" top="56" height="194" formscrolltype="both" right="0">
+        <Div id="Div00_00" taborder="3" text="Div00" left="7" top="46" height="194" formscrolltype="both" right="0">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
-              <Div id="Div00_00" taborder="1" text="Div00" left="3" top="Static00:19" height="150" cssclass="div_WF_TableComp" right="8">
+              <Static id="Static00" taborder="0" text="" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
+              <Div id="Div00_00" taborder="1" text="Div00" left="10" top="Static00:19" height="150" cssclass="div_WF_TableComp" right="10">
                 <Layouts>
                   <Layout>
-                    <Div id="useDiv" taborder="2" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="633">
+                    <Div id="useDiv" taborder="1" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="633">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="노출상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
@@ -51,25 +62,15 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="spotDiv" taborder="0" text="Div01" left="useDiv:0" top="32" height="33" cssclass="div_WF_CompWrap" right="2">
+                    <Div id="spotDiv" taborder="0" text="Div01" left="useDiv:-1" top="32" height="33" cssclass="div_WF_CompWrap" right="0">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="ds_spot_list" codecolumn="spotSeq" datacolumn="spotNm"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm"/>
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="ctgDiv" taborder="1" text="Div01" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="2">
-                      <Layouts>
-                        <Layout>
-                          <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" width="109"/>
-                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20"/>
-                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="100" height="20"/>
-                          <Combo id="Combo02" taborder="3" text="Combo02" left="Combo01:6" top="5" width="100" height="20"/>
-                        </Layout>
-                      </Layouts>
-                    </Div>
-                    <Div id="searchDiv" taborder="3" text="Div01" left="0" top="96" height="33" cssclass="div_WF_CompWrap" right="2">
+                    <Div id="searchDiv" taborder="2" text="Div01" left="0" top="96" height="33" cssclass="div_WF_CompWrap" right="0">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
@@ -81,7 +82,7 @@
                               </ColumnInfo>
                               <Rows>
                                 <Row>
-                                  <Col id="codecolumn"/>
+                                  <Col id="codecolumn">0</Col>
                                   <Col id="datacolumn">전체</Col>
                                 </Row>
                                 <Row>
@@ -105,11 +106,21 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="periodDiv" taborder="4" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="2">
+                    <Div id="periodDiv" taborder="3" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                           <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type03.xfdl" formscrolltype="none"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div00_00" taborder="4" text="Div00" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="130" height="20" innerdataset="ds_classCtgyLarge_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_00_Div00_00_Div00_00_Combo00_onitemchanged"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="130" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_00_Div00_00_Div00_00_Combo01_onitemchanged"/>
+                          <Combo id="Combo02" taborder="3" text="Combo02" left="Combo01:6" top="5" width="130" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -122,68 +133,94 @@
         <Div id="Div01" taborder="4" text="Div01" left="10" top="234" height="49" right="10">
           <Layouts>
             <Layout>
-              <Button id="btnPerminN" taborder="0" text="미노출" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnPerminN_onclick"/>
-              <Button id="btnPerminY" taborder="1" text="노출" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="230" onclick="Div01_btnPerminY_onclick"/>
-              <Button id="btnSave" taborder="2" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_btnSave_onclick" visible="true"/>
+              <Button id="btnPermitN" taborder="0" text="미노출" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnPerminN_onclick"/>
+              <Button id="btnPermitY" taborder="1" text="노출" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="230" onclick="Div01_btnPerminY_onclick"/>
+              <Button id="btnAdd" taborder="2" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_btnSave_onclick" visible="true"/>
               <Button id="btnDel" taborder="3" text="삭제" top="5" height="30" cssclass="btn_WF_High" right="10" width="50" onclick="Div01_btnDel_onclick"/>
-              <Static id="Static00" taborder="5" text="목록" left="10" top="14" height="14" fittocontents="none" cssclass="sta_WF_TitGray" width="90"/>
-              <Static id="Static01" taborder="4" text="(0개)" left="Static00:-51" top="14" width="34" height="14" fittocontents="none" onclick="Div01_Static01_onclick"/>
+              <Static id="txtTotal" taborder="4" left="9" top="10" height="21" text="목록 (0)개" width="82"/>
             </Layout>
           </Layouts>
         </Div>
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_rcdClass_list">
-        <ColumnInfo/>
-      </Dataset>
-      <Dataset id="ds_search">
+      <Dataset id="rcdClassDs">
         <ColumnInfo>
-          <Column id="param1" type="STRING" size="256"/>
-          <Column id="param2" type="STRING" size="256"/>
-          <Column id="param3" type="STRING" size="256"/>
-          <Column id="param4" type="STRING" size="256"/>
-          <Column id="param5" type="STRING" size="256"/>
-          <Column id="param6" type="STRING" size="256"/>
-          <Column id="param7" type="STRING" size="256"/>
-          <Column id="param8" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="searchDs">
+        <ColumnInfo>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="param1"/>
-            <Col id="param2"/>
-            <Col id="param3"/>
-            <Col id="param4"/>
-            <Col id="param5"/>
-            <Col id="param6"/>
-            <Col id="param7"/>
-            <Col id="param8"/>
+            <Col id="f">0</Col>
+            <Col id="useYn"/>
+            <Col id="brchCd"/>
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_menu_auth">
+      <Dataset id="spotCdList">
         <ColumnInfo>
-          <Column id="accYn" type="STRING" size="256"/>
-          <Column id="accSrchYn" type="STRING" size="256"/>
-          <Column id="accSaveYn" type="STRING" size="256"/>
-          <Column id="accDelYn" type="STRING" size="256"/>
-          <Column id="accPrtYn" type="STRING" size="256"/>
-          <Column id="accExlYn" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_spot_list">
+      <Dataset id="rcdClassDs_format">
         <ColumnInfo>
-          <Column id="spotSeq" type="STRING" size="256"/>
-          <Column id="spotNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classCtgyLarge_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classCtgyMiddle_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classCtgySmall_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
-    <Bind>
-      <BindItem id="item2" compid="Div00_00.form.Div00_00.form.useDiv.form.chkUseY" propid="value" datasetid="ds_search" columnid="param3"/>
-      <BindItem id="item3" compid="Div00_00.form.Div00_00.form.useDiv.form.chkUseN" propid="value" datasetid="ds_search" columnid="param4"/>
-      <BindItem id="item6" compid="Div00_00.form.Div00_00.form.searchDiv.form.Combo00" propid="value" datasetid="ds_search" columnid="param7"/>
-      <BindItem id="item7" compid="Div00_00.form.Div00_00.form.searchDiv.form.Edit00" propid="value" datasetid="ds_search" columnid="param8"/>
-    </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
@@ -193,6 +230,10 @@ include "Base::libCommon.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
+this.popCnt = 0;
+//this.brchCd = "";
+//this.yy = "";
+//this.lectSmsterCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -200,141 +241,250 @@ this.application = null;
 this.RecommendedClassMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.param = this.parent.param;
+	var objOwnerFrame = this.getOwnerFrame();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.spotCdList.copyData(this.application.gdsSpotCdList);
+	this.spotCdList.insertRow(0);
+	this.spotCdList.setColumn(0, "cd", "");
+	this.spotCdList.setColumn(0, "cdNm", "전체");
+	
+	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
+	this.gfnSetCheckBoxNoDataset(this.rcdClassDs, this.GridRcdClsList, 0);
+	// 코드 데이터
+	this.fn_code_list();
+
+	//강의 학기정보 조회
+	//this.fn_sesterInfo();
+	//this.fn_year_add();
+	//this.fn_semester_set();
+	//리스트
+	//this.fn_list(1);
+};
+
+this.Div00_00_Div00_00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.fn_classCtgyLarge_chg(obj);
+	this.fn_classCtgyMiddle_chg(obj);
+};
+
+this.Div00_00_Div00_00_Div00_00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.fn_classCtgyMiddle_chg(obj);
 };
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
-this.init = function()
-{
-
-}
-
-this.fnCallback = function(svcID, errorCode, errorMsg)
-{
-  // 에러 시 화면 처리 내역
-  if(errorCode != 0)
-  {
-    this.alert(errorCode+"\n"+errorMsg);
-  }
-
-  switch(svcID)
-  {
-    case "rcdClassList":
-	this.Div01.form.Static01.set_text('(' + this.ds_rcdClass_list.getRowCount() + '개)');
-	this.Div01.form.Static01.set_fittocontents("width");
-	this.Div01.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0); 
+this.fn_list = function (page)
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "list";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/recommendedClassList.do";
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.inData      = "search=searchDs";
+	tranObj.outData     = "rcdClassDs=recommendedClassList";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
-	if(!this.gridFlag)
-	{
-		this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div01.form.Div00.form.Grid00, 0); 
-		this.gridFlag = true;
-	}
-	break;
+	this.gfn_transaction(tranObj);		
 	
-  }
 };
 
-this.fn_checkboxAll = function(pObj) 
-{
-	var arrObj = pObj.parent.components;
-		
-	if(pObj.isChecked())
-	{		
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
-			{				
-				arrObj[i].set_value(true);
-			}
-			else
-			{
-				if(arrObj[i] == "[object CheckBox]")
-				{
-					arrObj[i].set_value(arrObj[i].truevalue);
-				}
-			}
-		}
-	}
-	else 
-	{
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
-			{				
-				arrObj[i].set_value(arrObj[i].falsevalue);
-			}
-			
-		}
-	}
-	
-}
-
-this.fn_checkbox = function(pObj) 
-{
-	var arrObj = pObj.parent.components;
-		
-	if(pObj.isChecked())
-	{
-		var len = 0;
-		var chkLen = 0;
-		var chkAll;
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
-			{				
-				chkAll = arrObj[i];
-			}
-			
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
-			{
-				len++;
-				if(arrObj[i].isChecked())
-				{
-					chkLen++;
-				}
-			}
-		}
-		
-		if(len == chkLen) 
-		{
-			chkAll.set_value(true);
-		}
-	}
-	else 
-	{
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
-			{				
-				arrObj[i].set_value(false);	
-				return;
-			}			
-		}
-	}
-}
-
-/* 
-this.fn_rcdClass_list = function()
+//카테고리 코드 리스트
+this.fn_code_list = function()
 {	
 	var tranObj = {
-		strSvcId : "rcdClassList",
-		strSvcUrl : this.application.Admin_svc + "::/selectRcdClassList.do",
-		inData : "search=ds_search",
-		outData : "ds_rdcClass_list = rcdClassList",
-		strArg : "",
+		strSvcId : "codeList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
+		inData : "",
+		outData : "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList",
+		strArg : "cdId=ctgy",
 		callBackFnc : "fnCallback",
-		isAsync : true
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
-				
+
 	this.gfn_transaction(tranObj);
+};
+
+//삭제
+this.fn_delete = function ()
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/deleteRecommendedClass.do";
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.inData      = "recommendedClassList=rcdClassDs:U";
+	tranObj.outData     = "rcdClassDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);	
+};
+
+//clear
+this.reset_search_form = function(){
+	
+	var cnt = this.searchDs.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		this.searchDs.setColumn(0, i, "");
+	}
+	this.searchDs.setColumn(0, "f", 0);
+	
+	this.fn_list();
 }
-*/
 
+this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
+	if(!obj.isChecked()){
+		
+		this.permitDiv.form.chkPermitAll.set_value(0);
+	}
+}
 
+//강좌 카테고리 세팅
+this.fn_classCtgy_set = function()
+{
 
+	this.ds_classCtgyLarge_list.set_enableevent(false);
+	this.ds_classCtgyLarge_list.insertRow(0);
+	this.ds_classCtgyLarge_list.setColumn(0, "cdId", "");
+	this.ds_classCtgyLarge_list.setColumn(0, "cd", "");
+	this.ds_classCtgyLarge_list.setColumn(0, "cdNm", "대분류");
+	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo00.set_index(0);
+	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_index(0);
+	this.ds_classCtgyLarge_list.set_enableevent(true);
+	
+	this.ds_classCtgyMiddle_list.set_enableevent(false);
+	this.ds_classCtgyMiddle_list.insertRow(0);
+	this.ds_classCtgyMiddle_list.setColumn(0, "cdId", "");
+	this.ds_classCtgyMiddle_list.setColumn(0, "cd", "");
+	this.ds_classCtgyMiddle_list.setColumn(0, "cdNm", "중분류");
+	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo01.set_index(0);
+	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo01.set_index(0);
+	this.ds_classCtgyMiddle_list.set_enableevent(true);
+	this.ds_classCtgyMiddle_list.filter("cdId == ''");
+	
+	this.ds_classCtgySmall_list.set_enableevent(false);
+	this.ds_classCtgySmall_list.insertRow(0);
+	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
+	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo02.set_index(0);
+	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo02.set_index(0);
+	this.ds_classCtgySmall_list.set_enableevent(true);
+	this.ds_classCtgySmall_list.filter("cdId == ''");
+}
+
+//카테고리 대분류 영역 변경
+this.fn_classCtgyLarge_chg = function(obj)
+{
+	this.ds_classCtgyMiddle_list.filter("");
+	this.ds_classCtgyMiddle_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getCategoryList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
+		inData : "",
+		outData : "ds_classCtgyMiddle_list=classCategoryMiddleList",
+		strArg : "ctegryLvlNo=1 ctegryName=classCategoryMiddleList ctegryId=" + obj.value,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+
+	this.gfn_transaction(tranObj);
+	
+	this.ds_classCtgyMiddle_list.set_enableevent(false);
+	this.ds_classCtgyMiddle_list.insertRow(0);
+	this.ds_classCtgyMiddle_list.setColumn(0, "cdId", "");
+	this.ds_classCtgyMiddle_list.setColumn(0, "cd", "");
+	this.ds_classCtgyMiddle_list.setColumn(0, "cdNm", "중분류");
+	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo01.set_index(0);
+	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo01.set_index(0);
+	this.ds_classCtgyMiddle_list.set_enableevent(true);
+}
+
+//카테고리 중분류 영역 변경
+this.fn_classCtgyMiddle_chg = function(obj)
+{
+	this.ds_classCtgySmall_list.filter("");
+	this.ds_classCtgySmall_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getCategoryList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
+		inData : "",
+		outData : "ds_classCtgySmall_list=classCategorySmallList",
+		strArg : "ctegryLvlNo=2 ctegryName=classCategorySmallList ctegryId=" + obj.value,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+
+	this.gfn_transaction(tranObj);
+	
+	this.ds_classCtgySmall_list.set_enableevent(false);
+	this.ds_classCtgySmall_list.insertRow(0);
+	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
+	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
+	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo02.set_index(0);
+	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo02.set_index(0);
+	this.ds_classCtgySmall_list.set_enableevent(true);
+}
+
+//콜백
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+	this.Div01.form.txtTotal.set_text("목록("+this.rcdClassDs.rowcount+")개");
+	if(!this.rcdClassDs.getColCount())
+	{
+		this.rcdClassDs.copyData(this.rcdClassDs_format);
+	}
+	
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+	case "list":
+		if(this.rcdClassDs.rowcount < 1){
+			this.alert("조회된 결과가 없습니다.");
+		}
+		break;
+	
+	case "codeList":
+			this.fn_classCtgy_set();
+			//this.fn_classRoom_set();
+			//this.fn_click_add(this);
+		break;
+		
+	case "delete":
+		this.alert("삭제완료");
+		this.fn_list(1);
+		break;
+	}
+};
+
+this.orderType = "desc";
 ]]></Script>
+    <Bind>
+      <BindItem id="strtDtm" compid="Div00_00.form.Div00_00.form.periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
+      <BindItem id="endDtm" compid="Div00_00.form.Div00_00.form.periodDiv.form.Div00.form.endDtm" propid="value" datasetid="searchDs" columnid="endDtm"/>
+      <BindItem id="brchCd" compid="Div00_00.form.Div00_00.form.spotDiv.form.Combo00" propid="value" datasetid="searchDs" columnid="brchCd"/>
+      <BindItem id="f" compid="Div00_00.form.Div00_00.form.searchDiv.form.Combo00" propid="value" datasetid="searchDs" columnid="f"/>
+      <BindItem id="q" compid="Div00_00.form.Div00_00.form.searchDiv.form.Edit00" propid="value" datasetid="searchDs" columnid="q"/>
+    </Bind>
   </Form>
 </FDL>
