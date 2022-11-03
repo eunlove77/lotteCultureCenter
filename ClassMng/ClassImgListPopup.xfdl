@@ -31,7 +31,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="3" left="15" top="105" height="530" width="750" text="데이터가 없습니다." onsetfocus="Div00_Div02_onsetfocus">
+              <Div id="Div02" taborder="3" left="15" top="105" height="530" width="750" onsetfocus="Div00_Div02_onsetfocus">
                 <Layouts>
                   <Layout type="horizontal" flexwrap="wrap" horizontalgap="20" verticalgap="20" flexcrossaxisalign="center" flexcrossaxiswrapalign="start" flexmainaxisalign="spacebetween"/>
                 </Layouts>
@@ -109,7 +109,7 @@ this.fn_code_list = function()
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
 		outData : "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList",
-		strArg : "cdId=ctgy useYn=Y",
+		strArg : "cdId=ctgy",
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		isPopup : true
@@ -162,6 +162,8 @@ this.fn_img_set = function()
 		objImageViewer.insertEventHandler("onclick", 0, this.fn_onclick, this);
 		this.imgArr.push(objImageViewer);
 	}
+	
+	this.Div00.form.Div02.form.resetScroll();
 }
 
 this.fn_onclick = function(obj)
@@ -189,7 +191,7 @@ this.fn_classCtgyLarge_chg = function(obj)
 		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
 		inData : "",
 		outData : "ds_classCtgyMiddle_list=classCategoryMiddleList",
-		strArg : "ctegryLvlNo=1 useYn=Y ctegryName=classCategoryMiddleList ctegryId=" + obj.value,
+		strArg : "ctegryLvlNo=1 ctegryName=classCategoryMiddleList ctegryId=" + obj.value,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		isPopup : true
@@ -217,7 +219,7 @@ this.fn_classCtgyMiddle_chg = function(obj)
 		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
 		inData : "",
 		outData : "ds_classCtgySmall_list=classCategorySmallList",
-		strArg : "ctegryLvlNo=2 useYn=Y ctegryName=classCategorySmallList ctegryId=" + obj.value,
+		strArg : "ctegryLvlNo=2 ctegryName=classCategorySmallList ctegryId=" + obj.value,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		isPopup : true

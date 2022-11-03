@@ -246,7 +246,7 @@
                             <Column size="80"/>
                             <Column size="80"/>
                             <Column size="119"/>
-                            <Column size="171"/>
+                            <Column size="302"/>
                             <Column size="80"/>
                             <Column size="95"/>
                             <Column size="95"/>
@@ -355,13 +355,14 @@
                         </Format>
                       </Formats>
                     </Grid>
-                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="16" width="79" height="20" left="0"/>
-                    <Button id="Button00" taborder="1" text="엑셀" top="0" width="50" height="30" cssclass="btn_WF_Medium" right="0"/>
-                    <Button id="Button00_00" taborder="2" text="출석부" top="0" width="60" height="30" cssclass="btn_WF_Medium" right="Button00:10"/>
+                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="16" width="100" height="20" left="0"/>
+                    <Button id="Button00" taborder="1" text="엑셀" top="0" width="50" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div02_Div01_Button00_onclick"/>
+                    <Button id="Button05" taborder="9" text="강사 출석부" top="0" height="30" cssclass="btn_WF_Medium" right="Button00:10" width="90"/>
+                    <Button id="Button00_00" taborder="2" text="출석부" top="0" width="60" height="30" cssclass="btn_WF_Medium" right="Button05:10"/>
                     <Button id="Button04" taborder="3" text="대기자 등록" top="0" height="30" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10"/>
-                    <Button id="Button03" taborder="4" text="강좌복사" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button04:10"/>
+                    <Button id="Button03" taborder="4" text="강좌복사" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div02_Div01_Button03_onclick"/>
                     <Button id="Button02" taborder="5" text="신규강좌" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button03:10" onclick="Div02_Div01_Button02_onclick"/>
-                    <Button id="Button01" taborder="6" text="일괄변경" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10"/>
+                    <Button id="Button01" taborder="6" text="일괄변경" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10" onclick="Div02_Div01_Button01_onclick"/>
                     <Button id="Button00_01" taborder="7" text="저장" top="0" height="30" width="50" right="Button01:10" cssclass="btn_WF_Medium" onclick="Div01_Button00_onclick"/>
                   </Layout>
                 </Layouts>
@@ -369,6 +370,130 @@
             </Layout>
           </Layouts>
         </Div>
+        <Grid id="Grid_Excel" taborder="2" left="0" top="1164" right="20" bottom="-777" binddataset="ds_class_list" nodatatext="데이터가 없습니다." visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48"/>
+                <Column size="78"/>
+                <Column size="129"/>
+                <Column size="113"/>
+                <Column size="80"/>
+                <Column size="185"/>
+                <Column size="95"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="119"/>
+                <Column size="171"/>
+                <Column size="80"/>
+                <Column size="95"/>
+                <Column size="95"/>
+                <Column size="116"/>
+                <Column size="121"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="104"/>
+                <Column size="170"/>
+                <Column size="93"/>
+                <Column size="80"/>
+                <Column size="99"/>
+                <Column size="158"/>
+                <Column size="105"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="119"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="130"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="34"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="지점명"/>
+                <Cell col="3" text="강의유형"/>
+                <Cell col="4" text="강좌코드"/>
+                <Cell col="5" text="강좌명"/>
+                <Cell col="6" text="강사명"/>
+                <Cell col="7" text="총정원"/>
+                <Cell col="8" text="수강인원"/>
+                <Cell col="9" text="대기자수"/>
+                <Cell col="10" text="강좌료"/>
+                <Cell col="11" text="강의요일"/>
+                <Cell col="12" text="강의횟수"/>
+                <Cell col="13" text="시작시간"/>
+                <Cell col="14" text="종료시간"/>
+                <Cell col="15" text="강좌상태"/>
+                <Cell col="16" text="승인상태"/>
+                <Cell col="17" text="전시상태"/>
+                <Cell col="18" text="연도"/>
+                <Cell col="19" text="학기"/>
+                <Cell col="20" text="강의기간"/>
+                <Cell col="21" text="할인구분"/>
+                <Cell col="22" text="할인율"/>
+                <Cell col="23" text="강좌구분"/>
+                <Cell col="24" text="강의실"/>
+                <Cell col="25" text="지급구분"/>
+                <Cell col="26" text="강사요율"/>
+                <Cell col="27" text="지급횟차"/>
+                <Cell col="28" text="지급차수"/>
+                <Cell col="29" text="옵션사용"/>
+                <Cell col="30" text="그룹여부"/>
+                <Cell col="31" text="강사수정요청"/>
+                <Cell col="32" text="등록자"/>
+                <Cell col="33" text="등록일시"/>
+                <Cell col="34" text="수정자"/>
+                <Cell col="35" text="수정일시"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
+                <Cell col="2" text="bind:brchNm"/>
+                <Cell col="3" text="bind:lectTpNm"/>
+                <Cell col="4" text="bind:lectCd"/>
+                <Cell col="5" text="bind:lectNm" edittype="text" editmaxlength="100" displaytype="editcontrol"/>
+                <Cell col="6" text="bind:tcNm"/>
+                <Cell col="7" text="bind:gsCapaCnt"/>
+                <Cell col="8"/>
+                <Cell col="9" text="bind:tcNm"/>
+                <Cell col="10" text="bind:lectAmt" displaytype="normal"/>
+                <Cell col="11" text="bind:stringStDaywNm"/>
+                <Cell col="12" text="bind:lectNbcnt"/>
+                <Cell col="13" text="bind:lectSt"/>
+                <Cell col="14" text="bind:lectEnd"/>
+                <Cell col="15" text="bind:lectStatNm"/>
+                <Cell col="16" text="bind:apvlStatNm"/>
+                <Cell col="17" text="bind:dsplyStatCd" edittype="combo" displaytype="combocontrol" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="18" text="bind:yy"/>
+                <Cell col="19" text="bind:lectSmsterNm"/>
+                <Cell col="20" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
+                <Cell col="21"/>
+                <Cell col="22"/>
+                <Cell col="23" text="bind:lectClNm"/>
+                <Cell col="24" text="bind:lectRmCd" edittype="combo" displaytype="combocontrol" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="25" text="expr:ppayStdCd == '1' ? '정률' : '정액'"/>
+                <Cell col="26" text="bind:ppayAmt"/>
+                <Cell col="27" text="bind:ppayTms"/>
+                <Cell col="28" text="bind:ppayordr"/>
+                <Cell col="29" text="bind:optnTypNm"/>
+                <Cell col="30" text="bind:groupYn"/>
+                <Cell col="31" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
+                <Cell col="32" text="bind:regId"/>
+                <Cell col="33" text="bind:regDtm"/>
+                <Cell col="34" text="bind:modId"/>
+                <Cell col="35" text="bind:modDtm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
@@ -417,6 +542,8 @@
           <Column id="modId" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="mdfreqCnt" type="STRING" size="256"/>
+          <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
+          <Column id="schdCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -603,8 +730,11 @@
           <Column id="regDtm" type="STRING" size="256"/>
           <Column id="modId" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
+          <Column id="schdCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <ExcelExportObject id="ExcelExportObject00"/>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -698,6 +828,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		case "classUpdateList":
 			alert("저장되었습니다.");
+		break;
+		
+		case "classSaveCopyList":
+			alert("복사등록이 완료 되었습니다.");		
 		break;
 	  }
   }
@@ -1189,7 +1323,6 @@ this.fn_update_validation = function()
 	this.fn_update();
 }
 
-
 this.fn_update = function()
 {	
 	var tranObj = {
@@ -1203,33 +1336,24 @@ this.fn_update = function()
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}				
 	this.gfn_transaction(tranObj);
-	
 }
 
-this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.fn_save_copy = function()
 {
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1)
-		{
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
+	var tranObj = {
+		strSvcId : "classSaveCopyList",
+		strSvcUrl : this.application.Admin_svc + "::class/insertClassCopy.do",
+		inData : "classList=ds_classUpdate_list",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}				
+	this.gfn_transaction(tranObj);
+}
 
-	if(flag)
-	{
-		this.fn_update_validation();
-	}
-	else
-	{
-		alert("1개의 강좌를 선택하세요.");
-	}
-};
+
 
 /**************************************************************************
  * 이벤트 영역
@@ -1363,6 +1487,122 @@ this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 	{
 		this.ds_classRoom.copyData(this.ds_classRoom_list);
 		this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
+	}
+};
+
+this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1)
+		{
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		this.fn_update_validation();
+	}
+	else
+	{
+		alert("1개의 강좌를 선택하세요.");
+	}
+};
+
+this.Div02_Div01_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1)
+		{
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		if(confirm(this.ds_classUpdate_list.getRowCount() + "개의 강좌를 복사하시겠습니까?"))
+		{
+			this.fn_save_copy();
+		}
+	}
+	else
+	{
+		alert("1개의 강좌를 선택하세요.");
+	}
+};
+
+this.Div02_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = {
+			title : "엑셀 다운로드 사유"
+		};
+	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "", this, 400, 250, true, false, null);
+};
+
+this.Div02_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	var brchCd = "";
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1)
+		{
+			if(this.ds_classUpdate_list.getRowCount() == 0) {
+				brchCd = this.ds_class_list.getColumn(i, "brchCd");
+			}
+			else
+			{
+				if(brchCd != this.ds_class_list.getColumn(i, "brchCd"))
+				{
+					alert("다른 지점의 강좌가 있습니다.");
+					return;
+				}
+			}
+			
+			if(this.ds_class_list.getColumn(i, "schdCnt") > 1) 
+			{
+				alert("강의스케줄이 1개인 대상만 일괄변경이 가능합니다.");
+				return;
+			}
+			
+			if(this.ds_class_list.getColumn(i, "lectStatCd") == "09") 
+			{
+				alert("폐강된 강좌가 있습니다.");
+				return;
+			}
+			
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		this.popCnt++;
+		var arrArguments = {
+			dataset : this.ds_classUpdate_list,
+			brchCd : brchCd
+		}
+		this.gfn_openPopup("ClassTotChg" + this.popCnt, arrArguments, "ClassMng::ClassTotChg.xfdl", this, 1280, 720, true, true, null);
+	}
+	else
+	{
+		alert("1개의 강좌를 선택하세요.");
 	}
 };
 ]]></Script>
