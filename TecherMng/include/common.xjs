@@ -195,7 +195,7 @@ this.com_reset_search_form = function(pObj){
 			this.com_reset_search_form(arrObj[i].form);
 		}
 		else if(arrObj[i] == "[object Edit]" || arrObj[i] == "[object Calendar]"){
-			arrObj[i].set_text("");
+			arrObj[i].set_value("");
 		}
 		else if(arrObj[i] == "[object Combo]"){
 			arrObj[i].set_index(0);
@@ -324,4 +324,71 @@ this.com_set_branch_on_user = function(){
 	}
 	
 	this.ds_search.setColumn(0, 'brchCd', user_brchCd ? user_brchCd : "");
+}
+
+/**************************************************************************
+ * 핸드폰 번호 세팅
+ **************************************************************************/
+this.com_set_hpNo_to_stmidlastNo = function(str){
+	if(!str) return [];
+	
+	var arr = str.split('-');
+	if(arr.length > 1){
+		if(arr[0].length == 4){
+			var tmp = arr[0];
+			arr[2] = arr[1];
+			arr[1] = arr[2];
+		}
+	} else {
+		if(str.length == 11){
+			arr[0] = str.slice(0, 3);
+			arr[1] = str.slice(3, 7);
+			arr[2] = str.slice(7, 11);
+		} else if(str.length == 8){
+			arr[1] = str.slice(0, 4);
+			arr[2] = str.slice(4, 8);
+		}
+	}
+	
+	this.ds_search.setColumn(0, 'hpStNo', arr[0] ? arr[0] : '');
+	this.ds_search.setColumn(0, 'hpMidNo', arr[1] ? arr[1] : '');
+	this.ds_search.setColumn(0, 'hpLastNo', arr[2] ? arr[2] : '');
+
+}
+
+/**************************************************************************
+ * 그리드 체크 
+ **************************************************************************/
+this.com_get_checkedArr_in_grid = function(ds){
+	var check_array = ds.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	return checked_array;
+}
+/**************************************************************************
+ * 검색조건의 체크박스 문자열로 조합
+ **************************************************************************/
+this.com_set_checkbox_to_string = function(pObj){
+	var rtnStr = "";
+	var comma = "";
+	
+	var arrObj = pObj.form.components;
+	for(var i=0; i<arrObj.length; i++)
+	{	
+		var obj = arrObj[i];
+		if(obj == "[object CheckBox]"){
+			if(obj.id.indexOf('All') > -1 && obj.isChecked()){
+				return "";
+			}
+			if(obj.isChecked){
+				rtnStr = comma + obj.truevalue;
+				comma = ",";
+			}
+		}
+	}
+	
+	return rtnStr;
 }]]></Script>
