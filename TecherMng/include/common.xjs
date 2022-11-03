@@ -49,7 +49,9 @@ this.com_set_combobox_default = function(ds_list){
 			ds.setColumn(0, 'cd', '');
 			ds.setColumn(0, 'cdNm', info.cdNm);
 		}
- 		this.com_set_combobox_default_index(info);
+		if(!info.isGrid){
+			this.com_set_combobox_default_index(info);
+		}
 		ds.set_enableevent(true);
 	}
 }
@@ -194,7 +196,7 @@ this.com_reset_search_form = function(pObj){
 		if(arrObj[i] == "[object Div]"){
 			this.com_reset_search_form(arrObj[i].form);
 		}
-		else if(arrObj[i] == "[object Edit]" || arrObj[i] == "[object Calendar]"){
+		else if(arrObj[i] == "[object Edit]"){
 			arrObj[i].set_value("");
 		}
 		else if(arrObj[i] == "[object Combo]"){
@@ -203,6 +205,10 @@ this.com_reset_search_form = function(pObj){
 		else if(arrObj[i] == "[object CheckBox]"){
 			var tv = arrObj[i].truevalue;
 			arrObj[i].set_value(tv ? tv : true);
+		}
+		else if(arrObj[i] == "[object Calendar]"){
+			arrObj[i].set_value("");
+			arrObj[i].calendaredit.set_readonly(true); 
 		}
 	}
 }
