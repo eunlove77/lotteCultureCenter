@@ -48,7 +48,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="1" text="Div00" left="5" top="363" height="600" right="5" minwidth="660" maxwidth="">
+        <Div id="Div01" taborder="1" text="Div00" left="5" top="363" height="619" right="5" minwidth="660" maxwidth="">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="쿠폰 등록정보" left="0" top="1" width="75" cssclass="sta_WF_TitGray" height="17"/>
@@ -61,11 +61,11 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="3" text="Div01" left="0" top="Div00:-1" height="270" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+              <Div id="Div01" taborder="3" text="Div01" left="0" top="Div00:-1" height="245" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Grid id="Grid00" taborder="1" left="121" top="32" width="235" height="225" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none">
+                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="50" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false" onclick="Div01_Div01_Grid00_onclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -82,11 +82,12 @@
                           </Band>
                           <Band id="body">
                             <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="dataset.checkarray[currow]"/>
-                            <Cell col="1" text="bind:grade"/>
+                            <Cell col="1" text="bind:cdNm"/>
                           </Band>
                         </Format>
                       </Formats>
                     </Grid>
+                    <Static id="Static01" taborder="2" text="샘플 양식.xlxs" left="Static00:10" top="-1" width="379" height="30" cursor="pointer" textDecoration="underline" visible="false" onclick="Div01_Div01_Static01_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -99,41 +100,90 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" height="200" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" height="250" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="적용 강좌 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Div id="Div00" taborder="1" text="Div00" left="Static00:0" top="0" right="0" bottom="0">
-                      <Layouts>
-                        <Layout>
-                          <Grid id="Grid00" taborder="1" left="10" width="533" binddataset="ds_appl_ctgr" autofittype="col" oncellclick="Div01_Div03_Div00_Grid00_oncellclick" top="5" bottom="5">
-                            <Formats>
-                              <Format id="default">
-                                <Columns>
-                                  <Column size="150"/>
-                                  <Column size="150"/>
-                                  <Column size="150"/>
-                                </Columns>
-                                <Rows>
-                                  <Row size="24" band="head"/>
-                                  <Row size="24"/>
-                                </Rows>
-                                <Band id="head">
-                                  <Cell text="대분류"/>
-                                  <Cell col="1" cssclass="btn_WF_High" text="중분류"/>
-                                  <Cell col="2" text="소분류"/>
-                                </Band>
-                                <Band id="body">
-                                  <Cell text="bind:lrclsCtegryNm" textAlign="center" controlautosizingtype="none"/>
-                                  <Cell col="1" displaytype="normal" edittype="none" text="bind:mdclsCtegryNm" controlautosizingtype="none"/>
-                                  <Cell col="2" text="bind:smclsCtegryNm" controlautosizingtype="none"/>
-                                </Band>
-                              </Format>
-                            </Formats>
-                          </Grid>
-                        </Layout>
-                      </Layouts>
-                    </Div>
+                    <Grid id="Grid00" taborder="1" left="Static00:10" width="533" binddataset="ds_appl_ctgr" autofittype="col" top="10" bottom="10" visible="false">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="150"/>
+                            <Column size="150"/>
+                            <Column size="150"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24" band="head"/>
+                            <Row size="24"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell text="대분류"/>
+                            <Cell col="1" cssclass="btn_WF_High" text="중분류"/>
+                            <Cell col="2" text="소분류"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell text="bind:lrclsCtegryNm" textAlign="center" controlautosizingtype="none"/>
+                            <Cell col="1" displaytype="normal" edittype="none" text="bind:mdclsCtegryNm" controlautosizingtype="none"/>
+                            <Cell col="2" text="bind:smclsCtegryNm" controlautosizingtype="none"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                    <Grid id="Grid01" taborder="2" left="Static00:10" top="10" right="198" bottom="10" binddataset="ds_appl_lect" autofittype="col" visible="false">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="48"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24" band="head"/>
+                            <Row size="24"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell text="지점명"/>
+                            <Cell col="1" text="강좌코드"/>
+                            <Cell col="2" text="강좌유형"/>
+                            <Cell col="3" text="강좌상태"/>
+                            <Cell col="4" text="강좌명"/>
+                            <Cell col="5" text="강사명"/>
+                            <Cell col="6" text="강좌요일"/>
+                            <Cell col="7" text="강의횟수"/>
+                            <Cell col="8" text="강좌시간"/>
+                            <Cell col="9" text="강의시작일"/>
+                            <Cell col="10" text="강의종료일"/>
+                            <Cell col="11" text="그룹여부"/>
+                            <Cell col="12"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell text="bind:brchNm"/>
+                            <Cell col="1" text="bind:lectCd"/>
+                            <Cell col="2" text="bind:lectTpNm"/>
+                            <Cell col="3" text="bind:lectStatNm"/>
+                            <Cell col="4" text="bind:lectNm"/>
+                            <Cell col="5" text="bind:tcNm"/>
+                            <Cell col="6" text="bind:stringStDaywNm"/>
+                            <Cell col="7" text="bind:lectNbcnt"/>
+                            <Cell col="8" text="expr:lectSt == '' ? '' : lectSt + ' ~ ' + lectEnd"/>
+                            <Cell col="9" text="bind:lectStDtm"/>
+                            <Cell col="10" text="bind:lectEndDtm"/>
+                            <Cell col="11" text="bind:groupYn"/>
+                            <Cell col="12" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
                   </Layout>
                 </Layouts>
               </Div>
@@ -286,7 +336,7 @@ this.fn_detail = function ()
 		strSvcId : "detail",
 		strSvcUrl : this.baseSvrUrl + "detail.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applCtgrList",
+		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.parent.parent.parent.parent.parent.param.MENU_ID, 
@@ -342,9 +392,33 @@ this.fn_set_detail = function()
 	var dcTxt = this.gfn_setComma(this.ds_detail.getColumn(0, "dcAmt")) + (this.ds_detail.getColumn(0, "dcAmtClCd") == "RATES" ? "%" : "원") + " 할인";
 	var prdTxt = "";
 	
+	this.fn_sync_checkBox();
+	this.fn_sync_mbrGrde();
+	
 	if(this.ds_detail.getColumn(0, "issueStatCd") == "10")
 	{
 		this.Div00.form.Div10.form.btnEnd.set_visible(true);		
+	}
+	
+	if(this.ds_detail.getColumn(0, "issueObjClCd") == "EXCEL")
+	{
+		this.Div01.form.Div01.form.Static01.set_visible(true);
+		this.Div01.form.Div01.set_height(33);
+	}
+	else
+	{
+		this.Div01.form.Div01.form.Grid00.set_visible(true);
+		this.Div01.form.Div01.form.Grid00.set_height(225);
+		this.Div01.form.Div01.set_height(245);
+	}
+	
+	if(this.ds_detail.getColumn(0, "applLectClCd") == "CLASS")
+	{
+		this.Div01.form.Div03.form.Grid01.set_visible(true);
+	}
+	else
+	{
+		this.Div01.form.Div03.form.Grid00.set_visible(true);
 	}
 	
 	if(this.ds_detail.getColumn(0, "usePrdClCd") == "DEADLINE")
@@ -356,9 +430,10 @@ this.fn_set_detail = function()
 		prdTxt = this.ds_detail.getColumn(0, "useStDt") + " ~ " + this.ds_detail.getColumn(0, "useEndDt");
 	}
 	
-	this.fn_sync_checkBox();
 	this.Div01.form.Div04.form.Static01.set_text(dcTxt);
 	this.Div01.form.Div05.form.Static01.set_text(prdTxt);	
+	this.Div01.set_fittocontents("height");
+	this.Div01.form.resetScroll();
 }
 
 //체크박스 동기화
@@ -380,6 +455,19 @@ this.fn_sync_checkBox = function()
 			}	
 		}
 	}
+}
+
+//회원등급 동기화
+this.fn_sync_mbrGrde = function()
+{
+	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
+	{
+		if(this.gfn_nvl(this.ds_mem_grade.getColumn(i, "mbrGrdeCd")) != "")
+		{
+			this.ds_mem_grade.checkarray[i] = 1;
+		}
+	}
+	this.Div01.form.Div01.form.Grid00.redrawExprCell()
 }
 
 
