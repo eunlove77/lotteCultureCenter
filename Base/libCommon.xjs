@@ -197,7 +197,7 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 				if(application.gdsCode.getColumn(i, "cdId") == "spotCd" && application.gdsCode.getColumn(i, "dpth") == "1"){
 					nRow = application.gdsSpotCdList.addRow();
 					application.gdsSpotCdList.setColumn(nRow, "cd", application.gdsCode.getColumn(i, "cd"));
-					application.gdsSpotCdList.setColumn(nRow, "cdNm", application.gdsCode.getColumn(i, "cdNm"));
+					application.gdsSpotCdList.setColumn(nRow, "cdNm", "[" + application.gdsCode.getColumn(i, "cd") + "] " + application.gdsCode.getColumn(i, "cdNm"));
 				}
 			}
 			
@@ -875,4 +875,54 @@ this.gfn_setMaskingTel = function(sValue)
 	}
 	
 	return sMask;
-};]]></Script>
+};
+
+
+/**
+* @description 	   : 콤보박스에 년도를 표시 데이터셋 자동 생성 후 바인딩
+*/
+this.gfn_set_year = function(form, targetObj, endYy, strtYy){
+	var ds = new Dataset;
+	var dsId = "ds_year";
+	
+	ds.addColumn("data", "String");
+	ds.addColumn("code", "String");
+	
+	form.addChild(dsId, ds);
+	
+	for(var i = strtYy ; i >= endYy ; i--){
+		var nRow = this[dsId].addRow();
+		this[dsId].setColumn(nRow, "data", i + "년");
+		this[dsId].setColumn(nRow, "code", i);
+	}
+	
+	targetObj.setInnerDataset(this[dsId]);				
+	targetObj.set_codecolumn("code");
+	targetObj.set_datacolumn("data");
+	targetObj.set_index(0);
+}
+
+/**
+* @description 	   : 콤보박스에 년도를 표시 데이터셋 자동 생성 후 바인딩
+*/
+this.gfn_set_month = function(form, targetObj){
+	var ds = new Dataset;
+	var dsId = "ds_month";
+	
+	ds.addColumn("data", "String");
+	ds.addColumn("code", "String");
+	
+	form.addChild(dsId, ds);
+	
+	for(var i = 1 ; i <= 12 ; i++){
+		var nRow = this[dsId].addRow();
+		this[dsId].setColumn(nRow, "data", i + "월");
+		this[dsId].setColumn(nRow, "code", i);
+	}
+	
+	targetObj.setInnerDataset(this[dsId]);				
+	targetObj.set_codecolumn("code");
+	targetObj.set_datacolumn("data");
+	targetObj.set_index(0);
+}
+]]></Script>

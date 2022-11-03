@@ -21,10 +21,10 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Div id="Div00" taborder="1" left="Static00:10" top="5" formscrolltype="none" text="" bottom="5" right="10">
+                    <Div id="Div00" taborder="1" left="Static00:10" top="5" formscrolltype="none" text="" bottom="5" right="0">
                       <Layouts>
                         <Layout type="horizontal" flexwrap="wrap">
-                          <CheckBox id="chkSpotAll" taborder="0" text="전체" left="11" top="9" width="130" height="20" fittocontents="none" value="false"/>
+                          <CheckBox id="chkSpotAll" taborder="0" text="전체" left="11" top="9" width="133" height="20" fittocontents="none" value="false" onclick="fn_checkboxAll" truevalue="true" falsevalue="false"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -50,7 +50,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="1" text="Div00" left="45" top="Div00:10" height="655" right="45" minwidth="720" maxwidth="">
+        <Div id="Div01" taborder="1" text="Div00" left="45" top="Div00:10" height="775" right="45" minwidth="720" maxwidth="">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="쿠폰 등록정보" left="0" top="1" width="75" cssclass="sta_WF_TitGray" height="17"/>
@@ -89,7 +89,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Radio id="radioTrgtMem" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="GRADE" text="회원등급별" index="0">
+                    <Radio id="radioTrgtMem" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="GRADE" text="회원등급별" index="0" onitemchanged="Div01_Div01_radioTrgtMem_onitemchanged">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -124,11 +124,19 @@
                           </Band>
                           <Band id="body">
                             <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="dataset.checkarray[currow]"/>
-                            <Cell col="1" text="bind:grade"/>
+                            <Cell col="1" text="bind:cdNm"/>
                           </Band>
                         </Format>
                       </Formats>
                     </Grid>
+                    <Div id="Div00" taborder="3" text="Div00" left="Static00:10" top="28" height="39" right="0" visible="false">
+                      <Layouts>
+                        <Layout>
+                          <Button id="uploadBtn" taborder="0" text="파일찾기" top="4" width="84" height="30" cssclass="btn_WF_Medium" left="2" onclick="Div01_Div01_Div00_uploadBtn_onclick"/>
+                          <Static id="Static00" taborder="1" text="샘플 양식.xlxs" left="uploadBtn:10" top="4" width="379" height="30" cursor="pointer" textDecoration="underline"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
                   </Layout>
                 </Layouts>
               </Div>
@@ -141,11 +149,11 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" height="180" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" height="300" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="적용 강좌 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Radio id="radioTrgtLect" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="CTGR" text="카테고리 지정" index="0">
+                    <Radio id="radioTrgtLect" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="CTGR" text="카테고리 지정" index="0" onitemchanged="Div01_Div03_radioTrgtLect_onitemchanged">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -167,9 +175,10 @@
                       <Layouts>
                         <Layout>
                           <Combo id="Combo00" taborder="0" text="" left="10" top="2" width="160" height="21" innerdataset="ds_category01" codecolumn="cd" datacolumn="cdNm" displaynulltext="대분류" onitemchanged="Div01_Div03_Div00_Combo00_onitemchanged"/>
-                          <Combo id="Combo01" taborder="1" left="Combo00:10" top="2" width="160" height="21" innerdataset="ds_category02" codecolumn="cd" datacolumn="cdNm" displaynulltext="중분류" onitemchanged="Div01_Div03_Div00_Combo01_onitemchanged"/>
+                          <Combo id="Combo01" taborder="1" left="Combo00:10" top="2" width="160" height="21" innerdataset="ds_category02" codecolumn="cd" datacolumn="cdNm" displaynulltext="중분류" onitemclick="Div01_Div03_Div00_Combo01_onitemclick"/>
                           <Combo id="Combo02" taborder="2" left="Combo01:10" top="2" width="160" height="21" displaynulltext="소분류" value="" index="-1" innerdataset="ds_category03" codecolumn="cd" datacolumn="cdNm" onitemclick="Div01_Div03_Div00_Combo02_onitemclick" visible="false"/>
-                          <Grid id="Grid00" taborder="3" left="10" width="533" height="90" binddataset="ds_appl_ctgr" autofittype="col" bottom="10" oncellclick="Div01_Div03_Div00_Grid00_oncellclick">
+                          <Static id="Static00" taborder="4" text="* 카테고리는 최대 10개까지 지정 가능합니다." left="10" top="30" width="250" height="21" color="gray"/>
+                          <Grid id="Grid00" taborder="3" left="10" width="533" binddataset="ds_appl_ctgr" autofittype="col" oncellclick="Div01_Div03_Div00_Grid00_oncellclick" top="Static00:5" bottom="10">
                             <Formats>
                               <Format id="default">
                                 <Columns>
@@ -197,7 +206,69 @@
                               </Format>
                             </Formats>
                           </Grid>
-                          <Static id="Static00" taborder="4" text="* 카테고리는 최대 10개까지 지정 가능합니다." left="10" top="26" width="250" height="21" color="gray"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01" taborder="3" text="Div00" left="Static00:0" top="26" right="0" bottom="0" visible="false">
+                      <Layouts>
+                        <Layout>
+                          <Button id="searchBtn" taborder="1" text="강좌 검색" top="8" width="84" height="30" cssclass="btn_WF_Medium" left="11" onclick="Div01_Div03_Div01_searchBtn_onclick"/>
+                          <Static id="Static00" taborder="2" text="*강좌는 최대 10개까지 지정 가능합니다." left="searchBtn:10" top="13" width="250" height="21" color="gray"/>
+                          <Grid id="Grid00" taborder="1" left="10" top="Static00:10" right="10" bottom="10" binddataset="ds_appl_lect" autofittype="col" oncellclick="Div01_Div03_Div01_Grid00_oncellclick">
+                            <Formats>
+                              <Format id="default">
+                                <Columns>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="80"/>
+                                  <Column size="48"/>
+                                </Columns>
+                                <Rows>
+                                  <Row size="24" band="head"/>
+                                  <Row size="24"/>
+                                </Rows>
+                                <Band id="head">
+                                  <Cell text="지점명"/>
+                                  <Cell col="1" text="강좌코드"/>
+                                  <Cell col="2" text="강좌유형"/>
+                                  <Cell col="3" text="강좌상태"/>
+                                  <Cell col="4" text="강좌명"/>
+                                  <Cell col="5" text="강사명"/>
+                                  <Cell col="6" text="강좌요일"/>
+                                  <Cell col="7" text="강의횟수"/>
+                                  <Cell col="8" text="강좌시간"/>
+                                  <Cell col="9" text="강의시작일"/>
+                                  <Cell col="10" text="강의종료일"/>
+                                  <Cell col="11" text="그룹여부"/>
+                                  <Cell col="12"/>
+                                </Band>
+                                <Band id="body">
+                                  <Cell text="bind:brchNm"/>
+                                  <Cell col="1" text="bind:lectCd"/>
+                                  <Cell col="2" text="bind:lectTpNm"/>
+                                  <Cell col="3" text="bind:lectStatNm"/>
+                                  <Cell col="4" text="bind:lectNm"/>
+                                  <Cell col="5" text="bind:tcNm"/>
+                                  <Cell col="6" text="bind:stringStDaywNm"/>
+                                  <Cell col="7" text="bind:lectNbcnt"/>
+                                  <Cell col="8" text="expr:lectSt == '' ? '' : lectSt + ' ~ ' + lectEnd"/>
+                                  <Cell col="9" text="bind:lectStDtm"/>
+                                  <Cell col="10" text="bind:lectEndDtm"/>
+                                  <Cell col="11" text="bind:groupYn"/>
+                                  <Cell col="12" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                                </Band>
+                              </Format>
+                            </Formats>
+                          </Grid>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -256,9 +327,9 @@
                     <Div id="Div00" taborder="2" left="Static00:0" top="30" width="235" height="30">
                       <Layouts>
                         <Layout>
-                          <Calendar id="strtDtm" taborder="0" left="10" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" enableevent="true" usesoftkeyboard="true" type="normal" editformat="yyyy-MM-dd" autoskip="false" oneditclick="Div01_Div05_Div00_strtDtm_oneditclick"/>
+                          <Calendar id="strtDtm" taborder="0" left="10" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" enableevent="true" usesoftkeyboard="true" type="normal" editformat="yyyy-MM-dd" autoskip="false" oneditclick="Div01_Div05_Div00_strtDtm_oneditclick" oncloseup="Div01_Div05_Div00_strtDtm_oncloseup"/>
                           <Static id="Static01" taborder="1" text="~" left="strtDtm:4" top="3" width="9" height="20"/>
-                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick"/>
+                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick" oncloseup="Div01_Div05_Div00_endDtm_oncloseup"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -321,6 +392,37 @@
           </Layouts>
         </Div>
         <Static id="txtMenuNm" taborder="5" text="쿠폰등록" left="10" top="20" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Grid id="Grid00" taborder="6" left="415" top="525" width="405" height="225" binddataset="ds_mem_excel">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="onlnCustNo"/>
+                <Cell col="1" text="mbrNo"/>
+                <Cell col="2" text="id"/>
+                <Cell col="3" text="korNm"/>
+                <Cell col="4" text="hpNo"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:onlnCustNo"/>
+                <Cell col="1" text="bind:mbrNo"/>
+                <Cell col="2" text="bind:id"/>
+                <Cell col="3" text="bind:korNm"/>
+                <Cell col="4" text="bind:hpNo"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
@@ -379,9 +481,18 @@
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_mem_excel"/>
+      <Dataset id="ds_mem_excel">
+        <ColumnInfo>
+          <Column id="onlnCustNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
       <Dataset id="ds_appl_ctgr">
         <ColumnInfo>
           <Column id="lrclsCtegryCd" type="STRING" size="256"/>
@@ -392,18 +503,49 @@
           <Column id="smclsCtegryNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_appl_lect"/>
+      <Dataset id="ds_appl_lect">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="rplcOptnNm" type="STRING" size="256"/>
+          <Column id="groupYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
+this.popCnt = 0;
+
+this.rsltMsg = ""
+this.rsltList = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -434,12 +576,8 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.gfn_transaction(tranObj);
 	
 	if(this.parent.cpnSeqno != ""){	
-		if(this.parent.type == "detail")
-		{
-			this.ds_detail.setColumn(0, "cpnSeqno", this.parent.cpnSeqno);
-			this.txtMenuNm.set_text("쿠폰 상세");
-		}
-		
+		this.ds_detail.setColumn(0, "cpnSeqno", this.parent.cpnSeqno);
+		this.txtMenuNm.set_text("쿠폰 상세");
 		this.fn_detail();
 		this.Div04.set_height(95);
 		this.resetScroll()
@@ -456,7 +594,7 @@ this.fn_detail = function ()
 		strSvcId : "detail",
 		strSvcUrl : this.baseSvrUrl + "detail.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applCtgrList",
+		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.parent.parent.param.MENU_ID,
@@ -478,17 +616,16 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	switch(svcID)
 	{
 		
-		case "codeList":		
-			break;
-		case "ctgrList":
+		case "checkMbr":
+			this.fn_set_mbr_list();
 			break;
 		case "save":
 			this.alert("저장되었습니다.");
-			this.fn_list();
+			this.opener.components[0].form.fn_list();
+			this.close();
 			break;
 		case "detail":    
 			this.fn_set_detail();
-
 			break;
 	}
 
@@ -532,6 +669,40 @@ this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 	this.Div01.form.Div05.form.Div01.form.resetScroll();
 	this.Div01.form.resetScroll();
 	this.resetScroll();
+};
+
+//발급대상 라디오버튼
+this.Div01_Div01_radioTrgtMem_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postvalue == 'EXCEL')
+	{	
+		this.Div01.form.Div01.form.Div00.set_visible(true);
+		this.Div01.form.Div01.form.Grid00.set_visible(false);
+		this.ds_mem_grade.checkarray = new Array();
+	}
+	else
+	{
+		this.Div01.form.Div01.form.Div00.set_visible(false);
+		this.Div01.form.Div01.form.Grid00.set_visible(true);
+		this.ds_mem_excel.deleteAll();
+	}
+};
+
+//적용강좌 라디오버튼
+this.Div01_Div03_radioTrgtLect_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postvalue == 'CLASS')
+	{	
+		this.Div01.form.Div03.form.Div01.set_visible(true);
+		this.Div01.form.Div03.form.Div00.set_visible(false);
+		this.ds_appl_ctgr.deleteAll();
+	}
+	else
+	{
+		this.Div01.form.Div03.form.Div01.set_visible(false);
+		this.Div01.form.Div03.form.Div00.set_visible(true);
+		this.ds_appl_lect.deleteAll();
+	}
 };
 
 //할인 금액 라디오 버튼
@@ -592,15 +763,14 @@ this.Div01_Div03_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 };
 
 //중분류 선택 시
-this.Div01_Div03_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-console.log(this.ds_category02)
 	var tranObj = {
 		strSvcId : "ctgrList",
 		strSvcUrl : this.baseSvrUrl + "codeList.do",
 		inData : "",
 		outData : "ds_category03=ctgrList",
-		strArg : "ctegryId="+e.postvalue+" ctegryLvlNo=2",
+		strArg : "ctegryId="+e.itemvalue+" ctegryLvlNo=2",
 		callBackFnc : "fnCallback",
 		menuSeq : this.parent.parent.param.MENU_ID,
 		isAsync : false,
@@ -671,20 +841,19 @@ this.fn_checkValidation = function(){
 			spotStr += spotObj[i].value + "|";
 		}	
 	}
-	
 	if(!spotFlag)
 	{
 		this.alert("지점을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.chkSpotAll.setFocus();
 		return;
 	}
-	if(this.gfn_isNull(this.Div00.form.Div01.form.Edit00.value))
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Edit00.value) == "")
 	{
 		this.alert("쿠폰명을 입력하세요.");
 		this.Div00.form.Div01.form.Edit00.setFocus();
 		return;
 	}
-	if(this.Div01.form.Div00.form.radioIssuCd == 'NORMAL')
+	if(this.Div01.form.Div00.form.radioIssuCd.value == 'NORMAL')
 	{
 		if(this.Div01.form.Div01.form.radioTrgtMem.value != 'EXCEL')
 		{
@@ -693,9 +862,14 @@ this.fn_checkValidation = function(){
 			
 			for(var i=0; i < this.ds_mem_grade.checkarray.length; i++){
 				if(this.ds_mem_grade.checkarray[i] == 1)
-				{
-					this.ds_mem_grade.setColumn(i, "chk", 1);
+				{	
+					console.log(this.ds_mem_grade.getColumn(i, "cd"))
+					this.ds_mem_grade.setColumn(i, "mbrGrdeCd", this.ds_mem_grade.getColumn(i, "cd"));
 					gradeFlag = true;
+				}
+				else
+				{
+					this.ds_mem_grade.setColumn(i, "mbrGrdeCd", null);
 				}
 			}
 			
@@ -708,7 +882,11 @@ this.fn_checkValidation = function(){
 		}
 		else
 		{
-			alert("파일 첨부 누락");
+			if(this.ds_mem_excel.getRowCount() == 0)
+			{
+				alert("회원리스트를 첨부하세요.");
+				return;
+			}
 		}
 				
 	}
@@ -722,11 +900,17 @@ this.fn_checkValidation = function(){
 	if(this.Div01.form.Div03.form.radioTrgtLect.value == 'CTGR' && this.ds_appl_ctgr.getRowCount() == 0)
 	{
 		this.alert("대상 카테고리를 선택하세요.");
-		this.Div01.form.Div03.form.Grid00.setFocus();
+		this.Div01.form.Div03.form.Div00.form.Grid00.setFocus();
+		return;
+	}
+	else if(this.Div01.form.Div03.form.radioTrgtLect.value == 'CLASS' && this.ds_appl_lect.getRowCount() == 0)
+	{
+		this.alert("대상 강좌를 선택하세요.");
+		this.Div01.form.Div03.form.Div01.form.Grid00.setFocus();
 		return;
 	}
 	
-	if(this.gfn_isNull(this.Div01.form.Div04.form.MaskEdit00.value))
+	if(this.gfn_nvl(this.Div01.form.Div04.form.MaskEdit00.value) == "")
 	{
 		this.alert("할인 금액(율)을 입력하세요.");
 		this.Div01.form.Div04.form.MaskEdit00.setFocus();
@@ -735,20 +919,28 @@ this.fn_checkValidation = function(){
 	
 	if(this.Div01.form.Div05.form.radioPeriod.value == 'PERIOD')
 	{
-		if(this.gfn_isNull(this.Div01.form.Div05.form.Div00.form.strtDtm.value))
+		var strtDt = this.Div01.form.Div05.form.Div00.form.strtDtm.value;
+		var endDt = this.Div01.form.Div05.form.Div00.form.endDtm.value;
+		
+		if(this.gfn_nvl(strtDt) == "")
 		{
 			this.alert("사용 시작일을 입력하세요.");
 			this.Div01.form.Div05.form.Div00.form.strtDtm.setFocus();
 			return;
 		}
-		else if(this.gfn_isNull(this.Div01.form.Div05.form.Div00.form.endDtm.value))
+		else if(this.gfn_nvl(endDt) == "")
 		{
 			this.alert("사용 종료일을 입력하세요.");
 			this.Div01.form.Div05.form.Div00.form.endDtm.setFocus();
 			return;
 		}
+		else if(strtDt > endDt)
+		{
+			alert("사용 종료일은 사용 시작일 이후로 설정하세요.");
+			return;
+		}
 	}
-	else if(this.gfn_isNull(this.Div01.form.Div05.form.Div01.form.Edit00.value))
+	else if(this.gfn_nvl(this.Div01.form.Div05.form.Div01.form.Edit00.value) == "")
 	{
 		this.alert("사용 가능일을 입력하세요.");
 		this.Div01.form.Div05.form.Div01.form.Edit00.setFocus();
@@ -764,7 +956,7 @@ this.fn_save = function(){
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.baseSvrUrl + "insert.do",
-		inData : "infoData=ds_detail applCtgrData=ds_appl_ctgr mbrGrdeData=ds_mem_grade",
+		inData : "infoData=ds_detail mbrGrdeData=ds_mem_grade mbrExclData=ds_mem_excel applCtgrData=ds_appl_ctgr applLectData=ds_appl_lect",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
@@ -785,11 +977,12 @@ this.fn_set_spot = function()
 	{
 		var id = "chkSpot" + i;
 		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 9, 130, 20);
+		objComp.init(id, content[i] + ":10", 9, 133, 20);
 		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		objComp.set_text("["+list.getColumn(i, "cd")+"]"+list.getColumn(i, "cdNm"));		
+		objComp.set_text(list.getColumn(i, "cdNm"));
 		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
+		objComp.set_falsevalue("");
+		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
 		objComp.show();	
 		content.push(id);
 		
@@ -816,9 +1009,16 @@ this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 //상세화면 세팅
 this.fn_set_detail = function()
 {
-	this.fn_sync_checkBox(brchObj, brchCdArr);
+	this.fn_sync_checkBox();
+	this.fn_sync_mbrGrde();
 	
 	var itemInfo = new nexacro.ItemChangeEventInfo();
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "issueObjClCd");
+	this.Div01_Div01_radioTrgtMem_onitemchanged(this.Div01.form.Div01.form.radioTrgtMem, itemInfo);
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "applLectClCd");
+	this.Div01_Div03_radioTrgtLect_onitemchanged(this.Div01.form.Div03.form.radioTrgtLect, itemInfo);
 	
 	itemInfo.postvalue = this.ds_detail.getColumn(0, "issueMthdClCd");
 	this.Div01_Div00_radioIssuCd_onitemchanged(this.Div01.form.Div00.form.radioIssuCd, itemInfo);
@@ -853,6 +1053,19 @@ this.fn_sync_checkBox = function()
 			}	
 		}
 	}
+}
+
+//회원등급 동기화
+this.fn_sync_mbrGrde = function()
+{
+	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
+	{
+		if(this.gfn_nvl(this.ds_mem_grade.getColumn(i, "mbrGrdeCd")) != "")
+		{
+			this.ds_mem_grade.checkarray[i] = 1;
+		}
+	}
+	this.Div01.form.Div01.form.Grid00.redrawExprCell()
 }
 
 //중분류 초기화
@@ -900,6 +1113,178 @@ this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 	
 };
 
+//강좌검색 버튼 
+this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
+	var spotStr = "";
+	var spotFlag = false;
+	
+	for(var i=0; i<spotObj.length; i++)
+	{
+		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
+		{		
+			spotFlag = true;
+			spotStr += spotObj[i].value + ",";
+		}	
+	}
+	
+	if(!spotFlag)
+	{
+		this.alert("지점을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.chkSpotAll.setFocus();
+		return;
+	}
+	
+	this.popCnt++;
+	var arrArguments = {
+		type : 1,
+		brchCd : spotStr,
+		dataset : this.ds_appl_lect
+	}
+	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 500, true, true, null);
+};
+
+this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objGridDs = obj.getBindDataset();
+	
+	if(e.cell == 12){		
+		this.ds_appl_lect.deleteRow(e.row);	
+	}
+};
+
+
+this.fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]")
+			{
+				arrObj[i].set_value(arrObj[i].truevalue);
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+			
+		}
+	}
+	
+}
+
+this.fn_checkbox = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+
+this.Div01_Div01_Div00_uploadBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.importObj = new ExcelImportObject("Import00", this);
+	this.importObj.set_importtype(nexacro.ImportTypes.EXCEL);
+	this.importObj.set_importurl(this.application.Domain + this.application.getVariable("excelImportExport"));
+	
+	this.importObj.addEventHandler("onsuccess", this.Import00_onsuccess, this);
+	this.importObj.addEventHandler("onerror", this.Import00_onerror, this);
+	
+	this.importObj.importData("", "", "ds_mem_excel=output1");
+};
+
+this.Import00_onsuccess = function(obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
+{
+	this.ds_mem_excel.updateColID("Column0", "onlnCustNo");
+	this.ds_mem_excel.updateColID("Column1", "mbrNo");
+	this.ds_mem_excel.updateColID("Column2", "mbrId");
+	this.ds_mem_excel.updateColID("Column3", "korNm");
+	this.ds_mem_excel.updateColID("Column4", "hpNo");
+	
+	this.excel_import_validation_check();
+
+	this.Div01.form.Div01.form.Div00.form.Static00.set_text(e.url.split("/")[2]);
+	
+	this.Grid00.createFormat();
+}
+
+this.Import00_onerror = function(obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
+{
+	console.log(e.errormsg);
+}
+
+
+/* 엑셀 업로드 유효성 검사 */
+this.excel_import_validation_check = function(){
+	this.ds_mem_excel.deleteRow(0);	//헤드제거
+	
+	var tranObj = {
+		strSvcId : "checkMbr",
+		strSvcUrl : this.baseSvrUrl + "checkMbr.do",
+		inData : "mbrList=ds_mem_excel",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.parent.parent.param.MENU_ID,
+		isAsync : false,
+		isPopup : true
+	}
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_set_mbr_list = function(){
+	var delRowArr = this.rsltList.split(",");
+	this.ds_mem_excel.deleteMultiRows(delRowArr);
+	
+	alert(this.rsltMsg);
+}
 ]]></Script>
     <Bind>
       <BindItem id="cpnNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="cpnNm"/>
