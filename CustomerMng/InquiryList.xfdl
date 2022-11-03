@@ -10,6 +10,7 @@
             <Format id="default">
               <Columns>
                 <Column size="40" band="left"/>
+                <Column size="130"/>
                 <Column size="303"/>
                 <Column size="130"/>
                 <Column size="130"/>
@@ -20,30 +21,32 @@
                 <Column size="80"/>
               </Columns>
               <Rows>
-                <Row size="30" band="head"/>
-                <Row size="30"/>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
               </Rows>
               <Band id="head">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" text="질문"/>
-                <Cell col="2" text="작성자"/>
-                <Cell col="3" text="이메일"/>
-                <Cell col="4" text="연락처"/>
-                <Cell col="5" text="등록일"/>
-                <Cell col="6" text="답변자"/>
-                <Cell col="7" text="답변여부"/>
-                <Cell col="8" text="답변일"/>
+                <Cell col="1" text="문의유형"/>
+                <Cell col="2" text="질문"/>
+                <Cell col="3" text="작성자"/>
+                <Cell col="4" text="이메일"/>
+                <Cell col="5" text="연락처"/>
+                <Cell col="6" text="등록일"/>
+                <Cell col="7" text="답변자"/>
+                <Cell col="8" text="답변여부"/>
+                <Cell col="9" text="답변일"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:faqSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="2" text="bind:mbrId"/>
-                <Cell col="3" text="bind:email"/>
-                <Cell col="4" text="bind:hpNo"/>
-                <Cell col="5" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="6" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
-                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;ansYn&quot;) == &quot;Y&quot; ? &quot;답변완료&quot; : &quot;미답변&quot;"/>
-                <Cell col="8" text="bind:ansDtm"/>
+                <Cell col="1" text="expr:clCd? clNm : ''"/>
+                <Cell col="2" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="3" text="bind:mbrId"/>
+                <Cell col="4" text="bind:email"/>
+                <Cell col="5" text="bind:hpNo"/>
+                <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="7" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
+                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;ansYn&quot;) == &quot;Y&quot; ? &quot;답변완료&quot; : &quot;미답변&quot;"/>
+                <Cell col="9" text="bind:ansDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -59,8 +62,7 @@
         <Div id="Div00_00" taborder="4" text="Div00" left="7" top="57" height="173" formscrolltype="both" right="0">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
-              <Div id="conDiv" taborder="1" text="Div00" left="3" top="Static00:9" height="134" cssclass="div_WF_TableComp" right="8">
+              <Div id="conDiv" taborder="1" text="Div00" left="3" top="34" height="134" cssclass="div_WF_TableComp" right="8">
                 <Layouts>
                   <Layout>
                     <Div id="searchDiv" taborder="0" text="Div01" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="2">
@@ -75,7 +77,7 @@
                               </ColumnInfo>
                               <Rows>
                                 <Row>
-                                  <Col id="codecolumn"/>
+                                  <Col id="codecolumn">0</Col>
                                   <Col id="datacolumn">전체</Col>
                                 </Row>
                                 <Row>
@@ -89,7 +91,7 @@
                               </Rows>
                             </Dataset>
                           </Combo>
-                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21"/>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21" onkeydown="Div00_00_conDiv_searchDiv_searchQuery_onkeydown"/>
                           <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
                           <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
                         </Layout>
@@ -269,6 +271,15 @@ this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e
 	this.fn_list();
 };
 
+//엔터키 검색
+this.Div00_00_conDiv_searchDiv_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_list(1);
+	}
+};
+
 //초기화 버튼
 this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -279,7 +290,7 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 1)
+	if(e.cell == 2)
 	{
 		var	onlnQuesSeqno = obj.getBindDataset().getColumn(e.row, "onlnQuesSeqno");
 		
@@ -296,6 +307,7 @@ this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 
 //조회
 this.fn_list = function(){
+	
 	var tranObj = {};
 	tranObj.strSvcId	= "select_inquiry";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/inquiryList.do";
@@ -304,6 +316,7 @@ this.fn_list = function(){
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
 	this.gfn_transaction(tranObj);
 }
@@ -394,22 +407,18 @@ this.reset_search_form = function(){
 
 //삭제
 this.fn_delete = function ()
-{		
-	var strSvcId    = "delete";
-	var strSvcUrl   = this.application.Admin_svc + "::/customer/deleteInquiry.do";
-	var inData      = "inquiryList=inquiryDs:U";
-	var outData     = "inquiryDs=output1";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/deleteInquiry.do";
+	tranObj.inData      = "inquiryList=inquiryDs:U";
+	tranObj.outData     = "inquiryDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-		strSvcUrl ,       // trabsaction을 요청할 주소
-		inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-		outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-		strArg,         // 입력값으로 보낼 arguments, a=b
-		callBackFnc,       // transaction의 결과를 받을 Function 이름
-		isAsync);         // 비동기통신 여부 [생략가능]
+	this.gfn_transaction(tranObj);
 };
 
 //코드 체크박스 세팅
@@ -434,83 +443,12 @@ this.fn_set_clCd = function()
 		//this.Div00_00.form.conDiv.form.typeDiv.form.resetScroll();
 		//this.Div00.form.Div00.form.Div00.form.resetScroll()
 	}
-}
-/**************************************************************************
-* 그리드 체크박스 영역
-**************************************************************************/
-this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx) 
-{ 
-	//체크여부 정보를 담을 Array를 사용자 변수로 설정
-	objDs.checkarray = new Array(); 
-	
-	//데이터셋 온로드이벤트 추가
-	objDs.addEventHandler("onload", this.gfnDataset_onload); 
-	
-	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
-	objGrd.checkcell = nCheckCellIdx; 
-	
-	//그리드 Cell Click 이벤트 추가
-	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick); 
-	
-	//그리드 Head Click 이벤트 추가
-	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick); 
-} 
-this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
-{ 
-	if(e.reason==0) 
-	{ 
-		//데이터셋이 로드되면 checkarray 초기화
-		obj.checkarray = new Array(); 
-	} 
-}; 
-this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var objDs; 
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		
-		if(objDs.checkarray[e.row]==1) 
-		{ 
-			//체크 해제
-			objDs.checkarray[e.row] = 0; 
-		}else 
-		{ 
-			//체크 설정
-			objDs.checkarray[e.row] = 1; 
-		}
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-}; 
-this.gfnGrid_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo) 
-{ 
-	var i; 
-	var objDs;
-	
-	//클릭된 cell이 checkcell이면
-	if(e.cell==obj.checkcell) 
-	{ 
-		objDs = obj.getBindDataset(); 
-		nChkVal = obj.getCellText(-1, e.cell); 
-		
-		if(nChkVal==1)nChkVal = 0; 
-		else nChkVal = 1; 
-		
-		//Head의 체크 상태 변경
-		obj.setCellProperty("head", e.cell, "text", nChkVal); 
-		
-		//Body의 체크 상태 변경
-		for(i=0;i<objDs.rowcount;i++) 
-		{ 
-			objDs.checkarray[i] = nChkVal; 
-		} 
-		
-		//Expr이 바로 반영되도록 실행
-		obj.redrawExprCell(); 
-	} 
-};]]></Script>
+}]]></Script>
+    <Bind>
+      <BindItem id="strtDt" compid="Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDt"/>
+      <BindItem id="endDt" compid="Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDt"/>
+      <BindItem id="f" compid="Div00_00.form.conDiv.form.searchDiv.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
+      <BindItem id="q" compid="Div00_00.form.conDiv.form.searchDiv.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+    </Bind>
   </Form>
 </FDL>

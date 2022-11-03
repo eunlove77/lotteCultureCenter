@@ -19,8 +19,8 @@
                 <Column size="80"/>
               </Columns>
               <Rows>
-                <Row size="30" band="head"/>
-                <Row size="30"/>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
               </Rows>
               <Band id="head">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
@@ -57,8 +57,7 @@
         <Div id="Div00_00" taborder="4" text="Div00" left="7" top="57" height="173" formscrolltype="both" right="0">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
-              <Div id="conDiv" taborder="1" text="Div00" left="3" top="Static00:9" height="134" cssclass="div_WF_TableComp" right="8">
+              <Div id="conDiv" taborder="1" text="Div00" left="3" top="34" height="134" cssclass="div_WF_TableComp" right="8">
                 <Layouts>
                   <Layout>
                     <Div id="searchDiv" taborder="0" text="Div01" left="0" top="94" height="33" cssclass="div_WF_CompWrap" right="2">
@@ -137,6 +136,19 @@
                   </Layout>
                 </Layouts>
               </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="ctgyDiv11" taborder="5" text="Div01" left="0" top="1232" height="33" cssclass="div_WF_CompWrap" right="20" visible="false">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="분류" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+              <CheckBox id="chkAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
+              <CheckBox id="chkClCd1" taborder="1" text="회원가입" left="chkAll:6" top="5" width="78" height="20" onclick="classified_ctgry_checkbox_onclick" truevalue="01"/>
+              <CheckBox id="chkClCd2" taborder="2" text="수강신청'취소" left="chkClCd1:6" top="5" height="20" truevalue="02" width="95" onclick="classified_ctgry_checkbox_onclick"/>
+              <CheckBox id="chkClCd3" taborder="4" text="강좌'강사" left="chkClCd2:6" top="5" height="20" truevalue="03" width="74" onclick="classified_ctgry_checkbox_onclick"/>
+              <CheckBox id="chkClCd4" taborder="5" text="지점'홈페이지" left="chkClCd3:6" top="5" height="20" truevalue="04" width="102" onclick="classified_ctgry_checkbox_onclick"/>
+              <CheckBox id="chkClCd5" taborder="6" text="기타" left="chkClCd4:6" top="5" width="53" height="20" truevalue="05" onclick="classified_ctgry_checkbox_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -520,6 +532,7 @@ this.fn_delete = function ()
       <BindItem id="item0" compid="Div00_00.form.conDiv.form.searchDiv.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
       <BindItem id="item1" compid="Div00_00.form.conDiv.form.searchDiv.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
       <BindItem id="item2" compid="Div00_00.form.conDiv.form.ctgyDiv.form.chkAll" propid="value" datasetid="searchDs" columnid="clCdAll"/>
+      <BindItem id="item3" compid="ctgyDiv11.form.chkAll" propid="value" datasetid="searchDs" columnid="clCdAll"/>
     </Bind>
   </Form>
 </FDL>

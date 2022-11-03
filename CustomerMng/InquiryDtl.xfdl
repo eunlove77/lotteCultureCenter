@@ -189,43 +189,35 @@ this.fn_list = function(){
 
 this.fn_save = function ()
 {		
-	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	var tranObj = {};
+	tranObj.strSvcId	= "save";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::customer/insertInquiry.do";
+	tranObj.inData      = "data=ds_detail";
+	tranObj.outData     = "";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::customer/insertInquiry.do";
-	var inData      = "data=ds_detail";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-
+	this.gfn_transaction(tranObj);
+	
 };
 
 this.fn_detail = function ()
 {	
-	var strSvcId	= "detail"
-	var strSvcUrl   = this.application.Admin_svc + "::/customer/inquiryDtl.do";
-	var inData      = "detail=ds_detail";
-	var outData     = "ds_detail=output2";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
 
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+	var tranObj = {};
+	tranObj.strSvcId	= "detail";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/inquiryDtl.do";
+	tranObj.inData      = "detail=ds_detail";
+	tranObj.outData     = "ds_detail=output2";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);		
+	
 };
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
@@ -239,10 +231,19 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
   switch(svcID)
   {
+	case "detail":
+			
+			if(!this.gfn_isNull(this.row11.form.TextArea00.value))
+			{
+				this.row11.form.TextArea00.set_readonly(true);
+				this.Div01.form.btnSave.set_visible(false);
+			}
+	break;
+	
     case "save":
 		this.alert("등록되었습니다.");
 		this.fn_list();
-		break;
+	break;
   }
 };
 
