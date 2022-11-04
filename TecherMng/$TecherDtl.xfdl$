@@ -28,12 +28,12 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사유형 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Radio id="Radio00" taborder="1" left="130" top="2" width="229" height="30" value="0" text="" index="-1" direction="vertical" rowcount="-1" columncount="-1" innerdataset="ds_tcTp_cdList" datacolumn="cdNm" codecolumn="cd" fittocontents="width"/>
+                    <Radio id="Radio00" taborder="1" left="130" top="2" width="139" height="30" value="0" text="" index="-1" direction="vertical" rowcount="-1" columncount="-1" innerdataset="ds_tcTp_cdList" datacolumn="cdNm" codecolumn="cd" fittocontents="none" readonly="true"/>
                     <Div id="Div_txfpBizprYn" taborder="2" text="Div00" left="Radio00:10" top="0" width="122" bottom="0" visible="false">
                       <Layouts>
                         <Layout>
                           <Static id="Static01" taborder="2" text="(" left="20" top="0" bottom="0" visible="true" width="10"/>
-                          <CheckBox id="txfpBizprYn" taborder="1" text="면세" left="Static01:10" top="0" width="50" truevalue="Y" value="false" falsevalue="N" bottom="0" readonly="false" visible="true"/>
+                          <CheckBox id="txfpBizprYn" taborder="1" text="면세" left="Static01:10" top="0" width="50" truevalue="Y" value="false" falsevalue="N" bottom="0" readonly="true" visible="true"/>
                           <Static id="Static01_00" taborder="0" text=")" left="txfpBizprYn:10" top="0" bottom="0" visible="true" width="10"/>
                         </Layout>
                       </Layouts>
@@ -552,12 +552,12 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div_topBtn" taborder="9" text="Div00" left="917" top="72" width="342" height="40">
+        <Div id="Div_topBtn" taborder="9" text="Div00" top="72" width="342" height="40" right="10">
           <Layouts>
             <Layout>
-              <Button id="btnTxReceipt" taborder="0" text="원천징수영수증" left="65" cssclass="btn_WF_Low" fittocontents="width" height="30" top="0" width="120" onclick="Div_topBtn_btnTxReceipt_onclick"/>
-              <Button id="btnCancel" taborder="1" text="취소" left="203" cssclass="btn_WF_Weak" fittocontents="width" height="30" onclick="btnCancel_onclick" top="0" width="50"/>
-              <Button id="btnSave" taborder="2" text="등록" width="50" cssclass="btn_WF_Medium" fittocontents="width" left="265" height="30" onclick="btnSave_onclick" top="0"/>
+              <Button id="btnTxReceipt" taborder="0" text="원천징수영수증" left="35" cssclass="btn_WF_Low" fittocontents="width" height="30" top="0" width="120" onclick="Div_topBtn_btnTxReceipt_onclick"/>
+              <Button id="btnCancel" taborder="1" text="취소" left="173" cssclass="btn_WF_Weak" fittocontents="width" height="30" onclick="btnCancel_onclick" top="0" width="77"/>
+              <Button id="btnSave" taborder="2" text="저장" cssclass="btn_WF_Medium" fittocontents="width" height="30" onclick="btnSave_onclick" top="0" right="0" width="77"/>
             </Layout>
           </Layouts>
         </Div>
@@ -571,6 +571,7 @@ include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
 include "Base::popup.xjs";
+include "TecherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -767,83 +768,46 @@ this.Div05_Div03_Div00_lectPlanFile_onclick = function(obj:nexacro.Static,e:nexa
 /**************************************************************************
  * 데이터 세팅
  **************************************************************************/
- this.set_dataset = function(){
-	var pbrltnBrchCd = this.application.gdsLoginInfo.getColumn(0, 'brchCd');
-	var pbrltnChrgprNm = this.application.gdsLoginInfo.getColumn(0, 'name');
-	
-	this.ds_techer_info.setColumn(0, 'pbrltnBrchCd', pbrltnBrchCd);
-	this.ds_techer_info.setColumn(0, 'pbrltnChrgprNm', pbrltnChrgprNm);
-	
-	this.set_dataset_from_code();
-	this.set_dataset_year();
-	
-	this.set_dataset_default_value();
- }
- this.set_dataset_from_code = function(){
+this.set_dataset = function(){
 	var ds_codes_list = [
-		{ds : 'ds_tcTp_cdList',		cd: "'CODE_62'"},	//강사유형
-		{ds : 'ds_hpStNo_cdList',	cd: "'002'"},		//핸드폰통신사
-		{ds : 'ds_telNo_cdList', 	cd: "'001'"},		//지역번호
-		{ds : 'ds_lsc_cdList', 		cd: "'017'"},		//양력음력
-		{ds : 'ds_emailAddr_cdList',cd: "'CODE_80'"},	//이메일주소
-		{ds : 'ds_schlCl_cdList', 	cd: "'CODE_81'"},	//학교구분
-		{ds : 'ds_grdtCl_cdList',	cd: "'CODE_82'"},	//졸업구분
-		{ds : 'ds_day_cdList',	cd: "'008'"},			//요일
+		{ds : this.ds_tcTp_cdList,		cd: "'CODE_62'"},	//강사유형
+		{ds : this.ds_hpStNo_cdList,	cd: "'002'"},		//핸드폰통신사
+		{ds : this.ds_telNo_cdList, 	cd: "'001'"},		//지역번호
+		{ds : this.ds_lsc_cdList, 		cd: "'017'"},		//양력음력
+		{ds : this.ds_emailAddr_cdList,cd: "'CODE_80'"},	//이메일주소
+		{ds : this.ds_schlCl_cdList, 	cd: "'CODE_81'"},	//학교구분
+		{ds : this.ds_grdtCl_cdList,	cd: "'CODE_82'"}	//졸업구분
+	];
+	//코드 데이터셋 설정
+	this.com_set_code_dataset(ds_codes_list);
+
+	//년도
+	this.com_set_dataset_year(this.ds_year_list, 1960);
+	
+	//콤보박스 기본값 설정
+ 	var ds_list = [
+		{ds : this.ds_hpStNo_cdList,
+		 obj : this.Div01.form.Div03.form.Div00.form.hpStNo},		//핸드폰번호
+		{ds : this.ds_telNo_cdList,	cdNm: '선택',
+		 obj : this.Div01.form.Div03.form.Div01.form.telStNo},		//지역번호
+		{ds : this.ds_emailAddr_cdList, cdNm: '직접입력',
+		 obj : this.Div01.form.Div05.form.Div00.form.Combo00},		//이메일주소
+		{ds : this.ds_schlCl_cdList, cdNm: '선택',
+		 obj : this.Div04.form.Div03.form.Grid00, isGrid: true},	//학교구분
+		{ds : this.ds_grdtCl_cdList, cdNm: '선택',
+		 obj : this.Div04.form.Div03.form.Grid00, isGrid: true},	//졸업구분
+		{ds : this.ds_year_list,		cdNm: '연도', 
+		 obj : this.Div04.form.Div03.form.Grid00, isGrid: true} 	//연도
 	];
 	
-	var gdsCode = this.application.gdsCode;
-	var filter_txt = 'cdId != cd && cdId == ';
-	for(var i = 0; i < ds_codes_list.length; i++){
-		obj = ds_codes_list[i];
-		gdsCode.filter(filter_txt + obj.cd);
-		this[obj.ds].copyData(gdsCode, true);
-	}
- }
- this.set_dataset_year = function(){
-	var today = new Date();
-	for(var i = today.getYear(); i >= 1960; i--){
-		var r = this.ds_year_list.addRow();
-		this.ds_year_list.setColumn(r, 'cd', i);
-		this.ds_year_list.setColumn(r, 'cdNm', i);
-	}
- }
- this.set_dataset_default_value = function(){
-	//콤보박스 기본값 설정
-	var ds_list = [
-		{ds : 'ds_telNo_cdList',	cdNm: '선택',
-		 id : 'Div01.form.Div03.form.Div01.form.telStNo'},		//지역번호
-		{ds : 'ds_emailAddr_cdList',cdNm: '직접입력',
-		 id : 'Div01.form.Div05.form.Div00.form.Combo00'},		//이메일주소
-		{ds : 'ds_year_list',		cdNm: '연도', 
-		 id : 'Div02.form.Div03.form.Grid00', isGrid: true} //연도
-	];
-		
-	for(var i = 0; i < ds_list.length; i++){
-		var ds = this[ds_list[i].ds];
-		ds.insertRow(0);
-		ds.setColumn(0, 'cd', '');
-		ds.setColumn(0, 'cdNm', ds_list[i].cdNm);
-		
-		//초기에 ds data가 없어서 첫 index설정을 추가로 해줘야 한다.
-		var compId = ds_list[i].id;
-		if(ds_list[i].isGrid){
-			/*this.get_componentById(compId).setCellProperty('body', ds_list[i].col, 'text', '0');*/
-		} else {
-			this.get_componentById(compId).set_index(0);
-		}
-	}
- }
+	this.com_set_combobox_default(ds_list);
+}
 
  /**************************************************************************
  * 뷰 세팅
  **************************************************************************/
 this.set_screen_view = function(){
-	var pbrltnBrchNm = this.application.gdsLoginInfo.getColumn(0, 'brchNm');
-	var pbrltnChrgprid = this.application.gdsLoginInfo.getColumn(0, 'id');
-	
-	var pbrltnInfo_txt = pbrltnBrchNm + '(' + pbrltnChrgprid + ')';
-	this.Div01.form.Div04.form.Div01.form.pbrltnInfo.set_text(pbrltnInfo_txt);
-	
+
 	//캘린더 키인 방지
 	this.Div01.form.Div04.form.Div00.form.bday.calendaredit.set_readonly(true); 
 
@@ -1186,6 +1150,24 @@ this.validate_techer_basic = function(){
 		}
 	}
 
+	//전화번호 - 하나입력하면 체크
+	var msg = "";
+	var isInput = false;
+	var vali_arr2 = [
+		['telStNo', '전화번호를'], ['telMidNo', '전화번호를'], ['telLastNo', '전화번호를'],
+	]
+	for(var vali of vali_arr2){
+		if(this.gfn_nvl(ds.getColumn(0, vali[0])) == "" || nexacro.trim(ds.getColumn(0, vali[0])) == ""){
+			msg = vali[1] + " 입력하세요.";
+		} else {
+			isInput = true;
+		}
+	}
+	if(isInput && msg){
+		alert(msg);
+		return false;
+	}
+	
 	return true;
 }
 //학력
@@ -1210,17 +1192,26 @@ this.validate_techer_athctf = function(){
 }
 
 this.validate_techer_ds_list = function(ds, vali_arr){
+	var isInput = false;
+	var msg = "";
 	var ds = this[ds];
 	for(var i = 0; i < ds.rowcount; i++){
 		for(var vali of vali_arr){
 			if(vali && (this.gfn_nvl(ds.getColumn(i, vali[0])) == "" || nexacro.trim(ds.getColumn(i, vali[0])) == "")){
-				alert(vali[1] + " 입력하세요.");
-				return false;
+				msg = vali[1] + " 입력하세요.";
+			} else {
+				isInput = true;
 			}
+		}
+		if(isInput && msg){
+			//하나라도 입력했다면 검사대상
+			alert(msg);
+			return false;
 		}
 	}
 	return true;
 }
+
 this.rrno_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo){
 	
 }
@@ -1247,13 +1238,7 @@ this.get_file_detail = function(ds, svcId){
 	
 	this.gfn_transaction(tranObj);
 }
-this.fnCallback = function(svcID, errorCode, errorMsg){
-	if(errorCode != 0){
-		this.alert(errorCode+"\n"+errorMsg);
-		return false;
-	}
-	
-}
+
 this.get_componentById = function(str){
 	var comp = this;
 	var list = str.split('.');
@@ -1278,6 +1263,24 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		//서명정보 사진파일 가져오기
 		this.ds_thnl_dtl.setColumn(0, 'atchFileId', this.ds_techer_info.getColumn(0, 'signImgFileId'));
 		this.get_file_detail('ds_sign_dtl');
+		
+		//이메일
+		var email = this.ds_techer_info.getColumn(0, 'email');
+		var emailAddrCd = this.ds_techer_info.getColumn(0, 'emailAddrCd');
+		if(email){
+			if(!emailAddrCd){
+				emailAddr = email.split('@')[1];
+				email = email.split('@')[0];
+				this.Div01.form.Div05.form.Div00.form.Edit00_00.set_text(emailAddr);
+			}
+			this.Div01.form.Div05.form.Div00.form.Edit00.set_text(email);
+		}
+		
+		//섭외정보
+		var pbrlRow = this.ds_spot_list.findRow(cd, this.ds_techer_info.getColumn(0, 'pbrltnBrchCd'));
+		var pbrltnBrchCdNm = this.ds_spot_list.getColumn(pbrlRow, 'cdNm');
+		var pbrlNm = this.ds_techer_info.getColumn(0, 'pbrltnChrgprNm')
+		this.Div01.form.Div04.form.Div01.form.pbrltnInfo.set_text(pbrltnBrchCdNm + "(" + pbrlNm + ")");
 	}
 	else if(svcId = 'ds_sign_dtl'){
 		
@@ -1693,7 +1696,6 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
       <BindItem id="item8" compid="Div01.form.Div03.form.Div01.form.telMidNo" propid="value" datasetid="ds_techer_info" columnid="telMidNo"/>
       <BindItem id="item9" compid="Div01.form.Div03.form.Div01.form.telLastNo" propid="value" datasetid="ds_techer_info" columnid="telLastNo"/>
       <BindItem id="item10" compid="Div01.form.Div04.form.Div00.form.bday" propid="value" datasetid="ds_techer_info" columnid="bday"/>
-      <BindItem id="item12" compid="Div01.form.Div04.form.Div01.form.pbrltnInfo" propid="text" datasetid="ds_techer_info" columnid="pbrltnBrchCd"/>
       <BindItem id="item13" compid="Div01.form.Div05.form.Div00.form.Edit00" propid="value" datasetid="ds_techer_info" columnid="email"/>
       <BindItem id="item14" compid="Div01.form.Div05.form.Div00.form.Combo00" propid="value" datasetid="ds_techer_info" columnid="emailAddrCd"/>
       <BindItem id="item15" compid="Div01.form.Div06.form.Edit00" propid="value" datasetid="ds_techer_info" columnid="addr"/>

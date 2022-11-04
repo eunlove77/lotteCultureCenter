@@ -660,8 +660,19 @@ this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	//데이터 세팅
+	//첨부파일
 	this.ds_techer_info.setColumn(0, 'phtFileId', this.ds_thnl_dtl.getColumn(0, 'atchFileId'));
 	this.ds_techer_info.setColumn(0, 'signImgFileId', this.ds_sign_dtl.getColumn(0, 'atchFileId'));
+	
+	//이메일주소
+	var emailAddrCd = this.ds_techer_info.getColumn(0, 'emailAddrCd');
+	var emailAddr = this.Div01.form.Div05.form.Div00.form.Edit00_00.value;
+	if(!emailAddrCd && emailAddr){
+		//직접 입력 시 email에 전체 정보
+		var email = this.ds_techer_info.getColumn(0, 'email');
+		email += "@" + this.Div01.form.Div05.form.Div00.form.Edit00_00.value;
+		this.ds_techer_info.setColumn(0, 'email', email);
+	}
 	
 	//유효성 검사
 	var vali_res = this.validate_techer();
@@ -671,9 +682,32 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	//submit
 	if(confirm("강사정보를 등록 하시겠습니까?")){
+		this.delete_empty_row();
 		this.submit_techer_info();
 	}
 };
+this.delete_empty_row = function(){
+	//필수값이 아닌 그리드 데이터 로우 삭제
+	var ds_list = [this.ds_tcedu_list, this.ds_tchist_list, this.ds_tcawrd_list, this.ds_tcathctf_list];
+	for(var ds of ds_list)
+		this.delete_empty_row_2(ds);
+}
+this.delete_empty_row_2 = function(ds){
+	var isInput = false;
+	var isEmpty = false;
+	
+	var i = ds.rowcount - 1;	//마지막 로우만 체크
+	for(var j = 1; j < ds.colcount; j++){ //키값 제외
+		if(this.gfn_nvl(ds.getColumn(i, j)) == "" || nexacro.trim(ds.getColumn(i, j) == "")){
+			isEmpty = true;
+		} else {
+			isInput = true;
+		}
+	}
+	if(isEmpty){
+		ds.deleteRow(i);
+	}
+}
 this.submit_techer_info = function(){
 
 	var inData = "";
@@ -744,7 +778,32 @@ this.validate_techer_basic = function(){
 			return false;
 		}
 	}
-
+	
+	//전화번호 - 하나입력하면 체크
+	var msg = "";
+	var isInput = false;
+	var vali_arr2 = [
+		['telStNo', '전화번호를'], ['telMidNo', '전화번호를'], ['telLastNo', '전화번호를'],
+	]
+	for(var vali of vali_arr2){
+		if(this.gfn_nvl(ds.getColumn(0, vali[0])) == "" || nexacro.trim(ds.getColumn(0, vali[0])) == ""){
+			msg = vali[1] + " 입력하세요.";
+		} else {
+			isInput = true;
+		}
+	}
+	if(isInput && msg){
+		alert(msg);
+		return false;
+	}
+	
+	//이메일 - 하나입력하면 체크
+	var email = this.ds_techer_info.getColumn(0, "email");
+	var emailAddrCd = this.ds_techer_info.getColumn(0, "emailAddrCd");
+	if(email && emailAddrCd){
+		
+	}
+	
 	return true;
 }
 //학력
@@ -769,13 +828,21 @@ this.validate_techer_athctf = function(){
 }
 
 this.validate_techer_ds_list = function(ds, vali_arr){
+	var isInput = false;
+	var msg = "";
 	var ds = this[ds];
 	for(var i = 0; i < ds.rowcount; i++){
 		for(var vali of vali_arr){
 			if(vali && (this.gfn_nvl(ds.getColumn(i, vali[0])) == "" || nexacro.trim(ds.getColumn(i, vali[0])) == "")){
-				alert(vali[1] + " 입력하세요.");
-				return false;
+				msg = vali[1] + " 입력하세요.";
+			} else {
+				isInput = true;
 			}
+		}
+		if(isInput && msg){
+			//하나라도 입력했다면 검사대상
+			alert(msg);
+			return false;
 		}
 	}
 	return true;
@@ -850,7 +917,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="tcCdNo"></Col>
+            <Col id="tcCdNo"/>
             <Col id="tcTpCd">1</Col>
             <Col id="apvlStatCd"> </Col>
             <Col id="txfrBizprYn"> </Col>
@@ -1161,7 +1228,6 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
       <BindItem id="item3" compid="Div01.form.Div07.form.signViewer" propid="image" datasetid="ds_sign_dtl" columnid="webPath"/>
       <BindItem id="item11" compid="Div01.form.Div01.form.Radio00" propid="value" datasetid="ds_techer_info" columnid="tcTpCd"/>
       <BindItem id="item18" compid="Div01.form.Div02.form.Div01.form.tcStgNm" propid="value" datasetid="ds_techer_info" columnid="tcStgNm"/>
-      <BindItem id="item19" compid="Div01.form.Div05.form.Div00.form.Edit00_00" propid="value" datasetid="ds_techer_info" columnid="emailAddrCd"/>
       <BindItem id="item20" compid="Div02.form.Div02.form.Edit00" propid="value" datasetid="ds_techer_info" columnid="rpsntLectNm"/>
       <BindItem id="item4" compid="Div01.form.Div03.form.Div00.form.hpStNo" propid="value" datasetid="ds_techer_info" columnid="hpStNo"/>
     </Bind>
