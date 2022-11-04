@@ -397,4 +397,95 @@ this.com_set_checkbox_to_string = function(pObj){
 	}
 	
 	return rtnStr;
+}
+/*===========================================================================*/
+// 주민등록번호를 체크한다.
+/*===========================================================================*/
+this.checkRegNo = function(pRegNo, pConfirmMode, pObjFocus)    {
+    var tArrMultiply  = new Array(2,3,4,5,6,7,8,9,2,3,4,5);
+    var sum   = 0;
+    var magic = 11;
+
+    if (pConfirmMode != true ) pConfirmMode = false;
+
+    if (pRegNo.length != 13)    {
+        alert("주민등록번호는 13자리 형식입니다.");
+        if (pObjFocus)  pObjFocus.setFocus();  // 만약 포커스를 넘길 객체가 있으면 포커스 이동.
+
+        return false;
+    }
+
+    for(var i = 0;i < pRegNo.length - 1;i++)    {
+        sum += Number(pRegNo.charAt(i)) * tArrMultiply[i];
+    }
+
+    var tConfirmMode = true;
+
+    // (magic - sum % magic)가 10보다 크거나 같은 경우가 있으므로 10으로 나누어줌.
+    var tCheckSum = ((magic - sum % magic) % 10).toString();
+    if (pRegNo.charAt(12) !=  tCheckSum)    {
+        // 20050324. kkr. 잘못된 주민번호인 경우 무조건 저장 안되게 함.
+        /*
+        if (pConfirmMode == true)   {
+            if (! confirm("잘못된 주민번호입니다.\n\n계속하시겠습니까 ?"))    {
+                if (pObjFocus)  pObjFocus.focus();  // 만약 포커스를 넘길 객체가 있으면 포커스 이동.
+                return false;
+            }
+
+        }
+        else    {
+        */
+              //2005.05.09 우리나라사람이 아닌 외국인 등록번호로 재 Check
+              if (! this.fgn_no_chksum(pRegNo) ) {
+                alert("잘못된 주민번호입니다.");
+      
+                if (pObjFocus)  pObjFocus.setFocus();  // 만약 포커스를 넘길 객체가 있으면 포커스 이동.
+                return false;
+            }
+        /*
+        }
+        */
+    }
+
+    return true;
+}
+
+/*===========================================================================*/
+// 외국인 등록번호를 체크한다.
+/*===========================================================================*/
+this.fgn_no_chksum = function(reg_no)  {
+    var sum = 0;
+    var odd = 0;
+    
+    buf = new Array(13);
+    for (i = 0; i < 13; i++) buf[i] = parseInt(reg_no.charAt(i));
+
+    odd = buf[7]*10 + buf[8];
+    
+    if (odd%2 != 0) {
+      return false;
+    }
+
+    if ((buf[11] != 6)&&(buf[11] != 7)&&(buf[11] != 8)&&(buf[11] != 9)) {
+      return false;
+    }
+        
+    multipliers = [2,3,4,5,6,7,8,9,2,3,4,5];
+    for (i = 0, sum = 0; i < 12; i++) sum += (buf[i] *= multipliers[i]);
+
+
+    sum=11-(sum%11);
+    
+    if (sum>=10) sum-=10;
+
+    sum += 2;
+
+    if (sum>=10) sum-=10;
+
+    if ( sum != buf[12]) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }]]></Script>
