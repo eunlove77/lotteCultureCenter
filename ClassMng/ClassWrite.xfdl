@@ -514,7 +514,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강의스케줄 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="128" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_scheduleTemp_list" autosizingtype="none" cellsizingtype="none" extendsizetype="none" autofittype="col" oncellclick="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncellclick" oncloseup="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncloseup">
+                                <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_scheduleTemp_list" autosizingtype="none" cellsizingtype="none" extendsizetype="none" autofittype="col" oncellclick="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncellclick" oncloseup="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncloseup" oninput="Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oninput">
                                   <Formats>
                                     <Format id="default">
                                       <Columns>
@@ -3230,6 +3230,28 @@ this.Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	if(confirm("복사등록 하시겠습니까?"))
 	{
 		this.fn_save_copy();
+	}
+};
+
+this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
+{
+	var curRow = obj.getSelectedDatasetRows();
+
+	if(obj.getCellPos() == 1)  
+	{  
+		var oriValue = this.ds_scheduleTemp_list.getColumn("stDaywCd", curRow); 
+
+		this.ds_scheduleTemp_list.setColumn(curRow, "stDaywCd", oriValue);
+		obj.setEditingValue(oriValue);
+		
+		var year = oriValue.slice(0, 4)
+		var mon = oriValue.slice(4, 6)
+		var day = oriValue.slice(6, 8)
+		var objDate = new nexacro.Date(year+ "-" + mon + "-" + day);
+		var nDay = objDate.getDay();
+		
+		nDay = (nDay == 0) ? 7 : nDay;
+		this.ds_scheduleTemp_list.setColumn(curRow, "stDaywCd", nDay);
 	}
 };
 ]]></Script>
