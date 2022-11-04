@@ -3,15 +3,15 @@
   <Form id="StlmCmpltDtl_popup" width="1280" height="800" titletext="결제내역 상세" onload="PayCmpltDtl_popup_onload">
     <Layouts>
       <Layout height="800" mobileorientation="landscape" width="1280">
-        <Div id="Div00" taborder="0" text="Div00" height="1890" left="10" right="10" top="10">
+        <Div id="Div00" taborder="0" text="Div00" height="2015" left="10" right="10" top="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="175" url="StlmMng::StlmCmpltDtl/StlmOrderInfo.xfdl" right="0"/>
               <Div id="Div01" taborder="1" text="Div01" left="0" top="185" height="100" url="StlmMng::StlmCmpltDtl/FinalStlmInfo.xfdl" right="0"/>
               <Div id="Div02" taborder="2" text="Div0222" left="0" top="285" height="210" url="StlmMng::StlmCmpltDtl/StlmCmpltList.xfdl" right="0"/>
               <Div id="Div03" taborder="3" text="Div03" left="0" top="495" height="200" right="0" url="StlmMng::StlmCmpltDtl/StlmRfndList.xfdl"/>
-              <Div id="Div04" taborder="4" text="Div04" left="0" top="715" height="405" url="StlmMng::StlmCmpltDtl/StlmInfoDtl.xfdl" right="0"/>
-              <Div id="Div05" taborder="5" text="Div05" left="0" top="1150" height="740" right="0" url="StlmMng::StlmCmpltDtl/AdmMemo.xfdl" visible="true"/>
+              <Div id="Div04" taborder="4" text="Div04" left="0" top="715" height="630" right="0" url="StlmMng::StlmCmpltDtl/StlmInfoDtl.xfdl"/>
+              <Div id="Div05" taborder="5" text="Div05" left="0" top="1275" height="740" right="0" url="StlmMng::StlmCmpltDtl/AdmMemo.xfdl" visible="true"/>
             </Layout>
           </Layouts>
         </Div>
@@ -34,19 +34,10 @@ var stlmOrderInfoFrm = this.Div00.form.Div00.form;
 var stlmCmpltListFrm = this.Div00.form.Div02.form;
 var stlmRfndListFrm = this.Div00.form.Div03.form;
 var admMemoFrm = this.Div00.form.Div05.form;
+var stlmInfoDtlFrm = this.Div00.form.Div04.form;
 
-
-var paymentInfoDtlFrm = this.Div00.form.Div04.form;
-var firstTabDivHeight = 0;
-var	firstTabHeight = 0;
-var lastTabDivHeight = 0;
-var	lastTabHeight = 0;
-var firstCurrentDivTop = 0;
-var lastCurrentDivTop = 0;
-var initTabDivHeight = 0;
-var initTabHeight = 0;
-var initParentDivHeight = 0;
-var initAdmMemoDivTop = 0;
+// 관리자 취소에서 사용하는 실수강인원 순번
+this.actlAtlctNpleSeqno = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -56,16 +47,8 @@ this.PayCmpltDtl_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 	this.application = nexacro.getApplication();
 	this.objPageingDs = this.application.gdsPageing;
 	
-	initTabDivHeight = this.Div00.form.Div04.getOffsetHeight();
-	initTabHeight = paymentInfoDtlFrm.Tab00.getOffsetHeight();
-	initParentDivHeight = this.Div00.getOffsetHeight();
-	initAdmMemoDivTop = this.Div00.form.Div05.getOffsetTop();
-	
 	// 결제내역 상세
 	this.fn_detail(this.atlctRsvNo);
-	
-	// 관리자 메모
- 	//admMemoFrm.fn_list(1);
 };
 
 // 결제내역 상세 조회
@@ -82,19 +65,9 @@ this.fn_detail = function(atlctRsvNo)
  	outData += "this.Div00.form.Div02.form.ds_fmly_cd_list=output4 ";
 	outData += "this.Div00.form.Div03.form.ds_stlm_rfnd_list=output5 ";
  	outData += "this.Div00.form.Div03.form.ds_fmly_cd_list=output4 ";
-// 	outData += "this.Div00.form.Div04.form.ds_first_order_mst=output7 ";
-// 	outData += "this.Div00.form.Div04.form.ds_first_order_lecture_offline_discount_list=output8 ";
-// 	outData += "this.Div00.form.Div04.form.ds_first_order_lecture_grade_discount_list=output9 ";
-// 	outData += "this.Div00.form.Div04.form.ds_first_order_lecture_coupon_discount_list=output10 ";
-// 	outData += "this.Div00.form.Div04.form.ds_first_order_additional_offline_discount_list=output11 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_mst=output12 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_lecture_offline_discount_list=output13 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_lecture_grade_discount_list=output14 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_lecture_coupon_discount_list=output15 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_refund_deduction_list=output16 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_additional_offline_discount_list=output17 ";
-// 	outData += "this.Div00.form.Div04.form.ds_last_order_additional_refund_deduction_list=output18 ";
-// 	outData += "this.Div00.form.Div04.form.ds_pay_method=output19";
+	outData += "this.Div00.form.Div04.form.ds_stlm_mthd=output6 ";
+ 	outData += "this.Div00.form.Div04.form.ds_first_atlct_stlm=output7 ";
+ 	outData += "this.Div00.form.Div04.form.ds_first_atlct_stlm_dc_list=output8 ";
 	var strArg      = "atlctRsvNo=" + atlctRsvNo;
 	var callBackFnc = "fn_callback";
 	var isAsync     = true;
@@ -140,53 +113,609 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 			
 			// 결제완료 목록 갯수 세팅
 			stlmCmpltListFrm.Static04.set_text("(" + this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() + "개)");
+			// 결제완료 목록 첫 번째 행 데이터가 채널이 데스크면 주문정보 버튼 노출, 이외는 숨김
+			if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(this.Div00.form.Div02.form.ds_stlm_cmplt_list.rowposition, "stlmChnlCd") == "D"){
+				this.Div00.form.Div02.form.btnModify.set_visible(true);
+			}else{
+				this.Div00.form.Div02.form.btnModify.set_visible(false);
+				this.Div00.form.Div02.form.Button06.set_right(94);
+			}
 			
 			// 결제채널이 데스크면 사은품 신청 버튼 표시
-			if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(0, "stlmChnlCdNm") == "데스크"){
+			if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(0, "stlmChnlCd") == "D"){
 				stlmCmpltListFrm.fgftAppl.set_visible(true);
 			}
 			
 			// 결제취소/환불 목록 갯수 세팅
 			stlmRfndListFrm.Static06.set_text("(" + this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() + "개)");
+			
+			// 결제수단 정보 데이터 세팅
+			this.fn_stlm_mthd_info();
 
-// 			// 최초 주문정보
-// 			this.fn_create_first_order_info_tab();
-// 			
-// 			if(paymentInfoDtlFrm.ds_last_order_mst.getRowCount() > 0){
-// 				// 최종 주문정보
-// 				this.fn_create_last_order_info_tab();
-// 				
-// 				// 최종 주문정보
-// 				this.Div00.form.Div04.setOffsetHeight(lastTabDivHeight);
-// 				paymentInfoDtlFrm.Tab00.setOffsetHeight(lastTabHeight);
-// 				
-// 				// 주문정보 탭의 길이가 길어지면 주문정보 하단의 영역들 밑으로 내림
-// 				if(lastCurrentDivTop > 400){
-// 					this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop + (lastCurrentDivTop - 400));
-// 					this.Div00.setOffsetHeight(initParentDivHeight + (lastCurrentDivTop - 400));
-// 				}else{
-// 					this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop);
-// 					this.Div00.setOffsetHeight(initParentDivHeight);
-// 				}
-// 			}else{
-// 				// 최초 주문정보
-// 				this.Div00.form.Div04.setOffsetHeight(firstTabDivHeight);
-// 				paymentInfoDtlFrm.Tab00.setOffsetHeight(firstTabHeight);
-// 				
-// 				// 주문정보 탭의 길이가 길어지면 주문정보 하단의 영역들 밑으로 내림
-// 				if(firstCurrentDivTop > 400){
-// 					this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop + (firstCurrentDivTop - 400));
-// 					this.Div00.setOffsetHeight(initParentDivHeight + (firstCurrentDivTop - 400));
-// 				}else{
-// 					this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop);
-// 					this.Div00.setOffsetHeight(initParentDivHeight);
-// 				}
-// 			}
-// 			
-// 			this.resetScroll();
-// 			paymentInfoDtlFrm.Tab00.setEventHandler("onchanged", this.fn_tab_onchanged, this);
+ 			// 최초 주문정보
+			var partRfndYn = false;
+ 			this.fn_create_first_atlct_stlm();
+			
+			if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0){
+				// 최종 주문정보
+				this.fn_create_last_atlct_stlm();
+				stlmInfoDtlFrm.Tab00.set_tabindex(1);
+				
+				if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() > 0){
+					// 부분 취소면 환불금액 영역 보여주기
+					partRfndYn = true;
+				}
+				
+			}else{
+				// 최종 주문정보 탭 삭제
+				stlmInfoDtlFrm.Tab00.removeTabpage(1);
+			}
+			
+			stlmInfoDtlFrm.Tab00.setEventHandler("onchanged", this.fn_tab_onchanged, this);
+			
+			// 부분취소일때 환불금액 데이터 세팅
+			if(partRfndYn){
+				stlmInfoDtlFrm.Static01.set_visible(true);
+				stlmInfoDtlFrm.Div01.set_visible(true);
+			}else{
+				stlmInfoDtlFrm.Static01.set_visible(false);
+				stlmInfoDtlFrm.Div01.set_visible(false);
+				
+				stlmInfoDtlFrm.Static00.set_top(0);
+				stlmInfoDtlFrm.Div00.set_top(25);
+			}
 
 		break;
+	}
+};
+
+// 최초 주문정보
+this.fn_create_first_atlct_stlm = function()
+{
+	var dsFirstAtlctStlm = stlmInfoDtlFrm.ds_first_atlct_stlm;
+	var dsFirstAtlctStlmDcList = stlmInfoDtlFrm.ds_first_atlct_stlm_dc_list;
+	var dcDiv = stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.dcDiv;
+	var dcTitleStatic = stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.dcDiv.form.Static00;
+	
+	//총 결제금액
+	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "gsStlmAmt")) + "원");
+	
+	//총 강좌료
+	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div01.form.Static01.set_text(this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totLectAmt")) + "원");
+	
+	//총 재료비/대여료
+	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totLectAddAmt")) + "원");
+	
+	if(dsFirstAtlctStlm.getColumn(0, "totDcAmt") > 0){
+		dcDiv.form.Static01.set_text("<fc v ='#ED5757'>(-)" + this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totDcAmt")) + "원" + "</fc>");
+	
+		// 할인금액 있는 경우
+		var arrOflnDc = [], arrGrdeDc = [], arrCpnDc = [], arrAddDc = [];
+		
+		for(var i=0;i<dsFirstAtlctStlmDcList.getRowCount();i++){
+			if(dsFirstAtlctStlmDcList.getColumn(i, "dcClCd") == "10"){
+				// 강좌료
+				if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "10"){
+					// 등급
+					arrGrdeDc.push({
+						dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+						, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+					});
+				}else if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "20"){
+					// 쿠폰
+					arrCpnDc.push({
+						dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+						, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+					});
+				}else if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "30"){
+					// 오프라인
+					arrOflnDc.push({
+						dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+						, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+					});
+				}
+			}else if(dsFirstAtlctStlmDcList.getColumn(i, "dcClCd") == "20"){
+				// 추가금액
+				arrAddDc.push({
+					dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+					, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+				});
+			}
+		}
+		
+		// 오프라인 할인
+		if(arrOflnDc.length > 0){
+			dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+			dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+			
+			var oflnDcStatic = new Static("static_ofln_dc");
+			oflnDcStatic.set_width(200);
+			oflnDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			oflnDcStatic.set_left(200);
+			oflnDcStatic.set_height(31);
+			oflnDcStatic.set_usedecorate(true);
+			oflnDcStatic.set_text("<b v='true'>오프라인 할인</b>");
+			
+			oflnDcStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_ofln_dc", oflnDcStatic);
+			oflnDcStatic.show();
+			
+			var oflnDcAmtStatic = new Static("static_ofln_dc_amt");
+			oflnDcAmtStatic.set_width(100);
+			oflnDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			oflnDcAmtStatic.set_right(0);
+			oflnDcAmtStatic.set_height(31);
+			oflnDcAmtStatic.set_text("<b v='true'>" + this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totOflnDcAmt")) + "원</b>");
+			oflnDcAmtStatic.set_usedecorate(true);
+			oflnDcAmtStatic.set_textAlign("right");
+			oflnDcAmtStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_ofln_dc_amt", oflnDcAmtStatic);
+			oflnDcAmtStatic.show();
+			
+			for(var i=0;i<arrOflnDc.length;i++){
+ 				dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+ 				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+ 				oflnDcStatic.set_height(oflnDcStatic.getPixelHeight() + 10);
+ 				oflnDcAmtStatic.set_height(oflnDcAmtStatic.getPixelHeight() + 10);
+				
+				oflnDcStatic.set_text(oflnDcStatic.text + "\r\nㄴ " + arrOflnDc[i].dcNm);
+				oflnDcAmtStatic.set_text(oflnDcAmtStatic.text + "\r\n" + this.gfn_setComma(arrOflnDc[i].dcAmt) + "원");
+			}
+		}
+		
+		// 등급 할인
+		if(arrGrdeDc.length > 0){
+			dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+			dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+			
+			var grdeDcStatic = new Static("static_grde_dc");
+			grdeDcStatic.set_width(200);
+			grdeDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			grdeDcStatic.set_left(200);
+			grdeDcStatic.set_height(31);
+			grdeDcStatic.set_text("<b v='true'>등급 할인</b>");
+			grdeDcStatic.set_usedecorate(true);
+			grdeDcStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_grde_dc", grdeDcStatic);
+			grdeDcStatic.show();
+			
+			var grdeDcAmtStatic = new Static("static_grde_dc_amt");
+			grdeDcAmtStatic.set_width(100);
+			grdeDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			grdeDcAmtStatic.set_right(0);
+			grdeDcAmtStatic.set_height(31);
+			grdeDcAmtStatic.set_text("<b v='true'>"+this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totGrdeDcAmt"))+"원</b>");
+			grdeDcAmtStatic.set_usedecorate(true);
+			grdeDcAmtStatic.set_textAlign("right");
+			grdeDcAmtStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_grde_dc_amt", grdeDcAmtStatic);
+			grdeDcAmtStatic.show();
+			
+			for(var i=0;i<arrGrdeDc.length;i++){
+ 				dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+ 				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+ 				grdeDcStatic.set_height(grdeDcStatic.getPixelHeight() + 10);
+ 				grdeDcAmtStatic.set_height(grdeDcAmtStatic.getPixelHeight() + 10);
+				
+				grdeDcStatic.set_text(grdeDcStatic.text + "\r\nㄴ " + arrGrdeDc[i].dcNm);
+				grdeDcAmtStatic.set_text(grdeDcAmtStatic.text + "\r\n" + this.gfn_setComma(arrGrdeDc[i].dcAmt) + "원");
+			}
+		}
+		
+		// 쿠폰 할인
+		if(arrCpnDc.length > 0){
+			dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+			dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+			
+			var cpnDcStatic = new Static("static_cpn_dc");
+			cpnDcStatic.set_width(200);
+			cpnDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			cpnDcStatic.set_left(200);
+			cpnDcStatic.set_height(31);
+			cpnDcStatic.set_text("<b v='true'>쿠폰 할인</b>");
+			cpnDcStatic.set_usedecorate(true);
+			cpnDcStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_cpn_dc", cpnDcStatic);
+			cpnDcStatic.show();
+			
+			var cpnDcAmtStatic = new Static("static_cpn_dc_amt");
+			cpnDcAmtStatic.set_width(100);
+			cpnDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			cpnDcAmtStatic.set_right(0);
+			cpnDcAmtStatic.set_height(31);
+			cpnDcAmtStatic.set_text("<b v='true'>"+this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totCpnDcAmt"))+"원</b>");
+			cpnDcAmtStatic.set_usedecorate(true);
+			cpnDcAmtStatic.set_textAlign("right");
+			cpnDcAmtStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_cpn_dc_amt", cpnDcAmtStatic);
+			cpnDcAmtStatic.show();
+			
+			for(var i=0;i<arrCpnDc.length;i++){
+ 				dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+ 				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+ 				cpnDcStatic.set_height(cpnDcStatic.getPixelHeight() + 10);
+ 				cpnDcAmtStatic.set_height(cpnDcAmtStatic.getPixelHeight() + 10);
+				
+				cpnDcStatic.set_text(cpnDcStatic.text + "\r\nㄴ " + arrCpnDc[i].dcNm);
+				cpnDcAmtStatic.set_text(cpnDcAmtStatic.text + "\r\n" + this.gfn_setComma(arrCpnDc[i].dcAmt) + "원");
+			}
+		}
+		
+		// 추가 할인
+		if(arrAddDc.length > 0){
+			dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+			dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+			
+			var addDcStatic = new Static("static_add_dc");
+			addDcStatic.set_width(200);
+			addDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			addDcStatic.set_left(200);
+			addDcStatic.set_height(31);
+			addDcStatic.set_text("<b v='true'>재료비/대여료 오프라인 할인</b>");
+			addDcStatic.set_usedecorate(true);
+			addDcStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_add_dc", addDcStatic);
+			addDcStatic.show();
+			
+			var addDcAmtStatic = new Static("static_add_dc_amt");
+			addDcAmtStatic.set_width(100);
+			addDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+			addDcAmtStatic.set_right(0);
+			addDcAmtStatic.set_height(31);
+			addDcAmtStatic.set_text("<b v='true'>"+this.gfn_setComma(dsFirstAtlctStlm.getColumn(0, "totAddDcAmt"))+"원</b>");
+			addDcAmtStatic.set_usedecorate(true);
+			addDcAmtStatic.set_textAlign("right");
+			addDcAmtStatic.set_cssclass("sta_WF_CompText");
+			dcDiv.addChild("static_add_dc_amt", addDcAmtStatic);
+			addDcAmtStatic.show();
+			
+			for(var i=0;i<arrAddDc.length;i++){
+ 				dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+ 				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+ 				addDcStatic.set_height(addDcStatic.getPixelHeight() + 10);
+ 				addDcAmtStatic.set_height(addDcAmtStatic.getPixelHeight() + 10);
+				
+				addDcStatic.set_text(addDcStatic.text + "\r\nㄴ " + arrAddDc[i].dcNm);
+				addDcAmtStatic.set_text(addDcAmtStatic.text + "\r\n" + this.gfn_setComma(arrAddDc[i].dcAmt) + "원");
+			}
+		}
+	}else{
+		// 할인금액 없으면 할인금액 영역 숨김
+		dcDiv.set_visible(false);
+	}
+	
+	if(dcDiv.visible){
+		// 할인영역이 있으면 할인영역으로 높이 맞춤
+		stlmInfoDtlFrm.Tab00.set_height(dcDiv.getPixelTop() + dcDiv.getPixelHeight() + 26);
+	}else{
+		// 할인영역이 없는 경우
+		stlmInfoDtlFrm.Tab00.set_height(stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.getPixelTop() + stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.getPixelHeight() + 26);
+	}
+};
+
+// 최종 주문정보
+this.fn_create_last_atlct_stlm = function()
+{
+	var feeDiv = stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.feeDiv;
+	var feeTitleStatic = stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.feeDiv.form.Static00;
+	var dcDiv = stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.dcDiv;
+	var dcTitleStatic = stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.dcDiv.form.Static00;
+
+	if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() == 0){
+		// 전체 취소
+		//총 결제금액
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div00.form.Static01.set_text("0원");
+		
+		//총 강좌료
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div01.form.Static01.set_text("0원");
+		
+		//총 재료비/대여료
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text("0원");
+		
+		if(stlmInfoDtlFrm.ds_first_atlct_stlm.getColumn(0, "totDcAmt") > 0){
+			dcDiv.form.Static01.set_text("<fc v ='#ED5757'>(-)0원</fc>");
+		}else{
+			// 할인금액 없으면 할인금액 영역 숨김
+			dcDiv.set_visible(false);
+		}
+	}else{
+		// 부분 취소
+		var totGsRfndScheAmt = 0;
+		var totLectAmtFee = 0;
+		var totAddAmtFee = 0;
+		var totLectStlmAmt = 0;
+		var totLectAmt = 0;
+		var totLectAddAmt = 0;
+		
+		for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+			totGsRfndScheAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "gsRfndScheAmt");
+			totLectAmtFee += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectAmtFee");
+			totAddAmtFee += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "addAmtFee");
+		}
+		
+		for(var i=0;i<this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount();i++){
+			totLectStlmAmt += this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(i, "lectStlmAmt");
+			totLectAmt += this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(i, "lectAmt");
+			totLectAddAmt += this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(i, "lectAddAmt");
+		}
+		
+		//총 결제금액
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(totGsRfndScheAmt) + "원");
+		
+		//총 강좌료
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div01.form.Static01.set_text(this.gfn_setComma(totLectAmt) + "원");
+		
+		//총 재료비/대여료
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(totLectAddAmt) + "원");
+		
+		//총 수수료
+		if(totLectAmtFee + totAddAmtFee > 0){
+			// 수수료 있는경우
+			var arrFee = [{feeNm : "강좌 환불 수수료", feeAmt : 1000}, {feeNm : "재료비 환불 수수료", feeAmt : 1000}];
+			if(arrFee.length > 0){
+ 				feeDiv.set_height(feeDiv.getPixelHeight() + 33);
+ 				feeTitleStatic.set_height(feeTitleStatic.getPixelHeight() + 33);
+				dcDiv.set_top(dcDiv.getPixelTop() + 33);
+			
+				var feeStatic = new Static("static_fee");
+				feeStatic.set_width(200);
+				feeStatic.set_left(200);
+				feeStatic.set_height(31);
+				feeStatic.set_text("");
+				feeStatic.set_usedecorate(true);
+				feeStatic.set_cssclass("sta_WF_CompText");
+				feeDiv.addChild("static_fee", feeStatic);
+				feeStatic.show();
+				
+				var feeAmtStatic = new Static("static_fee_amt");
+				feeAmtStatic.set_width(100);
+				feeAmtStatic.set_right(0);
+				feeAmtStatic.set_height(31);
+				feeAmtStatic.set_text("");
+				feeAmtStatic.set_usedecorate(true);
+				feeAmtStatic.set_textAlign("right");
+				feeAmtStatic.set_cssclass("sta_WF_CompText");
+				feeDiv.addChild("static_fee_amt", feeAmtStatic);
+				feeAmtStatic.show();
+				
+				for(var i=0;i<arrFee.length;i++){
+					if(i == 0){
+						feeStatic.set_top(feeTitleStatic.getPixelHeight() - 33);
+						feeAmtStatic.set_top(feeTitleStatic.getPixelHeight() - 33);
+					}else{
+						feeDiv.set_height(feeDiv.getPixelHeight() + 10);
+						feeTitleStatic.set_height(feeTitleStatic.getPixelHeight() + 10);
+						feeStatic.set_height(feeStatic.getPixelHeight() + 10);
+						feeAmtStatic.set_height(feeAmtStatic.getPixelHeight() + 10);
+						dcDiv.set_top(dcDiv.getPixelTop() + 10);
+					}
+					
+					i == 0 ? feeStatic.set_text(arrFee[i].feeNm) : feeStatic.set_text(feeStatic.text + "\r\n" + arrFee[i].feeNm);
+					i == 0 ? feeAmtStatic.set_text("<b v='true'>" + arrFee[i].feeAmt + "</b>") : feeAmtStatic.set_text(feeAmtStatic.text + "\r\n<b v='true'>" + arrFee[i].feeAmt + "</b>");
+				}
+			}
+		}else{
+			// 수수료 없는경우
+			feeDiv.set_visible(false);
+			dcDiv.set_top(95);
+		}
+		
+		// 할인여부
+		var dcYn = true;
+		if(dcYn){
+			dcDiv.form.Static01.set_text("<fc v ='#ED5757'>(-)0원</fc>");
+			
+			// 할인금액 있는 경우
+			var arrOflnDc = [], arrGrdeDc = [], arrCpnDc = [], arrAddDc = [];
+			
+// 			for(var i=0;i<dsFirstAtlctStlmDcList.getRowCount();i++){
+// 				if(dsFirstAtlctStlmDcList.getColumn(i, "dcClCd") == "10"){
+// 					// 강좌료
+// 					if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "10"){
+// 						// 등급
+// 						arrGrdeDc.push({
+// 							dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+// 							, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+// 						});
+// 					}else if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "20"){
+// 						// 쿠폰
+// 						arrCpnDc.push({
+// 							dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+// 							, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+// 						});
+// 					}else if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "30"){
+// 						// 오프라인
+// 						arrOflnDc.push({
+// 							dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+// 							, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+// 						});
+// 					}
+// 				}else if(dsFirstAtlctStlmDcList.getColumn(i, "dcClCd") == "20"){
+// 					// 추가금액
+// 					arrAddDc.push({
+// 						dcNm : dsFirstAtlctStlmDcList.getColumn(i, "dcNm")
+// 						, dcAmt : dsFirstAtlctStlmDcList.getColumn(i, "dcAmt")
+// 					});
+// 				}
+// 			}
+			
+			arrOflnDc.push({dcNm: "오프라인할인명", dcAmt: 1000});
+			arrGrdeDc.push({dcNm: "등급할인명", dcAmt: 1000});
+			arrCpnDc.push({dcNm: "쿠폰할인명", dcAmt: 1000});
+			arrAddDc.push({dcNm: "재료비/대여료", dcAmt: 1000});
+			
+			
+			// 오프라인 할인
+			if(arrOflnDc.length > 0){
+				dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+				
+				var oflnDcStatic = new Static("static_ofln_dc");
+				oflnDcStatic.set_width(200);
+				oflnDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				oflnDcStatic.set_left(200);
+				oflnDcStatic.set_height(31);
+				oflnDcStatic.set_usedecorate(true);
+				oflnDcStatic.set_text("<b v='true'>오프라인 할인</b>");
+				
+				oflnDcStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_ofln_dc", oflnDcStatic);
+				oflnDcStatic.show();
+				
+				var oflnDcAmtStatic = new Static("static_ofln_dc_amt");
+				oflnDcAmtStatic.set_width(100);
+				oflnDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				oflnDcAmtStatic.set_right(0);
+				oflnDcAmtStatic.set_height(31);
+				oflnDcAmtStatic.set_text("<b v='true'>1,000원</b>");
+				oflnDcAmtStatic.set_usedecorate(true);
+				oflnDcAmtStatic.set_textAlign("right");
+				oflnDcAmtStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_ofln_dc_amt", oflnDcAmtStatic);
+				oflnDcAmtStatic.show();
+				
+				for(var i=0;i<arrOflnDc.length;i++){
+					dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+					dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+					oflnDcStatic.set_height(oflnDcStatic.getPixelHeight() + 10);
+					oflnDcAmtStatic.set_height(oflnDcAmtStatic.getPixelHeight() + 10);
+					
+					oflnDcStatic.set_text(oflnDcStatic.text + "\r\nㄴ " + arrOflnDc[i].dcNm);
+					oflnDcAmtStatic.set_text(oflnDcAmtStatic.text + "\r\n" + arrOflnDc[i].dcAmt);
+				}
+			}
+			
+			// 등급 할인
+			if(arrGrdeDc.length > 0){
+				dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+				
+				var grdeDcStatic = new Static("static_grde_dc");
+				grdeDcStatic.set_width(200);
+				grdeDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				grdeDcStatic.set_left(200);
+				grdeDcStatic.set_height(31);
+				grdeDcStatic.set_text("<b v='true'>등급 할인</b>");
+				grdeDcStatic.set_usedecorate(true);
+				grdeDcStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_grde_dc", grdeDcStatic);
+				grdeDcStatic.show();
+				
+				var grdeDcAmtStatic = new Static("static_grde_dc_amt");
+				grdeDcAmtStatic.set_width(100);
+				grdeDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				grdeDcAmtStatic.set_right(0);
+				grdeDcAmtStatic.set_height(31);
+				grdeDcAmtStatic.set_text("<b v='true'>1,000원</b>");
+				grdeDcAmtStatic.set_usedecorate(true);
+				grdeDcAmtStatic.set_textAlign("right");
+				grdeDcAmtStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_grde_dc_amt", grdeDcAmtStatic);
+				grdeDcAmtStatic.show();
+				
+				for(var i=0;i<arrGrdeDc.length;i++){
+					dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+					dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+					grdeDcStatic.set_height(grdeDcStatic.getPixelHeight() + 10);
+					grdeDcAmtStatic.set_height(grdeDcAmtStatic.getPixelHeight() + 10);
+					
+					grdeDcStatic.set_text(grdeDcStatic.text + "\r\nㄴ " + arrGrdeDc[i].dcNm);
+					grdeDcAmtStatic.set_text(grdeDcAmtStatic.text + "\r\n" + arrGrdeDc[i].dcAmt);
+				}
+			}
+			
+			// 쿠폰 할인
+			if(arrCpnDc.length > 0){
+				dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+				
+				var cpnDcStatic = new Static("static_cpn_dc");
+				cpnDcStatic.set_width(200);
+				cpnDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				cpnDcStatic.set_left(200);
+				cpnDcStatic.set_height(31);
+				cpnDcStatic.set_text("<b v='true'>쿠폰 할인</b>");
+				cpnDcStatic.set_usedecorate(true);
+				cpnDcStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_cpn_dc", cpnDcStatic);
+				cpnDcStatic.show();
+				
+				var cpnDcAmtStatic = new Static("static_cpn_dc_amt");
+				cpnDcAmtStatic.set_width(100);
+				cpnDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				cpnDcAmtStatic.set_right(0);
+				cpnDcAmtStatic.set_height(31);
+				cpnDcAmtStatic.set_text("<b v='true'>1,000원</b>");
+				cpnDcAmtStatic.set_usedecorate(true);
+				cpnDcAmtStatic.set_textAlign("right");
+				cpnDcAmtStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_cpn_dc_amt", cpnDcAmtStatic);
+				cpnDcAmtStatic.show();
+				
+				for(var i=0;i<arrCpnDc.length;i++){
+					dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+					dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+					cpnDcStatic.set_height(cpnDcStatic.getPixelHeight() + 10);
+					cpnDcAmtStatic.set_height(cpnDcAmtStatic.getPixelHeight() + 10);
+					
+					cpnDcStatic.set_text(cpnDcStatic.text + "\r\nㄴ " + arrCpnDc[i].dcNm);
+					cpnDcAmtStatic.set_text(cpnDcAmtStatic.text + "\r\n" + arrCpnDc[i].dcAmt);
+				}
+			}
+			
+			// 추가 할인
+			if(arrAddDc.length > 0){
+				dcDiv.set_height(dcDiv.getPixelHeight() + 33);
+				dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 33);
+				
+				var addDcStatic = new Static("static_add_dc");
+				addDcStatic.set_width(200);
+				addDcStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				addDcStatic.set_left(200);
+				addDcStatic.set_height(31);
+				addDcStatic.set_text("<b v='true'>재료비/대여료 오프라인 할인</b>");
+				addDcStatic.set_usedecorate(true);
+				addDcStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_add_dc", addDcStatic);
+				addDcStatic.show();
+				
+				var addDcAmtStatic = new Static("static_add_dc_amt");
+				addDcAmtStatic.set_width(100);
+				addDcAmtStatic.set_top(dcTitleStatic.getPixelHeight() - 33);
+				addDcAmtStatic.set_right(0);
+				addDcAmtStatic.set_height(31);
+				addDcAmtStatic.set_text("<b v='true'>1,000원</b>");
+				addDcAmtStatic.set_usedecorate(true);
+				addDcAmtStatic.set_textAlign("right");
+				addDcAmtStatic.set_cssclass("sta_WF_CompText");
+				dcDiv.addChild("static_add_dc_amt", addDcAmtStatic);
+				addDcAmtStatic.show();
+				
+				for(var i=0;i<arrAddDc.length;i++){
+					dcDiv.set_height(dcDiv.getPixelHeight() + 10);
+					dcTitleStatic.set_height(dcTitleStatic.getPixelHeight() + 10);
+					addDcStatic.set_height(addDcStatic.getPixelHeight() + 10);
+					addDcAmtStatic.set_height(addDcAmtStatic.getPixelHeight() + 10);
+					
+					addDcStatic.set_text(addDcStatic.text + "\r\nㄴ " + arrAddDc[i].dcNm);
+					addDcAmtStatic.set_text(addDcAmtStatic.text + "\r\n" + arrAddDc[i].dcAmt);
+				}
+			}
+			
+		}else{
+			dcDiv.set_visible(false);
+		}
+	}
+	
+	if(dcDiv.visible){
+		// 할인영역이 있으면 할인영역으로 높이 맞춤
+		stlmInfoDtlFrm.Tab00.set_height(dcDiv.getPixelTop() + dcDiv.getPixelHeight() + 26);
+	}else if(!dcDiv.visible && feeDiv.visible){
+		// 할인영역이 없고 총 수수료영역이 있으면 총 수수료영역으로 높이 맞춤
+		stlmInfoDtlFrm.Tab00.set_height(feeDiv.getPixelTop() + feeDiv.getPixelHeight() + 26);
+	}else{
+		// 할인영역, 총 수수료영역 둘 다 없는경우
+		stlmInfoDtlFrm.Tab00.set_height(stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.getPixelTop() + stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.getPixelHeight() + 26);
 	}
 };
 
@@ -195,1961 +724,335 @@ this.fn_tab_onchanged = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventIn
 {
 	if(e.postindex == 0){
 		// 최초 주문정보
-		this.Div00.form.Div04.set_height(firstTabDivHeight);
-		paymentInfoDtlFrm.Tab00.set_height(firstTabHeight);
-	
-		// 주문정보 탭의 길이가 길어지면 주문정보 하단의 영역들 밑으로 내림
-		if(firstCurrentDivTop > 400){
-			this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop + (firstCurrentDivTop - 400));
-			this.Div00.setOffsetHeight(initParentDivHeight + (firstCurrentDivTop - 400));
+		if(stlmInfoDtlFrm.ds_first_atlct_stlm.getColumn(0, "totDcAmt") > 0){
+			stlmInfoDtlFrm.Tab00.set_height(stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.dcDiv.getPixelTop() + stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.dcDiv.getPixelHeight() + 26);
 		}else{
-			this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop);
-			this.Div00.setOffsetHeight(initParentDivHeight);
+			stlmInfoDtlFrm.Tab00.set_height(stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.getPixelTop() + stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.getPixelHeight() + 26);
 		}
 	}else if(e.postindex == 1){
 		// 최종 주문정보
-		this.Div00.form.Div04.set_height(lastTabDivHeight);
-		paymentInfoDtlFrm.Tab00.set_height(lastTabHeight);
-	
-		// 주문정보 탭의 길이가 길어지면 주문정보 하단의 영역들 밑으로 내림
-		if(lastCurrentDivTop > 400){
-			this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop + (lastCurrentDivTop - 400));
-			this.Div00.setOffsetHeight(initParentDivHeight + (lastCurrentDivTop - 400));
+		if(stlmInfoDtlFrm.ds_first_atlct_stlm.getColumn(0, "totDcAmt") > 0){
+			stlmInfoDtlFrm.Tab00.set_height(stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.dcDiv.getPixelTop() + stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.dcDiv.getPixelHeight() + 26);
 		}else{
-			this.Div00.form.Div05.setOffsetTop(initAdmMemoDivTop);
-			this.Div00.setOffsetHeight(initParentDivHeight);
+			stlmInfoDtlFrm.Tab00.set_height(stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.feeDiv.getPixelTop() + stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.feeDiv.getPixelHeight() + 26);
 		}
 	}
-	
-	this.resetScroll();
 };
 
-// 최종 주문정보 탭 컨텐츠 동적으로 그림
-this.fn_create_last_order_info_tab = function()
+// 결제수단 정보 데이터 세팅
+this.fn_stlm_mthd_info = function()
 {
-	var dsLastOrderMst = paymentInfoDtlFrm.ds_last_order_mst;
-	var dsLastOrderLectureOfflineDiscountList = paymentInfoDtlFrm.ds_last_order_lecture_offline_discount_list;
-	var dsLastOrderLectureGradeDiscountList = paymentInfoDtlFrm.ds_last_order_lecture_grade_discount_list;
-	var dsLastOrderLectureCouponDiscountList = paymentInfoDtlFrm.ds_last_order_lecture_coupon_discount_list;
-	var dsLastOrderRefundDeductionList = paymentInfoDtlFrm.ds_last_order_refund_deduction_list;
-	var dsLastOrderAdditionalOfflineDiscountList = paymentInfoDtlFrm.ds_last_order_additional_offline_discount_list;
-	var dsLastOrderAdditionalRefundDeductionList = paymentInfoDtlFrm.ds_last_order_additional_refund_deduction_list;
+	var arrStlmMthd = [];
+	
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt") > 0){
+		var crdStlmAmtDiv = new Div("div_crd_stlm_amt");
+		crdStlmAmtDiv.set_left(200);
+		crdStlmAmtDiv.set_right(0);
+		crdStlmAmtDiv.set_height(40);
+		crdStlmAmtDiv.set_cssclass("div_WF_CompWrap");
+		crdStlmAmtDiv.set_border("1px solid #e6e6e6, 0px none");
+		
+		var crdStlmMthdStatic = new Static("static_crd_stlm_mthd");
+		crdStlmMthdStatic.set_width(200);
+		crdStlmMthdStatic.set_top(0);
+		crdStlmMthdStatic.set_left(0);
+		crdStlmMthdStatic.set_bottom(0);
+		
+		// 데스크 결제 건에서는 카드사, 카드번호, 할부방식 미표시
+		if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "stlmChnlCd") == "D"){
+			crdStlmMthdStatic.set_text("신용카드");
+		}else{
+			crdStlmMthdStatic.set_text("신용카드\r\n" + stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdcoCdNm") + " (" + stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cardNum") + ") " + stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cardQuota"));
+		}
+		
+		crdStlmMthdStatic.set_cssclass("sta_WF_CompText");
+		crdStlmAmtDiv.addChild("static_crd_stlm_mthd", crdStlmMthdStatic);
+		
+		var crdStlmAmtStatic = new Static("static_crd_stlm_amt");
+		crdStlmAmtStatic.set_width(100);
+		crdStlmAmtStatic.set_top(0);
+		crdStlmAmtStatic.set_bottom(0);
+		crdStlmAmtStatic.set_right(0);
+		crdStlmAmtStatic.set_textAlign("right");
+		crdStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) + "원");
+		crdStlmAmtStatic.set_cssclass("sta_WF_CompText");
+		crdStlmAmtDiv.addChild("static_crd_stlm_amt", crdStlmAmtStatic);
 
-	paymentInfoDtlFrm.Tab00.insertTabpage("Tabpage2", -1, "", "최종 주문정보");
-	
-	lastTabDivHeight = initTabDivHeight;
-	lastTabHeight = initTabHeight;
-	
-	// 탭 테두리 없앰
-	paymentInfoDtlFrm.Tab00.Tabpage2.set_border("0px none");
-	
-	var totalLectureAmtParentDiv = new Div("div_total_lecture_amt_parent");
-	totalLectureAmtParentDiv.setOffsetWidth(604);
-	totalLectureAmtParentDiv.setOffsetHeight(33);
-	totalLectureAmtParentDiv.setOffsetLeft(0);
-	totalLectureAmtParentDiv.setOffsetTop(0);
-	totalLectureAmtParentDiv.set_cssclass("div_WF_CompWrap");
-	paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_total_lecture_amt_parent", totalLectureAmtParentDiv);
-	lastTabDivHeight += 33;
-	lastTabHeight += 33;
-	
-	// 총 강좌료 추가
-	var totalLectureObj = new Static("sta_total_lecture");
-	totalLectureObj.set_width(200);
-	totalLectureObj.set_height(31);
-	totalLectureObj.set_top(lastCurrentDivTop);
-	totalLectureObj.set_left(0);
-	totalLectureObj.set_text("· 총 강좌료");
-	totalLectureObj.set_cssclass("sta_WF_TableLabel");
-	totalLectureAmtParentDiv.addChild("sta_total_lecture", totalLectureObj);
-	
-	// 총 강좌료 금액 추가
-	var totalLectureAmtObj = new Static("sta_total_lecture_amt");
-	totalLectureAmtObj.set_width(402);
-	totalLectureAmtObj.set_height(31);
-	totalLectureAmtObj.set_top(lastCurrentDivTop);
-	totalLectureAmtObj.set_right(0);
-	totalLectureAmtObj.set_cssclass("sta_WF_CompText");
-	totalLectureAmtObj.set_usedecorate(true);
-	totalLectureAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "totalLectureAmt") +"원</b>");
-	totalLectureAmtObj.set_textAlign("right");
-	totalLectureAmtParentDiv.addChild("sta_total_lecture_amt", totalLectureAmtObj);
-	
-	totalLectureAmtParentDiv.show();
-	lastCurrentDivTop = totalLectureAmtParentDiv.getOffsetTop() + totalLectureAmtParentDiv.getOffsetHeight();
-	
-	// 강좌료에 대한 할인금액이 있다면
-	if(dsLastOrderMst.getColumn(0, "lectureDiscountAmt") > 0){
-		var lectureDiscountAmtParentDiv = new Div("div_lecture_discount_amt_parent");
-		lectureDiscountAmtParentDiv.setOffsetWidth(604);
-		lectureDiscountAmtParentDiv.setOffsetHeight(33);
-		lectureDiscountAmtParentDiv.setOffsetLeft(0);
-		lectureDiscountAmtParentDiv.setOffsetTop(lastCurrentDivTop - 1);
-		lectureDiscountAmtParentDiv.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_discount_amt_parent", lectureDiscountAmtParentDiv);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
-		
-		// 취소 할인금액 라벨 추가
-		var lectureDiscountObj = new Static("sta_lecture_discount");
-		lectureDiscountObj.set_width(200);
-		lectureDiscountObj.set_height(31);
-		lectureDiscountObj.set_top(0);
-		lectureDiscountObj.set_left(0);
-		lectureDiscountObj.set_text("ㄴ 취소 할인금액");
-		lectureDiscountObj.set_cssclass("sta_WF_TableLabel");
-		lectureDiscountAmtParentDiv.addChild("sta_lecture_discount", lectureDiscountObj);
-		
-		// 취소 할인금액 추가
-		var lectureDiscountAmtObj = new Static("sta_lecture_discount_amt");
-		lectureDiscountAmtObj.set_width(402);
-		lectureDiscountAmtObj.set_height(31);
-		lectureDiscountAmtObj.set_top(0);
-		lectureDiscountAmtObj.set_right(0);
-		lectureDiscountAmtObj.set_cssclass("sta_WF_TableLabel");
-		lectureDiscountAmtObj.set_usedecorate(true);
-		lectureDiscountAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsLastOrderMst.getColumn(0, "lectureOfflineDiscountAmt") +"원</fc></b>");
-		lectureDiscountAmtObj.set_textAlign("right");
-		lectureDiscountAmtObj.set_border("0px none");
-		lectureDiscountAmtParentDiv.addChild("sta_lecture_discount_amt", lectureDiscountAmtObj);
-		
-		lastCurrentDivTop = lectureDiscountAmtParentDiv.getOffsetTop() + lectureDiscountAmtParentDiv.getOffsetHeight();
-		lectureDiscountAmtParentDiv.show();
-		
-		// 오프라인 할인금액이 있는경우
-		if(dsLastOrderMst.getColumn(0, "lectureOfflineDiscountAmt") > 0){
-			// 강좌료 오프라인 할인금액 div 추가
-			var lectureOfflineDiscountDivObj = new Div("div_lecture_offline_discount");
-			lectureOfflineDiscountDivObj.set_width(604);
-			lectureOfflineDiscountDivObj.set_top(lastCurrentDivTop - 1);
-			lectureOfflineDiscountDivObj.set_left(0);
-			lectureOfflineDiscountDivObj.set_height(33);
-			lectureOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_offline_discount", lectureOfflineDiscountDivObj);
-			lastTabDivHeight += 33;
-			lastTabHeight += 33;
-			
-			// ㄴ 할인금액 밑 공백 부분 div 추가
-			var lectureDiscountBlankObj = new Static("sta_lecture_discount_blank");
-			lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-			lectureDiscountBlankObj.set_width(200);
-			lectureDiscountBlankObj.set_height(31);
-			lectureDiscountBlankObj.set_top(0);
-			lectureDiscountBlankObj.set_left(0);
-			lectureOfflineDiscountDivObj.addChild("sta_lecture_discount_blank", lectureDiscountBlankObj);
-			
-			// 오프라인 할인 추가
- 			var offlineDiscountObj = new Static("sta_offline_discount");
- 			offlineDiscountObj.set_cssclass("sta_WF_CompText");
- 			offlineDiscountObj.set_width(200);
- 			offlineDiscountObj.set_height(31);
- 			offlineDiscountObj.set_top(0);
- 			offlineDiscountObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 			offlineDiscountObj.set_usedecorate(true);
- 			offlineDiscountObj.set_text("<b v='true'>오프라인 할인</b>");
- 			lectureOfflineDiscountDivObj.addChild("sta_offline_discount", offlineDiscountObj);
- 			
- 			// 오프라인 할인 금액 추가
- 			var offlineDiscountAmtObj = new Static("sta_offline_discount_amt");
- 			offlineDiscountAmtObj.set_cssclass("sta_WF_CompText");
- 			offlineDiscountAmtObj.set_width(200);
- 			offlineDiscountAmtObj.set_height(31);
- 			offlineDiscountAmtObj.set_top(0);
- 			offlineDiscountAmtObj.set_right(0);
- 			offlineDiscountAmtObj.set_usedecorate(true);
- 			offlineDiscountAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "lectureOfflineDiscountAmt") +"원</b>");
- 			offlineDiscountAmtObj.set_textAlign("right");
- 			lectureOfflineDiscountDivObj.addChild("sta_offline_discount_amt", offlineDiscountAmtObj);
-			
-			lectureOfflineDiscountDivObj.show();
-			lastCurrentDivTop = lectureOfflineDiscountDivObj.getOffsetTop() + lectureOfflineDiscountDivObj.getOffsetHeight();
-			
-			var offlineDiscountOptObj;
- 			var offlineDiscountOptAmtObj;
-			for(var i=0;i<dsLastOrderLectureOfflineDiscountList.getRowCount();i++){
-				// 강좌료 오프라인 할인금액 div 추가
-				lectureOfflineDiscountDivObj = new Div("div_lecture_offline_discount" + i);
-				lectureOfflineDiscountDivObj.set_width(604);
-				lectureOfflineDiscountDivObj.set_top(lastCurrentDivTop - 1);
-				lectureOfflineDiscountDivObj.set_left(0);
-				lectureOfflineDiscountDivObj.set_height(33);
-				lectureOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_offline_discount" + i, lectureOfflineDiscountDivObj);
-				lastTabDivHeight += 33;
-				lastTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				lectureDiscountBlankObj = new Static("sta_lecture_discount_blank" + i);
-				lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				lectureDiscountBlankObj.set_width(200);
-				lectureDiscountBlankObj.set_height(31);
-				lectureDiscountBlankObj.set_top(0);
-				lectureDiscountBlankObj.set_left(0);
-				lectureOfflineDiscountDivObj.addChild("sta_lecture_discount_blank" + i, lectureDiscountBlankObj);
-				
-				// 오프라인 할인 옵션 추가
- 				offlineDiscountOptObj = new Static("sta_offline_discount_opt" + i);
- 				offlineDiscountOptObj.set_cssclass("sta_WF_CompText");
- 				offlineDiscountOptObj.set_width(200);
- 				offlineDiscountOptObj.set_height(31);
- 				offlineDiscountOptObj.set_top(0);
- 				offlineDiscountOptObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 				offlineDiscountOptObj.set_text("ㄴ " + dsLastOrderLectureOfflineDiscountList.getColumn(i, "discountNm"));
- 				lectureOfflineDiscountDivObj.addChild("sta_offline_discount_opt" + i, offlineDiscountOptObj);
- 				
- 				// 오프라인 할인 옵션 금액 추가
- 				offlineDiscountOptAmtObj = new Static("sta_offline_discount_opt_amt" + i);
- 				offlineDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
- 				offlineDiscountOptAmtObj.set_width(200);
- 				offlineDiscountOptAmtObj.set_height(31);
- 				offlineDiscountOptAmtObj.set_top(0);
- 				offlineDiscountOptAmtObj.set_right(0);
- 				offlineDiscountOptAmtObj.set_text(dsLastOrderLectureOfflineDiscountList.getColumn(i, "discountAmt") + "원");
- 				offlineDiscountOptAmtObj.set_textAlign("right");
- 				lectureOfflineDiscountDivObj.addChild("sta_offline_discount_opt_amt" + i, offlineDiscountOptAmtObj);
-				
-				lectureOfflineDiscountDivObj.show();
-				lastCurrentDivTop = lectureOfflineDiscountDivObj.getOffsetTop() + lectureOfflineDiscountDivObj.getOffsetHeight();
-			}
-		}
-		
-		// 등급 할인금액이 있는경우
- 		if(dsLastOrderMst.getColumn(0, "lectureGradeDiscountAmt") > 0){
-			// 강좌료 등급 할인금액 div 추가
-			var lectureGradeDiscountDivObj = new Div("div_lecture_grade_discount");
-			lectureGradeDiscountDivObj.set_width(604);
-			lectureGradeDiscountDivObj.set_top(lastCurrentDivTop - 1);
-			lectureGradeDiscountDivObj.set_left(0);
-			lectureGradeDiscountDivObj.set_height(33);
-			lectureGradeDiscountDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_grade_discount", lectureGradeDiscountDivObj);
-			lastTabDivHeight += 33;
-			lastTabHeight += 33;
-			
-			// ㄴ 할인금액 밑 공백 부분 div 추가
-			var lectureDiscountBlankObj = new Static("sta_lecture_discount_blank");
-			lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-			lectureDiscountBlankObj.set_width(200);
-			lectureDiscountBlankObj.set_height(31);
-			lectureDiscountBlankObj.set_top(0);
-			lectureDiscountBlankObj.set_left(0);
-			lectureGradeDiscountDivObj.addChild("sta_lecture_discount_blank", lectureDiscountBlankObj);
-			
-			// 등급 할인 추가
- 			var gradeDiscountObj = new Static("sta_grade_discount");
- 			gradeDiscountObj.set_cssclass("sta_WF_CompText");
- 			gradeDiscountObj.set_width(200);
- 			gradeDiscountObj.set_height(31);
- 			gradeDiscountObj.set_top(0);
- 			gradeDiscountObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 			gradeDiscountObj.set_usedecorate(true);
- 			gradeDiscountObj.set_text("<b v='true'>등급 할인</b>");
- 			lectureGradeDiscountDivObj.addChild("sta_grade_discount", gradeDiscountObj);
- 			
- 			// 등급 할인 금액 추가
- 			var gradeDiscountAmtObj = new Static("sta_grade_discount_amt");
- 			gradeDiscountAmtObj.set_cssclass("sta_WF_CompText");
- 			gradeDiscountAmtObj.set_width(200);
- 			gradeDiscountAmtObj.set_height(31);
- 			gradeDiscountAmtObj.set_top(0);
- 			gradeDiscountAmtObj.set_right(0);
- 			gradeDiscountAmtObj.set_usedecorate(true);
- 			gradeDiscountAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "lectureGradeDiscountAmt") +"원</b>");
- 			gradeDiscountAmtObj.set_textAlign("right");
- 			lectureGradeDiscountDivObj.addChild("sta_grade_discount_amt", gradeDiscountAmtObj);
-			
-			lectureGradeDiscountDivObj.show();
-			lastCurrentDivTop = lectureGradeDiscountDivObj.getOffsetTop() + lectureGradeDiscountDivObj.getOffsetHeight();
-			
-			var gradeDiscountOptObj;
- 			var gradeDiscountOptAmtObj;
-			for(var i=0;i<dsLastOrderLectureGradeDiscountList.getRowCount();i++){
-				// 강좌료 등급 할인금액 div 추가
-				lectureGradeDiscountDivObj = new Div("div_lecture_grade_discount" + i);
-				lectureGradeDiscountDivObj.set_width(604);
-				lectureGradeDiscountDivObj.set_top(lastCurrentDivTop - 1);
-				lectureGradeDiscountDivObj.set_left(0);
-				lectureGradeDiscountDivObj.set_height(33);
-				lectureGradeDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_grade_discount" + i, lectureGradeDiscountDivObj);
-				lastTabDivHeight += 33;
-				lastTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				lectureDiscountBlankObj = new Static("sta_lecture_discount_blank" + i);
-				lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				lectureDiscountBlankObj.set_width(200);
-				lectureDiscountBlankObj.set_height(31);
-				lectureDiscountBlankObj.set_top(0);
-				lectureDiscountBlankObj.set_left(0);
-				lectureGradeDiscountDivObj.addChild("sta_lecture_discount_blank" + i, lectureDiscountBlankObj);
-				
-				// 등급 할인 옵션 추가
- 				gradeDiscountOptObj = new Static("sta_grade_discount_opt" + i);
- 				gradeDiscountOptObj.set_cssclass("sta_WF_CompText");
- 				gradeDiscountOptObj.set_width(200);
- 				gradeDiscountOptObj.set_height(31);
- 				gradeDiscountOptObj.set_top(0);
- 				gradeDiscountOptObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 				gradeDiscountOptObj.set_text("ㄴ " + dsLastOrderLectureGradeDiscountList.getColumn(i, "discountNm"));
- 				lectureGradeDiscountDivObj.addChild("sta_grade_discount_opt" + i, gradeDiscountOptObj);
- 				
- 				// 등급 할인 옵션 금액 추가
- 				gradeDiscountOptAmtObj = new Static("sta_grade_discount_opt_amt" + i);
- 				gradeDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
- 				gradeDiscountOptAmtObj.set_width(200);
- 				gradeDiscountOptAmtObj.set_height(31);
- 				gradeDiscountOptAmtObj.set_top(0);
- 				gradeDiscountOptAmtObj.set_right(0);
- 				gradeDiscountOptAmtObj.set_text(dsLastOrderLectureGradeDiscountList.getColumn(i, "discountAmt") + "원");
- 				gradeDiscountOptAmtObj.set_textAlign("right");
- 				lectureGradeDiscountDivObj.addChild("sta_grade_discount_opt_amt" + i, gradeDiscountOptAmtObj);
-				
-				lectureGradeDiscountDivObj.show();
-				lastCurrentDivTop = lectureGradeDiscountDivObj.getOffsetTop() + lectureGradeDiscountDivObj.getOffsetHeight();
-			}
-		}
-		
-		// 쿠폰 할인금액이 있는 경우
- 		if(dsLastOrderMst.getColumn(0, "lectureCouponDiscountAmt") > 0){
-			// 강좌료 쿠폰 할인금액 div 추가
-			var lectureCouponDiscountDivObj = new Div("div_lecture_coupon_discount");
-			lectureCouponDiscountDivObj.set_width(604);
-			lectureCouponDiscountDivObj.set_top(lastCurrentDivTop - 1);
-			lectureCouponDiscountDivObj.set_left(0);
-			lectureCouponDiscountDivObj.set_height(33);
-			lectureCouponDiscountDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_coupon_discount", lectureCouponDiscountDivObj);
-			lastTabDivHeight += 33;
-			lastTabHeight += 33;
-			
-			// ㄴ 할인금액 밑 공백 부분 div 추가
-			var lectureDiscountBlankObj = new Static("sta_lecture_discount_blank");
-			lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-			lectureDiscountBlankObj.set_width(200);
-			lectureDiscountBlankObj.set_height(31);
-			lectureDiscountBlankObj.set_top(0);
-			lectureDiscountBlankObj.set_left(0);
-			lectureCouponDiscountDivObj.addChild("sta_lecture_discount_blank", lectureDiscountBlankObj);
-			
-			// 쿠폰 할인 추가
- 			var couponDiscountObj = new Static("sta_coupon_discount");
- 			couponDiscountObj.set_cssclass("sta_WF_CompText");
- 			couponDiscountObj.set_width(200);
- 			couponDiscountObj.set_height(31);
- 			couponDiscountObj.set_top(0);
- 			couponDiscountObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 			couponDiscountObj.set_usedecorate(true);
- 			couponDiscountObj.set_text("<b v='true'>쿠폰 할인</b>");
- 			lectureCouponDiscountDivObj.addChild("sta_coupon_discount", couponDiscountObj);
- 			
- 			// 쿠폰 할인 금액 추가
- 			var couponDiscountAmtObj = new Static("sta_coupon_discount_amt");
- 			couponDiscountAmtObj.set_cssclass("sta_WF_CompText");
- 			couponDiscountAmtObj.set_width(200);
- 			couponDiscountAmtObj.set_height(31);
- 			couponDiscountAmtObj.set_top(0);
- 			couponDiscountAmtObj.set_right(0);
- 			couponDiscountAmtObj.set_usedecorate(true);
- 			couponDiscountAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "lectureCouponDiscountAmt") +"원</b>");
- 			couponDiscountAmtObj.set_textAlign("right");
- 			lectureCouponDiscountDivObj.addChild("sta_grade_discount_amt", couponDiscountAmtObj);
-			
-			lectureCouponDiscountDivObj.show();
-			lastCurrentDivTop = lectureCouponDiscountDivObj.getOffsetTop() + lectureCouponDiscountDivObj.getOffsetHeight();
-			
-			var couponDiscountOptObj;
- 			var couponDiscountOptAmtObj;
-			for(var i=0;i<dsLastOrderLectureCouponDiscountList.getRowCount();i++){
-				// 강좌료 쿠폰 할인금액 div 추가
-				lectureCouponDiscountDivObj = new Div("div_lecture_coupon_discount" + i);
-				lectureCouponDiscountDivObj.set_width(604);
-				lectureCouponDiscountDivObj.set_top(lastCurrentDivTop - 1);
-				lectureCouponDiscountDivObj.set_left(0);
-				lectureCouponDiscountDivObj.set_height(33);
-				lectureCouponDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_coupon_discount" + i, lectureCouponDiscountDivObj);
-				lastTabDivHeight += 33;
-				lastTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				lectureDiscountBlankObj = new Static("sta_lecture_discount_blank" + i);
-				lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				lectureDiscountBlankObj.set_width(200);
-				lectureDiscountBlankObj.set_height(31);
-				lectureDiscountBlankObj.set_top(0);
-				lectureDiscountBlankObj.set_left(0);
-				lectureCouponDiscountDivObj.addChild("sta_lecture_discount_blank" + i, lectureDiscountBlankObj);
-				
-				// 쿠폰 할인 옵션 추가
- 				couponDiscountOptObj = new Static("sta_grade_discount_opt" + i);
- 				couponDiscountOptObj.set_cssclass("sta_WF_CompText");
- 				couponDiscountOptObj.set_width(200);
- 				couponDiscountOptObj.set_height(31);
- 				couponDiscountOptObj.set_top(0);
- 				couponDiscountOptObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 				couponDiscountOptObj.set_text("ㄴ " + dsLastOrderLectureCouponDiscountList.getColumn(i, "discountNm"));
- 				lectureCouponDiscountDivObj.addChild("sta_grade_discount_opt" + i, couponDiscountOptObj);
- 				
- 				// 쿠폰 할인 옵션 금액 추가
- 				couponDiscountOptAmtObj = new Static("sta_coupon_discount_opt_amt" + i);
- 				couponDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
- 				couponDiscountOptAmtObj.set_width(200);
- 				couponDiscountOptAmtObj.set_height(31);
- 				couponDiscountOptAmtObj.set_top(0);
- 				couponDiscountOptAmtObj.set_right(0);
- 				couponDiscountOptAmtObj.set_text(dsLastOrderLectureCouponDiscountList.getColumn(i, "discountAmt") + "원");
- 				couponDiscountOptAmtObj.set_textAlign("right");
- 				lectureCouponDiscountDivObj.addChild("sta_coupon_discount_opt_amt" + i, couponDiscountOptAmtObj);
-				
-				lectureCouponDiscountDivObj.show();
-				lastCurrentDivTop = lectureCouponDiscountDivObj.getOffsetTop() + lectureCouponDiscountDivObj.getOffsetHeight();
-			}
-		}
+		arrStlmMthd.push({div : crdStlmAmtDiv});
 	}
 	
-	// 환불 차감금액이 있는 경우
-	if(dsLastOrderMst.getColumn(0, "lectureRefundDeductionAmt") > 0){
-		var lectureRefundDeductionAmtParentDiv = new Div("div_lecture_refund_deduction_amt_parent");
-		lectureRefundDeductionAmtParentDiv.setOffsetWidth(604);
-		lectureRefundDeductionAmtParentDiv.setOffsetHeight(33);
-		lectureRefundDeductionAmtParentDiv.setOffsetLeft(0);
-		lectureRefundDeductionAmtParentDiv.setOffsetTop(lastCurrentDivTop - 1);
-		lectureRefundDeductionAmtParentDiv.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lecture_refund_deduction_amt_parent", lectureRefundDeductionAmtParentDiv);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt") > 0){
+		var lpntUseAmtDiv = new Div("div_lpnt_use_amt");
+		lpntUseAmtDiv.set_left(200);
+		lpntUseAmtDiv.set_right(0);
+		lpntUseAmtDiv.set_height(33);
+		lpntUseAmtDiv.set_cssclass("div_WF_CompWrap");
+		lpntUseAmtDiv.set_border("1px solid #e6e6e6, 0px none");
 		
-		// 환불차감 금액 라벨 추가
-		var lectureRefundDeductionObj = new Static("sta_lecture_refund_deduction");
-		lectureRefundDeductionObj.set_width(200);
-		lectureRefundDeductionObj.set_height(31);
-		lectureRefundDeductionObj.set_top(0);
-		lectureRefundDeductionObj.set_left(0);
-		lectureRefundDeductionObj.set_text("ㄴ 환불차감 금액");
-		lectureRefundDeductionObj.set_cssclass("sta_WF_TableLabel");
-		lectureRefundDeductionAmtParentDiv.addChild("sta_lecture_refund_deduction", lectureRefundDeductionObj);
+		var lpntUseMthdStatic = new Static("static_lpnt_use_mthd");
+		lpntUseMthdStatic.set_width(200);
+		lpntUseMthdStatic.set_top(0);
+		lpntUseMthdStatic.set_left(0);
+		lpntUseMthdStatic.set_bottom(0);
+		lpntUseMthdStatic.set_text("L.POINT");
+		lpntUseMthdStatic.set_cssclass("sta_WF_CompText");
+		lpntUseAmtDiv.addChild("static_lpnt_use_mthd", lpntUseMthdStatic);
 		
-		// 환불차감 금액 추가
-		var lectureRefundDeductionAmtObj = new Static("sta_lecture_refund_deduction_amt");
-		lectureRefundDeductionAmtObj.set_width(402);
-		lectureRefundDeductionAmtObj.set_height(31);
-		lectureRefundDeductionAmtObj.set_top(0);
-		lectureRefundDeductionAmtObj.set_right(0);
-		lectureRefundDeductionAmtObj.set_cssclass("sta_WF_TableLabel");
-		lectureRefundDeductionAmtObj.set_usedecorate(true);
-		lectureRefundDeductionAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsLastOrderMst.getColumn(0, "lectureRefundDeductionAmt") +"원</fc></b>");
-		lectureRefundDeductionAmtObj.set_textAlign("right");
-		lectureRefundDeductionAmtObj.set_border("0px none");
-		lectureRefundDeductionAmtParentDiv.addChild("sta_lecture_refund_deduction_amt", lectureRefundDeductionAmtObj);
-		
-		lastCurrentDivTop = lectureRefundDeductionAmtParentDiv.getOffsetTop() + lectureRefundDeductionAmtParentDiv.getOffsetHeight();
-		lectureRefundDeductionAmtParentDiv.show();
+		var lpntUseAmtStatic = new Static("static_lpnt_use_amt");
+		lpntUseAmtStatic.set_width(100);
+		lpntUseAmtStatic.set_top(0);
+		lpntUseAmtStatic.set_bottom(0);
+		lpntUseAmtStatic.set_right(0);
+		lpntUseAmtStatic.set_textAlign("right");
+		lpntUseAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) + "원");
+		lpntUseAmtStatic.set_cssclass("sta_WF_CompText");
+		lpntUseAmtDiv.addChild("static_lpnt_use_amt", lpntUseAmtStatic);
 
-		// 환불차감 금액 내역 건수만큼 반복
-		var refundDeductionDivObj;
-		var refundDeductionBlankObj;
-		var refundDeductionOptObj;
-		var refundDeductionOptAmtObj;
-		for(var i=0;i<dsLastOrderRefundDeductionList.getRowCount();i++){
-			// 환불차감 내역 div 추가
-			refundDeductionDivObj = new Div("div_refund_deduction" + i);
-			refundDeductionDivObj.set_width(604);
-			refundDeductionDivObj.set_top(lastCurrentDivTop - 1);
-			refundDeductionDivObj.set_left(0);
-			refundDeductionDivObj.set_height(33);
-			refundDeductionDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_refund_deduction" + i, refundDeductionDivObj);
-			lastTabDivHeight += 33;
-			lastTabHeight += 33;
-			
-			// ㄴ 환불차감 금액 밑 공백 부분 static 추가
-			refundDeductionBlankObj = new Static("sta_refund_deduction_blank" + i);
-			refundDeductionBlankObj.set_cssclass("sta_WF_TableLabel");
-			refundDeductionBlankObj.set_width(200);
-			refundDeductionBlankObj.set_height(31);
-			refundDeductionBlankObj.set_top(0);
-			refundDeductionBlankObj.set_left(0);
-			refundDeductionDivObj.addChild("sta_refund_deduction_blank" + i, refundDeductionBlankObj);
-			
-			// 환불차감 금액 내역 추가
-			refundDeductionOptObj = new Static("sta_refund_deduction_opt" + i);
-			refundDeductionOptObj.set_cssclass("sta_WF_CompText");
-			refundDeductionOptObj.set_width(200);
-			refundDeductionOptObj.set_height(31);
-			refundDeductionOptObj.set_top(0);
-			refundDeductionOptObj.set_left(refundDeductionBlankObj.getOffsetRight());
-			refundDeductionOptObj.set_text("ㄴ " + dsLastOrderRefundDeductionList.getColumn(i, "discountNm"));
-			refundDeductionDivObj.addChild("sta_refund_deduction_opt" + i, refundDeductionOptObj);
-			
-			// 환불차감 금액 내역 금액 추가
-			refundDeductionOptAmtObj = new Static("sta_refund_deduction_opt_amt" + i);
-			refundDeductionOptAmtObj.set_cssclass("sta_WF_CompText");
-			refundDeductionOptAmtObj.set_width(200);
-			refundDeductionOptAmtObj.set_height(31);
-			refundDeductionOptAmtObj.set_top(0);
-			refundDeductionOptAmtObj.set_right(0);
-			refundDeductionOptAmtObj.set_text(dsLastOrderRefundDeductionList.getColumn(i, "discountAmt") + "원");
-			refundDeductionOptAmtObj.set_textAlign("right");
-			refundDeductionDivObj.addChild("sta_refund_deduction_opt_amt" + i, refundDeductionOptAmtObj);
-			
-			refundDeductionDivObj.show();
-			lastCurrentDivTop = refundDeductionDivObj.getOffsetTop() + refundDeductionDivObj.getOffsetHeight();
-		}
+		arrStlmMthd.push({div : lpntUseAmtDiv});
 	}
 	
-	// 총 추가금액이 있는 경우
-	if(dsLastOrderMst.getColumn(0, "totalAdditionalAmt") > 0){
-		// 총 추가금액 div 추가
- 		var additionalAmtDivObj = new Div("div_additional_amt");
- 		additionalAmtDivObj.set_width(604);
- 		additionalAmtDivObj.set_top(lastCurrentDivTop - 1);
- 		additionalAmtDivObj.set_left(0);
- 		additionalAmtDivObj.set_height(33);
- 		additionalAmtDivObj.set_cssclass("div_WF_CompWrap");
- 		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_additional_amt", additionalAmtDivObj);
-		lastTabDivHeight += 33;
- 		lastTabHeight += 33;
- 		
- 		// 총 추가금액 라벨 추가
- 		var additionalObj = new Static("sta_additional");
- 		additionalObj.set_width(200);
- 		additionalObj.set_height(31);
- 		additionalObj.set_top(0);
- 		additionalObj.set_left(0);
- 		additionalObj.set_text("· 총 추가금액");
- 		additionalObj.set_cssclass("sta_WF_TableLabel");
- 		additionalAmtDivObj.addChild("sta_additional", additionalObj);
- 		
- 		// 총 추가금액 추가
- 		var additionalAmtObj = new Static("sta_additional_amt");
- 		additionalAmtObj.set_width(402);
- 		additionalAmtObj.set_height(31);
- 		additionalAmtObj.set_top(0);
- 		additionalAmtObj.set_right(0);
- 		additionalAmtObj.set_cssclass("sta_WF_CompText");
- 		additionalAmtObj.set_usedecorate(true);
- 		additionalAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "totalAdditionalAmt") +"원</b>");
- 		additionalAmtObj.set_textAlign("right");
- 		additionalAmtObj.set_border("0px none");
- 		additionalAmtDivObj.addChild("sta_additional_amt", additionalAmtObj);
- 		
- 		additionalAmtDivObj.show();
- 		lastCurrentDivTop = additionalAmtDivObj.getOffsetTop() + additionalAmtDivObj.getOffsetHeight();
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt") > 0){
+		var cshStlmAmtDiv = new Div("div_csh_stlm_amt");
+		cshStlmAmtDiv.set_left(200);
+		cshStlmAmtDiv.set_right(0);
+		cshStlmAmtDiv.set_height(33);
+		cshStlmAmtDiv.set_cssclass("div_WF_CompWrap");
+		cshStlmAmtDiv.set_border("1px solid #e6e6e6, 0px none");
 		
-		// 추가금액의 취소 할인금액이 있는 경우
- 		if(dsLastOrderMst.getColumn(0, "additionalDiscountAmt") > 0){
-  			// 추가금액의 취소 할인금액 div 추가
-  			var additionalDiscountDivObj = new Div("div_additional_discount");
-  			additionalDiscountDivObj.set_width(604);
-  			additionalDiscountDivObj.set_top(lastCurrentDivTop - 1);
-			additionalDiscountDivObj.set_height(33);
-  			additionalDiscountDivObj.set_left(0);
-  			additionalDiscountDivObj.set_cssclass("div_WF_CompWrap");
-  			paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_additional_discount", additionalDiscountDivObj);
-			lastTabDivHeight += 33;
-  			lastTabHeight += 33;
-  			
-  			// 추가금액의 취소 할인금액 추가
-  			var additionalDiscountObj = new Static("sta_additional_discount");
-  			additionalDiscountObj.set_width(200);
-  			additionalDiscountObj.set_height(31);
-  			additionalDiscountObj.set_top(0);
-  			additionalDiscountObj.set_left(0);
-  			additionalDiscountObj.set_text("ㄴ 취소 할인금액");
-  			additionalDiscountObj.set_cssclass("sta_WF_TableLabel");
-  			additionalDiscountDivObj.addChild("sta_additional_discount", additionalDiscountObj);
-  			
-  			// 추가금액의 총 취소 할인금액 추가
-  			var additionalDiscountAmtObj = new Static("sta_additional_discount_amt");
-  			additionalDiscountAmtObj.set_width(402);
-  			additionalDiscountAmtObj.set_height(31);
-  			additionalDiscountAmtObj.set_top(0);
-  			additionalDiscountAmtObj.set_right(0);
-  			additionalDiscountAmtObj.set_cssclass("sta_WF_TableLabel");
-  			additionalDiscountAmtObj.set_usedecorate(true);
-  			additionalDiscountAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsLastOrderMst.getColumn(0, "additionalDiscountAmt") +"원</fc></b>");
-  			additionalDiscountAmtObj.set_textAlign("right");
-  			additionalDiscountAmtObj.set_border("0px none");
-  			additionalDiscountDivObj.addChild("sta_additional_discount_amt", additionalDiscountAmtObj);
- 			
-			additionalDiscountDivObj.show();
-			lastCurrentDivTop = additionalDiscountDivObj.getOffsetTop() + additionalDiscountDivObj.getOffsetHeight();
-			
-			// 추가금액의 오프라인 할인금액이 있는경우
-   			if(dsLastOrderMst.getColumn(0, "additionalOfflineDiscountAmt") > 0){
-				// 강좌료 오프라인 할인금액 div 추가
-				var additionalOfflineDiscountDivObj = new Div("div_additional_offline_discount");
-				additionalOfflineDiscountDivObj.set_width(604);
-				additionalOfflineDiscountDivObj.set_top(lastCurrentDivTop - 1);
-				additionalOfflineDiscountDivObj.set_left(0);
-				additionalOfflineDiscountDivObj.set_height(33);
-				additionalOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_additional_offline_discount", additionalOfflineDiscountDivObj);
-				lastTabDivHeight += 33;
-				lastTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				var additionalDiscountBlankObj = new Static("sta_additional_discount_blank");
-				additionalDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				additionalDiscountBlankObj.set_width(200);
-				additionalDiscountBlankObj.set_height(31);
-				additionalDiscountBlankObj.set_top(0);
-				additionalDiscountBlankObj.set_left(0);
-				additionalOfflineDiscountDivObj.addChild("sta_lecture_discount_blank", additionalDiscountBlankObj);
-				
-				// 오프라인 할인 추가
-				var offlineDiscountObj = new Static("sta_offline_discount");
-				offlineDiscountObj.set_cssclass("sta_WF_CompText");
-				offlineDiscountObj.set_width(200);
-				offlineDiscountObj.set_height(31);
-				offlineDiscountObj.set_top(0);
-				offlineDiscountObj.set_left(additionalDiscountBlankObj.getOffsetRight());
-				offlineDiscountObj.set_usedecorate(true);
-				offlineDiscountObj.set_text("<b v='true'>오프라인 할인</b>");
-				additionalOfflineDiscountDivObj.addChild("sta_offline_discount", offlineDiscountObj);
-				
-				// 오프라인 할인 금액 추가
-				var offlineDiscountAmtObj = new Static("sta_offline_discount_amt");
-				offlineDiscountAmtObj.set_cssclass("sta_WF_CompText");
-				offlineDiscountAmtObj.set_width(200);
-				offlineDiscountAmtObj.set_height(31);
-				offlineDiscountAmtObj.set_top(0);
-				offlineDiscountAmtObj.set_right(0);
-				offlineDiscountAmtObj.set_usedecorate(true);
-				offlineDiscountAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "additionalOfflineDiscountAmt") +"원</b>");
-				offlineDiscountAmtObj.set_textAlign("right");
-				additionalOfflineDiscountDivObj.addChild("sta_offline_discount_amt", offlineDiscountAmtObj);
-				
-				additionalOfflineDiscountDivObj.show();
-				lastCurrentDivTop = additionalOfflineDiscountDivObj.getOffsetTop() + additionalOfflineDiscountDivObj.getOffsetHeight();
-				
-				var offlineDiscountOptObj;
-				var offlineDiscountOptAmtObj;
-				for(var i=0;i<dsLastOrderAdditionalOfflineDiscountList.getRowCount();i++){
-					// 추가금액 오프라인 할인금액 div 추가
-					additionalOfflineDiscountDivObj = new Div("div_additional_offline_discount" + i);
-					additionalOfflineDiscountDivObj.set_width(604);
-					additionalOfflineDiscountDivObj.set_top(lastCurrentDivTop - 1);
-					additionalOfflineDiscountDivObj.set_left(0);
-					additionalOfflineDiscountDivObj.set_height(33);
-					additionalOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-					paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_additional_offline_discount" + i, additionalOfflineDiscountDivObj);
-					lastTabDivHeight += 33;
-					lastTabHeight += 33;
-					
-					// ㄴ 할인금액 밑 공백 부분 div 추가
-					additionalDiscountBlankObj = new Static("sta_additional_discount_blank" + i);
-					additionalDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-					additionalDiscountBlankObj.set_width(200);
-					additionalDiscountBlankObj.set_height(31);
-					additionalDiscountBlankObj.set_top(0);
-					additionalDiscountBlankObj.set_left(0);
-					additionalOfflineDiscountDivObj.addChild("sta_additional_discount_blank" + i, additionalDiscountBlankObj);
-					
-					// 오프라인 할인 옵션 추가
-					offlineDiscountOptObj = new Static("sta_offline_discount_opt" + i);
-					offlineDiscountOptObj.set_cssclass("sta_WF_CompText");
-					offlineDiscountOptObj.set_width(200);
-					offlineDiscountOptObj.set_height(31);
-					offlineDiscountOptObj.set_top(0);
-					offlineDiscountOptObj.set_left(additionalDiscountBlankObj.getOffsetRight());
-					offlineDiscountOptObj.set_text("ㄴ " + dsLastOrderAdditionalOfflineDiscountList.getColumn(i, "discountNm"));
-					additionalOfflineDiscountDivObj.addChild("sta_offline_discount_opt" + i, offlineDiscountOptObj);
-					
-					// 오프라인 할인 옵션 금액 추가
-					offlineDiscountOptAmtObj = new Static("sta_offline_discount_opt_amt" + i);
-					offlineDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
-					offlineDiscountOptAmtObj.set_width(200);
-					offlineDiscountOptAmtObj.set_height(31);
-					offlineDiscountOptAmtObj.set_top(0);
-					offlineDiscountOptAmtObj.set_right(0);
-					offlineDiscountOptAmtObj.set_text(dsLastOrderAdditionalOfflineDiscountList.getColumn(i, "discountAmt") + "원");
-					offlineDiscountOptAmtObj.set_textAlign("right");
-					additionalOfflineDiscountDivObj.addChild("sta_offline_discount_opt_amt" + i, offlineDiscountOptAmtObj);
-					
-					additionalOfflineDiscountDivObj.show();
-					lastCurrentDivTop = additionalOfflineDiscountDivObj.getOffsetTop() + additionalOfflineDiscountDivObj.getOffsetHeight();
-				}
-			}
- 		}
+		var cshStlmMthdStatic = new Static("static_csh_stlm_mthd");
+		cshStlmMthdStatic.set_width(200);
+		cshStlmMthdStatic.set_top(0);
+		cshStlmMthdStatic.set_left(0);
+		cshStlmMthdStatic.set_bottom(0);
+		cshStlmMthdStatic.set_text("현금");
+		cshStlmMthdStatic.set_cssclass("sta_WF_CompText");
+		cshStlmAmtDiv.addChild("static_csh_stlm_mthd", cshStlmMthdStatic);
 		
-		// 추가금액의 환불차감 금액이 있는 경우
-		if(dsLastOrderMst.getColumn(0, "additionalRefundDeductionAmt") > 0){
-			var additionalRefundDeductionAmtParentDiv = new Div("div_additional_refund_deduction_amt_parent");
-			additionalRefundDeductionAmtParentDiv.setOffsetWidth(604);
-			additionalRefundDeductionAmtParentDiv.setOffsetHeight(33);
-			additionalRefundDeductionAmtParentDiv.setOffsetLeft(0);
-			additionalRefundDeductionAmtParentDiv.setOffsetTop(lastCurrentDivTop - 1);
-			additionalRefundDeductionAmtParentDiv.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_additional_refund_deduction_amt_parent", additionalRefundDeductionAmtParentDiv);
-			lastTabDivHeight += 33;
-			lastTabHeight += 33;
-			
-			// 추가금액의 환불차감 금액 라벨 추가
-			var additionalRefundDeductionObj = new Static("sta_additional_refund_deduction");
-			additionalRefundDeductionObj.set_width(200);
-			additionalRefundDeductionObj.set_height(31);
-			additionalRefundDeductionObj.set_top(0);
-			additionalRefundDeductionObj.set_left(0);
-			additionalRefundDeductionObj.set_text("ㄴ 환불차감 금액");
-			additionalRefundDeductionObj.set_cssclass("sta_WF_TableLabel");
-			additionalRefundDeductionAmtParentDiv.addChild("sta_additional_refund_deduction", additionalRefundDeductionObj);
-			
-			// 추가금액의 환불차감 금액 추가
-			var additionalRefundDeductionAmtObj = new Static("sta_additional_refund_deduction_amt");
-			additionalRefundDeductionAmtObj.set_width(402);
-			additionalRefundDeductionAmtObj.set_height(31);
-			additionalRefundDeductionAmtObj.set_top(0);
-			additionalRefundDeductionAmtObj.set_right(0);
-			additionalRefundDeductionAmtObj.set_cssclass("sta_WF_TableLabel");
-			additionalRefundDeductionAmtObj.set_usedecorate(true);
-			additionalRefundDeductionAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsLastOrderMst.getColumn(0, "additionalRefundDeductionAmt") +"원</fc></b>");
-			additionalRefundDeductionAmtObj.set_textAlign("right");
-			additionalRefundDeductionAmtObj.set_border("0px none");
-			additionalRefundDeductionAmtParentDiv.addChild("sta_additional_refund_deduction_amt", additionalRefundDeductionAmtObj);
-			
-			lastCurrentDivTop = additionalRefundDeductionAmtParentDiv.getOffsetTop() + additionalRefundDeductionAmtParentDiv.getOffsetHeight();
-			additionalRefundDeductionAmtParentDiv.show();
-			
-			// 추가금액의 환불차감 금액 내역 건수만큼 반복
-			var additionalRefundDeductionDivObj;
-			var additionalRefundDeductionBlankObj;
-			var additionalRefundDeductionOptObj;
-			var additionalRefundDeductionOptAmtObj;
-			for(var i=0;i<dsLastOrderAdditionalRefundDeductionList.getRowCount();i++){
-				// 추가금액의 환불차감 내역 div 추가
-				additionalRefundDeductionDivObj = new Div("div_additional_refund_deduction" + i);
-				additionalRefundDeductionDivObj.set_width(604);
-				additionalRefundDeductionDivObj.set_top(lastCurrentDivTop - 1);
-				additionalRefundDeductionDivObj.set_left(0);
-				additionalRefundDeductionDivObj.set_height(33);
-				additionalRefundDeductionDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_additional_refund_deduction" + i, additionalRefundDeductionDivObj);
-				lastTabDivHeight += 33;
-				lastTabHeight += 33;
-				
-				// ㄴ 환불차감 금액 밑 공백 부분 static 추가
-				additionalRefundDeductionBlankObj = new Static("sta_additional_refund_deduction_blank" + i);
-				additionalRefundDeductionBlankObj.set_cssclass("sta_WF_TableLabel");
-				additionalRefundDeductionBlankObj.set_width(200);
-				additionalRefundDeductionBlankObj.set_height(31);
-				additionalRefundDeductionBlankObj.set_top(0);
-				additionalRefundDeductionBlankObj.set_left(0);
-				additionalRefundDeductionDivObj.addChild("sta_additional_refund_deduction_blank" + i, additionalRefundDeductionBlankObj);
-				
-				// 추가금액의 환불차감 금액 내역 추가
-				additionalRefundDeductionOptObj = new Static("sta_additional_refund_deduction_opt" + i);
-				additionalRefundDeductionOptObj.set_cssclass("sta_WF_CompText");
-				additionalRefundDeductionOptObj.set_width(200);
-				additionalRefundDeductionOptObj.set_height(31);
-				additionalRefundDeductionOptObj.set_top(0);
-				additionalRefundDeductionOptObj.set_left(additionalRefundDeductionBlankObj.getOffsetRight());
-				additionalRefundDeductionOptObj.set_text("ㄴ " + dsLastOrderAdditionalRefundDeductionList.getColumn(i, "discountNm"));
-				additionalRefundDeductionDivObj.addChild("sta_additional_refund_deduction_opt" + i, additionalRefundDeductionOptObj);
-				
-				// 추가금액의 환불차감 금액 내역 금액 추가
-				additionalRefundDeductionOptAmtObj = new Static("sta_additional_refund_deduction_opt_amt" + i);
-				additionalRefundDeductionOptAmtObj.set_cssclass("sta_WF_CompText");
-				additionalRefundDeductionOptAmtObj.set_width(200);
-				additionalRefundDeductionOptAmtObj.set_height(31);
-				additionalRefundDeductionOptAmtObj.set_top(0);
-				additionalRefundDeductionOptAmtObj.set_right(0);
-				additionalRefundDeductionOptAmtObj.set_text(dsLastOrderAdditionalRefundDeductionList.getColumn(i, "discountAmt") + "원");
-				additionalRefundDeductionOptAmtObj.set_textAlign("right");
-				additionalRefundDeductionDivObj.addChild("sta_additional_refund_deduction_opt_amt" + i, additionalRefundDeductionOptAmtObj);
-				
-				additionalRefundDeductionDivObj.show();
-				lastCurrentDivTop = additionalRefundDeductionDivObj.getOffsetTop() + additionalRefundDeductionDivObj.getOffsetHeight();
-			}
-		}
-	}
-	
-	// L.POINT 할인이 있는 경우
- 	if(dsLastOrderMst.getColumn(0, "lpointDiscountAmt") > 0){
-		// L.POINT div 추가
- 		var lpointDivObj = new Div("div_lpoint");
- 		lpointDivObj.set_width(604);
- 		lpointDivObj.set_top(lastCurrentDivTop - 1);
-		lpointDivObj.set_height(33);
- 		lpointDivObj.set_left(0);
- 		lpointDivObj.set_cssclass("div_WF_CompWrap");
- 		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lpoint", lpointDivObj);
-		lastTabDivHeight += 33;
- 		lastTabHeight += 33;
- 		
- 		// L.POINT 라벨 추가
- 		var lpointObj = new Static("sta_lpoint");
- 		lpointObj.set_width(200);
- 		lpointObj.set_height(31);
- 		lpointObj.set_top(0);
- 		lpointObj.set_left(0);
- 		lpointObj.set_text("· L.POINT");
- 		lpointObj.set_cssclass("sta_WF_TableLabel");
- 		lpointDivObj.addChild("sta_lpoint", lpointObj);
- 		
- 		// L.POINT 금액 추가
- 		var lpointAmtObj = new Static("sta_lpoint_amt");
- 		lpointAmtObj.set_width(402);
- 		lpointAmtObj.set_height(31);
- 		lpointAmtObj.set_top(0);
- 		lpointAmtObj.set_right(0);
- 		lpointAmtObj.set_cssclass("sta_WF_CompText");
- 		lpointAmtObj.set_usedecorate(true);
- 		lpointAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsLastOrderMst.getColumn(0, "lpointDiscountAmt") +"원</fc></b>");
- 		lpointAmtObj.set_textAlign("right");
- 		lpointAmtObj.set_border("0px none");
- 		lpointDivObj.addChild("sta_lpoint_amt", lpointAmtObj);
- 		
- 		lpointDivObj.show();
- 		lastCurrentDivTop = lpointDivObj.getOffsetTop() + lpointDivObj.getOffsetHeight();
-	}
-	
-	// 총 환불금액 div 추가
- 	var totalRefundDivObj = new Div("div_total_refund");
- 	totalRefundDivObj.set_width(604);
- 	totalRefundDivObj.set_top(lastCurrentDivTop - 1);
-	totalRefundDivObj.set_height(33);
- 	totalRefundDivObj.set_left(0);
- 	totalRefundDivObj.set_cssclass("div_WF_CompWrap");
- 	paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_total_refund", totalRefundDivObj);
-	lastTabDivHeight += 33;
- 	lastTabHeight += 33;
- 	
- 	// 총 환불금액 라벨 추가
- 	var totalRefundObj = new Static("sta_total_refund");
- 	totalRefundObj.set_width(200);
- 	totalRefundObj.set_height(31);
- 	totalRefundObj.set_top(0);
- 	totalRefundObj.set_left(0);
- 	totalRefundObj.set_text("· 총 환불금액");
- 	totalRefundObj.set_cssclass("sta_WF_TableLabel");
- 	totalRefundDivObj.addChild("sta_total_refund", totalRefundObj);
- 	
- 	// 총 환불금액 금액 추가
- 	var totalRefundAmtObj = new Static("sta_total_refund_amt");
- 	totalRefundAmtObj.set_width(402);
- 	totalRefundAmtObj.set_height(31);
- 	totalRefundAmtObj.set_top(0);
- 	totalRefundAmtObj.set_right(0);
- 	totalRefundAmtObj.set_cssclass("sta_WF_TableLabel");
- 	totalRefundAmtObj.set_usedecorate(true);
- 	totalRefundAmtObj.set_text("<b v='true'>"+ dsLastOrderMst.getColumn(0, "totalRefundAmt") +"원</b>");
- 	totalRefundAmtObj.set_textAlign("right");
- 	totalRefundAmtObj.set_border("0px none");
- 	totalRefundDivObj.addChild("sta_total_refund_amt", totalRefundAmtObj);
- 	
- 	totalRefundDivObj.show();
- 	lastCurrentDivTop = totalRefundDivObj.getOffsetTop() + totalRefundDivObj.getOffsetHeight();
-	
-	// 신용카드 환불금액 있는경우
- 	if(dsLastOrderMst.getColumn(0, "cardRefundAmt") > 0){
-		var cardDivObj = new Div("div_card");
-		cardDivObj.set_width(604);
-		cardDivObj.set_top(lastCurrentDivTop - 1);
-		cardDivObj.set_left(0);
-		cardDivObj.set_height(33);
-		cardDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_card", cardDivObj);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
-		
-		var cardBlankObj = new Static("sta_card_blank");
-		cardBlankObj.set_cssclass("sta_WF_TableLabel");
-		cardBlankObj.set_width(200);
-		cardBlankObj.set_height(31);
-		cardBlankObj.set_top(0);
-		cardBlankObj.set_left(0);
-		cardDivObj.addChild("sta_card_blank", cardBlankObj);
-		
-		var cardObj = new Static("sta_card");
-		cardObj.set_cssclass("sta_WF_CompText");
-		cardObj.set_width(200);
-		cardObj.set_height(31);
-		cardObj.set_top(0);
-		cardObj.set_left(cardBlankObj.getOffsetRight());
-		cardObj.set_text("신용카드");
-		cardDivObj.addChild("sta_card", cardObj);
-		
-		var cardAmtObj = new Static("sta_card_amt");
-		cardAmtObj.set_cssclass("sta_WF_CompText");
-		cardAmtObj.set_width(200);
-		cardAmtObj.set_height(31);
-		cardAmtObj.set_top(0);
-		cardAmtObj.set_right(0);
-		cardAmtObj.set_text(dsLastOrderMst.getColumn(0, "cardRefundAmt") + "원");
-		cardAmtObj.set_textAlign("right");
-		cardDivObj.addChild("sta_card_amt", cardAmtObj);
-		
-		cardDivObj.show();
-		lastCurrentDivTop = cardDivObj.getOffsetTop() + cardDivObj.getOffsetHeight();
-	}
-	
-	// 현금 환불금액 있는경우
- 	if(dsLastOrderMst.getColumn(0, "cashRefundAmt") > 0){
-		var cashDivObj = new Div("div_cash");
-		cashDivObj.set_width(604);
-		cashDivObj.set_top(lastCurrentDivTop - 1);
-		cashDivObj.set_left(0);
-		cashDivObj.set_height(33);
-		cashDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_cash", cashDivObj);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
-		
-		var cashBlankObj = new Static("sta_cash_blank");
-		cashBlankObj.set_cssclass("sta_WF_TableLabel");
-		cashBlankObj.set_width(200);
-		cashBlankObj.set_height(31);
-		cashBlankObj.set_top(0);
-		cashBlankObj.set_left(0);
-		cashDivObj.addChild("sta_cash_blank", cashBlankObj);
-		
-		var cashObj = new Static("sta_cash");
-		cashObj.set_cssclass("sta_WF_CompText");
-		cashObj.set_width(200);
-		cashObj.set_height(31);
-		cashObj.set_top(0);
-		cashObj.set_left(cashBlankObj.getOffsetRight());
-		cashObj.set_text("현금");
-		cashDivObj.addChild("sta_card", cashObj);
-		
-		var cashAmtObj = new Static("sta_cash_amt");
-		cashAmtObj.set_cssclass("sta_WF_CompText");
-		cashAmtObj.set_width(200);
-		cashAmtObj.set_height(31);
-		cashAmtObj.set_top(0);
-		cashAmtObj.set_right(0);
-		cashAmtObj.set_text(dsLastOrderMst.getColumn(0, "cashRefundAmt") + "원");
-		cashAmtObj.set_textAlign("right");
-		cashDivObj.addChild("sta_cash_amt", cashAmtObj);
-		
-		cashDivObj.show();
-		lastCurrentDivTop = cashDivObj.getOffsetTop() + cashDivObj.getOffsetHeight();
-	}
-	
-	// 롯데상품권 결제금액 있는경우
- 	if(dsLastOrderMst.getColumn(0, "lotteGiftcardRefundAmt") > 0){
-		var lotteGiftcardDivObj = new Div("div_lotte_giftcard");
-		lotteGiftcardDivObj.set_width(604);
-		lotteGiftcardDivObj.set_top(lastCurrentDivTop - 1);
-		lotteGiftcardDivObj.set_left(0);
-		lotteGiftcardDivObj.set_height(33);
-		lotteGiftcardDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_lotte_giftcard", lotteGiftcardDivObj);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
-		
-		var lotteGiftcardBlankObj = new Static("sta_lotte_giftcard_blank");
-		lotteGiftcardBlankObj.set_cssclass("sta_WF_TableLabel");
-		lotteGiftcardBlankObj.set_width(200);
-		lotteGiftcardBlankObj.set_height(31);
-		lotteGiftcardBlankObj.set_top(0);
-		lotteGiftcardBlankObj.set_left(0);
-		lotteGiftcardDivObj.addChild("sta_lotte_giftcard_blank", lotteGiftcardBlankObj);
-		
-		var lotteGiftcardObj = new Static("sta_lotte_giftcard");
-		lotteGiftcardObj.set_cssclass("sta_WF_CompText");
-		lotteGiftcardObj.set_width(200);
-		lotteGiftcardObj.set_height(31);
-		lotteGiftcardObj.set_top(0);
-		lotteGiftcardObj.set_left(lotteGiftcardBlankObj.getOffsetRight());
-		lotteGiftcardObj.set_text("롯데상품권");
-		lotteGiftcardDivObj.addChild("sta_lotte_giftcard", lotteGiftcardObj);
-		
-		var lotteGiftcardAmtObj = new Static("sta_lotte_giftcard_amt");
-		lotteGiftcardAmtObj.set_cssclass("sta_WF_CompText");
-		lotteGiftcardAmtObj.set_width(200);
-		lotteGiftcardAmtObj.set_height(31);
-		lotteGiftcardAmtObj.set_top(0);
-		lotteGiftcardAmtObj.set_right(0);
-		lotteGiftcardAmtObj.set_text(dsLastOrderMst.getColumn(0, "lotteGiftcardRefundAmt") + "원");
-		lotteGiftcardAmtObj.set_textAlign("right");
-		lotteGiftcardDivObj.addChild("sta_lotte_giftcard_amt", lotteGiftcardAmtObj);
-		
-		lotteGiftcardDivObj.show();
-		lastCurrentDivTop = lotteGiftcardDivObj.getOffsetTop() + lotteGiftcardDivObj.getOffsetHeight();
-	}
-	
-	// 타사상품권 결제금액 있는경우
- 	if(dsLastOrderMst.getColumn(0, "otherGiftcardRefundAmt") > 0){
-		var otherGiftcardDivObj = new Div("div_other_giftcard");
-		otherGiftcardDivObj.set_width(604);
-		otherGiftcardDivObj.set_top(lastCurrentDivTop - 1);
-		otherGiftcardDivObj.set_left(0);
-		otherGiftcardDivObj.set_height(33);
-		otherGiftcardDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_other_giftcard", otherGiftcardDivObj);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
-		
-		var otherGiftcardBlankObj = new Static("sta_other_giftcard_blank");
-		otherGiftcardBlankObj.set_cssclass("sta_WF_TableLabel");
-		otherGiftcardBlankObj.set_width(200);
-		otherGiftcardBlankObj.set_height(31);
-		otherGiftcardBlankObj.set_top(0);
-		otherGiftcardBlankObj.set_left(0);
-		otherGiftcardDivObj.addChild("sta_other_giftcard_blank", otherGiftcardBlankObj);
-		
-		var otherGiftcardObj = new Static("sta_other_giftcard");
-		otherGiftcardObj.set_cssclass("sta_WF_CompText");
-		otherGiftcardObj.set_width(200);
-		otherGiftcardObj.set_height(31);
-		otherGiftcardObj.set_top(0);
-		otherGiftcardObj.set_left(otherGiftcardBlankObj.getOffsetRight());
-		otherGiftcardObj.set_text("타사상품권");
-		otherGiftcardDivObj.addChild("sta_other_giftcard", otherGiftcardObj);
-		
-		var otherGiftcardAmtObj = new Static("sta_other_giftcard_amt");
-		otherGiftcardAmtObj.set_cssclass("sta_WF_CompText");
-		otherGiftcardAmtObj.set_width(200);
-		otherGiftcardAmtObj.set_height(31);
-		otherGiftcardAmtObj.set_top(0);
-		otherGiftcardAmtObj.set_right(0);
-		otherGiftcardAmtObj.set_text(dsLastOrderMst.getColumn(0, "otherGiftcardRefundAmt") + "원");
-		otherGiftcardAmtObj.set_textAlign("right");
-		otherGiftcardDivObj.addChild("sta_other_giftcard_amt", otherGiftcardAmtObj);
-		
-		otherGiftcardDivObj.show();
-		lastCurrentDivTop = otherGiftcardDivObj.getOffsetTop() + otherGiftcardDivObj.getOffsetHeight();
-	}
-	
-	// 기타 결제금액 있는경우
- 	if(dsLastOrderMst.getColumn(0, "etcRefundAmt") > 0){
-		var etcDivObj = new Div("div_etc");
-		etcDivObj.set_width(604);
-		etcDivObj.set_top(lastCurrentDivTop - 1);
-		etcDivObj.set_left(0);
-		etcDivObj.set_height(33);
-		etcDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage2.form.addChild("div_etc", etcDivObj);
-		lastTabDivHeight += 33;
-		lastTabHeight += 33;
-		
-		var etcBlankObj = new Static("sta_etc_blank");
-		etcBlankObj.set_cssclass("sta_WF_TableLabel");
-		etcBlankObj.set_width(200);
-		etcBlankObj.set_height(31);
-		etcBlankObj.set_top(0);
-		etcBlankObj.set_left(0);
-		etcDivObj.addChild("sta_etc_blank", etcBlankObj);
-		
-		var etcObj = new Static("sta_etc");
-		etcObj.set_cssclass("sta_WF_CompText");
-		etcObj.set_width(200);
-		etcObj.set_height(31);
-		etcObj.set_top(0);
-		etcObj.set_left(etcBlankObj.getOffsetRight());
-		etcObj.set_text("기타");
-		etcDivObj.addChild("sta_etc", etcObj);
-		
-		var etcAmtObj = new Static("sta_etc_amt");
-		etcAmtObj.set_cssclass("sta_WF_CompText");
-		etcAmtObj.set_width(200);
-		etcAmtObj.set_height(31);
-		etcAmtObj.set_top(0);
-		etcAmtObj.set_right(0);
-		etcAmtObj.set_text(dsLastOrderMst.getColumn(0, "etcRefundAmt") + "원");
-		etcAmtObj.set_textAlign("right");
-		etcDivObj.addChild("sta_etc_amt", etcAmtObj);
-		
-		etcDivObj.show();
-		lastCurrentDivTop = etcDivObj.getOffsetTop() + etcDivObj.getOffsetHeight();
-	}
-	
-	//paymentInfoDtlFrm.Tab00.set_tabindex(0);
-};
+		var cshStlmAmtStatic = new Static("static_csh_stlm_amt");
+		cshStlmAmtStatic.set_width(100);
+		cshStlmAmtStatic.set_top(0);
+		cshStlmAmtStatic.set_bottom(0);
+		cshStlmAmtStatic.set_right(0);
+		cshStlmAmtStatic.set_textAlign("right");
+		cshStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) + "원");
+		cshStlmAmtStatic.set_cssclass("sta_WF_CompText");
+		cshStlmAmtDiv.addChild("static_csh_stlm_amt", cshStlmAmtStatic);
 
-// 최초 주문정보 탭 컨텐츠 동적으로 그림
-this.fn_create_first_order_info_tab = function()
-{
-	var dsFirstOrderMst = paymentInfoDtlFrm.ds_first_order_mst;
-	var dsFirstOrderLectureOfflineDiscountList = paymentInfoDtlFrm.ds_first_order_lecture_offline_discount_list;
-	var dsFirstOrderLectureGradeDiscountList = paymentInfoDtlFrm.ds_first_order_lecture_grade_discount_list;
-	var dsFirstOrderLectureCouponDiscountList = paymentInfoDtlFrm.ds_first_order_lecture_coupon_discount_list;
-	var dsFirstOrderAdditionalOfflineDiscountList = paymentInfoDtlFrm.ds_first_order_additional_offline_discount_list;
+		arrStlmMthd.push({div : cshStlmAmtDiv});
+	}
 	
-	firstTabDivHeight = initTabDivHeight;
-	firstTabHeight = initTabHeight;
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt") > 0){
+		var lttegiftStlmAmtDiv = new Div("div_lttegift_stlm_amt");
+		lttegiftStlmAmtDiv.set_left(200);
+		lttegiftStlmAmtDiv.set_right(0);
+		lttegiftStlmAmtDiv.set_height(33);
+		lttegiftStlmAmtDiv.set_cssclass("div_WF_CompWrap");
+		lttegiftStlmAmtDiv.set_border("1px solid #e6e6e6, 0px none");
+		
+		var lttegiftStlmMthdStatic = new Static("static_lttegift_stlm_mthd");
+		lttegiftStlmMthdStatic.set_width(200);
+		lttegiftStlmMthdStatic.set_top(0);
+		lttegiftStlmMthdStatic.set_left(0);
+		lttegiftStlmMthdStatic.set_bottom(0);
+		lttegiftStlmMthdStatic.set_text("롯데상품권");
+		lttegiftStlmMthdStatic.set_cssclass("sta_WF_CompText");
+		lttegiftStlmAmtDiv.addChild("static_lttegift_stlm_mthd", lttegiftStlmMthdStatic);
+		
+		var lttegiftStlmAmtStatic = new Static("static_lttegift_stlm_amt");
+		lttegiftStlmAmtStatic.set_width(100);
+		lttegiftStlmAmtStatic.set_top(0);
+		lttegiftStlmAmtStatic.set_bottom(0);
+		lttegiftStlmAmtStatic.set_right(0);
+		lttegiftStlmAmtStatic.set_textAlign("right");
+		lttegiftStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt")) + "원");
+		lttegiftStlmAmtStatic.set_cssclass("sta_WF_CompText");
+		lttegiftStlmAmtDiv.addChild("static_lttegift_stlm_amt", lttegiftStlmAmtStatic);
+
+		arrStlmMthd.push({div : lttegiftStlmAmtDiv});
+	}
 	
-	// 탭 테두리 없앰
-	paymentInfoDtlFrm.Tab00.Tabpage1.set_border("0px none");
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt") > 0){
+		var otgiftStlmAmtDiv = new Div("div_otgift_stlm_amt");
+		otgiftStlmAmtDiv.set_left(200);
+		otgiftStlmAmtDiv.set_right(0);
+		otgiftStlmAmtDiv.set_height(33);
+		otgiftStlmAmtDiv.set_cssclass("div_WF_CompWrap");
+		otgiftStlmAmtDiv.set_border("1px solid #e6e6e6, 0px none");
+		
+		var otgiftStlmMthdStatic = new Static("static_otgift_stlm_mthd");
+		otgiftStlmMthdStatic.set_width(200);
+		otgiftStlmMthdStatic.set_top(0);
+		otgiftStlmMthdStatic.set_left(0);
+		otgiftStlmMthdStatic.set_bottom(0);
+		otgiftStlmMthdStatic.set_text("타사상품권");
+		otgiftStlmMthdStatic.set_cssclass("sta_WF_CompText");
+		otgiftStlmAmtDiv.addChild("static_otgift_stlm_mthd", otgiftStlmMthdStatic);
+		
+		var otgiftStlmAmtStatic = new Static("static_otgift_stlm_amt");
+		otgiftStlmAmtStatic.set_width(100);
+		otgiftStlmAmtStatic.set_top(0);
+		otgiftStlmAmtStatic.set_bottom(0);
+		otgiftStlmAmtStatic.set_right(0);
+		otgiftStlmAmtStatic.set_textAlign("right");
+		otgiftStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt")) + "원");
+		otgiftStlmAmtStatic.set_cssclass("sta_WF_CompText");
+		otgiftStlmAmtDiv.addChild("static_otgift_stlm_amt", otgiftStlmAmtStatic);
+
+		arrStlmMthd.push({div : otgiftStlmAmtDiv});
+	}
 	
-	// 동적으로 그릴 영역의 top 값 저장하는 변수(할인금액이 있다면 할인금액 밑부터, 할인금액이 없다면 총 강좌료 밑부터...)
-	firstCurrentDivTop = paymentInfoDtlFrm.Tab00.Tabpage1.form.Div00.getOffsetTop() + paymentInfoDtlFrm.Tab00.Tabpage1.form.Div00.getOffsetHeight();
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt") > 0){
+		var etcStlmAmtDiv = new Div("div_etc_stlm_amt");
+		etcStlmAmtDiv.set_left(200);
+		etcStlmAmtDiv.set_right(0);
+		etcStlmAmtDiv.set_height(30);
+		etcStlmAmtDiv.set_cssclass("div_WF_CompWrap");
+		etcStlmAmtDiv.set_border("1px solid #e6e6e6, 0px none");
+		
+		var etcStlmMthdStatic = new Static("static_etc_stlm_mthd");
+		etcStlmMthdStatic.set_width(200);
+		etcStlmMthdStatic.set_top(0);
+		etcStlmMthdStatic.set_left(0);
+		etcStlmMthdStatic.set_bottom(0);
+		etcStlmMthdStatic.set_text("기타");
+		etcStlmMthdStatic.set_cssclass("sta_WF_CompText");
+		etcStlmAmtDiv.addChild("static_etc_stlm_mthd", etcStlmMthdStatic);
+		
+		var etcStlmAmtStatic = new Static("static_etc_stlm_amt");
+		etcStlmAmtStatic.set_width(100);
+		etcStlmAmtStatic.set_top(0);
+		etcStlmAmtStatic.set_bottom(0);
+		etcStlmAmtStatic.set_right(0);
+		etcStlmAmtStatic.set_textAlign("right");
+		etcStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) + "원");
+		etcStlmAmtStatic.set_cssclass("sta_WF_CompText");
+		etcStlmAmtDiv.addChild("static_etc_stlm_amt", etcStlmAmtStatic);
+
+		arrStlmMthd.push({div : etcStlmAmtDiv});
+	}
 	
-	if(dsFirstOrderMst.getColumn(0, "lectureDiscountAmt") > 0){
-		// 할인금액 div 추가
-		var lectureDiscountDivObj = new Div("div_lecture_discount");
-		lectureDiscountDivObj.set_width(604);
-		lectureDiscountDivObj.set_height(33);
-		lectureDiscountDivObj.set_top(firstCurrentDivTop - 1);
-		lectureDiscountDivObj.set_left(0);
-		lectureDiscountDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_discount", lectureDiscountDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt") > 0){
+		var chngAmtDiv = new Div("div_chng_amt");
+		chngAmtDiv.set_left(200);
+		chngAmtDiv.set_right(0);
+		chngAmtDiv.set_height(40);
+		chngAmtDiv.set_cssclass("div_WF_CompWrap");
+		chngAmtDiv.set_border("1px solid #e6e6e6, 0px none");
 		
-		// 할인금액 추가
-		var lectureDiscountObj = new Static("sta_lecture_discount");
-		lectureDiscountObj.set_width(200);
-		lectureDiscountObj.set_height(31);
-		lectureDiscountObj.set_top(0);
-		lectureDiscountObj.set_left(0);
-		lectureDiscountObj.set_text("ㄴ 할인금액");
-		lectureDiscountObj.set_cssclass("sta_WF_TableLabel");
-		lectureDiscountDivObj.addChild("sta_lecture_discount", lectureDiscountObj);
+		var chngMthdStatic = new Static("static_chng_mthd");
+		chngMthdStatic.set_width(200);
+		chngMthdStatic.set_top(0);
+		chngMthdStatic.set_left(0);
+		chngMthdStatic.set_bottom(0);
+		chngMthdStatic.set_text("거스름돈\r\nㄴ 상품권");
+		chngMthdStatic.set_cssclass("sta_WF_CompText");
+		chngAmtDiv.addChild("static_chng_mthd", chngMthdStatic);
 		
-		// 총 할인금액 추가
-		var lectureDiscountAmtObj = new Static("sta_lecture_discount_amt");
-		lectureDiscountAmtObj.set_width(402);
-		lectureDiscountAmtObj.set_height(31);
-		lectureDiscountAmtObj.set_top(0);
-		lectureDiscountAmtObj.set_right(0);
-		lectureDiscountAmtObj.set_cssclass("sta_WF_TableLabel");
-		lectureDiscountAmtObj.set_usedecorate(true);
-		lectureDiscountAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsFirstOrderMst.getColumn(0, "lectureDiscountAmt") +"원</fc></b>");
-		lectureDiscountAmtObj.set_textAlign("right");
-		lectureDiscountAmtObj.set_border("0px none");
-		lectureDiscountDivObj.addChild("sta_lecture_discount_amt", lectureDiscountAmtObj);
+		var chngAmtStatic = new Static("static_chng_amt");
+		chngAmtStatic.set_width(100);
+		chngAmtStatic.set_top(0);
+		chngAmtStatic.set_bottom(0);
+		chngAmtStatic.set_right(0);
+		chngAmtStatic.set_textAlign("right");
+		chngAmtStatic.set_text("(-)" + this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt")) + "원");
+		chngAmtStatic.set_cssclass("sta_WF_CompText");
+		chngAmtDiv.addChild("static_chng_amt", chngAmtStatic);
+
+		arrStlmMthd.push({div : chngAmtDiv});
+	}
+	
+	var divHeight = 0;
+	
+	// 결제수단 div
+	var stlmMthdDiv = stlmInfoDtlFrm.Div00.form.Div01;
+	
+	// 결제수단 static
+	var stlmMthdStatic = new Static("static_stlm_mthd");
+	stlmMthdStatic.set_width(200);
+	stlmMthdStatic.set_top(0);
+	stlmMthdStatic.set_left(0);
+	stlmMthdStatic.set_text("결제수단");
+	stlmMthdStatic.set_cssclass("sta_WF_TableLabel");
+	stlmMthdDiv.addChild("static_stlm_mthd", stlmMthdStatic);
+	stlmMthdStatic.show();
+	
+	for(var i=0;i<arrStlmMthd.length;i++){
+		var obj = arrStlmMthd[i];
 		
-		lectureDiscountDivObj.show();
-		firstCurrentDivTop = lectureDiscountDivObj.getOffsetTop() + lectureDiscountDivObj.getOffsetHeight();
+		obj.div.set_top(divHeight - i - 1);
 		
-		
-		// 오프라인 할인금액이 있는경우
- 		if(dsFirstOrderMst.getColumn(0, "lectureOfflineDiscountAmt") > 0){
-			// 강좌료 오프라인 할인금액 div 추가
-			var lectureOfflineDiscountDivObj = new Div("div_lecture_offline_discount");
-			lectureOfflineDiscountDivObj.set_width(604);
-			lectureOfflineDiscountDivObj.set_top(firstCurrentDivTop - 1);
-			lectureOfflineDiscountDivObj.set_left(0);
-			lectureOfflineDiscountDivObj.set_height(33);
-			lectureOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_offline_discount", lectureOfflineDiscountDivObj);
-			firstTabDivHeight += 33;
-			firstTabHeight += 33;
-			
-			// ㄴ 할인금액 밑 공백 부분 div 추가
-			var lectureDiscountBlankObj = new Static("sta_lecture_discount_blank");
-			lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-			lectureDiscountBlankObj.set_width(200);
-			lectureDiscountBlankObj.set_height(31);
-			lectureDiscountBlankObj.set_top(0);
-			lectureDiscountBlankObj.set_left(0);
-			lectureOfflineDiscountDivObj.addChild("sta_lecture_discount_blank", lectureDiscountBlankObj);
-			
-			// 오프라인 할인 추가
- 			var offlineDiscountObj = new Static("sta_offline_discount");
- 			offlineDiscountObj.set_cssclass("sta_WF_CompText");
- 			offlineDiscountObj.set_width(200);
- 			offlineDiscountObj.set_height(31);
- 			offlineDiscountObj.set_top(0);
- 			offlineDiscountObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 			offlineDiscountObj.set_usedecorate(true);
- 			offlineDiscountObj.set_text("<b v='true'>오프라인 할인</b>");
- 			lectureOfflineDiscountDivObj.addChild("sta_offline_discount", offlineDiscountObj);
- 			
- 			// 오프라인 할인 금액 추가
- 			var offlineDiscountAmtObj = new Static("sta_offline_discount_amt");
- 			offlineDiscountAmtObj.set_cssclass("sta_WF_CompText");
- 			offlineDiscountAmtObj.set_width(200);
- 			offlineDiscountAmtObj.set_height(31);
- 			offlineDiscountAmtObj.set_top(0);
- 			offlineDiscountAmtObj.set_right(0);
- 			offlineDiscountAmtObj.set_usedecorate(true);
- 			offlineDiscountAmtObj.set_text("<b v='true'>"+ dsFirstOrderMst.getColumn(0, "lectureOfflineDiscountAmt") +"원</b>");
- 			offlineDiscountAmtObj.set_textAlign("right");
- 			lectureOfflineDiscountDivObj.addChild("sta_offline_discount_amt", offlineDiscountAmtObj);
-			
-			lectureOfflineDiscountDivObj.show();
-			firstCurrentDivTop = lectureOfflineDiscountDivObj.getOffsetTop() + lectureOfflineDiscountDivObj.getOffsetHeight();
-			
-			var offlineDiscountOptObj;
- 			var offlineDiscountOptAmtObj;
-			for(var i=0;i<dsFirstOrderLectureOfflineDiscountList.getRowCount();i++){
-				// 강좌료 오프라인 할인금액 div 추가
-				lectureOfflineDiscountDivObj = new Div("div_lecture_offline_discount" + i);
-				lectureOfflineDiscountDivObj.set_width(604);
-				lectureOfflineDiscountDivObj.set_top(firstCurrentDivTop - 1);
-				lectureOfflineDiscountDivObj.set_left(0);
-				lectureOfflineDiscountDivObj.set_height(33);
-				lectureOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_offline_discount" + i, lectureOfflineDiscountDivObj);
-				firstTabDivHeight += 33;
-				firstTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				lectureDiscountBlankObj = new Static("sta_lecture_discount_blank" + i);
-				lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				lectureDiscountBlankObj.set_width(200);
-				lectureDiscountBlankObj.set_height(31);
-				lectureDiscountBlankObj.set_top(0);
-				lectureDiscountBlankObj.set_left(0);
-				lectureOfflineDiscountDivObj.addChild("sta_lecture_discount_blank" + i, lectureDiscountBlankObj);
-				
-				// 오프라인 할인 옵션 추가
- 				offlineDiscountOptObj = new Static("sta_offline_discount_opt" + i);
- 				offlineDiscountOptObj.set_cssclass("sta_WF_CompText");
- 				offlineDiscountOptObj.set_width(200);
- 				offlineDiscountOptObj.set_height(31);
- 				offlineDiscountOptObj.set_top(0);
- 				offlineDiscountOptObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 				offlineDiscountOptObj.set_text("ㄴ " + dsFirstOrderLectureOfflineDiscountList.getColumn(i, "discountNm"));
- 				lectureOfflineDiscountDivObj.addChild("sta_offline_discount_opt" + i, offlineDiscountOptObj);
- 				
- 				// 오프라인 할인 옵션 금액 추가
- 				offlineDiscountOptAmtObj = new Static("sta_offline_discount_opt_amt" + i);
- 				offlineDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
- 				offlineDiscountOptAmtObj.set_width(200);
- 				offlineDiscountOptAmtObj.set_height(31);
- 				offlineDiscountOptAmtObj.set_top(0);
- 				offlineDiscountOptAmtObj.set_right(0);
- 				offlineDiscountOptAmtObj.set_text(dsFirstOrderLectureOfflineDiscountList.getColumn(i, "discountAmt") + "원");
- 				offlineDiscountOptAmtObj.set_textAlign("right");
- 				lectureOfflineDiscountDivObj.addChild("sta_offline_discount_opt_amt" + i, offlineDiscountOptAmtObj);
-				
-				lectureOfflineDiscountDivObj.show();
-				firstCurrentDivTop = lectureOfflineDiscountDivObj.getOffsetTop() + lectureOfflineDiscountDivObj.getOffsetHeight();
-			}
+		if(i == arrStlmMthd.length - 1){
+			obj.div.set_border("1px solid #e6e6e6, 0px none, 0px none, 0px none");
 		}
 		
-		// 등급 할인금액이 있는경우
- 		if(dsFirstOrderMst.getColumn(0, "lectureGradeDiscountAmt") > 0){
-			// 강좌료 등급 할인금액 div 추가
-			var lectureGradeDiscountDivObj = new Div("div_lecture_grade_discount");
-			lectureGradeDiscountDivObj.set_width(604);
-			lectureGradeDiscountDivObj.set_top(firstCurrentDivTop - 1);
-			lectureGradeDiscountDivObj.set_left(0);
-			lectureGradeDiscountDivObj.set_height(33);
-			lectureGradeDiscountDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_grade_discount", lectureGradeDiscountDivObj);
-			firstTabDivHeight += 33;
-			firstTabHeight += 33;
-			
-			// ㄴ 할인금액 밑 공백 부분 div 추가
-			var lectureDiscountBlankObj = new Static("sta_lecture_discount_blank");
-			lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-			lectureDiscountBlankObj.set_width(200);
-			lectureDiscountBlankObj.set_height(31);
-			lectureDiscountBlankObj.set_top(0);
-			lectureDiscountBlankObj.set_left(0);
-			lectureGradeDiscountDivObj.addChild("sta_lecture_discount_blank", lectureDiscountBlankObj);
-			
-			// 등급 할인 추가
- 			var gradeDiscountObj = new Static("sta_grade_discount");
- 			gradeDiscountObj.set_cssclass("sta_WF_CompText");
- 			gradeDiscountObj.set_width(200);
- 			gradeDiscountObj.set_height(31);
- 			gradeDiscountObj.set_top(0);
- 			gradeDiscountObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 			gradeDiscountObj.set_usedecorate(true);
- 			gradeDiscountObj.set_text("<b v='true'>등급 할인</b>");
- 			lectureGradeDiscountDivObj.addChild("sta_grade_discount", gradeDiscountObj);
- 			
- 			// 등급 할인 금액 추가
- 			var gradeDiscountAmtObj = new Static("sta_grade_discount_amt");
- 			gradeDiscountAmtObj.set_cssclass("sta_WF_CompText");
- 			gradeDiscountAmtObj.set_width(200);
- 			gradeDiscountAmtObj.set_height(31);
- 			gradeDiscountAmtObj.set_top(0);
- 			gradeDiscountAmtObj.set_right(0);
- 			gradeDiscountAmtObj.set_usedecorate(true);
- 			gradeDiscountAmtObj.set_text("<b v='true'>"+ dsFirstOrderMst.getColumn(0, "lectureGradeDiscountAmt") +"원</b>");
- 			gradeDiscountAmtObj.set_textAlign("right");
- 			lectureGradeDiscountDivObj.addChild("sta_grade_discount_amt", gradeDiscountAmtObj);
-			
-			lectureGradeDiscountDivObj.show();
-			firstCurrentDivTop = lectureGradeDiscountDivObj.getOffsetTop() + lectureGradeDiscountDivObj.getOffsetHeight();
-			
-			var gradeDiscountOptObj;
- 			var gradeDiscountOptAmtObj;
-			for(var i=0;i<dsFirstOrderLectureGradeDiscountList.getRowCount();i++){
-				// 강좌료 등급 할인금액 div 추가
-				lectureGradeDiscountDivObj = new Div("div_lecture_grade_discount" + i);
-				lectureGradeDiscountDivObj.set_width(604);
-				lectureGradeDiscountDivObj.set_top(firstCurrentDivTop - 1);
-				lectureGradeDiscountDivObj.set_left(0);
-				lectureGradeDiscountDivObj.set_height(33);
-				lectureGradeDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_grade_discount" + i, lectureGradeDiscountDivObj);
-				firstTabDivHeight += 33;
-				firstTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				lectureDiscountBlankObj = new Static("sta_lecture_discount_blank" + i);
-				lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				lectureDiscountBlankObj.set_width(200);
-				lectureDiscountBlankObj.set_height(31);
-				lectureDiscountBlankObj.set_top(0);
-				lectureDiscountBlankObj.set_left(0);
-				lectureGradeDiscountDivObj.addChild("sta_lecture_discount_blank" + i, lectureDiscountBlankObj);
-				
-				// 등급 할인 옵션 추가
- 				gradeDiscountOptObj = new Static("sta_grade_discount_opt" + i);
- 				gradeDiscountOptObj.set_cssclass("sta_WF_CompText");
- 				gradeDiscountOptObj.set_width(200);
- 				gradeDiscountOptObj.set_height(31);
- 				gradeDiscountOptObj.set_top(0);
- 				gradeDiscountOptObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 				gradeDiscountOptObj.set_text("ㄴ " + dsFirstOrderLectureGradeDiscountList.getColumn(i, "discountNm"));
- 				lectureGradeDiscountDivObj.addChild("sta_grade_discount_opt" + i, gradeDiscountOptObj);
- 				
- 				// 등급 할인 옵션 금액 추가
- 				gradeDiscountOptAmtObj = new Static("sta_grade_discount_opt_amt" + i);
- 				gradeDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
- 				gradeDiscountOptAmtObj.set_width(200);
- 				gradeDiscountOptAmtObj.set_height(31);
- 				gradeDiscountOptAmtObj.set_top(0);
- 				gradeDiscountOptAmtObj.set_right(0);
- 				gradeDiscountOptAmtObj.set_text(dsFirstOrderLectureGradeDiscountList.getColumn(i, "discountAmt") + "원");
- 				gradeDiscountOptAmtObj.set_textAlign("right");
- 				lectureGradeDiscountDivObj.addChild("sta_grade_discount_opt_amt" + i, gradeDiscountOptAmtObj);
-				
-				lectureGradeDiscountDivObj.show();
-				firstCurrentDivTop = lectureGradeDiscountDivObj.getOffsetTop() + lectureGradeDiscountDivObj.getOffsetHeight();
-			}
-		}
+		stlmMthdDiv.addChild("div_stlm_mthd_" + i, obj.div);
+		obj.div.show();
 		
-		// 쿠폰 할인금액이 있는 경우
- 		if(dsFirstOrderMst.getColumn(0, "lectureCouponDiscountAmt") > 0){
-			// 강좌료 쿠폰 할인금액 div 추가
-			var lectureCouponDiscountDivObj = new Div("div_lecture_coupon_discount");
-			lectureCouponDiscountDivObj.set_width(604);
-			lectureCouponDiscountDivObj.set_top(firstCurrentDivTop - 1);
-			lectureCouponDiscountDivObj.set_left(0);
-			lectureCouponDiscountDivObj.set_height(33);
-			lectureCouponDiscountDivObj.set_cssclass("div_WF_CompWrap");
-			paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_coupon_discount", lectureCouponDiscountDivObj);
-			firstTabDivHeight += 33;
-			firstTabHeight += 33;
-			
-			// ㄴ 할인금액 밑 공백 부분 div 추가
-			var lectureDiscountBlankObj = new Static("sta_lecture_discount_blank");
-			lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-			lectureDiscountBlankObj.set_width(200);
-			lectureDiscountBlankObj.set_height(31);
-			lectureDiscountBlankObj.set_top(0);
-			lectureDiscountBlankObj.set_left(0);
-			lectureCouponDiscountDivObj.addChild("sta_lecture_discount_blank", lectureDiscountBlankObj);
-			
-			// 쿠폰 할인 추가
- 			var couponDiscountObj = new Static("sta_coupon_discount");
- 			couponDiscountObj.set_cssclass("sta_WF_CompText");
- 			couponDiscountObj.set_width(200);
- 			couponDiscountObj.set_height(31);
- 			couponDiscountObj.set_top(0);
- 			couponDiscountObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 			couponDiscountObj.set_usedecorate(true);
- 			couponDiscountObj.set_text("<b v='true'>쿠폰 할인</b>");
- 			lectureCouponDiscountDivObj.addChild("sta_coupon_discount", couponDiscountObj);
- 			
- 			// 쿠폰 할인 금액 추가
- 			var couponDiscountAmtObj = new Static("sta_coupon_discount_amt");
- 			couponDiscountAmtObj.set_cssclass("sta_WF_CompText");
- 			couponDiscountAmtObj.set_width(200);
- 			couponDiscountAmtObj.set_height(31);
- 			couponDiscountAmtObj.set_top(0);
- 			couponDiscountAmtObj.set_right(0);
- 			couponDiscountAmtObj.set_usedecorate(true);
- 			couponDiscountAmtObj.set_text("<b v='true'>"+ dsFirstOrderMst.getColumn(0, "lectureCouponDiscountAmt") +"원</b>");
- 			couponDiscountAmtObj.set_textAlign("right");
- 			lectureCouponDiscountDivObj.addChild("sta_grade_discount_amt", couponDiscountAmtObj);
-			
-			lectureCouponDiscountDivObj.show();
-			firstCurrentDivTop = lectureCouponDiscountDivObj.getOffsetTop() + lectureCouponDiscountDivObj.getOffsetHeight();
-			
-			var couponDiscountOptObj;
- 			var couponDiscountOptAmtObj;
-			for(var i=0;i<dsFirstOrderLectureCouponDiscountList.getRowCount();i++){
-				// 강좌료 쿠폰 할인금액 div 추가
-				lectureCouponDiscountDivObj = new Div("div_lecture_coupon_discount" + i);
-				lectureCouponDiscountDivObj.set_width(604);
-				lectureCouponDiscountDivObj.set_top(firstCurrentDivTop - 1);
-				lectureCouponDiscountDivObj.set_left(0);
-				lectureCouponDiscountDivObj.set_height(33);
-				lectureCouponDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lecture_coupon_discount" + i, lectureCouponDiscountDivObj);
-				firstTabDivHeight += 33;
-				firstTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				lectureDiscountBlankObj = new Static("sta_lecture_discount_blank" + i);
-				lectureDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				lectureDiscountBlankObj.set_width(200);
-				lectureDiscountBlankObj.set_height(31);
-				lectureDiscountBlankObj.set_top(0);
-				lectureDiscountBlankObj.set_left(0);
-				lectureCouponDiscountDivObj.addChild("sta_lecture_discount_blank" + i, lectureDiscountBlankObj);
-				
-				// 쿠폰 할인 옵션 추가
- 				couponDiscountOptObj = new Static("sta_grade_discount_opt" + i);
- 				couponDiscountOptObj.set_cssclass("sta_WF_CompText");
- 				couponDiscountOptObj.set_width(200);
- 				couponDiscountOptObj.set_height(31);
- 				couponDiscountOptObj.set_top(0);
- 				couponDiscountOptObj.set_left(lectureDiscountBlankObj.getOffsetRight());
- 				couponDiscountOptObj.set_text("ㄴ " + dsFirstOrderLectureCouponDiscountList.getColumn(i, "discountNm"));
- 				lectureCouponDiscountDivObj.addChild("sta_grade_discount_opt" + i, couponDiscountOptObj);
- 				
- 				// 쿠폰 할인 옵션 금액 추가
- 				couponDiscountOptAmtObj = new Static("sta_coupon_discount_opt_amt" + i);
- 				couponDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
- 				couponDiscountOptAmtObj.set_width(200);
- 				couponDiscountOptAmtObj.set_height(31);
- 				couponDiscountOptAmtObj.set_top(0);
- 				couponDiscountOptAmtObj.set_right(0);
- 				couponDiscountOptAmtObj.set_text(dsFirstOrderLectureCouponDiscountList.getColumn(i, "discountAmt") + "원");
- 				couponDiscountOptAmtObj.set_textAlign("right");
- 				lectureCouponDiscountDivObj.addChild("sta_coupon_discount_opt_amt" + i, couponDiscountOptAmtObj);
-				
-				lectureCouponDiscountDivObj.show();
-				firstCurrentDivTop = lectureCouponDiscountDivObj.getOffsetTop() + lectureCouponDiscountDivObj.getOffsetHeight();
-			}
+		divHeight += obj.div.getPixelHeight();
+		
+		if(i > 4){
+			// 결제수단 5개부터 관리자 메모 영역 내림
+			this.Div00.form.Div05.set_top(this.Div00.form.Div05.getPixelTop() + 33);
+			this.Div00.set_height(this.Div00.getPixelHeight() + 33);
+			this.resetScroll();
 		}
 	}
 	
-	// 추가금액이 있는 경우
-	if(dsFirstOrderMst.getColumn(0, "totalAdditionalAmt") > 0){
-		// 총 추가금액 div 추가
- 		var additionalAmtDivObj = new Div("div_additional_amt");
- 		additionalAmtDivObj.set_width(604);
- 		additionalAmtDivObj.set_top(firstCurrentDivTop - 1);
- 		additionalAmtDivObj.set_left(0);
- 		additionalAmtDivObj.set_height(33);
- 		additionalAmtDivObj.set_cssclass("div_WF_CompWrap");
- 		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_additional_amt", additionalAmtDivObj);
-		firstTabDivHeight += 33;
- 		firstTabHeight += 33;
- 		
- 		// 총 추가금액 라벨 추가
- 		var additionalObj = new Static("sta_additional");
- 		additionalObj.set_width(200);
- 		additionalObj.set_height(31);
- 		additionalObj.set_top(0);
- 		additionalObj.set_left(0);
- 		additionalObj.set_text("· 총 추가금액");
- 		additionalObj.set_cssclass("sta_WF_TableLabel");
- 		additionalAmtDivObj.addChild("sta_additional", additionalObj);
- 		
- 		// 총 추가금액 추가
- 		var additionalAmtObj = new Static("sta_additional_amt");
- 		additionalAmtObj.set_width(402);
- 		additionalAmtObj.set_height(31);
- 		additionalAmtObj.set_top(0);
- 		additionalAmtObj.set_right(0);
- 		additionalAmtObj.set_cssclass("sta_WF_CompText");
- 		additionalAmtObj.set_usedecorate(true);
- 		additionalAmtObj.set_text("<b v='true'>"+ dsFirstOrderMst.getColumn(0, "totalAdditionalAmt") +"원</b>");
- 		additionalAmtObj.set_textAlign("right");
- 		additionalAmtObj.set_border("0px none");
- 		additionalAmtDivObj.addChild("sta_additional_amt", additionalAmtObj);
- 		
- 		additionalAmtDivObj.show();
- 		firstCurrentDivTop = additionalAmtDivObj.getOffsetTop() + additionalAmtDivObj.getOffsetHeight();
-		
-		// 추가금액의 할인금액이 있는 경우
- 		if(dsFirstOrderMst.getColumn(0, "additionalDiscountAmt") > 0){
-  			// 추가금액의 할인금액 div 추가
-  			var additionalDiscountDivObj = new Div("div_additional_discount");
-  			additionalDiscountDivObj.set_width(604);
-  			additionalDiscountDivObj.set_top(firstCurrentDivTop - 1);
-			additionalDiscountDivObj.set_height(33);
-  			additionalDiscountDivObj.set_left(0);
-  			additionalDiscountDivObj.set_cssclass("div_WF_CompWrap");
-  			paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_additional_discount", additionalDiscountDivObj);
-			firstTabDivHeight += 33;
-  			firstTabHeight += 33;
-  			
-  			// 추가금액의 할인금액 추가
-  			var additionalDiscountObj = new Static("sta_additional_discount");
-  			additionalDiscountObj.set_width(200);
-  			additionalDiscountObj.set_height(31);
-  			additionalDiscountObj.set_top(0);
-  			additionalDiscountObj.set_left(0);
-  			additionalDiscountObj.set_text("ㄴ 할인금액");
-  			additionalDiscountObj.set_cssclass("sta_WF_TableLabel");
-  			additionalDiscountDivObj.addChild("sta_additional_discount", additionalDiscountObj);
-  			
-  			// 추가금액의 총 할인금액 추가
-  			var additionalDiscountAmtObj = new Static("sta_additional_discount_amt");
-  			additionalDiscountAmtObj.set_width(402);
-  			additionalDiscountAmtObj.set_height(31);
-  			additionalDiscountAmtObj.set_top(0);
-  			additionalDiscountAmtObj.set_right(0);
-  			additionalDiscountAmtObj.set_cssclass("sta_WF_TableLabel");
-  			additionalDiscountAmtObj.set_usedecorate(true);
-  			additionalDiscountAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsFirstOrderMst.getColumn(0, "additionalDiscountAmt") +"원</fc></b>");
-  			additionalDiscountAmtObj.set_textAlign("right");
-  			additionalDiscountAmtObj.set_border("0px none");
-  			additionalDiscountDivObj.addChild("sta_additional_discount_amt", additionalDiscountAmtObj);
- 			
-			additionalDiscountDivObj.show();
-			firstCurrentDivTop = additionalDiscountDivObj.getOffsetTop() + additionalDiscountDivObj.getOffsetHeight();
-			
-			// 추가금액의 오프라인 할인금액이 있는경우
-   			if(dsFirstOrderMst.getColumn(0, "additionalOfflineDiscountAmt") > 0){
-				// 강좌료 오프라인 할인금액 div 추가
-				var additionalOfflineDiscountDivObj = new Div("div_additional_offline_discount");
-				additionalOfflineDiscountDivObj.set_width(604);
-				additionalOfflineDiscountDivObj.set_top(firstCurrentDivTop - 1);
-				additionalOfflineDiscountDivObj.set_left(0);
-				additionalOfflineDiscountDivObj.set_height(33);
-				additionalOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-				paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_additional_offline_discount", additionalOfflineDiscountDivObj);
-				firstTabDivHeight += 33;
-				firstTabHeight += 33;
-				
-				// ㄴ 할인금액 밑 공백 부분 div 추가
-				var additionalDiscountBlankObj = new Static("sta_additional_discount_blank");
-				additionalDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-				additionalDiscountBlankObj.set_width(200);
-				additionalDiscountBlankObj.set_height(31);
-				additionalDiscountBlankObj.set_top(0);
-				additionalDiscountBlankObj.set_left(0);
-				additionalOfflineDiscountDivObj.addChild("sta_lecture_discount_blank", additionalDiscountBlankObj);
-				
-				// 오프라인 할인 추가
-				var offlineDiscountObj = new Static("sta_offline_discount");
-				offlineDiscountObj.set_cssclass("sta_WF_CompText");
-				offlineDiscountObj.set_width(200);
-				offlineDiscountObj.set_height(31);
-				offlineDiscountObj.set_top(0);
-				offlineDiscountObj.set_left(additionalDiscountBlankObj.getOffsetRight());
-				offlineDiscountObj.set_usedecorate(true);
-				offlineDiscountObj.set_text("<b v='true'>오프라인 할인</b>");
-				additionalOfflineDiscountDivObj.addChild("sta_offline_discount", offlineDiscountObj);
-				
-				// 오프라인 할인 금액 추가
-				var offlineDiscountAmtObj = new Static("sta_offline_discount_amt");
-				offlineDiscountAmtObj.set_cssclass("sta_WF_CompText");
-				offlineDiscountAmtObj.set_width(200);
-				offlineDiscountAmtObj.set_height(31);
-				offlineDiscountAmtObj.set_top(0);
-				offlineDiscountAmtObj.set_right(0);
-				offlineDiscountAmtObj.set_usedecorate(true);
-				offlineDiscountAmtObj.set_text("<b v='true'>"+ dsFirstOrderMst.getColumn(0, "additionalOfflineDiscountAmt") +"원</b>");
-				offlineDiscountAmtObj.set_textAlign("right");
-				additionalOfflineDiscountDivObj.addChild("sta_offline_discount_amt", offlineDiscountAmtObj);
-				
-				additionalOfflineDiscountDivObj.show();
-				firstCurrentDivTop = additionalOfflineDiscountDivObj.getOffsetTop() + additionalOfflineDiscountDivObj.getOffsetHeight();
-				
-				var offlineDiscountOptObj;
-				var offlineDiscountOptAmtObj;
-				for(var i=0;i<dsFirstOrderAdditionalOfflineDiscountList.getRowCount();i++){
-					// 추가금액 오프라인 할인금액 div 추가
-					additionalOfflineDiscountDivObj = new Div("div_additional_offline_discount" + i);
-					additionalOfflineDiscountDivObj.set_width(604);
-					additionalOfflineDiscountDivObj.set_top(firstCurrentDivTop - 1);
-					additionalOfflineDiscountDivObj.set_left(0);
-					additionalOfflineDiscountDivObj.set_height(33);
-					additionalOfflineDiscountDivObj.set_cssclass("div_WF_CompWrap");
-					paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_additional_offline_discount" + i, additionalOfflineDiscountDivObj);
-					firstTabDivHeight += 33;
-					firstTabHeight += 33;
-					
-					// ㄴ 할인금액 밑 공백 부분 div 추가
-					additionalDiscountBlankObj = new Static("sta_additional_discount_blank" + i);
-					additionalDiscountBlankObj.set_cssclass("sta_WF_TableLabel");
-					additionalDiscountBlankObj.set_width(200);
-					additionalDiscountBlankObj.set_height(31);
-					additionalDiscountBlankObj.set_top(0);
-					additionalDiscountBlankObj.set_left(0);
-					additionalOfflineDiscountDivObj.addChild("sta_additional_discount_blank" + i, additionalDiscountBlankObj);
-					
-					// 오프라인 할인 옵션 추가
-					offlineDiscountOptObj = new Static("sta_offline_discount_opt" + i);
-					offlineDiscountOptObj.set_cssclass("sta_WF_CompText");
-					offlineDiscountOptObj.set_width(200);
-					offlineDiscountOptObj.set_height(31);
-					offlineDiscountOptObj.set_top(0);
-					offlineDiscountOptObj.set_left(additionalDiscountBlankObj.getOffsetRight());
-					offlineDiscountOptObj.set_text("ㄴ " + dsFirstOrderAdditionalOfflineDiscountList.getColumn(i, "discountNm"));
-					additionalOfflineDiscountDivObj.addChild("sta_offline_discount_opt" + i, offlineDiscountOptObj);
-					
-					// 오프라인 할인 옵션 금액 추가
-					offlineDiscountOptAmtObj = new Static("sta_offline_discount_opt_amt" + i);
-					offlineDiscountOptAmtObj.set_cssclass("sta_WF_CompText");
-					offlineDiscountOptAmtObj.set_width(200);
-					offlineDiscountOptAmtObj.set_height(31);
-					offlineDiscountOptAmtObj.set_top(0);
-					offlineDiscountOptAmtObj.set_right(0);
-					offlineDiscountOptAmtObj.set_text(dsFirstOrderAdditionalOfflineDiscountList.getColumn(i, "discountAmt") + "원");
-					offlineDiscountOptAmtObj.set_textAlign("right");
-					additionalOfflineDiscountDivObj.addChild("sta_offline_discount_opt_amt" + i, offlineDiscountOptAmtObj);
-					
-					additionalOfflineDiscountDivObj.show();
-					firstCurrentDivTop = additionalOfflineDiscountDivObj.getOffsetTop() + additionalOfflineDiscountDivObj.getOffsetHeight();
-				}
-			}
- 		}
+	
+	stlmMthdStatic.set_height(divHeight);
+	stlmMthdDiv.set_height(divHeight + 2);
+	
+	// 사용 할인금액 (부분 취소인 경우에만)
+	// this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0
+	var useRfndAmtYn = false;
+	if(useRfndAmtYn){
+		stlmInfoDtlFrm.Div00.form.Div08
+	}else{
+		stlmInfoDtlFrm.Div00.form.Div08.set_visible(false);
+		stlmInfoDtlFrm.Div00.form.Div00.set_top(stlmInfoDtlFrm.Div00.form.Div01.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div01.getPixelHeight() - 1);
+		stlmInfoDtlFrm.Div00.form.Div02.set_top(stlmInfoDtlFrm.Div00.form.Div00.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div00.getPixelHeight() - 1);
+ 		stlmInfoDtlFrm.Div00.form.Div03.set_top(stlmInfoDtlFrm.Div00.form.Div02.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div02.getPixelHeight() - 1);
+ 		stlmInfoDtlFrm.Div00.form.Div04.set_top(stlmInfoDtlFrm.Div00.form.Div03.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div03.getPixelHeight() - 1);
+ 		stlmInfoDtlFrm.Div00.form.Div05.set_top(stlmInfoDtlFrm.Div00.form.Div04.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div04.getPixelHeight() - 1);
+ 		stlmInfoDtlFrm.Div00.form.Div06.set_top(stlmInfoDtlFrm.Div00.form.Div05.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div05.getPixelHeight() - 1);
+ 		stlmInfoDtlFrm.Div00.form.Div07.set_top(stlmInfoDtlFrm.Div00.form.Div06.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div06.getPixelHeight() - 1);
 	}
 	
-	// L.POINT 할인이 있는 경우
- 	if(dsFirstOrderMst.getColumn(0, "lpointDiscountAmt") > 0){
-		// L.POINT div 추가
- 		var lpointDivObj = new Div("div_lpoint");
- 		lpointDivObj.set_width(604);
- 		lpointDivObj.set_top(firstCurrentDivTop - 1);
-		lpointDivObj.set_height(33);
- 		lpointDivObj.set_left(0);
- 		lpointDivObj.set_cssclass("div_WF_CompWrap");
- 		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lpoint", lpointDivObj);
-		firstTabDivHeight += 33;
- 		firstTabHeight += 33;
- 		
- 		// L.POINT 라벨 추가
- 		var lpointObj = new Static("sta_lpoint");
- 		lpointObj.set_width(200);
- 		lpointObj.set_height(31);
- 		lpointObj.set_top(0);
- 		lpointObj.set_left(0);
- 		lpointObj.set_text("· L.POINT");
- 		lpointObj.set_cssclass("sta_WF_TableLabel");
- 		lpointDivObj.addChild("sta_lpoint", lpointObj);
- 		
- 		// L.POINT 금액 추가
- 		var lpointAmtObj = new Static("sta_lpoint_amt");
- 		lpointAmtObj.set_width(402);
- 		lpointAmtObj.set_height(31);
- 		lpointAmtObj.set_top(0);
- 		lpointAmtObj.set_right(0);
- 		lpointAmtObj.set_cssclass("sta_WF_CompText");
- 		lpointAmtObj.set_usedecorate(true);
- 		lpointAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsFirstOrderMst.getColumn(0, "lpointDiscountAmt") +"원</fc></b>");
- 		lpointAmtObj.set_textAlign("right");
- 		lpointAmtObj.set_border("0px none");
- 		lpointDivObj.addChild("sta_lpoint_amt", lpointAmtObj);
- 		
- 		lpointDivObj.show();
- 		firstCurrentDivTop = lpointDivObj.getOffsetTop() + lpointDivObj.getOffsetHeight();
-	}
+	// 결제채널
+	stlmInfoDtlFrm.Div00.form.Div00.set_height(stlmInfoDtlFrm.Div00.form.Div00.getPixelHeight());
+	stlmInfoDtlFrm.Div00.form.Div00.form.Static01.set_text(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "stlmChnlCdNm"));
 	
-	// 총 결제금액 div 추가
- 	var totalPayDivObj = new Div("div_total_pay");
- 	totalPayDivObj.set_width(604);
- 	totalPayDivObj.set_top(firstCurrentDivTop - 1);
-	totalPayDivObj.set_height(33);
- 	totalPayDivObj.set_left(0);
- 	totalPayDivObj.set_cssclass("div_WF_CompWrap");
- 	paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_total_pay", totalPayDivObj);
-	firstTabDivHeight += 33;
- 	firstTabHeight += 33;
- 	
- 	// 총 결제금액 라벨 추가
- 	var totalPayObj = new Static("sta_total_pay");
- 	totalPayObj.set_width(200);
- 	totalPayObj.set_height(31);
- 	totalPayObj.set_top(0);
- 	totalPayObj.set_left(0);
- 	totalPayObj.set_text("· 총 결제금액");
- 	totalPayObj.set_cssclass("sta_WF_TableLabel");
- 	totalPayDivObj.addChild("sta_total_pay", totalPayObj);
- 	
- 	// 총 결제금액 금액 추가
- 	var totalPayAmtObj = new Static("sta_total_pay_amt");
- 	totalPayAmtObj.set_width(402);
- 	totalPayAmtObj.set_height(31);
- 	totalPayAmtObj.set_top(0);
- 	totalPayAmtObj.set_right(0);
- 	totalPayAmtObj.set_cssclass("sta_WF_TableLabel");
- 	totalPayAmtObj.set_usedecorate(true);
- 	totalPayAmtObj.set_text("<b v='true'>"+ dsFirstOrderMst.getColumn(0, "totalPayAmt") +"원</b>");
- 	totalPayAmtObj.set_textAlign("right");
- 	totalPayAmtObj.set_border("0px none");
- 	totalPayDivObj.addChild("sta_lpoint_amt", totalPayAmtObj);
- 	
- 	totalPayDivObj.show();
- 	firstCurrentDivTop = totalPayDivObj.getOffsetTop() + totalPayDivObj.getOffsetHeight();
+	// 결제요청일시
+	stlmInfoDtlFrm.Div00.form.Div02.set_height(stlmInfoDtlFrm.Div00.form.Div02.getPixelHeight());
+	stlmInfoDtlFrm.Div00.form.Div02.form.Static01.set_text(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "atlctReqDtm"));
 	
-	// 신용카드 결제금액 있는경우
- 	if(dsFirstOrderMst.getColumn(0, "cardAmt") > 0){
-		var cardDivObj = new Div("div_card");
-		cardDivObj.set_width(604);
-		cardDivObj.set_top(firstCurrentDivTop - 1);
-		cardDivObj.set_left(0);
-		cardDivObj.set_height(33);
-		cardDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_card", cardDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var cardBlankObj = new Static("sta_card_blank");
-		cardBlankObj.set_cssclass("sta_WF_TableLabel");
-		cardBlankObj.set_width(200);
-		cardBlankObj.set_height(31);
-		cardBlankObj.set_top(0);
-		cardBlankObj.set_left(0);
-		cardDivObj.addChild("sta_card_blank", cardBlankObj);
-		
-		var cardObj = new Static("sta_card");
-		cardObj.set_cssclass("sta_WF_CompText");
-		cardObj.set_width(200);
-		cardObj.set_height(31);
-		cardObj.set_top(0);
-		cardObj.set_left(cardBlankObj.getOffsetRight());
-		cardObj.set_text("신용카드");
-		cardDivObj.addChild("sta_card", cardObj);
-		
-		var cardAmtObj = new Static("sta_card_amt");
-		cardAmtObj.set_cssclass("sta_WF_CompText");
-		cardAmtObj.set_width(200);
-		cardAmtObj.set_height(31);
-		cardAmtObj.set_top(0);
-		cardAmtObj.set_right(0);
-		cardAmtObj.set_text(dsFirstOrderMst.getColumn(0, "cardAmt") + "원");
-		cardAmtObj.set_textAlign("right");
-		cardDivObj.addChild("sta_card_amt", cardAmtObj);
-		
-		cardDivObj.show();
-		firstCurrentDivTop = cardDivObj.getOffsetTop() + cardDivObj.getOffsetHeight();
-	}
+	// 결제확인일시
+	stlmInfoDtlFrm.Div00.form.Div03.set_height(stlmInfoDtlFrm.Div00.form.Div03.getPixelHeight());
+	stlmInfoDtlFrm.Div00.form.Div03.form.Static01.set_text(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "stlmDtm"));
 	
-	// 현금 결제금액 있는경우
- 	if(dsFirstOrderMst.getColumn(0, "cashAmt") > 0){
-		var cashDivObj = new Div("div_cash");
-		cashDivObj.set_width(604);
-		cashDivObj.set_top(firstCurrentDivTop - 1);
-		cashDivObj.set_left(0);
-		cashDivObj.set_height(33);
-		cashDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_cash", cashDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var cashBlankObj = new Static("sta_cash_blank");
-		cashBlankObj.set_cssclass("sta_WF_TableLabel");
-		cashBlankObj.set_width(200);
-		cashBlankObj.set_height(31);
-		cashBlankObj.set_top(0);
-		cashBlankObj.set_left(0);
-		cashDivObj.addChild("sta_cash_blank", cashBlankObj);
-		
-		var cashObj = new Static("sta_cash");
-		cashObj.set_cssclass("sta_WF_CompText");
-		cashObj.set_width(200);
-		cashObj.set_height(31);
-		cashObj.set_top(0);
-		cashObj.set_left(cashBlankObj.getOffsetRight());
-		cashObj.set_text("현금");
-		cashDivObj.addChild("sta_card", cashObj);
-		
-		var cashAmtObj = new Static("sta_cash_amt");
-		cashAmtObj.set_cssclass("sta_WF_CompText");
-		cashAmtObj.set_width(200);
-		cashAmtObj.set_height(31);
-		cashAmtObj.set_top(0);
-		cashAmtObj.set_right(0);
-		cashAmtObj.set_text(dsFirstOrderMst.getColumn(0, "cashAmt") + "원");
-		cashAmtObj.set_textAlign("right");
-		cashDivObj.addChild("sta_cash_amt", cashAmtObj);
-		
-		cashDivObj.show();
-		firstCurrentDivTop = cashDivObj.getOffsetTop() + cashDivObj.getOffsetHeight();
-	}
+	// 결제취소일시
+	stlmInfoDtlFrm.Div00.form.Div04.set_height(stlmInfoDtlFrm.Div00.form.Div04.getPixelHeight());
+	stlmInfoDtlFrm.Div00.form.Div04.form.Static01.set_text(this.gfn_nvl(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cnclDtm")) == "" ? "-" : stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cnclDtm"));
 	
-	// 롯데상품권 결제금액 있는경우
- 	if(dsFirstOrderMst.getColumn(0, "lotteGiftcardAmt") > 0){
-		var lotteGiftcardDivObj = new Div("div_lotte_giftcard");
-		lotteGiftcardDivObj.set_width(604);
-		lotteGiftcardDivObj.set_top(firstCurrentDivTop - 1);
-		lotteGiftcardDivObj.set_left(0);
-		lotteGiftcardDivObj.set_height(33);
-		lotteGiftcardDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lotte_giftcard", lotteGiftcardDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var lotteGiftcardBlankObj = new Static("sta_lotte_giftcard_blank");
-		lotteGiftcardBlankObj.set_cssclass("sta_WF_TableLabel");
-		lotteGiftcardBlankObj.set_width(200);
-		lotteGiftcardBlankObj.set_height(31);
-		lotteGiftcardBlankObj.set_top(0);
-		lotteGiftcardBlankObj.set_left(0);
-		lotteGiftcardDivObj.addChild("sta_lotte_giftcard_blank", lotteGiftcardBlankObj);
-		
-		var lotteGiftcardObj = new Static("sta_lotte_giftcard");
-		lotteGiftcardObj.set_cssclass("sta_WF_CompText");
-		lotteGiftcardObj.set_width(200);
-		lotteGiftcardObj.set_height(31);
-		lotteGiftcardObj.set_top(0);
-		lotteGiftcardObj.set_left(lotteGiftcardBlankObj.getOffsetRight());
-		lotteGiftcardObj.set_text("롯데상품권");
-		lotteGiftcardDivObj.addChild("sta_lotte_giftcard", lotteGiftcardObj);
-		
-		var lotteGiftcardAmtObj = new Static("sta_lotte_giftcard_amt");
-		lotteGiftcardAmtObj.set_cssclass("sta_WF_CompText");
-		lotteGiftcardAmtObj.set_width(200);
-		lotteGiftcardAmtObj.set_height(31);
-		lotteGiftcardAmtObj.set_top(0);
-		lotteGiftcardAmtObj.set_right(0);
-		lotteGiftcardAmtObj.set_text(dsFirstOrderMst.getColumn(0, "lotteGiftcardAmt") + "원");
-		lotteGiftcardAmtObj.set_textAlign("right");
-		lotteGiftcardDivObj.addChild("sta_lotte_giftcard_amt", lotteGiftcardAmtObj);
-		
-		lotteGiftcardDivObj.show();
-		firstCurrentDivTop = lotteGiftcardDivObj.getOffsetTop() + lotteGiftcardDivObj.getOffsetHeight();
-	}
+	// 결제환불일시
+	stlmInfoDtlFrm.Div00.form.Div05.set_height(stlmInfoDtlFrm.Div00.form.Div05.getPixelHeight());
+	stlmInfoDtlFrm.Div00.form.Div05.form.Static01.set_text(this.gfn_nvl(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "rfndDtm")) == "" ? "-" : stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "rfndDtm"));
 	
-	// 타사상품권 결제금액 있는경우
- 	if(dsFirstOrderMst.getColumn(0, "otherGiftcardAmt") > 0){
-		var otherGiftcardDivObj = new Div("div_other_giftcard");
-		otherGiftcardDivObj.set_width(604);
-		otherGiftcardDivObj.set_top(firstCurrentDivTop - 1);
-		otherGiftcardDivObj.set_left(0);
-		otherGiftcardDivObj.set_height(33);
-		otherGiftcardDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_other_giftcard", otherGiftcardDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var otherGiftcardBlankObj = new Static("sta_other_giftcard_blank");
-		otherGiftcardBlankObj.set_cssclass("sta_WF_TableLabel");
-		otherGiftcardBlankObj.set_width(200);
-		otherGiftcardBlankObj.set_height(31);
-		otherGiftcardBlankObj.set_top(0);
-		otherGiftcardBlankObj.set_left(0);
-		otherGiftcardDivObj.addChild("sta_other_giftcard_blank", otherGiftcardBlankObj);
-		
-		var otherGiftcardObj = new Static("sta_other_giftcard");
-		otherGiftcardObj.set_cssclass("sta_WF_CompText");
-		otherGiftcardObj.set_width(200);
-		otherGiftcardObj.set_height(31);
-		otherGiftcardObj.set_top(0);
-		otherGiftcardObj.set_left(lectureDiscountBlankObj.getOffsetRight());
-		otherGiftcardObj.set_text("타사상품권");
-		otherGiftcardDivObj.addChild("sta_other_giftcard", otherGiftcardObj);
-		
-		var otherGiftcardAmtObj = new Static("sta_other_giftcard_amt");
-		otherGiftcardAmtObj.set_cssclass("sta_WF_CompText");
-		otherGiftcardAmtObj.set_width(200);
-		otherGiftcardAmtObj.set_height(31);
-		otherGiftcardAmtObj.set_top(0);
-		otherGiftcardAmtObj.set_right(0);
-		otherGiftcardAmtObj.set_text(dsFirstOrderMst.getColumn(0, "otherGiftcardAmt") + "원");
-		otherGiftcardAmtObj.set_textAlign("right");
-		otherGiftcardDivObj.addChild("sta_other_giftcard_amt", otherGiftcardAmtObj);
-		
-		otherGiftcardDivObj.show();
-		firstCurrentDivTop = otherGiftcardDivObj.getOffsetTop() + otherGiftcardDivObj.getOffsetHeight();
-	}
+	// POS 영수증번호 (오프라인일때만 표시)
+ 	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "stlmChnlCd") == "D"){
+ 		stlmInfoDtlFrm.Div00.form.Div06.set_height(stlmInfoDtlFrm.Div00.form.Div06.getPixelHeight());
+ 		stlmInfoDtlFrm.Div00.form.Div06.form.Static01.set_text(this.gfn_nvl(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "posRcptNo")) == "" ? "-" : stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "posRcptNo"));
+ 	}else{
+ 		stlmInfoDtlFrm.Div00.form.Div06.set_visible(false);
+ 		stlmInfoDtlFrm.Div00.form.Div07.set_top(stlmInfoDtlFrm.Div00.form.Div05.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div05.getPixelHeight() - 1);
+ 	}
 	
-	// 기타 결제금액 있는경우
- 	if(dsFirstOrderMst.getColumn(0, "etcAmt") > 0){
-		var etcDivObj = new Div("div_etc");
-		etcDivObj.set_width(604);
-		etcDivObj.set_top(firstCurrentDivTop - 1);
-		etcDivObj.set_left(0);
-		etcDivObj.set_height(33);
-		etcDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_etc", etcDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var etcBlankObj = new Static("sta_etc_blank");
-		etcBlankObj.set_cssclass("sta_WF_TableLabel");
-		etcBlankObj.set_width(200);
-		etcBlankObj.set_height(31);
-		etcBlankObj.set_top(0);
-		etcBlankObj.set_left(0);
-		etcDivObj.addChild("sta_etc_blank", etcBlankObj);
-		
-		var etcObj = new Static("sta_etc");
-		etcObj.set_cssclass("sta_WF_CompText");
-		etcObj.set_width(200);
-		etcObj.set_height(31);
-		etcObj.set_top(0);
-		etcObj.set_left(etcBlankObj.getOffsetRight());
-		etcObj.set_text("기타");
-		etcDivObj.addChild("sta_etc", etcObj);
-		
-		var etcAmtObj = new Static("sta_etc_amt");
-		etcAmtObj.set_cssclass("sta_WF_CompText");
-		etcAmtObj.set_width(200);
-		etcAmtObj.set_height(31);
-		etcAmtObj.set_top(0);
-		etcAmtObj.set_right(0);
-		etcAmtObj.set_text(dsFirstOrderMst.getColumn(0, "etcAmt") + "원");
-		etcAmtObj.set_textAlign("right");
-		etcDivObj.addChild("sta_etc_amt", etcAmtObj);
-		
-		etcDivObj.show();
-		firstCurrentDivTop = etcDivObj.getOffsetTop() + etcDivObj.getOffsetHeight();
-	}
-	
-	// 상품권 거스름돈 있는경우
- 	if(dsFirstOrderMst.getColumn(0, "giftcardChangeAmt") > 0){
-		var changeDivObj = new Div("div_change");
-		changeDivObj.set_width(604);
-		changeDivObj.set_top(firstCurrentDivTop - 1);
-		changeDivObj.set_left(0);
-		changeDivObj.set_height(33);
-		changeDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_change", changeDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var changeBlankObj = new Static("sta_change_blank");
-		changeBlankObj.set_cssclass("sta_WF_TableLabel");
-		changeBlankObj.set_width(200);
-		changeBlankObj.set_height(31);
-		changeBlankObj.set_top(0);
-		changeBlankObj.set_left(0);
-		changeDivObj.addChild("sta_change_blank", changeBlankObj);
-		
-		var changeObj = new Static("sta_change");
-		changeObj.set_cssclass("sta_WF_CompText");
-		changeObj.set_width(200);
-		changeObj.set_height(31);
-		changeObj.set_top(0);
-		changeObj.set_left(changeBlankObj.getOffsetRight());
-		changeObj.set_text("거스름돈");
-		changeDivObj.addChild("sta_change", changeObj);
-		
-		changeDivObj.show();
-		firstCurrentDivTop = changeDivObj.getOffsetTop() + changeDivObj.getOffsetHeight();
-		
-		var lotteGiftCardChangeDivObj = new Div("div_lotte_giftcard_change");
-		lotteGiftCardChangeDivObj.set_width(604);
-		lotteGiftCardChangeDivObj.set_top(firstCurrentDivTop - 1);
-		lotteGiftCardChangeDivObj.set_left(0);
-		lotteGiftCardChangeDivObj.set_height(33);
-		lotteGiftCardChangeDivObj.set_cssclass("div_WF_CompWrap");
-		paymentInfoDtlFrm.Tab00.Tabpage1.form.addChild("div_lotte_giftcard_change", lotteGiftCardChangeDivObj);
-		firstTabDivHeight += 33;
-		firstTabHeight += 33;
-		
-		var lotteGiftCardChangeBlankObj = new Static("sta_lotte_giftcard_change_blank");
-		lotteGiftCardChangeBlankObj.set_cssclass("sta_WF_TableLabel");
-		lotteGiftCardChangeBlankObj.set_width(200);
-		lotteGiftCardChangeBlankObj.set_height(31);
-		lotteGiftCardChangeBlankObj.set_top(0);
-		lotteGiftCardChangeBlankObj.set_left(0);
-		lotteGiftCardChangeDivObj.addChild("sta_lotte_giftcard_change_blank", lotteGiftCardChangeBlankObj);
-		
-		var lotteGiftCardChangeObj = new Static("sta_lotte_giftcard_change");
-		lotteGiftCardChangeObj.set_cssclass("sta_WF_CompText");
-		lotteGiftCardChangeObj.set_width(200);
-		lotteGiftCardChangeObj.set_height(31);
-		lotteGiftCardChangeObj.set_top(0);
-		lotteGiftCardChangeObj.set_left(lotteGiftCardChangeBlankObj.getOffsetRight());
-		lotteGiftCardChangeObj.set_text("ㄴ 상품권");
-		lotteGiftCardChangeDivObj.addChild("sta_lotte_giftcard_change", lotteGiftCardChangeObj);
-		
-		var lotteGiftCardChangeAmtObj = new Static("sta_lotte_giftcard_change_amt");
-		lotteGiftCardChangeAmtObj.set_cssclass("sta_WF_CompText");
-		lotteGiftCardChangeAmtObj.set_width(200);
-		lotteGiftCardChangeAmtObj.set_height(31);
-		lotteGiftCardChangeAmtObj.set_top(0);
-		lotteGiftCardChangeAmtObj.set_right(0);
-		lotteGiftCardChangeAmtObj.set_usedecorate(true);
-		lotteGiftCardChangeAmtObj.set_text("<b v='true'><fc v ='#ED5757'>(-)"+ dsFirstOrderMst.getColumn(0, "giftcardChangeAmt") +"원</fc></b>");
-		lotteGiftCardChangeAmtObj.set_textAlign("right");
-		lotteGiftCardChangeDivObj.addChild("sta_lotte_giftcard_change_amt", lotteGiftCardChangeAmtObj);
-		
-		lotteGiftCardChangeDivObj.show();
-		firstCurrentDivTop = lotteGiftCardChangeDivObj.getOffsetTop() + lotteGiftCardChangeDivObj.getOffsetHeight();
+	// L.point 적립금
+	stlmInfoDtlFrm.Div00.form.Div07.set_height(stlmInfoDtlFrm.Div00.form.Div07.getPixelHeight());
+	if(this.gfn_nvl(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumDt")) == ""){
+		stlmInfoDtlFrm.Div00.form.Div07.form.Static01.set_text("-");
+	}else{
+		stlmInfoDtlFrm.Div00.form.Div07.form.Static01.set_text(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumDt") + " (적립금 " + stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumAmt") + "원)");
 	}
 };]]></Script>
   </Form>

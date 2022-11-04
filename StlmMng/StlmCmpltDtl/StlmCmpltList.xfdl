@@ -8,7 +8,7 @@
         <Div id="Div02" taborder="2" text="Div02" left="0" top="31" height="160" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="데이터가 없습니다." right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" oncloseup="Div02_Grid00_oncloseup" selecttype="row" readonly="false" oninput="Div02_Grid00_oninput">
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="데이터가 없습니다." right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" oncloseup="Div02_Grid00_oncloseup" selecttype="row" readonly="false" oninput="Div02_Grid00_oninput" oncellclick="Div02_Grid00_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -129,8 +129,8 @@
         <Button id="Button02" taborder="3" text="엑셀" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button02_onclick"/>
         <Button id="fgftAppl" taborder="4" text="사은품 신청" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="Button02:10" visible="false"/>
         <Button id="Button04" taborder="5" text="관리자 취소" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button04_onclick"/>
-        <Button id="Button05" taborder="6" text="주문정보 수정" top="180" width="100" height="21" cssclass="btn_WF_Medium" right="Button04:10" onclick="Button05_onclick"/>
-        <Button id="Button06" taborder="7" text="강좌이강" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="Button05:10" onclick="Button06_onclick"/>
+        <Button id="btnModify" taborder="6" text="주문정보 수정" top="180" width="100" height="21" cssclass="btn_WF_Medium" right="94" onclick="Button05_onclick" visible="false"/>
+        <Button id="Button06" taborder="7" text="강좌이강" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="204" onclick="Button06_onclick"/>
         <Grid id="Grid_Excel" taborder="8" left="0" top="210" height="270" binddataset="ds_stlm_cmplt_list" right="0" visible="false">
           <Formats>
             <Format id="default">
@@ -263,6 +263,7 @@ this.excelFileName = "결제완료_목록_";
 this.oldValue;
 this.targetColumn;
 this.excelImportExport = "";
+this.menuSeq = this.parent.parent.parent.parent.parent.menuSeq;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -273,48 +274,52 @@ this.PayCmpltList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.excelImportExport = this.application.getVariable("excelImportExport");
 };
 
+// 관리자 취소 버튼 클릭
 this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	// 관리자 취소
 	if(this.lookup("admCnclDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
-		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 410);
-		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 410);
-		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 410);
+		this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno");
+		
+		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 470);
+		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 470);
+		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 470);
 		var divObj = new Div("admCnclDiv");
 		divObj.set_left(0);
 		divObj.set_right(0);
 		divObj.set_top(495);
-		divObj.set_height(410);
-		divObj.set_url("PayMng::PayCmpltDtl/AdmCncl.xfdl");
+		divObj.set_height(470);
+		divObj.set_url("StlmMng::StlmCmpltDtl/AdmCncl.xfdl");
 		
 		this.parent.parent.parent.form.addChild("admCnclDiv", divObj);
 		divObj.show();
 		
-		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 410); // div
+		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 470); // div
 		this.parent.parent.parent.parent.resetScroll(); // form
 	}
 	
 	
 };
 
+// 주문정보 수정 버튼 클릭
 this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	// 주문정보 수정
 	if(this.lookup("orderInfoModifyDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
-		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 550);
-		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 550);
-		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 550);
+		this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno");
+		
+		this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 560);
+		this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 560);
+		this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 560);
 		var divObj = new Div("orderInfoModifyDiv");
 		divObj.set_left(0);
 		divObj.set_right(0);
 		divObj.set_top(495);
-		divObj.set_height(550);
-		divObj.set_url("PayMng::PayCmpltDtl/OrderInfoModify.xfdl");
+		divObj.set_height(560);
+		divObj.set_url("StlmMng::StlmCmpltDtl/OrderInfoModify.xfdl");
 		
 		this.parent.parent.parent.form.addChild("orderInfoModifyDiv", divObj);
 		divObj.show();
 		
-		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 550); // div
+		this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 560); // div
 		this.parent.parent.parent.parent.resetScroll(); // form
 	}
 };
@@ -396,7 +401,7 @@ this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 				callBackFnc : callBackFnc,
 				isAsync : isAsync,
 				isPopup : true,
-				menuSeq : this.getOwnerFrame().param.MENU_ID
+				menuSeq : this.menuSeq
 			};
 			
 			this.gfn_transaction(tranObj);
@@ -448,6 +453,18 @@ this.Div02_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
 		this.ds_stlm_cmplt_list.setColumn(curRow, "stlmDtm", this.oldValue);
 		this.ds_stlm_cmplt_list.set_enableevent(true);
 		obj.setEditingValue(this.oldValue);
+	}
+};
+
+// 그리드 셀 클릭
+this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	// 셀 클랙 대상 행 데이터가 채널이 데스크면 주문정보 버튼 노출, 이외는 숨김
+	if(this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "stlmChnlCd") == "D"){
+		this.btnModify.set_visible(true);
+	}else{
+		this.btnModify.set_visible(false);
+		this.Button06.set_right(94);
 	}
 };
 ]]></Script>

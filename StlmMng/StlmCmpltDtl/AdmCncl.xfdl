@@ -1,79 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="AdmCncl" width="1280" height="410" titletext="New Form">
+  <Form id="AdmCncl" width="1280" height="470" titletext="New Form" onload="AdmCncl_onload">
     <Layouts>
-      <Layout height="410" width="1280">
+      <Layout height="470" width="1280">
         <Static id="Static00" taborder="0" text="▶ 관리자 취소" left="0" top="0" width="120" height="17" cssclass="sta_WF_TitGray"/>
-        <Static id="Static01" taborder="1" text="· 환불(취소) 예정 내역" left="0" top="27" width="120" height="17" cssclass="sta_WF_TitGray"/>
-        <Combo id="Combo00" taborder="2" text="Combo00" left="Static01:50" top="25" width="160" height="20"/>
-        <Div id="Div00" taborder="3" text="Div00" left="0" top="54" height="135" cssclass="div_WF_TableComp" right="0">
+        <Static id="Static01" taborder="1" text="· 취소(환불) 처리" left="0" top="27" width="120" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div00" taborder="2" text="Div00" left="0" top="54" height="36" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" width="640">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="환불(취소) 구분 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20"/>
+                    <Static id="Static00" taborder="0" text="취소(환불) 구분 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_rfnd_lect_tms_cd_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_Combo00_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Div id="Div01" taborder="1" text="Div01" left="639" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="환불(취소) 사유 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20"/>
+                    <Static id="Static00" taborder="0" text="취소(환불) 사유 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_rfnd_rsn_cd_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="2" text="Div02" left="0" top="32" width="640" height="33" cssclass="div_WF_CompWrap">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="강좌료 환불(취소) 예정 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" value="20,000" text="20,000" textAlign="right"/>
-                    <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div03" taborder="3" text="Div03" left="639" top="32" height="33" cssclass="div_WF_CompWrap" right="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="추가금액 환불(취소) 예정 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" value="20,000" text="20,000" readonly="true" textAlign="right"/>
-                    <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" height="20" cssclass="sta_WF_CompText" width="120"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div04" taborder="4" text="Div04" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="총 환불(취소) 예정금액" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;40,000원&lt;/fc&gt;" left="Static00:10" top="5" width="200" height="20" cssclass="sta_WF_CompText" usedecorate="true"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Button id="Button00" taborder="5" text="금액변경" top="107" height="21" cssclass="btn_WF_Medium" right="0" width="100"/>
             </Layout>
           </Layouts>
         </Div>
-        <Static id="Static02" taborder="4" text="· 환불(취소) 금액" left="0" top="200" width="120" height="17" cssclass="sta_WF_TitGray"/>
-        <Div id="Div01" taborder="5" text="Div01" left="0" top="227" height="150" cssclass="div_WF_TableComp" right="0">
+        <Static id="Static02" taborder="3" text="· 취소(환불) 금액" left="0" top="290" width="120" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div01" taborder="4" text="Div01" left="0" top="317" height="103" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="640" height="33" cssclass="div_WF_CompWrap">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="카드 환불(취소) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Static id="Static01" taborder="1" text="삼성" left="Static00:10" top="5" width="50" height="20" cssclass="sta_WF_CompText"/>
-                    <Edit id="Edit00" taborder="2" left="Static01:0" top="5" width="200" height="20" readonly="true" value="30,000" text="30,000" textAlign="right"/>
-                    <Static id="Static02" taborder="3" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="Static00" taborder="0" text="카드 취소(환불) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Static id="Static01" taborder="1" text="삼성" left="210" top="5" width="50" height="20" cssclass="sta_WF_CompText"/>
+                    <Edit id="Edit00" taborder="2" left="260" top="5" width="200" height="20" readonly="true" text="30,000" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
+                    <Static id="Static02" taborder="3" text="원" left="460" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Div id="Div01" taborder="1" text="Div01" left="639" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="L.POINT 환불(취소)금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" value="20,000" text="20,000" textAlign="right"/>
+                    <Static id="Static00" taborder="0" text="L.POINT 취소(환불)금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" text="20,000" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
                     <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
@@ -81,8 +53,8 @@
               <Div id="Div02" taborder="2" text="Div02" left="0" top="32" width="640" height="33" cssclass="div_WF_CompWrap">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="현금 환불(취소) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true"/>
+                    <Static id="Static00" taborder="0" text="현금 취소(환불) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
                     <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
@@ -90,8 +62,8 @@
               <Div id="Div03" taborder="3" text="Div03" left="639" top="32" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="상품권 환불(취소) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true"/>
+                    <Static id="Static00" taborder="0" text="상품권 취소(환불) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
                     <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
                 </Layouts>
@@ -99,48 +71,607 @@
               <Div id="Div04" taborder="4" text="Div04" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="기타 환불(취소)금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true"/>
+                    <Static id="Static00" taborder="0" text="기타 취소(환불)금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
                     <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div05" taborder="5" text="Div05" left="0" top="96" width="640" height="33" cssclass="div_WF_CompWrap">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="등급할인" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="복원불가(7,000원)" left="299" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div06" taborder="6" text="Div06" left="639" top="96" height="33" cssclass="div_WF_CompWrap" right="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="쿠폰 할인금액" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" text="복원(7,000원)" left="242" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
                   </Layout>
                 </Layouts>
               </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Button id="Button00" taborder="6" text="환불" top="377" height="21" cssclass="btn_WF_Medium" width="100" right="0"/>
-        <Button id="Button01" taborder="7" text="취소" top="377" width="100" height="21" cssclass="btn_WF_Weak" right="Button00:10" onclick="Button01_onclick"/>
+        <Button id="Button00" taborder="5" text="환불완료" top="437" height="21" cssclass="btn_WF_Medium" width="100" right="0" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="6" text="취소" top="437" width="100" height="21" cssclass="btn_WF_Weak" right="Button00:10" onclick="Button01_onclick"/>
+        <Static id="Static03" taborder="7" text="· 취소(환불) 예정 금액" left="0" top="114" width="120" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div02" taborder="8" text="Div02" left="0" top="141" height="139" cssclass="div_WF_TableComp" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="구분" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+                    <Static id="Static01" taborder="1" text="환불예정금액" left="200" top="0" height="31" cssclass="sta_WF_TableLabel" textAlign="center" font="bold 12px/normal &quot;Noto Sans KR&quot;" width="440"/>
+                    <Static id="Static02" taborder="2" text="수수료" left="640" top="0" height="31" cssclass="sta_WF_TableLabel" right="0" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" width="641">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="강좌료" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
+                    <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div02" left="640" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="1,000원" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="3" text="Div01" left="0" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" width="641">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="재료비/대여료" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="200" height="20" readonly="true" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
+                    <Static id="Static01" taborder="2" text="원" left="Edit00:0" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="4" text="Div02" left="640" top="Div02:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="1,000원" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div05" taborder="5" text="Div01" left="0" top="Div03:-1" height="33" cssclass="div_WF_CompWrap" width="641">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="합계" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Static id="Static01" taborder="1" left="Static00:0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div06" taborder="6" text="Div02" left="640" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="1,000원" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="Button02" taborder="9" text="금액변경" top="114" width="100" height="17" cssclass="btn_WF_Medium" right="220" onclick="Button02_onclick"/>
+        <Button id="Button03" taborder="10" text="취소" top="114" width="100" height="17" right="110" cssclass="btn_WF_Weak" visible="false" onclick="Button03_onclick"/>
+        <Button id="Button04" taborder="11" text="저장" top="114" width="100" height="17" cssclass="btn_WF_Medium" right="0" visible="false" onclick="Button04_onclick"/>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.menuSeq = this.parent.parent.parent.parent.parent.menuSeq;
+this.atlctRsvNo = this.parent.parent.parent.parent.parent.atlctRsvNo;
+this.actlAtlctNpleSeqno = this.parent.parent.parent.parent.actlAtlctNpleSeqno;
+
+// 금액변경 이전 값 저장을 위한 변수
+this.oldLectAmt = 0;
+this.oldLectAddAmt = 0;
+this.oldCrdRfndAmt = 0;
+this.oldCshRfndAmt = 0;
+this.oldEtcRfndAmt = 0;
+this.oldLpntUseAmt = 0;
+this.oldGiftRfndAmt = 0;
+
+// 부분환불 금액(강좌료 + 추가비) 저장 변수
+this.totRfndAmt = 0;
+
+// 부분환불 강좌료 + 수수료 저장 변수
+this.totLectRfndAmt = 0
+// 부분환불 추가금액 + 수수료 저장 변수 
+this.totLectAddRfndAmt = 0;
+
+// 환불예정금액(강좌료 + 추가금액) 저장 변수
+this.expctTotRfndAmt = 0;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.AdmCncl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	// 코드성 데이터 세팅
+	this.fn_data_list();
+};
+
+// 코드성 데이터 세팅
+this.fn_data_list = function(rfndLectTmsCd)
+{
+	
+	var strSvcId    = "data_list";
+	if(new String(rfndLectTmsCd).valueOf() != "undefined"){
+		strSvcId	= "change";
+	}
+	
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getAdmCnclDataList.do";
+	var inData      = "";
+	var outData     = "this.ds_rfnd_rsn_cd_list=output1 this.ds_adm_cncl_data=output2 this.ds_rfnd_lect_tms_cd_list=output3";
+	var strArg      = "atlctRsvNo=" + this.atlctRsvNo + " actlAtlctNpleSeqno=" + this.actlAtlctNpleSeqno + " rfndLectTmsCd=" + rfndLectTmsCd;
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "data_list":
+			// 금액변경 버튼 맨 끝으로
+			this.Button02.set_right(0);
+		
+			// 취소(환불) 구분 콤보박스 초기화
+			if(this.ds_adm_cncl_data.getColumn(0, "lectNbcnt") == this.ds_adm_cncl_data.getColumn(0, "rfndLectTmsCnt")){
+				// 전액환불 대상이면 전액으로 세팅
+				this.Div00.form.Div00.form.Combo00.set_index(0);
+			}else{
+				this.Div00.form.Div00.form.Combo00.set_index(this.ds_adm_cncl_data.getColumn(0, "lectNbcnt") - this.ds_adm_cncl_data.getColumn(0, "rfndLectTmsCnt"));
+			}
+			
+			// 취소(환불) 사유 콤보박스 초기화
+			this.Div00.form.Div01.form.Combo00.set_index(0);
+			
+			this.fn_set_rfnd_amt();
+			
+			break;
+		case "change":
+			this.fn_set_rfnd_amt();
+			break;
+		case "update":
+			alert("결제 취소되었습니다.");
+			this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() - 470);
+			this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() - 470);
+			this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() - 470);
+			
+			this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() - 470); // div
+			this.parent.parent.parent.parent.resetScroll(); // form
+
+			this.parent.parent.parent.form.removeChild("admCnclDiv");
+			break;
+	}
+};
+
+// 취소(환불) 예정금액, 취소(환불) 금액 세팅
+this.fn_set_rfnd_amt = function()
+{
+	// 부분환불 금액
+	this.totRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt");
+	// 취소(환불) 예정 금액 세팅
+	this.totLectRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt");
+	this.totLectAddRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt");
+	
+	this.Div02.form.Div01.form.Edit00.set_value(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt")));
+	this.Div02.form.Div02.form.Static00.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt")) + "원");
+	this.Div02.form.Div03.form.Edit00.set_value(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt")));
+	this.Div02.form.Div04.form.Static00.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt")) + "원");
+	this.Div02.form.Div05.form.Static01.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt")) + "원");
+	this.Div02.form.Div06.form.Static00.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt")) + "원");
+	
+	// 취소(환불) 금액 세팅
+	var crdStlmAmt = this.ds_adm_cncl_data.getColumn(0, "crdStlmAmt");
+	var lpntUseAmt = this.ds_adm_cncl_data.getColumn(0, "lpntUseAmt");
+	var cshStlmAmt = this.ds_adm_cncl_data.getColumn(0, "cshStlmAmt");
+	var giftStlmAmt = this.ds_adm_cncl_data.getColumn(0, "giftStlmAmt");
+	var etcStlmAmt = this.ds_adm_cncl_data.getColumn(0, "etcStlmAmt");
+	
+	// 기존 카드 결제금액이 0원이면 카드사 영역 숨김 
+	if(crdStlmAmt == 0){
+		this.Div01.form.Div00.form.Static01.set_visible(false);
+		this.Div01.form.Div00.form.Edit00.set_left(210);
+		this.Div01.form.Div00.form.Static02.set_left(410);
+	}
+	
+	var totRfndAmt = this.totRfndAmt;
+	
+	if(totRfndAmt == 0){
+		// 환불가능금액이 없는경우
+	}else{
+		if(crdStlmAmt > 0){
+			this.Div01.form.Div00.form.Static01.set_text(this.ds_adm_cncl_data.getColumn(0, "crdcoCdNm"));
+			if(totRfndAmt >= crdStlmAmt){
+				this.Div01.form.Div00.form.Edit00.set_value(this.gfn_setComma(crdStlmAmt));
+				totRfndAmt -= crdStlmAmt;
+			}else{
+				this.Div01.form.Div00.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
+				totRfndAmt = 0;
+			}
+		}
+		if(lpntUseAmt > 0){
+			if(totRfndAmt >= lpntUseAmt){
+				this.Div01.form.Div01.form.Edit00.set_value(this.gfn_setComma(lpntUseAmt));
+				totRfndAmt -= lpntUseAmt;
+			}else{
+				this.Div01.form.Div01.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
+				totRfndAmt = 0;
+			}
+		}
+		if(cshStlmAmt > 0){
+			if(totRfndAmt >= cshStlmAmt){
+				this.Div01.form.Div02.form.Edit00.set_value(this.gfn_setComma(cshStlmAmt));
+				totRfndAmt -= cshStlmAmt;
+			}else{
+				this.Div01.form.Div02.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
+				totRfndAmt = 0;
+			}
+		}
+		if(giftStlmAmt > 0){
+			if(totRfndAmt >= giftStlmAmt){
+				this.Div01.form.Div03.form.Edit00.set_value(this.gfn_setComma(giftStlmAmt));
+				totRfndAmt -= giftStlmAmt;
+			}else{
+				this.Div01.form.Div03.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
+				totRfndAmt = 0;
+			}
+		}
+		if(etcStlmAmt > 0){
+			if(totRfndAmt >= etcStlmAmt){
+				this.Div01.form.Div04.form.Edit00.set_value(this.gfn_setComma(etcStlmAmt));
+				totRfndAmt -= etcStlmAmt;
+			}else{
+				this.Div01.form.Div04.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
+				totRfndAmt = 0;
+			}
+		}
+	}
+};
+
+// 관리자 취소 취소 버튼 클릭
 this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	// 취소
-	this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() - 410);
-	this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() - 410);
-	this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() - 410);
-	
- 	this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() - 410); // div
-  	this.parent.parent.parent.parent.resetScroll(); // form
+	if(confirm("취소하시겠습니까? 입력된 내용은 초기화됩니다.")){
+		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() - 470);
+		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() - 470);
+		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() - 470);
+		
+		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() - 470); // div
+		this.parent.parent.parent.parent.resetScroll(); // form
 
-	this.parent.parent.parent.form.removeChild("admCnclDiv");
+		this.parent.parent.parent.form.removeChild("admCnclDiv");
+	}
+};
+
+// 금액변경 버튼 클릭
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.Button02.set_right(220);
+	this.Button02.set_visible(false);
+	this.Button03.set_visible(true);
+	this.Button04.set_visible(true);
+	
+	this.Div02.form.Div01.form.Edit00.set_readonly(false);
+	this.Div02.form.Div03.form.Edit00.set_readonly(false);
+	this.oldLectAmt = this.Div02.form.Div01.form.Edit00.value;
+	this.oldLectAddAmt = this.Div02.form.Div03.form.Edit00.value;
+};
+
+// 금액변경 취소 버튼 클릭
+this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("취소하시겠습니까? 입력된 내용은 초기화됩니다.")){
+		this.Div02.form.Div01.form.Edit00.set_value(this.oldLectAmt);
+		this.Div02.form.Div03.form.Edit00.set_value(this.oldLectAddAmt);
+		this.Div02.form.Div01.form.Edit00.set_readonly(true);
+		this.Div02.form.Div03.form.Edit00.set_readonly(true);
+		this.Button03.set_visible(false);
+		this.Button04.set_visible(false);
+		this.Button02.set_visible(true);
+		this.Button02.set_right(0);
+	}
+};
+
+// 금액변경 저장 버튼 클릭
+this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var lectAmt = this.Div02.form.Div01.form.Edit00.value;
+	lectAmt = nexacro.replaceAll(lectAmt.toString(), ",", "");
+	if(lectAmt == ""){
+		alert("환불예정금액을 입력하세요.");
+		this.Div02.form.Div01.form.Edit00.setFocus();
+		return;
+	}
+	
+	if(Number(lectAmt) > Number(this.totRfndAmt)){
+		alert("주문금액 보다 강좌료 취소(환불) 예정금액을 초과하여 입력 할 수 없습니다.");
+		this.Div02.form.Div01.form.Edit00.setFocus();
+		return;
+	}
+	
+	var lectAddAmt = this.Div02.form.Div03.form.Edit00.value;
+	if(lectAddAmt == ""){
+		alert("환불예정금액을 입력하세요.");
+		this.Div02.form.Div03.form.Edit00.setFocus();
+		return;
+	}
+	lectAddAmt = nexacro.replaceAll(lectAddAmt.toString(), ",", "");
+	if(Number(lectAddAmt) > Number(this.totRfndAmt)){
+		alert("주문금액 보다 재료비/대여료 취소(환불) 예정금액을 초과하여 입력 할 수 없습니다.");
+		this.Div02.form.Div03.form.Edit00.setFocus();
+		return;
+	}
+	
+	if(Number(lectAmt) + Number(lectAddAmt) > Number(this.totRfndAmt)){
+		alert("주문금액 보다 강좌료 취소(환불) 예정금액을 초과하여 입력 할 수 없습니다.");
+		return;
+	}
+	
+	if(confirm("저장하시겠습니까?")){
+		// 취소(환불) 예정 금액 업데이트
+		var lectRfndDeducAmt = this.totLectRfndAmt - Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", ""));
+		var lectAddRfndDeducAmt = this.totLectAddRfndAmt - Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", ""));
+		
+		// 수수료
+		this.Div02.form.Div02.form.Static00.set_text(this.gfn_setComma(lectRfndDeducAmt) + "원");
+		this.Div02.form.Div04.form.Static00.set_text(this.gfn_setComma(lectAddRfndDeducAmt) + "원");
+		this.Div02.form.Div05.form.Static01.set_text(this.gfn_setComma((Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", "")) + Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", "")))) + "원");
+		this.Div02.form.Div06.form.Static00.set_text(this.gfn_setComma(lectRfndDeducAmt + lectAddRfndDeducAmt) + "원");
+		
+		this.Div02.form.Div01.form.Edit00.set_readonly(true);
+		this.Div02.form.Div03.form.Edit00.set_readonly(true);
+		this.Button03.set_visible(false);
+		this.Button04.set_visible(false);
+		this.Button02.set_visible(true);
+		this.Button02.set_right(0);
+		this.Div01.form.Div00.form.Edit00.set_readonly(false);
+		this.Div01.form.Div01.form.Edit00.set_readonly(false);
+		this.Div01.form.Div02.form.Edit00.set_readonly(false);
+		this.Div01.form.Div03.form.Edit00.set_readonly(false);
+		this.Div01.form.Div04.form.Edit00.set_readonly(false);
+	}
+};
+
+// 취소(환불) 구분 콤보박스 선택이벤트
+this.Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.fn_data_list(e.postvalue);
+};
+
+// 금액필드 입력 포맷
+this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
+{
+	var num = nexacro.replaceAll(obj.value.toString(), ",", "");
+	if(num.startsWith("0") && num.length > 1){
+		num = num.substring(1);
+	}
+	obj.set_value(this.gfn_setComma(num));
+};
+
+// 환불완료 버튼 클릭
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 환불예정금액
+	this.expctTotRfndAmt = Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", "")) + Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", ""));
+	
+	var crdRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div00.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div00.form.Edit00.value), ",", ""));
+	var lpntRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div01.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div01.form.Edit00.value), ",", ""));
+	var cshRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div02.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div02.form.Edit00.value), ",", ""));
+	var giftRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div03.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div03.form.Edit00.value), ",", ""));
+	var etcRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div04.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div04.form.Edit00.value), ",", ""));
+	var rfndScheLectAmt = this.gfn_nvl(this.Div02.form.Div01.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", ""));
+	var rfndScheAddAmt = this.gfn_nvl(this.Div02.form.Div03.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", ""));
+	var lectAmtFee = this.Div02.form.Div02.form.Static00.text;
+	lectAmtFee = Number(nexacro.replaceAll(lectAmtFee.substring(0, lectAmtFee.length - 1), ",", ""));
+	var addAmtFee = this.Div02.form.Div04.form.Static00.text;
+	addAmtFee = Number(nexacro.replaceAll(addAmtFee.substring(0, addAmtFee.length - 1), ",", ""));
+	var feeRt = nexacro.round((lectAmtFee + addAmtFee) / (rfndScheLectAmt + rfndScheAddAmt + lectAmtFee + addAmtFee) * 100);
+	
+	var crdStlmAmt = this.ds_adm_cncl_data.getColumn(0, "crdStlmAmt");
+	var lpntUseAmt = this.ds_adm_cncl_data.getColumn(0, "lpntUseAmt");
+	var cshStlmAmt = this.ds_adm_cncl_data.getColumn(0, "cshStlmAmt");
+	var giftStlmAmt = this.ds_adm_cncl_data.getColumn(0, "giftStlmAmt");
+	var etcStlmAmt = this.ds_adm_cncl_data.getColumn(0, "etcStlmAmt");
+	
+	if(crdRfndAmt > crdStlmAmt){
+		alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		return;
+	}
+	
+	if(lpntRfndAmt > lpntUseAmt){
+		alert("L.Point 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		return;
+	}
+	
+	// 상품권 결제금액만큼 현금으로 환불 가능
+	if(cshRfndAmt > cshStlmAmt && (cshRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+giftRfndAmt) > giftStlmAmt)){
+		alert("현금 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		return;
+	}
+	
+	if(giftRfndAmt > giftStlmAmt){
+		alert("상품권 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		return;
+	}
+	
+	// 상품권 결제금액만큼 기타로 환불 가능
+	if(etcRfndAmt > etcStlmAmt && (etcRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+giftRfndAmt) > giftStlmAmt)){
+		alert("기타 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		return;
+	}
+	
+	trace(crdRfndAmt);
+	trace(this.expctTotRfndAmt);
+ 	if(crdRfndAmt > this.expctTotRfndAmt){
+		alert("카드 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+		return;
+ 	}
+	
+	if(lpntRfndAmt > this.expctTotRfndAmt){
+		alert("L.Point 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+		return;
+ 	}
+	
+	if(cshRfndAmt > this.expctTotRfndAmt){
+		alert("현금 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+		return;
+ 	}
+	
+	if(giftRfndAmt > this.expctTotRfndAmt){
+		alert("상품권 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+		return;
+ 	}
+	
+	if(etcRfndAmt > this.expctTotRfndAmt){
+		alert("기타 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+		return;
+ 	}
+	
+	if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + giftRfndAmt + etcRfndAmt > this.expctTotRfndAmt){
+		alert("환불예정 금액 보다 환불금액을 초과하여 입력 할 수 없습니다.");
+		return;
+	}else if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + giftRfndAmt + etcRfndAmt < this.expctTotRfndAmt){
+		alert("환불예정 금액 만큼 환불금액을 입력하세요.");
+		return;
+	}
+	
+	if(confirm("결제 건을 취소(환불)하시겠습니까?")){
+		var dsUpdate = new Dataset();
+		dsUpdate.name = "ds_update_info";
+		dsUpdate.addColumn("atlctRsvNo", "string", 256);
+		dsUpdate.addColumn("actlAtlctNpleSeqno", "int", 256);
+		dsUpdate.addColumn("rfndClCd", "string", 256);
+		dsUpdate.addColumn("rfndStatCd", "string", 256);
+		dsUpdate.addColumn("rfndChnlCd", "string", 256);
+		dsUpdate.addColumn("rfndLectTmsCd", "string", 256);
+		dsUpdate.addColumn("rfndRsnCd", "string", 256);
+		dsUpdate.addColumn("gsRfndScheAmt", "int", 256);
+		dsUpdate.addColumn("rfndScheLectAmt", "int", 256);
+		dsUpdate.addColumn("rfndScheAddAmt", "int", 256);
+		dsUpdate.addColumn("feeRt", "int", 256);
+		dsUpdate.addColumn("lectAmtFee", "int", 256);
+		dsUpdate.addColumn("addAmtFee", "int", 256);
+		dsUpdate.addColumn("crdRfndAmt", "int", 256);
+		dsUpdate.addColumn("lpntRfndAmt", "int", 256);
+		dsUpdate.addColumn("cshRfndAmt", "int", 256);
+		dsUpdate.addColumn("ltteGiftRfndAmt", "int", 256);
+		dsUpdate.addColumn("etcRfndAmt", "int", 256);
+		
+		this.addChild("ds_update_info", dsUpdate);
+		
+		this.ds_update_info.set_enableevent(false);
+		this.ds_update_info.insertRow(0);
+		this.ds_update_info.setColumn(0, "atlctRsvNo", this.ds_adm_cncl_data.getColumn(0, "atlctRsvNo"));
+		this.ds_update_info.setColumn(0, "actlAtlctNpleSeqno", this.ds_adm_cncl_data.getColumn(0, "actlAtlctNpleSeqno"));
+		this.ds_update_info.setColumn(0, "rfndClCd", lectAmtFee + addAmtFee > 0 ? "20" : "10");
+		this.ds_update_info.setColumn(0, "rfndStatCd", lectAmtFee + addAmtFee > 0 ? "60" : "40");
+		this.ds_update_info.setColumn(0, "rfndChnlCd", "D");
+		this.ds_update_info.setColumn(0, "rfndLectTmsCd", this.Div00.form.Div00.form.Combo00.value == "" ? "1" : this.Div00.form.Div00.form.Combo00.value);
+		this.ds_update_info.setColumn(0, "rfndRsnCd", this.Div00.form.Div01.form.Combo00.value);
+		this.ds_update_info.setColumn(0, "gsRfndScheAmt", rfndScheLectAmt + rfndScheAddAmt);
+		this.ds_update_info.setColumn(0, "rfndScheLectAmt", rfndScheLectAmt);
+		this.ds_update_info.setColumn(0, "rfndScheAddAmt", rfndScheAddAmt);
+		this.ds_update_info.setColumn(0, "feeRt", lectAmtFee + addAmtFee > 0 ? feeRt : 0);
+		this.ds_update_info.setColumn(0, "lectAmtFee", lectAmtFee);
+		this.ds_update_info.setColumn(0, "addAmtFee", addAmtFee);
+		this.ds_update_info.setColumn(0, "crdRfndAmt", crdRfndAmt);
+		this.ds_update_info.setColumn(0, "lpntRfndAmt", lpntRfndAmt);
+		this.ds_update_info.setColumn(0, "cshRfndAmt", cshRfndAmt);
+		this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", giftRfndAmt);
+		this.ds_update_info.setColumn(0, "etcRfndAmt", etcRfndAmt);
+		
+		this.ds_update_info.set_enableevent(true);
+	
+		var strSvcId    = "update";
+		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
+		var inData      = "updateInfo=this.ds_update_info";
+		var outData     = "";
+		var strArg      = "updateType=rfnd";
+		var callBackFnc = "fnCallback";
+		var isAsync     = true;
+		var tranObj = {
+			strSvcId : strSvcId,
+			strSvcUrl : strSvcUrl,
+			inData : inData,
+			outData : outData,
+			strArg : strArg,
+			callBackFnc : callBackFnc,
+			isAsync : isAsync,
+			isPopup : true,
+			menuSeq : this.menuSeq
+		};
+		
+		this.gfn_transaction(tranObj);
+	}
 };
 ]]></Script>
+    <Objects>
+      <Dataset id="ds_rfnd_rsn_cd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_rfnd_lect_tms_cd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_adm_cncl_data">
+        <ColumnInfo>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="lectAmt" type="INT" size="256"/>
+          <Column id="lectDcAmt" type="INT" size="256"/>
+          <Column id="lectAddAmt" type="INT" size="256"/>
+          <Column id="lectAddDcAmt" type="INT" size="256"/>
+          <Column id="lectNbcnt" type="INT" size="256"/>
+          <Column id="rfndOptnUseYn" type="STRING" size="256"/>
+          <Column id="rfndLectTmsCnt" type="INT" size="256"/>
+          <Column id="totLectAmt" type="INT" size="256"/>
+          <Column id="totLectAddAmt" type="INT" size="256"/>
+          <Column id="freeRfndYn" type="STRING" size="256"/>
+          <Column id="gsStlmAmt" type="INT" size="256"/>
+          <Column id="crdcoCdNm" type="STRING" size="256"/>
+          <Column id="crdStlmAmt" type="INT" size="256"/>
+          <Column id="lpntUseAmt" type="INT" size="256"/>
+          <Column id="cshStlmAmt" type="INT" size="256"/>
+          <Column id="giftStlmAmt" type="INT" size="256"/>
+          <Column id="etcStlmAmt" type="INT" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+          <Column id="totLectRfndAmt" type="INT" size="256"/>
+          <Column id="totLectRfndDeducAmt" type="INT" size="256"/>
+          <Column id="totLectAddRfndAmt" type="INT" size="256"/>
+          <Column id="totLectAddRfndDeducAmt" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>
