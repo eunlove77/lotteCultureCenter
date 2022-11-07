@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="RefundPolicyMng" width="1280" height="1000" titletext="New Form" onload="RefundPolicyMng_onload">
+    <Layouts>
+      <Layout height="1000" mobileorientation="landscape" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="90" height="340" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div01" taborder="0" text="Div01" left="0" top="3" height="330" cssclass="div_WF_CompWrap" right="70" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
+                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="1" text="Div03" left="45" top="Div00:33" height="55" right="45">
+          <Layouts>
+            <Layout>
+              <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="21" cssclass="btn_WF_Weak" fittocontents="width" onclick="Div03_btnCnl_onclick"/>
+              <Button id="btnSave" taborder="0" text="등록" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" left="btnCnl:16.036000000000058" onclick="Div03_btnSave_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="txtMenuNm" taborder="2" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Edit id="Edit00" taborder="3" left="12" top="72" width="106" height="18" value="R" text="R" readonly="true" visible="false"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="seqno" type="INT" size="256"/>
+          <Column id="cntsClCd" type="STRING" size="256"/>
+          <Column id="webCnts" type="STRING" size="256"/>
+          <Column id="mbilCnts" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cntsClCd">R</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="cntsClCd" compid="Edit00" propid="value" datasetid="ds_detail" columnid="cntsClCd"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+* include 영역 
+**************************************************************************/
+include "Base::lib_base.xjs";
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+* FORM 변수 선언 영역
+**************************************************************************/
+this.application = null;
+this.param = null;
+this.domain = "";
+this.editorInit = false;
+
+/**************************************************************************
+* FORM EVENT 영역(onload)
+**************************************************************************/
+this.RefundPolicyMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	var objOwnerFrame = this.getOwnerFrame();
+	
+	this.domain = this.application.getVariable("domain");
+	this.editorInit = false;
+	
+	this.Div00.form.Div01.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html");
+	this.Div00.form.Div01.form.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	
+	this.fn_detail();
+	
+};
+
+//등록버튼
+this.Div03_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{					
+	var cntnObj = this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00);
+	var len = cntnObj.len;
+	
+	this.ds_detail.setColumn(0, "webCnts", cntnObj.cntn);
+	this.ds_detail.setColumn(0, "mbilCnts", cntnObj.cntn);
+	
+	this.fn_checkValidation(len);
+};
+
+//취소버튼
+this.Div03_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("취소하시겠습니까"))
+	{
+		this.reload();
+	}
+};
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+//조회
+this.fn_detail = function ()
+{	
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.application.Admin_svc + "::/policy/policyList.do",
+		inData : "detail=ds_detail",
+		outData : "ds_detail=policyList",
+		strArg : "clCd=R",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	
+	this.gfn_transaction(tranObj);
+	
+};
+
+//콜백
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+	case "detail":
+		
+		break;
+		
+    case "save":
+		this.alert("저장되었습니다.");
+		this.reload();
+		break;
+	}
+};
+
+//저장
+this.fn_save = function ()
+{		
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.application.Admin_svc + "::policy/insertPolicy.do",
+		inData : "data=ds_detail:U",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	this.gfn_transaction(tranObj);
+};
+
+//에디터
+this.fn_get_edit_body = function(wbObj){
+	
+	var _win = wbObj.getProperty("window");
+	
+	var len = _win.callMethod("getTextValueLen");
+	var bodyValue = _win.callMethod("getData");
+	var valueObj = { 
+		len : len , 
+		cntn : bodyValue
+		}
+	
+	trace("editor body length : " + len);
+	console.log("editor body length : " + len);
+	
+	if(_win)
+    {
+        _win.destroy();
+        _win = null;
+    }    
+
+	return valueObj;
+}
+
+//에디터세팅
+this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+{	
+	this.editorInit = true;
+	var content = "";	
+	
+	content = this.ds_detail.getColumn(0, "webCnts");
+		
+	var _win = obj.getProperty("window");	 
+
+	_win.callMethod("setData", content);
+	
+	if(_win)
+	{
+		_win.destroy();
+		_win = null;
+	}  
+};
+
+//유효성체크
+this.fn_checkValidation = function(len){
+	
+	if(len == 0)
+	{
+		this.alert("에디터 내용을 입력하세요");
+		this.Div00.form.Div01.form.WebBrowser00.setFocus();
+		return;
+	}
+	else
+	{								
+		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		{
+			this.fn_save();
+		}
+	}
+}]]></Script>
+  </Form>
+</FDL>
