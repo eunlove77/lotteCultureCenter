@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ClassBrchPopup" width="900" height="600" titletext="지점검색" onload="ClassBrchPopup_onload">
+    <Layouts>
+      <Layout height="600" mobileorientation="landscape" width="900">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" border="0px none, 0px none, 1px solid black" height="500" right="10">
+          <Layouts>
+            <Layout flexwrap="nowrap" verticalgap="30"/>
+          </Layouts>
+        </Div>
+        <Button id="Button00" taborder="1" text="취소" left="40%" top="Div00:15" width="80" height="30" cssclass="btn_WF_High" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="2" text="선택" left="Button00:20" top="Div00:15" width="80" height="30" cssclass="btn_WF_Medium" onclick="Button01_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+ 
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+
+this.application = null;
+this.domain = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+this.ClassBrchPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.domain = this.application.getVariable("domain");
+	// 코드 데이터
+	this.fn_code_list();
+};
+
+/**************************************************************************
+ * 트랜잭션 callback
+**************************************************************************/
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+  else 
+  {
+	 switch(svcID)
+	  {
+		case "codeList":
+			this.fn_brchSet();
+		break;	
+	  }
+  }
+};
+
+/**************************************************************************
+ * 코드 조회
+**************************************************************************/
+
+//카테고리 조회
+this.fn_code_list = function()
+{
+	var tranObj = {
+		strSvcId : "codeList",
+		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
+		inData : "",
+		outData : "ds_brchArea_list=brchAreaList ds_brch_list=brchList",
+		strArg : "cdId=107||brch",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		isPopup : true
+	}
+
+	this.gfn_transaction(tranObj);
+}
+
+
+/**************************************************************************
+ * 지점설정
+**************************************************************************/
+
+this.fn_brchSet = function()
+{
+	var content = [""];
+	for(var i=0; i<this.ds_brchArea_list.getRowCount(); i++)
+	{
+		var objId = "objDiv" + i;
+		var objDiv = new Div();
+		if(i == 0)
+		{
+			objDiv.init(objId, 0, 0, "100%", 150, null);
+		}
+		else 
+		{
+			objDiv.init(objId, 0, content[i] + ":15", "100%", 150, null);
+		}
+		this.Div00.form.addChild(objId, objDiv);
+		objDiv.show();	
+		objDiv.brchAreaCd = this.ds_brchArea_list.getColumn(i, "cd");
+		objDiv.brchAreaNm = this.ds_brchArea_list.getColumn(i, "cdNm");
+		objDiv.brchList = this.ds_brch_list;
+		objDiv.brchCopyList = this.ds_brchCopy_list;
+		objDiv.set_async("false");
+		objDiv.set_url("ClassMng::flexDiv.xfdl");
+		
+		content.push(objId);
+	}
+	
+	this.Div00.form.resetScroll();
+}
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.ds_brchCopy_list.getRowCount() == 0)
+	{
+		alert("지점을 선택하세요.");
+		return;
+	}
+	
+	for(var i=0; i<this.ds_brchCopy_list.getRowCount(); i++)
+	{
+		var findRow = this.parent.dataset.extractRows("brchCd== '" + this.ds_brchCopy_list.getColumn(i, "brchCd") + "'")
+		findRow = (findRow.length == undefined) ? [] : findRow;
+		if(findRow.length < 1)
+		{
+			var rowIndex = this.parent.dataset.addRow();
+			this.parent.dataset.copyRow(rowIndex, this.ds_brchCopy_list, i);
+		}
+	}
+	
+	this.close();
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_brchArea_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_brch_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchAreaCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_brchCopy_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchAreaCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="flexDiv" width="880" height="150" titletext="New Form" onload="flexDiv_onload">
+    <Layouts>
+      <Layout height="150" mobileorientation="landscape" width="880">
+        <Static id="Static00" taborder="0" text="Static00" left="0" top="0" width="120" height="20"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="Static00:15" right="0" bottom="0">
+          <Layouts>
+            <Layout type="horizontal" flexwrap="wrap" horizontalgap="1" verticalgap="1"/>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+this.flexDiv_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+
+	this.Static00.set_text(this.parent.brchAreaNm);
+	
+	for(var i=0; i<this.parent.brchList.getRowCount(); i++)
+	{
+		if(this.parent.brchList.getColumn(i, "brchAreaCd") == this.parent.brchAreaCd)
+		{
+			var objBtn = new Div(); 
+			objBtn.init("objBtn" + i, 0, 0, 100, 30, 0, 0);
+			this.Div00.addChild("objBtn" + i, objBtn);
+			objBtn.show();
+			objBtn.set_border("1px solid");
+			objBtn.set_color("#000000");
+			objBtn.set_text(this.parent.brchList.getColumn(i, "brchNm"));
+			objBtn.flag = 0;
+			objBtn.index = i;
+			objBtn.brchCd = this.parent.brchList.getColumn(i, "brchCd");
+			objBtn.insertEventHandler("onclick", 0, this.fn_brch_click, this);
+		}	
+	}
+};
+
+this.fn_brch_click = function(obj)
+{
+	if(obj.flag == 0)
+	{
+		obj.flag = 1;
+		obj.set_background("bisque");
+		var rowIndex = this.parent.brchCopyList.addRow();
+		this.parent.brchCopyList.copyRow(rowIndex, this.parent.brchList, obj.index);
+		this.parent.brchCopyList.setColumn(rowIndex, "useYn", "Y");
+	}
+	else
+	{
+		obj.flag = 0;
+		obj.set_background("#ffffff");
+		for(var i=0; i<this.parent.brchCopyList.getRowCount(); i++)
+		{
+			if(this.parent.brchCopyList.getColumn(i, "brchCd") == obj.brchCd)
+			{
+				this.parent.brchCopyList.deleteRow(i);
+			}
+		}
+	}
+}
+
+]]></Script>
+  </Form>
+</FDL>

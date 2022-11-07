@@ -164,7 +164,7 @@
                                         <Column size="48"/>
                                         <Column size="80"/>
                                         <Column size="80"/>
-                                        <Column size="80"/>
+                                        <Column size="100"/>
                                         <Column size="80"/>
                                         <Column size="106"/>
                                         <Column size="80"/>
@@ -201,7 +201,7 @@
                                         <Cell col="7" text="bind:ppayAmt" displaytype="maskeditcontrol" edittype="mask" maskeditlimitbymask="both" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
                                         <Cell col="8" text="bind:ppayAmtExpl" edittype="text" displaytype="editcontrol" editmaxlength="20"/>
                                         <Cell col="9" displaytype="combocontrol" edittype="combo" combodataset="ds_whdtxCl_list" combocodecol="cd" combodatacol="cdNm" combodisplaynulltext="선택" text="bind:whdtxClCd" combodisplaynulltype="nulltext"/>
-                                        <Cell col="10" displaytype="combocontrol" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'readonly' : 'combo'" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:incmClCd"/>
+                                        <Cell col="10" displaytype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'nomal' : 'combocontrol'" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'none' : 'combo'" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd" combodisplaynulltext="선택" combodisplaynulltype="nulltext"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -557,6 +557,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			if(this.updateCode == "01")
 			{
 				alert("승인되었습니다.");
+				this.close();
 			}
 			else if(this.updateCode == "02")
 			{
@@ -1248,8 +1249,9 @@ this.Div00_Div00_Div00_Div05_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexa
 		{
 			this.ds_teacher_list.setColumn(e.row, "incmClCd", "60");
 		}
+		
+		obj.moveToNextCell();
 	}
-	
 };
 
 this.Div00_Div00_Div00_Div05_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
