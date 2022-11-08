@@ -59,7 +59,7 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.param = null;
 this.domain = "";
-this.editorInit = false;
+this.editorArr = [];
 
 /**************************************************************************
 * FORM EVENT 영역(onload)
@@ -71,11 +71,20 @@ this.RefundPolicyMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	var objOwnerFrame = this.getOwnerFrame();
 	
 	this.domain = this.application.getVariable("domain");
-	this.editorInit = false;
+	this.editorArr = [];
 	
-	this.Div00.form.Div01.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html");
-	this.Div00.form.Div01.form.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	var editorObj = { cntnObj : this.Div00.form.Div01.form.WebBrowser00 }
 	
+	this.editorArr.push(editorObj);
+	if(this.editorArr[0].cntnObj._url == 'about:blank')
+	{
+		this.Div00.form.Div01.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html");
+		this.Div00.form.Div01.form.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	}
+	else
+	{
+		this.editorArr[0].cntnObj.reload();
+	}
 	this.fn_detail();
 	
 };
