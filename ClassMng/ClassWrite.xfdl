@@ -1157,7 +1157,7 @@ this.init = function()
 		_this : this,
 		atchFileId : atchFileId,
 		fileExtn : "jpg,jpeg,gif,png",
-		fileMaxCnt : 10,
+		fileMaxCnt : 1,
 		fileMaxSize : 10,
 		fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 		callbackFunc : this.fn_save
@@ -2167,7 +2167,7 @@ this.fn_content_set = function()
 			_this : this,
 			atchFileId : atchFileId,
 			fileExtn : "jpg,jpeg,gif,png",
-			fileMaxCnt : 10,
+			fileMaxCnt : 1,
 			fileMaxSize : 10,
 			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 			callbackFunc : this.fn_save
@@ -2390,7 +2390,7 @@ this.fn_content_add = function()
 			_this : this,
 			atchFileId : atchFileId,
 			fileExtn : "jpg,jpeg,gif,png",
-			fileMaxCnt : 10,
+			fileMaxCnt : 1,
 			fileMaxSize : 10,
 			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 			callbackFunc : this.fn_save
@@ -2735,7 +2735,7 @@ this.fn_update_mdfreq = function(prcsStatCd)
 	this.ds_mdfreqUpdate_list.clearData();
 	for(var i=0; i<this.ds_mdfreq_list.getRowCount(); i++)
 	{
-		if(this.ds_mdfreq_list.checkarray[i] == 1)
+		if(this.ds_mdfreq_list.checkarray[i] == 1 && this.ds_mdfreq_list.getColumn(i, "prcsStatCd") == "01")
 		{
 			flag = true;
 			var rowIndex = this.ds_mdfreqUpdate_list.addRow();

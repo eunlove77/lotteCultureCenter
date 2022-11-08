@@ -172,8 +172,8 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Button id="Button00" taborder="2" text="취소" left="43%" top="Div01:10" width="80" height="30" cssclass="btn_WF_High" onclick="Div00_Button00_onclick"/>
-              <Button id="Button01" taborder="3" text="선택" left="Button00:10" top="Div01:10" width="80" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button01_onclick"/>
+              <Button id="Button00" taborder="2" text="취소" left="43%" top="Div01:10" width="80" height="30" cssclass="btn_WF_High" onclick="Div00_Button00_onclick" visible="false"/>
+              <Button id="Button01" taborder="3" text="선택" left="Button00:10" top="Div01:10" width="80" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button01_onclick" visible="false"/>
             </Layout>
           </Layouts>
         </Div>
@@ -342,6 +342,12 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.gfn_nvl(this.parent.type) != "") 
 	{
 		this.type = this.parent.type;
+	}
+	
+	if(!(this.gfn_nvl(new String(this.parent.show)) != "" && this.parent.show == false)) 
+	{
+		this.Div00.form.Button00.set_visible("true");
+		this.Div00.form.Button01.set_visible("true");
 	}
 	
 	this.Div00.form.Div01.form.Grid00.type = this.type;

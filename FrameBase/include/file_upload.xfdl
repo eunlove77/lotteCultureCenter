@@ -9,10 +9,10 @@
             <Format id="default">
               <Columns>
                 <Column size="48"/>
-                <Column size="314"/>
-                <Column size="64"/>
+                <Column size="261"/>
+                <Column size="62"/>
                 <Column size="100"/>
-                <Column size="60"/>
+                <Column size="68"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -26,7 +26,7 @@
                 <Cell col="4" cssclass="btn_WF_High"/>
               </Band>
               <Band id="body">
-                <Cell edittype="checkbox" text="expr:dataset.checkarray[currow]" displaytype="expr:atchFileId == '' ? 'none' : 'checkboxcontrol'"/>
+                <Cell edittype="checkbox" text="expr:dataset.checkarray[currow]" displaytype="expr:fileSeq === '' ? 'none' : 'checkboxcontrol'"/>
                 <Cell col="1" text="bind:realFileNm"/>
                 <Cell col="2" text="bind:fileExtn"/>
                 <Cell col="3" text="bind:fileSize" textAlign="right"/>
@@ -125,6 +125,7 @@ this.fn_init = function(atchFileObj)
 		{
 			this.fileExtn = atchFileObj.fileExtn
 		}
+		
 		if(!this.gfn_isNull(atchFileObj.fileMaxCnt) && atchFileObj.fileMaxCnt != "")
 		{
 			this.fileMaxCnt = atchFileObj.fileMaxCnt
@@ -383,7 +384,7 @@ this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	for(var i=0; i<list.getRowCount(); i++)
 	{
-		if(list.checkarray[i] == 1)
+		if(list.checkarray[i] == 1 && this.gfn_nvl(this.ds_atchFileList.getColumn(i, "fileSeq")) !== "")
 		{
 			flag = true;
 			var rowIndex = this.ds_atchFileDownList.addRow();
