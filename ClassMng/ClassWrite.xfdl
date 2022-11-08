@@ -202,7 +202,7 @@
                           <Div id="Div01_08" taborder="16" text="Div01" left="Div00_08:0" top="Div01_07:-1" height="33" right="0" cssclass="div_WF_CompWrap">
                             <Layouts>
                               <Layout>
-                                <Static id="Static00" taborder="0" text="강의실" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                                <Static id="Static00" taborder="0" text="강의실 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
                                 <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="130" height="20" innerdataset="ds_classRoom_list" codecolumn="cd" datacolumn="cdNm"/>
                               </Layout>
                             </Layouts>
@@ -312,8 +312,9 @@
                                     <Format id="default">
                                       <Columns>
                                         <Column size="48"/>
-                                        <Column size="901"/>
-                                        <Column size="131"/>
+                                        <Column size="639"/>
+                                        <Column size="117"/>
+                                        <Column size="280"/>
                                         <Column size="53"/>
                                       </Columns>
                                       <Rows>
@@ -323,14 +324,16 @@
                                       <Band id="head">
                                         <Cell text="번호"/>
                                         <Cell col="1" text="지점명"/>
-                                        <Cell col="2" text="사용여부"/>
-                                        <Cell col="3"/>
+                                        <Cell col="2" text="강좌코드"/>
+                                        <Cell col="3" text="사용여부"/>
+                                        <Cell col="4"/>
                                       </Band>
                                       <Band id="body">
                                         <Cell text="expr:currow+1"/>
                                         <Cell col="1" text="expr:&quot;[&quot; + brchCd + &quot;]&quot; + &quot; &quot; + brchNm"/>
-                                        <Cell col="2" text="bind:useYn" edittype="combo" displaytype="combocontrol" combodataset="ds_gradeDisc" combocodecol="cd" combodatacol="cdNm"/>
-                                        <Cell col="3" text="삭제" displaytype="buttoncontrol" edittype="button"/>
+                                        <Cell col="2" text="bind:lectCd"/>
+                                        <Cell col="3" text="bind:useYn" edittype="combo" displaytype="combocontrol" combodataset="ds_gradeDisc" combocodecol="cd" combodatacol="cdNm"/>
+                                        <Cell col="4" text="expr:lectCd != null ? '' : '삭제'" displaytype="expr:lectCd != null ? '' : 'buttoncontrol'" edittype="expr:lectCd != null ? '' : 'button'"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -2583,6 +2586,13 @@ this.fn_save_validation = function()
 		}
 	}
 	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectRmCd")))) == "")
+	{
+		alert("강의실을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.Div01_08.form.Combo00.setFocus();
+		return;
+	}
+	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStMiCd")))) != ""
 		|| nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndMiCd")))) != "")
 	{
@@ -3451,9 +3461,11 @@ this.ds_teacher_list_onrowsetchanged = function(obj:nexacro.NormalDataset,e:nexa
 
 this.Div00_Div00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 3)
+	if(e.col == 4)
 	{
-		this.ds_pblpmprcust_list.deleteRow(e.row);
+		if(this.gfn_nvl(this.ds_pblpmprcust_list.getColumn(e.row, "lectCd")) === "") {
+			this.ds_pblpmprcust_list.deleteRow(e.row);
+		}
 	}
 };
 
@@ -3742,6 +3754,9 @@ this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="brchAreaCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="useYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>

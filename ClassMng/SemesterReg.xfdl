@@ -181,13 +181,13 @@ this.prevSmsterPrdEndDt = "";
 this.nextSmsterPrdStDt = "";
 
 this.lectNbcntArr = [
-						this.Div00.form.Div01.form.Div00_04.form.Div03_00_00_00.form.MaskEdit00
-						, this.Div00.form.Div01.form.Div00_04.form.Div00.form.MaskEdit00
+						this.Div00.form.Div01.form.Div00_04.form.Div00.form.MaskEdit00
 						, this.Div00.form.Div01.form.Div00_04.form.Div01.form.MaskEdit00
 						, this.Div00.form.Div01.form.Div00_04.form.Div02.form.MaskEdit00
 						, this.Div00.form.Div01.form.Div00_04.form.Div03.form.MaskEdit00
 						, this.Div00.form.Div01.form.Div00_04.form.Div03_00.form.MaskEdit00
 						, this.Div00.form.Div01.form.Div00_04.form.Div03_00_00.form.MaskEdit00	
+						, this.Div00.form.Div01.form.Div00_04.form.Div03_00_00_00.form.MaskEdit00
 				   ]
 
 this.lectSmsterArr = ["봄학기", "여름학기", "가을학기", "겨울학기"]; 
@@ -201,8 +201,6 @@ this.SemesterReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	this.brchCd = nexacro.getPrivateProfile("brchCd");
 	this.brchNm = nexacro.getPrivateProfile("brchNm");
-	
-	this.Div00.form.Div01.form.Static00.set_text("[" + this.brchCd + "] " + this.brchNm  + " 학기정보");
 	
 	this.init();
 	
@@ -279,6 +277,8 @@ this.fn_sester_dtl = function()
 {
 	if(this.ds_semester_dtl.getColumn(0, "brchCd") != undefined)
 	{
+		this.Div00.form.Div01.form.Static00.set_text(this.Div00.form.Div00.form.Div00_00.form.Combo00.text + " 학기정보");
+	
 		this.Div00.form.Div01.set_visible(true);
 		
 		this.Div00.form.Div01.form.Div00_00.form.Static01.set_text(this.ds_semester_dtl.getColumn(0, "yy") + "년");
@@ -412,6 +412,8 @@ this.fn_semester_set = function()
 this.fn_create = function()
 {
 	this.init();
+	
+	this.Div00.form.Div01.form.Static00.set_text(this.Div00.form.Div00.form.Div00_00.form.Combo00.text + " 학기정보");
 	this.flag = false;
 	
 	this.ds_semester_dtl.setColumn(0, "brchCd", this.brchCd);
@@ -600,7 +602,6 @@ this.Div00_Div00_Div00_01_Button00_onclick = function(obj:nexacro.Button,e:nexac
 this.Div00_Div00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.brchCd = obj.value;
-	this.Div00.form.Div01.form.Static00.set_text("[" + obj.value + "] " + obj.text + " 학기정보");
 	this.fn_sesterInfo();
 	this.fn_year_add();
 	this.fn_semester_set();

@@ -160,7 +160,7 @@
           <Column id="trfrLectNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_classUpdate_list" updatecontrol="false">
+      <Dataset id="ds_classInsert_list" updatecontrol="false">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
@@ -258,6 +258,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			var text = this.yy + "년 " + this.lectSmsterArr[this.lectSmsterCd-1];
 			this.Div00.form.Div00.form.Div00.form.Div01.form.Static01.set_text(text);
+		break;
+		
+		case "insertClassTransfer":
+			alert("이관등록 되었습니다.");
 		break;
 	  }
   }
@@ -602,32 +606,37 @@ this.Div02_Div00_Div00_Div00_00_00_00_Button00_onclick = function(obj:nexacro.Bu
 
 this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	var cnt = 0;
 	var flag = false;
-	this.ds_classUpdate_list.clearData();
+	this.ds_classInsert_list.clearData();
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
 	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.gfn_nvl(this.ds_class_list.getColumn(i, "trfrLectCd ")) == "")
+		console.log(this.gfn_nvl(this.ds_class_list.getColumn(i, "trfrLectCd")))
+		if(this.ds_class_list.checkarray[i] == 1 && this.gfn_nvl(this.ds_class_list.getColumn(i, "trfrLectCd")) == "")
 		{
+			cnt++;
 			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+			var rowIndex = this.ds_classInsert_list.addRow();
+			this.ds_classInsert_list.copyRow(rowIndex, this.ds_class_list, i);
 		}
 	}
 	
 	if(flag)
 	{
-// 		var tranObj = {
-// 			strSvcId : "updateClassMdfreq",
-// 			strSvcUrl : this.application.Admin_svc + "::class/updateClassMdfreq.do",
-// 			inData : "mdfreqUpdateList=ds_mdfreqUpdate_list",
-// 			outData : "ds_mdfreq_list=mdfreqList",
-// 			strArg : "",
-// 			callBackFnc : "fnCallback",
-// 			isAsync : true,
-// 			isPopup : true
-// 		}
-// 
-// 		this.gfn_transaction(tranObj);
+		if(confirm(cnt + "개의 강좌를 이관등록 하시겠습니까?")) {
+			var tranObj = {
+				strSvcId : "insertClassTransfer",
+				strSvcUrl : this.application.Admin_svc + "::class/insertClassTransfer.do",
+				inData : "classList=ds_classInsert_list search=ds_search",
+				outData : "ds_class_list=classList",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				isPopup : true
+			}
+
+			this.gfn_transaction(tranObj);
+		}
 	}
 	else
 	{
