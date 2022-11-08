@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CatalogMng" width="1280" height="1000" titletext="New Form" onload="CatalogMng_onload">
+    <Layouts>
+      <Layout height="1000" mobileorientation="landscape" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="90" height="360" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="row04" taborder="0" text="Div01" left="10" top="8" height="324" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="323" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="306" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="1" text="Div03" left="55" top="Div00:3" height="55" right="35">
+          <Layouts>
+            <Layout>
+              <Button id="btnSave" taborder="0" text="등록" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" left="553" onclick="Div01_btnSave_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="txtMenuNm" taborder="2" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="catalogDs">
+        <ColumnInfo>
+          <Column id="catalogSeqno" type="STRING" size="256"/>
+          <Column id="catalogCont" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="catalogSeqno"/>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+* include 영역 
+**************************************************************************/
+include "Base::lib_base.xjs";
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+* FORM 변수 선언 영역
+**************************************************************************/
+this.application = null;
+this.domain = "";
+this.param = null;
+this.editorArr = [];
+
+/**************************************************************************
+* FORM EVENT 영역(onload)
+**************************************************************************/
+this.CatalogMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	var objOwnerFrame = this.getOwnerFrame();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	this.domain = this.application.getVariable("domain");
+	
+	this.param = this.parent.param;
+	this.editorArr = [];
+	
+	var editorObj = { cntnObj : this.Div00.form.row04.form.WebBrowser00 }
+	
+	this.editorArr.push(editorObj);
+	
+	if(this.editorArr[0].cntnObj._url == 'about:blank')
+	{	
+		this.editorArr[0].cntnObj.set_url(this.domain + "/namo/index_custom_01.html")
+		this.editorArr[0].cntnObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+	}
+	else
+	{
+		this.editorArr[0].cntnObj.reload();
+	}
+	
+	this.fn_list();
+	
+};
+
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var cntnObj = this.fn_get_edit_body(this.Div00.form.row04.form.WebBrowser00);
+	
+	var len = cntnObj.len;
+	
+	this.catalogDs.setColumn(0, "catalogCont", cntnObj.cntn);
+	
+	this.fn_checkValidation(len);
+};
+
+//유효성 검사
+this.fn_checkValidation = function(len)
+{
+	if(len == 0)
+	{
+		this.alert("내용을 입력하세요");
+		this.Div00.form.row04.form.WebBrowser00.setFocus();
+		return;
+	}
+	else
+	{								
+		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		{
+			this.fn_save();
+		}
+	}
+}
+
+this.fn_get_edit_body = function(wbObj){
+	
+	var _win = wbObj.getProperty("window");
+	
+	var len = _win.callMethod("getTextValueLen");
+	var bodyValue = _win.callMethod("getData");
+	var valueObj = { 
+		len : len , 
+		cntn : bodyValue
+		}
+	
+	trace("editor body length : " + len);
+	console.log("editor body length : " + len);
+	
+	if(_win)
+    {
+        _win.destroy();
+        _win = null;
+    }    
+	
+	return valueObj;
+}
+
+this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+{	
+	var content = "";	
+	
+	content = this.catalogDs.getColumn(0, "catalogCont");
+	
+	var _win = obj.getProperty("window");	 
+	
+	_win.callMethod("setData", content);
+	
+	if(_win)
+	{
+		_win.destroy();
+		_win = null;
+	}  
+};
+
+/**************************************************************************
+* 카탈로그 조회
+**************************************************************************/
+this.fn_list = function()
+{	
+	var tranObj = {
+		strSvcId : "catalogList",
+		strSvcUrl : this.application.Admin_svc + "::/contents/contentsList.do",
+		inData : "detail=catalogDs", // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+		outData : "catalogDs=catalogList", // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+		strArg : "clCd=CATALOG",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	
+	this.gfn_transaction(tranObj);
+}
+
+/**************************************************************************
+* 트랜잭션 callback
+**************************************************************************/
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	else
+	{
+		switch(svcID)
+		{
+		case "list":
+			
+			break;
+			
+		case "save":
+			this.alert("저장되었습니다.");
+			this.reload();
+			break;
+		}
+	}
+};
+
+/**************************************************************************
+* 저장 영역
+**************************************************************************/
+this.fn_save = function()
+{																		
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.application.Admin_svc + "::/contents/insertContents.do",
+		inData : "data=catalogDs",
+		outData : "",
+		strArg : "clCd=CATALOG",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+	this.gfn_transaction(tranObj);
+}]]></Script>
+    <Bind>
+      <BindItem id="catalogCont" compid="Div00.form.row04.form.WebBrowser00" propid="accessibilityaction" datasetid="ds_detail" columnid="catalogCont"/>
+    </Bind>
+  </Form>
+</FDL>
