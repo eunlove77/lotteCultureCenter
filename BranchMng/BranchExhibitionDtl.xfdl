@@ -124,16 +124,59 @@
           </Layouts>
         </Div>
         <Static id="Static02" taborder="13" text="강좌정보" left="30" top="853" width="130" cssclass="sta_WF_TitGray" height="17"/>
-        <Div id="row09_00" taborder="14" text="Div01" left="10" top="882" height="138" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+        <Div id="row09_00" taborder="14" text="Div01" left="10" top="882" height="238" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="지점별 강좌 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="137" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Button id="btnSearch" taborder="1" text="강좌 검색" top="7" height="30" width="82" cssclass="btn_WF_Low" left="Static00:8"/>
+              <Static id="Static00" taborder="0" text="지점별 강좌 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="237" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Button id="btnSearch" taborder="1" text="강좌 검색" top="7" height="30" width="82" cssclass="btn_WF_Low" left="Static00:8" onclick="row09_00_btnSearch_onclick"/>
+              <Grid id="Grid00" taborder="2" left="116" top="40" right="6" bottom="9" binddataset="ds_appl_lect" oncellclick="row09_00_Grid00_oncellclick">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="66"/>
+                      <Column size="142"/>
+                      <Column size="142"/>
+                      <Column size="142"/>
+                      <Column size="269"/>
+                      <Column size="91"/>
+                      <Column size="133"/>
+                      <Column size="102"/>
+                      <Column size="55"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호"/>
+                      <Cell col="1" text="지점명"/>
+                      <Cell col="2" text="강좌유형"/>
+                      <Cell col="3" text="강좌코드"/>
+                      <Cell col="4" text="강좌명"/>
+                      <Cell col="5" text="강사명"/>
+                      <Cell col="6" text="강좌료"/>
+                      <Cell col="7" text="학기"/>
+                      <Cell col="8"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="expr:currow+1"/>
+                      <Cell col="1" text="expr:'['+ brchCd + ']'  + ' ' +brchNm"/>
+                      <Cell col="2" text="bind:lectTpNm"/>
+                      <Cell col="3" text="bind:lectCd"/>
+                      <Cell col="4" text="bind:lectNm"/>
+                      <Cell col="5" text="-"/>
+                      <Cell col="6" text="bind:lectAmt"/>
+                      <Cell col="7" text="bind:lectSmsterNm"/>
+                      <Cell col="8" text="삭제" displaytype="buttoncontrol" edittype="button"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
             </Layout>
           </Layouts>
         </Div>
         <Static id="Static01_00" taborder="15" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="853" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="25" width="200"/>
-        <Div id="Div01" taborder="16" text="Div03" left="45" top="1028" height="55" right="45" minwidth="400" maxwidth="">
+        <Div id="Div01" taborder="16" text="Div03" left="45" top="row09_00:38" height="55" right="45" minwidth="400" maxwidth="">
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
@@ -177,12 +220,39 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_appl_lect">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="rplcOptnNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::lib_base.xjs";
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -190,6 +260,7 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.param = null;
 this.atchFileUploadArr = [];
+this.popCnt = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -268,6 +339,7 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 		this.atchFileUploadArr[0].fn_init(atchFileObj);
 		this.atchFileUploadArr[1].fn_init(atchFileObj2);
 		this.atchFileUploadArr[2].fn_init(atchFileObj3);
+		
 	}
 };
 
@@ -299,7 +371,7 @@ this.fn_save = function (_this)
 		var tranObj = {
 			strSvcId : "save",
 			strSvcUrl : _this.application.Admin_svc + "::/branch/insertBranchExb.do",
-			inData : "data=ds_detail",
+			inData : "infoData=ds_detail applLectData=ds_appl_lect",
 			outData : "",
 			strArg : "",
 			callBackFnc : "fnCallback",
@@ -368,6 +440,11 @@ this.fn_checkValidation = function(){
 		this.alert("썸네일(Mobile)을 등록해주세요");
 		return;
 	}
+	else if(this.ds_appl_lect.rowcount < 1)
+	{
+		this.alert("강좌를 선택해주세요");
+		return;
+	}
 	else
 	{								
 		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
@@ -385,7 +462,7 @@ this.fn_detail = function ()
 		strSvcId : "detail",
 		strSvcUrl : this.application.Admin_svc + "::/branch/branchExbDtl.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=output2",
+		outData : "ds_detail=infoMap ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
@@ -460,7 +537,27 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	break;
   }
 };
-]]></Script>
+
+this.row09_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var arrArguments = {
+		type : 1,
+		brchCd : '',
+		lectTpCd : '01',
+		dataset : this.ds_appl_lect
+	}
+	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
+};
+
+this.row09_00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objGridDs = obj.getBindDataset();
+	
+	if(e.cell == 8){		
+		this.ds_appl_lect.deleteRow(e.row);	
+	}
+};]]></Script>
     <Bind>
       <BindItem id="brchCd" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
       <BindItem id="brchAreaCd" compid="row03.form.spotDiv.form.ComboSpotArea" propid="value" datasetid="ds_detail" columnid="brchAreaCd"/>
