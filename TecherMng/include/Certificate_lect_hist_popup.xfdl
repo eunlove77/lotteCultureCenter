@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Certificate_lect_hist_popup" width="620" height="280" titletext="New Form" onload="Certificate_lect_hist_popup_onload">
+  <Form id="Certificate_lect_hist_popup" width="620" height="280" onload="Certificate_lect_hist_popup_onload">
     <Layouts>
       <Layout height="280" width="620">
         <Static id="txtMenuNm" taborder="0" text="원천징수영수증 발행" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -60,14 +60,15 @@
  **************************************************************************/
 this.Certificate_lect_hist_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
-
+	this.application = nexacro.getApplication();
+	
 	this.ds_certi_info.setColumn(0, 'tcCdNo', this.parent.tcCdNo);
 	this.ds_certi_info.setColumn(0, 'tcNm', this.parent.tcNm);
 	
 	var today = new Date();
 	this.ds_certi_info.setColumn(0, 'year', today.getYear());
 	
-	this.set_dataset_year(this.ds_year_list, 2016);
+	this.com_set_dataset_year(this.ds_year_list, 2016);
 };
 
 this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -77,9 +78,17 @@ this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 this.btnPrint_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	var url = "techerMng/certificate/lect_hist.do";
+	window.open(url, 'popup', 'width=100,');
 	
 };
-]]></Script>
+this.fnCallback = function(svcId, errorCode, errorMsg){
+	if(errorCode != 0){
+		// 에러 시 화면 처리 내역
+		this.alert(errorCode+"\n"+errorMsg);
+		return false;
+	}
+}]]></Script>
     <Objects>
       <Dataset id="ds_certi_info">
         <ColumnInfo>
