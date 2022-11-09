@@ -172,7 +172,7 @@
         <Button id="copyBtn" taborder="7" text="쿠폰 복사" top="191" height="30" width="75" cssclass="btn_WF_Medium" right="insBtn:10" onclick="copyBtn_onclick"/>
         <Button id="closeBtn" taborder="6" text="발급 종료" top="191" height="30" width="83" wordWrap="char" cssclass="btn_WF_High" right="copyBtn:10"/>
         <Button id="excelDownBtn" taborder="5" text="엑셀 다운로드" top="191" height="30" width="98" cssclass="btn_WF_Weak" right="closeBtn:10" onclick="excelDownBtn_onclick"/>
-        <Grid id="Grid_Excel" taborder="9" left="10" top="730" binddataset="ds_coupon_list" autofittype="col" right="10" height="100" visible="false">
+        <Grid id="Grid_Excel" taborder="9" left="10" top="730" binddataset="ds_coupon_excel" autofittype="col" right="10" height="100" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -388,6 +388,7 @@ this.excelDownBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 		{
 			//체크행 엑셀데이터로 복사
 			excelList.addRow();
+			excelList.copyRow(chkCnt, list, i);
 			chkCnt++;
 		}
 	}

@@ -225,7 +225,7 @@
         <Div id="Div02" taborder="3" text="Div02" left="10" top="Div01:10" right="10" minwidth="680" maxwidth="" bottom="10">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="0" oncellclick="Div02_Grid00_oncellclick" useselcolor="true">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="0" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -277,8 +277,8 @@
                       <Cell col="9" text="bind:itrstBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                       <Cell col="10" text="bind:smsRcvAgrYn"/>
                       <Cell col="11" text="bind:joinCorsCd"/>
-                      <Cell col="12" text="bind:joinDtm"/>
-                      <Cell col="13" text="bind:lastLoginDtm"/>
+                      <Cell col="12" text="bind:joinDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                      <Cell col="13" text="bind:lastLoginDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date" calendardisplaynulltype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -390,7 +390,7 @@
           <Column id="email" type="STRING" size="256"/>
           <Column id="emailAddrCd" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
-          <Column id="mvgBlstrVal" type="STRING" size="256"/>
+          <Column id="mvgBlstrCd" type="STRING" size="256"/>
           <Column id="itrstBrchCd" type="STRING" size="256"/>
           <Column id="smsRcvAgrYn" type="STRING" size="256"/>
           <Column id="joinCorsCd" type="STRING" size="256"/>
@@ -407,7 +407,7 @@
           <Column id="email" type="STRING" size="256"/>
           <Column id="emailAddrCd" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
-          <Column id="mvgBlstrVal" type="STRING" size="256"/>
+          <Column id="mvgBlstrCd" type="STRING" size="256"/>
           <Column id="itrstBrchCd" type="STRING" size="256"/>
           <Column id="smsRcvAgrYn" type="STRING" size="256"/>
           <Column id="joinCorsCd" type="STRING" size="256"/>
@@ -525,6 +525,7 @@ this.Div02_Div00_btnDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 		{
 			//체크행 엑셀데이터로 복사
 			excelList.addRow();
+			excelList.copyRow(chkCnt, list, i);
 			chkCnt++;
 		}
 	}
