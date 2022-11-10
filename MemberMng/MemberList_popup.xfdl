@@ -226,7 +226,7 @@
         <Div id="Div02" taborder="4" text="Div02" left="10" top="235" right="10" minwidth="680" maxwidth="" bottom="50">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="10" oncellclick="Div02_Grid00_oncellclick" useselcolor="true">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="10" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -250,7 +250,7 @@
                       <Row size="24"/>
                     </Rows>
                     <Band id="head">
-                      <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
+                      <Cell edittype="expr:comp.type == 1 ? 'checkboxcontrol' : 'none' " displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'none' "/>
                       <Cell col="1" text="번호"/>
                       <Cell col="2" text="회원번호"/>
                       <Cell col="3" text="회원명"/>
@@ -266,7 +266,7 @@
                       <Cell col="13" text="최종접속일"/>
                     </Band>
                     <Band id="body">
-                      <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemcontrol' " edittype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemitem' " radioitemcodevalue="1" expr="dataset.checkarray[currow]"/>
                       <Cell col="1" expr="dataset.getRowCount() - currow"/>
                       <Cell col="2" text="bind:mbrNo" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666"/>
                       <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)"/>
@@ -278,8 +278,8 @@
                       <Cell col="9" text="bind:itrstBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                       <Cell col="10" text="bind:smsRcvAgrYn"/>
                       <Cell col="11" text="bind:joinCorsCd"/>
-                      <Cell col="12" text="bind:joinDtm"/>
-                      <Cell col="13" text="bind:lastLoginDtm"/>
+                      <Cell col="12" text="bind:joinDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none"/>
+                      <Cell col="13" text="bind:lastLoginDtm" displaytype="date" calendardisplaynulltype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -301,7 +301,8 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.baseSvrUrl = "";
 this._this;
-this.maxCnt;
+this.type = 1;
+this.maxCnt = 10;
 this.callBackFnc;
 
 /**************************************************************************
@@ -317,6 +318,10 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.baseSvrUrl = this.application.Admin_svc + "::member/";
 	this._this = this.parent._this;
 	
+	if(this.parent.type)
+	{
+		this.type = this.parent.type;
+	}
 	if(this.parent.maxCnt)
 	{
 		this.maxCnt = this.parent.maxCnt;
@@ -326,9 +331,19 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 		this.callBackFnc = this.parent.callBackFnc;
 	}
 	
-	this.fn_list(1);
+	if(this.type == 1)
+	{
+		this.gfnSetCheckBoxNoDataset(this.ds_member_list, this.Div02.form.Grid00, 0);
+	}
+	else
+	{
+		this.gfnSetRadioNoDataset(this.ds_member_list, this.Div02.form.Grid00, 0);
+	}
 	
-	this.gfnSetCheckBoxNoDataset(this.ds_member_list, this.Div02.form.Grid00, 0); 
+	this.Div02.form.Grid00.type = this.type;
+	this.Div02.form.Grid00.redrawExprCell(); 
+	
+	this.fn_list(1);
 };
 
 /**************************************************************************
@@ -408,7 +423,8 @@ this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  		this.close();
 	}
 	
-};]]></Script>
+};
+]]></Script>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.ComboSpotType" propid="value" datasetid="ds_search" columnid="brchTypeCd"/>
       <BindItem id="item1" compid="Div01.form.Div00.form.ComboSpot" propid="value" datasetid="ds_search" columnid="brchCd"/>
