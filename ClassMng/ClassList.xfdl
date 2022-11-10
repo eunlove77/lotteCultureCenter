@@ -18,7 +18,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="100" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div02_Div00_Div00_Div00_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" height="20" width="130" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div02_Div00_Div00_Div00_Combo00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -307,12 +307,12 @@
                             <Cell col="31" text="수정일시"/>
                           </Band>
                           <Band id="body">
-                            <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                            <Cell displaytype="expr:pblPmprcustBrchCd == '' ? 'checkboxcontrol' : 'none'" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                             <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
-                            <Cell col="2" text="bind:brchNm"/>
+                            <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchNm : pblPmprcustBrchNm"/>
                             <Cell col="3" text="bind:lectTpNm"/>
-                            <Cell col="4" text="bind:lectCd"/>
-                            <Cell col="5" text="bind:lectNm" edittype="text" editmaxlength="100" displaytype="editcontrol"/>
+                            <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd"/>
+                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="100" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
                             <Cell col="6" text="bind:tcNm"/>
                             <Cell col="7" text="bind:gsCapaCnt"/>
                             <Cell col="8"/>
@@ -324,12 +324,12 @@
                             <Cell col="14" text="bind:lectEnd"/>
                             <Cell col="15" text="bind:lectStatNm"/>
                             <Cell col="16" text="bind:apvlStatNm"/>
-                            <Cell col="17" text="bind:dsplyStatCd" edittype="combo" displaytype="combocontrol" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="17" text="expr:pblPmprcustBrchCd == '' ?  dsplyStatCd : dsplyStatNm" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="18" text="bind:yy"/>
                             <Cell col="19" text="bind:lectSmsterNm"/>
                             <Cell col="20" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
                             <Cell col="21" text="bind:lectClNm"/>
-                            <Cell col="22" text="bind:lectRmCd" edittype="combo" displaytype="combocontrol" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="22" text="expr:pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="23" text="expr:ppayStdCd == '1' ? '정률' : '정액'"/>
                             <Cell col="24" text="bind:ppayAmt"/>
                             <Cell col="25" text="bind:optnTypNm"/>
@@ -519,6 +519,9 @@
           <Column id="mdfreqCnt" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
           <Column id="schdCnt" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -1488,7 +1491,7 @@ this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
 	{
-		if(this.ds_class_list.checkarray[i] == 1)
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
 		{
 			flag = true;
 			var rowIndex = this.ds_classUpdate_list.addRow();
@@ -1513,7 +1516,7 @@ this.Div02_Div01_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
 	{
-		if(this.ds_class_list.checkarray[i] == 1)
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
 		{
 			flag = true;
 			var rowIndex = this.ds_classUpdate_list.addRow();
@@ -1551,7 +1554,7 @@ this.Div02_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
 	{
-		if(this.ds_class_list.checkarray[i] == 1)
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
 		{
 			if(this.ds_classUpdate_list.getRowCount() == 0) {
 				brchCd = this.ds_class_list.getColumn(i, "brchCd");

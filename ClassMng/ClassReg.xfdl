@@ -18,7 +18,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Combo id="Combo00" taborder="1" text="" left="Static00:6" top="5" width="100" height="20" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="1" text="" left="Static00:6" top="5" width="130" height="20" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -89,7 +89,7 @@
                           <Div id="Div00_04" taborder="8" text="Div00" left="0" top="Div00_03:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                             <Layouts>
                               <Layout>
-                                <Static id="Static00" taborder="0" text="강좌소개" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                                <Static id="Static00" taborder="0" text="한줄소개" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
                                 <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" maxlength="100" right="150" onkeyup="Div00_Div00_Div00_Div00_04_Edit00_onkeyup"/>
                                 <Static id="Static01" taborder="2" text="(0/100)" left="Edit00:6" top="5" width="120" height="20"/>
                               </Layout>
@@ -509,10 +509,10 @@
                                         <Cell col="4" displaytype="checkboxcontrol" edittype="checkbox" checkboxtruevalue="Y" checkboxfalsevalue="N" text="bind:rpsntYn"/>
                                         <Cell col="5" text="bind:tcGrdeCd" displaytype="combocontrol" edittype="combo" combodataset="ds_tcGrade_list" combocodecol="cd" combodatacol="cdNm"/>
                                         <Cell col="6" text="bind:ppayStdCd" displaytype="combocontrol" edittype="combo" combodataset="ds_ppayStd_list" combodatacol="cdNm" combocodecol="cd"/>
-                                        <Cell col="7" text="bind:ppayAmt" displaytype="maskeditcontrol" edittype="mask" maskeditlimitbymask="both" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
+                                        <Cell col="7" text="bind:ppayAmt" displaytype="maskeditcontrol" edittype="mask" maskeditlimitbymask="both" maskeditformat="expr:ppayStdCd == '01' ? '!##0' : '!##,###,###,##0'"/>
                                         <Cell col="8" text="bind:ppayAmtExpl" edittype="text" displaytype="editcontrol" editmaxlength="20"/>
-                                        <Cell col="9" displaytype="combocontrol" edittype="combo" combodataset="ds_whdtxCl_list" combocodecol="cd" combodatacol="cdNm" combodisplaynulltext="선택" text="bind:whdtxClCd" combodisplaynulltype="nulltext"/>
-                                        <Cell col="10" displaytype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'nomal' : 'combocontrol'" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'none' : 'combo'" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd" combodisplaynulltext="선택" combodisplaynulltype="nulltext"/>
+                                        <Cell col="9" displaytype="combocontrol" edittype="combo" combodataset="ds_whdtxCl_list" combocodecol="cd" combodatacol="cdNm" text="bind:whdtxClCd"/>
+                                        <Cell col="10" displaytype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'nomal' : 'combocontrol'" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'none' : 'combo'" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -902,8 +902,6 @@ this.rceptPrdEndDt = "";
 this.extngMbrRceptPrdStDt = "";
 this.extngMbrRceptPrdEndDt = "";
 
-this.taxFlag;
-
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -929,9 +927,6 @@ this.ClassReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 this.init = function()
 {
-	//원천세 구분
-	this.taxFlag = false;
-	
 	//캘린더 세팅
 	this.Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar00.calendaredit.set_readonly(true); 
 	this.Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar01.calendaredit.set_readonly(true); 
@@ -2086,30 +2081,7 @@ this.fn_save_validation = function()
 		{
 			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "ppayAmt")))) == "")
 			{
-				alert("지급율(%)/지급액(원)을 입력하세요.");
-				this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setFocus();
-				return;
-			}
-			
-			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "ppayAmtExpl")))) == "")
-			{
-				alert("지급율근거를 입력하세요.");
-				this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setFocus();
-				return;
-			}
-			
-			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "whdtxClCd")))) == "")
-			{
-				alert("원천세구분을 입력하세요.");
-				this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setFocus();
-				return;
-			}
-			
-			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "incmClCd")))) == "")
-			{
-				alert("소득구분을 입력하세요.");
-				this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setFocus();
-				return;
+				this.ds_teacher_list.setColumn(i, "ppayAmt", 0);
 			}
 		}
 	}
@@ -2175,13 +2147,6 @@ this.fn_save_validation = function()
 // 			return;
 // 		}
 // 	}
-	
-	if(!this.taxFlag)
-	{
-		alert("원천세를 선택하세요.");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Button02.setFocus();
-		return;
-	}
 	
 	if(confirm("강좌등록을 등록하시겠습니까?"))
 	{
@@ -2301,7 +2266,6 @@ this.Div00_Div00_Div00_Div01_05_Calendar01_onchanged = function(obj:nexacro.Cale
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.taxFlag = true;
 	var arrArguments = {
 		title : "강좌등록"
 	}
@@ -2744,17 +2708,24 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var rpsntYn = "N";
-	if(this.ds_teacher_list.getRowCount() == 1)
+	var delChk = [];
+	for(var i=0; i<this.ds_teacher_list.getRowCount(); i++)
 	{
-		rpsntYn = "Y";
+		if(this.ds_teacher_list.checkarray[i] == 1)
+		{
+			delChk.push(i);
+		}
+		
+		this.ds_teacher_list.checkarray[i] = 0;
 	}
-
-	this.ds_teacher_list.setColumn(e.row, "rpsntYn", rpsntYn);
-	this.ds_teacher_list.setColumn(e.row, "tcGrdeCd", "S");
-	this.ds_teacher_list.setColumn(e.row, "ppayStdCd", "01");
-	this.ds_teacher_list.setColumn(e.row, "whdtxClCd", "");
-	this.ds_teacher_list.setColumn(e.row, "incmClCd", "");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
+	
+	this.ds_teacher_list.deleteMultiRows(delChk);
+	
+	if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+	{
+		this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+	}
 };
 
 this.ds_teacher_list_onrowsetchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSRowsetChangeEventInfo)
@@ -2764,12 +2735,22 @@ this.ds_teacher_list_onrowsetchanged = function(obj:nexacro.NormalDataset,e:nexa
 	{
 		rpsntYn = "Y";
 	}
-
+	
+	this.ds_teacher_list.getColumn()
 	this.ds_teacher_list.setColumn(e.row, "rpsntYn", rpsntYn);
 	this.ds_teacher_list.setColumn(e.row, "tcGrdeCd", "S");
 	this.ds_teacher_list.setColumn(e.row, "ppayStdCd", "01");
-	this.ds_teacher_list.setColumn(e.row, "whdtxClCd", "");
-	this.ds_teacher_list.setColumn(e.row, "incmClCd", "");
+	this.ds_teacher_list.setColumn(e.row, "whdtxClCd", "C0");
+	this.ds_teacher_list.setColumn(e.row, "incmClCd", "60");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
+};
+
+this.ds_teacher_list_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if(this.ds_teacher_list.getColumn(e.row, "tcTpCd") != undefined && this.ds_teacher_list.getColumn(e.row, "tcTpCd") != 1)
+	{
+		this.ds_teacher_list.setColumn(e.row, "incmClCd", "");
+	}
 };
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -2795,7 +2776,7 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncloseup = function(obj:nexacro
 {
 	if(e.col == "9")
 	{	
-		if(e.value != "D8")
+		if(e.value != "D8" && this.ds_teacher_list.getColumn(e.row, "tcTpCd") == 1)
 		{
 			this.ds_teacher_list.setColumn(e.row, "incmClCd", "60");
 		}
@@ -2808,7 +2789,8 @@ this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e
 {
 	var arrArguments = {
 		title : "강좌등록",
-		dataset : this.ds_pblpmprcust_list
+		dataset : this.ds_pblpmprcust_list,
+		brchCd : this.brchCd
 	}
 	
 	this.gfn_showModal("classBrchPopupModal", arrArguments, "ClassMng::ClassBrchPopup.xfdl", "", this, 900, 600, true, false, null);
@@ -2837,7 +2819,8 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
 	if(e.row >= 0 ) {
 		this.ds_pblpmprcust_list.moveRow(e.userdata, e.row);
 	}
-};]]></Script>
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_classType_list">
         <ColumnInfo>
@@ -3157,7 +3140,7 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_teacher_list" onrowsetchanged="ds_teacher_list_onrowsetchanged">
+      <Dataset id="ds_teacher_list" onrowsetchanged="ds_teacher_list_onrowsetchanged" onvaluechanged="ds_teacher_list_onvaluechanged">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
