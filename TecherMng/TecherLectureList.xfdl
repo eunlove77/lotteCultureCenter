@@ -28,7 +28,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                    <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                    <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="com_fn_checkboxAll"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -52,7 +52,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                    <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                    <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="com_fn_checkboxAll"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -70,7 +70,7 @@
                     <Div id="Div00" taborder="2" text="Div00" left="109" top="0" width="255" bottom="0">
                       <Layouts>
                         <Layout>
-                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="com_fn_checkboxAll"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -360,11 +360,11 @@ this.reset_search_form = function(){
 this.set_search_info = function(){
 
 	//검색조건 - 휴대전화
-	var hpNo = this.Div04.form.Div02.form.hpNo.value;
+	var hpNo = this.Div03.form.Div02.form.hpNo.value;
 	this.com_set_hpNo_to_stmidlastNo(hpNo);
 	
 	//검색조건 - 체크박스 세팅 - 강사유형
-	var tcTpCdList = this.com_set_checkbox_to_string(this.Div02.form.Div00.form.Div00);
+	var tcTpCdList = this.com_set_checkbox_to_string(this.Div03.form.Div00.form.Div00);
 	this.ds_search.setColumn(0, "tcTpCdList", tcTpCdList);
 	//검색조건 - 체크박스 세팅 - 강좌구분
 	var lectClCdList = this.com_set_checkbox_to_string(this.Div01.form.Div02);
@@ -379,7 +379,7 @@ this.get_techer_lecture_list = function()
 {	
 	var tranObj = {
 		strSvcId : "techer_lecture_list",
-		strSvcUrl : this.application.Admin_svc + "::class/selectClassList.do",
+		strSvcUrl : this.application.Admin_svc + "::techerMng/tclect/list.do",
 		inData : "search=ds_search",
 		outData : "ds_class_list=ouput1",
 		strArg : "",
@@ -391,11 +391,16 @@ this.get_techer_lecture_list = function()
 	this.gfn_transaction(tranObj);
 }
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
+this.fnCallback = function(svcId, errorCode, errorMsg)
 {
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0){	
 		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	if(svcId == "techer_lecture_list"){
+		var rowcount = this.ds_tclect_list.rowcount;
+		this.txtTotal.set_text("("+ rowcount +"개)");
 	}
 };
 
@@ -425,14 +430,10 @@ this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	console.log('test');
-	var oArg = {
-				title : "강사목록팝업",
-				selMultiYn : "N",
-				ownerFrame : this.getOwnerFrame()
-				};
-	
-	this.gfn_openPopup("TecherListPop", oArg, "TecherMng::TecherList_popup.xfdl", this, 1000, 700, true, true, null);
-}]]></Script>
+	this.ds_search.setColumn(0, 'brchCd', '');
+	this.get_techer_lecture_list();
+}
+]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>

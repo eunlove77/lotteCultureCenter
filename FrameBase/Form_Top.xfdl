@@ -21,23 +21,18 @@
  **************************************************************************/
 this.application = null;
 
-
-
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.Form_Top_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();	
+	this.fn_set_loginInfo();
 };
 
 this.Form_Top_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
 {
-	var brchNm = nexacro.getPrivateProfile("brchNm");
-	var adminName = nexacro.getPrivateProfile("name");
-	
-	this.txtName.set_text("[" + brchNm + "]" + adminName);
-
+	this.fn_set_loginInfo();
 };
 
 this.btnLogout_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -60,12 +55,13 @@ this.fn_closeMain = function()
 	objVFrame01.set_separatesize("46,0,*,0");
 };
 
-
-this.Form_Top_onclick = function(obj:nexacro.Form,e:nexacro.ClickEventInfo)
+this.fn_set_loginInfo = function()
 {
+	var brchNm = nexacro.getPrivateProfile("brchNm");
+	var adminName = nexacro.getPrivateProfile("name");
 	
+	this.txtName.set_text("[" + brchNm + "]" + adminName);
 };
-
 
 
 ]]></Script>
