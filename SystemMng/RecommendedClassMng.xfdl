@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridRcdClsList" taborder="2" left="10" top="280" binddataset="rcdClassDs" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" cssclass="grd_WF_TableType">
+        <Grid id="GridRcdClsList" taborder="2" left="10" top="280" binddataset="rcdClassDs" autofittype="col" right="10" bottom="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" cssclass="grd_WF_TableType" oncellclick="GridRcdClsList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -33,12 +33,12 @@
                 <Cell col="7" text="노출여부"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:lectCd" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:lectCd"/>
-                <Cell col="2" text="bind:brchCd"/>
-                <Cell col="3" text="bind:ctgy"/>
-                <Cell col="4" text="bind:lectCd" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="2" text="bind:brchNm"/>
+                <Cell col="3" text="expr:lrclsCtegryCd? lrclsCtegryNm+ ' &gt; ' + mdclsCtegryNm  + ' &gt; ' + smclsCtegryNm : ''"/>
+                <Cell col="4" text="bind:lectNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="5" text="bind:rgprId"/>
                 <Cell col="6" text="bind:rgprDtm"/>
                 <Cell col="7" text="expr:dataset.getColumn(currow, 'expsrYn') == 'Y' ? '노출' : '미노출'"/>
               </Band>
@@ -133,11 +133,12 @@
         <Div id="Div01" taborder="4" text="Div01" left="10" top="234" height="49" right="10">
           <Layouts>
             <Layout>
-              <Button id="btnPermitN" taborder="0" text="미노출" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnPerminN_onclick"/>
-              <Button id="btnPermitY" taborder="1" text="노출" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="230" onclick="Div01_btnPerminY_onclick"/>
-              <Button id="btnAdd" taborder="2" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_btnSave_onclick" visible="true"/>
+              <Button id="btnUseN" taborder="0" text="미노출" top="5" height="30" cssclass="btn_WF_High" right="149" width="60" onclick="Div01_btnUseN_onclick"/>
+              <Button id="btnUseY" taborder="1" text="노출" top="5" height="30" width="50" cssclass="btn_WF_Medium" right="230" onclick="Div01_btnUseY_onclick"/>
+              <Button id="btnSave" taborder="2" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_btnSave_onclick" visible="true"/>
               <Button id="btnDel" taborder="3" text="삭제" top="5" height="30" cssclass="btn_WF_High" right="10" width="50" onclick="Div01_btnDel_onclick"/>
               <Static id="txtTotal" taborder="4" left="9" top="10" height="21" text="목록 (0)개" width="82"/>
+              <Button id="btnSearch" taborder="5" text="조회" top="5" height="30" cssclass="btn_WF_Low" width="50" right="300" visible="true" onclick="Div01_btnSearch_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -148,12 +149,21 @@
         <ColumnInfo>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryNm" type="STRING" size="256"/>
+          <Column id="mdclsCtegryNm" type="STRING" size="256"/>
+          <Column id="smclsCtegryNm" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprIp" type="STRING" size="256"/>
-          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
           <Column id="mdfId" type="STRING" size="256"/>
           <Column id="mdfIp" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
@@ -164,8 +174,10 @@
         <ColumnInfo>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="useYn" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
@@ -187,12 +199,21 @@
         <ColumnInfo>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryNm" type="STRING" size="256"/>
+          <Column id="mdclsCtegryNm" type="STRING" size="256"/>
+          <Column id="smclsCtegryNm" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprIp" type="STRING" size="256"/>
-          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
           <Column id="mdfId" type="STRING" size="256"/>
           <Column id="mdfIp" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
@@ -225,12 +246,16 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
+this.param = null;
 this.popCnt = 0;
+this.flag = false;
 //this.brchCd = "";
 //this.yy = "";
 //this.lectSmsterCd = "";
@@ -255,44 +280,71 @@ this.RecommendedClassMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	// 코드 데이터
 	this.fn_code_list();
 
-	//강의 학기정보 조회
-	//this.fn_sesterInfo();
-	//this.fn_year_add();
-	//this.fn_semester_set();
 	//리스트
-	//this.fn_list(1);
+	this.fn_list(1);
 };
 
+//조회버튼
+this.Div00_Div00_00_Div00_00_14_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list();
+};
+//초기화버튼
+this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var cnt = this.searchDs.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		this.searchDs.setColumn(0, i, "");
+	}
+	this.searchDs.setColumn(0, "f", 0);
+	
+	this.fn_list();
+};
+
+//대분류 카테고리
 this.Div00_00_Div00_00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_classCtgyLarge_chg(obj);
 	this.fn_classCtgyMiddle_chg(obj);
 };
 
+//중분류 카테고리
 this.Div00_00_Div00_00_Div00_00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_classCtgyMiddle_chg(obj);
 };
 
+//노출 처리
+this.Div01_btnUseY_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_chgExpsr("노출", "Y");			
+};
+
+//미노출 처리
+this.Div01_btnUseN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_chgExpsr("미노출", "N");	
+};
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
+//추천강좌 리스트
 this.fn_list = function (page)
 {	
 	var tranObj = {};
 	tranObj.strSvcId	= "list";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/recommendedClassList.do";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/rcdClsList.do";
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	tranObj.inData      = "search=searchDs";
-	tranObj.outData     = "rcdClassDs=recommendedClassList";
+	tranObj.outData     = "rcdClassDs=rcdClsList";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
 	this.gfn_transaction(tranObj);		
-	
 };
 
 //카테고리 코드 리스트
@@ -312,14 +364,50 @@ this.fn_code_list = function()
 	this.gfn_transaction(tranObj);
 };
 
+//노출여부 처리
+this.fn_chgExpsr = function(gb, expsrYn){
+	var check_array = this.rcdClassDs.checkarray;
+	var checked_array = new Array();
+	
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert(gb + "할 추천강좌를 선택해주세요.");
+		return false;
+	}else{
+		if(confirm("선택한 추천강좌를 " + gb + "하시겠습니까?")){
+			
+			for(var i = 0 ; i < checked_array.length ; i++){
+				this.rcdClassDs.setColumn(checked_array[i], "expsrYn", expsrYn);
+			}
+			
+			var tranObj = {
+				strSvcId : "expsrYn",
+				strSvcUrl : this.application.Admin_svc + "::/main/updateRcdCls.do",
+				inData : "rcdClsList=rcdClassDs:U",
+				outData : "rcdClassDs=output1",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : true,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			
+			this.gfn_transaction(tranObj);
+			
+		}
+	}	
+}
+
 //삭제
 this.fn_delete = function ()
 {	
 	var tranObj = {};
 	tranObj.strSvcId	= "delete";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/deleteRecommendedClass.do";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/deleteRcdCls.do";
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
-	tranObj.inData      = "recommendedClassList=rcdClassDs:U";
+	tranObj.inData      = "rcdClsList=rcdClassDs:U";
 	tranObj.outData     = "rcdClassDs=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
@@ -455,36 +543,134 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	{
 		this.alert(errorCode+"\n"+errorMsg);
 	}
-	
-	switch(svcID)
+	else
 	{
-	case "list":
-		if(this.rcdClassDs.rowcount < 1){
-			this.alert("조회된 결과가 없습니다.");
+		switch(svcID)
+		{
+			case "list":
+				if(this.rcdClassDs.rowcount < 1)
+				{
+					this.alert("조회된 결과가 없습니다.");
+				}
+			break;
+
+			case "codeList":
+					this.fn_classCtgy_set();
+					break;
+
+			case "save":
+				this.alert("저장완료");
+				this.fn_list(1);
+			break;
+
+			case "expsrYn":
+				this.alert("처리완료");
+				this.reload();
+			break;
+
+			case "delete":
+				this.alert("삭제완료");
+				this.fn_list(1);
+			break;
 		}
-		break;
-	
-	case "codeList":
-			this.fn_classCtgy_set();
-			//this.fn_classRoom_set();
-			//this.fn_click_add(this);
-		break;
-		
-	case "delete":
-		this.alert("삭제완료");
-		this.fn_list(1);
-		break;
 	}
 };
 
 this.orderType = "desc";
-]]></Script>
+
+//등록 버튼 클릭
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag= false;
+	
+	if(this.rcdClassDs.rowcount >0 )
+	{
+		flag = true;
+	}
+	if(flag)
+	{	
+		this.fn_save("rcdClassDs");
+	}
+	
+};
+
+//강좌 조회
+this.Div01_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var arrArguments = {
+		type : 1,
+		brchCd : '',
+		lectTpCd : '01',
+		dataset : this.rcdClassDs
+		//this.ds_multtms_list
+	}
+	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true);
+};
+
+//저장
+this.fn_save = function(datasetName) {
+	
+	var tranObj = {};
+	tranObj.strSvcId	= "save";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/insertRcdCls.do";
+	tranObj.inData      = "applLectData="+ datasetName +":U";
+	tranObj.outData     = "";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);
+
+}
+this.GridRcdClsList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 4)
+	{
+		var arrArguments = {
+			brchCd : this.rcdClassDs.getColumn(e.row, "brchCd"),
+			yy : this.rcdClassDs.getColumn(e.row, "yy"),
+			lectSmsterCd : this.rcdClassDs.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.rcdClassDs.getColumn(e.row, "lectCd")	
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+};
+//삭제처리
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.rcdClassDs.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 추천강좌를 선택하세요.");
+		return false;
+	}
+	if(!confirm("선택한 추천강좌를 삭제하시겠습니까?")){
+		return false;
+	}
+	
+	this.rcdClassDs.deleteMultiRows(checked_array);
+	for(i of checked_array){
+		check_array[i] = 0;
+	}
+	this.fn_delete();
+};]]></Script>
     <Bind>
       <BindItem id="strtDtm" compid="Div00_00.form.Div00_00.form.periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
       <BindItem id="endDtm" compid="Div00_00.form.Div00_00.form.periodDiv.form.Div00.form.endDtm" propid="value" datasetid="searchDs" columnid="endDtm"/>
       <BindItem id="brchCd" compid="Div00_00.form.Div00_00.form.spotDiv.form.Combo00" propid="value" datasetid="searchDs" columnid="brchCd"/>
       <BindItem id="f" compid="Div00_00.form.Div00_00.form.searchDiv.form.Combo00" propid="value" datasetid="searchDs" columnid="f"/>
       <BindItem id="q" compid="Div00_00.form.Div00_00.form.searchDiv.form.Edit00" propid="value" datasetid="searchDs" columnid="q"/>
+      <BindItem id="lrclsCtegryCd" compid="Div00_00.form.Div00_00.form.Div00_00.form.Combo00" propid="value" datasetid="searchDs" columnid="lrclsCtegryCd"/>
+      <BindItem id="mdclsCtegryCd" compid="Div00_00.form.Div00_00.form.Div00_00.form.Combo01" propid="value" datasetid="searchDs" columnid="mdclsCtegryCd"/>
+      <BindItem id="smclsCtegryCd" compid="Div00_00.form.Div00_00.form.Div00_00.form.Combo02" propid="value" datasetid="searchDs" columnid="smclsCtegryCd"/>
     </Bind>
   </Form>
 </FDL>
