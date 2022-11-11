@@ -125,9 +125,9 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="노출상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <CheckBox id="chkPermitAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" onclick="row03_permitDiv_permitAll_onclick" value="false"/>
-              <CheckBox id="chkPermitY" taborder="2" text="노출" left="chkPermitAll:3" top="4" width="60" height="20" value="false" onclick="fn_checkbox_click02"/>
-              <CheckBox id="chkPermitN" taborder="3" text="미노출" left="chkPermitY:3" top="4" width="70" height="20" value="false" onclick="fn_checkbox_click02"/>
+              <CheckBox id="chkExpsrAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_expsrAll_onlick"/>
+              <CheckBox id="chkExpsrY" taborder="2" text="노출" left="chkExpsrAll:6" top="5" width="41" height="20" onclick="fn_expsrY_onlick"/>
+              <CheckBox id="chkExpsrN" taborder="3" text="미노출" left="chkExpsrY:6" top="5" width="53" height="20" onclick="fn_expsrN_onlick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -154,7 +154,7 @@
           <Column id="dateField" type="STRING" size="256"/>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="permitType" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
@@ -162,7 +162,7 @@
           <Row>
             <Col id="dateField">1</Col>
             <Col id="f">0</Col>
-            <Col id="permitType"/>
+            <Col id="expsrYn"/>
             <Col id="q"/>
             <Col id="strtDtm"/>
             <Col id="endDtm"/>
@@ -211,6 +211,8 @@ this.MainBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.mainBannerDs, this.GridMainBannerList, 0);
 	
+	this.fn_searchValueInit();
+	
 	this.fn_list(1);
 };
 
@@ -228,7 +230,9 @@ this.Div06_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventI
 {
 	if(e.keycode ==13)
 	{
-		this.fn_list(1);
+		this.fn_searchValueInit();
+		
+		this.fn_list();
 	}
 };
 
@@ -259,20 +263,40 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 //검색버튼
 this.Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.fn_searchValueInit();
+		
 	this.fn_list();
 };
 
 //초기화버튼
 this.Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.reset_search_form();
+
+	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
+	
+	this.periodDiv.form.dateField.set_index(0);
+	
+	objCalendar.strtDtm.set_value('');
+	objCalendar.endDtm.set_value('');
+	
+	this.Div06.form.searchField.set_index(0);
+	this.Div06.form.searchQuery.set_value('');
+	
+	this.periodDiv.form.dateField.set_index(0);
+	
+	this.permitDiv.form.chkExpsrAll.set_value(0);
+	this.permitDiv.form.chkExpsrY.set_value(0);
+	this.permitDiv.form.chkExpsrN.set_value(0);
+	
+	this.fn_searchValueInit();
+	
 	this.fn_list();
 };
 
 //미사용버튼
 this.Div01_btnPerminN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	
+	this.fn_chgExpsr("미노출", "N");
 };
 
 this.permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
@@ -307,9 +331,12 @@ this.GridMainBannerList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
-
+//목록 조회
 this.fn_list = function (page)
 {	
+	
+	this.mainBannerDs.clearData();
+	
 	var tranObj = {};
 	tranObj.strSvcId	= "list";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/mainBannerList.do";
@@ -323,6 +350,23 @@ this.fn_list = function (page)
 	
 	this.gfn_transaction(tranObj);		
 	
+};
+
+// 검색 데이터 세팅
+this.fn_searchValueInit = function()
+{					  
+	var objCalendar = this.periodDiv.form.Div00.form; //캘린더
+	var arrExpsrYn = new Array();
+	
+	if(this.permitDiv.form.chkExpsrY.value == true) arrExpsrYn.push("'Y'");
+	if(this.permitDiv.form.chkExpsrN.value == true) arrExpsrYn.push("'N'");
+	
+	this.searchDs.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.searchDs.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	this.searchDs.setColumn(0, "dateField", this.periodDiv.form.dateField.value);
+	this.searchDs.setColumn(0, "expsrYn", arrExpsrYn.join(","));
+	this.searchDs.setColumn(0, "f", this.Div06.form.searchField.value);
+	this.searchDs.setColumn(0, "q", this.Div06.form.searchQuery.value);
 };
 
 //삭제
@@ -342,27 +386,75 @@ this.fn_delete = function ()
 	this.gfn_transaction(tranObj);	
 };
 
-//clear
-this.reset_search_form = function(){
-	
-	var cnt = this.searchDs.getColCount();
-	for(var i=0; i<cnt; i++)
-	{
-		this.searchDs.setColumn(0, i, "");
+//노출여부 전체 선택 체크 박스 
+this.fn_expsrAll_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.chkExpsrY.set_value(1);
+		obj.parent.chkExpsrN.set_value(1);
+	}else{
+		obj.parent.chkExpsrY.set_value(0);
+		obj.parent.chkExpsrN.set_value(0);
 	}
-	this.searchDs.setColumn(0,"dateField", 1);
-	this.searchDs.setColumn(0, "f", 0);
+};
+
+//체크박스 노출 버튼 체크
+this.fn_expsrY_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkExpsrN.isChecked()){
+		obj.parent.chkExpsrAll.set_value(1);
+	}else{
+		obj.parent.chkExpsrAll.set_value(0);
+	}
+};
+
+//체크박스 미노출 버튼 체크
+this.fn_expsrN_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkExpsrY.isChecked()){
+		obj.parent.chkExpsrAll.set_value(1);
+	}else{
+		obj.parent.chkExpsrAll.set_value(0);
+	}
+};
+
+//노출여부 처리
+this.fn_chgExpsr = function(gb, expsrYn){
+	var check_array = this.rcdClassDs.checkarray;
+	var checked_array = new Array();
 	
-	this.fn_list();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert(gb + "할 메인배너를 선택해주세요.");
+		return false;
+	}else{
+		if(confirm("선택한 메인배너를 " + gb + "하시겠습니까?")){
+			
+			for(var i = 0 ; i < checked_array.length ; i++){
+				this.rcdClassDs.setColumn(checked_array[i], "expsrYn", expsrYn);
+			}
+			
+			var tranObj = {
+				strSvcId : "expsrYn",
+				strSvcUrl : this.application.Admin_svc + "::/main/updateExpsrYn.do",
+				inData : "mainBannerList=mainBannerDs:U",
+				outData : "mainBannerDs=output1",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : true,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			
+			this.gfn_transaction(tranObj);
+			
+		}
+	}	
 }
 
-this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		
-		this.permitDiv.form.chkPermitAll.set_value(0);
-	}
-}
-
+//콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
 	this.Div01.form.txtTotal.set_text("목록("+this.mainBannerDs.rowcount+")개");
@@ -385,6 +477,11 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		}
 		break;
 		
+	case "expsrYn":
+		this.alert("처리완료");
+		this.reload();
+		break;
+		
 	case "delete":
 		this.alert("삭제완료");
 		this.fn_list(1);
@@ -393,13 +490,5 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 };
 
 this.orderType = "desc";]]></Script>
-    <Bind>
-      <BindItem id="strtDtm" compid="periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
-      <BindItem id="endDtm" compid="periodDiv.form.Div00.form.endDtm" propid="value" datasetid="searchDs" columnid="endDtm"/>
-      <BindItem id="permitType" compid="permitDiv.form.chkPermitAll" propid="value" datasetid="searchDs" columnid="permitType"/>
-      <BindItem id="q" compid="Div06.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
-      <BindItem id="f" compid="Div06.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
-      <BindItem id="dateField" compid="periodDiv.form.dateField" propid="value" datasetid="searchDs" columnid="dateField"/>
-    </Bind>
   </Form>
 </FDL>

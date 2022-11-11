@@ -56,9 +56,9 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="노출상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <CheckBox id="chkUseAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
-                          <CheckBox id="chkUseY" taborder="1" text="노출" left="chkUseAll:6" top="5" width="41" height="20" onclick="fn_checkbox" truevalue="Y"/>
-                          <CheckBox id="chkUseN" taborder="2" text="미노출" left="chkUseY:6" top="5" width="53" height="20" onclick="fn_checkbox" truevalue="N"/>
+                          <CheckBox id="chkExpsrAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_expsrAll_onlick"/>
+                          <CheckBox id="chkExpsrY" taborder="1" text="노출" left="chkExpsrAll:6" top="5" width="41" height="20" onclick="fn_expsrY_onlick"/>
+                          <CheckBox id="chkExpsrN" taborder="2" text="미노출" left="chkExpsrY:6" top="5" width="53" height="20" onclick="fn_expsrN_onlick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -91,7 +91,7 @@
                                 </Row>
                                 <Row>
                                   <Col id="codecolumn">2</Col>
-                                  <Col id="datacolumn">제목</Col>
+                                  <Col id="datacolumn">강좌명</Col>
                                 </Row>
                                 <Row>
                                   <Col id="codecolumn">3</Col>
@@ -100,7 +100,7 @@
                               </Rows>
                             </Dataset>
                           </Combo>
-                          <Edit id="Edit00" taborder="2" left="Combo00:6" top="5" width="500" height="21"/>
+                          <Edit id="Edit00" taborder="2" left="Combo00:6" top="5" width="500" height="21" onkeydown="Div00_00_Div00_00_searchDiv_Edit00_onkeydown"/>
                           <Button id="Button00" taborder="3" text="검색" left="Edit00:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_Div00_00_14_Button00_onclick"/>
                           <Button id="Button01" taborder="4" text="초기화" left="Button00:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_Div00_00_Div00_00_14_Button01_onclick"/>
                         </Layout>
@@ -178,6 +178,7 @@
           <Column id="lrclsCtegryCd" type="STRING" size="256"/>
           <Column id="mdclsCtegryCd" type="STRING" size="256"/>
           <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
@@ -279,7 +280,9 @@ this.RecommendedClassMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	this.gfnSetCheckBoxNoDataset(this.rcdClassDs, this.GridRcdClsList, 0);
 	// 코드 데이터
 	this.fn_code_list();
-
+	
+	this.fn_searchValueInit();
+	
 	//리스트
 	this.fn_list(1);
 };
@@ -287,8 +290,52 @@ this.RecommendedClassMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 //조회버튼
 this.Div00_Div00_00_Div00_00_14_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.fn_searchValueInit();
+	
 	this.fn_list();
 };
+
+//엔터키 검색
+this.Div00_00_Div00_00_searchDiv_Edit00_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_searchValueInit();
+	
+		this.fn_list();
+	}
+};
+
+//등록 버튼 클릭
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var flag= false;
+	
+	if(this.rcdClassDs.rowcount >0 )
+	{
+		flag = true;
+	}
+	if(flag)
+	{	
+		this.fn_save("rcdClassDs");
+	}
+	
+};
+
+//강좌 조회
+this.Div01_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var arrArguments = {
+		type : 1,
+		brchCd : '',
+		lectTpCd : '01',
+		dataset : this.rcdClassDs
+		//this.ds_multtms_list
+	}
+	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true);
+};
+
 //초기화버튼
 this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -298,6 +345,9 @@ this.Div00_Div00_00_Div00_00_14_Button01_onclick = function(obj:nexacro.Button,e
 		this.searchDs.setColumn(0, i, "");
 	}
 	this.searchDs.setColumn(0, "f", 0);
+	this.Div00_00.form.Div00_00.form.useDiv.form.chkExpsrAll.set_value(0);
+	this.Div00_00.form.Div00_00.form.useDiv.form.chkExpsrY.set_value(0);
+	this.Div00_00.form.Div00_00.form.useDiv.form.chkExpsrN.set_value(0);
 	
 	this.fn_list();
 };
@@ -313,6 +363,30 @@ this.Div00_00_Div00_00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Com
 this.Div00_00_Div00_00_Div00_00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_classCtgyMiddle_chg(obj);
+};
+
+//삭제처리
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.rcdClassDs.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 추천강좌를 선택하세요.");
+		return false;
+	}
+	if(!confirm("선택한 추천강좌를 삭제하시겠습니까?")){
+		return false;
+	}
+	
+	this.rcdClassDs.deleteMultiRows(checked_array);
+	for(i of checked_array){
+		check_array[i] = 0;
+	}
+	this.fn_delete();
 };
 
 //노출 처리
@@ -333,6 +407,8 @@ this.Div01_btnUseN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 //추천강좌 리스트
 this.fn_list = function (page)
 {	
+	this.rcdClassDs.clearData();
+	
 	var tranObj = {};
 	tranObj.strSvcId	= "list";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/rcdClsList.do";
@@ -362,6 +438,26 @@ this.fn_code_list = function()
 	}
 
 	this.gfn_transaction(tranObj);
+};
+
+// 검색 데이터 세팅
+this.fn_searchValueInit = function()
+{					  
+	var objCalendar = this.Div00_00.form.Div00_00.form.periodDiv.form.Div00.form; //캘린더
+	var arrExpsrYn = new Array();
+	
+	if(this.Div00_00.form.Div00_00.form.useDiv.form.chkExpsrY.value == true) arrExpsrYn.push("'Y'");
+	if(this.Div00_00.form.Div00_00.form.useDiv.form.chkExpsrN.value == true) arrExpsrYn.push("'N'");
+	
+	this.searchDs.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.searchDs.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	this.searchDs.setColumn(0, "brchCd", this.Div00_00.form.Div00_00.form.spotDiv.form.Combo00.value);
+	this.searchDs.setColumn(0, "lrclsCtegryCd", this.Div00_00.form.Div00_00.form.Div00_00.form.Combo00.value);
+	this.searchDs.setColumn(0, "mdclsCtegryCd", this.Div00_00.form.Div00_00.form.Div00_00.form.Combo01.value);
+	this.searchDs.setColumn(0, "smclsCtegryCd", this.Div00_00.form.Div00_00.form.Div00_00.form.Combo02.value);
+	this.searchDs.setColumn(0, "expsrYn", arrExpsrYn.join(","));
+	this.searchDs.setColumn(0, "f", this.Div00_00.form.Div00_00.form.searchDiv.form.Combo00.value);
+	this.searchDs.setColumn(0, "q", this.Div00_00.form.Div00_00.form.searchDiv.form.Edit00.value);
 };
 
 //노출여부 처리
@@ -417,37 +513,15 @@ this.fn_delete = function ()
 	this.gfn_transaction(tranObj);	
 };
 
-//clear
-this.reset_search_form = function(){
-	
-	var cnt = this.searchDs.getColCount();
-	for(var i=0; i<cnt; i++)
-	{
-		this.searchDs.setColumn(0, i, "");
-	}
-	this.searchDs.setColumn(0, "f", 0);
-	
-	this.fn_list();
-}
-
-this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		
-		this.permitDiv.form.chkPermitAll.set_value(0);
-	}
-}
-
 //강좌 카테고리 세팅
 this.fn_classCtgy_set = function()
 {
-
 	this.ds_classCtgyLarge_list.set_enableevent(false);
 	this.ds_classCtgyLarge_list.insertRow(0);
 	this.ds_classCtgyLarge_list.setColumn(0, "cdId", "");
 	this.ds_classCtgyLarge_list.setColumn(0, "cd", "");
 	this.ds_classCtgyLarge_list.setColumn(0, "cdNm", "대분류");
 	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo00.set_index(0);
-	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_index(0);
 	this.ds_classCtgyLarge_list.set_enableevent(true);
 	
 	this.ds_classCtgyMiddle_list.set_enableevent(false);
@@ -456,7 +530,6 @@ this.fn_classCtgy_set = function()
 	this.ds_classCtgyMiddle_list.setColumn(0, "cd", "");
 	this.ds_classCtgyMiddle_list.setColumn(0, "cdNm", "중분류");
 	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo01.set_index(0);
-	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo01.set_index(0);
 	this.ds_classCtgyMiddle_list.set_enableevent(true);
 	this.ds_classCtgyMiddle_list.filter("cdId == ''");
 	
@@ -466,7 +539,6 @@ this.fn_classCtgy_set = function()
 	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
 	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
 	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo02.set_index(0);
-	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo02.set_index(0);
 	this.ds_classCtgySmall_list.set_enableevent(true);
 	this.ds_classCtgySmall_list.filter("cdId == ''");
 }
@@ -496,7 +568,6 @@ this.fn_classCtgyLarge_chg = function(obj)
 	this.ds_classCtgyMiddle_list.setColumn(0, "cd", "");
 	this.ds_classCtgyMiddle_list.setColumn(0, "cdNm", "중분류");
 	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo01.set_index(0);
-	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo01.set_index(0);
 	this.ds_classCtgyMiddle_list.set_enableevent(true);
 }
 
@@ -525,7 +596,6 @@ this.fn_classCtgyMiddle_chg = function(obj)
 	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
 	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
 	this.Div00_00.form.Div00_00.form.Div00_00.form.Combo02.set_index(0);
-	//this.Div02.form.Div00.form.Div00.form.Div00_00.form.Combo02.set_index(0);
 	this.ds_classCtgySmall_list.set_enableevent(true);
 }
 
@@ -578,36 +648,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
 this.orderType = "desc";
 
-//등록 버튼 클릭
-this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var flag= false;
-	
-	if(this.rcdClassDs.rowcount >0 )
-	{
-		flag = true;
-	}
-	if(flag)
-	{	
-		this.fn_save("rcdClassDs");
-	}
-	
-};
-
-//강좌 조회
-this.Div01_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.popCnt++;
-	var arrArguments = {
-		type : 1,
-		brchCd : '',
-		lectTpCd : '01',
-		dataset : this.rcdClassDs
-		//this.ds_multtms_list
-	}
-	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true);
-};
-
 //저장
 this.fn_save = function(datasetName) {
 	
@@ -624,6 +664,8 @@ this.fn_save = function(datasetName) {
 	this.gfn_transaction(tranObj);
 
 }
+
+//강좌 상세 이동
 this.GridRcdClsList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	if(e.col == 4)
@@ -639,28 +681,37 @@ this.GridRcdClsList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickE
 		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 	}
 };
-//삭제처리
-this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+
+//노출여부 전체 선택 체크 박스 
+this.fn_expsrAll_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
-	var check_array = this.rcdClassDs.checkarray;
-	var checked_array = new Array();
-	for(var i = 0; i < check_array.length; i++){
-		if(check_array[i] > 0) checked_array.push(i);
+	if(obj.isChecked()){
+		obj.parent.chkExpsrY.set_value(1);
+		obj.parent.chkExpsrN.set_value(1);
+	}else{
+		obj.parent.chkExpsrY.set_value(0);
+		obj.parent.chkExpsrN.set_value(0);
 	}
-	
-	if(checked_array.length == 0){
-		alert("삭제할 추천강좌를 선택하세요.");
-		return false;
+};
+
+//체크박스 노출 버튼 체크
+this.fn_expsrY_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkExpsrN.isChecked()){
+		obj.parent.chkExpsrAll.set_value(1);
+	}else{
+		obj.parent.chkExpsrAll.set_value(0);
 	}
-	if(!confirm("선택한 추천강좌를 삭제하시겠습니까?")){
-		return false;
+};
+
+//체크박스 미노출 버튼 체크
+this.fn_expsrN_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkExpsrY.isChecked()){
+		obj.parent.chkExpsrAll.set_value(1);
+	}else{
+		obj.parent.chkExpsrAll.set_value(0);
 	}
-	
-	this.rcdClassDs.deleteMultiRows(checked_array);
-	for(i of checked_array){
-		check_array[i] = 0;
-	}
-	this.fn_delete();
 };]]></Script>
     <Bind>
       <BindItem id="strtDtm" compid="Div00_00.form.Div00_00.form.periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="searchDs" columnid="strtDtm"/>
