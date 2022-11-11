@@ -303,6 +303,7 @@ this.baseSvrUrl = "";
 this._this;
 this.type = 1;
 this.maxCnt = 10;
+this.menuId = "";
 this.callBackFnc;
 
 /**************************************************************************
@@ -325,6 +326,10 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	if(this.parent.maxCnt)
 	{
 		this.maxCnt = this.parent.maxCnt;
+	}
+	if(this.parent.menuId)
+	{
+		this.menuId = this.parent.menuId;
 	}
 	if(this.parent.callBackFnc)
 	{
@@ -352,7 +357,6 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 
 this.fn_list = function (page)
 {	
-console.log( this.opener.opener)
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.baseSvrUrl + "list.do",
@@ -360,7 +364,7 @@ console.log( this.opener.opener)
 		outData : "ds_member_list=memberList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.opener.opener.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
