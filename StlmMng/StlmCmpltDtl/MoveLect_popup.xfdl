@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="MoveLect_popup" width="1280" height="800" titletext="강좌이강" onload="MoveLect_popup_onload">
+    <Layouts>
+      <Layout height="800" width="1280">
+        <Div id="divMoveLect" taborder="0" text="Div00" left="0" top="0" right="0" url="ClassMng::ClassListPopup.xfdl" height="720"/>
+        <Static id="Static00" taborder="1" text="▶ 재료비/대여료" left="10" top="630" width="120" height="21" cssclass="sta_WF_TitGray" visible="false"/>
+        <Div id="Div01" taborder="2" text="Div01" left="10" top="660" height="33" cssclass="div_WF_CompWrap" right="10" visible="false">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+              <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="21" innerdataset="ds_optn_list" codecolumn="optnSeqno" datacolumn="optnNm"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="Button00" taborder="3" text="취소" left="504" width="84" bottom="10" height="21" cssclass="btn_WF_Medium" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="4" text="강좌이강" left="598" width="84" height="21" bottom="10" cssclass="btn_WF_Weak" onclick="Button01_onclick"/>
+        <Button id="Button02" taborder="5" text="전체이강" left="692" width="84" cssclass="btn_WF_Weak" bottom="10" height="21" onclick="Button02_onclick" visible="false"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.grid = null;
+this.ds = null;
+this.menuSeq = this.parent.menuSeq;
+
+// 이미 체크된 라디오버튼 다시 체크하는 행동 막기위한 변수
+this.checkedYn = false;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.MoveLect_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.grid = this.divMoveLect.form.Div00.form.Div01.form.Grid00;
+	this.ds = this.divMoveLect.form.ds_class_list;
+
+	// 라디오 버튼
+	this.grid.type = 2;
+	this.grid.redrawExprCell();
+	
+	this.gfnSetRadioNoDataset(this.ds, this.grid, 0);
+	this.grid.addEventHandler("oncellclick", this.fn_grid_oncellclick, this);
+	if(this.parent.actlAtlctNpleCnt > 1){
+		this.Button02.set_visible(true);
+	}
+	
+	// classlistpopup 지점 설정 시 후처리
+	this.divMoveLect.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_value(this.parent.brchCd);
+	this.divMoveLect.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_readonly(true);
+	this.divMoveLect.form.brchCd = this.divMoveLect.form.ds_search.getColumn(0, "brchCd");
+	this.divMoveLect.form.fn_sesterInfo();
+	this.divMoveLect.form.fn_year_add();
+	this.divMoveLect.form.fn_semester_set();
+};
+
+// 그리드 라디오버튼 클릭 이벤트
+this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objDs = obj.getBindDataset();
+	if(e.cell == obj.checkcell && !this.checkedYn){
+		this.Static00.set_visible(false);
+		this.Div01.set_visible(false);
+		this.checkedYn = true;
+		
+		if(this.ds.getColumn(e.row, "brchCd") != this.parent.brchCd){
+			alert("강좌 이강을 하실 수 없습니다.\n지점이 동일하지 않습니다.");
+			for(var i=0; i<objDs.getRowCount(); i++)
+ 			{
+ 				objDs.checkarray[i] = 0;
+ 			}
+ 			obj.redrawExprCell();
+			this.checkedYn = false;
+			return;
+		}
+		
+		if(Number(this.ds.getColumn(e.row, "lectAmt")) != this.parent.lectAmt){
+			alert("강좌 이강을 하실 수 없습니다.\n강좌료가 동일하지 않습니다.");
+			for(var i=0; i<objDs.getRowCount(); i++)
+ 			{
+ 				objDs.checkarray[i] = 0;
+ 			}
+ 			obj.redrawExprCell();
+			this.checkedYn = false;
+			return;
+		}
+		
+		if(this.ds.getColumn(e.row, "lectStatCd") != "02" && this.ds.getColumn(e.row, "lectStatCd") != "03"
+			&& this.ds.getColumn(e.row, "lectStatCd") != "04"){
+			alert("이강이 불가능한 강좌가 포함돼있습니다. 강좌상태를 확인 후 강좌이강 바랍니다.");
+			for(var i=0; i<objDs.getRowCount(); i++)
+ 			{
+ 				objDs.checkarray[i] = 0;
+ 			}
+ 			obj.redrawExprCell();
+			this.checkedYn = false;
+			return;
+		}
+		
+		if(Number(this.ds.getColumn(e.row, "lectNbcnt")) != this.parent.lectNbcnt){
+			alert("강좌 이강을 하실 수 없습니다.\n강의횟수가 동일하지 않습니다.");
+			for(var i=0; i<objDs.getRowCount(); i++)
+ 			{
+ 				objDs.checkarray[i] = 0;
+ 			}
+ 			obj.redrawExprCell();
+			this.checkedYn = false;
+			return;
+		}
+		
+		if(this.ds.getColumn(e.row, "brchCd") == this.parent.brchCd
+			&& this.ds.getColumn(e.row, "yy") == this.parent.yy
+			&& Number(this.ds.getColumn(e.row, "lectSmsterCd")) == this.parent.lectSmsterCd
+			&& this.ds.getColumn(e.row, "lectCd") == this.parent.lectCd){
+			alert("수강신청 내역이 존재합니다.");
+			for(var i=0; i<objDs.getRowCount(); i++)
+ 			{
+ 				objDs.checkarray[i] = 0;
+ 			}
+ 			obj.redrawExprCell();
+			this.checkedYn = false;
+			return;
+		}
+		
+		// 이강 이전 강의시간과 이강 이후 강의시간이 겹치는지 여부
+		var overlapYn = false;
+		
+		// 강의시작일, 강의종료일
+		var befLectStDtm = nexacro.replaceAll(this.parent.lectStDtm, ".", "");
+		var befLectEndDtm = nexacro.replaceAll(this.parent.lectEndDtm, ".", "");
+		var aftLectStDtm = this.ds.getColumn(e.row, "lectStDtm");
+		var aftLectEndDtm = this.ds.getColumn(e.row, "lectEndDtm");
+		if((Number(aftLectStDtm) >= Number(befLectStDtm) && Number(aftLectStDtm) <= Number(befLectEndDtm))
+			|| (Number(aftLectEndDtm) >= Number(befLectStDtm) && Number(aftLectEndDtm) <= Number(befLectEndDtm))){
+			overlapYn = true;
+		}
+		
+		// 강의시작시간
+		var befLectStHhCd = this.parent.lectStHhCd;
+		var befLectStMiCd = this.parent.lectStMiCd;
+		var befLectEndHhCd = this.parent.lectEndHhCd;
+		var befLectEndMiCd = this.parent.lectEndMiCd;
+		var aftLectStHhCd = this.ds.getColumn(e.row, "lectStHhCd");
+		var aftLectStMiCd = this.ds.getColumn(e.row, "lectStMiCd");
+		var aftLectEndHhCd = this.ds.getColumn(e.row, "lectEndHhCd");
+		var aftLectEndMiCd = this.ds.getColumn(e.row, "lectEndMiCd");
+		var aftStTime, aftEndTime;
+		if(Number(aftLectStMiCd) >= 30){
+			aftStTime = aftLectStHhCd + ((Number(aftLectStMiCd) - 30).toString().length < 2 ? "0" + (Number(aftLectStMiCd) - 30) : (Number(aftLectStMiCd) - 30));
+		}else{
+			aftStTime = ((Number(aftLectStHhCd) -1).toString().length < 2 ? "0"+(Number(aftLectStHhCd) -1).toString() : (Number(aftLectStHhCd) -1).toString()) + ((60 + (Number(aftLectStMiCd) - 30)) == 60 ? "00" : ((60 + (Number(aftLectStMiCd) - 30)).toString().length < 2 ? "0"+(60 + (Number(aftLectStMiCd) - 30)).toString() : (60 + (Number(aftLectStMiCd) - 30)).toString()));
+		}
+		
+		if(Number(aftLectEndMiCd) <= 30){
+			aftEndTime = aftLectEndHhCd + ((Number(aftLectEndMiCd) + 30).toString().length < 2 ? "0"+(Number(aftLectEndMiCd) + 30) : (Number(aftLectEndMiCd) + 30));
+		}else{
+			aftEndTime = ((Number(aftLectEndHhCd) +1).toString().length < 2 ? "0"+(Number(aftLectEndHhCd) +1).toString() : (Number(aftLectEndHhCd) +1).toString()) + ((Number(aftLectEndMiCd) + 30) == 60 ? "00" : ((Number(aftLectEndMiCd) + 30) - 60).toString().length < 2 ? "0"+((Number(aftLectEndMiCd) + 30) - 60).toString() : ((Number(aftLectEndMiCd) + 30) - 60).toString());
+		}
+		
+		if((Number(aftStTime) >= Number(befLectStHhCd + befLectStMiCd) && Number(aftStTime) <= Number(befLectEndHhCd + befLectEndMiCd))
+		|| (Number(aftEndTime) >= Number(befLectStHhCd + befLectStMiCd) && Number(aftEndTime) <= Number(befLectEndHhCd + befLectEndMiCd))){
+			overlapYn = true;
+		}
+
+		// 요일
+		var befLectStDtmNm = this.parent.lectStDtmNm;
+		var arrBefLectStDtmNm = befLectStDtmNm.split(",");
+		var aftLectStDtmNm = this.ds.getColumn(e.row, "stringStDaywNm");
+		var arrAftLectStDtmNm = aftLectStDtmNm.split(",");
+		
+		for(var i=0;i<arrBefLectStDtmNm.length;i++){
+			for(var j=0;j<arrAftLectStDtmNm.length;j++){
+				if(arrBefLectStDtmNm[i] == arrAftLectStDtmNm[j]){
+					overlapYn = true;
+				}
+			}
+		}
+		
+		if(overlapYn){
+			if(!confirm("강의시간이 중복되는 강좌가 있습니다. 그래도 이강하시겠습니까?")){
+				for(var i=0; i<objDs.getRowCount(); i++)
+				{
+					objDs.checkarray[i] = 0;
+				}
+				obj.redrawExprCell();
+				this.checkedYn = false;
+				return;
+			}
+		}
+		
+		// 이강 대상 강좌가 옵션이 있고, 이강 전 강좌 추가결제금액이 있는경우
+		if(this.gfn_nvl(this.ds.getColumn(e.row, "optnUseYn")) == "Y" && this.parent.lectAddAmt > 0){
+			this.removeChild("ds_class_info");
+			var dsClassInfo = new Dataset();
+			dsClassInfo.name = "ds_class_info";
+			this.addChild("ds_class_info", dsClassInfo);
+			dsClassInfo.set_enableevent(false);
+			dsClassInfo.clear();
+			dsClassInfo.copyData(this.ds, false);
+			dsClassInfo.clearData();
+			dsClassInfo.addRow();
+			dsClassInfo.copyRow(0, this.ds, this.ds.rowposition);
+			dsClassInfo.set_enableevent(true);
+			
+			var strSvcId    = "data_list";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectOptnList.do";
+			var inData      = "classInfo=this.ds_class_info";
+			var outData     = "this.ds_optn_list=output1";
+			var strArg      = "atlctRsvNo=" + this.parent.atlctRsvNo + " actlAtlctNpleSeqno=" + this.parent.actlAtlctNpleSeqno;
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.menuSeq
+			};
+			
+			this.gfn_transaction(tranObj);
+		}else{
+			this.Static00.set_visible(false);
+			this.Div01.set_visible(false);
+		}
+		
+		this.checkedYn = false;
+	}
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		if(errorCode == -2){
+			// 리스트에서 강좌 선택 시 옵션 목록 가져올때 옵션금액이 달라서 발생하는 에러
+			this.alert("강좌 이강을 하실 수 없습니다.\n(사유: 이강 전 강좌: "+ this.parent.optnTypCdNm +" / 이강 후 강좌: "+ this.ds.getColumn(this.ds.rowposition, "optnTypNm") +"가 동일 하지 않습니다.)");
+			for(var i=0; i<this.ds.getRowCount(); i++)
+ 			{
+ 				this.ds.checkarray[i] = 0;
+ 			}
+ 			this.grid.redrawExprCell();
+			this.checkedYn = false;
+		}else if(errorCode == -3){
+			// 이강할때 정원이 없어서 발생하는 에러
+			this.alert("신청 정원이 0명으로 이강 할 수 없습니다.");
+		}else if(errorCode == -4){
+			// 전체이강할때 이강 대상목록들이 옵션비용이 하나라도 다를 때
+			this.alert("강좌 이강을 하실 수 없습니다.\n(사유: 이강 전 강좌: "+ this.parent.optnTypCdNm +" / 이강 후 강좌: "+ this.ds.getColumn(this.ds.rowposition, "optnTypNm") +"가 동일 하지 않습니다.)");
+		}else if(errorCode == -5){
+			// 이강 후 강좌 상태가 기존회원접수, 접수중, 지점문의가 아닐때
+			this.alert("이강이 불가능한 강좌가 포함돼있습니다. 강좌상태를 확인 후 강좌이강 바랍니다.");
+		}else{
+			this.alert(errorCode+"\n"+errorMsg);
+		}
+		
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "data_list":
+			if(this.gfn_nvl(this.ds.getColumn(this.ds.rowposition, "optnUseYn")) == "Y"){
+				this.Static00.set_visible(true);
+				this.Div01.set_visible(true);
+				this.Div01.form.Static00.set_text(this.ds.getColumn(this.ds.rowposition, "optnTypNm"));
+			}
+			this.Div01.form.Combo00.set_index(0);
+			break;
+		case "update":
+			alert("저장 되었습니다.");
+			this.close();
+			this.opener.reload();
+			break;
+	}
+};
+
+// 취소 버튼 클릭
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+// 강좌이강 버튼 클릭
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.Div01.form.Combo00.value == ""){
+		alert("이강 되는 강좌의 " + this.ds.getColumn(this.ds.rowposition, "optnTypNm") + " 옵션을 선택하세요.");
+		return;
+	}
+	
+	if(confirm("강좌 이강하시겠습니까?")){
+		this.fn_update("N");
+	}
+};
+
+// 전체이강 버튼 클릭
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.Div01.form.Combo00.value == ""){
+		alert("이강 되는 강좌의 " + this.ds.getColumn(this.ds.rowposition, "optnTypNm") + " 옵션을 선택하세요.");
+		return;
+	}
+	
+	if(confirm("이강 전 동일 강좌의 여러 실수강자를 포함하여 이강 하시겠습니까?")){
+		this.fn_update("Y");
+	}
+};
+
+this.fn_update = function(multipleYn)
+{
+	this.removeChild("ds_update_info");
+	var dsUpdateInfo = new Dataset();
+	dsUpdateInfo.name = "ds_update_info";
+	this.addChild("ds_update_info", dsUpdateInfo);
+	dsUpdateInfo.set_enableevent(false);
+	dsUpdateInfo.clear();
+	dsUpdateInfo.copyData(this.ds, false);
+	dsUpdateInfo.clearData();
+	dsUpdateInfo.addRow();
+	dsUpdateInfo.copyRow(0, this.ds, this.ds.rowposition);
+	dsUpdateInfo.set_enableevent(true);
+	
+	var optnSeqno = 0;
+	if(this.Div01.visible){
+		optnSeqno = this.Div01.form.Combo00.value;
+	}
+	
+	var strSvcId    = "update";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateLect.do";
+	var inData      = "updateInfo=this.ds_update_info";
+	var outData     = "";
+	var strArg      = "atlctRsvNo=" + this.parent.atlctRsvNo + " actlAtlctNpleSeqno=" + this.parent.actlAtlctNpleSeqno;
+	strArg			+= " optnSeqno=" + optnSeqno + " multipleYn=" + multipleYn;
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_optn_list">
+        <ColumnInfo>
+          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="optnAmt" type="STRING" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+          <Column id="partRfndClCd" type="STRING" size="256"/>
+          <Column id="deltYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

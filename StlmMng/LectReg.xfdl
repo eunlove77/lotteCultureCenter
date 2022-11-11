@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="LectReg" width="1280" height="720" titletext="New Form" onload="LectReg_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="80" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="70" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 학기검색" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="0" top="20" height="33" cssclass="div_WF_CompWrap" right="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:10" top="5" width="150" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="80" height="120" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 회원정보" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="0" top="20" height="33" cssclass="div_WF_CompWrap" right="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="회원번호" left="0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static01" taborder="1" left="Static00:0" top="0" width="252" height="31" cssclass="sta_WF_CompText"/>
+                          <Static id="Static02" taborder="2" text="회원명" left="Static01:0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static03" taborder="3" left="Static02:0" top="0" width="252" height="31" cssclass="sta_WF_CompText"/>
+                          <Static id="Static04" taborder="4" text="회원 아이디" left="Static03:0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static05" taborder="5" left="Static04:0" top="0" height="31" cssclass="sta_WF_CompText" right="0"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01" taborder="2" text="Div01" left="0" top="52" height="33" cssclass="div_WF_CompWrap" right="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static01" taborder="1" left="168" top="0" width="252" height="31" cssclass="sta_WF_CompText"/>
+                          <Static id="Static02" taborder="2" text="회원 등급" left="420" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static03" taborder="3" left="588" top="0" width="252" height="31" cssclass="sta_WF_CompText"/>
+                          <Static id="Static04" taborder="4" left="840" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static05" taborder="5" left="1008" top="0" height="31" cssclass="sta_WF_CompText" right="0"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Button id="Button00" taborder="3" text="초기화" top="95" height="20" right="0" width="100" cssclass="btn_WF_Weak" onclick="Div00_Div01_Button00_onclick"/>
+                    <Button id="Button01" taborder="4" text="검색" top="95" width="100" height="20" right="Button00:10" cssclass="btn_WF_Medium" onclick="Div00_Div01_Button01_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div02" left="0" top="210" right="0" bottom="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 강좌목록" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
+                    <Button id="Button00" taborder="1" text="옵션변경" top="0" height="20" right="0" width="100" cssclass="btn_WF_Medium"/>
+                    <Button id="Button01" taborder="2" text="입력확인" top="0" height="20" right="Button00:10" width="100" cssclass="btn_WF_Weak"/>
+                    <Button id="Button02" taborder="3" text="강좌검색" top="0" height="20" right="Button01:10" width="100" cssclass="btn_WF_Medium" onclick="Div00_Div02_Button02_onclick"/>
+                    <Grid id="Grid00" taborder="4" left="0" top="25" right="0" bottom="0"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.cnt = 0;
+this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.LectReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.fn_data_list();
+};
+
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectRegDataList.do";
+	var inData      = "";
+	var outData     = "ds_smster_list=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	  if(errorCode != 0)
+	  {
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	  }
+
+	  switch(svcID)
+	  {
+		case "dataList":
+			for(var i=0;i<this.ds_smster_list.getRowCount();i++){
+				if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
+					this.Div00.form.Div00.form.Div00.form.Combo01.set_index(i);
+					
+					//년도
+					this.removeChild("ds_yy_list");
+					var dsYyList = new Dataset();
+					dsYyList.name = "ds_yy_list";
+					dsYyList.addColumn("cd", "string", 256);
+					dsYyList.addColumn("cdNm", "string", 256);
+					
+					this.addChild("ds_yy_list", dsYyList);
+					
+					var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
+					this.ds_yy_list.set_enableevent(false);
+					for(var i=0;i<16;i++){
+						this.ds_yy_list.insertRow(i);
+						this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
+						this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
+					}
+					this.ds_yy_list.set_enableevent(true);
+					this.Div00.form.Div00.form.Div00.form.Combo00.setInnerDataset(this.ds_yy_list);
+					this.Div00.form.Div00.form.Div00.form.Combo00.set_codecolumn("cd");
+					this.Div00.form.Div00.form.Div00.form.Combo00.set_datacolumn("cdNm");
+					this.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
+				}
+			}
+			break;
+	  }
+};
+
+// 회원검색 버튼 클릭
+this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00.form.Static01.text) != ""){
+		if(confirm("수강등록을 취소하시겠습니까? 입력된 내용은 초기화 됩니다.")){
+			var oArg = {
+				_this : this
+				, type : 2
+				, maxCnt : 1
+				, callBackFnc : this.memberCallback
+				, menuId : this.menuSeq
+			};
+			this.cnt++;
+			this.gfn_openPopup("popupOpen" + this.cnt, oArg, "MemberMng::MemberList_popup.xfdl", this, 1280, 720, true, true, null);
+		}
+	}else{
+		var oArg = {
+			_this : this
+			, type : 2
+			, maxCnt : 1
+			,callBackFnc : this.memberCallback
+			, menuId : this.menuSeq
+		};
+		this.cnt++;
+		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "MemberMng::MemberList_popup.xfdl", this, 1280, 720, true, true, null);
+	}
+};
+
+// 회원팝업에서 확인 눌렀을때 콜백
+this.memberCallback = function(_this, chkDs)
+{
+	_this.Div00.form.Div01.form.Div00.form.Static01.set_text(chkDs.getColumn(0, "mbrNo"));
+	_this.Div00.form.Div01.form.Div00.form.Static03.set_text(chkDs.getColumn(0, "korNm"));
+	_this.Div00.form.Div01.form.Div00.form.Static05.set_text(chkDs.getColumn(0, "korId"));
+	_this.Div00.form.Div01.form.Div01.form.Static01.set_text(chkDs.getColumn(0, "hpNo"));
+	_this.Div00.form.Div01.form.Div01.form.Static03.set_text(chkDs.getColumn(0, "mbrGrdeCd"));
+};
+
+// 회원 초기화 버튼 클릭
+this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("수강등록을 취소하시겠습니까? 입력된 내용은 초기화 됩니다.")){
+		_this.Div00.form.Div01.form.Div00.form.Static01.set_text("");
+		_this.Div00.form.Div01.form.Div00.form.Static03.set_text("");
+		_this.Div00.form.Div01.form.Div00.form.Static05.set_text("");
+		_this.Div00.form.Div01.form.Div01.form.Static01.set_text("");
+		_this.Div00.form.Div01.form.Div01.form.Static03.set_text("");
+	}
+};
+
+// 강좌검색 버튼 클릭
+this.Div00_Div02_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00.form.Static01.text) != ""){
+		var yy = this.Div00.form.Div00.form.Div00.form.Combo00.value;
+		var lectSmsterCd = this.Div00.form.Div00.form.Div00.form.Combo01.value;
+		var oArg = {
+			menuSeq : this.menuSeq
+			, yy : yy
+			, lectSmsterCd : lectSmsterCd
+			, mbrNo : this.Div00.form.Div01.form.Div00.form.Static01.text
+		};
+		this.cnt++;
+		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::LectReg/LectSearch_popup.xfdl", this, 1280, 700, true, true, null);
+	}else{
+		alert("회원 검색 후 이용 가능합니다.");
+		return;
+	}
+	
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_smster_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="currSmsterCdYn" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

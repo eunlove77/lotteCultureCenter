@@ -324,16 +324,45 @@ this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 };
 
+// 강좌이강 버튼 클릭
 this.Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	// 강좌이강 팝업
-	//description Modal
+	// 실수강자 카운트(동일강좌 한꺼번에 이강할때 사용)
+	var actlAtlctNpleCnt = 0;
+	for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
+		if(this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "brchCd") == this.ds_stlm_cmplt_list.getColumn(i, "brchCd")
+			&& this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "yy") == this.ds_stlm_cmplt_list.getColumn(i, "yy")
+			&& Number(this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectSmsterCd")) == Number(this.ds_stlm_cmplt_list.getColumn(i, "lectSmsterCd"))
+			&& this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectCd") == this.ds_stlm_cmplt_list.getColumn(i, "lectCd")){
+			actlAtlctNpleCnt++;
+		}
+	}
+	
 	var oArg = {
-				//objArguments : this.TextArea00,
-				test : "aaaaa"
-				};
-				
-	this.gfn_openPopup("popupOpen" + this.cnt, oArg, "PayMng::MoveLecture_popup.xfdl", this, 960, 480, true, true, null);
+		menuSeq : this.menuSeq
+		, atlctRsvNo : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "atlctRsvNo")
+		, actlAtlctNpleSeqno : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno")
+		, brchCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "brchCd")
+		, yy : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "yy")
+		, lectSmsterCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectSmsterCd")
+		, lectCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectCd")
+		, lectStatCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStatCd")
+		, lectAmt : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectAmt")
+		, lectAddAmt : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectAddAmt")
+		, lectNbcnt : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectNbcnt")
+		, lectStDtm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStDtm")
+		, lectEndDtm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectEndDtm")
+		, lectStHhCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStHhCd")
+		, lectStMiCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStMiCd")
+		, lectEndHhCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectEndHhCd")
+		, lectEndMiCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectEndMiCd")
+		, lectStDtmNm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStDtmNm")
+		, optnUseYn : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "optnUseYn")
+		, optnTypCdNm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "optnTypCdNm")
+		, actlAtlctNpleCnt : actlAtlctNpleCnt
+	};
+	
+	this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/MoveLect_popup.xfdl", this, 1280, 800, true, true, null);
 };
 
 this.popupCallBack = function(sFormId, sArg)
@@ -388,7 +417,7 @@ this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			var strSvcId    = "updateStlmCmpltList";
 			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStlmCmpltList.do";
 			var inData      = "stlmCmpltList=ds_stlm_cmplt_list:U";
-			var outData     = "this.ds_stlm_cmplt_list=output1";
+			var outData     = "";
 			var strArg      = "targetColumn=" + this.targetColumn + " oldValue=" + nexacro.wrapQuote(this.oldValue);
 			var callBackFnc = "fnCallback";
 			var isAsync     = true;
@@ -421,7 +450,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		this.alert(errorCode+"\n"+errorMsg);
 		this.ds_stlm_cmplt_list.set_enableevent(false);
-		this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, this.oldValue);
+		this.ds_stlm_cmplt_list.setColumn(this.ds_stlm_cmplt_list.rowposition, this.targetColumn, this.oldValue);
 		this.ds_stlm_cmplt_list.set_enableevent(true);
 		return;
 	}
@@ -430,6 +459,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "updateStlmCmpltList":
 			alert("변경되었습니다.");
+			this.parent.parent.parent.parent.reload();
 			break;
 	}
 };
@@ -510,6 +540,18 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
           <Column id="atlctRsvNo" type="STRING" size="256"/>
           <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="lectDcAmt" type="INT" size="256"/>
+          <Column id="lectAddDcAmt" type="INT" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="optnTypCdNm" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_fmly_cd_list">

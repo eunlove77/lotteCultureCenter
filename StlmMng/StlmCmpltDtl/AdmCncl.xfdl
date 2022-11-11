@@ -258,14 +258,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 		case "update":
 			alert("결제 취소되었습니다.");
-			this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() - 470);
-			this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() - 470);
-			this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() - 470);
-			
-			this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() - 470); // div
-			this.parent.parent.parent.parent.resetScroll(); // form
-
-			this.parent.parent.parent.form.removeChild("admCnclDiv");
+			this.parent.parent.parent.parent.reload();
 			break;
 	}
 };
@@ -491,7 +484,8 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	lectAmtFee = Number(nexacro.replaceAll(lectAmtFee.substring(0, lectAmtFee.length - 1), ",", ""));
 	var addAmtFee = this.Div02.form.Div04.form.Static00.text;
 	addAmtFee = Number(nexacro.replaceAll(addAmtFee.substring(0, addAmtFee.length - 1), ",", ""));
-	var feeRt = nexacro.round((lectAmtFee + addAmtFee) / (rfndScheLectAmt + rfndScheAddAmt + lectAmtFee + addAmtFee) * 100);
+	// 수수료율 삭제
+	//var feeRt = nexacro.round((lectAmtFee + addAmtFee) / (rfndScheLectAmt + rfndScheAddAmt + lectAmtFee + addAmtFee) * 100);
 	
 	var crdStlmAmt = this.ds_adm_cncl_data.getColumn(0, "crdStlmAmt");
 	var lpntUseAmt = this.ds_adm_cncl_data.getColumn(0, "lpntUseAmt");
@@ -526,8 +520,6 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return;
 	}
 	
-	trace(crdRfndAmt);
-	trace(this.expctTotRfndAmt);
  	if(crdRfndAmt > this.expctTotRfndAmt){
 		alert("카드 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
@@ -560,7 +552,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		alert("환불예정 금액 만큼 환불금액을 입력하세요.");
 		return;
 	}
-	
+	trace(this.Div00.form.Div00.form.Combo00.value);
 	if(confirm("결제 건을 취소(환불)하시겠습니까?")){
 		var dsUpdate = new Dataset();
 		dsUpdate.name = "ds_update_info";
@@ -574,7 +566,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		dsUpdate.addColumn("gsRfndScheAmt", "int", 256);
 		dsUpdate.addColumn("rfndScheLectAmt", "int", 256);
 		dsUpdate.addColumn("rfndScheAddAmt", "int", 256);
-		dsUpdate.addColumn("feeRt", "int", 256);
+		//dsUpdate.addColumn("feeRt", "int", 256);
 		dsUpdate.addColumn("lectAmtFee", "int", 256);
 		dsUpdate.addColumn("addAmtFee", "int", 256);
 		dsUpdate.addColumn("crdRfndAmt", "int", 256);
@@ -597,7 +589,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_update_info.setColumn(0, "gsRfndScheAmt", rfndScheLectAmt + rfndScheAddAmt);
 		this.ds_update_info.setColumn(0, "rfndScheLectAmt", rfndScheLectAmt);
 		this.ds_update_info.setColumn(0, "rfndScheAddAmt", rfndScheAddAmt);
-		this.ds_update_info.setColumn(0, "feeRt", lectAmtFee + addAmtFee > 0 ? feeRt : 0);
+		//this.ds_update_info.setColumn(0, "feeRt", lectAmtFee + addAmtFee > 0 ? feeRt : 0);
 		this.ds_update_info.setColumn(0, "lectAmtFee", lectAmtFee);
 		this.ds_update_info.setColumn(0, "addAmtFee", addAmtFee);
 		this.ds_update_info.setColumn(0, "crdRfndAmt", crdRfndAmt);

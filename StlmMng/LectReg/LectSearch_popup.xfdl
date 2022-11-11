@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="LectSearch_popup" width="1280" height="1000" titletext="강좌검색" onload="LectSearch_popup_onload">
+    <Layouts>
+      <Layout height="1000" width="1280">
+        <Div id="Div01" taborder="1" text="Div01" left="0" top="0" height="920" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="10" top="640" height="130" right="10" visible="false">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 동반 수강자 정보" left="0" top="0" width="130" height="17" cssclass="sta_WF_TitGray"/>
+                    <Static id="Static01" taborder="1" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="0" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="0" width="200"/>
+                    <Div id="Div00" taborder="2" text="Div00" left="0" top="20" height="102" cssclass="div_WF_CompWrap" right="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="실수강자 선택 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="100" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                          <Div id="Div00" taborder="1" text="Div00" left="Static00:0" top="0" height="100" right="0"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="divLectReg" taborder="1" text="Div01" left="0" top="0" height="630" right="0" url="ClassMng::ClassListPopup.xfdl"/>
+              <Div id="Div01" taborder="2" text="Div01" left="10" top="780" height="120" right="10" visible="false">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 재료비/대여료" left="0" top="0" width="130" height="17" cssclass="sta_WF_TitGray"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="0" top="20" height="33" cssclass="div_WF_CompWrap" right="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" onitemchanged="Div01_Div01_Div00_Combo00_onitemchanged" innerdataset="ds_optn_list" codecolumn="optnSeqno" datacolumn="optnNm"/>
+                          <Static id="Static01" taborder="2" left="Combo00:10" top="5" width="200" height="20"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button00" taborder="3" text="취소" left="551" width="84" bottom="10" height="21" cssclass="btn_WF_Medium" visible="false"/>
+              <Button id="Button01" taborder="4" text="저장" left="645" width="84" height="21" bottom="10" cssclass="btn_WF_Weak" visible="false"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.grid = null;
+this.ds = null;
+this.menuSeq = null;
+this.yy = null;
+this.lectSmsterCd = null;
+
+// 이미 체크된 라디오버튼 다시 체크하는 행동 막기위한 변수
+this.checkedYn = false;
+this.selectedIndex;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.LectSearch_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.grid = this.Div01.form.divLectReg.form.Div00.form.Div01.form.Grid00;
+	this.ds = this.Div01.form.divLectReg.form.ds_class_list;
+	this.menuSeq = this.parent.menuSeq;
+	this.yy = this.parent.yy;
+	this.lectSmsterCd = this.parent.lectSmsterCd;
+	
+	// 초기 데이터 세팅
+	this.fn_data_list();
+};
+
+// 최초 데이터 로드
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectPopDataList.do";
+	var inData      = "";
+	var outData     = "ds_fmly_list=output1";
+	var strArg      = "mbrNo=" + this.parent.mbrNo;
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	  if(errorCode != 0)
+	  {
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	  }
+
+	  switch(svcID)
+	  {
+		case "dataList":
+			// 라디오 버튼
+			this.grid.type = 2;
+			this.grid.redrawExprCell();
+			
+			this.gfnSetRadioNoDataset(this.ds, this.grid, 0);
+			this.grid.addEventHandler("oncellclick", this.fn_grid_oncellclick, this);
+			
+			// classlistpopup 지점 설정 시 후처리
+			if(nexacro.getPrivateProfile("athrCd") == "99"){
+				// 슈퍼관리자는 모든 지점 가능
+				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
+			}else{
+				// 슈퍼 이외 관리자는 설정 지점만 가능
+				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_value(nexacro.getPrivateProfile("brchCd"));
+				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_readonly(true);
+			}
+			
+			this.Div01.form.divLectReg.form.brchCd = this.Div01.form.divLectReg.form.ds_search.getColumn(0, "brchCd");
+			this.Div01.form.divLectReg.form.fn_sesterInfo();
+			this.Div01.form.divLectReg.form.fn_year_add();
+			
+			// 년도
+			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_value(this.yy);
+			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_readonly(true);
+			// 학기
+			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_value(this.lectSmsterCd);
+			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
+			
+			var objCheckbox;
+			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+				if(i % 2 == 0){
+					objCheckbox = new CheckBox("fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), 5, (5 + (nexacro.floor(i/2) * 20)), 105, 20, null, null);
+				}else{
+					objCheckbox = new CheckBox("fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), 500, (5 + (nexacro.floor(i/2) * 20)), 105, 20, null, null);
+				}
+				
+				objCheckbox.set_text(this.ds_fmly_list.getColumn(i, "korNm") + "(" + this.ds_fmly_list.getColumn(i, "fmlyRelCdNm") + ")");
+				this.Div01.form.Div00.form.Div00.form.Div00.form.addChild("chk_fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), objCheckbox);
+				objCheckbox.set_value(0);
+				objCheckbox.show();
+			}
+			
+			break;
+		case "optnList":
+			this.Div01.form.Div01.form.Div00.form.Static00.set_text(this.ds.getColumn(this.ds.rowposition, "optnTypNm"));
+			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+			this.Div01.form.Div01.set_visible(true);
+			break;
+	  }
+};
+
+// 그리드 라디오버튼 선택이벤트
+this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo){
+	var objDs = obj.getBindDataset();
+	
+	for(var i=0; i<objDs.getRowCount(); i++)
+	{
+		if(objDs.checkarray[i] == 1){
+			if(this.selectedIndex != i){
+				this.checkedYn = false;
+				this.selectedIndex = i;
+			}
+		}
+	}
+	
+	if(e.cell == obj.checkcell && !this.checkedYn){
+		this.checkedYn = true;
+		
+		// 강좌 상태 체크
+		if(this.ds.getColumn(e.row, "lectStatCd") != "02" && this.ds.getColumn(e.row, "lectStatCd") != "03" && this.ds.getColumn(e.row, "lectStatCd") != "04"){
+			alert("수강등록이 불가능한 강좌가 포함되어 있습니다.\n강좌상태를 확인 후 수강등록 바랍니다.");
+			for(var i=0; i<objDs.getRowCount(); i++)
+ 			{
+ 				objDs.checkarray[i] = 0;
+ 			}
+ 			obj.redrawExprCell();
+			this.checkedYn = false;
+			this.Div01.set_height(640);
+			this.Div01.form.Div00.set_visible(false);
+			this.Div01.form.Div01.set_visible(false);
+			this.Div01.form.Button00.set_visible(false);
+			this.Div01.form.Button01.set_visible(false);
+			this.resetScroll();
+			return;
+		}
+
+		// 동반 수강자 정보
+		this.Div01.set_height(920);
+		this.Div01.form.Div00.set_visible(true);
+		
+		// 재료비/대여료
+		if(this.ds.getColumn(e.row, "optnUseYn") == "Y"){
+			this.removeChild("ds_class_info");
+			var dsClassInfo = new Dataset();
+			dsClassInfo.name = "ds_class_info";
+			this.addChild("ds_class_info", dsClassInfo);
+			dsClassInfo.set_enableevent(false);
+			dsClassInfo.clear();
+			dsClassInfo.copyData(this.ds, false);
+			dsClassInfo.clearData();
+			dsClassInfo.addRow();
+			dsClassInfo.copyRow(0, this.ds, this.ds.rowposition);
+			dsClassInfo.set_enableevent(true);
+			
+			var strSvcId    = "optnList";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectOptnList.do";
+			var inData      = "classInfo=this.ds_class_info";
+			var outData     = "this.ds_optn_list=output1";
+			var strArg      = "";
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.menuSeq
+			};
+			
+			this.gfn_transaction(tranObj);
+		}else{
+			this.Div01.form.Div01.set_visible(false);
+		}
+		
+		this.Div01.form.Button00.set_visible(true);
+		this.Div01.form.Button01.set_visible(true);
+		
+		this.resetScroll();
+	}
+}
+
+// 옵션 선택 셀렉트박스
+this.Div01_Div01_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	if(obj.value == ""){
+		this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+	}else{
+		this.Div01.form.Div01.form.Div00.form.Static01.set_text(this.gfn_setComma(this.ds_optn_list.getColumn(obj.index, "optnAmt")) + "원");
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_fmly_list">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="fmlySeqno" type="STRING" size="256"/>
+          <Column id="fmlyMbrNo" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="lscCd" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_optn_list">
+        <ColumnInfo>
+          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="optnAmt" type="INT" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+          <Column id="partRfndClCd" type="STRING" size="256"/>
+          <Column id="deltYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

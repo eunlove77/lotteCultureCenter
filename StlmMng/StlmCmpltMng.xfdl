@@ -3,9 +3,7 @@
   <Form id="StlmCmpltMng" width="1280" height="1000" titletext="New Form" onload="StlmCmpltMng_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
-        <Static id="title" taborder="0" text="결제완료 관리" left="10" top="10" width="120" height="60" onclick="title_onclick"/>
-        <Static id="navigator" taborder="1" text="Home" left="1050" top="10" height="60" right="0"/>
-        <Div id="Div00" taborder="2" text="Div00" left="10" top="80" right="10" bottom="10">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="80" right="10" bottom="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="4" text="Div00" left="0" top="0" height="210" url="StlmMng::StlmCmpltMng/StlmCmpltMngSearch.xfdl" right="0"/>
@@ -13,6 +11,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Static id="txtMenuNm" taborder="1" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
       </Layout>
     </Layouts>
     <Objects/>
@@ -42,11 +41,7 @@ this.StlmCmpltMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.objPageingDs = this.application.gdsPageing;		
 	
-	var objOwnerFrame = this.getOwnerFrame();
-	
-	var menuNm = objOwnerFrame.param.MENU_NM;
-	
-	this.navigator.set_text( this.navigator.text + " > " + menuNm );
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	searchFrm.fn_data_list();
 };

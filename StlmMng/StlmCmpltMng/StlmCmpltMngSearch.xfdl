@@ -209,39 +209,37 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		chkboxFrm.stlmChnlAll.set_value(1);
 		
 		// 학기
-		var dsYyList = new Dataset();
-		dsYyList.name = "ds_yy_list";
-		dsYyList.addColumn("cd", "string", 256);
-		dsYyList.addColumn("cdNm", "string", 256);
-		
-		this.addChild("ds_yy_list", dsYyList);
-		
-		var currYear = new Date().getFullYear();
-		
-		this.ds_yy_list.set_enableevent(false);
-		for(var i=0;i<16;i++){
-			this.ds_yy_list.insertRow(i);
-			this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
-			this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
-		}
-		this.ds_yy_list.set_enableevent(true);
-		
-		
-		this.Div00.form.Div04.form.strtYy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div04.form.strtYy.set_codecolumn("cd");
-		this.Div00.form.Div04.form.strtYy.set_datacolumn("cdNm");
-		this.Div00.form.Div04.form.strtYy.set_index(0);
-		this.Div00.form.Div04.form.endYy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div04.form.endYy.set_codecolumn("cd");
-		this.Div00.form.Div04.form.endYy.set_datacolumn("cdNm");
-		this.Div00.form.Div04.form.endYy.set_index(0);
-		
-		// 학기
 		for(var i=0;i<this.ds_smster_list.getRowCount();i++){
 			if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
 				this.initSmsterCdIndex = i;
 				this.Div00.form.Div04.form.strtSmsterCd.set_index(this.initSmsterCdIndex);
 				this.Div00.form.Div04.form.endSmsterCd.set_index(this.initSmsterCdIndex);
+				
+				//년도
+				this.removeChild("ds_yy_list");
+				var dsYyList = new Dataset();
+				dsYyList.name = "ds_yy_list";
+				dsYyList.addColumn("cd", "string", 256);
+				dsYyList.addColumn("cdNm", "string", 256);
+				
+				this.addChild("ds_yy_list", dsYyList);
+				
+				var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
+				this.ds_yy_list.set_enableevent(false);
+				for(var i=0;i<16;i++){
+					this.ds_yy_list.insertRow(i);
+					this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
+					this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
+				}
+				this.ds_yy_list.set_enableevent(true);
+				this.Div00.form.Div04.form.strtYy.setInnerDataset(this.ds_yy_list);
+				this.Div00.form.Div04.form.strtYy.set_codecolumn("cd");
+				this.Div00.form.Div04.form.strtYy.set_datacolumn("cdNm");
+				this.Div00.form.Div04.form.strtYy.set_index(0);
+				this.Div00.form.Div04.form.endYy.setInnerDataset(this.ds_yy_list);
+				this.Div00.form.Div04.form.endYy.set_codecolumn("cd");
+				this.Div00.form.Div04.form.endYy.set_datacolumn("cdNm");
+				this.Div00.form.Div04.form.endYy.set_index(0);
 			}
 		}
 		
@@ -496,6 +494,7 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
           <Column id="cd" type="STRING" size="4"/>
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="currSmsterCdYn" type="STRING" size="1"/>
+          <Column id="yy" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_stlm_mthd_list">

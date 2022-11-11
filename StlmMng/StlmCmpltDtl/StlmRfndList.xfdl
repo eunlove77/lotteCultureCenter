@@ -346,6 +346,13 @@
           <Column id="fmlyCd" type="STRING" size="256"/>
           <Column id="rfndChnlCd" type="STRING" size="256"/>
           <Column id="stlmDtm" type="STRING" size="256"/>
+          <Column id="rfndLectTmsCd" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="INT" size="256"/>
+          <Column id="rfndScheLectAmt" type="INT" size="256"/>
+          <Column id="rfndScheAddAmt" type="INT" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="lectDcAmt" type="INT" size="256"/>
+          <Column id="lectAddDcAmt" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_fmly_cd_list">
@@ -370,6 +377,7 @@ this.oldValue;
 this.targetColumn;
 this.excelFileName = "결제취소/환불_목록_";
 this.excelImportExport = "";
+this.menuSeq = this.parent.parent.parent.parent.parent.menuSeq;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -430,8 +438,8 @@ this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			var strSvcId    = "updateStlmRfndList";
 			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStlmRfndList.do";
 			var inData      = "stlmRfndList=ds_stlm_rfnd_list:U";
-			var outData     = "this.ds_stlm_rfnd_list=output1";
-			var strArg      = "targetColumn=" + this.targetColumn;
+			var outData     = "";
+			var strArg      = "targetColumn=" + this.targetColumn + " oldValue=" + nexacro.wrapQuote(this.oldValue);
 			var callBackFnc = "fnCallback";
 			var isAsync     = true;
 			
@@ -444,7 +452,7 @@ this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 				callBackFnc : callBackFnc,
 				isAsync : isAsync,
 				isPopup : true,
-				menuSeq : this.getOwnerFrame().param.MENU_ID
+				menuSeq : this.menuSeq
 			};
 			
 			this.gfn_transaction(tranObj);
@@ -464,7 +472,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		this.alert(errorCode+"\n"+errorMsg);
 		this.ds_stlm_rfnd_list.set_enableevent(false);
-		this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, this.oldValue);
+		this.ds_stlm_rfnd_list.setColumn(this.ds_stlm_rfnd_list.rowposition, this.targetColumn, this.oldValue);
 		this.ds_stlm_rfnd_list.set_enableevent(true);
 		return;
 	}
@@ -473,6 +481,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "updateStlmRfndList":
 			alert("변경되었습니다.");
+			this.parent.parent.parent.parent.reload();
 			break;
 	}
 };
