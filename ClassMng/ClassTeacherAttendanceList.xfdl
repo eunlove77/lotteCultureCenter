@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ClassTeacherAttendanceList" width="1280" height="720" titletext="강사 출석부" onload="ClassTeacherAttendanceList_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="강사 출석부" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
+          <Layouts>
+            <Layout>
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="80" right="0"/>
+              <Div id="Div00" taborder="1" text="Div00" left="0" top="Grid00:15" height="130" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색" left="0" top="0" width="120" height="21"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="0" top="Static00:15" bottom="0" right="0" cssclass="div_WF_TableComp">
+                      <Layouts>
+                        <Layout>
+                          <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="50%" height="33" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="회차선택" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div00_00" taborder="1" text="Div00" left="Div00:0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="출석여부" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <CheckBox id="checkYnAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                                <CheckBox id="checkYn0" taborder="2" text="Y" left="checkYnAll:6" top="5" width="24" height="20" truevalue="Y"/>
+                                <CheckBox id="CheckBox00" taborder="3" text="N" left="checkYn0:6" top="5" width="27" height="20" truevalue="N"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div00_01" taborder="3" text="Div00" left="0" top="Div00:-1" width="50.00%" height="33" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="수강자명" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" width="100" height="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div00_00_00" taborder="2" text="Div00" left="Div00_01:0" top="Div00_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Button id="Button00" taborder="1" text="초기화" top="5" height="20" width="80" right="0" cssclass="btn_WF_Low"/>
+                                <Button id="Button00_00" taborder="2" text="검색" top="5" height="20" width="80" right="Button00:15" cssclass="btn_WF_Medium"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="2" text="Div01" left="0" top="Div00:15" height="330" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="목록 (0명)" left="0" top="0" width="120" height="21"/>
+                    <Grid id="Grid00" taborder="1" left="0" top="Static00:15" right="0" bottom="0"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button01" taborder="3" text="취소" left="46%" top="Div01:30" width="100" height="30" cssclass="btn_WF_High" onclick="Div00_Button01_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.popCnt = 0;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.ClassTeacherAttendanceList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.fn_click_add(this);
+};
+
+
+/**************************************************************************
+ * 검색영역
+ **************************************************************************/
+
+//체크박스 클릭이벤트
+this.fn_click_add = function(pObj)
+{
+	var arrObj = pObj.components;
+	for(var i=0; i<arrObj.length; i++)
+	{	
+		if(arrObj[i] == "[object Div]"){
+			this.fn_click_add(arrObj[i].form);
+		}
+		else 
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				arrObj[i].insertEventHandler("onclick", 0, this.fn_checkbox, this);
+			}
+		}
+	}	
+}
+
+//체크박스 전체 초기화
+this.chkAllInit = function(pObj)
+{
+	var arrObj = pObj.components;
+	
+	for(var i=0; i<arrObj.length; i++)
+	{
+		if(arrObj[i] == "[object Div]"){
+			this.chkAllInit(arrObj[i].form);
+		}
+		else if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+		{				
+			arrObj[i].set_value(false);
+		}	
+	}
+}
+
+
+this.fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(true);
+			}
+			else
+			{
+				if(arrObj[i] == "[object CheckBox]")
+				{
+					arrObj[i].set_value(arrObj[i].truevalue);
+				}
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+			
+		}
+	}
+	
+}
+
+this.fn_checkbox = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+
+
+/**************************************************************************
+ * 이벤트 영역
+**************************************************************************/
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};]]></Script>
+  </Form>
+</FDL>

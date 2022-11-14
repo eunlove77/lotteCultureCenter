@@ -7,8 +7,8 @@
         <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
           <Layouts>
             <Layout>
-              <Button id="Button00" taborder="0" text="계약서 미리보기" left="0" top="15" width="120" height="30" cssclass="btn_WF_Medium"/>
-              <Button id="Button00_00" taborder="1" text="계약서 등록" left="Button00:15" top="15" width="100" height="30" cssclass="btn_WF_Medium"/>
+              <Button id="Button00" taborder="0" text="계약서 미리보기" left="0" top="15" width="120" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button00_onclick"/>
+              <Button id="Button00_00" taborder="1" text="계약서 등록" left="Button00:15" top="15" width="100" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button00_00_onclick"/>
               <Div id="Div00" taborder="2" text="Div00" left="0" top="Button00:15" height="100" right="0" cssclass="div_WF_TableComp">
                 <Layouts>
                   <Layout>
@@ -125,12 +125,14 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-
+this.popCnt = 0;
+this.updateCode = "00";
 
  /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -139,15 +141,14 @@ this.application = null;
 this.ClassContractCreate_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	
+	this.ds_class_list.copyData(this.parent.dataset);
+
 	//캘린더 세팅
 	this.Div00.form.Div00.form.Div00_00.form.Calendar01.calendaredit.set_readonly(true); 
 	var objDate = new nexacro.Date();
-	var today = objDate.getFullYear() + ("0" + (objDate.getMonth()+1)).slice(-2) + ("0" + objDate.getDate()).slice(-2);
+	var today = objDate.getFullYear() + ("0" + (objDate.getMonth()+1)).slice(-2) + ("0" + objDate.getDate()).slice(-2)
 	this.Div00.form.Div00.form.Div00_00.form.Calendar01.set_value(today);
-	
-	this.ds_class_list.copyData(this.parent.dataset);
-	
+
 	this.Div00.form.Div00.form.Div00_01.form.Edit00.set_value(this.ds_class_list.getColumn(0, "tcNm"));
 	this.Div00.form.Div00.form.Div00_02.form.Edit00.set_value(this.ds_class_list.getColumn(0, "brchNm"));
 	
@@ -161,6 +162,36 @@ this.ClassContractCreate_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	}
 };
 
+/**************************************************************************
+ * 트랜잭션 callback
+**************************************************************************/
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+  else 
+  {
+	 switch(svcID)
+	  {
+		case "insertClassContract":
+			if(this.updateCode == "00") 
+			{
+				alert("계약서가 등록되었습니다.");
+			}
+			else
+			{
+				alert("다시 시도해주세요.");
+			}
+			this.opener.components[0].form.Div00.form.Div00.form.Div00.form.Div03.form.Button00.click();
+			this.close();
+		break;
+	  }
+  }
+};
+
 
 /**************************************************************************
  * 이벤트 영역
@@ -169,7 +200,37 @@ this.ClassContractCreate_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.close();
-};]]></Script>
+};
+
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var arrArguments = {
+		dataset : this.ds_class_list
+	}
+	this.gfn_openPopup("ClassContractPreviewPopup" + this.popCnt, arrArguments, "ClassMng::ClassContractPreviewPopup.xfdl", this, 1280, 720, true, true, null);
+};
+
+this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("계약서를 생성하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "insertClassContract",
+			strSvcUrl : this.application.Admin_svc + "::class/insertClassContract.do",
+			inData : "classList=ds_class_list",
+			outData : "",
+			strArg : "cntrDt=" + this.Div00.form.Div00.form.Div00_00.form.Calendar01.value,
+			callBackFnc : "fnCallback",
+			isAsync : false,
+			menuSeq : this.parent.menuSeq,
+			isPopup : true
+			
+		}
+		this.gfn_transaction(tranObj);
+	}
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_class_list" updatecontrol="false">
         <ColumnInfo>
@@ -202,6 +263,7 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="stDaywNm" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
+          <Column id="cntrDt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

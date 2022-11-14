@@ -1130,6 +1130,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		case "insertClass":
 			this.alert("저장 되었습니다.");
+			this.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
 			this.close();
 		break;
 	  }
@@ -1155,6 +1156,7 @@ this.fn_code_list = function()
 		strArg : "cdId=CLASS_02||CLASS_03||CLASS_05||CLASS_06||CLASS_07||sester||ctgy||room||discount||087||090||INCM_CL||PPAY_STD useYn=Y brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 
@@ -1179,6 +1181,7 @@ this.fn_classCtgyLarge_chg = function(obj)
 		strArg : "ctegryLvlNo=1 useYn=Y ctegryName=classCategoryMiddleList ctegryId=" + obj.value,
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 
@@ -1198,7 +1201,6 @@ this.fn_classCtgyMiddle_chg = function(obj)
 {
 	this.ds_classCtgySmall_list.filter("");
 	this.ds_classCtgySmall_list.clearData();
-	
 	var tranObj = {
 		strSvcId : "getCategoryList",
 		strSvcUrl : this.application.Admin_svc + "::class/getCategoryList.do",
@@ -1207,6 +1209,7 @@ this.fn_classCtgyMiddle_chg = function(obj)
 		strArg : "ctegryLvlNo=2 useYn=Y ctegryName=classCategorySmallList ctegryId=" + obj.value,
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 
@@ -1268,6 +1271,7 @@ this.getSesterDtlInfo = function()
 			strArg : "",
 			callBackFnc : "fnCallback",
 			isAsync : false,
+			menuSeq : this.parent.menuSeq,
 			isPopup : true
 	}
 
@@ -1522,6 +1526,7 @@ this.fn_schedule_cal = function(obj)
 			strArg : "brchCd=" + this.brchCd + " lectDt=" + obj.value,
 			callBackFnc : "fnCallback",
 			isAsync : false,
+			menuSeq : this.parent.menuSeq,
 			isPopup : true
 		}
 		this.gfn_transaction(tranObj);
@@ -1941,12 +1946,13 @@ this.fn_save = function(_this)
 			inData += "cctList=ds_cct_list multtmsList=ds_multtms_list pblpmprcustList=ds_pblpmprcust_list" 
 		var tranObj = {
 			strSvcId : "insertClass",
-			strSvcUrl : this.application.Admin_svc + "::class/insertClass.do",
+			strSvcUrl : _this.application.Admin_svc + "::class/insertClass.do",
 			inData : inData,
 			outData : "",
 			strArg : "",
 			callBackFnc : "fnCallback",
 			isAsync : false,
+			menuSeq : _this.parent.menuSeq,
 			isPopup : true
 			
 		}
@@ -2345,6 +2351,7 @@ this.Div00_Div00_00_00_00_00_Div00_Div04_Button00_onclick = function(obj:nexacro
 			strArg : "brchCd=" + this.brchCd,
 			callBackFnc : "fnCallback",
 			isAsync : true,
+			menuSeq : this.parent.menuSeq,
 			isPopup : true
 		}
 
@@ -2570,7 +2577,8 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var arrArguments = {
-		title : "강좌등록"
+		title : "강좌등록",
+		menuSeq : this.parent.menuSeq,
 	}
 	
 	this.gfn_showModal("classImgListPopupModal", arrArguments, "ClassMng::ClassImgListPopup.xfdl", "", this, 800, 720, true, false, null);
@@ -2583,7 +2591,8 @@ this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Bu
 		type : 1,
 		brchCd : '',
 		lectTpCd : '01',
-		dataset : this.ds_multtms_list
+		dataset : this.ds_multtms_list,
+		menuSeq : this.parent.menuSeq,
 	}
 	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
 };
@@ -2617,7 +2626,8 @@ this.Div00_Div00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Butto
 		type : 1,
 		brchCd : '',
 		lectTpCd : '01',
-		dataset : this.ds_cct_list
+		dataset : this.ds_cct_list,
+		menuSeq : this.parent.menuSeq
 	}
 	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
 };
@@ -2718,13 +2728,20 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro
 		
 		this.ds_teacher_list.checkarray[i] = 0;
 	}
-	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
 	
-	this.ds_teacher_list.deleteMultiRows(delChk);
-	
-	if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+	if(delChk.length == 0)
 	{
-		this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+		alert("삭제 대상을 선택하세요.");
+	}
+	else
+	{
+		this.ds_teacher_list.deleteMultiRows(delChk);
+	
+		if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+		{
+			this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+		}
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
 	}
 };
 
@@ -2736,7 +2753,6 @@ this.ds_teacher_list_onrowsetchanged = function(obj:nexacro.NormalDataset,e:nexa
 		rpsntYn = "Y";
 	}
 	
-	this.ds_teacher_list.getColumn()
 	this.ds_teacher_list.setColumn(e.row, "rpsntYn", rpsntYn);
 	this.ds_teacher_list.setColumn(e.row, "tcGrdeCd", "S");
 	this.ds_teacher_list.setColumn(e.row, "ppayStdCd", "01");
@@ -2790,7 +2806,8 @@ this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e
 	var arrArguments = {
 		title : "강좌등록",
 		dataset : this.ds_pblpmprcust_list,
-		brchCd : this.brchCd
+		brchCd : this.brchCd,
+		menuSeq : this.parent.menuSeq,
 	}
 	
 	this.gfn_showModal("classBrchPopupModal", arrArguments, "ClassMng::ClassBrchPopup.xfdl", "", this, 900, 600, true, false, null);

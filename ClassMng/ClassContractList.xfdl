@@ -73,7 +73,7 @@
                                     </Rows>
                                   </Dataset>
                                 </Combo>
-                                <Edit id="Edit00" taborder="2" left="221" top="5" width="500" height="20" onkeyup="Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup"/>
+                                <Edit id="Edit00" taborder="2" left="221" top="5" width="500" height="20" onkeyup="Div00_Div00_Div00_Div03_Edit00_onkeyup"/>
                                 <Button id="Button00" taborder="3" text="검색" left="727" top="5" width="80" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_Div00_Div03_Button00_onclick"/>
                                 <Button id="Button01" taborder="4" text="초기화" left="813" top="5" width="80" height="20" cssclass="btn_WF_Low" onclick="Div00_Div00_Div00_Div03_Button01_onclick"/>
                               </Layout>
@@ -90,14 +90,14 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌계약 목록 (0개)" top="16" width="150" height="20" left="0"/>
                     <Button id="Button00" taborder="1" text="계약서 생성" top="0" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div01_Button00_onclick"/>
-                    <Grid id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list">
+                    <Grid id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
                             <Column size="48"/>
                             <Column size="48"/>
                             <Column size="80"/>
-                            <Column size="80"/>
+                            <Column size="203"/>
                             <Column size="80"/>
                             <Column size="80"/>
                             <Column size="80"/>
@@ -110,7 +110,7 @@
                             <Column size="80"/>
                             <Column size="94"/>
                             <Column size="135"/>
-                            <Column size="95"/>
+                            <Column size="189"/>
                             <Column size="80"/>
                             <Column size="130"/>
                             <Column size="130"/>
@@ -145,7 +145,7 @@
                             <Cell displaytype="expr:cntrNo == null ? 'checkboxcontrol' : 'none'" text="expr:dataset.checkarray[currow]" edittype="checkbox"/>
                             <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
                             <Cell col="2" text="bind:brchNm"/>
-                            <Cell col="3" text="bind:cntrNo"/>
+                            <Cell col="3" text="bind:cntrNo" color="blue" cursor="pointer" textDecoration="underline"/>
                             <Cell col="4" text="expr:cntrStatCd == '01' ? '계약완료' : '미계약'"/>
                             <Cell col="5" text="bind:tcCdNo"/>
                             <Cell col="6" text="bind:tcNm"/>
@@ -206,6 +206,10 @@
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="stDaywNm" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
+          <Column id="cntrDt" type="STRING" size="256"/>
+          <Column id="cndocFileId" type="STRING" size="256"/>
+          <Column id="signFileId" type="STRING" size="256"/>
+          <Column id="samplCndocFileId" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
@@ -284,6 +288,10 @@
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="stDaywNm" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
+          <Column id="cntrDt" type="STRING" size="256"/>
+          <Column id="cndocFileId" type="STRING" size="256"/>
+          <Column id="signFileId" type="STRING" size="256"/>
+          <Column id="samplCndocFileId" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -697,13 +705,39 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	{
 		this.popCnt++;
 		var arrArguments = {
-			dataset : this.ds_classInsert_list
+			dataset : this.ds_classInsert_list,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
 		}
 		this.gfn_openPopup("ClassContractCreatePopup" + this.popCnt, arrArguments, "ClassMng::ClassContractCreate.xfdl", this, 1280, 720, true, true, null);
 	}
 	else
 	{
 		alert("대상을 선택하세요.");
+	}
+};
+
+this.Div00_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(this.gfn_nvl(this.ds_class_list.getColumn(e.row, "cntrNo")) != "")
+	{
+		this.ds_classInsert_list.clearData();
+		var rowIndex = this.ds_classInsert_list.addRow();
+		this.ds_classInsert_list.copyRow(rowIndex, this.ds_class_list, e.row);
+		
+		this.popCnt++;
+		var arrArguments = {
+			dataset : this.ds_classInsert_list,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		}
+		this.gfn_openPopup("ClassContractDtlPopup" + this.popCnt, arrArguments, "ClassMng::ClassContractDtl.xfdl", this, 1280, 800, true, true, null);
+	}
+};
+
+this.Div00_Div00_Div00_Div03_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		this.Div00.form.Div00.form.Div00.form.Div03.form.Button00.click();
 	}
 };
 ]]></Script>

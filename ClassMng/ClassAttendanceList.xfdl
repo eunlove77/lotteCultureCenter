@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ClassAttendanceList" width="1280" height="720" titletext="출석부" onload="ClassAttendanceList_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="출석부" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="400" right="0">
+                <Layouts>
+                  <Layout>
+                    <Button id="Button00" taborder="0" text="알림톡" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0"/>
+                    <Button id="Button00_00" taborder="1" text="문자발송" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00:15"/>
+                    <Button id="Button00_00_00" taborder="2" text="Print" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00_00:15"/>
+                    <Static id="Static00" taborder="3" text="출석부 목록 (0명)" left="0" top="15" width="120" height="21"/>
+                    <Grid id="Grid00" taborder="4" left="0" top="Button00_00_00:15" right="0" bottom="0" binddataset="ds_class_list">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="93"/>
+                            <Column size="80"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24" band="head"/>
+                            <Row size="24"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell text="brchCd"/>
+                            <Cell col="1" text="brchNm"/>
+                            <Cell col="2" text="yy"/>
+                            <Cell col="3" text="lectSmsterCd"/>
+                            <Cell col="4" text="lectSmsterNm"/>
+                            <Cell col="5" text="강좌코드"/>
+                            <Cell col="6" text="lectNm"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell text="bind:brchCd"/>
+                            <Cell col="1" text="bind:brchNm"/>
+                            <Cell col="2" text="bind:yy"/>
+                            <Cell col="3" text="bind:lectSmsterCd"/>
+                            <Cell col="4" text="bind:lectSmsterNm"/>
+                            <Cell col="5" text="bind:lectCd"/>
+                            <Cell col="6" text="bind:lectNm"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button01" taborder="1" text="취소" left="46%" top="Div00:30" width="100" height="30" cssclass="btn_WF_High" onclick="Div00_Button01_onclick"/>
+              <Div id="Div01" taborder="5" text="Div01" left="0" top="Button01:30" height="1" right="0" border="1px solid black, 0px none, 0px none"/>
+              <Static id="Static00" taborder="2" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;  실 수강자 나이가 '0세' 로 표시되는 경우는 생년월일이 형식(YYYY-MM-DD)에 맞지 않는 경우입니다." left="0" top="Div01:30" height="21" usedecorate="true" right="0" font="normal bold 10pt/normal &quot;Arial&quot;"/>
+              <Static id="Static00_00" taborder="3" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;  실 수강자가 '48개월' 미만인데도 월령(개월)으로 표시되지 않는 경우는 생년월일이 형식(YYYY-MM-DD)에 맞지 않는 경우입니다." left="0" top="Static00:15" height="21" usedecorate="true" right="0" font="normal bold 10pt/normal &quot;Arial&quot;"/>
+              <Static id="Static00_00_00" taborder="4" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;  회원관리 &gt; 회원등록조회 &gt; 회원정보상세 메뉴에서 실 수강자 생년월일을 확인 및 수정할 수 있습니다." left="0" top="Static00_00:15" height="21" usedecorate="true" right="0" font="normal bold 10pt/normal &quot;Arial&quot;"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.popCnt = 0;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.ClassAttendanceList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	this.ds_class_list.copyData(this.parent.dataset);
+	var tranObj = {
+		strSvcId : "selectClassAttendanceList",
+		strSvcUrl : this.application.Admin_svc + "::class/selectClassAttendanceList.do",
+		inData : "classList=ds_class_list",
+		outData : "ds_class_list=classList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.parent.menuSeq,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+};
+
+/**************************************************************************
+ * 이벤트 영역
+**************************************************************************/
+
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+
+]]></Script>
+    <Objects>
+      <Dataset id="ds_class_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

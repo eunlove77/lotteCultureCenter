@@ -198,10 +198,10 @@
                                         <Cell col="4" displaytype="checkboxcontrol" edittype="checkbox" checkboxtruevalue="Y" checkboxfalsevalue="N" text="bind:rpsntYn"/>
                                         <Cell col="5" text="bind:tcGrdeCd" displaytype="combocontrol" edittype="combo" combodataset="ds_tcGrade_list" combocodecol="cd" combodatacol="cdNm"/>
                                         <Cell col="6" text="bind:ppayStdCd" displaytype="combocontrol" edittype="combo" combodataset="ds_ppayStd_list" combodatacol="cdNm" combocodecol="cd"/>
-                                        <Cell col="7" text="bind:ppayAmt" displaytype="maskeditcontrol" edittype="mask" maskeditlimitbymask="both" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
+                                        <Cell col="7" text="bind:ppayAmt" displaytype="maskeditcontrol" edittype="mask" maskeditlimitbymask="both" maskeditformat="expr:ppayStdCd == '01' ? '!##0' : '!##,###,###,##0'"/>
                                         <Cell col="8" text="bind:ppayAmtExpl" edittype="text" displaytype="editcontrol" editmaxlength="20"/>
-                                        <Cell col="9" displaytype="combocontrol" edittype="combo" combodataset="ds_whdtxCl_list" combocodecol="cd" combodatacol="cdNm" combodisplaynulltext="선택" text="bind:whdtxClCd" combodisplaynulltype="nulltext"/>
-                                        <Cell col="10" displaytype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'nomal' : 'combocontrol'" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3') ? 'none' : 'combo'" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd" combodisplaynulltext="선택" combodisplaynulltype="nulltext"/>
+                                        <Cell col="9" displaytype="combocontrol" edittype="combo" combodataset="ds_whdtxCl_list" combocodecol="cd" combodatacol="cdNm" text="bind:whdtxClCd" combodisplaynulltype="none"/>
+                                        <Cell col="10" displaytype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'nomal' : 'combocontrol'" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'none' : 'combo'" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -337,7 +337,7 @@
           <Column id="sleStatCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_teacher_list" onrowsetchanged="ds_teacher_list_onrowsetchanged">
+      <Dataset id="ds_teacher_list" onrowsetchanged="ds_teacher_list_onrowsetchanged" onvaluechanged="ds_teacher_list_onvaluechanged">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
@@ -554,6 +554,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClassTotal":
+			this.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
 			if(this.updateCode == "01")
 			{
 				alert("승인되었습니다.");
@@ -590,6 +591,7 @@ this.fn_code_list = function()
 		strArg : "cdId=CLASS_07||room||ctgy||087||090||INCM_CL||PPAY_STD useYn=Y brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 
@@ -638,6 +640,7 @@ this.fn_classCtgyLarge_chg = function(obj)
 		strArg : "ctegryLvlNo=1 useYn=Y ctegryName=classCategoryMiddleList ctegryId=" + obj.value,
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 
@@ -666,6 +669,7 @@ this.fn_classCtgyMiddle_chg = function(obj)
 		strArg : "ctegryLvlNo=2 useYn=Y ctegryName=classCategorySmallList ctegryId=" + obj.value,
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 
@@ -913,6 +917,7 @@ this.fn_schedule_cal = function(obj)
 			strArg : "brchCd=" + this.brchCd + " lectDt=" + obj.value,
 			callBackFnc : "fnCallback",
 			isAsync : false,
+			menuSeq : this.parent.menuSeq,
 			isPopup : true
 		}
 		this.gfn_transaction(tranObj);
@@ -1106,26 +1111,7 @@ this.fn_save_validation = function()
 		{
 			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "ppayAmt")))) == "")
 			{
-				alert("지급율(%)/지급액(원)을 입력하세요.");
-				return;
-			}
-			
-			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "ppayAmtExpl")))) == "")
-			{
-				alert("지급율근거를 입력하세요.");
-				return;
-			}
-			
-			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "whdtxClCd")))) == "")
-			{
-				alert("원천세구분을 입력하세요.");
-				return;
-			}
-			
-			if(nexacro.trim(new String(this.gfn_nvl(this.ds_teacher_list.getColumn(i, "incmClCd")))) == "")
-			{
-				alert("소득구분을 입력하세요.");
-				return;
+				this.ds_teacher_list.setColumn(i, "ppayAmt", 0);
 			}
 		}
 	}
@@ -1153,6 +1139,7 @@ this.fn_save = function()
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : false,
+		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
@@ -1236,16 +1223,24 @@ this.ds_teacher_list_onrowsetchanged = function(obj:nexacro.NormalDataset,e:nexa
 	this.ds_teacher_list.setColumn(e.row, "rpsntYn", rpsntYn);
 	this.ds_teacher_list.setColumn(e.row, "tcGrdeCd", "S");
 	this.ds_teacher_list.setColumn(e.row, "ppayStdCd", "01");
-	this.ds_teacher_list.setColumn(e.row, "whdtxClCd", "");
-	this.ds_teacher_list.setColumn(e.row, "incmClCd", "");
-	
+	this.ds_teacher_list.setColumn(e.row, "whdtxClCd", "C0");
+	this.ds_teacher_list.setColumn(e.row, "incmClCd", "60");
+	this.Div00.form.Div00.form.Div00.form.Div05.form.Grid00.setCellProperty("head", 0, "text", 0);
+};
+
+this.ds_teacher_list_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if(this.ds_teacher_list.getColumn(e.row, "tcTpCd") != undefined && this.ds_teacher_list.getColumn(e.row, "tcTpCd") != 1)
+	{
+		this.ds_teacher_list.setColumn(e.row, "incmClCd", "");
+	}
 };
 
 this.Div00_Div00_Div00_Div05_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 {
 	if(e.col == "9")
 	{	
-		if(e.value != "D8")
+		if(e.value != "D8" && this.ds_teacher_list.getColumn(e.row, "tcTpCd") == 1)
 		{
 			this.ds_teacher_list.setColumn(e.row, "incmClCd", "60");
 		}
@@ -1275,30 +1270,30 @@ this.Div00_Div00_Div00_Div05_Grid00_oncellclick = function(obj:nexacro.Grid,e:ne
 
 this.Div00_Div00_Div00_Div05_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var delArr = [];
-	for(var i=0; i<this.ds_teacher_list.getRowCount(); i++) 
+	var delChk = [];
+	for(var i=0; i<this.ds_teacher_list.getRowCount(); i++)
 	{
 		if(this.ds_teacher_list.checkarray[i] == 1)
 		{
-			flag = true;
-			delArr.push(i);
-			
+			delChk.push(i);
 		}
+		
+		this.ds_teacher_list.checkarray[i] = 0;
 	}
 	
-	if(delArr.length == 0)
+	if(delChk.length == 0)
 	{
 		alert("삭제 대상을 선택하세요.");
 	}
 	else
 	{
-		this.ds_teacher_list.deleteMultiRows(delArr);
-		for(var i=0; i<this.ds_teacher_list.getRowCount(); i++) 
+		this.ds_teacher_list.deleteMultiRows(delChk);
+	
+		if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
 		{
-			this.ds_teacher_list.checkarray[i] = 0;
-			
+			this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
 		}
-		this.Div00.form.Div00.form.Div00.form.Div05.form.Grid00.redrawExprCell(); 
+		this.Div00.form.Div00.form.Div00.form.Div05.form.Grid00.setCellProperty("head", 0, "text", 0);
 	}
 };
 
@@ -1376,6 +1371,7 @@ this.Div00_Div00_Div00_Div07_Button00_onclick = function(obj:nexacro.Button,e:ne
 			strArg : "brchCd=" + this.brchCd,
 			callBackFnc : "fnCallback",
 			isAsync : true,
+			menuSeq : this.parent.menuSeq,
 			isPopup : true
 		}
 
@@ -1417,6 +1413,7 @@ this.Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup = function(obj:nexacro.MaskEd
 	}
 	this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.set_value(nexacro.toNumber(obj.value, 0) + nexacro.toNumber(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit00.value, 0));
 };
+
 ]]></Script>
   </Form>
 </FDL>

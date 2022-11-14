@@ -46,7 +46,7 @@
                                 <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="130" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_Div00_Div03_Combo01_onitemchanged"/>
                                 <Combo id="Combo02" taborder="3" text="Combo02" left="Combo01:6" top="5" width="130" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm"/>
                                 <Button id="Button01" taborder="5" text="초기화" top="5" height="20" cssclass="btn_WF_Low" onclick="Div00_Div00_00_Div00_00_14_Button01_onclick" right="0" width="80"/>
-                                <Button id="Button00" taborder="4" text="검색" top="5" height="20" cssclass="btn_WF_Medium" onclick="Div02_Div00_Div00_Div00_00_00_00_Button00_onclick" right="Button01:6" width="80"/>
+                                <Button id="Button00" taborder="4" text="검색" top="5" height="20" cssclass="btn_WF_Medium" right="Button01:6" width="80" onclick="Div00_Div00_Div00_Div03_Button00_onclick"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -599,11 +599,6 @@ this.Div00_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,
 	this.fn_sesterInfo();
 };
 
-this.Div02_Div00_Div00_Div00_00_00_00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_search();
-};
-
 this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var cnt = 0;
@@ -631,7 +626,7 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 				strArg : "",
 				callBackFnc : "fnCallback",
 				isAsync : false,
-				isPopup : true
+				menuSeq : this.getOwnerFrame().param.MENU_ID
 			}
 
 			this.gfn_transaction(tranObj);
@@ -641,6 +636,11 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	{
 		alert("이관대상을 선택하세요.");
 	}
+};
+
+this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_search();
 };
 ]]></Script>
   </Form>
