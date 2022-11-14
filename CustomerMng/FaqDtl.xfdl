@@ -11,36 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="분류 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Radio id="radioGb" taborder="1" left="117" top="-2" width="412" height="33" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1">
-                      <Dataset id="innerdataset">
-                        <ColumnInfo>
-                          <Column id="codecolumn" size="256"/>
-                          <Column id="datacolumn" size="256"/>
-                        </ColumnInfo>
-                        <Rows>
-                          <Row>
-                            <Col id="codecolumn">01</Col>
-                            <Col id="datacolumn">회원가입</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">02</Col>
-                            <Col id="datacolumn">수강신청'취소</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">03</Col>
-                            <Col id="datacolumn">강좌'강사</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">04</Col>
-                            <Col id="datacolumn">지점'홈페이지</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">05</Col>
-                            <Col id="datacolumn">기타</Col>
-                          </Row>
-                        </Rows>
-                      </Dataset>
-                    </Radio>
+                    <Radio id="radioGb" taborder="1" left="117" top="-2" width="882" height="33" innerdataset="categoryDs" codecolumn="cd" datacolumn="cdNm" direction="vertical" columncount="-1" rowcount="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -162,6 +133,15 @@
           </Row>
         </Rows>
       </Dataset>
+      <Dataset id="categoryDs">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="10"/>
+          <Column id="cdNm" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="row03.form.Edit00" propid="value" datasetid="ds_detail" columnid="titNm"/>
@@ -196,6 +176,8 @@ this.FaqReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//this.alert("값체크" + this.param.faqSeqno);
 	
+	this.fn_data_list();
+	
 	if(this.param.faqSeqno != ""){	
 		this.ds_detail.setColumn(0, "faqSeqno", this.param.faqSeqno);
 		this.fn_detail();
@@ -221,6 +203,32 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 this.fn_list = function(){
 	this.parent.set_url("CustomerMng::FaqList.xfdl");	
 }
+
+// 코드 세팅
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::/customer/faqCodeList.do";
+	var inData      = "";
+	var outData     = "categoryDs=clCdList";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+};
 
 this.fn_save = function ()
 {		

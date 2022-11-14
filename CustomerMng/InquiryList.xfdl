@@ -105,21 +105,21 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="typeDiv" taborder="2" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="632">
+                    <Div id="typeDiv" taborder="2" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="542">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="문의 유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
+                          <CheckBox id="chkClCdAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll" truevalue="Y"/>
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="answerDiv" taborder="3" text="Div01" left="typeDiv:0" top="32" height="33" cssclass="div_WF_CompWrap" right="2">
+                    <Div id="answerDiv" taborder="3" text="Div01" left="typeDiv:-1" top="32" height="33" cssclass="div_WF_CompWrap" right="2">
                       <Layouts>
                         <Layout>
-                          <Static id="Static00" taborder="0" text="답변 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <CheckBox id="chkAnsAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
-                          <CheckBox id="chkAnsY" taborder="1" text="답변" left="chkAnsAll:6" top="5" width="41" height="20" onclick="fn_checkbox" truevalue="Y"/>
-                          <CheckBox id="chkAnsN" taborder="2" text="미 답변" left="chkAnsY:6" top="5" width="70" height="20" onclick="fn_checkbox" truevalue="N"/>
+                          <Static id="Static00" taborder="0" text="답변 여부" left="-2" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkAnsAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_answerAll_onlick"/>
+                          <CheckBox id="chkAnsY" taborder="1" text="답변" left="chkAnsAll:6" top="5" width="41" height="20" onclick="fn_chkAnsY_onlick"/>
+                          <CheckBox id="chkAnsN" taborder="2" text="미 답변" left="chkAnsY:6" top="5" width="70" height="20" onclick="fn_chkAnsN_onlick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -148,26 +148,17 @@
           <Column id="ansYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_search">
+      <Dataset id="searchDs">
         <ColumnInfo>
           <Column id="strtDt" type="STRING" size="256"/>
           <Column id="endDt" type="STRING" size="256"/>
-          <Column id="clCdAll" type="STRING" size="256"/>
-          <Column id="clCdList" type="STRING" size="256"/>
+          <Column id="clCd" type="STRING" size="256"/>
           <Column id="answerYn" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
-          <Row>
-            <Col id="f">0</Col>
-            <Col id="clCdList"/>
-            <Col id="clCdAll"/>
-            <Col id="answerYn"/>
-            <Col id="endDt"/>
-            <Col id="strtDt"/>
-            <Col id="q"/>
-          </Row>
+          <Row/>
         </Rows>
       </Dataset>
       <Dataset id="inquiryDs_format">
@@ -182,7 +173,7 @@
           <Column id="rgprDtm" type="DATETIME" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="clCdDs">
+      <Dataset id="categoryDs">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="10"/>
           <Column id="cdNm" type="STRING" size="50"/>
@@ -213,21 +204,10 @@ this.InquiryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
+	
 	this.gfnSetCheckBoxNoDataset(this.inquiryDs, this.GridInquiryList, 0);
 	
-	//공통 코드 조회
-	var tranObj = {
-		strSvcId : "codeList",
-		strSvcUrl : this.application.Admin_svc + "::/customer/codeList.do",
-		inData : "",
-		outData : "clCdDs=ctgrList",
-		strArg : "cdId=072",
-		callBackFnc : "fnCallback",
-		isAsync : true
-	}
-	
-	this.gfn_transaction(tranObj);
+	this.fn_data_list();
 	
 	this.fn_list(1);
 };
@@ -262,12 +242,7 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 //검색버튼
 this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var strtDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm.value;
-	var endDt = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm.value;
-	
-	this.ds_search.setColumn(0, 'strtDt', strtDt);
-	this.ds_search.setColumn(0, 'endDt', endDt);
-	
+	this.fn_searchValueInit();
 	this.fn_list();
 };
 
@@ -276,14 +251,39 @@ this.Div00_00_conDiv_searchDiv_searchQuery_onkeydown = function(obj:nexacro.Edit
 {
 	if(e.keycode ==13)
 	{
-		this.fn_list(1);
+		this.fn_searchValueInit();	
+		this.fn_list();
 	}
 };
 
 //초기화 버튼
 this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.reset_search_form();
+	var objCalendar = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form; //캘린더
+	var chkboxFrm;
+	
+	objCalendar.strtDtm.set_value('');
+	objCalendar.endDtm.set_value('');
+	
+	//검색 필드
+	this.Div00_00.form.conDiv.form.searchDiv.form.searchField.set_index(0);
+	this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.set_value('');
+	
+	//답변여부 필드
+	this.Div00_00.form.conDiv.form.answerDiv.form.chkAnsAll.set_value(0);
+	this.Div00_00.form.conDiv.form.answerDiv.form.chkAnsY.set_value(0);
+	this.Div00_00.form.conDiv.form.answerDiv.form.chkAnsN.set_value(0);
+	
+	//구분 필드
+	chkboxFrm = this.Div00_00.form.conDiv.form.typeDiv.form;
+	chkboxFrm.chkClCdAll.set_value(0);
+	
+	for(var i=0;i<this.categoryDs.getRowCount();i++){
+		chkboxFrm["chkClCdStatus" + this.categoryDs.getColumn(i, "cd")].set_value(0);
+	}
+	
+	this.fn_searchValueInit();
+	
 	this.fn_list();
 };
 
@@ -304,14 +304,41 @@ this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
+// 코드 세팅
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::/customer/getInqCodeList.do";
+	var inData      = "";
+	var outData     = "categoryDs=clCdList";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+};
 
 //조회
 this.fn_list = function(){
 	
+	this.inquiryDs.clearData();
+	
 	var tranObj = {};
 	tranObj.strSvcId	= "select_inquiry";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/inquiryList.do";
-	tranObj.inData      = "search=ds_search";
+	tranObj.inData      = "search=searchDs";
 	tranObj.outData     = "inquiryDs=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
@@ -321,36 +348,62 @@ this.fn_list = function(){
 	this.gfn_transaction(tranObj);
 }
 
-//체크박스 전체선택
-this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+// 검색 데이터 세팅
+this.fn_searchValueInit = function()
+{					 
+	var objCalendar = this.Div00_00.form.conDiv.form.periodDiv.form.Div00.form; //캘린더
+	var arrAnswerYn = new Array();
+	var arrClCd = new Array();
+	  
+	if(this.Div00_00.form.conDiv.form.answerDiv.form.chkAnsY.value == true) arrAnswerYn.push("'Y'");
+	if(this.Div00_00.form.conDiv.form.answerDiv.form.chkAnsN.value == true) arrAnswerYn.push("'N'");
+	
+	// 구분코드
+	for(var i=0;i<this.categoryDs.getRowCount();i++){
+			
+		if(this.Div00_00.form.conDiv.form.typeDiv.form["chkClCdStatus" + this.categoryDs.getColumn(i, "cd")].value == true)
+		{
+			arrClCd.push("'"+ this.categoryDs.getColumn(i, "cd") +"'");
+		}
+	}
+	
+	this.searchDs.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.searchDs.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	this.searchDs.setColumn(0, "clCd", arrClCd.join(","));
+	this.searchDs.setColumn(0, "answerYn", arrAnswerYn.join(","));
+	this.searchDs.setColumn(0, "f", this.Div00_00.form.conDiv.form.searchDiv.form.searchField.value);
+	this.searchDs.setColumn(0, "q", this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.value);
+};
+
+//답변여부 전체 선택 체크 박스 
+this.fn_answerAll_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked()){
-		var trueVal1 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.truevalue;
-		var trueVal2 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.truevalue;
-		var trueVal3 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.truevalue;
-		var trueVal4 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.truevalue;
-		var trueVal5 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.truevalue;
-		var trueVal6 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.truevalue;
-		var trueVal7 = this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.truevalue;
-		
-		
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.set_value(trueVal1);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.set_value(trueVal2);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.set_value(trueVal3);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.set_value(trueVal4);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.set_value(trueVal5);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.set_value(trueVal6);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.set_value(trueVal7);
-		
-		
-	} else {
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.set_value(false);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.set_value(false);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.set_value(false);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.set_value(false);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.set_value(false);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.set_value(false);
-		this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.set_value(false);
+		obj.parent.chkAnsY.set_value(1);
+		obj.parent.chkAnsN.set_value(1);
+	}else{
+		obj.parent.chkAnsY.set_value(0);
+		obj.parent.chkAnsN.set_value(0);
+	}
+};
+
+//체크박스 답변 버튼 체크
+this.fn_chkAnsY_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkAnsN.isChecked()){
+		obj.parent.chkAnsAll.set_value(1);
+	}else{
+		obj.parent.chkAnsAll.set_value(0);
+	}
+};
+
+//체크박스 미답변 버튼 체크
+this.fn_chkAnsN_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkAnsY.isChecked()){
+		obj.parent.chkAnsAll.set_value(1);
+	}else{
+		obj.parent.chkAnsAll.set_value(0);
 	}
 };
 
@@ -371,10 +424,40 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 	
 	switch(svcID)
 	{
-	
-		case "codeList":
-			this.fn_set_clCd();
+		case "list":
 			
+			if(this.faqDs.rowcount < 1){
+				this.alert("조회된 결과가 없습니다.");
+			}
+		break;
+		
+		case "dataList":
+			
+			var chkboxFrm;
+			var objCheckbox;
+			
+			// 온라인문의 구분자 체크박스 추가
+			chkboxFrm = this.Div00_00.form.conDiv.form.typeDiv.form;
+			
+			for(var i=0;i<this.categoryDs.getRowCount();i++){
+				if(i > 0){
+					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm["chkClCdStatus" + this.categoryDs.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.chkClCdAll.getOffsetTop(), 100, 20, null, null);
+				}else{
+					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm.chkClCdAll.getOffsetRight(), chkboxFrm.chkClCdAll.getOffsetTop(), 100, 20, null, null);
+				}
+				
+				objCheckbox.set_text(this.categoryDs.getColumn(i, "cdNm"));
+				chkboxFrm.addChild("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), objCheckbox);
+				objCheckbox.show();
+				
+				objCheckbox.setEventHandler("onclick", this.fn_chkClCd_onclick, this);
+				objCheckbox.set_value(0);
+			}
+			
+			// 온라인문의 구분자 전체 체크박스 클릭이벤트 추가
+			chkboxFrm.chkClCdAll.setEventHandler("onclick", this.fn_chkClCdAll_onclick, this);
+			chkboxFrm.chkClCdAll.set_value(0);
+		
 		break;
 		
 		case "delete":
@@ -382,27 +465,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 			this.fn_list(1);
 		break;
 	}
-}
-
-//초기화
-this.reset_search_form = function(){
-	
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkAll.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd0.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd1.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd2.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd3.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd4.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd5.set_value(false);
-	this.Div00_00.form.conDiv.form.typeDiv.form.chkClCd6.set_value(false);
-	
-	
-	this.ds_search.setColumn(0, "strtDt", "");
-	this.ds_search.setColumn(0, "endDt", "");
-	this.ds_search.setColumn(0, "clCdAll", "");
-	this.ds_search.setColumn(0, "clCdList", "");
-	this.ds_search.setColumn(0, "f", 0);
-	this.ds_search.setColumn(0, "q", "");
 }
 
 //삭제
@@ -421,34 +483,40 @@ this.fn_delete = function ()
 	this.gfn_transaction(tranObj);
 };
 
-//코드 체크박스 세팅
-this.fn_set_clCd = function()
+
+// 구분조건 단일 체크박스 클릭이벤트
+this.fn_chkClCd_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
-	var content = ["chkAll"];
-	var list = this.clCdDs;
-	
-	for(var i=0; i < list.getRowCount(); i++) 
-	{
-		var id = "chkClCd" + i;
-		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":5", 6, 70, 18);
-		//this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		this.Div00_00.form.conDiv.form.typeDiv.form.addChild(id, objComp);
-		
-		objComp.set_text(list.getColumn(i, "cdNm"));		
-		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("");
-		objComp.show();	
-		content.push(id);
-		//this.Div00_00.form.conDiv.form.typeDiv.form.resetScroll();
-		//this.Div00.form.Div00.form.Div00.form.resetScroll()
+	var allCheckYn = true;
+ 
+	for(var i=0;i<this.categoryDs.getRowCount();i++){
+		if(!obj.parent.all["chkClCdStatus"+this.categoryDs.getColumn(i, "cd")].isChecked()){
+			allCheckYn = false;
+		}
 	}
-}]]></Script>
-    <Bind>
-      <BindItem id="strtDt" compid="Div00_00.form.conDiv.form.periodDiv.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDt"/>
-      <BindItem id="endDt" compid="Div00_00.form.conDiv.form.periodDiv.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDt"/>
-      <BindItem id="f" compid="Div00_00.form.conDiv.form.searchDiv.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
-      <BindItem id="q" compid="Div00_00.form.conDiv.form.searchDiv.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
-    </Bind>
+	
+	if(allCheckYn){
+		obj.parent.chkClCdAll.set_value(1);
+	}else{
+		obj.parent.chkClCdAll.set_value(0);
+	}
+};
+
+// 구분 검색조건 전체 체크박스 클릭이벤트
+this.fn_chkClCdAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked())
+	{
+		for(var i=0;i<this.categoryDs.getRowCount();i++){
+			obj.parent["chkClCdStatus" + this.categoryDs.getColumn(i, "cd")].set_value(1);
+		}
+	}
+	else
+	{
+		for(var i=0;i<this.categoryDs.getRowCount();i++){
+			obj.parent["chkClCdStatus" + this.categoryDs.getColumn(i, "cd")].set_value(0);
+		}
+	}
+};]]></Script>
   </Form>
 </FDL>
