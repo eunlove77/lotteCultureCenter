@@ -705,7 +705,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="옵션타입" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="280" height="20" innerdataset="ds_classOptType_list" datacolumn="cdNm" codecolumn="cd" direction="vertical"/>
+                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="280" height="20" innerdataset="ds_classOptType_list" datacolumn="cdNm" codecolumn="cd" direction="vertical" onitemchanged="Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -1026,6 +1026,7 @@ this.yy = "";
 this.lectSmsterCd = "";
 this.lectCd = "";
 this.menuSeq = "";
+this.searchButton = null;
 
 this.popCnt = 0;
 
@@ -1057,6 +1058,7 @@ this.ClassWrite_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.lectSmsterCd = this.parent.parent.parent.parent.lectSmsterCd;
 	this.lectCd = this.parent.parent.parent.parent.lectCd;
 	this.menuSeq = this.parent.parent.parent.parent.menuSeq;
+	this.searchButton = this.parent.parent.parent.parent.searchButton;
 	
 	this.ds_class_dtl.addRow();
 	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
@@ -1292,7 +1294,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClass":
-			this.parent.parent.parent.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+			this.searchButton.click();
 			if(this.updateFlag == "1") 
 			{
 				this.alert("저장 되었습니다.");			
@@ -1332,7 +1334,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		 
 		 case "insertClassCopy":
 			alert("복사등록이 완료 되었습니다.");
-			this.parent.parent.parent.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+			this.searchButton.click();
 		 break;
 	  }
   }
@@ -1389,6 +1391,18 @@ this.fn_class_dtl = function()
 	this.ds_class_list.setColumn(0, "lectRpsntImgFileId", this.ds_class_dtl.getColumn(0, "lectRpsntImgFileId"));
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "displaytype", "expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'nomal' : 'combocontrol'");
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "edittype", "expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'none' : 'combo'");
+	
+	if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
+	{
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+	}
+	else
+	{
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
+	}
+	
 }
 
 /**************************************************************************
@@ -1553,7 +1567,9 @@ this.fn_classOptType_set = function(type)
 			this.ds_class_dtl.setColumn(0, "optnTypCd", "01");
 			this.ds_option_list.clearData();
 			this.ds_option_list.addRow();
-			this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+			this.ds_option_list.setColumn(0, "partRfndClCd", "");
+			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 		}
 		
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
@@ -3009,7 +3025,14 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexac
 			if(this.ds_option_list.getRowCount() < 10)
 			{
 				var index = this.ds_option_list.addRow();
-				this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+				if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
+				{
+					this.ds_option_list.setColumn(index, "partRfndClCd", "");
+				}
+				else
+				{
+					this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+				}
 			}
 		} 
 		else
@@ -3464,6 +3487,27 @@ this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e
 	
 	this.gfn_showModal("classBrchPopupModal", arrArguments, "ClassMng::ClassBrchPopup.xfdl", "", this, 900, 600, true, false, null);
 };
+
+this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	var partRfndClCd = "";
+	if(obj.value == "01")
+	{
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+	}
+	else
+	{
+		partRfndClCd = "1";
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
+	}
+	
+	for(var i=0; i<this.ds_option_list.getRowCount(); i++)
+	{	
+		this.ds_option_list.setColumn(i, "partRfndClCd", partRfndClCd);
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_dtl">
@@ -3606,17 +3650,11 @@ this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e
       </Dataset>
       <Dataset id="ds_option_list">
         <ColumnInfo>
-          <Column id="partRefund" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="optnAmt" type="STRING" size="256"/>
           <Column id="partRfndPsblYn" type="STRING" size="256"/>
           <Column id="partRfndClCd" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="partRefund">Y</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_partRefund">
         <ColumnInfo>

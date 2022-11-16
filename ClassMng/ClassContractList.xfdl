@@ -18,7 +18,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Combo id="Combo00" taborder="1" text="Combo00" left="116" top="5" height="20" width="130" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="1" text="Combo00" left="116" top="5" height="20" width="130" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -90,7 +90,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌계약 목록 (0개)" top="16" width="150" height="20" left="0"/>
                     <Button id="Button00" taborder="1" text="계약서 생성" top="0" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div01_Button00_onclick"/>
-                    <Grid id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick">
+                    <Grid id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick" oncelldblclick="Div00_Div01_Grid00_oncelldblclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -148,8 +148,8 @@
                             <Cell col="3" text="bind:cntrNo" color="blue" cursor="pointer" textDecoration="underline"/>
                             <Cell col="4" text="expr:cntrStatCd == '01' ? '계약완료' : '미계약'"/>
                             <Cell col="5" text="bind:tcCdNo"/>
-                            <Cell col="6" text="bind:tcNm"/>
-                            <Cell col="7" text="bind:lectCd"/>
+                            <Cell col="6" text="bind:tcNm" textDecoration="underline"/>
+                            <Cell col="7" text="bind:lectCd" textDecoration="underline"/>
                             <Cell col="8" text="bind:lectNm"/>
                             <Cell col="9" text="bind:lectTpNm"/>
                             <Cell col="10" text="bind:lectClNm"/>
@@ -294,6 +294,12 @@
           <Column id="samplCndocFileId" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
@@ -326,7 +332,12 @@ this.ClassContractList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	//지점초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	if(nexacro.getPrivateProfile("brchCd") != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'")
+	}
 	
 	//그리드초기화
 	this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div00.form.Div01.form.Grid00, 0); 
@@ -668,7 +679,7 @@ this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:ne
 
 this.Div00_Div00_Div00_Div03_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.init();
 	this.chkAllInit(this.Div00.form.Div00.form);
 };
@@ -718,7 +729,7 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div00_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(this.gfn_nvl(this.ds_class_list.getColumn(e.row, "cntrNo")) != "")
+	if(this.gfn_nvl(this.ds_class_list.getColumn(e.row, "cntrNo")) != "" && e.col == 3)
 	{
 		this.ds_classInsert_list.clearData();
 		var rowIndex = this.ds_classInsert_list.addRow();
@@ -738,6 +749,35 @@ this.Div00_Div00_Div00_Div03_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacr
 	if(e.keycode == 13)
 	{
 		this.Div00.form.Div00.form.Div00.form.Div03.form.Button00.click();
+	}
+};
+
+this.Div00_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 7)
+	{
+		var arrArguments = {
+			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_class_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+			menuSeq : this.getOwnerFrame().param.MENU_ID,
+			searchButton : this.Div00.form.Div00.form.Div00.form.Div03.form.Button00
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+	
+	if(e.col == 6)
+	{
+		this.popCnt++;
+		var oArg = {
+				type : "detail",
+				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
+				ownerFrame : this.getOwnerFrame()
+		};
+		this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 };
 ]]></Script>

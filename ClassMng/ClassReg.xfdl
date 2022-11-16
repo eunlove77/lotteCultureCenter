@@ -18,7 +18,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Combo id="Combo00" taborder="1" text="" left="Static00:6" top="5" width="130" height="20" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="1" text="" left="Static00:6" top="5" width="130" height="20" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -654,7 +654,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="옵션타입" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="280" height="20" innerdataset="ds_classOptType_list" datacolumn="cdNm" codecolumn="cd" direction="vertical"/>
+                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="280" height="20" innerdataset="ds_classOptType_list" datacolumn="cdNm" codecolumn="cd" direction="vertical" onitemchanged="Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -910,8 +910,13 @@ this.ClassReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.domain = this.application.getVariable("domain");
 	//지점 초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
 	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
+	if(nexacro.getPrivateProfile("brchCd") != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'")
+	}
 	
 	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00, 0);
 	
@@ -947,8 +952,9 @@ this.init = function()
 	this.ds_class_dtl.setColumn(0, "dsplyIconCd", "N");
 	this.ds_class_dtl.setColumn(0, "rfndOptnUseYn", "N");
 	this.Div00.form.Div00.form.Div00.form.Div00_07.form.Radio00.set_readonly(false);
-	//강좌 등급할인 초기화 (추가)
 	
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 	
 	//공동모객, 순회강좌, 다회차강좌 초기화 
 	this.ds_cct_list.clearData();
@@ -968,7 +974,7 @@ this.init = function()
 	//강좌 옵션 초기화
 	this.ds_option_list.clearData();
 	this.ds_option_list.addRow();
-	this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+	this.ds_option_list.setColumn(0, "partRfndClCd", "");
 	
 	//강좌 상세정보 초기화
 	//대표이미지
@@ -2398,7 +2404,9 @@ this.Div00_Div00_00_00_00_01_Div00_Div00_Radio00_onitemchanged = function(obj:ne
 		this.ds_class_dtl.setColumn(0, "optnTypCd", "01");
 		this.ds_option_list.clearData();
 		this.ds_option_list.addRow();
-		this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+		this.ds_option_list.setColumn(0, "partRfndClCd", "");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 	}
 	
 	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
@@ -2426,7 +2434,14 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexac
 			if(this.ds_option_list.getRowCount() < 10)
 			{
 				var index = this.ds_option_list.addRow();
-				this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+				if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
+				{
+					this.ds_option_list.setColumn(index, "partRfndClCd", "");
+				}
+				else
+				{
+					this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+				}
 			}
 		} 
 		else
@@ -2837,6 +2852,28 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
 		this.ds_pblpmprcust_list.moveRow(e.userdata, e.row);
 	}
 };
+
+this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	var partRfndClCd = "";
+	if(obj.value == "01")
+	{
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+	}
+	else
+	{
+		partRfndClCd = "1";
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
+	}
+	
+	for(var i=0; i<this.ds_option_list.getRowCount(); i++)
+	{	
+		this.ds_option_list.setColumn(i, "partRfndClCd", partRfndClCd);
+	}
+	
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_classType_list">
@@ -2968,17 +3005,11 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
       </Dataset>
       <Dataset id="ds_option_list">
         <ColumnInfo>
-          <Column id="partRefund" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="optnAmt" type="STRING" size="256"/>
           <Column id="partRfndPsblYn" type="STRING" size="256"/>
           <Column id="partRfndClCd" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="partRefund">Y</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_partRefund">
         <ColumnInfo>
@@ -3198,6 +3229,12 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_ppayStd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
