@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="ClassContractDtl" width="1280" height="800" titletext="계약내역" onload="ClassContractDtl_onload">
+  <Form id="ClassContractDtl" width="1280" height="830" titletext="계약내역" onload="ClassContractDtl_onload">
     <Layouts>
-      <Layout height="800" width="1280">
+      <Layout height="830" width="1280">
         <Static id="txtMenuNm" taborder="0" text="계약내역" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
           <Layouts>
             <Layout>
               <Button id="Button00" taborder="0" text="계약내용 확인" left="-10" top="15" width="120" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button00_onclick" visible="false"/>
               <Button id="Button00_00" taborder="1" text="서명윈도우" left="Button00:15" top="15" width="100" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button00_00_onclick" visible="false"/>
-              <Div id="Div00" taborder="2" text="Div00" left="0" top="Button00:15" height="230" right="0" cssclass="div_WF_TableComp">
+              <Div id="Div00" taborder="2" text="Div00" left="0" top="Button00:15" height="260" right="0" cssclass="div_WF_TableComp">
                 <Layouts>
                   <Layout>
                     <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="50%" height="33" cssclass="div_WF_CompWrap">
@@ -199,6 +199,7 @@
           <Column id="realFileNm" type="STRING" size="256"/>
           <Column id="saveFileNm" type="STRING" size="256"/>
           <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="npayCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_class_list" updatecontrol="false">
@@ -286,22 +287,6 @@ this.ClassContractDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	{
 		this.Div00.form.Div00.form.Div00_00_01.form.Edit00.set_value(this.ds_class_dtl.getColumn(0, "rrno"));
 	}
-	
-	//첨부파일 설정
-	var atchFileId = this.ds_class_dtl.getColumn(0, "cndocFileId");
-	var atchFileObj = {
-		_this : this,
-		atchFileId : atchFileId,
-		fileExtn : "doc,pdf",
-		fileMaxCnt : 1,
-		fileMaxSize : 10,
-		fileTxt : "※ doc, pdf 파일만 등록 가능합니다. (파일크기제한 10MB)",
-		callbackFunc : this.fn_save
-	}
-	//첨부파일 초기화
-	this.atchFile.fn_init(atchFileObj);
-	
-	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 };
 
 /**************************************************************************
@@ -334,19 +319,41 @@ this.init = function()
 	this.ds_class_dtl.setColumn(0, "signFileId", this.ds_class_info.getColumn(0, "signFileId"));
 	this.ds_class_dtl.setColumn(0, "samplCndocFileId", this.ds_class_info.getColumn(0, "samplCndocFileId"));
 	
+	var mode = 1;
 	if(this.ds_class_info.getColumn(0, "cntrStatCd") == "01")
 	{
 		this.Div00.form.Button00_00_00_01.set_visible(true);
 		this.Div00.form.Button00_00_00_01.set_left(0);
 		this.Div00.form.Div00.form.Div01.form.ImageViewer00.set_image(this.ds_sign_dtl.getColumn(0, "webPath"));
-		this.atchFile.Button00.destroy();
-		this.atchFile.Grid00.deleteContentsCol("body", 4);
+		mode = 2;
+		this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 	}
 	else
 	{
 		this.Div00.form.Button00.set_visible(true);
 		this.Div00.form.Button00_00.set_visible(true);
 		this.Div00.form.Button00_00_00.set_visible(true);
+	}
+	
+	//첨부파일 설정
+	var atchFileId = this.ds_class_dtl.getColumn(0, "cndocFileId");
+	var atchFileObj = {
+		_this : this,
+		atchFileId : atchFileId,
+		fileExtn : "doc,pdf",
+		fileMaxCnt : 1,
+		fileMaxSize : 10,
+		fileTxt : "※ doc, pdf 파일만 등록 가능합니다. (파일크기제한 10MB)",
+		mode : mode,
+		callbackFunc : this.fn_save
+	}
+	//첨부파일 초기화
+	this.atchFile.fn_init(atchFileObj);
+	
+	
+	if(Number(this.ds_class_info.getColumn(0, "npayCnt")) < this.ds_class_list.getRowCount())
+	{
+		this.Div00.form.Button00_00_00_00.destroy();
 	}
 }
 

@@ -731,6 +731,7 @@ this.yy = "";
 this.lectSmsterCd = "";
 this.excelImportExport = "";
 this.excelFileName = "강좌목록_관리_";
+this.searchFlag = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -867,6 +868,7 @@ this.fn_search = function()
 
 	this.gfn_transaction(tranObj);
 	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
+	this.searchFlag = 1;
 }
 
 //지점 세팅
@@ -1387,7 +1389,8 @@ this.Div02_Div01_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 {
 	this.popCnt++;
 	var arrArguments = {
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		searchFlag : this.searchFlag
 	}
 	this.gfn_openPopup("ClassReg" + this.popCnt, arrArguments, "ClassMng::ClassReg.xfdl", this, 1280, 720, true, true, null);
 };
