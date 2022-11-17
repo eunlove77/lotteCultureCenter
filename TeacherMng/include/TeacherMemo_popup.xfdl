@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popup_modal" width="740" height="600" onclose="popup_onclose" onload="popup_modal_onload">
+    <Layouts>
+      <Layout height="600" mobileorientation="landscape" width="740">
+        <GroupBox id="GroupBox03" text="관리자 메모 이력" taborder="0" enableevent="false" left="10" top="10" width="720" height="520"/>
+        <Button id="btnCancel" taborder="1" text="취소" left="310" top="550" height="21" cssclass="btn_WF_Weak" fittocontents="none" onclick="btnCancel_onclick" width="100"/>
+        <Grid id="Grid00" taborder="2" left="27" top="80" width="686" height="440" autofittype="col" binddataset="ds_tcmemo_list" oncellclick="Grid00_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="500"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="메모"/>
+                <Cell col="1" text="작성자"/>
+                <Cell col="2" text="작성일시"/>
+                <Cell col="3"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:memoCont"/>
+                <Cell col="1" text="expr:rgprId + '(' + rgprNm + ')'"/>
+                <Cell col="2" text="bind:rgprDtm"/>
+                <Cell col="3" displaytype="buttoncontrol" text="삭제"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="totalNum" taborder="3" text="총 0건" left="32" top="51" width="58" height="19" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+        <Static id="totalNum00" taborder="4" text="※메모 삭제 시 복원이 불가합니다." left="82" top="51" width="218" height="19"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  관리자 메모 이력 팝업
+*  @MenuPath    
+*  @FileName	popup_exceldown.xfdl 
+*  @Desction	관리자 메모 이력 팝업
+*******************************************************************************
+*  2022.10.27		조민석			최초 생성
+*******************************************************************************
+*/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+include "Base::lib_date.xjs";
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ this.menuSeq = 0;
+/**************************************************************************
+ * onload
+ **************************************************************************/
+this.popup_modal_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.ds_tcmemo_list.setColumn(0, "tcCdNo", this.parent.tcCdNo);
+	
+  this.menuSeq = this.parent.menuSeq;
+
+	this.get_teacher_memo_list();
+};
+this.get_teacher_memo_list = function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "get_memo_list";
+	tranObj.strSvcUrl   = this.opener.application.Admin_svc + "::teacherMng/memo/list.do";
+	tranObj.inData      = "search=ds_tcmemo_list";
+	tranObj.outData     = "ds_tcmemo_list=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	=  this.menuSeq;
+	
+  if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	this.gfn_transaction(tranObj);
+}
+this.fnCallback = function(svcId, errorCode, errorMsg){
+	if(errorCode != 0){
+		this.alert(errorCode+"\n"+errorMsg);
+		this.close();
+		return false;
+	}
+	
+	if(svcId == 'delete_memo'){
+		alert('삭제 되었습니다.');
+	}
+	
+	this.totalNum.set_text('총 ' + this.ds_tcmemo_list.rowcount + '건');
+}
+this.popup_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+{
+	//call back
+	this.close("OK");
+};
+
+this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close("OK");
+};
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var grid = e.fromobject._grid;
+	var ds = this.ds_tcmemo_list;
+	
+	if(e.col != grid.getFormatColCount() - 1) return false;
+	
+	if(confirm('메모를 삭제 하시겠습니까?')){
+		ds.deleteRow(e.row);
+		this.delete_teacher_memo();
+	}
+};
+this.delete_teacher_memo= function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "delete_memo";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/memo/delete.do";
+	tranObj.inData      = "detailMapList=ds_tcmemo_list:U";
+	tranObj.outData     = "";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.menuSeq;
+	
+  if(this.gfn_btn_auth(this.menuSeq, "accDelYn")) return;
+	this.gfn_transaction(tranObj);
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_tcmemo_list">
+        <ColumnInfo>
+          <Column id="tcMemoSeqno" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

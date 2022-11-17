@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Certificate_lect_hist_popup" width="620" height="280" onload="Certificate_lect_hist_popup_onload">
+    <Layouts>
+      <Layout height="280" width="620">
+        <Static id="txtMenuNm" taborder="0" text="원천징수영수증 발행" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="72" right="10" height="158">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="※2016년도 가을학기 이후분 부터 출력가능합니다." left="18" top="-5" width="284" height="33"/>
+              <Div id="Div00" taborder="1" text="Div03" left="20" top="31" height="83" right="20" cssclass="div_WF_CompWrap">
+                <Layouts>
+                  <Layout>
+                    <Div id="Div00" taborder="1" text="Div00" left="0" top="0" right="0" cssclass="div_WF_CompWrap" height="50%">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="강사코드" left="0" top="0" width="33.33%" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0.5" textAlign="center"/>
+                          <Static id="Static00_00_00" taborder="2" text="강사명" top="0" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0" textAlign="center" width="33.33%" left="Static00:0"/>
+                          <Static id="Static00_00" taborder="1" text="기준년도" top="0" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0" textAlign="center" right="0" width="33.33%"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01" taborder="1" text="Div01" left="0" width="33.33%" cssclass="div_WF_CompWrap" top="40" bottom="0">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" left="10" top="5" height="28" text="000000" textAlign="center" right="10"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01_00_00" taborder="3" text="Div01" top="40" cssclass="div_WF_CompWrap" bottom="0" right="0" width="33.33%">
+                      <Layouts>
+                        <Layout>
+                          <Combo id="Combo00" taborder="0" text="" left="11" top="7" height="25" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" right="10"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div01_00" taborder="2" text="Div01" left="Div01:0" top="40" cssclass="div_WF_CompWrap" bottom="0" width="33.33%">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" left="10" top="5" height="28" text="홍길동" textAlign="center" right="10"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="btnPrint" taborder="3" text="발행" height="20" cssclass="btn_WF_Medium" width="100" onclick="btnPrint_onclick" top="Div00:0" right="33.55%"/>
+        <Button id="btnCancel" taborder="2" text="취소" cssclass="btn_WF_Weak" height="20" onclick="btnCancel_onclick" top="Div00:0" right="btnPrint:10" width="100"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+ include "TeacherMng::include/common.xjs";
+ /**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.Certificate_lect_hist_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	this.ds_certi_info.setColumn(0, 'tcCdNo', this.parent.tcCdNo);
+	this.ds_certi_info.setColumn(0, 'tcNm', this.parent.tcNm);
+	
+	var today = new Date();
+	this.ds_certi_info.setColumn(0, 'year', today.getYear());
+	
+	this.com_set_dataset_year(this.ds_year_list, 2016);
+};
+
+this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+this.btnPrint_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var url = "teacherMng/certificate/lect_hist.do";
+	window.open(url, 'popup', 'width=100,');
+	
+};
+this.fnCallback = function(svcId, errorCode, errorMsg){
+	if(errorCode != 0){
+		// 에러 시 화면 처리 내역
+		this.alert(errorCode+"\n"+errorMsg);
+		return false;
+	}
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_certi_info">
+        <ColumnInfo>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="year" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_year_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div00.form.Div01.form.Static00" propid="text" datasetid="ds_certi_info" columnid="tcCdNo"/>
+      <BindItem id="item1" compid="Div00.form.Div00.form.Div01_00.form.Static00" propid="text" datasetid="ds_certi_info" columnid="tcNm"/>
+      <BindItem id="item2" compid="Div00.form.Div00.form.Div01_00_00.form.Combo00" propid="value" datasetid="ds_certi_info" columnid="year"/>
+    </Bind>
+  </Form>
+</FDL>
