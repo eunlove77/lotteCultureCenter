@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="PromotionList" width="1280" height="720" titletext="New Form">
+  <Form id="PromotionList" width="1280" height="720" titletext="New Form" onload="PromotionList_onload">
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -11,7 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboGrade" taborder="1" text="" left="Static00:10" top="5" width="120" height="20" innerdataset="ds_search" codecolumn="issueStatCd" datacolumn="datacolumn" index="0" value="" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                    <Combo id="ComboSpot" taborder="1" text="" left="Static00:10" top="5" width="150" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value="" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" type="filterlike">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -40,10 +40,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="진행상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="CheckBox00" taborder="1" text="전체" left="Static00:10" top="5" width="60" height="20"/>
-                    <CheckBox id="CheckBox00_00" taborder="2" text="진행중" left="CheckBox00:10" top="5" width="60" height="20"/>
-                    <CheckBox id="CheckBox00_00_00" taborder="3" text="예정" left="CheckBox00_00:10" top="5" width="60" height="20"/>
-                    <CheckBox id="CheckBox00_00_00_00" taborder="4" text="종료" left="CheckBox00_00_00:10" top="5" width="60" height="20"/>
+                    <CheckBox id="chkStatAll" taborder="1" text="전체" left="Static00:10" top="5" width="60" height="20" onclick="fn_checkboxAll" truevalue="true" fittocontents="width"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -75,7 +72,7 @@
                     </Combo>
                     <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div06_btnSearch_onclick"/>
-                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
+                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div00_Div04_btnInit_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -92,11 +89,11 @@
                         <Rows>
                           <Row>
                             <Col id="codecolumn">1</Col>
-                            <Col id="datacolumn">가입일</Col>
+                            <Col id="datacolumn">등록일</Col>
                           </Row>
                           <Row>
                             <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">최종접속일</Col>
+                            <Col id="datacolumn">프로모션기간</Col>
                           </Row>
                         </Rows>
                       </Dataset>
@@ -110,9 +107,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="노출상태" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkDisAll" taborder="1" text="전체" left="Static00:10" top="5" width="60" height="20"/>
-                    <CheckBox id="chkDis0" taborder="2" text="전시" left="chkDisAll:10" top="5" width="60" height="20" truevalue="Y"/>
-                    <CheckBox id="chkDis1" taborder="3" text="미전시" left="chkDis0:10" top="5" width="60" height="20" truevalue="N" minwidth="350" maxwidth=""/>
+                    <CheckBox id="chkDisAll" taborder="1" text="전체" left="Static00:10" top="5" width="60" height="20" truevalue="true" onclick="fn_checkboxAll"/>
+                    <CheckBox id="chkDis0" taborder="2" text="노출" left="chkDisAll:10" top="5" width="60" height="20" truevalue="Y" onclick="fn_checkbox" falsevalue="false"/>
+                    <CheckBox id="chkDis1" taborder="3" text="미노출" left="chkDis0:10" top="5" width="60" height="20" truevalue="N" minwidth="350" maxwidth="" onclick="fn_checkbox" falsevalue="false"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -122,7 +119,7 @@
         <Div id="Div01" taborder="2" text="Div02" left="10" top="235" right="10" minwidth="680" maxwidth="" bottom="10">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="0" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_promotion_list" autofittype="col" right="0" bottom="0" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" oncellclick="Div01_Grid00_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -158,15 +155,15 @@
                     <Band id="body">
                       <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                       <Cell col="1" expr="dataset.getRowCount() - currow"/>
-                      <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
-                      <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)" color="blue" cursor="pointer" textDecoration="underline"/>
+                      <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="bind:brchCd"/>
+                      <Cell col="3" color="blue" cursor="pointer" textDecoration="underline" text="bind:titNm"/>
                       <Cell col="4" color="#666666" expr="stDt + &quot; ~ &quot; + endDt"/>
-                      <Cell col="5"/>
-                      <Cell col="6"/>
-                      <Cell col="7"/>
-                      <Cell col="8" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" displaytype="none"/>
-                      <Cell col="9" displaytype="none" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
-                      <Cell col="10"/>
+                      <Cell col="5" displaytype="combotext" text="bind:statCd" combodataset="ds_stat_cd" combocodecol="cd" combodatacol="cdNm"/>
+                      <Cell col="6" text="bind:rgprId" expr="rgprNm + &quot;(&quot; + rgprId + &quot;)&quot;"/>
+                      <Cell col="7" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                      <Cell col="8" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" displaytype="normal" text="bind:expsrYn" expr="expsrYn == 'N' ? '미노출' : '노출'"/>
+                      <Cell col="9" displaytype="normal" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" expr="statCd == '00' ? '' : appCnt"/>
+                      <Cell col="10" expr="statCd == '00' ? ' ' : recpCnt"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -175,8 +172,8 @@
               <Div id="Div00" taborder="2" text="Div00" top="0" height="30" right="10" width="375">
                 <Layouts>
                   <Layout>
-                    <Button id="btnDel" taborder="1" text="삭제" top="0" height="30" cssclass="btn_WF_High" width="80" right="0"/>
-                    <Button id="btnReg" taborder="0" text="등록" top="0" height="30" cssclass="btn_WF_Medium" right="btnDel:10" width="80" onclick="Div02_Div00_btnDown_onclick"/>
+                    <Button id="btnDel" taborder="1" text="삭제" top="0" height="30" cssclass="btn_WF_High" width="80" right="0" onclick="Div01_Div00_btnDel_onclick"/>
+                    <Button id="btnReg" taborder="0" text="등록" top="0" height="30" cssclass="btn_WF_Medium" right="btnDel:10" width="80" onclick="Div01_Div00_btnReg_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -185,14 +182,394 @@
         </Div>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_stat_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cd">00</Col>
+            <Col id="cdNm">예정</Col>
+          </Row>
+          <Row>
+            <Col id="cd">10</Col>
+            <Col id="cdNm">진행중</Col>
+          </Row>
+          <Row>
+            <Col id="cd">20</Col>
+            <Col id="cdNm">종료</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="dateTypeCd" type="STRING" size="256"/>
+          <Column id="strtDt" type="STRING" size="256"/>
+          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="statCd" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="dateTypeCd">1</Col>
+            <Col id="brchCd"> </Col>
+            <Col id="f"/>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_promotion_list">
+        <ColumnInfo>
+          <Column id="prmtnSeqno" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="titNm" type="STRING" size="256"/>
+          <Column id="strtDt" type="STRING" size="256"/>
+          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="statCd" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
+          <Column id="recpCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+this.popCnt = 0;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.PromotionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.baseSvrUrl = this.application.Admin_svc + "::promotion/";
+	//지점코드 세팅
+	this.fn_set_spotCd();
+	//캘린더 세팅
+	this.Div00.form.Div00.form.Div00.form.strtDtm.calendaredit.set_readonly(true);
+	this.Div00.form.Div00.form.Div00.form.endDtm.calendaredit.set_readonly(true);
+	
+	this.fn_set_chkbox(this.ds_stat_cd, this.Div00.form.Div02, "chkStat");	//진행상태 추가
+	this.gfnSetCheckBoxNoDataset(this.ds_promotion_list, this.Div01.form.Grid00, 0); 
+	
+	this.fn_list()
+};
+
+/**************************************************************************
+ * 검색필터 영역
+ **************************************************************************/
+
+this.fn_set_spotCd = function()
+{
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.insertRow(0);
+	this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+	this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+}
+
+//체크박스 세팅
+this.fn_set_chkbox = function(ds, frm, idVal){
+	
+	var content = [idVal+"All"];
+	for(var i=0; i < ds.rowcount; i++) 
+	{
+		var id = idVal + i;
+		var objComp = new CheckBox();
+		objComp.init(id, content[i] + ":30", 5, 90, 20);
+		frm.addChild(id, objComp);
+		objComp.set_text(ds.getColumn(i, "cdNm"));		
+		objComp.set_truevalue(ds.getColumn(i, "cd"));
+		objComp.set_falsevalue(false);
+		objComp.set_fittocontents("width");
+		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
+		objComp.show();	
+		content.push(id);
+	}
+}
+
+//전체 체크박스 이벤트
+this.fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]")
+			{
+				arrObj[i].set_value(arrObj[i].truevalue);
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+		}
+	}
+}
+
+//개별 체크박스 이벤트
+this.fn_checkbox = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+
+this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list();
+};
+
+this.Div00_Div04_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var cnt = this.ds_search.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		this.ds_search.setColumn(0, i, "");
+	}
+	
+	this.fn_init(this.Div00.form);
+	this.fn_list();
+};
+
+//필터 초기화
+this.fn_init = function(obj)
+{
+	var arrObj = obj.components;
+	
+	for(var i=0; i<arrObj.length; i++)
+	{
+		if(arrObj[i] == "[object Div]"){
+			this.fn_init(arrObj[i].form);
+		}
+		else if(arrObj[i] == "[object Combo]"){
+			arrObj[i].set_index(0);
+		}
+		else if(arrObj[i] == "[object CheckBox]"){
+			arrObj[i].set_value(false);
+		}
+	}
+}
+
+/**************************************************************************
+ * 리스트 영역
+ **************************************************************************/
+
+this.fn_list = function (page)
+{	
+	//체크된 코드 처리
+	var statObj = this.Div00.form.Div02.form.components;
+	var expsrObj = this.Div00.form.Div03.form.components;
+	var statStr = "";
+	var expsrStr = "";
+	
+	for(var i=0; i<statObj.length; i++)
+	{
+		if(statObj[i] == "[object CheckBox]" && statObj[i].name.indexOf("All") < 0 && statObj[i].value != "false")
+		{		
+			statStr += statObj[i].value + ",";
+		}	
+	}
+	for(var i=0; i<expsrObj.length; i++)
+	{
+		if(expsrObj[i] == "[object CheckBox]" && expsrObj[i].name.indexOf("All") < 0 && expsrObj[i].value != "false")
+		{		
+			expsrStr += expsrObj[i].value + ",";
+		}	
+	}
+
+	this.ds_search.setColumn(0, "statCd", statStr);
+	this.ds_search.setColumn(0, "expsrYn", expsrStr);
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "search=ds_search",
+		outData : "ds_promotion_list=promotionList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);	
+};
+
+this.Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 3){	
+		this.popCnt ++;
+		var oArg = {
+				prmtnSeqno : obj.getBindDataset().getColumn(e.row, "prmtnSeqno")
+				};
+	
+		this.gfn_openPopup("prmtnDtlPop"+this.popCnt, oArg, "PromotionMng::PromotionReg.xfdl", this, null, null, true, true, null);		
+	}
+};
+
+/**************************************************************************
+ * 등록 버튼
+ **************************************************************************/
+
+this.Div01_Div00_btnReg_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt ++;
+	
+	var oArg = { prmtnSeqno : "" };
+	
+	this.gfn_openPopup("promotionPop"+this.popCnt, oArg, "PromotionMng::PromotionReg.xfdl", this, null, null, true, true, null);
+};
+
+/**************************************************************************
+ * 삭제 버튼
+ **************************************************************************/
+
+this.Div01_Div00_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var list = this.ds_promotion_list;
+	var appCnt = 0;
+	var chkStr = "";
+	
+	//신청자가 없는 경우에만 삭제 가능
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkStr += list.getColumn(i, "prmtnSeqno")+",";
+			
+			if(list.getColumn(i, "appCnt") != 0)
+			{
+				appCnt++;
+				break;
+			}
+		}
+	}
+	
+	if(chkStr == "")
+	{
+		alert("항목을 선택하세요.");
+	}
+	else if(appCnt > 0)
+	{
+		alert("신청자가 있는 프로모션은 삭제할 수 없습니다.");
+	}
+	else if(this.confirm("선택된 프로모션을 삭제하시겠습니까?"))
+	{
+		this.fn_delete(chkStr);
+	}
+};
+
+this.fn_delete = function(delStr)
+{
+	var tranObj = {
+		strSvcId : "delete",
+		strSvcUrl : this.baseSvrUrl + "delete.do",
+		inData : "",
+		outData : "",
+		strArg : "delStr="+delStr,
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);	
+}
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "delete":
+			this.alert("삭제되었습니다.");
+			this.fn_list();
+			break;
+	}
+};]]></Script>
     <Bind>
-      <BindItem id="item10" compid="Div00.form.Div04.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
-      <BindItem id="item11" compid="Div00.form.Div04.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
-      <BindItem id="item0" compid="Div00.form.Div00.form.ComboDateType" propid="value" datasetid="ds_search" columnid="dateTypeCd"/>
-      <BindItem id="item1" compid="Div00.form.Div00.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDtm"/>
-      <BindItem id="item2" compid="Div00.form.Div00.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDtm"/>
-      <BindItem id="item3" compid="Div00.form.Div03.form.chkDis0" propid="value" datasetid="ds_search" columnid="chkDis0"/>
-      <BindItem id="item4" compid="Div00.form.Div03.form.chkDis1" propid="value" datasetid="ds_search" columnid="chkDis1"/>
+      <BindItem id="dateTypeCd" compid="Div00.form.Div00.form.ComboDateType" propid="value" datasetid="ds_search" columnid="dateTypeCd"/>
+      <BindItem id="strtDt" compid="Div00.form.Div00.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDt"/>
+      <BindItem id="endDt" compid="Div00.form.Div00.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDt"/>
+      <BindItem id="f" compid="Div00.form.Div04.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
+      <BindItem id="q" compid="Div00.form.Div04.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="brchCd" compid="Div00.form.Div01.form.ComboSpot" propid="value" datasetid="ds_search" columnid="brchCd"/>
     </Bind>
   </Form>
 </FDL>
