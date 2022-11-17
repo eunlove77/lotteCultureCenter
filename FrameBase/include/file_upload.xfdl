@@ -285,7 +285,28 @@ this.FileList_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFil
 				this.ds_atchFileList.setColumn(nRowIdx, "realFileNm", obj.filename);			
 				this.ds_atchFileList.setColumn(nRowIdx, "fileExtn", obj.filename.split('.').pop().toLowerCase());
 				this.ds_atchFileList.setColumn(nRowIdx, "fileSize", this.cutFileSize(e.filesize));
-
+				
+				if("jpg,jpeg,gif,png".indexOf(obj.filename.split('.').pop().toLowerCase()) > -1)
+				{
+					var ds = this.ds_atchFileList;
+					var imageViewer = this.ImageViewer00;
+					var reader = new FileReader();
+					reader.addEventListener(
+						'load',
+						function () {
+							ds.setColumn(nRowIdx, "webPath", reader.result);
+							imageViewer.set_image(reader.result);
+							imageViewer.set_visible(true);
+						},
+						false
+					);
+					reader.readAsDataURL(obj._handle);
+				}
+				else
+				{
+					this.ImageViewer00.set_visible(false);
+				}
+				
 				this.FileUpTransfer00.addFile(obj.filename, obj);
 			}
 			
@@ -407,9 +428,10 @@ this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.
 this.Grid00_oncellposchanged = function(obj:nexacro.Grid,e:nexacro.GridSelectEventInfo)
 {
 	var fileExtn = this.ds_atchFileList.getColumn(e.row, "fileExtn");
-	
-	if(this.gfn_nvl(this.ds_atchFileList.getColumn(e.row, "fileSeq")) !== "" && "jpg,jpeg,gif,png".indexOf(fileExtn) > -1)
+
+	if("jpg,jpeg,gif,png".indexOf(fileExtn) > -1)
 	{
+
 		this.ImageViewer00.set_visible(true);
 		this.ImageViewer00.set_image(this.ds_atchFileList.getColumn(e.row, "webPath"));
 	}
