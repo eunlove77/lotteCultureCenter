@@ -519,7 +519,7 @@
                                 <Button id="Button00" taborder="1" text="강사추가" left="Static00:6" top="5" width="70" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_00_00_Div00_Div00_Button00_onclick"/>
                                 <Button id="Button01" taborder="2" text="삭제" left="Button00:6" top="5" width="46" height="20" cssclass="btn_WF_High" onclick="Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick"/>
                                 <Button id="Button02" taborder="3" text="원천세구분" top="5" height="20" right="6" width="80" cssclass="btn_WF_Low" onclick="Div00_Div00_00_00_00_00_Div00_Div00_Button02_onclick"/>
-                                <Grid id="Grid00" taborder="4" left="Static00:6" top="Button01:6" right="6" bottom="0" binddataset="ds_teacher_list" autofittype="col" oncellclick="Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncellclick" oncloseup="Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncloseup">
+                                <Grid id="Grid00" taborder="4" left="Static00:6" top="Button02:6" right="6" bottom="0" binddataset="ds_teacher_list" autofittype="col" oncellclick="Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncellclick" oncloseup="Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncloseup">
                                   <Formats>
                                     <Format id="default">
                                       <Columns>
@@ -1259,6 +1259,9 @@ this.init = function()
 	//폐강 설정
 	this.fn_close_set();
 	
+	//강사 설정
+	this.fn_teacher_set();
+	
 	this.Div00.form.resetScroll();
 	this.parent.parent.Tabpage1.form.resetScroll();
 }
@@ -1452,6 +1455,24 @@ this.fn_close_set = function()
 	}
 }
 
+//강사 설정
+this.fn_teacher_set = function()
+{
+	//정산여부
+	if(this.ds_class_dtl.getColumn(0, "npayCnt") == 0)
+	{
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 4, "edittype", "readonly");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 5, "edittype", "readonly");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 6, "edittype", "readonly");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 7, "edittype", "readonly");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 8, "edittype", "readonly");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 9, "edittype", "readonly");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "edittype", "readonly");
+		
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Button00.destroy();
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Button01.destroy();
+	}
+}
 
 //카테고리 대분류 영역 변경
 this.fn_classCtgyLarge_chg = function(obj)
@@ -3569,6 +3590,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="lectClosedDtm" type="STRING" size="256"/>
           <Column id="lectClosedRsnNm" type="STRING" size="256"/>
           <Column id="lectClosedRfndCndtNm" type="STRING" size="256"/>
+          <Column id="npayCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classType_list">
