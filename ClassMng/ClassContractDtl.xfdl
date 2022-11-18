@@ -256,8 +256,8 @@ this.popCnt = 0;
 this.updateCode = "00";
 this.atchFile = this.Div00.form.Div00.form.Div01.form.Div00.form;
 this.prevFlag = false;
-this.ownerFrame = this.parent.getOwnerFrame();
 this.webPath = "";
+this.menuSeq = this.parent.menuSeq;
 
  /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -459,8 +459,7 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 	if(this.prevFlag) 
 	{
 		var oArg = {
-			ds : this.ds_sign_dtl,
-			menuSeq : this.parent.menuSeq
+			ds : this.ds_sign_dtl
 		};
 				
 		this.gfn_openPopup("signWindow" + this.popCnt, oArg, "TeacherMng::include/SignWindow_popup.xfdl", this, 750, 400, true, true, null);
@@ -473,6 +472,8 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 
 this.Div00_Button00_00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accDelYn")) return;
+	
 	if(confirm("계약서를 삭제 하시겠습니까?"))
 	{
 		var tranObj = {

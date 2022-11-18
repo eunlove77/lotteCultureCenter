@@ -26,9 +26,9 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:memoCont"/>
-                <Cell col="1" text="expr:rgprId + '(' + rgprNm + ')'"/>
+                <Cell col="1" text="expr:tcMemoSeqno ? rgprId + '(' + rgprNm + ')' : &quot;&quot;"/>
                 <Cell col="2" text="bind:rgprDtm"/>
-                <Cell col="3" displaytype="buttoncontrol" text="삭제"/>
+                <Cell col="3" displaytype="expr:tcMemoSeqno ? &quot;buttoncontrol&quot; : &quot;none&quot;" text="삭제"/>
               </Band>
             </Format>
           </Formats>
@@ -139,6 +139,9 @@ this.delete_teacher_memo= function(){
           <Column id="rgprNm" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
   </Form>

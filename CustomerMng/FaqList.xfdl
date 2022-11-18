@@ -169,8 +169,8 @@
       </Dataset>
       <Dataset id="searchDs">
         <ColumnInfo>
-          <Column id="strtDt" type="STRING" size="256"/>
-          <Column id="endDt" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
           <Column id="clCd" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="top5SlctYn" type="STRING" size="256"/>
@@ -390,7 +390,7 @@ this.fn_list = function(){
 	this.faqDs.clearData();
 	
 	var tranObj = {};
-	tranObj.strSvcId	= "select_faq";
+	tranObj.strSvcId	= "list";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/faqList.do";
 	tranObj.inData      = "search=searchDs";
 	tranObj.outData     = "faqDs=output1";
@@ -441,6 +441,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm.chkClCdAll.getOffsetRight(), chkboxFrm.chkClCdAll.getOffsetTop(), 100, 20, null, null);
 				}
 				
+				objCheckbox.set_fittocontents("width");
 				objCheckbox.set_text(this.categoryDs.getColumn(i, "cdNm"));
 				chkboxFrm.addChild("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), objCheckbox);
 				objCheckbox.show();

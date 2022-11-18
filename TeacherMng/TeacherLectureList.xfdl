@@ -136,7 +136,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="none" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tclect_list">
+        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tclect_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -215,8 +215,8 @@
                 <Cell col="18" text="expr:lectStDtm + &quot;~&quot; + lectEndDtm"/>
                 <Cell col="19" text="bind:avgLctrvw"/>
                 <Cell col="20" text="bind:avgEvlpnt"/>
-                <Cell col="21" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="22" text="bind:mdfDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="21" text="bind:rgprDtm"/>
+                <Cell col="22" text="bind:mdfDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -240,6 +240,7 @@ include "TeacherMng::include/common.xjs";
  **************************************************************************/
 this.application = null;
 this.brchCd = "";
+this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -247,6 +248,8 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 	
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_tclect_list, this.Grid00, 0);
@@ -388,7 +391,7 @@ this.get_teacher_lecture_list = function()
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuSeq
 	}
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;

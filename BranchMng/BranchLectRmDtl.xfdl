@@ -192,7 +192,7 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}
 	else
 	{	
-		//this.fn_rmCdList();
+		this.fn_rmCdList();
 		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
 	}
 	
@@ -208,7 +208,7 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
 	{
 		this.fn_checkValidation();
-		this.fn_rmCdList();
+		//this.fn_rmCdList();
 	}
 };
 
@@ -232,6 +232,7 @@ this.fn_save = function ()
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 	
@@ -281,7 +282,7 @@ this.fn_rmCdList = function()
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/branch/lectRmCd.do";
 	tranObj.inData      = "";
 	tranObj.outData     = "ds_lectRmCd=lectRmCd";
-	tranObj.strArg      = "cdId=BRANCH_LECTRM_SEQ";
+	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	
@@ -300,7 +301,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   switch(svcID)
   {
 	case "cdList":
-			//this.alert("22231" + this.ds_lectRmCd.getColumn(0, "lectRmCd")); 
+			
 			this.row06.form.Static01.set_text(this.ds_lectRmCd.getColumn(0, "lectRmCd"));
 			
 			break;

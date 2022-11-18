@@ -279,7 +279,8 @@ this.fn_save_validation = function()
 **************************************************************************/
 this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	var arrRow = this.ds_category_list.extractRows("ctegryId=='CTEGRY'");
 	var ctegryCd = "01";
 	
@@ -311,6 +312,8 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	var ctegryId = this.ds_category_list.getColumn(this.ds_category_list.rowposition, "ctegryId");
 	var ctegryLvlNo = this.ds_category_list.getColumn(this.ds_category_list.rowposition, "ctegryLvlNo");
 	var ctegryCd = this.ds_category_list.getColumn(this.ds_category_list.rowposition, "ctegryCd");
@@ -420,6 +423,8 @@ this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Div00_Grid00_oncellposchanged = function(obj:nexacro.Grid,e:nexacro.GridSelectEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	//상세 추가
 	this.ds_category_dtl.clearData()
 	this.ds_category_dtl.addRow();
