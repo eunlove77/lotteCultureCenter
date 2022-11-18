@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="TeacherAdmtDtl_popup" width="1280" height="720" onload="TeacherAdmtDtl_popup_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Grid id="Grid00" taborder="0" left="10" top="60" right="10" bottom="10" autofittype="col" binddataset="ds_list">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50"/>
+                <Column size="80"/>
+                <Column size="300"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="강좌코드"/>
+                <Cell col="2" text="강좌명"/>
+                <Cell col="3" text="지급액"/>
+                <Cell col="4" text="소득금액"/>
+                <Cell col="5" text="재료비(구매형)"/>
+                <Cell col="6" text="재료비(1/N형)"/>
+                <Cell col="7" text="세금합계"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:lectCd"/>
+                <Cell col="2" text="bind:lectNm"/>
+                <Cell col="3" text="bind:ppayAmt"/>
+                <Cell col="4" text="bind:actlPpayAmt"/>
+                <Cell col="5" text="bind:pchOptnStlmAmt"/>
+                <Cell col="6" text="bind:npchOptnStlmAmt"/>
+                <Cell col="7" text="bind:taxSmamt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="Static00" taborder="1" text="강사명 :" left="14" top="10" width="46" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="txtTcNm" taborder="2" left="73" top="10" width="120" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="Static00_00" taborder="3" text="강사코드 :" left="14" top="30" width="59" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="txtTcCd" taborder="4" left="73" top="30" width="120" height="21" cssclass="sta_WF_TitGray"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="admtYmPpayAmt" type="STRING" size="256"/>
+          <Column id="pchOptnStlmAmt" type="STRING" size="256"/>
+          <Column id="npchOptnStlmAmt" type="STRING" size="256"/>
+          <Column id="incmtax" type="STRING" size="256"/>
+          <Column id="rsdttax" type="STRING" size="256"/>
+          <Column id="taxSmamt" type="STRING" size="256"/>
+          <Column id="actlPpayAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ this.application = null;
+ this.admtNo = "";
+ this.tcNm = "";
+ this.tcCdNo = "";
+ 
+ /**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.TeacherAdmtDtl_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	this.admtNo = this.getOwnerFrame().admtNo;	
+	this.tcNm = this.getOwnerFrame().tcNm;
+	this.tcCdNo = this.getOwnerFrame().tcCdNo;
+	
+	this.txtTcNm.set_text(this.tcNm);
+	this.txtTcCd.set_text(this.tcCdNo);
+	
+	this.fn_list();
+};
+
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_list = function(){
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/sapAdmtMtrlList.do",
+		inData : "",
+		outData : "ds_list=output1",
+		strArg : "admtNo=" + this.admtNo + " tcCdNo=" + this.tcCdNo,
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.menuId
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "mtrl_list" : 			
+			
+			if(this.ds_list.rowcount < 1){
+				this.Grid00.set_nodatatext("검색 결과 없습니다.")
+			}else{			
+			}			
+			break; 				
+	}
+}
+
+
+]]></Script>
+  </Form>
+</FDL>

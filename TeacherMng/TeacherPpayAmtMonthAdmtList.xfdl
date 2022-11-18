@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherPpayAmtList" width="1280" height="720" titletext="New Form" onload="TecherPpayAmtList_onload">
+  <Form id="TeacherPpayAmtList" width="1280" height="720" titletext="New Form" onload="TeacherPpayAmtList_onload">
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -194,9 +194,9 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
-                <Cell col="1" text="bind:tcCdNo"/>
-                <Cell col="2" text="bind:tcNm"/>
-                <Cell col="3" text="bind:tcTpNm"/>
+                <Cell col="1" text="bind:tcCdNo" suppress="1"/>
+                <Cell col="2" text="bind:tcNm" suppress="2"/>
+                <Cell col="3" text="bind:tcTpNm" suppress="3"/>
                 <Cell col="4" text="bind:cntrStat"/>
                 <Cell col="5" text="bind:ppayInfo"/>
                 <Cell col="6" text="bind:sapAdmtPrcsStat"/>
@@ -235,7 +235,7 @@ this.excelImportExport = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 { 
 	this.application = nexacro.getApplication();
 	this.excelImportExport = this.application.getVariable("excelImportExport");
@@ -361,7 +361,7 @@ this.fn_list = function(page){
 	
 	var tranObj = {
 		strSvcId : "list",
-		strSvcUrl : this.application.Admin_svc + "::techerPpayMng/monthAdmtList.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/monthAdmtList.do",
 		inData : "search=ds_search pageing=gdsPageing",
 		outData : "ds_list=output1 gdsPageing=output2",
 		strArg : "",

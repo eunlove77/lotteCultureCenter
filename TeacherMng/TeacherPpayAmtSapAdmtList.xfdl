@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherPpayAmtSapList" width="1280" height="720" titletext="New Form" onload="TecherPpayAmtSapList_onload">
+  <Form id="TeacherPpayAmtSapList" width="1280" height="720" titletext="New Form" onload="TeacherPpayAmtSapList_onload">
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -57,7 +57,7 @@
         </Div>
         <Static id="Static00_00" taborder="4" text="▶ SAP정산 목록" left="10" top="239" width="110" height="21" cssclass="sta_WF_TitGray"/>
         <Static id="txtTotal" taborder="5" left="Static00_00:0" height="21" text="( 0개 )" width="50" top="239" cssclass="sta_WF_TitGray"/>
-        <Grid id="Grid00" taborder="6" left="10" top="260" bottom="10" autofittype="col" binddataset="ds_list" right="10">
+        <Grid id="Grid00" taborder="6" left="10" top="260" bottom="10" autofittype="col" binddataset="ds_list" right="10" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -95,7 +95,7 @@
               <Band id="body">
                 <Cell text="bind:rnum"/>
                 <Cell col="1" text="bind:brchNm"/>
-                <Cell col="2" text="bind:admtNo"/>
+                <Cell col="2" text="bind:admtNo" textDecoration="underline" cursor="pointer" color="#000dcc"/>
                 <Cell col="3" text="bind:admtYm"/>
                 <Cell col="4" text="bind:sumAmt" textAlign="right"/>
                 <Cell col="5" text="bind:admtPrcsStatNm"/>
@@ -128,7 +128,7 @@ this.application = null;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherPpayAmtSapList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherPpayAmtSapList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 { 
 	this.application = nexacro.getApplication();
 	this.objPageingDs = this.application.gdsPageing;	
@@ -203,9 +203,30 @@ this.btnC0_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		wthdtaxCd : "C0"
 	};
 	
-	this.gfn_openPopup("popup", oArg, "TecherMng::SAPDtl.xfdl", this, 0, 0, true, true, null);
+	this.gfn_openPopup("popup", oArg, "TeacherMng::include/AdmtObjMtrl_popup.xfdl", this, 0, 0, true, true, null);
 };
 
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var headTitle = obj.getCellProperty("Head", e.col, "text");
+	
+	if(headTitle == "정산처리요청번호"){
+		
+		if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+
+		var oArg = {			
+			menuId : this.getOwnerFrame().param.MENU_ID,
+			admtNo : this.ds_list.getColumn(e.row, "admtNo"),
+			brchCd : this.row01.form.Div00.form.brchCd.value,
+			ppayYear : this.row01.form.Div01.form.yy.value,
+			ppayMonth : this.row01.form.Div01.form.mm.value,
+			wthdtaxCd : "C0"
+		};
+		
+		this.gfn_openPopup("popup", oArg, "TeacherMng::include/AdmtObjMtrl_popup.xfdl", this, 0, 0, true, true, null);
+	}
+	
+};
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -216,7 +237,7 @@ this.fn_list = function(page){
 	
 	var tranObj = {
 		strSvcId : "list",
-		strSvcUrl : this.application.Admin_svc + "::techerPpayMng/sapAdmtList.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/sapAdmtList.do",
 		inData : "search=ds_search pageing=gdsPageing",
 		outData : "ds_list=output1 gdsPageing=output2",
 		strArg : "",
@@ -280,6 +301,8 @@ this.fn_set_checkbox_value = function(value){
 	this.Div01.form.Div00.form.chkAdmtPrcsStat0.set_value(value);
 	this.Div01.form.Div00.form.chkAdmtPrcsStat1.set_value(value);	
 }
+
+
 ]]></Script>
     <Objects>
       <Dataset id="ds_list">
