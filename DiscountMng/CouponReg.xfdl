@@ -542,6 +542,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
+this.menuId = this.parent.parent.param.MENU_ID;
 this.popCnt = 0;
 
 this.rsltMsg = ""
@@ -568,7 +569,7 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		outData : "ds_category01=ctgrList",
 		strArg : "ctegryId=CTEGRY ctegryLvlNo=0",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
@@ -597,7 +598,7 @@ this.fn_detail = function ()
 		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
@@ -753,7 +754,7 @@ this.Div01_Div03_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 		outData : "ds_category02=ctgrList",
 		strArg : "ctegryId="+e.postvalue+" ctegryLvlNo=1",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : false,
 		isPopup : true
 	}
@@ -802,7 +803,7 @@ this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacr
 		outData : "ds_category03=ctgrList",
 		strArg : "ctegryId="+e.itemvalue+" ctegryLvlNo=2",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : false,
 		isPopup : true
 		}
@@ -988,10 +989,11 @@ this.fn_save = function(){
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
+	 if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);
 }
 
@@ -1297,7 +1299,7 @@ this.excel_import_validation_check = function(){
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : false,
 		isPopup : true
 	}
