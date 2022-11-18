@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="StlmMthdIncome" width="1280" height="720" titletext="New Form" onload="StlmMthdIncome_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="txtMenuNm:10" height="98" right="10" url="StlmMng::StlmMthdIncmTtl/StlmMthdIncmTtlSearch.xfdl"/>
+        <Div id="Div01" taborder="2" text="Div01" left="10" top="Div00:20" height="520" right="10" url="StlmMng::StlmMthdIncmTtl/StlmMthdIncmTtlList.xfdl"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+var searchFrm = this.Div00.form;
+var gridFrm = this.Div01.form;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.StlmMthdIncome_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();	
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+};
+]]></Script>
+  </Form>
+</FDL>
