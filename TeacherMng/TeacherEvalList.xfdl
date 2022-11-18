@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherEvalList" width="1280" height="1000" titletext="New Form" onload="TecherLectureList_onload">
+  <Form id="TeacherEvalList" width="1280" height="1000" titletext="New Form" onload="TeacherLectureList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -11,7 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="brchCd" taborder="1" text="" left="116" top="5" width="130" height="20" index="0" value="-1" innerdataset="ds_spot_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="brchCd" taborder="1" text="" left="116" top="5" width="130" height="20" index="0" value="-1" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -128,7 +128,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tclect_list">
+        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tceval_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -170,21 +170,21 @@
                 <Cell col="14" text="수정일시"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:tcCdNo" color="blue" textDecoration="underline"/>
-                <Cell col="1" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
-                <Cell col="2" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd"/>
-                <Cell col="3" text="bind:pbrltnBrchCd" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="4" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
-                <Cell col="5" text="bind:mdfReqYn" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="6" text="bind:frstHopeBrchCd" color="blue" textDecoration="underline"/>
-                <Cell col="7" tooltiptext="bind:secHopeBrchCd" textDecoration="underline" color="blue"/>
-                <Cell col="8"/>
-                <Cell col="9"/>
-                <Cell col="10"/>
-                <Cell col="11"/>
-                <Cell col="12"/>
-                <Cell col="13" text="bind:mdfDtm"/>
-                <Cell col="14" text="bind:rgprDtm"/>
+                <Cell text="bind:tcCdNo" color="blue" textDecoration="underline" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="1" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="2" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:evlPnt" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="3" text="bind:brchCd" displaytype="combotext" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="4" text="bind:yy" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="5" text="bind:lectSmsterCd" calendardateformat="yyyy-MM-dd HH:mm:ss" displaytype="combotext" combodataset="ds_semester_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="6" text="bind:lectCd" textDecoration="underline" color="blue" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="7" textDecoration="underline" color="blue" text="bind:lectNm" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="8" text="bind:lectTpCd" displaytype="combotext" combodataset="ds_classCtgy_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="9" text="bind:lectClCd" displaytype="combotext" combodataset="ds_classGb_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="10" text="bind:mbrNo" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="11" text="bind:mbrNm" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="12" text="bind:memoCont" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="13" text="expr:rgprDtm" displaytype="expr:rgprDtm ? &quot;date&quot; : &quot;none&quot;" calendardateformat="yyyy-MM-dd HH:mm:ss" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="14" text="bind:mdfDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" displaytype="expr:mdfDtm ? &quot;date&quot; : &quot;none&quot;" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
               </Band>
             </Format>
           </Formats>
@@ -192,7 +192,6 @@
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Static id="Static00" taborder="8" text="강사평가 목록" left="20" top="265" width="100" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
         <Static id="txtTotal" taborder="4" left="Static00:5" top="270" height="21" text="(0개)" width="52"/>
-        <Button id="test" taborder="9" text="테스트버튼" left="182" top="256" width="116" height="24" onclick="test_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -200,7 +199,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::popup.xjs";
-include "TecherMng::include/common.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -208,16 +207,19 @@ include "TecherMng::include/common.xjs";
 this.application = null;
 this.brchCd = "";
 this.popCnt = 0;
+this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_tclect_list, this.Grid00, 0);
+	//this.gfnSetCheckBoxNoDataset(this.ds_tceval_list, this.Grid00, 0);
 	
 	//지점초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd");
@@ -234,6 +236,10 @@ this.TecherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
  * 데이터 세팅
  **************************************************************************/
 this.set_dataset = function(){
+	
+	//글로벌 코드
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+
 	var ds_codes_list = [
 		{ds : this.ds_spot_list,		cd: "'spotCd'"},	//지점
 		{ds : this.ds_semester_list,	cd: "'034'"},		//학기구분
@@ -304,13 +310,15 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();	//검색 데이터 세팅
-	this.get_techer_evaluation_list();
+	this.get_teacher_evaluation_list();
 };
 //초기화 버튼 
 this.reset_search_form = function(){
 	
+	//공통
 	this.com_reset_search_form(this);
 	
+	//카테고리
 	var lgObj = this.Div02.form.Div00.form.Combo00;
 	var mdObj = this.Div02.form.Div00.form.Combo01;
 	var smObj = this.Div02.form.Div00.form.Combo02;
@@ -321,62 +329,60 @@ this.reset_search_form = function(){
 	
 	//날짜기준 학기
 	this.com_reset_search_semester(this.Div01.form.Div01.form.Combo01);
+	
+	//휴대전화
+	this.ds_search.setColumn(0, "hpStNo", "");
+	this.ds_search.setColumn(0, "hpMidNo", "");
+	this.ds_search.setColumn(0, "hpLastNo", "");
 
 }
 this.set_search_info = function(){
+
 	//검색조건 - 휴대전화
 	var hpNo = this.Div03.form.Div02.form.hpNo.value;
-	var arr = this.parse_phone_number(hpNo);
+	this.com_set_hpNo_to_stmidlastNo(hpNo);
 	
-	this.ds_search.setColumn(0, 'hpStNo', arr[0] ? arr[0] : '');
-	this.ds_search.setColumn(0, 'hpMidNo', arr[1] ? arr[1] : '');
-	this.ds_search.setColumn(0, 'hpLastNo', arr[2] ? arr[2] : '');
-}
-this.parse_phone_number = function(str){
-	if(!str) return [];
+	//검색조건 - 체크박스 세팅 - 강사유형
+	var tcTpCdList = this.com_set_checkbox_to_string(this.Div03.form.Div00.form.Div00);
+	this.ds_search.setColumn(0, "tcTpCdList", tcTpCdList);
+	//검색조건 - 체크박스 세팅 - 강좌구분
+	var lectClCdList = this.com_set_checkbox_to_string(this.Div01.form.Div02);
+	this.ds_search.setColumn(0, "lectClCdList", lectClCdList);
+	//검색조건 - 체크박스 세팅 - 강좌유형
+	var lectTpCdList = this.com_set_checkbox_to_string(this.Div02.form.Div01);
+	this.ds_search.setColumn(0, "lectTpCdList", lectTpCdList);
 	
-	var arr = str.split('-');
-	if(arr.length > 1){
-		if(arr[0].length == 4){
-			var tmp = arr[0];
-			arr[2] = arr[1];
-			arr[1] = arr[2];
-		}
-	} else {
-		if(str.length == 11){
-			arr[0] = str.slice(0, 3);
-			arr[1] = str.slice(3, 7);
-			arr[2] = str.slice(7, 11);
-		} else if(str.length == 8){
-			arr[1] = str.slice(0, 4);
-			arr[2] = str.slice(4, 8);
-		}
-	}
-	
-	return arr;
 }
 
-this.get_techer_evaluation_list = function()
+this.get_teacher_evaluation_list = function()
 {	
 	var tranObj = {
-		strSvcId : "techer_evaluation_list",
-		strSvcUrl : this.application.Admin_svc + "::techerMng/tceval/list.do",
+		strSvcId : "teacher_evaluation_list",
+		strSvcUrl : this.application.Admin_svc + "::teacherMng/tceval/list.do",
 		inData : "search=ds_search",
-		outData : "ds_class_list=ouput1",
+		outData : "ds_tceval_list=output1",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuSeq
 	}
-				
+	
+  if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
+this.fnCallback = function(svcId, errorCode, errorMsg)
 {
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0){	
 		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	if(svcId == "teacher_evaluation_list"){
+		this.ds_tceval_list.filter("tcCdNo != '총점'");
+		var rowcount = this.ds_tceval_list.rowcount;
+		this.txtTotal.set_text("("+ rowcount +"개)");
+		this.ds_tceval_list.filter("");
 	}
 };
 /**************************************************************************
@@ -385,34 +391,38 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	//강사정보
-	if(e.cell == 0 || e.cell == 1){	
+	if(e.cell == 0 || e.cell == 1){
+		var tcCdNo = obj.getBindDataset().getColumn(e.row, "tcCdNo");
+		if(!tcCdNo || tcCdNo == "총점"){
+			return;
+		}
+		
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
 				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
-				ownerFrame : this.getOwnerFrame()
+        menuSeq : this.menuSeq
 				};
-		//this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 	//강좌정보
 	else if(e.cell == 6 || e.cell == 7){	
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
-				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
-				ownerFrame : this.getOwnerFrame()
+				brchCd : obj.getBindDataset().getColumn(e.row, "brchCd"),
+				yy : obj.getBindDataset().getColumn(e.row, "yy"),
+				lectSmsterCd : obj.getBindDataset().getColumn(e.row, "lectSmsterCd"),
+				lectCd : obj.getBindDataset().getColumn(e.row, "lectCd"),
+				menuSeq : this.menuSeq
 				};
-		//this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
+		this.gfn_openPopup("ClassDtlPop"+this.popCnt, oArg, "ClassMng::ClassDtl.xfdl", this, 1300, 850, true, true, null, "강좌 상세");
 	}
 };
 
 /**************************************************************************
  * UTIL
  **************************************************************************/
-this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	console.log('test');
-};
 this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	this.com_fn_checkboxAll(obj, e);
@@ -424,13 +434,13 @@ this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
-          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClCdList" type="STRING" size="256"/>
           <Column id="lrclsCtegryCd" type="STRING" size="256"/>
           <Column id="mdclsCtegryCd" type="STRING" size="256"/>
           <Column id="smclsCtegryCd" type="STRING" size="256"/>
-          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpCdList" type="STRING" size="256"/>
           <Column id="txfrBizprYn" type="STRING" size="256"/>
-          <Column id="tcTpCd" type="STRING" size="256"/>
+          <Column id="tcTpCdList" type="STRING" size="256"/>
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
@@ -443,13 +453,13 @@ this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
             <Col id="brchCd"> </Col>
             <Col id="yy"> </Col>
             <Col id="lectSmsterCd"> </Col>
-            <Col id="lectClCd"> </Col>
+            <Col id="lectClCdList"> </Col>
             <Col id="lrclsCtegryCd"> </Col>
             <Col id="mdclsCtegryCd"> </Col>
             <Col id="smclsCtegryCd"> </Col>
-            <Col id="lectTpCd"> </Col>
+            <Col id="lectTpCdList"> </Col>
             <Col id="txfrBizprYn"> </Col>
-            <Col id="tcTpCd"> </Col>
+            <Col id="tcTpCdList"> </Col>
             <Col id="hpStNo"> </Col>
             <Col id="hpMidNo"> </Col>
             <Col id="hpLastNo"> </Col>
@@ -457,32 +467,28 @@ this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_tclect_list">
+      <Dataset id="ds_tceval_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
-          <Column id="tcTpCd" type="STRING" size="256"/>
-          <Column id="apvlStatCd" type="STRING" size="256"/>
-          <Column id="txfrBizprYn" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
-          <Column id="hpNo" type="STRING" size="256"/>
-          <Column id="bday" type="STRING" size="256"/>
-          <Column id="lscCd" type="STRING" size="256"/>
-          <Column id="pbrltnBrchCd" type="STRING" size="256"/>
-          <Column id="pbrltnChrgprNm" type="STRING" size="256"/>
-          <Column id="frstHopeBrchCd" type="STRING" size="256"/>
-          <Column id="secHopeBrchCd" type="STRING" size="256"/>
-          <Column id="frstLrclsCtegryCd" type="STRING" size="256"/>
-          <Column id="frstMdclsCtegryCd" type="STRING" size="256"/>
-          <Column id="frstSmclsCtegryCd" type="STRING" size="256"/>
-          <Column id="secLrclsCtegryCd" type="STRING" size="256"/>
-          <Column id="secMdclsCtegryCd" type="STRING" size="256"/>
-          <Column id="secSmclsCtegryCd" type="STRING" size="256"/>
-          <Column id="hopeDaywCd" type="STRING" size="256"/>
-          <Column id="hopeTime" type="STRING" size="256"/>
-          <Column id="mdfReqYn" type="STRING" size="256"/>
+          <Column id="tcStgNm" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="evlPnt" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
-          <Column id="appDt" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_spot_list">
@@ -542,6 +548,7 @@ this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
           <Column id="cdId" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list"/>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.brchCd" propid="value" datasetid="ds_search" columnid="brchCd"/>
@@ -552,6 +559,7 @@ this.fn_checkboxAll = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
       <BindItem id="item5" compid="Div02.form.Div00.form.Combo02" propid="value" datasetid="ds_search" columnid="smclsCtegryCd"/>
       <BindItem id="item6" compid="Div05.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item7" compid="Div05.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item8" compid="Div03.form.Div00.form.txfrBizprYn" propid="value" datasetid="ds_search" columnid="txfrBizprYn"/>
     </Bind>
   </Form>
 </FDL>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherLectureList" width="1280" height="1000" titletext="New Form" onload="TecherLectureList_onload">
+  <Form id="TeacherLectureList" width="1280" height="1000" titletext="New Form" onload="TeacherLectureList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -136,7 +136,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tclect_list">
+        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="none" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tclect_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -146,23 +146,23 @@
                 <Column size="100"/>
                 <Column size="130"/>
                 <Column size="130"/>
+                <Column size="120"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="150"/>
                 <Column size="80"/>
                 <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
               </Columns>
               <Rows>
                 <Row size="30" band="head"/>
@@ -198,25 +198,25 @@
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
                 <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
-                <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd"/>
+                <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
                 <Cell col="5" text="bind:hpNo"/>
-                <Cell col="6" text="bind:pbrltnBrchCd" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="7" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
-                <Cell col="8" text="bind:mdfReqYn" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="9" text="bind:frstHopeBrchCd"/>
-                <Cell col="10" tooltiptext="bind:secHopeBrchCd"/>
-                <Cell col="11"/>
-                <Cell col="12"/>
-                <Cell col="13"/>
-                <Cell col="14"/>
-                <Cell col="15"/>
-                <Cell col="16"/>
-                <Cell col="17"/>
-                <Cell col="18"/>
-                <Cell col="19"/>
-                <Cell col="20" text="bind:appDt"/>
-                <Cell col="21" text="bind:mdfDtm"/>
-                <Cell col="22" text="bind:rgprDtm"/>
+                <Cell col="6" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="7" text="bind:yy"/>
+                <Cell col="8" text="bind:lectSmsterCd" displaytype="combotext" combodataset="ds_semester_list" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="9" text="bind:lectCd" textDecoration="underline" color="blue"/>
+                <Cell col="10" text="bind:lectNm"/>
+                <Cell col="11" text="bind:lectTpCd" displaytype="combotext" combodataset="ds_classCtgy_list" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="12" combodataset="ds_classGb_list" combodatacol="cdNm" combocodecol="cd" text="bind:lectClCd"/>
+                <Cell col="13" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:lrclsCtegryCd"/>
+                <Cell col="14" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:mdclsCtegryCd"/>
+                <Cell col="15" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:smclsCtegryCd"/>
+                <Cell col="16" text="bind:ppayStdCd"/>
+                <Cell col="17" text="bind:ppayAmt"/>
+                <Cell col="18" text="expr:lectStDtm + &quot;~&quot; + lectEndDtm"/>
+                <Cell col="19" text="bind:avgLctrvw"/>
+                <Cell col="20" text="bind:avgEvlpnt"/>
+                <Cell col="21" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="22" text="bind:mdfDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
             </Format>
           </Formats>
@@ -226,7 +226,6 @@
         <Static id="txtTotal" taborder="4" left="Static00:5" top="270" height="21" text="(0개)" width="52"/>
         <Button id="btnLcthistConf" taborder="8" text="출강이력확인서" top="270" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="72" onclick="btnLcthistConf_onclick"/>
         <Button id="btnSms" taborder="9" text="SMS" top="270" height="21" cssclass="btn_WF_Low" fittocontents="width" width="50" right="10" onclick="btnSms_onclick"/>
-        <Button id="test" taborder="11" text="테스트버튼" left="182" top="256" width="116" height="24" onclick="test_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -234,7 +233,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::popup.xjs";
-include "TecherMng::include/common.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -244,7 +243,7 @@ this.brchCd = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
@@ -336,7 +335,7 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();	//검색 데이터 세팅
-	this.get_techer_lecture_list();
+	this.get_teacher_lecture_list();
 };
 //초기화 버튼 
 this.reset_search_form = function(){
@@ -356,6 +355,10 @@ this.reset_search_form = function(){
 	//날짜기준 학기
 	this.com_reset_search_semester(this.Div01.form.Div01.form.Combo01);
 	
+	//휴대전화
+	this.ds_search.setColumn(0, "hpStNo", "");
+	this.ds_search.setColumn(0, "hpMidNo", "");
+	this.ds_search.setColumn(0, "hpLastNo", "");
 }
 this.set_search_info = function(){
 
@@ -375,19 +378,20 @@ this.set_search_info = function(){
 	
 }
 
-this.get_techer_lecture_list = function()
+this.get_teacher_lecture_list = function()
 {	
 	var tranObj = {
-		strSvcId : "techer_lecture_list",
-		strSvcUrl : this.application.Admin_svc + "::techerMng/tclect/list.do",
+		strSvcId : "teacher_lecture_list",
+		strSvcUrl : this.application.Admin_svc + "::teacherMng/tclect/list.do",
 		inData : "search=ds_search",
-		outData : "ds_class_list=ouput1",
+		outData : "ds_tclect_list=output1",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
-				
+	
+  if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
 
@@ -398,7 +402,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 		this.alert(errorCode+"\n"+errorMsg);
 	}
 	
-	if(svcId == "techer_lecture_list"){
+	if(svcId == "teacher_lecture_list"){
 		var rowcount = this.ds_tclect_list.rowcount;
 		this.txtTotal.set_text("("+ rowcount +"개)");
 	}
@@ -424,15 +428,35 @@ this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	
 };
-/**************************************************************************
- * UTIL
- **************************************************************************/
-this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+/************************************************************************
+ * 그리드
+ ************************************************************************/
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	console.log('test');
-	this.ds_search.setColumn(0, 'brchCd', '');
-	this.get_techer_lecture_list();
-}
+	//강사 상세
+	if(e.cell == 2 || e.cell == 3){	
+		this.popCnt ++;
+		var oArg = {
+				type : "detail",
+				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
+				menuSeq : this.menuSeq
+				};
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+	}
+	//강좌 상세
+	else if(e.cell == 9){
+		this.popCnt ++;
+		var oArg = {
+				type : "detail",
+				brchCd : obj.getBindDataset().getColumn(e.row, "brchCd"),
+				yy : obj.getBindDataset().getColumn(e.row, "yy"),
+				lectSmsterCd : obj.getBindDataset().getColumn(e.row, "lectSmsterCd"),
+				lectCd : obj.getBindDataset().getColumn(e.row, "lectCd"),
+				menuSeq : this.menuSeq
+				};
+		this.gfn_openPopup("ClassDtlPop"+this.popCnt, oArg, "ClassMng::ClassDtl.xfdl", this, 1300, 850, true, true, null, "강좌 상세");
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_search">
@@ -476,29 +500,33 @@ this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
       <Dataset id="ds_tclect_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
-          <Column id="tcTpCd" type="STRING" size="256"/>
-          <Column id="apvlStatCd" type="STRING" size="256"/>
-          <Column id="txfrBizprYn" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="tcStgNm" type="STRING" size="256"/>
+          <Column id="tcTpCd" type="STRING" size="256"/>
           <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
           <Column id="bday" type="STRING" size="256"/>
-          <Column id="lscCd" type="STRING" size="256"/>
-          <Column id="pbrltnBrchCd" type="STRING" size="256"/>
-          <Column id="pbrltnChrgprNm" type="STRING" size="256"/>
-          <Column id="frstHopeBrchCd" type="STRING" size="256"/>
-          <Column id="secHopeBrchCd" type="STRING" size="256"/>
-          <Column id="frstLrclsCtegryCd" type="STRING" size="256"/>
-          <Column id="frstMdclsCtegryCd" type="STRING" size="256"/>
-          <Column id="frstSmclsCtegryCd" type="STRING" size="256"/>
-          <Column id="secLrclsCtegryCd" type="STRING" size="256"/>
-          <Column id="secMdclsCtegryCd" type="STRING" size="256"/>
-          <Column id="secSmclsCtegryCd" type="STRING" size="256"/>
-          <Column id="hopeDaywCd" type="STRING" size="256"/>
-          <Column id="hopeTime" type="STRING" size="256"/>
-          <Column id="mdfReqYn" type="STRING" size="256"/>
+          <Column id="txfrBizprYn" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="ppayStdCd" type="STRING" size="256"/>
+          <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="avgLctrvw" type="STRING" size="256"/>
+          <Column id="avgEvlpnt" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
-          <Column id="appDt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_spot_list">
@@ -568,6 +596,7 @@ this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
       <BindItem id="item5" compid="Div02.form.Div00.form.Combo02" propid="value" datasetid="ds_search" columnid="smclsCtegryCd"/>
       <BindItem id="item6" compid="Div05.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item7" compid="Div05.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item8" compid="Div03.form.Div00.form.txfrBizprYn" propid="value" datasetid="ds_search" columnid="txfrBizprYn"/>
     </Bind>
   </Form>
 </FDL>

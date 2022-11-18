@@ -1,27 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="CooperationApplyList" width="1280" height="1000" titletext="New Form" onload="TecherLectureList_onload">
+  <Form id="CooperationApplyList" width="1280" height="1000" titletext="New Form" onload="TeacherLectureList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="50%">
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33.33%">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="담당자 연락처" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="159" bottom="5"/>
-                    <Edit id="Edit00_00" taborder="2" left="289" top="5" width="159" bottom="5"/>
-                    <Edit id="Edit00_00_00" taborder="3" left="459" top="5" width="159" bottom="5"/>
+                    <Static id="Static00" taborder="0" text="담당자명" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" bottom="5" right="10"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="1" text="Div01" top="0" height="33" cssclass="div_WF_CompWrap" right="0" width="50%">
+              <Div id="Div02" taborder="1" text="Div01" top="0" height="33" cssclass="div_WF_CompWrap" right="0" width="33.33%">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="답변여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
                     <Combo id="Combo00" taborder="1" text="Combo01" left="121" top="5" width="130" height="20" innerdataset="ds_answrCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00_00" taborder="2" text="Div01" left="33.33%" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33.33%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="담당자 연락처" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" bottom="5" right="10"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -50,10 +56,6 @@
                       <Col id="codecolumn">1</Col>
                     </Row>
                     <Row>
-                      <Col id="codecolumn">2</Col>
-                      <Col id="datacolumn">담당자명</Col>
-                    </Row>
-                    <Row>
                       <Col id="codecolumn">3</Col>
                       <Col id="datacolumn">이메일</Col>
                     </Row>
@@ -73,11 +75,10 @@
           </Layouts>
         </Div>
         <Div id="Div00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="5" text="목록" left="20" top="185" width="100" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+        <Static id="Static00" taborder="5" text="목록" left="20" top="185" width="70" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
         <Static id="txtTotal" taborder="3" left="Static00:5" top="190" height="21" text="(0개)" width="52"/>
-        <Button id="test" taborder="6" text="테스트버튼" left="182" top="176" width="116" height="24" onclick="test_onclick"/>
-        <Button id="btnDelete" taborder="7" text="삭제" top="190" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnDelete_onclick"/>
-        <Grid id="Grid00" taborder="8" left="10" top="230" autofittype="col" right="10" bottom="210" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_coprapp_list">
+        <Button id="btnDelete" taborder="6" text="삭제" top="190" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnDelete_onclick"/>
+        <Grid id="Grid00" taborder="7" left="10" top="230" autofittype="col" right="10" bottom="210" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_coprapp_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -113,7 +114,7 @@
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:buenNm" color="blue" textDecoration="underline"/>
                 <Cell col="3" text="bind:chrgprNm"/>
-                <Cell col="4" text="expr:hpStNm + &quot;-&quot; + hpMidNo + &quot;-&quot; + hpLastNo"/>
+                <Cell col="4" text="expr:hpStNo + &quot;-&quot; + hpMidNo + &quot;-&quot; + hpLastNo"/>
                 <Cell col="5" text="bind:email"/>
                 <Cell col="6" text="bind:mbrNo"/>
                 <Cell col="7" text="bind:mbrNm"/>
@@ -130,23 +131,26 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::popup.xjs";
-include "TecherMng::include/common.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
 this.popCnt = 0;
+this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_tclect_list, this.Grid00, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_coprapp_list, this.Grid00, 0);
 
 	this.reset_search_form();
 };
@@ -155,30 +159,57 @@ this.TecherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
  **************************************************************************/
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	//개인정보 2개이상 조합필요
+	//유효성 검사
+	if(!this.check_validation()) return;
 	
-	this.get_afterLectureReview_list();
+	//검색조건 - 휴대전화
+	var hpNo = this.Div01.form.Div00_00.form.Edit00.value;
+	this.com_set_hpNo_to_stmidlastNo(hpNo);
+	
+	this.get_cooperationApply_list();
 };
 //초기화 버튼 
 this.reset_search_form = function(){
 
+	//공통
 	this.com_reset_search_form(this);
 
+	//휴대전화
+	this.ds_search.setColumn(0, "hpStNo", "");
+	this.ds_search.setColumn(0, "hpMidNo", "");
+	this.ds_search.setColumn(0, "hpLastNo", "");
+	
 }
 this.get_cooperationApply_list = function()
 {	
 	var tranObj = {
 		strSvcId : "select_cooperation_apply_list",
-		strSvcUrl : this.application.Admin_svc + "::techerMng/coprapp/list.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherMng/coprapp/list.do",
 		inData : "search=ds_search",
-		outData : "ds_coprapp_list=ouput1",
+		outData : "ds_coprapp_list=output1",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuSeq
 	}
 	
+  if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
+}
+/**************************************************************************
+ * 유효성 검사 - 검색조건
+ **************************************************************************/
+this.check_validation = function(){
+
+	//개인정보는 2개이상 조합
+	var chrgprNm = this.ds_search.getColumn(0, "chrgprNm");
+	var hpNo = this.Div01.form.Div00_00.form.Edit00.value;
+	if(!chrgprNm != !hpNo){
+		alert("개인정보는 2개 이상 조합하여 검색해주세요.\n예시) 담당자명+휴대전화");
+		return false;
+	}
+	
+	return true;
 }
 
 /**************************************************************************
@@ -192,13 +223,13 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		var oArg = {
 				type : "detail",
 				coprAppSeqno : obj.getBindDataset().getColumn(e.row, "coprAppSeqno"),
-				ownerFrame : this.getOwnerFrame()
+				menuSeq : this.menuSeq
 				};
-		//this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::CooperationApplyDtl.xfdl", this, 1000, 670, true, true, null, "제휴신청 상세/수정");
 	}
 };
 /**************************************************************************
- * 저장
+ * 삭제
  **************************************************************************/
  this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -220,46 +251,40 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	for(i of checked_array){
 		check_array[i] = 0;
 	}
-	 this.Grid00.redrawExprCell();
+	this.Grid00.redrawExprCell();
 
-	delete_cooperation_apply();
+	this.delete_cooperation_apply();
 };
 
 this.delete_cooperation_apply = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "delete_cooperation_apply";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/coprapp/delete.do";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/coprapp/delete.do";
 	tranObj.inData      = "coprappList=ds_coprapp_list:U";
 	tranObj.outData     = "";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.menuSeq;
 	
+  if(this.gfn_btn_auth(this.menuSeq, "accDelYn")) return;
 	this.gfn_transaction(tranObj);
 }
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
+this.fnCallback = function(svcId, errorCode, errorMsg)
 {
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0){
 		this.alert(errorCode+"\n"+errorMsg);
+		return;
 	}
 	
 	if(svcId == "select_cooperation_apply_list"){
-		
+		this.txtTotal.set_text("(" + this.ds_coprapp_list.rowcount + ")개");
 	}
 	else if(svcId == "delete_cooperation_apply"){
 		alert("삭제되었습니다.");
 	}
-};
-
-/**************************************************************************
- * UTIL
- **************************************************************************/
-this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	console.log('test');
 };
 ]]></Script>
     <Objects>
@@ -268,6 +293,7 @@ this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="chrgprNm" type="STRING" size="256"/>
           <Column id="answrYn" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
@@ -320,12 +346,11 @@ this.test_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
       </Dataset>
     </Objects>
     <Bind>
-      <BindItem id="item0" compid="Div01.form.Div00.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
-      <BindItem id="item1" compid="Div01.form.Div00.form.Edit00_00" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
-      <BindItem id="item2" compid="Div01.form.Div00.form.Edit00_00_00" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
       <BindItem id="item3" compid="Div01.form.Div02.form.Combo00" propid="value" datasetid="ds_search" columnid="answrYn"/>
       <BindItem id="item4" compid="Div05.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item5" compid="Div05.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item2" compid="Div01.form.Div00.form.Edit00" propid="accessibilityaction" datasetid="ds_search" columnid="chrgprNm"/>
+      <BindItem id="item0" compid="Div01.form.Div00.form.Edit00" propid="value" datasetid="ds_search" columnid="chrgprNm"/>
     </Bind>
   </Form>
 </FDL>

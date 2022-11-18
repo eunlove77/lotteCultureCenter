@@ -765,7 +765,37 @@ this.Div01_Div03_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 //중분류 선택 시
 this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	var tranObj = {
+	if(e.itemvalue == "")
+	{
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);
+		
+		if(this.ds_appl_ctgr.getRowCount() < 10)
+		{
+			var lrclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo00.value;
+			
+			//중복체크
+			if(0 > this.ds_appl_ctgr.findRowExpr("lrclsCtegryCd=="+"'"+lrclsCtegryCd+"'"+" && mdclsCtegryCd=="+"'"+e.itemvalue+"'"))
+			{
+				var nRowIdx = this.ds_appl_ctgr.addRow();
+					
+				this.ds_appl_ctgr.setColumn(nRowIdx, "lrclsCtegryCd", this.Div01.form.Div03.form.Div00.form.Combo00.value);			
+				this.ds_appl_ctgr.setColumn(nRowIdx, "lrclsCtegryNm", this.Div01.form.Div03.form.Div00.form.Combo00.text);
+				this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryCd", e.itemvalue);
+				this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryNm", e.itemtext);
+			}
+			else
+			{
+				alert("이미 지정한 카테고리입니다."); 
+			}		
+		}
+		else
+		{
+			alert("카테고리는 최대 10개까지 지정 가능합니다.");
+		}	
+	}
+	else
+	{
+		var tranObj = {
 		strSvcId : "ctgrList",
 		strSvcUrl : this.baseSvrUrl + "codeList.do",
 		inData : "",
@@ -775,9 +805,10 @@ this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacr
 		menuSeq : this.parent.parent.param.MENU_ID,
 		isAsync : false,
 		isPopup : true
+		}
+		
+		this.gfn_transaction(tranObj);
 	}
-	
-	this.gfn_transaction(tranObj);
 };
 
 //소분류 선택 시
@@ -787,10 +818,9 @@ this.Div01_Div03_Div00_Combo02_onitemclick = function(obj:nexacro.Combo,e:nexacr
 	{
 		var lrclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo00.value;
 		var mdclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo01.value;
-		var smclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo02.value;
 		
 		//중복체크
- 		if(0 > this.ds_appl_ctgr.findRowExpr("lrclsCtegryCd=="+"'"+lrclsCtegryCd+"'"+" && mdclsCtegryCd=="+"'"+mdclsCtegryCd+"'"+" && smclsCtegryCd=="+"'"+smclsCtegryCd+"'"))
+ 		if(0 > this.ds_appl_ctgr.findRowExpr("lrclsCtegryCd=="+"'"+lrclsCtegryCd+"'"+" && mdclsCtegryCd=="+"'"+mdclsCtegryCd+"'"+" && smclsCtegryCd=="+"'"+e.itemvalue+"'"))
  		{
  			var nRowIdx = this.ds_appl_ctgr.addRow();
 				
@@ -815,8 +845,6 @@ this.Div01_Div03_Div00_Combo02_onitemclick = function(obj:nexacro.Combo,e:nexacr
 //카테고리 그리드 삭제 버튼
 this.Div01_Div03_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var objGridDs = obj.getBindDataset();
-	
 	if(e.cell == 3){		
 		this.ds_appl_ctgr.deleteRow(e.row);	
 	}
@@ -1076,7 +1104,7 @@ this.ds_category02_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 		this.ds_category02.insertRow(0);
 		this.ds_category02.setColumn(0, "cd", "");
 		this.ds_category02.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo01.set_text("전체");+
+		this.Div01.form.Div03.form.Div00.form.Combo01.set_text("전체");
 		
 		this.ds_category03.deleteAll();
 		this.ds_category03.addRow();
@@ -1100,7 +1128,7 @@ this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 		smclsCtegryInf.itemtext = "";
 		smclsCtegryInf.itemvalue = "";
 		
-		this.Div01_Div03_Div00_Combo02_onitemclick(this.Div01.form.Div03.form.Div00.form.Combo02,smclsCtegryInf);
+		this.Div01_Div03_Div00_Combo02_onitemclick(this.Div01.form.Div03.form.Div00.form.Combo02, smclsCtegryInf);
 	}
 	else
 	{
@@ -1147,8 +1175,6 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 
 this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var objGridDs = obj.getBindDataset();
-	
 	if(e.cell == 12){		
 		this.ds_appl_lect.deleteRow(e.row);	
 	}

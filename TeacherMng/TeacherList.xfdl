@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherList" width="1280" height="1000" titletext="New Form" onload="TecherList_onload">
+  <Form id="TeacherList" width="1280" height="1000" titletext="New Form" onload="TeacherList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -79,7 +79,7 @@
                     <Div id="Div00" taborder="2" text="Div00" left="109" top="0" width="255" bottom="0">
                       <Layouts>
                         <Layout>
-                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="com_fn_checkboxAll"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -161,7 +161,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_techer_list" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -171,23 +171,23 @@
                 <Column size="100"/>
                 <Column size="130"/>
                 <Column size="130"/>
+                <Column size="120"/>
                 <Column size="80"/>
                 <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
                 <Column size="80"/>
+                <Column size="120"/>
                 <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
               </Columns>
               <Rows>
                 <Row size="30" band="head"/>
@@ -239,16 +239,16 @@
                 <Cell col="17" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:hopeDaywVal"/>
                 <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
                 <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:pbrltnChrgprId"/>
-                <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="22" text="expr:appDt ? appDt : rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="22" text="expr:appDt ? appDt : rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Static id="txtTotal" taborder="4" left="8" top="270" height="21" text="강사목록 (0)개" width="82"/>
-        <Button id="btnNewTecher" taborder="9" text="신규강사" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="72" onclick="btnNewTecher_onclick"/>
+        <Button id="btnNewTeacher" taborder="9" text="신규강사" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="72" onclick="btnNewTeacher_onclick"/>
         <Button id="btnSms" taborder="10" text="SMS" top="270" height="21" cssclass="btn_WF_Low" fittocontents="width" width="50" right="10" onclick="btnSms_onclick"/>
       </Layout>
     </Layouts>
@@ -259,23 +259,26 @@ include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
 include "Base::popup.xjs";
-include "TecherMng::include/common.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.rowcount = 0;
+this.popCnt = 0;
+this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_techer_list, this.Grid00, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid00, 0);
 	
 	// 코드 데이터
 	this.set_dataset();
@@ -296,6 +299,7 @@ this.set_dataset = function(){
 		{ds : this.ds_spot_list,		cd: "'spotCd'"},	//지점
 		{ds : this.ds_day_cdList,		cd: "'008'"},	//요일
 		{ds : this.ds_tcTp_list,		cd: "'CODE_62'"},	//강사유형
+		{ds : this.ds_payStd_list,		cd: "'PPAY_STD'"},	//지급기준
 	];
 	//코드 데이터셋 설정
 	this.com_set_code_dataset(ds_codes_list);
@@ -350,12 +354,11 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();
-	this.select_techer_list();
+	this.select_teacher_list();
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.reset_search_form();
-	this.select_techer_list();
 };
 
 this.set_search_info = function(){
@@ -381,38 +384,39 @@ this.set_search_info = function(){
 	
 }
 
-this.select_techer_list = function(){
+this.select_teacher_list = function(){
 	var tranObj = {};
-	tranObj.strSvcId	= "select_techer";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/list.do";
+	tranObj.strSvcId	= "select_teacher";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
 	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_techer_list=output1";
+	tranObj.outData     = "ds_teacher_list=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.menuSeq;
 	
+  if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
-this.process_techer_list = function(){
+this.process_teacher_list = function(){
 	//강사 목록 데이터 가공
-	this.ds_techer_list.addColumn("tcTpCdNm", "STRING");
+	this.ds_teacher_list.addColumn("tcTpCdNm", "STRING");
 	
-	for(var i = 0; i < this.ds_techer_list.rowcount; i++){
+	for(var i = 0; i < this.ds_teacher_list.rowcount; i++){
 		var row;
 		//강사유형
-		var tpCd = this.ds_techer_list.getColumn(i, "tcTpCd");
-		var txfrBizprYn = this.ds_techer_list.getColumn(i, "txfrBizprYn");
+		var tpCd = this.ds_teacher_list.getColumn(i, "tcTpCd");
+		var txfrBizprYn = this.ds_teacher_list.getColumn(i, "txfrBizprYn");
 		row = this.ds_tcTp_list.findRow("cd", tpCd);
 		var tpCdNm = this.ds_tcTp_list.getColumn(row, "cdNm");
 		
 		if(txfrBizprYn == "Y"){
 			tpCdNm += "(면세)";
 		}
-		this.ds_techer_list.setColumn(i, "tcTpCdNm", tpCdNm);
+		this.ds_teacher_list.setColumn(i, "tcTpCdNm", tpCdNm);
 		
 		//hopeDaywVal 파싱
-		var str = this.ds_techer_list.getColumn(i, "hopeDaywVal");
+		var str = this.ds_teacher_list.getColumn(i, "hopeDaywVal");
 		if(str){
 			var arr = str.split(",");
 			var resStr = "", comma = "";
@@ -422,7 +426,7 @@ this.process_techer_list = function(){
 				resStr += comma + dayNm;
 				comma = ",";
 			}
-			this.ds_techer_list.setColumn(i, "hopeDaywVal", resStr);
+			this.ds_teacher_list.setColumn(i, "hopeDaywVal", resStr);
 		}
 	}
 }
@@ -433,9 +437,9 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 		return false;
 	}
 	
-	if(svcId == "select_techer"){
-		this.txtTotal.set_text("강사목록 (" + this.ds_techer_list.rowcount + ")개");
-		this.process_techer_list();
+	if(svcId == "select_teacher"){
+		this.txtTotal.set_text("강사목록 (" + this.ds_teacher_list.rowcount + ")개");
+		this.process_teacher_list();
 	}
 	
 }
@@ -472,19 +476,19 @@ this.reset_search_form = function(){
 /**************************************************************************
  * 신규강사, SMS
  **************************************************************************/
- this.btnNewTecher_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+ this.btnNewTeacher_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var oArg = {
 				title : "강사 등록",
 				tcCdNo : "",
-				ownerFrame : this.getOwnerFrame()
+				menuSeq : this.menuSeq
 				};
 	
-	this.gfn_openPopup("techerInsPop", oArg, "TecherMng::TecherInsert.xfdl", this, 1300, 850, true, true, null);
+	this.gfn_openPopup("teacherInsPop", oArg, "TeacherMng::TeacherInsert.xfdl", this, 1300, 850, true, true, null);
 };
 this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_techer_list);
+	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_teacher_list);
 	if(checkedArr.length == 0){
 		alert("발송대상을 선택하세요.");
 		return false;
@@ -535,9 +539,9 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		var oArg = {
 				type : "detail",
 				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
-				ownerFrame : this.getOwnerFrame()
+				menuSeq : this.menuSeq
 				};
-		this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 };
 ]]></Script>
@@ -592,7 +596,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_techer_list">
+      <Dataset id="ds_teacher_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
@@ -749,6 +753,12 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_payStd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

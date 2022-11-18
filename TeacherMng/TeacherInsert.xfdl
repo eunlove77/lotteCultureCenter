@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TecherDtl" width="1280" height="1000" titletext="강사 등록" onload="TecherDtl_onload">
+  <Form id="TeacherDtl" width="1280" height="1000" titletext="강사 등록" onload="TeacherDtl_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Div id="Div01" taborder="0" text="Div01" left="10" top="71" height="339" right="10" minwidth="680" maxwidth="">
@@ -303,7 +303,7 @@ include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
 include "Base::popup.xjs";
-include "TecherMng::include/common.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -314,17 +314,17 @@ this.rowcount = 0;
 this.fileExtn = "jpg,jpeg,gif,png"; //확장자
 this.fileMaxSize= 200; 	//최대 파일크기 200Kb
 this.age = 0;
-this.ownerFrame;
+this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	
 	this.application.getVariable("domain");
 
-	this.ownerFrame = this.parent.getOwnerFrame();
+	this.menuSeq = this.parent.menuSeq;
 
 	this.set_dataset();
 	
@@ -337,10 +337,10 @@ this.TecherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
  this.set_dataset = function(){
  
 	//로그인정보 -> 섭외정보
-	var pbrltnBrchCd = this.application.gdsLoginInfo.getColumn(0, 'brchCd');
-	var pbrltnChrgprNm = this.application.gdsLoginInfo.getColumn(0, 'name');
-	this.ds_techer_info.setColumn(0, 'pbrltnBrchCd', pbrltnBrchCd);
-	this.ds_techer_info.setColumn(0, 'pbrltnChrgprNm', pbrltnChrgprNm);
+	var pbrltnBrchCd = nexacro.getPrivateProfile("brchCd");
+	var pbrltnChrgprNm = nexacro.getPrivateProfile("brchNm");
+	this.ds_teacher_info.setColumn(0, 'pbrltnBrchCd', pbrltnBrchCd);
+	this.ds_teacher_info.setColumn(0, 'pbrltnChrgprNm', pbrltnChrgprNm);
 	
 	var ds_codes_list = [
 		{ds : this.ds_tcTp_cdList,		cd: "'CODE_62'"},	//강사유형
@@ -382,8 +382,8 @@ this.TecherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
  **************************************************************************/
 this.set_screen_view = function(){
 	//로그인정보 -> 섭외정보
-	var pbrltnBrchNm = this.application.gdsLoginInfo.getColumn(0, 'brchNm');
-	var pbrltnChrgprid = this.application.gdsLoginInfo.getColumn(0, 'id');
+	var pbrltnBrchNm = nexacro.getPrivateProfile("brchNm");
+	var pbrltnChrgprid = nexacro.getPrivateProfile("id");
 	var pbrltnInfo_txt = pbrltnBrchNm + '(' + pbrltnChrgprid + ')';
 	this.Div01.form.Div04.form.Div01.form.pbrltnInfo.set_text(pbrltnInfo_txt);
 	
@@ -408,7 +408,7 @@ this.prevent_gridCalendar_keyin_oninput = function(obj:nexacro.Grid,e:nexacro.In
 this.rollback_dataset_data_onGrid = function(obj, dsColNm){
 	var ds = obj.getBindDataset();
 	var curRow = obj.getSelectedDatasetRows();
-	var oriValue = ds.getColumn(dsColNm, curRow);
+	var oriValue = ds.getColumn(curRow, dsColNm);
 	
 	ds.setColumn(curRow, dsColNm, oriValue);
 	obj.setEditingValue(oriValue);
@@ -570,12 +570,13 @@ this.Div01_Div05_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
  this.Div01_Div07_Div02_btnCheckInfo_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var oArg = {
-		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
-		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
-		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
-		tcNm: this.ds_techer_info.getColumn(0, 'tcNm'),
+		tcNm: this.ds_teacher_info.getColumn(0, 'tcNm'),
+		tcNm: this.ds_teacher_info.getColumn(0, 'tcNm'),
+		tcNm: this.ds_teacher_info.getColumn(0, 'tcNm'),
+		tcNm: this.ds_teacher_info.getColumn(0, 'tcNm'),
+    menuSeq : this.menuSeq
 	};
-	this.gfn_openPopup("checkInfoPopup", oArg, "TecherMng::include/TecherInfoCheckWindow_popup.xfdl", this, 850, 550, true, true, null);
+	this.gfn_openPopup("checkInfoPopup", oArg, "TeacherMng::include/TeacherInfoCheckWindow_popup.xfdl", this, 850, 550, true, true, null);
 };
 this.Div01_Div07_Div02_btnSignPad_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -589,10 +590,11 @@ this.Div01_Div07_Div02_btnSignPad_onclick = function(obj:nexacro.Button,e:nexacr
 	}
 	
 	var oArg = {
- 				ds : this.ds_sign_dtl
- 				};
+ 			ds : this.ds_sign_dtl
+      menuSeq : this.menuSeq
+  };
 				
-	this.gfn_openPopup("signWindow", oArg, "TecherMng::include/SignWindow_popup.xfdl", this, 750, 400, true, true, null);
+	this.gfn_openPopup("signWindow", oArg, "TeacherMng::include/SignWindow_popup.xfdl", this, 750, 400, true, true, null);
 };
 this.popupCallBack = function(){
 	this.get_file_detail('ds_sign_dtl');
@@ -621,13 +623,13 @@ this.grid_button_click = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 this.validate_before_addRow = function(ds){
 	switch(ds.name) {
 	case 'ds_tcedu_list':
-		return this.validate_techer_edu();
+		return this.validate_teacher_edu();
 	case 'ds_tchist_list':
-		return this.validate_techer_hist();
+		return this.validate_teacher_hist();
 	case 'ds_tcawrd_list':
-		return this.validate_techer_awrd();
+		return this.validate_teacher_awrd();
 	case 'ds_tcathctf_list':
-		return this.validate_techer_athctf();
+		return this.validate_teacher_athctf();
 	}
 	return false;
 }
@@ -660,21 +662,21 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	//데이터 세팅
 	//첨부파일
-	this.ds_techer_info.setColumn(0, 'phtFileId', this.ds_thnl_dtl.getColumn(0, 'atchFileId'));
-	this.ds_techer_info.setColumn(0, 'signImgFileId', this.ds_sign_dtl.getColumn(0, 'atchFileId'));
+	this.ds_teacher_info.setColumn(0, 'phtFileId', this.ds_thnl_dtl.getColumn(0, 'atchFileId'));
+	this.ds_teacher_info.setColumn(0, 'signImgFileId', this.ds_sign_dtl.getColumn(0, 'atchFileId'));
 	
 	//이메일주소
-	var emailAddrCd = this.ds_techer_info.getColumn(0, 'emailAddrCd');
+	var emailAddrCd = this.ds_teacher_info.getColumn(0, 'emailAddrCd');
 	var emailAddr = this.Div01.form.Div05.form.Div00.form.Edit00_00.value;
 	if(!emailAddrCd && emailAddr){
 		//직접 입력 시 email에 전체 정보
-		var email = this.ds_techer_info.getColumn(0, 'email');
+		var email = this.ds_teacher_info.getColumn(0, 'email');
 		email += "@" + this.Div01.form.Div05.form.Div00.form.Edit00_00.value;
-		this.ds_techer_info.setColumn(0, 'email', email);
+		this.ds_teacher_info.setColumn(0, 'email', email);
 	}
 	
 	//유효성 검사
-	var vali_res = this.validate_techer();
+	var vali_res = this.validate_teacher();
 	if(!vali_res){
 		return false;
 	}
@@ -682,7 +684,7 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	//submit
 	if(confirm("강사정보를 등록 하시겠습니까?")){
 		this.delete_empty_row();
-		this.submit_techer_info();
+		this.submit_teacher_info();
 	}
 };
 this.delete_empty_row = function(){
@@ -707,28 +709,29 @@ this.delete_empty_row_2 = function(ds){
 		ds.deleteRow(i);
 	}
 }
-this.submit_techer_info = function(){
+this.submit_teacher_info = function(){
 
 	var inData = "";
-	inData += "techerDtl=ds_techer_info";
+	inData += "teacherDtl=ds_teacher_info";
 	inData += " tceduList=ds_tcedu_list";
 	inData += " tchistList=ds_tchist_list";
 	inData += " tcawrdList=ds_tcawrd_list";
 	inData += " tcathctfList=ds_tcathctf_list";
 	
 	var tranObj = {};
-	tranObj.strSvcId	= "insert_techer";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/insert.do";
+	tranObj.strSvcId	= "insert_teacher";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/insert.do";
 	tranObj.inData      = inData;
 	tranObj.outData     = "";
 	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback_techer";
+	tranObj.callBackFnc = "fnCallback_teacher";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.ownerFrame.param.MENU_ID;
+	tranObj.menuSeq 	= this.menuSeq;
 	
+  if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	this.gfn_transaction(tranObj);
 }
-this.fnCallback_techer = function(svcID, errorCode, errorMsg){
+this.fnCallback_teacher = function(svcID, errorCode, errorMsg){
 	if(errorCode != 0){
 		// 에러 시 화면 처리 내역
 		this.alert(errorCode+"\n"+errorMsg);
@@ -740,22 +743,22 @@ this.fnCallback_techer = function(svcID, errorCode, errorMsg){
 /**************************************************************************
  * 유효성 검사
  **************************************************************************/
-this.validate_techer = function(){
+this.validate_teacher = function(){
 
-	if(!this.validate_techer_basic()) return false;
+	if(!this.validate_teacher_basic()) return false;
 	
 	//학력 및 경력정보
-	if(!this.validate_techer_edu()) return false;
-	if(!this.validate_techer_hist()) return false;
-	if(!this.validate_techer_awrd()) return false;
-	if(!this.validate_techer_athctf()) return false;
+	if(!this.validate_teacher_edu()) return false;
+	if(!this.validate_teacher_hist()) return false;
+	if(!this.validate_teacher_awrd()) return false;
+	if(!this.validate_teacher_athctf()) return false;
 	
 	return true;
 }
-this.validate_techer_basic = function(){
+this.validate_teacher_basic = function(){
 
 	// 강사 기본정보 검사
-	var ds = this.ds_techer_info;
+	var ds = this.ds_teacher_info;
 	// 조건별 필수항목
 	var tcNm = "강사명을";
 	var bday = ['bday', '생년월일을'];
@@ -797,8 +800,8 @@ this.validate_techer_basic = function(){
 	}
 	
 	//이메일 - 하나입력하면 체크
-	var email = this.ds_techer_info.getColumn(0, "email");
-	var emailAddrCd = this.ds_techer_info.getColumn(0, "emailAddrCd");
+	var email = this.ds_teacher_info.getColumn(0, "email");
+	var emailAddrCd = this.ds_teacher_info.getColumn(0, "emailAddrCd");
 	if(email && emailAddrCd){
 		
 	}
@@ -806,27 +809,27 @@ this.validate_techer_basic = function(){
 	return true;
 }
 //학력
-this.validate_techer_edu = function(){
+this.validate_teacher_edu = function(){
 	var vali_arr= [['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
-	return this.validate_techer_ds_list("ds_tcedu_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr);
 }
 //경력
-this.validate_techer_hist = function(){
+this.validate_teacher_hist = function(){
 	var vali_arr= [['histStDt', '기간을'], ['histEndDt', '기간을'], ['histPlcNm', '기관명을']]
-	return this.validate_techer_ds_list("ds_tchist_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr);
 }
 //수상
-this.validate_techer_awrd = function(){
+this.validate_teacher_awrd = function(){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '수상내역을']]
-	return this.validate_techer_ds_list("ds_tcawrd_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr);
 }
 //자격
-this.validate_techer_athctf = function(){
+this.validate_teacher_athctf = function(){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '자격증명을']];
-	return this.validate_techer_ds_list("ds_tcathctf_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr);
 }
 
-this.validate_techer_ds_list = function(ds, vali_arr){
+this.validate_teacher_ds_list = function(ds, vali_arr){
 	var isInput = false;
 	var msg = "";
 	var ds = this[ds];
@@ -852,14 +855,15 @@ this.validate_techer_ds_list = function(ds, vali_arr){
 this.get_file_detail = function(ds){
 	var tranObj = {};
 	tranObj.strSvcId	= ds;
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/selectFileDtl.do";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/selectFileDtl.do";
 	tranObj.inData      = "file_detail=" + ds;
 	tranObj.outData     = ds + "=file_detail";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.ownerFrame.param.MENU_ID;
+	tranObj.menuSeq 	= this.menuSeq;
 	
+    if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
 this.fnCallback = function(svcID, errorCode, errorMsg){
@@ -878,7 +882,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 };
 ]]></Script>
     <Objects>
-      <Dataset id="ds_techer_info">
+      <Dataset id="ds_teacher_info">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
@@ -1209,26 +1213,26 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
       </Dataset>
     </Objects>
     <Bind>
-      <BindItem id="item1" compid="Div01.form.Div01.form.txfpBizprYn" propid="value" datasetid="ds_techer_info" columnid="txfrBizprYn"/>
-      <BindItem id="item2" compid="Div01.form.Div02.form.Div00.form.tcNm" propid="value" datasetid="ds_techer_info" columnid="tcNm"/>
-      <BindItem id="item5" compid="Div01.form.Div03.form.Div00.form.hpMidNo" propid="value" datasetid="ds_techer_info" columnid="hpMidNo"/>
-      <BindItem id="item6" compid="Div01.form.Div03.form.Div00.form.hpLastNo" propid="value" datasetid="ds_techer_info" columnid="hpLastNo"/>
-      <BindItem id="item7" compid="Div01.form.Div03.form.Div01.form.telStNo" propid="value" datasetid="ds_techer_info" columnid="telStNo"/>
-      <BindItem id="item8" compid="Div01.form.Div03.form.Div01.form.telMidNo" propid="value" datasetid="ds_techer_info" columnid="telMidNo"/>
-      <BindItem id="item9" compid="Div01.form.Div03.form.Div01.form.telLastNo" propid="value" datasetid="ds_techer_info" columnid="telLastNo"/>
-      <BindItem id="item10" compid="Div01.form.Div04.form.Div00.form.bday" propid="value" datasetid="ds_techer_info" columnid="bday"/>
-      <BindItem id="item12" compid="Div01.form.Div04.form.Div01.form.pbrltnInfo" propid="text" datasetid="ds_techer_info" columnid="pbrltnBrchCd"/>
-      <BindItem id="item13" compid="Div01.form.Div05.form.Div00.form.Edit00" propid="value" datasetid="ds_techer_info" columnid="email"/>
-      <BindItem id="item14" compid="Div01.form.Div05.form.Div00.form.Combo00" propid="value" datasetid="ds_techer_info" columnid="emailAddrCd"/>
-      <BindItem id="item15" compid="Div01.form.Div06.form.Edit00" propid="value" datasetid="ds_techer_info" columnid="addr"/>
-      <BindItem id="item16" compid="Div01.form.Div07.form.Div00.form.usePrivateAgree" propid="value" datasetid="ds_techer_info" columnid="usePrivateAgree"/>
-      <BindItem id="item17" compid="Div01.form.Div07.form.Div01.form.useMarketingAgree" propid="value" datasetid="ds_techer_info" columnid="useMarketingAgree"/>
+      <BindItem id="item1" compid="Div01.form.Div01.form.txfpBizprYn" propid="value" datasetid="ds_teacher_info" columnid="txfrBizprYn"/>
+      <BindItem id="item2" compid="Div01.form.Div02.form.Div00.form.tcNm" propid="value" datasetid="ds_teacher_info" columnid="tcNm"/>
+      <BindItem id="item5" compid="Div01.form.Div03.form.Div00.form.hpMidNo" propid="value" datasetid="ds_teacher_info" columnid="hpMidNo"/>
+      <BindItem id="item6" compid="Div01.form.Div03.form.Div00.form.hpLastNo" propid="value" datasetid="ds_teacher_info" columnid="hpLastNo"/>
+      <BindItem id="item7" compid="Div01.form.Div03.form.Div01.form.telStNo" propid="value" datasetid="ds_teacher_info" columnid="telStNo"/>
+      <BindItem id="item8" compid="Div01.form.Div03.form.Div01.form.telMidNo" propid="value" datasetid="ds_teacher_info" columnid="telMidNo"/>
+      <BindItem id="item9" compid="Div01.form.Div03.form.Div01.form.telLastNo" propid="value" datasetid="ds_teacher_info" columnid="telLastNo"/>
+      <BindItem id="item10" compid="Div01.form.Div04.form.Div00.form.bday" propid="value" datasetid="ds_teacher_info" columnid="bday"/>
+      <BindItem id="item12" compid="Div01.form.Div04.form.Div01.form.pbrltnInfo" propid="text" datasetid="ds_teacher_info" columnid="pbrltnBrchCd"/>
+      <BindItem id="item13" compid="Div01.form.Div05.form.Div00.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="email"/>
+      <BindItem id="item14" compid="Div01.form.Div05.form.Div00.form.Combo00" propid="value" datasetid="ds_teacher_info" columnid="emailAddrCd"/>
+      <BindItem id="item15" compid="Div01.form.Div06.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="addr"/>
+      <BindItem id="item16" compid="Div01.form.Div07.form.Div00.form.usePrivateAgree" propid="value" datasetid="ds_teacher_info" columnid="usePrivateAgree"/>
+      <BindItem id="item17" compid="Div01.form.Div07.form.Div01.form.useMarketingAgree" propid="value" datasetid="ds_teacher_info" columnid="useMarketingAgree"/>
       <BindItem id="item0" compid="Div01.form.Div00.form.ImageViewer00" propid="image" datasetid="ds_thnl_dtl" columnid="webPath"/>
       <BindItem id="item3" compid="Div01.form.Div07.form.signViewer" propid="image" datasetid="ds_sign_dtl" columnid="webPath"/>
-      <BindItem id="item11" compid="Div01.form.Div01.form.Radio00" propid="value" datasetid="ds_techer_info" columnid="tcTpCd"/>
-      <BindItem id="item18" compid="Div01.form.Div02.form.Div01.form.tcStgNm" propid="value" datasetid="ds_techer_info" columnid="tcStgNm"/>
-      <BindItem id="item20" compid="Div02.form.Div02.form.Edit00" propid="value" datasetid="ds_techer_info" columnid="rpsntLectNm"/>
-      <BindItem id="item4" compid="Div01.form.Div03.form.Div00.form.hpStNo" propid="value" datasetid="ds_techer_info" columnid="hpStNo"/>
+      <BindItem id="item11" compid="Div01.form.Div01.form.Radio00" propid="value" datasetid="ds_teacher_info" columnid="tcTpCd"/>
+      <BindItem id="item18" compid="Div01.form.Div02.form.Div01.form.tcStgNm" propid="value" datasetid="ds_teacher_info" columnid="tcStgNm"/>
+      <BindItem id="item20" compid="Div02.form.Div02.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="rpsntLectNm"/>
+      <BindItem id="item4" compid="Div01.form.Div03.form.Div00.form.hpStNo" propid="value" datasetid="ds_teacher_info" columnid="hpStNo"/>
     </Bind>
   </Form>
 </FDL>

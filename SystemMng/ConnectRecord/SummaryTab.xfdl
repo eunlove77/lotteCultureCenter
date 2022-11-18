@@ -103,16 +103,13 @@ this.SummaryTab_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.pageingDiv.form.pageingCallObj = this;
 	
-	console.log("load tab1");
-	
 	this.fn_list(1);
 };
 
 this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
 	if(this.ds_summary.rowcount > 1)
-	{
-		console.log(this.application.Domain + this.excelImportExport);
+	{		
 		this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
 		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid00, "Sheet1!A1");  	
 		this.ExcelExportObj.set_exportfilename("접속기록_통계");

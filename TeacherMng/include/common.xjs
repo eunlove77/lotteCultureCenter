@@ -231,8 +231,10 @@ this.com_set_category = function(lgObj, mdObj, smObj){
 		strArg : "cdId=ctgy brchCd=" + this.brchCd,
 		callBackFnc : "com_set_category_callback",
 		isAsync : false,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuSeq
 	}
+
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
 //강좌 카테고리 세팅
@@ -313,23 +315,27 @@ this.com_reset_search_semester = function(obj){
  * 지점명 콤보박스 세팅
  **************************************************************************/
 this.com_set_branch_list = function(){
-	for(var i = 0; i < this.ds_spot_list.rowcount; i++){
-		var cd = this.ds_spot_list.getColumn(i, 'cd');
-		var cdNm = this.ds_spot_list.getColumn(i, 'cdNm');
-		this.ds_spot_list.setColumn(i, 'cdNm', '[' + cd + '] ' + cdNm);
-	}
+	//gdsSpotList사용
+// 	for(var i = 0; i < this.ds_spot_list.rowcount; i++){
+// 		var cd = this.ds_spot_list.getColumn(i, 'cd');
+// 		var cdNm = this.ds_spot_list.getColumn(i, 'cdNm');
+// 		this.ds_spot_list.setColumn(i, 'cdNm', '[' + cd + '] ' + cdNm);
+// 	}
+
 	this.com_set_branch_on_user();
 }
 this.com_set_branch_on_user = function(){
-	var user_brchCd = this.application.gdsLoginInfo.getColumn(0, 'brchCd');
-	var user_brchCdNm = this.application.gdsLoginInfo.getColumn(0, 'brchCdNm');
+
+	var user_brchCd = nexacro.getPrivateProfile("brchCd");
+	var user_brchCdNm = nexacro.getPrivateProfile("brchNm");
 	var ds = this.ds_spot_list;
 	
 	if(user_brchCdNm != '본사'){
 		ds.filter('cd == "' + user_brchCd + '"');
+		this.ds_search.setColumn(0, 'brchCd', user_brchCd ? user_brchCd : "");
+	} else {
+		this.ds_search.setColumn(0, 'brchCd', "");
 	}
-	
-	this.ds_search.setColumn(0, 'brchCd', user_brchCd ? user_brchCd : "");
 }
 
 /**************************************************************************
@@ -346,6 +352,7 @@ this.com_set_hpNo_to_stmidlastNo = function(str){
 			arr[1] = arr[2];
 		}
 	} else {
+		arr = new Array(3);
 		if(str.length == 11){
 			arr[0] = str.slice(0, 3);
 			arr[1] = str.slice(3, 7);
@@ -392,7 +399,7 @@ this.com_set_checkbox_to_string = function(pObj){
 				return "";
 			}
 			else if(obj.isChecked()){
-				rtnStr = comma + obj.truevalue;
+				rtnStr += comma + obj.truevalue;
 				comma = ",";
 			}
 		}
@@ -538,4 +545,45 @@ this.chk_Saup_No = function(saupno)
 		return false;
 	}
 	return true;
-}]]></Script>
+}
+/**************************************************************************
+ * 입력폼 readonly
+ **************************************************************************/
+this.com_set_form_readonly = function(pObj){
+	var readonlyComps = "";
+	
+	readonlyComps += "[object Edit]";
+	readonlyComps += "[object Combo]";
+	readonlyComps += "[object CheckBox]";
+	readonlyComps += "[object Calendar]";
+	readonlyComps += "[object TextArea]";
+	
+	var arrObj = pObj.components;
+	for(var i=0; i<arrObj.length; i++)
+	{	
+		if(arrObj[i] == "[object Div]"){
+			this.com_set_form_readonly(arrObj[i].form);
+		}
+		else if(arrObj[i] == "[object Grid]"){
+			arrObj[i].clearEventHandler("oncellclick");
+			arrObj[i].set_readonly(true);
+		}
+		else if(readonlyComps.indexOf(arrObj[i]) > -1){
+			arrObj[i].set_readonly(true);
+		}
+	}
+}
+/**************************************************************************
+ * dataset 내부 데이터 존재 여부
+ **************************************************************************/
+this.com_have_value_in_ds = function(ds){
+	for(var i = 0; i < ds.rowcount; i++){
+		for(var j = 0; j < ds.colcount; j++){
+			if(!ds.getColumn(i, j)){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+]]></Script>

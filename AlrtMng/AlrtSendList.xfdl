@@ -43,7 +43,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="brchCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm" index="0" value="" onitemchanged="row02_spotDiv_spotCd_onitemchanged"/>
+              <Combo id="brchCd" taborder="1" text="" left="116" top="5" width="160" height="20" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm" index="-1" value="" onitemchanged="row02_spotDiv_spotCd_onitemchanged"/>
             </Layout>
           </Layouts>
         </Div>
@@ -147,9 +147,11 @@ this.AlrtSendList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.objPageingDs = this.application.gdsPageing;		
 	this.pageingDiv.form.pageingCallObj = this;
 
-	
-	// 코드 데이터
-	this.fn_data_list();
+	this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
+	this.ds_brch_cd.insertRow(0);
+	this.ds_brch_cd.setColumn(0, "cd", "");
+	this.ds_brch_cd.setColumn(0, "cdNm", "전체");
+	this.Div06.form.brchCd.set_index(0);
 	
 	this.fn_list(1);
 };
@@ -238,25 +240,6 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
-this.fn_data_list = function ()
-{	
-	var strSvcId    = "dataList";
-	var strSvcUrl   = this.application.Admin_svc + "::alertMng/getCodeList.do";
-	var inData      = "";
-	var outData     = "ds_brch_cd=output1";
-	var strArg      = "";
-	var callBackFnc = "fn_callback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
-};
-
 this.fn_list = function(page){
 	
 	this.objPageingDs.setColumn(0, "pageIndex", page);
@@ -341,12 +324,6 @@ this.fn_searchValueInit = function() {
 
 ]]></Script>
     <Objects>
-      <Dataset id="ds_brch_cd">
-        <ColumnInfo>
-          <Column id="cd" type="STRING" size="256"/>
-          <Column id="cdNm" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="ds_alrt_snd_list">
         <ColumnInfo>
           <Column id="rnum" type="STRING" size="256"/>
@@ -377,6 +354,12 @@ this.fn_searchValueInit = function() {
         <Rows>
           <Row/>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_brch_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
   </Form>

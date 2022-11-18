@@ -1,43 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_FileUpload" left="0" top="0" width="790" height="140" titletext="New Form" border="" background="" onload="Form_FileUpload_onload">
+  <Form id="Form_FileUpload" left="0" top="0" width="790" height="160" titletext="New Form" border="" background="" onload="Form_FileUpload_onload">
     <Layouts>
-      <Layout height="140" width="790" stepcount="0">
+      <Layout height="160" width="790" stepcount="0">
         <Static id="Static00" taborder="1" text="Drop Files Here" left="10" top="59" height="70" visible="true" background="aliceblue" color="dodgerblue" font="normal 30pt/normal &quot;Arial&quot;" textAlign="center" verticalAlign="middle" width="541"/>
-        <Grid id="Grid00" taborder="0" left="10" top="35" height="95" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick" width="542" binddataset="ds_atchFileList" autofittype="col">
+        <Grid id="Grid00" taborder="0" left="10" top="35" height="95" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick" width="542" binddataset="ds_atchFileList" autofittype="col" oncellposchanged="Grid00_oncellposchanged">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="48"/>
-                <Column size="261"/>
+                <Column size="206"/>
                 <Column size="62"/>
                 <Column size="100"/>
                 <Column size="68"/>
+                <Column size="106"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
                 <Row size="33"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" text="파일명"/>
-                <Cell col="2" text="확장자"/>
-                <Cell col="3" text="파일크기"/>
-                <Cell col="4" cssclass="btn_WF_High"/>
+                <Cell text="파일명"/>
+                <Cell col="1" text="확장자"/>
+                <Cell col="2" text="파일크기"/>
+                <Cell col="3" cssclass="btn_WF_High"/>
+                <Cell col="4"/>
               </Band>
               <Band id="body">
-                <Cell edittype="checkbox" text="expr:dataset.checkarray[currow]" displaytype="expr:fileSeq == null ? 'none' : 'checkboxcontrol'"/>
-                <Cell col="1" text="bind:realFileNm"/>
-                <Cell col="2" text="bind:fileExtn"/>
-                <Cell col="3" text="bind:fileSize" textAlign="right"/>
-                <Cell col="4" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                <Cell text="bind:realFileNm"/>
+                <Cell col="1" text="bind:fileExtn"/>
+                <Cell col="2" text="bind:fileSize" textAlign="right"/>
+                <Cell col="3" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                <Cell col="4" displaytype="expr:fileSeq == null ? 'none' : 'buttoncontrol'" edittype="expr:fileSeq == null ? 'none' : button'" text="expr:fileSeq == null ? '' : '다운로드'"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
         <Button id="Button00" taborder="2" text="파일찾기" left="10" top="9" width="84" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="Button00_onclick"/>
-        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" left="Button00:0" top="10" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true"/>
-        <Button id="Button01" taborder="4" text="파일 다운로드" left="564" top="35" width="99" height="25" cssclass="btn_WF_Low" onclick="Button01_onclick"/>
+        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" top="Static00:5" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true" left="10"/>
+        <ImageViewer id="ImageViewer00" taborder="4" left="Static00:35" top="5" width="125" height="125" stretch="fixaspectratio" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -88,6 +88,7 @@ this.isPass = false;
 this.atchFileId = "";
 this.callbackFunc = null;
 this._this = null;
+this.mode = 1;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -96,8 +97,7 @@ this.Form_FileUpload_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.domain = this.application.getVariable("domain");
-	
-	this.gfnSetCheckBoxNoDataset(this.ds_atchFileList, this.Grid00, 0); 
+
 	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 };
 
@@ -138,16 +138,25 @@ this.fn_init = function(atchFileObj)
 		{
 			this.fileTxt = atchFileObj.fileTxt;
 		}
+		if(!this.gfn_isNull(atchFileObj.mode) && atchFileObj.mode != "")
+		{
+			this.mode = atchFileObj.mode;
+		}
 		this._this = atchFileObj._this;
 		this.callbackFunc = atchFileObj.callbackFunc;
 		
 		this.FileUpTransfer00.removePostData("delFileSeq");
 		this.FileUpTransfer00.clearFileList();
 		this.fileStatic.set_text(this.fileTxt);
+		
+		if(this.mode == 2)
+		{
+			this.Button00.destroy();
+			this.Grid00.deleteContentsCol("body", 3);
+		}
 	}
 	
 	this.isPass = false;
-	this.Grid00.setCellProperty("head", 0, "text", 0); 
 }
 
 /**************************************************************************
@@ -270,14 +279,34 @@ this.FileList_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFil
 			}
 			else
 			{
-			
 				var nRowIdx = this.ds_atchFileList.addRow();
 				
 				this.ds_atchFileList.setColumn(nRowIdx, "atchFileId", "");
 				this.ds_atchFileList.setColumn(nRowIdx, "realFileNm", obj.filename);			
 				this.ds_atchFileList.setColumn(nRowIdx, "fileExtn", obj.filename.split('.').pop().toLowerCase());
 				this.ds_atchFileList.setColumn(nRowIdx, "fileSize", this.cutFileSize(e.filesize));
-
+				
+				if("jpg,jpeg,gif,png".indexOf(obj.filename.split('.').pop().toLowerCase()) > -1)
+				{
+					var ds = this.ds_atchFileList;
+					var imageViewer = this.ImageViewer00;
+					var reader = new FileReader();
+					reader.addEventListener(
+						'load',
+						function () {
+							ds.setColumn(nRowIdx, "webPath", reader.result);
+							imageViewer.set_image(reader.result);
+							imageViewer.set_visible(true);
+						},
+						false
+					);
+					reader.readAsDataURL(obj._handle);
+				}
+				else
+				{
+					this.ImageViewer00.set_visible(false);
+				}
+				
 				this.FileUpTransfer00.addFile(obj.filename, obj);
 			}
 			
@@ -332,26 +361,47 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	fileId = objGridDs.getColumn(e.row, "atchFileId");
 	fileName = objGridDs.getColumn(e.row, "realFileNm");
 	
-	if(e.cell == 4){		
-		if(!this.gfn_isNull(fileId)){
-			var delFileSeq = this.FileUpTransfer00.getPostData("delFileSeq");
-			if(delFileSeq != null)
-			{
-				delFileSeq += ("," + this.ds_atchFileList.getColumn(e.row, "fileSeq"));
-			}
-			else
-			{
-				delFileSeq = this.ds_atchFileList.getColumn(e.row, "fileSeq");
-			}
-			
-			this.FileUpTransfer00.setPostData("delFileSeq", delFileSeq);
-			this.ds_atchFileList.deleteRow(e.row);
-		}else{
-			delResult = this.FileUpTransfer00.removeFile(fileName);
-			if(delResult > -1){
+	if(this.mode == 1)
+	{
+		if(e.cell == 3)
+		{		
+			if(!this.gfn_isNull(fileId)){
+				var delFileSeq = this.FileUpTransfer00.getPostData("delFileSeq");
+				if(delFileSeq != null)
+				{
+					delFileSeq += ("," + this.ds_atchFileList.getColumn(e.row, "fileSeq"));
+				}
+				else
+				{
+					delFileSeq = this.ds_atchFileList.getColumn(e.row, "fileSeq");
+				}
+				
+				this.FileUpTransfer00.setPostData("delFileSeq", delFileSeq);
 				this.ds_atchFileList.deleteRow(e.row);
-			}
-		}		
+			}else{
+				delResult = this.FileUpTransfer00.removeFile(fileName);
+				if(delResult > -1){
+					this.ds_atchFileList.deleteRow(e.row);
+				}
+			}		
+		}
+	}
+	
+	
+	if(e.cell == (this.mode == 1 ? 4 : 3))
+	{
+		var flag = false;
+		var list = this.ds_atchFileList;
+		this.ds_atchFileDownList.clearData();
+		
+		if(this.gfn_nvl(this.ds_atchFileList.getColumn(e.row, "fileSeq")) !== "")
+		{
+			var rowIndex = this.ds_atchFileDownList.addRow();
+			this.ds_atchFileDownList.copyRow(rowIndex, this.ds_atchFileList, e.row);
+			this.FileDownTransfer00.setPostData("fileInfo", this.ds_atchFileDownList.saveXML());
+			this.FileDownTransfer00.set_downloadfilename(this.ds_atchFileDownList.getColumn(0, "realFileNm"));
+			this.FileDownTransfer00.download();
+		}
 	}
 };
 
@@ -375,37 +425,19 @@ this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.
 	this.callbackFunc(this._this);
 };
 
-
-this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Grid00_oncellposchanged = function(obj:nexacro.Grid,e:nexacro.GridSelectEventInfo)
 {
-	var flag = false;
-	var list = this.ds_atchFileList;
-	this.ds_atchFileDownList.clearData();
-	
-	for(var i=0; i<list.getRowCount(); i++)
-	{
-		if(list.checkarray[i] == 1 && this.gfn_nvl(this.ds_atchFileList.getColumn(i, "fileSeq")) !== "")
-		{
-			flag = true;
-			var rowIndex = this.ds_atchFileDownList.addRow();
-			this.ds_atchFileDownList.copyRow(rowIndex, this.ds_atchFileList, i);
-		}
-	}
+	var fileExtn = this.ds_atchFileList.getColumn(e.row, "fileExtn");
 
-	if(flag)
+	if("jpg,jpeg,gif,png".indexOf(fileExtn) > -1)
 	{
-		this.FileDownTransfer00.setPostData("fileInfo", this.ds_atchFileDownList.saveXML());		
-		if(this.ds_atchFileDownList.getRowCount() > 1){
-			this.FileDownTransfer00.set_downloadfilename("첨부파일.zip");
-		}else{
-			this.FileDownTransfer00.set_downloadfilename(this.ds_atchFileDownList.getColumn(0, "realFileNm"));
-		}
-		
-		this.FileDownTransfer00.download();
+
+		this.ImageViewer00.set_visible(true);
+		this.ImageViewer00.set_image(this.ds_atchFileList.getColumn(e.row, "webPath"));
 	}
 	else
 	{
-		alert("다운로드 할 파일을 선택하세요.");
+		this.ImageViewer00.set_visible(false);
 	}
 };
 ]]></Script>

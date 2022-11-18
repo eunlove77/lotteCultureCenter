@@ -18,7 +18,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Combo id="Combo00" taborder="1" text="" left="Static00:6" top="5" width="130" height="20" innerdataset="gdsSpotCdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="1" text="" left="Static00:6" top="5" width="130" height="20" innerdataset="ds_gdsSpotCd_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div00_Div00_Div00_Div00_Combo00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -654,7 +654,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="옵션타입" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="280" height="20" innerdataset="ds_classOptType_list" datacolumn="cdNm" codecolumn="cd" direction="vertical"/>
+                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="280" height="20" innerdataset="ds_classOptType_list" datacolumn="cdNm" codecolumn="cd" direction="vertical" onitemchanged="Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -710,9 +710,8 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="대표이미지" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" usedecorate="true" height="248"/>
-                                <Button id="Button00" taborder="1" text="저장된 이미지" left="Static00:16" top="5" width="99" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick"/>
-                                <Div id="Div00" taborder="2" text="Div00" top="Button00:15" height="150" left="Static00:6" width="800" async="false"/>
-                                <Edit id="Edit00" taborder="3" left="Static00:16" top="Div00:10" height="30" displaynulltext="사진설명" maxlength="100" width="750"/>
+                                <Button id="Button00" taborder="1" text="저장된 이미지" top="150" width="99" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick" left="5"/>
+                                <Div id="Div00" taborder="2" text="Div00" height="160" left="Static00:6" width="800" async="false" top="15"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -733,7 +732,7 @@
                                       <Div id="templateArea0" taborder="1" text="Div01" left="0" top="Div00:15" right="0" visible="true" bottom="40">
                                         <Layouts>
                                           <Layout>
-                                            <Div id="Div00" taborder="0" text="Div00" left="6" top="0" height="150" width="800" async="false"/>
+                                            <Div id="Div00" taborder="0" text="Div00" left="6" top="0" height="160" width="800" async="false"/>
                                             <TextArea id="TextArea00" taborder="1" left="16" top="Div00:0" right="16" bottom="0" displaynulltext="내용을 입력해주세요." maxlength="2000"/>
                                           </Layout>
                                         </Layouts>
@@ -910,8 +909,13 @@ this.ClassReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.domain = this.application.getVariable("domain");
 	//지점 초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd");
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
 	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
+	if(nexacro.getPrivateProfile("brchCd") != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'")
+	}
 	
 	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00, 0);
 	
@@ -947,8 +951,9 @@ this.init = function()
 	this.ds_class_dtl.setColumn(0, "dsplyIconCd", "N");
 	this.ds_class_dtl.setColumn(0, "rfndOptnUseYn", "N");
 	this.Div00.form.Div00.form.Div00.form.Div00_07.form.Radio00.set_readonly(false);
-	//강좌 등급할인 초기화 (추가)
 	
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 	
 	//공동모객, 순회강좌, 다회차강좌 초기화 
 	this.ds_cct_list.clearData();
@@ -968,7 +973,7 @@ this.init = function()
 	//강좌 옵션 초기화
 	this.ds_option_list.clearData();
 	this.ds_option_list.addRow();
-	this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+	this.ds_option_list.setColumn(0, "partRfndClCd", "");
 	
 	//강좌 상세정보 초기화
 	//대표이미지
@@ -1130,7 +1135,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		case "insertClass":
 			this.alert("저장 되었습니다.");
-			this.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+			if(this.parent.searchFlag == 1)
+			{
+				this.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+			}	
 			this.close();
 		break;
 	  }
@@ -1820,7 +1828,7 @@ this.fn_content_add = function()
 		objTemplateArea.show();	
 		
 		var objAtchFile = new Div();
-		objAtchFile.init("objAtchFile" + ord, 6, 0, 800, 150);
+		objAtchFile.init("objAtchFile" + ord, 6, 0, 800, 160);
 		objTemplateArea.form.addChild("objAtchFile" + ord, objAtchFile);	
 		objAtchFile.show();	
 		objAtchFile.set_async(false);
@@ -1835,13 +1843,16 @@ this.fn_content_add = function()
 		objTextArea.set_displaynulltext("내용을 입력해주세요.");
 		objTextArea.set_maxlength(2000)
 		
-		var objButton = new Button();
-		objButton.init("objButton" + ord, null, "templateArea" + ord + ":15", 80, 25, 0);
-		objComp.form.addChild("objButton" + ord, objButton);	
-		objButton.show();	
-		objButton.set_text("추가")
-		objButton.set_cssclass("btn_WF_Medium");
-		objButton.insertEventHandler("onclick", 0, this.fn_content_add, this);
+		if(this.contentArr.length < 9)
+		{
+			var objButton = new Button();
+			objButton.init("objButton" + ord, null, "templateArea" + ord + ":15", 80, 25, 0);
+			objComp.form.addChild("objButton" + ord, objButton);	
+			objButton.show();	
+			objButton.set_text("추가")
+			objButton.set_cssclass("btn_WF_Medium");
+			objButton.insertEventHandler("onclick", 0, this.fn_content_add, this);
+		}
 		
 		var objCnlButton = new Button();
 		objCnlButton.init("objCnlButton" + ord, null, "templateArea" + ord + ":15", 80, 25, "objButton" + ord + ":10");
@@ -2398,7 +2409,9 @@ this.Div00_Div00_00_00_00_01_Div00_Div00_Radio00_onitemchanged = function(obj:ne
 		this.ds_class_dtl.setColumn(0, "optnTypCd", "01");
 		this.ds_option_list.clearData();
 		this.ds_option_list.addRow();
-		this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+		this.ds_option_list.setColumn(0, "partRfndClCd", "");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 	}
 	
 	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
@@ -2426,7 +2439,14 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexac
 			if(this.ds_option_list.getRowCount() < 10)
 			{
 				var index = this.ds_option_list.addRow();
-				this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+				if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
+				{
+					this.ds_option_list.setColumn(index, "partRfndClCd", "");
+				}
+				else
+				{
+					this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+				}
 			}
 		} 
 		else
@@ -2837,6 +2857,28 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
 		this.ds_pblpmprcust_list.moveRow(e.userdata, e.row);
 	}
 };
+
+this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	var partRfndClCd = "";
+	if(obj.value == "01")
+	{
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+	}
+	else
+	{
+		partRfndClCd = "1";
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
+	}
+	
+	for(var i=0; i<this.ds_option_list.getRowCount(); i++)
+	{	
+		this.ds_option_list.setColumn(i, "partRfndClCd", partRfndClCd);
+	}
+	
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_classType_list">
@@ -2857,7 +2899,6 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectExpl" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
-          <Column id="lectRpsntImgExpl" type="STRING" size="256"/>
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
           <Column id="lectClCd" type="STRING" size="256"/>
@@ -2968,17 +3009,11 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
       </Dataset>
       <Dataset id="ds_option_list">
         <ColumnInfo>
-          <Column id="partRefund" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="optnAmt" type="STRING" size="256"/>
           <Column id="partRfndPsblYn" type="STRING" size="256"/>
           <Column id="partRfndClCd" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="partRefund">Y</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_partRefund">
         <ColumnInfo>
@@ -3203,6 +3238,12 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00" propid="value" datasetid="ds_class_dtl" columnid="lectTpCd"/>
@@ -3221,7 +3262,6 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
       <BindItem id="item15" compid="Div00.form.Div00.form.Div00.form.Div00_00.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectCd"/>
       <BindItem id="item16" compid="Div00.form.Div00.form.Div00.form.Div00_03.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectNm"/>
       <BindItem id="item17" compid="Div00.form.Div00.form.Div00.form.Div00_04.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectExpl"/>
-      <BindItem id="item18" compid="Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div00.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectRpsntImgExpl"/>
       <BindItem id="item19" compid="Div00.form.Div00.form.Div00.form.Div01_00.form.MaskEdit00" propid="value" datasetid="ds_class_dtl" columnid="lectAmt"/>
       <BindItem id="item20" compid="Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar00" propid="value" datasetid="ds_class_dtl" columnid="rceptPrdStDt"/>
       <BindItem id="item21" compid="Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar01" propid="value" datasetid="ds_class_dtl" columnid="rceptPrdEndDt"/>

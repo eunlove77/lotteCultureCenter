@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="TecherPpayAmtSapList" width="1280" height="720" titletext="New Form" onload="TecherPpayAmtSapList_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Static id="Static00" taborder="2" text="▶ 검색" left="10" top="79" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Div id="row01" taborder="3" text="row01" left="10" top="100" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" minwidth="360" maxwidth="" right="1000">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" index="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" text="" width="340">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지급월" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="yy" taborder="1" text="년도" left="116" top="5" width="100" height="20" value="" index="-1"/>
+                    <Combo id="mm" taborder="2" text="월" left="yy:5" top="5" width="100" height="20" value="" index="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div02" left="Div01:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="정산처리요청번호" left="0" top="0" width="114" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="editAdmtPrcsReqNo" taborder="1" left="118" top="5" height="21" right="5"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="8" text="Div01" left="10" top="row01:-1" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="정산처리상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkAdmtPrcsStatAll" taborder="1" text="전체" left="116" top="5" width="50" height="20" onclick="Div01_Div00_chkAdmtPrcsStatAll_onclick"/>
+                    <CheckBox id="chkAdmtPrcsStat0" taborder="2" text="미전송" left="chkAdmtPrcsStatAll:0" top="5" width="60" height="20" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkAdmtPrcsStat1" taborder="3" text="전송완료" left="chkAdmtPrcsStat0:0" top="5" width="70" height="20" onclick="fn_checkbox_click"/>
+                    <Button id="btnSearch" taborder="4" text="검색" left="chkAdmtPrcsStat1:10" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_btnSearch_onclick"/>
+                    <Button id="btnInit" taborder="5" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div00_btnInit_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="Static00_00" taborder="4" text="▶ SAP정산 목록" left="10" top="239" width="110" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="txtTotal" taborder="5" left="Static00_00:0" height="21" text="( 0개 )" width="50" top="239" cssclass="sta_WF_TitGray"/>
+        <Grid id="Grid00" taborder="6" left="10" top="260" bottom="10" autofittype="col" binddataset="ds_list" right="10">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50" band="left"/>
+                <Column size="80" band="left"/>
+                <Column size="120" band="left"/>
+                <Column size="90" band="left"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="지점명"/>
+                <Cell col="2" text="정산처리요청번호"/>
+                <Cell col="3" text="지급기준월"/>
+                <Cell col="4" text="합계금액"/>
+                <Cell col="5" text="정산처리상태"/>
+                <Cell col="6" text="작성자 사번"/>
+                <Cell col="7" text="전표번호"/>
+                <Cell col="8" text="강사료"/>
+                <Cell col="9" text="재료비"/>
+                <Cell col="10" text="세금합계"/>
+                <Cell col="11" text="등록일시"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:brchNm"/>
+                <Cell col="2" text="bind:admtNo"/>
+                <Cell col="3" text="bind:admtYm"/>
+                <Cell col="4" text="bind:sumAmt" textAlign="right"/>
+                <Cell col="5" text="bind:admtPrcsStatNm"/>
+                <Cell col="6" text="bind:rgprId"/>
+                <Cell col="7" text="bind:sapSlipNo"/>
+                <Cell col="8" text="bind:sapPpayAmt" textAlign="right"/>
+                <Cell col="9" text="bind:optnSumAmt" textAlign="right"/>
+                <Cell col="10" text="bind:txSumAmt" textAlign="right"/>
+                <Cell col="11" text="bind:rgprDtm" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnC0" taborder="7" text="개인강사(C0)" top="235" width="90" height="21" cssclass="btn_WF_Medium" right="110" onclick="btnC0_onclick"/>
+        <Button id="Button00_00" taborder="9" text="SAP 상태조회" top="235" height="21" cssclass="btn_WF_Medium" left="btnC0:5" right="10"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.TecherPpayAmtSapList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{ 
+	this.application = nexacro.getApplication();
+	this.objPageingDs = this.application.gdsPageing;	
+	
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+		
+	this.row01.form.Div00.form.brchCd.set_index(0);
+	
+	var comboYyObj = this.row01.form.Div01.form.yy;
+	var comboMmObj = this.row01.form.Div01.form.mm;
+	
+	var data = new Date();
+	var strtYy = data.getFullYear();
+	var endYy = 2017
+	
+	this.gfn_set_year(this, comboYyObj, 2017, strtYy);
+	this.gfn_set_month(this, comboMmObj);
+		
+	this.fn_set_checkbox_value(1);
+};
+
+
+this.Div01_Div00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_searchValueInit();
+		
+	this.fn_list(1);
+};
+
+
+this.Div01_Div00_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.row01.form.Div00.form.brchCd.set_index(0);
+	this.row01.form.Div01.form.yy.set_index(0);
+	this.row01.form.Div01.form.mm.set_index(0);
+	
+	this.fn_set_checkbox_value(1);
+	
+	this.ds_list.clearData();
+	this.txtTotal.set_text("( 0개 )");	
+};
+
+this.Div01_Div00_chkAdmtPrcsStatAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.chkAdmtPrcsStat0.set_value(1);
+		obj.parent.chkAdmtPrcsStat1.set_value(1);		
+	}else{
+		obj.parent.chkAdmtPrcsStat0.set_value(0);
+		obj.parent.chkAdmtPrcsStat1.set_value(0);		
+	}
+};
+
+
+this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
+	if(!obj.isChecked()){
+		this.Div01.form.Div00.form.chkAdmtPrcsStatAll.set_value(0);
+	}
+}
+
+
+this.btnC0_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+
+	var oArg = {			
+		menuId : this.getOwnerFrame().param.MENU_ID,
+		admtNo : "",
+		brchCd : this.row01.form.Div00.form.brchCd.value,
+		ppayYear : this.row01.form.Div01.form.yy.value,
+		ppayMonth : this.row01.form.Div01.form.mm.value,
+		wthdtaxCd : "C0"
+	};
+	
+	this.gfn_openPopup("popup", oArg, "TecherMng::SAPDtl.xfdl", this, 0, 0, true, true, null);
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_list = function(page){
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::techerPpayMng/sapAdmtList.do",
+		inData : "search=ds_search pageing=gdsPageing",
+		outData : "ds_list=output1 gdsPageing=output2",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":			
+			this.txtTotal.set_text("( " + this.objPageingDs.getColumn(0, "totCnt")  + "개 )");					
+			
+			if(this.ds_list.rowcount < 1){
+				this.Grid00.set_nodatatext("검색 결과 없습니다.")
+			}else{
+			  
+				var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+				var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+				var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+				
+				this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+				this.pageingDiv.form.setPage(pageIndex);
+				
+				for(var i = 0 ; i < this.ds_list.rowcount ; i++){
+					this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+				}	
+			}
+			
+		break; 		
+	}
+}
+
+this.fn_searchValueInit = function(){
+
+	var arrAdmtPrcsStatCd = new Array();
+
+	if(this.Div01.form.Div00.form.chkAdmtPrcsStat0.value == true) arrAdmtPrcsStatCd.push("0");
+	if(this.Div01.form.Div00.form.chkAdmtPrcsStat1.value == true) arrAdmtPrcsStatCd.push("1");
+
+ 	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
+ 	this.ds_search.setColumn(0, "admtYm", this.row01.form.Div01.form.yy.value + this.row01.form.Div01.form.mm.value); 		
+	this.ds_search.setColumn(0, "admtPrcsReqNo", this.row01.form.Div02.form.editAdmtPrcsReqNo.value);
+	this.ds_search.setColumn(0, "admtPrcsStat", arrAdmtPrcsStatCd.join(","));
+	
+}
+
+this.fn_set_checkbox_value = function(value){
+	this.Div01.form.Div00.form.chkAdmtPrcsStatAll.set_value(value);
+	this.Div01.form.Div00.form.chkAdmtPrcsStat0.set_value(value);
+	this.Div01.form.Div00.form.chkAdmtPrcsStat1.set_value(value);	
+}
+]]></Script>
+    <Objects>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="admtNo" type="STRING" size="256"/>
+          <Column id="admtYm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="wthdtaxCd" type="STRING" size="256"/>
+          <Column id="gsamtDptCd" type="STRING" size="256"/>
+          <Column id="rsdttaxDptCd" type="STRING" size="256"/>
+          <Column id="incmtaxDptCd" type="STRING" size="256"/>
+          <Column id="gsamtSmryCont" type="STRING" size="256"/>
+          <Column id="rsdttaxSmryCont" type="STRING" size="256"/>
+          <Column id="incmtaxSmryCont" type="STRING" size="256"/>
+          <Column id="recpDptCd" type="STRING" size="256"/>
+          <Column id="hopeRecpDt" type="STRING" size="256"/>
+          <Column id="ppayDt" type="STRING" size="256"/>
+          <Column id="trmsDt" type="STRING" size="256"/>
+          <Column id="admtPrcsStatCd" type="STRING" size="256"/>
+          <Column id="admtPrcsStatNm" type="STRING" size="256"/>
+          <Column id="saveYn" type="STRING" size="256"/>
+          <Column id="sumAmt" type="STRING" size="256"/>
+          <Column id="optnSumAmt" type="STRING" size="256"/>
+          <Column id="txSumAmt" type="STRING" size="256"/>
+          <Column id="sapSlipNo" type="STRING" size="256"/>
+          <Column id="sapPpayAmt" type="STRING" size="256"/>
+          <Column id="sapPpayMethCd" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="admtYm" type="STRING" size="256"/>
+          <Column id="admtPrcsReqNo" type="STRING" size="256"/>
+          <Column id="admtPrcsStat" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
