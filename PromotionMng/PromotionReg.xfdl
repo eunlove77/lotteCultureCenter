@@ -128,6 +128,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
+this.menuId = this.parent.parent.param.MENU_ID;
 this.atchFileUpload;
 this.giftDiv;
 this.popCnt = 0;
@@ -176,7 +177,7 @@ this.fn_detail = function ()
 		outData : "ds_detail=detail",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
@@ -268,10 +269,12 @@ this.fn_end_promotion = function()
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+	
 	this.gfn_transaction(tranObj);
 }
 
@@ -356,10 +359,11 @@ this.fn_save = function()
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);
 }
 
@@ -390,10 +394,11 @@ this.fn_delete = function()
 		outData : "",
 		strArg : "delStr="+this.ds_detail.getColumn(0, "prmtnSeqno"),
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : true,
 		isPopup : true
 	}
+	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
 	
 	this.gfn_transaction(tranObj);	
 }
