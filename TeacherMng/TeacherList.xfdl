@@ -161,7 +161,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -215,7 +215,7 @@
                 <Cell col="18" text="희망시간"/>
                 <Cell col="19" text="섭외자"/>
                 <Cell col="20" text="등록일시"/>
-                <Cell col="21" text="수정일시"/>
+                <Cell col="21" text="수정일시" calendardateformat="yyyy-MM-dd hh:mi:ss"/>
                 <Cell col="22" text="승인일시"/>
               </Band>
               <Band id="body">
@@ -239,9 +239,9 @@
                 <Cell col="17" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:hopeDaywVal"/>
                 <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
                 <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:pbrltnChrgprId"/>
-                <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="22" text="expr:appDt ? appDt : rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="22" text="expr:appDt ? appDt : rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
               </Band>
             </Format>
           </Formats>
@@ -275,7 +275,7 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-  this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid00, 0);
@@ -534,7 +534,7 @@ this.modify_request_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBox
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	//강사 상세
-	if(e.cell == 2 || e.cell == 3){	
+	if(e.cell == 2 || e.cell == 3){
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",

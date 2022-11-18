@@ -306,7 +306,7 @@
                             <Column size="100"/>
                             <Column size="350"/>
                             <Column size="350"/>
-                            <Column size="48"/>
+                            <Column size="50"/>
                           </Columns>
                           <Rows>
                             <Row size="32"/>
@@ -317,7 +317,7 @@
                             <Cell col="2" edittype="combo" displaytype="combocontrol" padding="5px" combodataset="ds_year_list" combodatacol="cdNm" border="0px solid #dbdee2" text="bind:yy" combocodecol="cd"/>
                             <Cell col="3" text="bind:schlNm" padding="5px" edittype="text" displaytype="editcontrol" border="0px solid #dbdee2" expr="schlNm ? schlNm : '학교명'" editmaxlength="100"/>
                             <Cell col="4" text="bind:mjrNm" padding="5px" edittype="text" displaytype="editcontrol" border="0px solid #dbdee2" expr="mjrNm ? mjrNm : '전공'" editmaxlength="100"/>
-                            <Cell col="5" displaytype="buttoncontrol" text="expr:currow == 0 ? '+' : '-'" cssclass="btn_WF_Medium" edittype="button" border="0px solid #dbdee2"/>
+                            <Cell col="5" displaytype="buttoncontrol" text="expr:currow == 0 ? '+' : '-'" cssclass="btn_WF_Medium" edittype="button" border="0px solid #dbdee2" padding="5px"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -333,11 +333,11 @@
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="120"/>
-                            <Column size="40"/>
-                            <Column size="120"/>
-                            <Column size="600"/>
-                            <Column size="48"/>
+                            <Column size="150"/>
+                            <Column size="50"/>
+                            <Column size="150"/>
+                            <Column size="700"/>
+                            <Column size="50"/>
                           </Columns>
                           <Rows>
                             <Row size="32"/>
@@ -363,10 +363,10 @@
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="120"/>
-                            <Column size="300"/>
-                            <Column size="500"/>
-                            <Column size="48"/>
+                            <Column size="150"/>
+                            <Column size="450"/>
+                            <Column size="450"/>
+                            <Column size="50"/>
                           </Columns>
                           <Rows>
                             <Row size="32"/>
@@ -391,10 +391,10 @@
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="120"/>
-                            <Column size="300"/>
-                            <Column size="500"/>
-                            <Column size="48"/>
+                            <Column size="150"/>
+                            <Column size="450"/>
+                            <Column size="450"/>
+                            <Column size="50"/>
                           </Columns>
                           <Rows>
                             <Row size="32"/>
@@ -973,26 +973,26 @@ this.set_screen_view_after = function(){
 	
 	var rc = this.ds_tcedu_list.rowcount;
 	rc = rc ? rc : 1;
-	this.Div04.form.Div03.set_height(rc * 33);
+	this.Div04.form.Div03.set_height(rc * 32 + 4);
 	t_rc += rc - 1;
 	
 	rc = this.ds_tchist_list.rowcount;
 	rc = rc ? rc : 1;
-	this.Div04.form.Div04.set_height(rc * 33);
+	this.Div04.form.Div04.set_height(rc * 32 + 4);
 	t_rc += rc - 1;
 	
 	rc = this.ds_tcawrd_list.rowcount;
 	rc = rc ? rc : 1;
-	this.Div04.form.Div05.set_height(rc * 33);
+	this.Div04.form.Div05.set_height(rc * 32 + 4);
 	t_rc += rc - 1;
 	
 	rc = this.ds_tcathctf_list.rowcount;
 	rc = rc ? rc : 1;
-	this.Div04.form.Div06.set_height(rc * 33);
+	this.Div04.form.Div06.set_height(rc * 32 + 4);
 	t_rc += rc - 1;
 	
 	var height = Number(this.Div04.height);
-	this.Div04.set_height(height + (t_rc * 33));
+	this.Div04.set_height(height + (t_rc * 32 + 4));
 	
 	this.resetScroll();
 	
@@ -1208,15 +1208,15 @@ this.add_grid_row = function(grid, ds, row){
 		ds.setColumn(row, 'grdtClCd', 0);
 		ds.setColumn(row, 'yy', '');
 	}
-	grid.parent.parent.set_height(++row * 33);
-	this.Div04.set_height(Number(this.Div04.height) + 33);
+	grid.parent.parent.set_height(++row * 32 + 4);
+	this.Div04.set_height(Number(this.Div04.height) + 32);
 	
 	this.resetScroll();
 }
 this.remove_grid_row = function(grid, ds){
 	var t_row = grid.rowcount;
-	grid.parent.parent.set_height(t_row * 33);
-	this.Div04.set_height(Number(this.Div04.height) - 33);
+	grid.parent.parent.set_height(t_row * 32 + 4);
+	this.Div04.set_height(Number(this.Div04.height) - 32);
 	
 	this.resetScroll();
 }
