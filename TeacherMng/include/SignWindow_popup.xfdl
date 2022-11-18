@@ -6,7 +6,7 @@
         <Graphics id="Graphics00" taborder="0" left="0" top="0" height="300" border="1px solid #e6e6e6" right="0" onlbuttondown="Graphics00_onlbuttondown" onlbuttonup="Graphics00_onlbuttonup" onmousemove="Graphics00_onmousemove" background="#ffffff"/>
         <Button id="Button01" taborder="2" text="재입력" left="500" width="100" cssclass="btn_WF_Weak" height="20" bottom="10" onclick="Button01_onclick"/>
         <Button id="Button00" taborder="1" text="확인" height="20" cssclass="btn_WF_Medium" bottom="10" onclick="Button00_onclick" right="Button01:10" width="100"/>
-        <Button id="Button02" taborder="3" text="취소" width="100" cssclass="btn_WF_Weak" right="Button00:10" height="20" bottom="10" onclick="Button02_onclick"/>
+        <Button id="Button02" taborder="3" text="취소" width="100" cssclass="btn_WF_Weak" right="Button00:10" height="20" bottom="10"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -19,13 +19,13 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.atchFileId = "";
-this.ownerFrame = null;
+this.menuSeq = 0;
 
 this.SignWindow_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	
-	this.ownerFrame = this.opener.ownerFrame;
+	this.menuSeq = this.opener.menuSeq;
 };
 
 var bMouseButtonPressed = false;
@@ -94,14 +94,16 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		
 		var tranObj = {
 			strSvcId : "uploadSignImage",
-			strSvcUrl : this.application.Admin_svc + "::techerMng/uploadSignImage.do",
+			strSvcUrl : this.application.Admin_svc + "::teacherMng/uploadSignImage.do",
 			inData : "signImage=ds_sign_image",
 			outData : "",
 			strArg : "",
 			callBackFnc : "fnCallback",
 			isAsync : false,
-			menuSeq : this.ownerFrame.param.MENU_ID,
+			menuSeq : this.menuSeq,
 		}
+
+		if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 		this.gfn_transaction(tranObj);
 	}else{
 		alert("서명을 입력해주세요.");
@@ -134,24 +136,20 @@ this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 this.get_image_detail = function(ds){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_imageDtl";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/selectFileDtl.do";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/selectFileDtl.do";
 	tranObj.inData      = "file_detail=" + ds;
 	tranObj.outData     = ds + "=file_detail";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_img";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.ownerFrame.param.MENU_ID;
+	tranObj.menuSeq 	= this.menuSeq;
 	
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
 this.fnCallback_img = function(sId, nErrorCd, sErrorMsg){
 	this.close();
-}
-this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.close();
-};
-]]></Script>
+}]]></Script>
     <Objects>
       <Dataset id="ds_sign_image">
         <ColumnInfo>

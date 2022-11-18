@@ -710,9 +710,8 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="대표이미지" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" usedecorate="true" height="248"/>
-                                <Button id="Button00" taborder="1" text="저장된 이미지" left="Static00:16" top="5" width="99" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick"/>
-                                <Div id="Div00" taborder="2" text="Div00" top="Button00:15" height="150" left="Static00:6" width="800" async="false"/>
-                                <Edit id="Edit00" taborder="3" left="Static00:16" top="Div00:10" height="30" displaynulltext="사진설명" maxlength="100" width="750"/>
+                                <Button id="Button00" taborder="1" text="저장된 이미지" top="150" width="99" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick" left="5"/>
+                                <Div id="Div00" taborder="2" text="Div00" height="160" left="Static00:6" width="800" async="false" top="15"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -733,7 +732,7 @@
                                       <Div id="templateArea0" taborder="1" text="Div01" left="0" top="Div00:15" right="0" visible="true" bottom="40">
                                         <Layouts>
                                           <Layout>
-                                            <Div id="Div00" taborder="0" text="Div00" left="6" top="0" height="150" width="800" async="false"/>
+                                            <Div id="Div00" taborder="0" text="Div00" left="6" top="0" height="160" width="800" async="false"/>
                                             <TextArea id="TextArea00" taborder="1" left="16" top="Div00:0" right="16" bottom="0" displaynulltext="내용을 입력해주세요." maxlength="2000"/>
                                           </Layout>
                                         </Layouts>
@@ -1136,7 +1135,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		case "insertClass":
 			this.alert("저장 되었습니다.");
-			this.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+			if(this.parent.searchFlag == 1)
+			{
+				this.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+			}	
 			this.close();
 		break;
 	  }
@@ -1826,7 +1828,7 @@ this.fn_content_add = function()
 		objTemplateArea.show();	
 		
 		var objAtchFile = new Div();
-		objAtchFile.init("objAtchFile" + ord, 6, 0, 800, 150);
+		objAtchFile.init("objAtchFile" + ord, 6, 0, 800, 160);
 		objTemplateArea.form.addChild("objAtchFile" + ord, objAtchFile);	
 		objAtchFile.show();	
 		objAtchFile.set_async(false);
@@ -1841,13 +1843,16 @@ this.fn_content_add = function()
 		objTextArea.set_displaynulltext("내용을 입력해주세요.");
 		objTextArea.set_maxlength(2000)
 		
-		var objButton = new Button();
-		objButton.init("objButton" + ord, null, "templateArea" + ord + ":15", 80, 25, 0);
-		objComp.form.addChild("objButton" + ord, objButton);	
-		objButton.show();	
-		objButton.set_text("추가")
-		objButton.set_cssclass("btn_WF_Medium");
-		objButton.insertEventHandler("onclick", 0, this.fn_content_add, this);
+		if(this.contentArr.length < 9)
+		{
+			var objButton = new Button();
+			objButton.init("objButton" + ord, null, "templateArea" + ord + ":15", 80, 25, 0);
+			objComp.form.addChild("objButton" + ord, objButton);	
+			objButton.show();	
+			objButton.set_text("추가")
+			objButton.set_cssclass("btn_WF_Medium");
+			objButton.insertEventHandler("onclick", 0, this.fn_content_add, this);
+		}
 		
 		var objCnlButton = new Button();
 		objCnlButton.init("objCnlButton" + ord, null, "templateArea" + ord + ":15", 80, 25, "objButton" + ord + ":10");
@@ -2894,7 +2899,6 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectExpl" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
-          <Column id="lectRpsntImgExpl" type="STRING" size="256"/>
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
           <Column id="lectClCd" type="STRING" size="256"/>
@@ -3258,7 +3262,6 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
       <BindItem id="item15" compid="Div00.form.Div00.form.Div00.form.Div00_00.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectCd"/>
       <BindItem id="item16" compid="Div00.form.Div00.form.Div00.form.Div00_03.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectNm"/>
       <BindItem id="item17" compid="Div00.form.Div00.form.Div00.form.Div00_04.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectExpl"/>
-      <BindItem id="item18" compid="Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div00.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectRpsntImgExpl"/>
       <BindItem id="item19" compid="Div00.form.Div00.form.Div00.form.Div01_00.form.MaskEdit00" propid="value" datasetid="ds_class_dtl" columnid="lectAmt"/>
       <BindItem id="item20" compid="Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar00" propid="value" datasetid="ds_class_dtl" columnid="rceptPrdStDt"/>
       <BindItem id="item21" compid="Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar01" propid="value" datasetid="ds_class_dtl" columnid="rceptPrdEndDt"/>

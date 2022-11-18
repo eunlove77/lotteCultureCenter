@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="AuthCertificateIssueList" width="1280" height="1000" titletext="New Form" onload="AuthCertificateIssueList_onload">
+    <Layouts>
+      <Layout height="1000" mobileorientation="landscape" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div01" taborder="5" text="Div01" left="10" top="90" right="10" height="33">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="700">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연도" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="year" taborder="1" text="" left="116" top="5" width="100" innerdataset="ds_year_list" index="0" value="-1" datacolumn="cdNm" codecolumn="cd" bottom="5"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="1" text="Div01" left="Div00:0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="증명서유형" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkAll" taborder="1" text="전체" left="Static00:10" top="5" width="45" value="false" onclick="com_fn_checkboxAll" bottom="5"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="6" text="Div01" left="10" top="Div01:0" height="33" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="1" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="700">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발급여부" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkAll" taborder="1" text="전체" left="119" top="5" width="45" value="false" onclick="com_fn_checkboxAll" bottom="5"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" left="Div00:0" height="100.00%" right="1">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="요청일자" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Calendar id="rgprDtm" taborder="1" left="Static00:10" top="5" width="129" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" onchanged="Div01_Div01_rgprDtm_onchanged" bottom="5"/>
+                    <Static id="Static01" taborder="3" text="~" left="rgprDtm:0" top="3" width="32" height="25" textAlign="center"/>
+                    <Calendar id="rgprDtm00" taborder="2" left="Static01:0" top="5" width="129" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" onchanged="Div01_Div01_rgprDtm_onchanged" bottom="5"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="1" text="Div01" left="10" top="Div02:0" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Button id="btnReset" taborder="4" text="초기화" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="79" onclick="reset_search_form"/>
+              <Button id="btnSearch" taborder="3" text="검색" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div05_btnSearch_onclick" right="btnReset:5" width="80"/>
+              <Edit id="searchQuery" taborder="2" top="5" text="123123" left="221" right="btnSearch:5" maxlength="20" bottom="5"/>
+              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" width="100" bottom="5">
+                <Dataset id="innerdataset">
+                  <ColumnInfo>
+                    <Column id="codecolumn" size="256"/>
+                    <Column id="datacolumn" size="256"/>
+                  </ColumnInfo>
+                  <Rows>
+                    <Row>
+                      <Col id="codecolumn">0</Col>
+                      <Col id="datacolumn">전체</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">1</Col>
+                      <Col id="datacolumn">강사코드</Col>
+                    </Row>
+                    <Row>
+                      <Col id="codecolumn">2</Col>
+                      <Col id="datacolumn">강사명</Col>
+                    </Row>
+                    <Row>
+                      <Col id="datacolumn">예명</Col>
+                      <Col id="codecolumn">3</Col>
+                    </Row>
+                  </Rows>
+                </Dataset>
+              </Combo>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="Grid00" taborder="2" left="10" top="240" binddataset="ds_list" autofittype="col" right="10" bottom="320" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="40" band="left"/>
+                <Column size="40"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="강사코드"/>
+                <Cell col="3" text="강사명"/>
+                <Cell col="4" text="기준년도"/>
+                <Cell col="5" text="증명서유형"/>
+                <Cell col="6" text="승인여부"/>
+                <Cell col="7" text="요청일자"/>
+                <Cell col="8" text="승인일자"/>
+                <Cell col="9" text="승인자"/>
+                <Cell col="10" text="파일보기"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="expr:dataset.getRowCount() - currow" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
+                <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
+                <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:stdYy"/>
+                <Cell col="5" text="bind:athctfTpCd" displaytype="combotext" combodataset="ds_athctfTp_cdList" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="6" text="bind:apvlStatCd" displaytype="combotext" combodataset="ds_apvlStat_cdList" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="7" text="bind:reqDtm" displaytype="date" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="8" displaytype="expr:apvlDtm ? &quot;date&quot; : &quot;none&quot;" text="bind:apvlDtm" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="9" text="bind:apprId"/>
+                <Cell col="10" text="bind:athctfFileNm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Static id="Static00" taborder="8" text="증명서발급 신청 목록" left="16" top="210" width="130" height="21" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+        <Static id="txtTotal" taborder="4" left="Static00:22" top="210" height="21" text="(0개)" width="42"/>
+        <Button id="btnConfirm" taborder="7" text="증명서발급(승인)" top="210" height="21" width="125" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::lib_date.xjs";
+include "Base::popup.xjs";
+include "TeacherMng::include/common.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.popCnt = 0;
+this.menuSeq = 0;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.AuthCertificateIssueList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
+	//그리드 체크박스 세팅
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
+	
+	// 코드 데이터
+	this.set_dataset();
+	
+	//체크박스 세팅
+	this.set_dynamic_checkbox();
+	
+	//검색폼 초기화
+	this.reset_search_form();
+};
+ /**************************************************************************
+ * 데이터 세팅
+ **************************************************************************/
+this.set_dataset = function(){
+	var ds_codes_list = [
+		{ds : this.ds_athctfTp_cdList,		cd: "'TC_012'"},	//증명서
+		{ds : this.ds_apvlStat_cdList,		cd: "'TC_013'"},	//승인상태
+	];
+	//코드 데이터셋 설정
+	this.com_set_code_dataset(ds_codes_list);
+	
+	//년도
+	this.com_set_dataset_year(this.ds_year_list, 2005);
+	
+	//콤보박스 기본값 설정
+ 	var ds_list = [{
+			ds : this.ds_year_list,
+			obj : this.Div01.form.Div00.form.year	//년도
+		}];
+	this.com_set_combobox_default(ds_list);
+	
+}
+//동적 체크박스 추가
+this.set_dynamic_checkbox = function()
+{
+	this.com_set_dynamic_checkbox_from_dataset(this.ds_athctfTp_cdList, this.Div01.form.Div02);	//증명서
+	this.com_set_dynamic_checkbox_from_dataset(this.ds_apvlStat_cdList, this.Div02.form.Div00);	//승인상태
+	
+	//클릭 이벤트 추가
+	this.com_fn_click_add(this);
+}
+/**************************************************************************
+ * 검색, 초기화
+ **************************************************************************/
+this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.set_search_info();
+	this.select_list();
+};
+this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.reset_search_form();
+};
+this.set_search_info = function(){
+
+	//검색조건 - 체크박스 세팅 - 증명서
+	var tcTpCdList = this.com_set_checkbox_to_string(this.Div01.form.Div02);
+	this.ds_search.setColumn(0, "athctfTpCdList", tcTpCdList);
+	
+	//검색조건 - 체크박스 세팅 - 승인상태
+	var tcTpCdList = this.com_set_checkbox_to_string(this.Div02.form.Div00);
+	this.ds_search.setColumn(0, "apvlStatCdList", tcTpCdList);
+
+}
+
+this.select_list = function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "select_list";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/athctf/list.do";
+	tranObj.inData      = "search=ds_search";
+	tranObj.outData     = "ds_list=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.menuSeq
+	
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	this.gfn_transaction(tranObj);
+}
+
+this.reset_search_form = function(){
+	
+	//공통
+	this.com_reset_search_form(this);
+	
+}
+//리스트 데이터 가공
+this.process_teacher_list = function(){
+
+}
+/**************************************************************************
+ * 증명서 발급
+ **************************************************************************/
+this.btnConfirm_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.ds_list.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("대상을 선택하세요.");
+		return false;
+	}
+	
+	if(confirm("증명서를 발급 하시겠습니까?")){
+		
+		this.ds_list_checked.clearData();
+		for(i of checked_array){
+			var row = this.ds_list_checked.addRow();
+			var tcCdNo = this.ds_list.getColumn(i, "tcCdNo");
+			var stdYy = this.ds_list.getColumn(i, "stdYy");
+			var athctfTpCd = this.ds_list.getColumn(i, "athctfTpCd");
+			this.ds_list_checked.setColumn(row, "tcCdNo", tcCdNo);
+			this.ds_list_checked.setColumn(row, "stdYy", stdYy);
+			this.ds_list_checked.setColumn(row, "athctfTpCd", athctfTpCd);
+		}
+		
+		for(i of checked_array){
+			check_array[i] = 0;
+		}
+		
+		this.update_list();
+
+	}
+};
+this.update_list = function(){
+	
+	var tranObj = {
+		strSvcId : "update_list",
+		strSvcUrl : this.application.Admin_svc + "::teacherMng/athctf/update.do",
+		inData : "list=ds_list_checked",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.menuSeq
+	}
+  
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	this.gfn_transaction(tranObj);
+}
+/************************************************************************
+ * 그리드
+ ************************************************************************/
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 2 || e.cell == 3){	
+		this.popCnt ++;
+		var oArg = {
+				type : "teacher_dtl",
+				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
+				menuSeq : this.menuSeq
+				};
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+	}
+};
+
+this.fnCallback = function(svcId, errorCode, errorMsg){
+	if(errorCode != 0){
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	if(svcId == "select_list"){
+		this.txtTotal.set_text("(" + this.ds_list.rowcount + ")개");
+		this.process_teacher_list();
+	}
+	else if(svcId == "update_list"){
+		
+		alert("발급 되었습니다.");
+		
+		this.select_list();
+	}
+	
+}
+]]></Script>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="stdYy" type="STRING" size="256"/>
+          <Column id="athctfTpCdList" type="STRING" size="256"/>
+          <Column id="apvlStatCdList" type="STRING" size="256"/>
+          <Column id="reqStDt" type="STRING" size="256"/>
+          <Column id="reqEndDt" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="stdYy" type="STRING" size="256"/>
+          <Column id="athctfTpCd" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="reqDtm" type="STRING" size="256"/>
+          <Column id="apvlDtm" type="STRING" size="256"/>
+          <Column id="apprId" type="STRING" size="256"/>
+          <Column id="athctfFileId" type="STRING" size="256"/>
+          <Column id="athctfFileNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_athctfTp_cdList">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_apvlStat_cdList">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_year_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_list_checked">
+        <ColumnInfo>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="stdYy" type="STRING" size="256"/>
+          <Column id="athctfTpCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div01.form.Div00.form.year" propid="value" datasetid="ds_search" columnid="stdYy"/>
+      <BindItem id="item1" compid="Div02.form.Div02.form.rgprDtm" propid="value" datasetid="ds_search" columnid="reqStDt"/>
+      <BindItem id="item2" compid="Div02.form.Div02.form.rgprDtm00" propid="value" datasetid="ds_search" columnid="reqEndDt"/>
+      <BindItem id="item3" compid="Div03.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
+      <BindItem id="item4" compid="Div03.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+    </Bind>
+  </Form>
+</FDL>

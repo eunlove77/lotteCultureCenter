@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="OnlineTecherRqstList" width="1280" height="1000" titletext="New Form" onload="TecherList_onload">
+  <Form id="OnlineTeacherRqstList" width="1280" height="1000" titletext="New Form" onload="TeacherList_onload">
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -41,9 +41,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망분야" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="Combo00" taborder="1" text="" left="116" top="5" width="100" height="20" index="-1" value="-1" usesoftkeyboard="false" innerdataset="ds_lgctgry_cdList" datacolumn="cdNm" codecolumn="cd" onitemchanged="first_class_category_onchanged"/>
-                    <Combo id="Combo01" taborder="2" text="" left="226" top="5" width="100" height="20" innerdataset="ds_mdctgry_cdList" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="second_class_category_onchanged"/>
-                    <Combo id="Combo02" taborder="3" text="" left="336" top="5" width="100" height="20" innerdataset="ds_smctgry_cdList" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
+                    <Combo id="Combo00" taborder="1" text="" left="116" top="5" width="100" height="20" index="-1" value="-1" usesoftkeyboard="false" innerdataset="ds_classCtgyLarge_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="first_class_category_onchanged"/>
+                    <Combo id="Combo01" taborder="2" text="" left="226" top="5" width="100" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="second_class_category_onchanged"/>
+                    <Combo id="Combo02" taborder="3" text="" left="336" top="5" width="100" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -71,7 +71,7 @@
                     <Div id="Div00" taborder="2" text="Div00" left="109" top="0" width="255" bottom="0">
                       <Layouts>
                         <Layout>
-                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="fn_checkboxAll"/>
+                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="com_fn_checkboxAll"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -125,7 +125,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_techer_list" autofittype="col" right="10" bottom="260" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="260" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -136,18 +136,17 @@
                 <Column size="130"/>
                 <Column size="130"/>
                 <Column size="130"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="200"/>
               </Columns>
               <Rows>
                 <Row size="30" band="head"/>
@@ -171,29 +170,27 @@
                 <Cell col="14" text="소분류2"/>
                 <Cell col="15" text="희망요일"/>
                 <Cell col="16" text="희망시간"/>
-                <Cell col="17" text="섭외자"/>
-                <Cell col="18" text="등록일시"/>
+                <Cell col="17" text="등록일시"/>
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
                 <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
-                <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd"/>
+                <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
                 <Cell col="5" text="bind:hpNo"/>
-                <Cell col="6"/>
-                <Cell col="7" text="bind:frstHopeBrchCd"/>
-                <Cell col="8" tooltiptext="bind:secHopeBrchCd"/>
-                <Cell col="9"/>
-                <Cell col="10"/>
-                <Cell col="11"/>
-                <Cell col="12"/>
-                <Cell col="13"/>
-                <Cell col="14"/>
-                <Cell col="15"/>
-                <Cell col="16"/>
-                <Cell col="17"/>
-                <Cell col="18" text="bind:appDt"/>
+                <Cell col="6" text="bind:email"/>
+                <Cell col="7" text="bind:frstHopeBrchCd" displaytype="combotext" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="8" displaytype="combotext" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" text="bind:secHopeBrchCd"/>
+                <Cell col="9" text="bind:frstLrclsCtegryCd" displaytype="combotext" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="10" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:frstMdclsCtegryCd"/>
+                <Cell col="11" displaytype="combotext" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:frstSmclsCtegryCd"/>
+                <Cell col="12" displaytype="combotext" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd" text="bind:secLrclsCtegryCd"/>
+                <Cell col="13" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:frstMdclsCtegryCd"/>
+                <Cell col="14" displaytype="combotext" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:frstSmclsCtegryCd"/>
+                <Cell col="15" text="bind:hopeDaywVal"/>
+                <Cell col="16" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
+                <Cell col="17" text="bind:appDt" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
             </Format>
           </Formats>
@@ -211,28 +208,35 @@ include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
 include "Base::popup.xjs";
-include "TecherMng::include/common.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.rowcount = 0;
-
+this.popCnt = 0;
+this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.TecherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	//강사유형
-	this.Div03.form.Div00.form.tcTpCdAll.set_value(true);
-	this.techer_type_onchanged(this.Div03.form.Div00.form.tcTpCdAll);
+  this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
+	//그리드 체크박스 세팅
+	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid00, 0);
 	
+	// 코드 데이터
 	this.set_dataset();
 	
+	//체크박스 세팅
+	this.set_dynamic_checkbox();
+	
+	//검색폼 초기화
+	this.reset_search_form();
 };
  /**************************************************************************
  * 데이터 세팅
@@ -240,7 +244,9 @@ this.TecherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 this.set_dataset = function(){
 	var ds_codes_list = [
 		{ds : this.ds_spot_list,		cd: "'spotCd'"},	//지점
+		{ds : this.ds_day_cdList,		cd: "'008'"},	//요일
 		{ds : this.ds_tcTp_list,		cd: "'CODE_62'"},	//강사유형
+		{ds : this.ds_emailAddr_cdList,cd: "'CODE_80'"},	//이메일주소
 	];
 	//코드 데이터셋 설정
 	this.com_set_code_dataset(ds_codes_list);
@@ -275,7 +281,7 @@ this.set_dynamic_checkbox = function()
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();
-	this.select_techer_list();
+	this.select_teacher_list();
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -295,71 +301,86 @@ this.set_search_info = function(){
 	}
 	
 	//검색조건 - 휴대전화
-	var hpNo = this.Div04.form.Div02.form.hpNo.value;
-	var arr = this.parse_phone_number(hpNo);
-	
-	this.ds_search.setColumn(0, 'hpStNo', arr[0] ? arr[0] : '');
-	this.ds_search.setColumn(0, 'hpMidNo', arr[1] ? arr[1] : '');
-	this.ds_search.setColumn(0, 'hpLastNo', arr[2] ? arr[2] : '');
+	var hpNo = this.Div03.form.Div02.form.hpNo.value;
+	this.com_set_hpNo_to_stmidlastNo(hpNo);
 
-}
-this.parse_phone_number = function(str){
-	if(!str) return [];
+	//검색조건 - 체크박스 세팅 - 강사유형
+	var tcTpCdList = this.com_set_checkbox_to_string(this.Div03.form.Div00.form.Div00);
+	this.ds_search.setColumn(0, "tcTpCdList", tcTpCdList);
 	
-	var arr = str.split('-');
-	if(arr.length > 1){
-		if(arr[0].length == 4){
-			var tmp = arr[0];
-			arr[2] = arr[1];
-			arr[1] = arr[2];
-		}
-	} else {
-		if(str.length == 11){
-			arr[0] = str.slice(0, 3);
-			arr[1] = str.slice(3, 7);
-			arr[2] = str.slice(7, 11);
-		} else if(str.length == 8){
-			arr[1] = str.slice(0, 4);
-			arr[2] = str.slice(4, 8);
-		}
-	}
-	
-	return arr;
 }
-this.select_techer_list = function(){
+
+this.select_teacher_list = function(){
 	var tranObj = {};
-	tranObj.strSvcId	= "select_techer";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::techerMng/list.do";
+	tranObj.strSvcId	= "select_teacher";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
 	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_techer_list=output1";
+	tranObj.outData     = "ds_teacher_list=output1";
 	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback_techer_list";
+	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.menuSeq
 	
+  if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
-this.fnCallback_techer_list = function(svcId, errorCode, errorMsg){
-	if(errorCode != 0){
-		// 에러 시 화면 처리 내역
-		this.alert(errorCode+"\n"+errorMsg);
-		return false;
-	}
-}
+
 this.reset_search_form = function(){
 	
-	this.com_reset_search_form();
+	//공통
+	this.com_reset_search_form(this);
 	
-	var ds_list = [{
-			ds: this.ds_mdctgry_cdList, cdNm: '중분류', 
-			id: this.Div02.form.Div00.form.mdclsCtegryCd
-		}, {
-			ds: this.ds_smctgry_cdList, cdNm: '소분류',
-			id: this.Div02.form.Div00.form.smclsCtegryCd
-	}];
-	this.ds_mdctgry_cdList.clearData();
-	this.ds_smctgry_cdList.clearData();
-	this.set_combobox_default(ds_list);
+	//희망시간
+	this.ds_search.setColumn(0, 'hopeStHh', "");
+	this.ds_search.setColumn(0, 'hopeStMi', "");
+	this.ds_search.setColumn(0, 'hopeEndHh', "");
+	this.ds_search.setColumn(0, 'hopeEndMi', "");
+	
+	//휴대전화
+	this.ds_search.setColumn(0, "hpStNo", "");
+	this.ds_search.setColumn(0, "hpMidNo", "");
+	this.ds_search.setColumn(0, "hpLastNo", "");
+	
+	//카테고리
+	var lgObj = this.Div02.form.Div00.form.Combo00;
+	var mdObj = this.Div02.form.Div00.form.Combo01;
+	var smObj = this.Div02.form.Div00.form.Combo02;
+	this.com_reset_category(lgObj, mdObj, smObj);
+	
+	//면세사업체크 해제
+	this.Div03.form.Div00.form.txfrBizprYn.set_value('N');
+	
+}
+//강사 리스트 데이터 가공
+this.process_teacher_list = function(){
+
+	for(var i = 0; i < this.ds_teacher_list.rowcount; i++){
+		//이메일
+		var email = this.ds_teacher_list.getColumn(i, 'email');
+		var emailAddrCd = this.ds_teacher_list.getColumn(i, 'emailAddrCd');
+		if(email){
+			if(emailAddrCd){
+				var row = this.ds_emailAddr_cdList.findRow("cd", emailAddrCd);
+				emailAddr = this.ds_emailAddr_cdList.getColumn(row, "cdNm");
+				email += '@' + emailAddr;
+				this.ds_teacher_list.setColumn(i, 'email', email);
+			}
+		}
+		
+		//희망요일
+		var hopeDaywVal = this.ds_teacher_list.getColumn(i, 'hopeDaywVal');
+		if(hopeDaywVal){
+			var rtnStr = "", comma = "";
+			var arr = hopeDaywVal.split(",");
+			for(var item of arr){
+				var row = this.ds_day_cdList.findRow('cd', item);
+				var dayNm = this.ds_day_cdList.getColumn(row, 'cdNm');
+				rtnStr += comma + dayNm;
+				comma = ",";
+			}
+		}
+		this.ds_teacher_list.setColumn(i, 'hopeDaywVal', rtnStr);
+	}
 	
 }
 /**************************************************************************
@@ -367,7 +388,7 @@ this.reset_search_form = function(){
  **************************************************************************/
 this.btnConfirm_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var check_array = this.ds_tclect_list.checkarray;
+	var check_array = this.ds_teacher_list.checkarray;
 	var checked_array = new Array();
 	for(var i = 0; i < check_array.length; i++){
 		if(check_array[i] > 0) checked_array.push(i);
@@ -379,132 +400,39 @@ this.btnConfirm_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	
 	if(confirm("지원강사를 승인 하시겠습니까?")){
-		this.ds_techer_list.deleteMultiRows(checked_array);
+		
+		this.ds_apvl_list.clearData();
+		for(i of checked_array){
+			var row = this.ds_apvl_list.addRow();
+			var tcCdNo = this.ds_teacher_list.getColumn(i, "tcCdNo");
+			this.ds_apvl_list.setColumn(row, "tcCdNo", tcCdNo);
+		}
+		
+		this.ds_teacher_list.deleteMultiRows(checked_array);
 		for(i of checked_array){
 			check_array[i] = 0;
 		}
 		this.Grid00.redrawExprCell();
-		this.confirm_online_techer_rqst(checked_array);
 		
-		this.confirm_online_techer_rqst();
+		this.confirm_online_teacher_rqst();
+
 	}
 };
-this.confirm_online_techer_rqst = function(){
+this.confirm_online_teacher_rqst = function(){
 	
 	var tranObj = {
-		strSvcId : "confirm_techer",
-		strSvcUrl : this.application.Admin_svc + "::onlineTecherRqst/approve.do",
-		inData : "",
+		strSvcId : "confirm_teacher",
+		strSvcUrl : this.application.Admin_svc + "::teacherMng/onlineTeacherRqst/approve.do",
+		inData : "apvlList=ds_apvl_list",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : false,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuSeq
 	}
+  
+  if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	this.gfn_transaction(tranObj);
-}
-/**************************************************************************
- * 검색조건 변경 이벤트
- **************************************************************************/
-this.techer_type_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
-	var value = '';
-	var obj_all = this.Div03.form.Div00.form.tcTpCdAll;
-	var obj_1 = this.Div03.form.Div00.form.tcTpCd1;
-	var obj_2 = this.Div03.form.Div00.form.tcTpCd2;
-	var obj_3 = this.Div03.form.Div00.form.tcTpCd3;
-	
-	switch(obj.name) {
-	case 'tcTpCdAll':
-		if(obj.value){
-			obj_1.set_value('1');
-			obj_2.set_value('2');
-			obj_3.set_value('3');
-		} else {
-			obj_1.set_value(false);
-			obj_2.set_value(false);
-			obj_3.set_value(false);
-		}
-		break;
-	default:
-		obj_all.set_value(false);
-		if(obj_1.value && obj_2.value && obj_3.value){
-			obj_all.set_value(true);
-			value = '';
-		} else {
-			var comma = '';
-			if(obj_1.isChecked()){
-				value += comma + obj_1.value;
-				comma = ',';
-			}
-			if(obj_2.isChecked()){
-				value += comma + obj_2.value;
-				comma = ',';
-			}
-			if(obj_3.isChecked()){
-				value += comma + obj_3.value;
-			}
-		}
-	}
-	this.ds_search.setColumn(0, 'tcTpCdList', value);
-}
-this.modify_request_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
-	var value = '';
-	var obj_chkAll = this.Div04.form.Div00.form.mdfreqAll;
-	var obj_chkY = this.Div04.form.Div00.form.mdfreqY;
-	var obj_chkN = this.Div04.form.Div00.form.mdfreqN;
-	switch(obj.name) {
-	case 'mdfreqAll':
-		if(obj.value){
-			obj_chkY.set_value(true);
-			obj_chkN.set_value(true);
-		} else {
-			obj_chkY.set_value(false);
-			obj_chkN.set_value(false);
-		}
-		value = '';
-		break;
-	default:
-		obj_chkAll.set_value(false);
-		if(obj_chkY.value && obj_chkN.value){
-			obj_chkAll.set_value(true);
-			value = '';
-		} else if(obj_chkY.value) {
-			value = 'Y';
-		} else if(obj_chkN.value){
-			value = 'N';
-		} else {
-			value = '';
-		}
-	}
-	this.ds_search.setColumn(0, 'tcmdfreqYn', value);
-}
-//카테고리
-this.first_class_category_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
-	var ds;
-	var ds_list = [{
-			ds: 'ds_mdctgry_cdList', cdNm: '중분류', cd: "'028_"+ obj.value +"'",
-			id: 'Div02.form.Div00.form.mdclsCtegryCd'
-		}, {
-			ds: 'ds_smctgry_cdList', cdNm: '소분류', cd: "'028_"+ obj.value +"'",
-			id: 'Div02.form.Div00.form.smclsCtegryCd'
-	}];
-	
-	//중분류 변경
-	this.set_dataset_from_code(ds_list[0]);
-	//소분류 변경
-	ds = this.ds_smctgry_cdList;
-	ds.clearData();
-	
-	this.set_combobox_default(ds_list);
-}
-this.second_class_category_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo){
-	var ds_list = [{
-		ds: 'ds_smctgry_cdList', cdNm: '소분류', cd: "'028_"+ obj.value +"'",
-		id: 'Div02.form.Div00.form.smclsCtegryCd'
-	}]
-	//소분류 변경
-	this.set_dataset_from_code(ds_list[0]);
-	this.set_combobox_default(ds_list);
 }
 /************************************************************************
  * 그리드
@@ -514,23 +442,29 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	if(e.cell == 2 || e.cell == 3){	
 		this.popCnt ++;
 		var oArg = {
-				type : "detail",
-				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo")
+				type : "online_request",
+				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
+				menuSeq : this.menuSeq
 				};
-		this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 600, 350, true, true, null, "강사 상세");
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 };
+
 this.fnCallback = function(svcId, errorCode, errorMsg){
 	if(errorCode != 0){
 		this.alert(errorCode+"\n"+errorMsg);
 		return;
 	}
-	switch(svcID){
-		case "confirm_techer":
-			alert("승인 되었습니다.");
-			break;
+	if(svcId == "select_teacher"){
+		this.txtTotal.set_text("(" + this.ds_teacher_list.rowcount + ")개");
+		this.process_teacher_list();
 	}
-}]]></Script>
+	else if(svcId == "confirm_teacher"){
+		alert("승인 되었습니다.");
+	}
+	
+}
+]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
@@ -559,7 +493,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
         <Rows>
           <Row>
             <Col id="apvlStatCd">1</Col>
-            <Col id="hopeDaywCd">1</Col>
+            <Col id="hopeDaywCd"/>
             <Col id="lrclsCtegryCd"/>
             <Col id="txfrBizprYn">N</Col>
             <Col id="f">0</Col>
@@ -582,10 +516,11 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_techer_list">
+      <Dataset id="ds_teacher_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
+          <Column id="tcTpCdNm" type="STRING" size="256"/>
           <Column id="apvlStatCd" type="STRING" size="256"/>
           <Column id="txfrBizprYn" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
@@ -593,6 +528,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           <Column id="bday" type="STRING" size="256"/>
           <Column id="lscCd" type="STRING" size="256"/>
           <Column id="pbrltnBrchCd" type="STRING" size="256"/>
+          <Column id="pbrltnChrgprId" type="STRING" size="256"/>
           <Column id="pbrltnChrgprNm" type="STRING" size="256"/>
           <Column id="frstHopeBrchCd" type="STRING" size="256"/>
           <Column id="secHopeBrchCd" type="STRING" size="256"/>
@@ -602,12 +538,19 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           <Column id="secLrclsCtegryCd" type="STRING" size="256"/>
           <Column id="secMdclsCtegryCd" type="STRING" size="256"/>
           <Column id="secSmclsCtegryCd" type="STRING" size="256"/>
-          <Column id="hopeDaywCd" type="STRING" size="256"/>
-          <Column id="hopeTime" type="STRING" size="256"/>
+          <Column id="hopeDaywVal" type="STRING" size="256"/>
+          <Column id="hopeStHh" type="STRING" size="256"/>
+          <Column id="hopeStMi" type="STRING" size="256"/>
+          <Column id="hopeEndHh" type="STRING" size="256"/>
+          <Column id="hopeEndMi" type="STRING" size="256"/>
           <Column id="mdfReqYn" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
           <Column id="appDt" type="STRING" size="256"/>
+          <Column id="mdfReqCount" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="emailAddrCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_spot_list">
@@ -664,103 +607,43 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           <Column id="memo" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_mdctgry_cdList">
+      <Dataset id="ds_tcTp_list">
         <ColumnInfo>
-          <Column id="cdId" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
-          <Column id="cdOrd" type="STRING" size="256"/>
-          <Column id="dpth" type="STRING" size="256"/>
-          <Column id="useYn" type="STRING" size="256"/>
-          <Column id="regId" type="STRING" size="256"/>
-          <Column id="regIp" type="STRING" size="256"/>
-          <Column id="regDtm" type="STRING" size="256"/>
-          <Column id="modId" type="STRING" size="256"/>
-          <Column id="modIp" type="STRING" size="256"/>
-          <Column id="modDtm" type="STRING" size="256"/>
-          <Column id="nextChildOrd" type="STRING" size="256"/>
-          <Column id="memo" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="cd"> </Col>
-            <Col id="cdNm">중분류</Col>
-          </Row>
-        </Rows>
       </Dataset>
-      <Dataset id="ds_smctgry_cdList">
+      <Dataset id="ds_classCtgyLarge_list">
         <ColumnInfo>
-          <Column id="cdId" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
-          <Column id="cdOrd" type="STRING" size="256"/>
-          <Column id="dpth" type="STRING" size="256"/>
-          <Column id="useYn" type="STRING" size="256"/>
-          <Column id="regId" type="STRING" size="256"/>
-          <Column id="regIp" type="STRING" size="256"/>
-          <Column id="regDtm" type="STRING" size="256"/>
-          <Column id="modId" type="STRING" size="256"/>
-          <Column id="modIp" type="STRING" size="256"/>
-          <Column id="modDtm" type="STRING" size="256"/>
-          <Column id="nextChildOrd" type="STRING" size="256"/>
-          <Column id="memo" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="cd"> </Col>
-            <Col id="cdNm">소분류</Col>
-          </Row>
-        </Rows>
       </Dataset>
-      <Dataset id="ds_search_default">
+      <Dataset id="ds_classCtgyMiddle_list">
         <ColumnInfo>
-          <Column id="apvlStatCd" type="STRING" size="256"/>
-          <Column id="hopeBrchCd" type="STRING" size="256"/>
-          <Column id="rgprDtm" type="STRING" size="256"/>
-          <Column id="hopeDaywCd" type="STRING" size="256"/>
-          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
-          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
-          <Column id="smclsCtegryCd" type="STRING" size="256"/>
-          <Column id="hopeStHh" type="STRING" size="256"/>
-          <Column id="hopeStMi" type="STRING" size="256"/>
-          <Column id="hopeEndHh" type="STRING" size="256"/>
-          <Column id="hopeEndMi" type="STRING" size="256"/>
-          <Column id="tcTpCdList" type="STRING" size="256"/>
-          <Column id="txfrBizprYn" type="STRING" size="256"/>
-          <Column id="pbrltnBrchCd" type="STRING" size="256"/>
-          <Column id="tcmdfreqYn" type="STRING" size="256"/>
-          <Column id="age" type="STRING" size="256"/>
-          <Column id="hpStNo" type="STRING" size="256"/>
-          <Column id="hpMidNo" type="STRING" size="256"/>
-          <Column id="hpLastNo" type="STRING" size="256"/>
-          <Column id="f" type="STRING" size="256"/>
-          <Column id="q" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="apvlStatCd">2</Col>
-            <Col id="hopeDaywCd"/>
-            <Col id="lrclsCtegryCd"/>
-            <Col id="txfrBizprYn">N</Col>
-            <Col id="f">0</Col>
-            <Col id="mdclsCtegryCd"/>
-            <Col id="smclsCtegryCd"/>
-            <Col id="pbrltnBrchCd"/>
-            <Col id="hopeBrchCd"/>
-            <Col id="rgprDtm"/>
-            <Col id="hopeStHh"/>
-            <Col id="hopeStMi"/>
-            <Col id="hopeEndHh"/>
-            <Col id="hopeEndMi"/>
-            <Col id="tcTpCdList"/>
-            <Col id="tcmdfreqYn"/>
-            <Col id="age"/>
-            <Col id="hpStNo"/>
-            <Col id="hpMidNo"/>
-            <Col id="hpLastNo"/>
-            <Col id="q"/>
-          </Row>
-        </Rows>
+      </Dataset>
+      <Dataset id="ds_classCtgySmall_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="cdId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_emailAddr_cdList">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_apvl_list">
+        <ColumnInfo>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Bind>

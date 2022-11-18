@@ -731,6 +731,7 @@ this.yy = "";
 this.lectSmsterCd = "";
 this.excelImportExport = "";
 this.excelFileName = "강좌목록_관리_";
+this.searchFlag = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -867,6 +868,7 @@ this.fn_search = function()
 
 	this.gfn_transaction(tranObj);
 	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
+	this.searchFlag = 1;
 }
 
 //지점 세팅
@@ -1387,7 +1389,8 @@ this.Div02_Div01_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 {
 	this.popCnt++;
 	var arrArguments = {
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		searchFlag : this.searchFlag
 	}
 	this.gfn_openPopup("ClassReg" + this.popCnt, arrArguments, "ClassMng::ClassReg.xfdl", this, 1280, 720, true, true, null);
 };
@@ -1483,9 +1486,9 @@ this.Div02_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.Gri
 		var oArg = {
 				type : "detail",
 				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
-				ownerFrame : this.getOwnerFrame()
+				menuSeq : this.getOwnerFrame().param.MENU_ID
 		};
-		this.gfn_openPopup("TecherDtlPop"+this.popCnt, oArg, "TecherMng::TecherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 };
 
