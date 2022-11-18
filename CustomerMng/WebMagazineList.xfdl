@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="WebMagazineList" width="1280" height="800" titletext="New Form" onload="WebMagazineList_onload">
+    <Layouts>
+      <Layout height="800" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="Div00_00" taborder="2" text="Div00" left="7" top="57" height="173" formscrolltype="both" right="0">
+          <Layouts>
+            <Layout>
+              <Div id="conDiv" taborder="1" text="Div00" left="3" top="15" height="134" cssclass="div_WF_TableComp" right="8">
+                <Layouts>
+                  <Layout>
+                    <Div id="useDiv" taborder="1" text="Div01" top="30" height="33" cssclass="div_WF_CompWrap" left="1" right="1">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="노출 여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <CheckBox id="chkExpsrAll" taborder="3" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_expsrAll_onlick"/>
+                          <CheckBox id="chkExpsrY" taborder="1" text="노출" left="chkExpsrAll:6" top="5" width="41" height="20" onclick="fn_expsrY_onlick"/>
+                          <CheckBox id="chkExpsrN" taborder="2" text="미노출" left="chkExpsrY:6" top="5" width="53" height="20" onclick="fn_expsrN_onlick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="searchDiv" taborder="1" text="Div01" left="1" top="useDiv:-1" height="33" cssclass="div_WF_CompWrap" right="1">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="searchField" taborder="1" left="Static00:7" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" text="전체" value="">
+                            <Dataset id="innerdataset">
+                              <ColumnInfo>
+                                <Column id="codecolumn" size="256"/>
+                                <Column id="datacolumn" size="256"/>
+                              </ColumnInfo>
+                              <Rows>
+                                <Row>
+                                  <Col id="codecolumn">0</Col>
+                                  <Col id="datacolumn">전체</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">1</Col>
+                                  <Col id="datacolumn">제목</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">2</Col>
+                                  <Col id="datacolumn">작성자</Col>
+                                </Row>
+                              </Rows>
+                            </Dataset>
+                          </Combo>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21" onkeydown="Div00_00_conDiv_searchDiv_searchQuery_onkeydown"/>
+                          <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
+                          <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="Div00_00:-45" height="45" right="10">
+          <Layouts>
+            <Layout>
+              <Button id="btnAdd" taborder="0" text="등록" top="5" height="30" cssclass="btn_WF_Medium" width="50" right="80" onclick="Div01_btnAdd_onclick" visible="true"/>
+              <Button id="btnDel" taborder="1" text="삭제" top="5" height="30" cssclass="btn_WF_High" right="10" width="50" onclick="Div01_btnDel_onclick"/>
+              <Static id="txtTotal" taborder="2" left="9" top="10" height="21" text="목록 (0)개" width="82"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="GridWebMagazineList" taborder="4" left="10" top="Div01:10" binddataset="webMagazineDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridWebMagazineList_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50"/>
+                <Column size="47"/>
+                <Column size="299"/>
+                <Column size="179"/>
+                <Column size="65"/>
+                <Column size="80"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="제목"/>
+                <Cell col="3" text="행사 기간"/>
+                <Cell col="4" text="노출여부"/>
+                <Cell col="5" text="등록자"/>
+                <Cell col="6" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:webMgznSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell col="1" text="bind:rnum"/>
+                <Cell col="2" text="bind:mainTitNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="3" text="expr:evntStDt+' ~ ' +evntEndDt"/>
+                <Cell col="4" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
+                <Cell col="5" text="expr:rgprId ? rgprNm : ''"/>
+                <Cell col="6" text="bind:rgprDtm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="webMagazineDs">
+        <ColumnInfo>
+          <Column id="rnum" type="INT" size="256"/>
+          <Column id="webMgznSeqno" type="STRING" size="256"/>
+          <Column id="mainTitNm" type="STRING" size="256"/>
+          <Column id="evntStDt" type="STRING" size="256"/>
+          <Column id="evntEndDt" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="searchDs">
+        <ColumnInfo>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="webMagazineDs_format">
+        <ColumnInfo>
+          <Column id="rnum" type="INT" size="256"/>
+          <Column id="webMgznSeqno" type="STRING" size="256"/>
+          <Column id="mainTitNm" type="STRING" size="256"/>
+          <Column id="evntStDt" type="STRING" size="256"/>
+          <Column id="evntEndDt" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+* include 영역 
+**************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+
+/**************************************************************************
+* FORM 변수 선언 영역
+**************************************************************************/
+this.application = null;
+this.rowcount = 0;
+
+/**************************************************************************
+* FORM EVENT 영역(onload)
+**************************************************************************/
+this.WebMagazineList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.param = this.parent.param;
+	var objOwnerFrame = this.getOwnerFrame();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.gfnSetCheckBoxNoDataset(this.webMagazineDs, this.GridWebMagazineList, 0);
+	
+	this.fn_list(1);
+};
+
+//등록 버튼
+this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.param = {
+		webMgznSeqno : ""
+	}
+	this.parent.set_url("CustomerMng::WebMagazineDtl.xfdl");
+};
+
+//삭제 버튼
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var check_array = this.webMagazineDs.checkarray;
+	var checked_array = new Array();
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 웹매거진을 선택하세요.");
+		return false;
+	}
+	if(!confirm("선택한 웹매거진을 삭제하시겠습니까?")){
+		return false;
+	}
+	
+	this.webMagazineDs.deleteMultiRows(checked_array);
+	for(i of checked_array){
+		check_array[i] = 0;
+	}
+	this.fn_delete();	
+};
+
+//검색버튼
+this.Div00_00_conDiv_searchDiv_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_searchValueInit();
+	
+	this.fn_list();
+};
+
+//엔터키 검색
+this.Div00_00_conDiv_searchDiv_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		this.fn_searchValueInit();
+	
+		this.fn_list();
+	}
+};
+
+//초기화버튼
+this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//검색 필드
+	this.Div00_00.form.conDiv.form.searchDiv.form.searchField.set_index(0);
+	this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.set_value('');
+	
+	//노출여부 필드
+	this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrAll.set_value(0);
+	this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrY.set_value(0);
+	this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrN.set_value(0);
+	
+	this.fn_searchValueInit();
+	
+	this.fn_list();
+	
+};
+
+//그리드 상세 페이지 이동
+this.GridWebMagazineList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 2)
+	{
+		var	webMgznSeqno = obj.getBindDataset().getColumn(e.row, "webMgznSeqno");
+		
+		this.parent.param = {
+			webMgznSeqno : webMgznSeqno
+		};
+		
+		this.parent.set_url("CustomerMng::WebMagazineDtl.xfdl");
+	}
+};
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+//조회
+this.fn_list = function ()
+{	
+	this.webMagazineDs.clearData();
+	
+	var tranObj = {};
+	tranObj.strSvcId	= "list";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/webMagazineList.do";
+	tranObj.inData      = "search=searchDs";
+	tranObj.outData     = "webMagazineDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);		
+};
+
+//삭제
+this.fn_delete = function ()
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/deleteWebMagazine.do";
+	tranObj.inData      = "webMagazineList=webMagazineDs:U";
+	tranObj.outData     = "webMagazineDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);
+	
+};
+
+// 검색 데이터 세팅
+this.fn_searchValueInit = function()
+{					 
+	var arrExpsrYn = new Array();
+	
+	if(this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrY.value == true) arrExpsrYn.push("'Y'");
+	if(this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrN.value == true) arrExpsrYn.push("'N'");
+	
+	this.searchDs.setColumn(0, "expsrYn", arrExpsrYn.join(","));
+	this.searchDs.setColumn(0, "f", this.Div00_00.form.conDiv.form.searchDiv.form.searchField.value);
+	this.searchDs.setColumn(0, "q", this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.value);
+};
+
+//노출여부 전체 선택 체크 박스 
+this.fn_expsrAll_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.chkExpsrY.set_value(1);
+		obj.parent.chkExpsrN.set_value(1);
+	}else{
+		obj.parent.chkExpsrY.set_value(0);
+		obj.parent.chkExpsrN.set_value(0);
+	}
+};
+
+//체크박스 노출 버튼 체크
+this.fn_expsrY_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkExpsrN.isChecked()){
+		obj.parent.chkExpsrAll.set_value(1);
+	}else{
+		obj.parent.chkExpsrAll.set_value(0);
+	}
+};
+
+//체크박스 미노출 버튼 체크
+this.fn_expsrN_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked() && obj.parent.chkExpsrY.isChecked()){
+		obj.parent.chkExpsrAll.set_value(1);
+	}else{
+		obj.parent.chkExpsrAll.set_value(0);
+	}
+};
+
+//콜백
+this.fnCallback = function(svcID,errorCode,errorMsg)
+
+{
+	//목록 카운트
+	
+	this.Div01.form.txtTotal.set_text("목록("+this.webMagazineDs.rowcount+")개");
+	
+	if(!this.webMagazineDs.getColCount())
+	{
+		this.webMagazineDs.copyData(this.webMagazineDs_format);
+	}
+	
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			if(this.webMagazineDs.rowcount < 1)
+			{
+				this.alert("조회된 결과가 없습니다.");
+			}
+		break;
+		
+		case "delete":
+			this.alert("삭제되었습니다.");
+			this.fn_list(1);
+		break;
+	}
+	
+};]]></Script>
+  </Form>
+</FDL>
