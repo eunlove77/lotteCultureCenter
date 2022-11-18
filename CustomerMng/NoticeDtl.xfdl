@@ -291,6 +291,9 @@ this.fn_save = function ()
 //유효성 체크
 this.fn_checkValidation = function(flag){
 	
+	var stDt = parseInt(this.row07.form.strtDtm.value);
+	var endDt = parseInt(this.row07.form.endDtm.value);
+	
 	if(this.gfn_isNull(this.row07.form.strtDtm.value))
 	{
 		this.alert("게시 시작일을 입력하세요");
@@ -302,6 +305,12 @@ this.fn_checkValidation = function(flag){
 		this.alert("게시 종료일을 입력하세요");
 		this.row07.form.endDtm.setFocus();
 		return false;
+	}
+	else if(stDt > endDt)
+	{
+		this.alert("게시 종료일이 게시 시작일보다 이전일 수 없습니다");
+		this.row07.form.endDtm.setFocus();
+		return;
 	}
 	else if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
 	{

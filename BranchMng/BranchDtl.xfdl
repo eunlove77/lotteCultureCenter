@@ -76,7 +76,7 @@
         <Div id="row04" taborder="7" text="Div01" left="10" top="168" height="150" cssclass="div_WF_CompWrap" right="10">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="파일업로드" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+              <Static id="Static00" taborder="0" text="지점 이미지 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
               <Div id="Div00" taborder="1" text="Div00" left="111" top="3" height="141" async="true" right="0" url="FrameBase::include/file_upload.xfdl"/>
             </Layout>
           </Layouts>
@@ -274,6 +274,9 @@ this.fn_save = function (_this)
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	
 	_this.gfn_transaction(tranObj);
 	
 };
