@@ -249,7 +249,7 @@
                                   </Dataset>
                                 </Radio>
                                 <Button id="Button00" taborder="2" text="폐강" left="Radio00:15" top="5" width="60" height="20" cssclass="btn_WF_High" onclick="Div00_Div00_Div00_Div03_Button00_onclick"/>
-                                <Static id="Static01" taborder="3" left="Radio00:15" top="0" bottom="0" right="0"/>
+                                <Static id="Static01" taborder="3" left="Radio00:15" top="0" bottom="0" right="0" text="" onclick="Div00_Div00_Div00_Div03_Static01_onclick"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -279,7 +279,7 @@
                                       <Band id="body">
                                         <Cell text="bind:mbrGrdeNm"/>
                                         <Cell col="1" text="expr:dcRt + '%'"/>
-                                        <Cell col="2"/>
+                                        <Cell col="2" text="bind:applDt"/>
                                         <Cell col="3" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_gradeDisc" combocodecol="cd" combodatacol="cdNm"/>
                                       </Band>
                                     </Format>
@@ -957,7 +957,7 @@
                 </Layouts>
               </Div>
               <Button id="Button00" taborder="8" text="취소" left="45.00%" width="70" height="30" cssclass="btn_WF_High" onclick="Div00_Button00_onclick" top="Div03:30"/>
-              <Button id="Button01" taborder="9" text="등록" left="Button00:15" width="70" cssclass="btn_WF_Medium" height="30" onclick="Div00_Button01_onclick" top="Div03:30"/>
+              <Button id="Button01" taborder="9" text="저장" left="Button00:15" width="70" cssclass="btn_WF_Medium" height="30" onclick="Div00_Button01_onclick" top="Div03:30"/>
               <Button id="Button00_00_02" taborder="14" text="저장" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Button00_00_02_onclick"/>
               <Div id="Div02" taborder="15" text="Div02" left="0" top="Div00_00_00_01:15" height="200" right="0">
                 <Layouts>
@@ -3147,6 +3147,8 @@ this.Div00_Div00_Div00_Div01_05_Button00_onclick = function(obj:nexacro.Button,e
 
 this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	
 	var arrArguments = {
 		title : "강좌상세",
 		menuSeq : this.menuSeq
@@ -3157,6 +3159,8 @@ this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexa
 
 this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	
 	this.popCnt++;
 	var arrArguments = {
 		type : 1,
@@ -3192,6 +3196,8 @@ this.Div00_Div00_00_00_Div00_Div00_Grid00_oninput = function(obj:nexacro.Grid,e:
 
 this.Div00_Div00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	
 	this.popCnt++;
 	var arrArguments = {
 		type : 1,
@@ -3272,11 +3278,13 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 
 this.Div00_Div02_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	this.fn_update_mdfreq("03");
 };
 
 this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	this.fn_update_mdfreq("02");
 };
 
@@ -3292,6 +3300,8 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	
 	for(var i=0; i < this.contentArr.length; i++)
 	{		
 		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
@@ -3304,6 +3314,8 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 };
 this.Div00_Button00_00_02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	
 	for(var i=0; i < this.contentArr.length; i++)
 	{		
 		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
@@ -3317,6 +3329,8 @@ this.Div00_Button00_00_02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	
 	var arrArguments = {
 		dataset : this.ds_class_dtl
 		, callbackfunc : this.fn_closeCallBack
@@ -3330,6 +3344,8 @@ this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:ne
 
 this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	
 	if(confirm("승인 하시겠습니까?"))
 	{
 		this.updateClassApvlStat("02");
@@ -3338,6 +3354,8 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 
 this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	
 	if(confirm("반려 하시겠습니까?"))
 	{
 		this.updateClassApvlStat("01");
@@ -3346,6 +3364,8 @@ this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	
 	if(confirm("복사등록 하시겠습니까?"))
 	{
 		this.fn_save_copy();
@@ -3376,14 +3396,16 @@ this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oninput = function(obj:nexacro.G
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	
 	var oArg = {
 		title : "강사목록팝업",
 		selMultiYn : "",
 		dataset : this.ds_teacher_list,
-		ownerFrame : this.parent.parent.parent.parent.getOwnerFrame(),
+		menuSeq : this.menuSeq
 	};
 	
-	this.gfn_openPopup("TecherListPop", oArg, "TecherMng::TecherList_popup.xfdl", this, 1000, 700, true, true, null);
+	this.gfn_openPopup("TeacherListPop", oArg, "TeacherMng::TeacherList_popup.xfdl", this, 1000, 700, true, true, null);
 };
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -3501,6 +3523,8 @@ this.Div00_Div00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexa
 
 this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	
 	var arrArguments = {
 		title : "강좌상세",
 		dataset : this.ds_pblpmprcust_list,
@@ -3771,6 +3795,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="applStDt" type="STRING" size="256"/>
           <Column id="applEndDt" type="STRING" size="256"/>
           <Column id="useYn" type="STRING" size="256"/>
+          <Column id="applDt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classRoom_list">

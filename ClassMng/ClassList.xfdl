@@ -347,7 +347,7 @@
                     <Button id="Button00" taborder="1" text="엑셀" top="0" width="50" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div02_Div01_Button00_onclick"/>
                     <Button id="Button05" taborder="9" text="강사 출석부" top="0" height="30" cssclass="btn_WF_Medium" right="Button00:10" width="90" onclick="Div02_Div01_Button05_onclick"/>
                     <Button id="Button00_00" taborder="2" text="출석부" top="0" width="60" height="30" cssclass="btn_WF_Medium" right="Button05:10" onclick="Div02_Div01_Button00_00_onclick"/>
-                    <Button id="Button04" taborder="3" text="대기자 등록" top="0" height="30" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10"/>
+                    <Button id="Button04" taborder="3" text="대기자 등록" top="0" height="30" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10" onclick="Div02_Div01_Button04_onclick"/>
                     <Button id="Button03" taborder="4" text="강좌복사" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div02_Div01_Button03_onclick"/>
                     <Button id="Button02" taborder="5" text="신규강좌" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button03:10" onclick="Div02_Div01_Button02_onclick"/>
                     <Button id="Button01" taborder="6" text="일괄변경" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10" onclick="Div02_Div01_Button01_onclick"/>
@@ -1387,6 +1387,8 @@ this.Div02_Div00_Div00_Div02_00_00_Edit00_00_onkeyup = function(obj:nexacro.Edit
 
 this.Div02_Div01_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	this.popCnt++;
 	var arrArguments = {
 		menuSeq : this.getOwnerFrame().param.MENU_ID,
@@ -1452,6 +1454,7 @@ this.Div02_Div00_Div00_Div00_00_01_Calendar01_oncloseup = function(obj:nexacro.C
 
 this.Div02_Div00_Div00_Div00_00_00_00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	this.fn_search();
 };
 
@@ -1503,6 +1506,8 @@ this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 
 this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	var flag = false;
 	this.ds_classUpdate_list.clearData();
 	
@@ -1528,6 +1533,8 @@ this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div02_Div01_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	var flag = false;
 	this.ds_classUpdate_list.clearData();
 	
@@ -1556,6 +1563,7 @@ this.Div02_Div01_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div02_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
 	var oArg = {
 			title : "엑셀 다운로드 사유",
 			gridExcel : this.Grid_Excel
@@ -1565,6 +1573,8 @@ this.Div02_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div02_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
 	var flag = false;
 	this.ds_classUpdate_list.clearData();
 	var brchCd = "";
@@ -1685,6 +1695,11 @@ this.Div02_Div01_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	{
 		alert("강좌를 선택하세요.");
 	}
+};
+
+this.Div02_Div01_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
 };
 ]]></Script>
     <Bind>

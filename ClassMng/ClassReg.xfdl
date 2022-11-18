@@ -2596,6 +2596,8 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accSrchYn")) return;
+	
 	var arrArguments = {
 		title : "강좌등록",
 		menuSeq : this.parent.menuSeq,
@@ -2606,6 +2608,8 @@ this.Div00_Div00_00_00_00_01_00_Div00_Div00_Button00_onclick = function(obj:nexa
 
 this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accSrchYn")) return;
+	
 	this.popCnt++;
 	var arrArguments = {
 		type : 1,
@@ -2641,6 +2645,8 @@ this.Div00_Div00_00_00_Div00_Div00_Grid00_oninput = function(obj:nexacro.Grid,e:
 
 this.Div00_Div00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accSrchYn")) return;
+	
 	this.popCnt++;
 	var arrArguments = {
 		type : 1,
@@ -2726,14 +2732,16 @@ this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oninput = function(obj:nexacro.G
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accSrchYn")) return;
+	
 	var oArg = {
 		title : "강사목록팝업",
 		selMultiYn : "",
 		dataset : this.ds_teacher_list,
-		ownerFrame : this.parent.getOwnerFrame()
+		menuSeq : this.parent.menuSeq
 	};
 	
-	this.gfn_openPopup("TecherListPop", oArg, "TecherMng::TecherList_popup.xfdl", this, 1000, 700, true, true, null);
+	this.gfn_openPopup("TeacherListPop", oArg, "TeacherMng::TeacherList_popup.xfdl", this, 1000, 700, true, true, null);
 };
 
 this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -2823,6 +2831,8 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncloseup = function(obj:nexacro
 
 this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accSrchYn")) return;
+	
 	var arrArguments = {
 		title : "강좌등록",
 		dataset : this.ds_pblpmprcust_list,
@@ -3105,6 +3115,9 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="dcNbcnt" type="STRING" size="256"/>
           <Column id="dcRt" type="STRING" size="256"/>
           <Column id="useYn" type="STRING" size="256"/>
+          <Column id="applStDt" type="STRING" size="256"/>
+          <Column id="applEndDt" type="STRING" size="256"/>
+          <Column id="applDt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classRoom_list">

@@ -600,6 +600,7 @@ this.Div00_Div00_Div00_01_Button01_onclick = function(obj:nexacro.Button,e:nexac
 
 this.Div00_Div00_Div00_01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	this.fn_search();
 };
 
@@ -613,6 +614,7 @@ this.Div00_Div00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:n
 
 this.Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	this.fn_create();
 };
 
@@ -666,6 +668,8 @@ this.Div00_Div01_Div00_03_Calendar01_oncloseup = function(obj:nexacro.Calendar,e
 
 this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	 
 	var tranObj = {
 		strSvcId : "sesterOtherInfo",
 		strSvcUrl : this.application.Admin_svc + "::class/getSesterOtherInfo.do",
