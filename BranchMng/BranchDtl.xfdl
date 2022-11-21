@@ -191,7 +191,7 @@ include "Base::libCommon.xjs";
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
-this.param = null;
+this.menuId = this.parent.parent.param.MENU_ID;
 this.atchFileUpload;
 
 /**************************************************************************
@@ -201,10 +201,6 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	var objOwnerFrame = this.getOwnerFrame();
-	
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	
-	this.param = this.parent.param;
 	
 	this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
@@ -216,10 +212,10 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotAreaCdList.setColumn(0, "cd", "");
 	this.spotAreaCdList.setColumn(0, "cdNm", "전체");
 	
-	if(this.param.brchCd != ""){	
+	if(this.parent.brchCd != ""){	
 		
-		this.ds_detail.setColumn(0, "brchCd", this.param.brchCd);
-		this.ds_detail.setColumn(0, "brchAreaCd", this.param.brchAreaCd);
+		this.ds_detail.setColumn(0, "brchCd", this.parent.brchCd);
+		this.ds_detail.setColumn(0, "brchAreaCd", this.parent.brchAreaCd);
 		this.row02.form.spotDiv.form.ComboSpot.set_readonly(true);
 		this.fn_detail();
 	}
@@ -262,7 +258,8 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 
 this.fn_list = function()
 {
-	this.parent.set_url("BranchMng::BranchList.xfdl");	
+	this.opener.components[0].form.fn_list();
+	this.close();	
 }
 
 this.fn_save = function (_this)
@@ -277,10 +274,10 @@ this.fn_save = function (_this)
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
 	
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	//if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	
 	_this.gfn_transaction(tranObj);
 	
@@ -296,7 +293,7 @@ this.fn_checkValidation = function(){
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
 	
 	this.gfn_transaction(tranObj);
@@ -361,7 +358,7 @@ this.fn_detail = function ()
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
 	
 	this.gfn_transaction(tranObj);
@@ -411,7 +408,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.row02.form.spotDiv.form.ComboSpot.setFocus();
 			return false;
 		}
-		else if(!this.param.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
+		else if(!this.parent.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
 		{
 			this.alert("해당 지점은 이미 등록되었습니다.");
 			this.row02.form.spotDiv.form.ComboSpot.setFocus();
