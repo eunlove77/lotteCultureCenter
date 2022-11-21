@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="AdminMenuMng" width="1280" height="795" titletext="관리자 메뉴 관리" onload="AdminMenuMng_onload" onclose="AdminMenuMng_onclose">
+  <Form id="FrontMenuMng" width="1280" height="795" titletext="사용자 메뉴 관리" onload="FrontMenuMng_onload" onclose="FrontMenuMng_onclose">
     <Layouts>
       <Layout height="795" width="1280">
         <Button id="btnCreateRoot" taborder="0" text="최상위 생성" left="10" top="70" width="90" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium"/>
         <Button id="btnCreateChild" taborder="1" text="하위 생성" left="106" top="70" width="84" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium"/>
         <Button id="btnDelete" taborder="2" text="삭제" left="196" top="70" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High"/>
-        <Grid id="GridMenuList" taborder="3" left="10" top="96" width="400" height="684" binddataset="ds_menu_list" treeusecheckbox="false" treeinitstatus="collapse,all" oncellclick="GridCodeList_oncellclick" autoenter="none" treeuseimage="false" autofittype="col">
+        <Grid id="GridMenuList" taborder="3" left="10" top="96" width="400" height="684" binddataset="ds_menu_list" treeusecheckbox="false" treeinitstatus="collapse,all" autoenter="none" treeuseimage="false" autofittype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -32,16 +32,16 @@
         <Div id="Div01" taborder="5" text="Div01" left="435" top="175" height="30" right="20" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Static id="txtPagePathLabel" taborder="0" text="관리자 페이지 경로" left="0" top="0" width="120" height="30"/>
-              <Edit id="editPagePath" taborder="1" left="150" top="0" height="30" right="0"/>
+              <Static id="txtSeoKeywordLabel" taborder="0" text="SEO 키워드" left="0" top="0" width="120" height="30"/>
+              <Edit id="editSeoKeyWord" taborder="1" left="150" top="0" height="30" right="0"/>
             </Layout>
           </Layouts>
         </Div>
         <Div id="Div02" taborder="6" text="Div02" left="435" top="215" height="30" right="20" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Static id="txtPageIdLabel" taborder="0" text="관리자 페이지 ID" left="0" top="0" width="120" height="30"/>
-              <Edit id="editPageId" taborder="1" left="150" top="0" height="30" right="0"/>
+              <Static id="txtSeoContLabel" taborder="0" text="SEO 내용" left="0" top="0" width="120" height="30"/>
+              <Edit id="editSeoCont" taborder="1" left="150" top="0" height="30" right="0"/>
             </Layout>
           </Layouts>
         </Div>
@@ -112,7 +112,7 @@
         </Div>
         <Static id="txtMenuNm" taborder="11" text="메뉴명" left="10" top="10" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Button id="Button04_00" taborder="12" text="" top="0" width="21" height="21" cssclass="btn_WF_SquStarFav" right="0"/>
-        <Grid id="Grid00" taborder="13" left="29" top="829" width="375" height="270" binddataset="ds_menu_list">
+        <Grid id="Grid00" taborder="13" left="72" top="825" width="375" height="270" binddataset="ds_menu_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -225,18 +225,17 @@ this.application = null;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-this.AdminMenuMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+this.FrontMenuMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
-
-	var lftVal = this.application.gdsMenu.getColumn(this.application.gdsMenu.findRowExpr("menuSeq == 2"), "lftVal");
-	var rhtVal = this.application.gdsMenu.getColumn(this.application.gdsMenu.findRowExpr("menuSeq == 2"), "rhtVal");
+	
+	var lftVal = this.application.gdsMenu.getColumn(this.application.gdsMenu.findRowExpr("menuSeq == 257"), "lftVal");
+	var rhtVal = this.application.gdsMenu.getColumn(this.application.gdsMenu.findRowExpr("menuSeq == 257"), "rhtVal");
 
 	this.ds_menu_list.copyData(this.application.gdsMenu);
 	this.ds_menu_list.filter("lftVal >= " + lftVal + " && rhtVal <= " + rhtVal)
-
 };
 
 
@@ -375,20 +374,18 @@ this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 };
 
-
-this.AdminMenuMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+this.FrontMenuMng_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
 {
 	var objGridMenu = this.GridMenuList;	
 	var objDs = objGridMenu.getBindDataset();
 	
-	objDs.reset();
-
+	objDs.reset();	
 };
 ]]></Script>
     <Bind>
       <BindItem id="item1" compid="Div00.form.editSiteUrl" propid="value" datasetid="ds_menu_list" columnid="userLink"/>
-      <BindItem id="item4" compid="Div01.form.editPagePath" propid="value" datasetid="ds_menu_list" columnid="pagePath"/>
-      <BindItem id="item5" compid="Div02.form.editPageId" propid="value" datasetid="ds_menu_list" columnid="pageId"/>
+      <BindItem id="item4" compid="Div01.form.editSeoKeyWord" propid="value" datasetid="ds_menu_list" columnid="seoKwrd"/>
+      <BindItem id="item5" compid="Div02.form.editSeoCont" propid="value" datasetid="ds_menu_list" columnid="seoCntn"/>
       <BindItem id="item2" compid="Div03.form.radioWndYn" propid="value" datasetid="ds_menu_list" columnid="userWndYn"/>
       <BindItem id="item3" compid="Div04.form.radioUseYn" propid="value" datasetid="ds_menu_list" columnid="userUseYn"/>
       <BindItem id="item0" compid="Div06.form.editMenuNm" propid="value" datasetid="ds_menu_list" columnid="menuNm"/>
