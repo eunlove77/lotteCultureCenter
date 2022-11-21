@@ -157,7 +157,7 @@
                             <Cell col="12" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
                             <Cell col="13" text="bind:tcGrdeCd"/>
                             <Cell col="14" text="bind:hpNo"/>
-                            <Cell col="15" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : ''" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
+                            <Cell col="15" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
                             <Cell col="16" text="bind:regId"/>
                             <Cell col="17" text="bind:cntrChnlCd"/>
                             <Cell col="18" text="bind:regDtm"/>
@@ -334,9 +334,16 @@ this.ClassContractList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 	//지점초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	if(nexacro.getPrivateProfile("brchCd") != "0000")
+	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
 	{
-		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'")
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
 	
 	//그리드초기화
@@ -669,7 +676,6 @@ this.Div00_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,
 	this.fn_year_add();
 	this.fn_semester_set();
 };
-
 
 
 this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
