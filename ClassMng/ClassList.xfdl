@@ -252,14 +252,14 @@
                             <Column size="95"/>
                             <Column size="116"/>
                             <Column size="121"/>
-                            <Column size="80"/>
+                            <Column size="108"/>
                             <Column size="80"/>
                             <Column size="104"/>
                             <Column size="170"/>
                             <Column size="99"/>
                             <Column size="158"/>
                             <Column size="105"/>
-                            <Column size="80"/>
+                            <Column size="149"/>
                             <Column size="80"/>
                             <Column size="80"/>
                             <Column size="119"/>
@@ -283,7 +283,7 @@
                             <Cell col="7" text="총정원"/>
                             <Cell col="8" text="수강인원"/>
                             <Cell col="9" text="대기자수"/>
-                            <Cell col="10" text="강좌료"/>
+                            <Cell col="10" text="수강료"/>
                             <Cell col="11" text="강의요일"/>
                             <Cell col="12" text="강의횟수"/>
                             <Cell col="13" text="시작시간"/>
@@ -297,7 +297,7 @@
                             <Cell col="21" text="강좌구분"/>
                             <Cell col="22" text="강의실"/>
                             <Cell col="23" text="지급구분"/>
-                            <Cell col="24" text="강사요율"/>
+                            <Cell col="24" text="지급율(%)/지급액(원)"/>
                             <Cell col="25" text="옵션사용"/>
                             <Cell col="26" text="그룹여부"/>
                             <Cell col="27" text="강사수정요청"/>
@@ -324,14 +324,14 @@
                             <Cell col="14" text="bind:lectEnd"/>
                             <Cell col="15" text="bind:lectStatNm"/>
                             <Cell col="16" text="bind:apvlStatNm"/>
-                            <Cell col="17" text="expr:pblPmprcustBrchCd == '' ?  dsplyStatCd : dsplyStatNm" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="17" text="bind:dsplyStatCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? dsplyStatCd : dsplyStatNm"/>
                             <Cell col="18" text="bind:yy"/>
                             <Cell col="19" text="bind:lectSmsterNm"/>
                             <Cell col="20" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
                             <Cell col="21" text="bind:lectClNm"/>
-                            <Cell col="22" text="expr:pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
-                            <Cell col="23" text="expr:ppayStdCd == '1' ? '정률' : '정액'"/>
-                            <Cell col="24" text="bind:ppayAmt"/>
+                            <Cell col="22" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm"/>
+                            <Cell col="23" text="expr:ppayStdCd == '01' ? '정률' : '정액'"/>
+                            <Cell col="24" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
                             <Cell col="25" text="bind:optnTypNm"/>
                             <Cell col="26" text="bind:groupYn"/>
                             <Cell col="27" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
@@ -495,6 +495,7 @@
           <Column id="apvlStatCd" type="STRING" size="256"/>
           <Column id="apvlStatNm" type="STRING" size="256"/>
           <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="dsplyStatNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectSmsterNm" type="STRING" size="256"/>
@@ -714,6 +715,13 @@
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
+      <Dataset id="ds_classRoomTemp">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -869,6 +877,8 @@ this.fn_search = function()
 	this.gfn_transaction(tranObj);
 	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
 	this.searchFlag = 1;
+	this.ds_classRoom.copyData(this.ds_classRoom_list);
+	this.ds_classRoomTemp.copyData(this.ds_classRoom_list);
 }
 
 //지점 세팅
@@ -1176,7 +1186,6 @@ this.fn_semester_set = function()
 //강의실 세팅
 this.fn_classRoom_set = function()
 {
-	this.ds_classRoom.copyData(this.ds_classRoom_list);
 	this.ds_classRoom_list.insertRow(0);
 	this.ds_classRoom_list.setColumn(0, "cd", "");
 	this.ds_classRoom_list.setColumn(0, "cdNm", "전체");
@@ -1497,9 +1506,9 @@ this.Div02_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.Gri
 
 this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 24)
+	if(e.col == 22)
 	{
-		this.ds_classRoom.copyData(this.ds_classRoom_list);
+		this.ds_classRoom.copyData(this.ds_classRoomTemp);
 		this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
 	}
 };

@@ -136,7 +136,7 @@ include "Base::libCommon.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.param = null;
+this.menuId = this.parent.parent.param.MENU_ID;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -146,12 +146,7 @@ this.InquiryDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	var objOwnerFrame = this.getOwnerFrame();
 	
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	
-	this.param = this.parent.param;
-	
-	//if(this.param.onlnQuesSeqno != ""){	
-	this.ds_detail.setColumn(0, "onlnQuesSeqno", this.param.onlnQuesSeqno);
+	this.ds_detail.setColumn(0, "onlnQuesSeqno", this.parent.onlnQuesSeqno);
 	
 	var adminName = nexacro.getPrivateProfile("name");
 	var adminId = nexacro.getPrivateProfile("id");
@@ -159,8 +154,6 @@ this.InquiryDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.row010.form.Static01.set_text(adminName+"("+adminId+")");
 	
 	this.fn_detail();
-	
-	//this.row11.form.TextArea00.set_readonly(true);
 	
 };
 
@@ -176,16 +169,18 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 //취소(목록)
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_list();
+	this.close();
 };
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
-this.fn_list = function(){
-	this.parent.set_url("CustomerMng::InquiryList.xfdl");	
-};
+this.fn_list = function()
+{
+	this.opener.components[0].form.fn_list();
+	this.close();
+}
 
 this.fn_save = function ()
 {		
@@ -197,8 +192,9 @@ this.fn_save = function ()
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.menuId;
 	
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);
 	
 };
@@ -214,7 +210,7 @@ this.fn_detail = function ()
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.menuSeq 	= this.menuId;
 	
 	this.gfn_transaction(tranObj);		
 	

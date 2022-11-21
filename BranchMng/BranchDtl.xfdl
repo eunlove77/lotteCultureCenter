@@ -164,6 +164,11 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_dupeCnt">
+        <ColumnInfo>
+          <Column id="dupeCode" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
@@ -186,7 +191,7 @@ include "Base::libCommon.xjs";
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
-this.param = null;
+this.menuId = this.parent.parent.param.MENU_ID;
 this.atchFileUpload;
 
 /**************************************************************************
@@ -196,10 +201,6 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	var objOwnerFrame = this.getOwnerFrame();
-	
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	
-	this.param = this.parent.param;
 	
 	this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
@@ -211,10 +212,10 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotAreaCdList.setColumn(0, "cd", "");
 	this.spotAreaCdList.setColumn(0, "cdNm", "전체");
 	
-	if(this.param.brchCd != ""){	
+	if(this.parent.brchCd != ""){	
 		
-		this.ds_detail.setColumn(0, "brchCd", this.param.brchCd);
-		this.ds_detail.setColumn(0, "brchAreaCd", this.param.brchAreaCd);
+		this.ds_detail.setColumn(0, "brchCd", this.parent.brchCd);
+		this.ds_detail.setColumn(0, "brchAreaCd", this.parent.brchAreaCd);
 		this.row02.form.spotDiv.form.ComboSpot.set_readonly(true);
 		this.fn_detail();
 	}
@@ -257,7 +258,8 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 
 this.fn_list = function()
 {
-	this.parent.set_url("BranchMng::BranchList.xfdl");	
+	this.opener.components[0].form.fn_list();
+	this.close();	
 }
 
 this.fn_save = function (_this)
@@ -272,20 +274,39 @@ this.fn_save = function (_this)
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
 	
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	//if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	
 	_this.gfn_transaction(tranObj);
 	
 };
 
 this.fn_checkValidation = function(){
+
+	var tranObj = {
+		strSvcId : "chkValidation",
+		strSvcUrl : this.application.Admin_svc + "::/branch/getDupeCnt.do",
+		inData : "data=ds_detail",
+		outData : "ds_dupeCnt=dupeCode",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.menuId
+	}
 	
-	if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+	this.gfn_transaction(tranObj);
+	
+	/*if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
 	{
 		this.alert("지점을 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(rtnCode =="99")
+	{
+		this.alert("해당 지점은 이미 등록되었습니다.");
 		this.row02.form.spotDiv.form.ComboSpot.setFocus();
 		return false;
 	}
@@ -324,7 +345,7 @@ this.fn_checkValidation = function(){
 		{
 			this.atchFileUpload.fn_upload(); 
 		}
-	}	
+	}*/	
 }
 
 this.fn_detail = function ()
@@ -337,7 +358,7 @@ this.fn_detail = function ()
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
 	
 	this.gfn_transaction(tranObj);
@@ -378,7 +399,60 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		//}
 		
 		break;
-		
+	
+	case "chkValidation":
+	
+		if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+		{
+			this.alert("지점을 선택해주세요");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+		else if(!this.parent.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
+		{
+			this.alert("해당 지점은 이미 등록되었습니다.");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.row03.form.spotDiv.form.ComboSpotArea.value))
+		{
+			this.alert("지점권역코드를 선택해주세요");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+		else if(this.atchFileUpload.fn_validation() < 1)
+		{
+			this.alert("지점이미지를 1개이상 등록해주세요");
+			return false;
+		}
+		else if(this.gfn_isNull(this.row06.form.Edit00.value))
+		{
+			this.alert("기본주소를 입력해주세요");
+			this.row06.form.Edit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.row08.form.Edit00.value))
+		{
+			this.alert("위도를 입력해주세요");
+			this.row08.form.Edit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.row09.form.Edit00.value))
+		{
+			this.alert("경도를 입력해주세요");
+			this.row09.form.Edit00.setFocus();
+			return false;
+		}
+		else
+		{								
+			if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+			{
+				this.atchFileUpload.fn_upload(); 
+			}
+		}
+	
+	break;
+	
     case "save":
 		this.alert("저장되었습니다.");
 		this.fn_list();

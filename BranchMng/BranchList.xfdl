@@ -215,12 +215,14 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
+this.popCnt = 0;
 
 /**************************************************************************
 * FORM EVENT 영역(onload)
@@ -255,10 +257,11 @@ this.BranchList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
-		brchCd : ""
-	}
-	this.parent.set_url("BranchMng::BranchDtl.xfdl");
+	this.popCnt ++;
+		
+	var oArg = { brchCd : ""};
+	
+	this.gfn_openPopup("branchPop"+this.popCnt, oArg, "BranchMng::BranchDtl.xfdl", this, null, null, true, true, null);
 };
 
 //삭제 버튼
@@ -326,16 +329,15 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 this.GridBranchList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	if(e.cell == 2)
-	{
-		var	brchCd = obj.getBindDataset().getColumn(e.row, "brchCd");
-		var	brchAreaCd = obj.getBindDataset().getColumn(e.row, "brchAreaCd");
+	{	
+		this.popCnt ++;
 		
-		this.parent.param = {
-			brchCd : brchCd
-			,brchAreaCd : brchAreaCd
+		var oArg = {
+			  brchCd : obj.getBindDataset().getColumn(e.row, "brchCd")
+			, brchAreaCd : obj.getBindDataset().getColumn(e.row, "brchAreaCd") 
 		};
 		
-		this.parent.set_url("BranchMng::BranchDtl.xfdl");
+		this.gfn_openPopup("branchDtlPop"+this.popCnt, oArg, "BranchMng::BranchDtl.xfdl", this, null, null, true, true, null);	
 	}
 };
 

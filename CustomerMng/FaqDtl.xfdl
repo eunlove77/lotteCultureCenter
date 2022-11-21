@@ -3,7 +3,7 @@
   <Form id="FaqReg" width="1280" height="800" titletext="New Form" onload="FaqReg_onload">
     <Layouts>
       <Layout height="800" width="1280">
-        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Static id="txtMenuNm" taborder="0" text="FAQ 관리" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="row01" taborder="1" text="Div01" left="10" top="112" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
@@ -160,7 +160,7 @@ include "Base::libCommon.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.param = null;
+this.menuId = this.parent.parent.param.MENU_ID;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -170,23 +170,17 @@ this.FaqReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	var objOwnerFrame = this.getOwnerFrame();
 	
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	
-	this.param = this.parent.param;
-	
-	//this.alert("값체크" + this.param.faqSeqno);
-	
 	this.fn_data_list();
 	
-	if(this.param.faqSeqno != ""){	
-		this.ds_detail.setColumn(0, "faqSeqno", this.param.faqSeqno);
+	if(this.parent.faqSeqno != ""){	
+		this.ds_detail.setColumn(0, "faqSeqno", this.parent.faqSeqno);
 		this.fn_detail();
 	}
 };
 
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_list();
+	this.close();
 };
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -200,10 +194,11 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
  * 사용자 FUNCTION 영역
  **************************************************************************/
 
-this.fn_list = function(){
-	this.parent.set_url("CustomerMng::FaqList.xfdl");	
+this.fn_list = function()
+{
+	this.opener.components[0].form.fn_list();
+	this.close();
 }
-
 // 코드 세팅
 this.fn_data_list = function()
 {
@@ -224,7 +219,7 @@ this.fn_data_list = function()
 		callBackFnc : callBackFnc,
 		isAsync : isAsync,
 		isPopup : false,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	};
 	
 	this.gfn_transaction(tranObj);
@@ -232,24 +227,18 @@ this.fn_data_list = function()
 
 this.fn_save = function ()
 {		
-	//this.ds_detail.setColumn(0, "cntn", this.fn_get_edit_body(this.row04.form.WebBrowser00));
+	var tranObj = {};
+	tranObj.strSvcId	= "save";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/insertFaq.do";
+	tranObj.inData      = "data=ds_detail";
+	tranObj.outData     = "";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.menuId;
 	
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::customer/insertFaq.do";
-	var inData      = "data=ds_detail";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+	this.gfn_transaction(tranObj);	
 };
 
 this.fn_checkValidation = function(){
@@ -281,6 +270,7 @@ this.fn_detail = function ()
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
+	var menuSeq 	= this.menuId;
 
 	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
             strSvcUrl ,       // trabsaction을 요청할 주소
@@ -288,7 +278,8 @@ this.fn_detail = function ()
             outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
             strArg,         // 입력값으로 보낼 arguments, a=b
             callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+            isAsync,		  // 비동기통신 여부 [생략가능]
+			menuSeq);         
 };
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
