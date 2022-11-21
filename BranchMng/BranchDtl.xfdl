@@ -164,6 +164,11 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_dupeCnt">
+        <ColumnInfo>
+          <Column id="dupeCode" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
@@ -282,10 +287,29 @@ this.fn_save = function (_this)
 };
 
 this.fn_checkValidation = function(){
+
+	var tranObj = {
+		strSvcId : "chkValidation",
+		strSvcUrl : this.application.Admin_svc + "::/branch/getDupeCnt.do",
+		inData : "data=ds_detail",
+		outData : "ds_dupeCnt=dupeCode",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
 	
-	if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+	this.gfn_transaction(tranObj);
+	
+	/*if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
 	{
 		this.alert("지점을 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(rtnCode =="99")
+	{
+		this.alert("해당 지점은 이미 등록되었습니다.");
 		this.row02.form.spotDiv.form.ComboSpot.setFocus();
 		return false;
 	}
@@ -324,7 +348,7 @@ this.fn_checkValidation = function(){
 		{
 			this.atchFileUpload.fn_upload(); 
 		}
-	}	
+	}*/	
 }
 
 this.fn_detail = function ()
@@ -378,7 +402,60 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		//}
 		
 		break;
-		
+	
+	case "chkValidation":
+	
+		if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+		{
+			this.alert("지점을 선택해주세요");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+		else if(!this.param.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
+		{
+			this.alert("해당 지점은 이미 등록되었습니다.");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.row03.form.spotDiv.form.ComboSpotArea.value))
+		{
+			this.alert("지점권역코드를 선택해주세요");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+		else if(this.atchFileUpload.fn_validation() < 1)
+		{
+			this.alert("지점이미지를 1개이상 등록해주세요");
+			return false;
+		}
+		else if(this.gfn_isNull(this.row06.form.Edit00.value))
+		{
+			this.alert("기본주소를 입력해주세요");
+			this.row06.form.Edit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.row08.form.Edit00.value))
+		{
+			this.alert("위도를 입력해주세요");
+			this.row08.form.Edit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.row09.form.Edit00.value))
+		{
+			this.alert("경도를 입력해주세요");
+			this.row09.form.Edit00.setFocus();
+			return false;
+		}
+		else
+		{								
+			if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+			{
+				this.atchFileUpload.fn_upload(); 
+			}
+		}
+	
+	break;
+	
     case "save":
 		this.alert("저장되었습니다.");
 		this.fn_list();
