@@ -156,12 +156,14 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
+this.popCnt = 0;
 
 /**************************************************************************
 * FORM EVENT 영역(onload)
@@ -181,10 +183,10 @@ this.WebMagazineList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
-		webMgznSeqno : ""
-	}
-	this.parent.set_url("CustomerMng::WebMagazineDtl.xfdl");
+	this.popCnt ++;
+	var oArg = { webMgznSeqno : ""};
+	
+	this.gfn_openPopup("webMagazinePop"+this.popCnt, oArg, "CustomerMng::WebMagazineDtl.xfdl", this, null, null, true, true, null);
 };
 
 //삭제 버튼
@@ -253,13 +255,12 @@ this.GridWebMagazineList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridC
 {
 	if(e.cell == 2)
 	{
-		var	webMgznSeqno = obj.getBindDataset().getColumn(e.row, "webMgznSeqno");
-		
-		this.parent.param = {
-			webMgznSeqno : webMgznSeqno
+		this.popCnt ++;
+		var oArg = {
+			webMgznSeqno : obj.getBindDataset().getColumn(e.row, "webMgznSeqno")
 		};
 		
-		this.parent.set_url("CustomerMng::WebMagazineDtl.xfdl");
+		this.gfn_openPopup("webMagazineDtlPop"+this.popCnt, oArg, "CustomerMng::WebMagazineDtl.xfdl", this, null, null, true, true, null);
 	}
 };
 
@@ -282,6 +283,8 @@ this.fn_list = function ()
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
+	
 	this.gfn_transaction(tranObj);		
 };
 
@@ -297,6 +300,8 @@ this.fn_delete = function ()
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 	

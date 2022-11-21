@@ -196,7 +196,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
+this.popCnt = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -292,13 +292,13 @@ this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 {
 	if(e.cell == 2)
 	{
-		var	onlnQuesSeqno = obj.getBindDataset().getColumn(e.row, "onlnQuesSeqno");
+		this.popCnt ++;
 		
-		this.parent.param = {
-			onlnQuesSeqno : onlnQuesSeqno
+		var oArg = {
+			onlnQuesSeqno : obj.getBindDataset().getColumn(e.row, "onlnQuesSeqno")
 		};
 		
-		this.parent.set_url("CustomerMng::InquiryDtl.xfdl");
+		this.gfn_openPopup("inquiryDtlPop"+this.popCnt, oArg, "CustomerMng::InquiryDtl.xfdl", this, null, null, true, true, null);
 	}
 };
 /**************************************************************************
@@ -344,6 +344,8 @@ this.fn_list = function(){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 }
@@ -480,6 +482,8 @@ this.fn_delete = function ()
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 };

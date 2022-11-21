@@ -220,12 +220,14 @@
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
+this.popCnt = 0;
 
 /**************************************************************************
 * FORM EVENT 영역(onload)
@@ -252,11 +254,12 @@ this.FaqList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록버튼
 this.Div01_BtnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.popCnt ++;
+		
+	var oArg = { faqSeqno : ""};
 	
-	this.parent.param = {
-		faqSeqno : ""
-	}
-	this.parent.set_url("CustomerMng::FaqDtl.xfdl");
+	this.gfn_openPopup("faqPop"+this.popCnt, oArg, "CustomerMng::FaqDtl.xfdl", this, null, null, true, true, null);
+	
 };
 
 //삭제버튼
@@ -345,13 +348,13 @@ this.GridFaqList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEven
 {
 	if(e.cell == 2)
 	{
-		var	faqSeqno = obj.getBindDataset().getColumn(e.row, "faqSeqno");
+		this.popCnt ++;
 		
-		this.parent.param = {
-			faqSeqno : faqSeqno
+		var oArg = {
+			faqSeqno : obj.getBindDataset().getColumn(e.row, "faqSeqno")
 		};
 		
-		this.parent.set_url("CustomerMng::FaqDtl.xfdl");
+		this.gfn_openPopup("faqDtlPop"+this.popCnt, oArg, "CustomerMng::FaqDtl.xfdl", this, null, null, true, true, null);	
 	}
 };
 
@@ -381,6 +384,8 @@ this.fn_data_list = function()
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	};
 	
+	//if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
+	
 	this.gfn_transaction(tranObj);
 };
 
@@ -397,6 +402,9 @@ this.fn_list = function(){
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 }
@@ -562,22 +570,21 @@ this.fn_topN_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 
 //삭제
 this.fn_delete = function ()
-{		
-	var strSvcId    = "delete";
-	var strSvcUrl   = this.application.Admin_svc + "::/customer/deleteFaq.do";
-	var inData      = "faqList=faqDs:U";
-	var outData     = "faqDs=output1";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
+{	
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/deleteFaq.do";
+	tranObj.inData      = "faqList=faqDs:U";
+	tranObj.outData     = "faqDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-		strSvcUrl ,       // trabsaction을 요청할 주소
-		inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-		outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-		strArg,         // 입력값으로 보낼 arguments, a=b
-		callBackFnc,       // transaction의 결과를 받을 Function 이름
-		isAsync);         // 비동기통신 여부 [생략가능]
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);	
+	
 };
 
 // 구분조건 단일 체크박스 클릭이벤트

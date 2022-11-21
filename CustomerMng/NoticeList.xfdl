@@ -43,7 +43,7 @@
                 <Cell col="3" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="4" text="expr:postStDt? postStDt + ' ~ ' + postEndDt : ''"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="6" text="bind:rgprDtm" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="6" text="bind:rgprDtm" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="7" text="bind:inqCnt"/>
                 <Cell col="8" text="expr:dataset.getColumn(currow, &quot;fixYn&quot;) == &quot;Y&quot; ? &quot;고정&quot; : &quot;미고정&quot;"/>
                 <Cell col="9" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
@@ -231,14 +231,14 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
-//include "Base::lib_date.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
+this.popCnt = 0;
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -267,10 +267,10 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
-		notcSeqno : ""
-	}
-	this.parent.set_url("CustomerMng::NoticeDtl.xfdl");
+	this.popCnt ++;
+	var oArg = { notcSeqno : ""};
+	
+	this.gfn_openPopup("noticePop"+this.popCnt, oArg, "CustomerMng::NoticeDtl.xfdl", this, null, null, true, true, null);
 };
 
 //삭제 버튼
@@ -358,15 +358,14 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridNoticeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 3)
-	{
-		var	notcSeqno = obj.getBindDataset().getColumn(e.row, "notcSeqno");
-		
-		this.parent.param = {
-			notcSeqno : notcSeqno
+	if(e.cell == 3){
+	
+		this.popCnt ++;
+		var oArg = {
+			notcSeqno : obj.getBindDataset().getColumn(e.row, "notcSeqno")
 		};
 		
-		this.parent.set_url("CustomerMng::NoticeDtl.xfdl");
+		this.gfn_openPopup("noticeDtlPop"+this.popCnt, oArg, "CustomerMng::NoticeDtl.xfdl", this, null, null, true, true, null);		
 	}
 };
 
@@ -397,6 +396,8 @@ this.fn_data_list = function()
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	};
 	
+	//if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
+	
 	this.gfn_transaction(tranObj);
 };
 
@@ -414,6 +415,8 @@ this.fn_list = function ()
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
 	
 	this.gfn_transaction(tranObj);		
 };
@@ -527,6 +530,8 @@ this.fn_delete = function ()
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
 	
 	this.gfn_transaction(tranObj);	
 };
