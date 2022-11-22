@@ -147,7 +147,7 @@ this.mbrNo = "";
 this.FamilyMemInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.baseSvrUrl = this.application.Admin_svc + "::member/";
+	this.baseSvrUrl = this.application.Admin_svc + "::member/family/";
 	
 	var tranObj = {
 		strSvcId : "detail",
@@ -225,11 +225,11 @@ this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 this.fn_list = function ()
 {	
 	var tranObj = {
-		strSvcId : "detail",
-		strSvcUrl : this.baseSvrUrl + "tabInfo.do",
-		inData : "tabInfo=ds_fmly_info",
-		outData : "ds_fmly_list=tabInfo",
-		strArg : "tabId=FMLY",
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "detail=ds_fmly_info",
+		outData : "ds_fmly_list=fmlyList",
+		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.menuId,
 		isPopup : true
@@ -261,7 +261,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_init();
 
 			break;
-		case "detailFmly":    
+		case "detail":    
 			if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
 			{
 				this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)
@@ -362,8 +362,8 @@ this.fn_delete = function(){
 this.fn_detail = function()
 {
 	var tranObj = {
-		strSvcId : "detailFmly",
-		strSvcUrl : this.baseSvrUrl + "detailFmly.do",
+		strSvcId : "detail",
+		strSvcUrl : this.baseSvrUrl + "detail.do",
 		inData : "infoData=ds_fmly_info",
 		outData : "ds_fmly_info=infoData",
 		strArg : "",
