@@ -525,7 +525,7 @@
                                       <Columns>
                                         <Column size="48"/>
                                         <Column size="80"/>
-                                        <Column size="80"/>
+                                        <Column size="100"/>
                                         <Column size="100"/>
                                         <Column size="80"/>
                                         <Column size="106"/>
@@ -1396,13 +1396,13 @@ this.fn_class_dtl = function()
 	
 	if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
 	{
-		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
-		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
 	}
 	else
 	{
-		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
-		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 	}
 	
 }
@@ -1587,9 +1587,9 @@ this.fn_classOptType_set = function(type)
 			this.ds_class_dtl.setColumn(0, "optnTypCd", "01");
 			this.ds_option_list.clearData();
 			this.ds_option_list.addRow();
-			this.ds_option_list.setColumn(0, "partRfndClCd", "");
-			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
-			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+			this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
 		}
 		
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
@@ -3050,11 +3050,11 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexac
 				var index = this.ds_option_list.addRow();
 				if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
 				{
-					this.ds_option_list.setColumn(index, "partRfndClCd", "");
+					this.ds_option_list.setColumn(index, "partRfndClCd", "1");
 				}
 				else
 				{
-					this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+					this.ds_option_list.setColumn(index, "partRfndClCd", "");
 				}
 			}
 		} 
@@ -3543,7 +3543,7 @@ this.Div00_Div00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e
 this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
 	var partRfndClCd = "";
-	if(obj.value == "01")
+	if(obj.value == "02")
 	{
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");

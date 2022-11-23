@@ -266,10 +266,16 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "sesterInfo":
+		
 			this.ds_search.setColumn(0, "yy", this.yy);
 			this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
 			
-			var text = this.yy + "년 " + this.lectSmsterArr[this.lectSmsterCd-1];
+			var text = "";		
+			if(this.yy != "" && this.lectSmsterCd != "")
+			{
+				text = this.yy + "년 " + this.lectSmsterArr[this.lectSmsterCd-1];
+			}
+
 			this.Div00.form.Div00.form.Div00.form.Div01.form.Static01.set_text(text);
 		break;
 		
@@ -324,8 +330,11 @@ this.fn_search = function()
 		isAsync : false,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
-
-	this.gfn_transaction(tranObj);
+	
+	if(this.yy != "" && this.lectSmsterCd != "")
+	{
+		this.gfn_transaction(tranObj);
+	}
 	this.Div00.form.Div01.form.Static00.set_text("강좌이관 목록(" + this.ds_class_list.getRowCount() + "개)");
 }
 

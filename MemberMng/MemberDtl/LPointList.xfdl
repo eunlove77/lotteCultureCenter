@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="LPointList" width="1280" height="550" titletext="New Form">
+  <Form id="LPointList" width="1280" height="550" titletext="New Form" onload="LPointList_onload">
     <Layouts>
       <Layout height="550" width="1280">
         <Div id="Div00" taborder="1" text="Div00" left="10" top="15" height="95" right="10">
@@ -14,13 +14,13 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00_00" taborder="1" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="">
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="" visible="false">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="포인트 지급/차감" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Button id="btnSearch00" taborder="1" text="차감" left="375" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80"/>
-                    <Button id="btnSearch" taborder="2" text="지급" left="290" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
-                    <MaskEdit id="MaskEdit00" taborder="3" left="125" top="5" width="160" height="21" readonly="false"/>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="125" top="5" width="160" height="21" readonly="false" format="9,99"/>
+                    <Button id="btnPlus" taborder="2" text="지급" left="MaskEdit00:5" top="5" height="21" cssclass="btn_WF_Low" width="80" onclick="Div00_Div01_btnPlus_onclick"/>
+                    <Button id="btnMinus" taborder="1" text="차감" left="btnPlus:5" top="5" height="21" cssclass="btn_WF_Medium" width="80" onclick="Div00_Div01_btnMinus_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -31,14 +31,13 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" left="0" top="5" height="21" text="LPoint 내역" width="200"/>
-              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_coupon_list" autofittype="col" right="0" bottom="0">
+              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_lpoint_list" autofittype="col" right="0" bottom="0">
                 <Formats>
                   <Format id="default">
                     <Columns>
                       <Column size="50"/>
                       <Column size="100"/>
                       <Column size="150"/>
-                      <Column size="0"/>
                       <Column size="200"/>
                       <Column size="150"/>
                       <Column size="150"/>
@@ -52,18 +51,16 @@
                       <Cell col="1" text="구분"/>
                       <Cell col="2" text="LPoint 승인코드"/>
                       <Cell col="3" text="일시"/>
-                      <Cell col="4" text="일시"/>
-                      <Cell col="5" text="지점명"/>
-                      <Cell col="6" text="포인트 금액"/>
+                      <Cell col="4" text="지점명"/>
+                      <Cell col="5" text="포인트 금액"/>
                     </Band>
                     <Band id="body">
                       <Cell expr="dataset.getRowCount() - currow"/>
-                      <Cell col="1" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
-                      <Cell col="2" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
-                      <Cell col="3" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
-                      <Cell col="4"/>
-                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
-                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
+                      <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" expr="(acumUseClNm+trnsClNm).replace('승인','')" displaytype="normal" maskedittype="string" maskeditmaskchar=" "/>
+                      <Cell col="2" text="bind:apvlNo"/>
+                      <Cell col="3" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" expr="apvlDt + apvlTm" calendareditformat="yyyyMMddHHmmss" calendardisplaynulltype="none"/>
+                      <Cell col="4" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                      <Cell col="5" expr="comp.parent.parent.parent.fn_set_point(acumUseClCd+trnsClCd, lpntAmt )"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -73,5 +70,168 @@
         </Div>
       </Layout>
     </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+this.mbrMst = this.parent.parent.parent;
+this.mbrNo = "";
+this.mbrPoint = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.LPointList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.baseSvrUrl = this.application.Admin_svc + "::member/lpoint/";
+	
+	if(this.parent.parent.parent.parent.mbrNo != ""){
+		this.mbrNo = this.parent.parent.parent.parent.mbrNo;
+		this.ds_lpoint_info.setColumn(0, "mbrNo", this.mbrNo);
+		this.ds_lpoint_info.setColumn(0, "membCustNo", this.mbrMst.ds_detail.getColumn(0, "membCustNo"))
+		this.ds_lpoint_info.setColumn(0, "brchCd", nexacro.getPrivateProfile("brchCd"))
+		this.ds_lpoint_info.setColumn(0, "coprMemstrNo", nexacro.getPrivateProfile("coprMemstrNo"))
+		this.fn_list();
+		console.log(this.ds_lpoint_info)
+	}	
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_list = function ()
+{	
+	if(nexacro.getPrivateProfile("athrCd") == "99")
+	{
+		this.Div00.form.Div01.set_visible(true);
+	}
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "detail=ds_lpoint_info",
+		outData : "ds_lpoint_list=pointList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+}
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "save":
+			this.alert("저장되었습니다.\n실제포인트는 배치 후 지급/차감됩니다.");
+			this.ds_lpoint_info.setColumn(0, "lpntAmt", "");
+			this.ds_lpoint_info.setColumn(0, "trnsClCd", "");
+			this.fn_list();
+
+			break;
+
+		case "list":    
+			this.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(Number(this.mbrPoint)))
+
+			break;
+	}
+
+};
+
+this.fn_set_point = function(cd, point)
+{
+	if(cd == '1001' || cd == '2002') //적립 / 사용취소
+	{
+		return "+" +point+ " P";
+	}
+	else 
+	{
+		return "-" +point+ " P";
+	}
+}
+
+this.Div00_Div01_btnPlus_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_lpoint_info.setColumn(0, "trnsClCd", "01");
+	this.fn_save(obj.text);
+};
+
+this.Div00_Div01_btnMinus_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_lpoint_info.setColumn(0, "trnsClCd", "02");
+	this.fn_save(obj.text);
+};
+
+this.fn_save = function(objText)
+{
+	if(this.gfn_nvl(this.Div00.form.Div01.form.MaskEdit00.value) == "")
+	{
+		alert("포인트를 입력하세요.");
+		this.Div00.form.Div01.form.MaskEdit00.setFocus();
+	}
+	else if(this.confirm("포인트를 " +objText+"하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "save",
+			strSvcUrl : this.baseSvrUrl + "insert.do",
+			inData : "detail=ds_lpoint_info",
+			outData : "",
+			strArg : "",
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isPopup : true
+		}
+		this.gfn_transaction(tranObj);
+	}
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_lpoint_info">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="membCustNo" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="coprMemstrNo" type="STRING" size="256"/>
+          <Column id="trnsClCd" type="STRING" size="256"/>
+          <Column id="lpntAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="lpntAmt"></Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_lpoint_list">
+        <ColumnInfo>
+          <Column id="lpntSeqno" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="trnsClCd" type="STRING" size="256"/>
+          <Column id="trnsClNm" type="STRING" size="256"/>
+          <Column id="acumUseClCd" type="STRING" size="256"/>
+          <Column id="acumUseClNm" type="STRING" size="256"/>
+          <Column id="lpntAmt" type="STRING" size="256"/>
+          <Column id="apvlNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="lpntAmt" compid="Div00.form.Div01.form.MaskEdit00" propid="value" datasetid="ds_lpoint_info" columnid="lpntAmt"/>
+    </Bind>
   </Form>
 </FDL>
