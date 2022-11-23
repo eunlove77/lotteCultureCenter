@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TeacherDtl" width="1280" height="2410" titletext="강사 상세" onload="TeacherDtl_onload">
+  <Form id="TeacherDtl" width="1280" height="1950" titletext="강사 상세" onload="TeacherDtl_onload">
     <Layouts>
-      <Layout height="2410" mobileorientation="landscape" width="1280">
+      <Layout height="1950" mobileorientation="landscape" width="1280">
         <Div id="Div01" taborder="0" text="Div01" left="10" top="131" height="381" right="10" minwidth="680" maxwidth="">
           <Layouts>
             <Layout>
@@ -1115,12 +1115,9 @@ this.fn_upload = function()
 }
 this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
 {
-	alert('성공');
-	
 	var objCallDs = e.datasets[0];
 	var atchFileId = objCallDs.getColumn(0,"atchFileId");
 
-	this.ds_teacher_info.setColumn(0, 'signImgFileId', atchFileId);
 	this.ds_thnl_dtl.setColumn(0, "atchFileId", atchFileId);
 	
 	this.get_file_detail('ds_thnl_dtl', 'ds_thnl_dtl');
@@ -1308,7 +1305,8 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	
 	//데이터 세팅
-	this.ds_teacher_info.setColumn(0, 'signImgFileId', this.ds_sign_dtl.getColumn(0, 'atchFileId'));
+	this.ds_teacher_info.setColumn(0, 'phtFileId', this.ds_thnl_dtl.getColumn(0, 'atchFileId'));
+
 	//지급정보
 	this.set_teacher_info_rrno();
 	
@@ -1515,7 +1513,7 @@ this.get_file_detail = function(ds, svcId){
 	tranObj.inData      = "file_detail=" + ds;
 	tranObj.outData     = ds + "=file_detail";
 	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback_" + svcId;
+	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
 	
@@ -1533,15 +1531,24 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		this.set_teacher_info();
 		
 		//기본정보 사진파일 가져오기
-		this.ds_thnl_dtl.setColumn(0, 'atchFileId', this.ds_teacher_info.getColumn(0, 'phtFileId'));
-		this.get_file_detail('ds_thnl_dtl', 'ds_thnl_dtl');
+		var phtFileId = this.ds_teacher_info.getColumn(0, 'phtFileId');
+		if(phtFileId){
+			this.ds_thnl_dtl.setColumn(0, 'atchFileId', phtFileId);
+			this.get_file_detail('ds_thnl_dtl', 'ds_thnl_dtl');
+		}
 		
 		//서명정보 사진파일 가져오기
-		this.ds_sign_dtl.setColumn(0, 'atchFileId', this.ds_teacher_info.getColumn(0, 'signImgFileId'));
-		this.get_file_detail('ds_sign_dtl', 'ds_sign_dtl');
-		
+		var signImgFileId = this.ds_teacher_info.getColumn(0, 'signImgFileId');
+		if(signImgFileId){
+			this.ds_sign_dtl.setColumn(0, 'atchFileId', signImgFileId);
+			this.get_file_detail('ds_sign_dtl', 'ds_sign_dtl');
+		}
+	
 		/*this.set_screen_view_after();*/
 		
+	}
+	else if(svcId == 'ds_thnl_dtl'){
+		this.Div01.form.Div00.form.ImageViewer00.set_text('');
 	}
 	else if(svcId == "get_lect_plan"){
 		
