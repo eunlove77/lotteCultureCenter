@@ -55,6 +55,7 @@
  * include 영역 
  **************************************************************************/
  include "TeacherMng::include/common.xjs";
+ include "Base::libCommon.xjs";
  /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -65,10 +66,14 @@ this.Certificate_lect_hist_popup_onload = function(obj:nexacro.Form,e:nexacro.Lo
 	this.ds_certi_info.setColumn(0, 'tcCdNo', this.parent.tcCdNo);
 	this.ds_certi_info.setColumn(0, 'tcNm', this.parent.tcNm);
 	
+	this.menuSeq = this.parent.menuSeq;
+	this.domain = this.application.getVariable("domain");
+	
 	var today = new Date();
 	this.ds_certi_info.setColumn(0, 'year', today.getYear());
 	
 	this.com_set_dataset_year(this.ds_year_list, 2016);
+	
 };
 
 this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -78,15 +83,30 @@ this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 this.btnPrint_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var url = "teacherMng/certificate/tax.do";
-	window.open(url, 'popup', 'width=100,');
-	
+	this.selectCertificate_tax();
 };
+this.selectCertificate_tax = function(){
+	var param = "";
+	param += "tcCdNo=" + this.parent.tcCdNo;
+	param += "&tcNm=" + this.parent.tcNm;
+	param += "&year=" + this.ds_certi_info.getColumn(0, "year");
+	
+	var url = this.domain + "/admin/teacherMng/certificate/tax.do?" + param;
+	
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	window.open(url, "원천징수영수증", "width=840, height=1188");
+	
+}
+
 this.fnCallback = function(svcId, errorCode, errorMsg){
 	if(errorCode != 0){
 		// 에러 시 화면 처리 내역
 		this.alert(errorCode+"\n"+errorMsg);
 		return false;
+	}
+	
+	if(svcId == "select_certificate_tax"){
+		this.close();
 	}
 }]]></Script>
     <Objects>
@@ -104,6 +124,24 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_tax_list">
+        <ColumnInfo>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="mm" type="STRING" size="256"/>
+          <Column id="dd" type="STRING" size="256"/>
+          <Column id="incmtax" type="STRING" size="256"/>
+          <Column id="rsdttax" type="STRING" size="256"/>
+          <Column id="tottax" type="STRING" size="256"/>
+          <Column id="actlPpayAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_tc_info">
+        <ColumnInfo>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="rrno" type="STRING" size="256"/>
+          <Column id="addr" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

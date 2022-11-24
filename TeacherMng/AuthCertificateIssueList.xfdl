@@ -130,14 +130,14 @@
                 <Cell col="7" text="bind:reqDtm" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="8" displaytype="expr:apvlDtm ? &quot;date&quot; : &quot;none&quot;" text="bind:apvlDtm" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="9" text="bind:apprId"/>
-                <Cell col="10" text="bind:athctfFileNm"/>
+                <Cell col="10" text="bind:athctfFileNm" color="blue" textDecoration="underline"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="8" text="증명서발급 신청 목록" left="16" top="210" width="130" height="21" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-        <Static id="txtTotal" taborder="4" left="Static00:22" top="210" height="21" text="(0개)" width="42"/>
+        <Static id="Static00" taborder="8" text="증명서발급 신청 목록" left="16" top="210" width="130" height="21" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
+        <Static id="txtTotal" taborder="4" left="Static00:10" top="210" height="21" text="(0개)" width="42"/>
         <Button id="btnConfirm" taborder="7" text="증명서발급(승인)" top="210" height="21" width="125" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
       </Layout>
     </Layouts>
@@ -155,6 +155,7 @@ include "TeacherMng::include/common.xjs";
  **************************************************************************/
 this.application = null;
 this.popCnt = 0;
+this.domain = "";
 this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -164,6 +165,7 @@ this.AuthCertificateIssueList_onload = function(obj:nexacro.Form,e:nexacro.LoadE
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+	this.domain = this.application.getVariable("domain");
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
@@ -280,9 +282,12 @@ this.btnConfirm_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		for(i of checked_array){
 			var row = this.ds_list_checked.addRow();
 			var tcCdNo = this.ds_list.getColumn(i, "tcCdNo");
+			var tcNm = this.ds_list.getColumn(i, "tcNm");
 			var stdYy = this.ds_list.getColumn(i, "stdYy");
 			var athctfTpCd = this.ds_list.getColumn(i, "athctfTpCd");
+			
 			this.ds_list_checked.setColumn(row, "tcCdNo", tcCdNo);
+			this.ds_list_checked.setColumn(row, "tcNm", tcNm);
 			this.ds_list_checked.setColumn(row, "stdYy", stdYy);
 			this.ds_list_checked.setColumn(row, "athctfTpCd", athctfTpCd);
 		}
@@ -325,8 +330,31 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 				};
 		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
+	else if(e.cell == 10){
+		if(obj.getCellText(e.row, e.col)){
+			//파일 다운로드
+			this.ds_atch_file_dtl.setColumn(0, "atchFileId", this.ds_list.getColumn(e.row, "athctfFileId"));
+			this.get_file_detail();
+		}
+	}
 };
-
+ /**************************************************************************
+ * 증명서 파일
+ **************************************************************************/
+this.get_file_detail = function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "get_fileDtl";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/selectFileDtl.do";
+	tranObj.inData      = "file_detail=ds_atch_file_dtl";
+	tranObj.outData     = "ds_atch_file_dtl=file_detail";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.menuSeq;
+	
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")){return;}
+	this.gfn_transaction(tranObj);
+}
 this.fnCallback = function(svcId, errorCode, errorMsg){
 	if(errorCode != 0){
 		this.alert(errorCode+"\n"+errorMsg);
@@ -342,7 +370,17 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		
 		this.select_list();
 	}
-	
+	else if(svcId == "get_fileDtl"){
+		var fileNm = this.ds_atch_file_dtl.getColumn(0, 'realFileNm');
+		if(fileNm){
+			this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
+			this.ds_atch_file_dtl.addColumn("chk", "STRING");
+			this.ds_atch_file_dtl.setColumn(0, "chk", "Y");
+			this.gfn_fileDown(this.ds_atch_file_dtl, this.FileDownTransfer00);
+		} else {
+			obj.set_text("실제 파일이 존재하지 않습니다.");
+		}
+	}
 }
 ]]></Script>
     <Objects>
@@ -395,10 +433,27 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <Dataset id="ds_list_checked">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
           <Column id="stdYy" type="STRING" size="256"/>
           <Column id="athctfTpCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_atch_file_dtl">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <FileDownTransfer id="FileDownTransfer00"/>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.year" propid="value" datasetid="ds_search" columnid="stdYy"/>

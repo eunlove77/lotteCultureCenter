@@ -166,7 +166,7 @@ this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
 this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.baseSvrUrl = this.application.Admin_svc + "::member/";
+	this.baseSvrUrl = this.application.Admin_svc + "::member/info/";
 	
 	if(this.parent.parent.parent.parent.mbrNo != ""){
 		this.ds_info.setColumn(0, "mbrNo", this.parent.parent.parent.parent.mbrNo);
@@ -178,10 +178,10 @@ this.fn_detail = function ()
 {	
 	var tranObj = {
 		strSvcId : "detail",
-		strSvcUrl : this.baseSvrUrl + "tabInfo.do",
-		inData : "tabInfo=ds_info",
-		outData : "ds_info=tabInfo",
-		strArg : "tabId=INFO",
+		strSvcUrl : this.baseSvrUrl + "detail.do",
+		inData : "detail=ds_info",
+		outData : "ds_info=detail",
+		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.menuId,
 		isPopup : true

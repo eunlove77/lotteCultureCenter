@@ -240,8 +240,8 @@
                             <Column size="129"/>
                             <Column size="113"/>
                             <Column size="80"/>
-                            <Column size="185"/>
-                            <Column size="95"/>
+                            <Column size="200"/>
+                            <Column size="100"/>
                             <Column size="80"/>
                             <Column size="80"/>
                             <Column size="80"/>
@@ -309,7 +309,7 @@
                           <Band id="body">
                             <Cell displaytype="expr:pblPmprcustBrchCd == '' ? 'checkboxcontrol' : 'none'" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                             <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
-                            <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchNm : pblPmprcustBrchNm"/>
+                            <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="3" text="bind:lectTpNm"/>
                             <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
                             <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="100" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
@@ -358,17 +358,16 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid_Excel" taborder="2" left="0" top="1100" right="20" bottom="-713" binddataset="ds_class_list" nodatatext="데이터가 없습니다." visible="false">
+        <Grid id="Grid_Excel" taborder="2" left="0" top="1090" right="20" bottom="-703" binddataset="ds_class_list" nodatatext="검색결과 없음" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="48"/>
                 <Column size="78"/>
                 <Column size="129"/>
                 <Column size="113"/>
                 <Column size="80"/>
-                <Column size="185"/>
-                <Column size="95"/>
+                <Column size="200"/>
+                <Column size="100"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
@@ -379,14 +378,14 @@
                 <Column size="95"/>
                 <Column size="116"/>
                 <Column size="121"/>
-                <Column size="80"/>
+                <Column size="108"/>
                 <Column size="80"/>
                 <Column size="104"/>
                 <Column size="170"/>
                 <Column size="99"/>
                 <Column size="158"/>
                 <Column size="105"/>
-                <Column size="80"/>
+                <Column size="149"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="119"/>
@@ -400,72 +399,70 @@
                 <Row size="34"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" text="번호"/>
-                <Cell col="2" text="지점명"/>
-                <Cell col="3" text="강의유형"/>
-                <Cell col="4" text="강좌코드"/>
-                <Cell col="5" text="강좌명"/>
-                <Cell col="6" text="강사명"/>
-                <Cell col="7" text="총정원"/>
-                <Cell col="8" text="수강인원"/>
-                <Cell col="9" text="대기자수"/>
-                <Cell col="10" text="강좌료"/>
-                <Cell col="11" text="강의요일"/>
-                <Cell col="12" text="강의횟수"/>
-                <Cell col="13" text="시작시간"/>
-                <Cell col="14" text="종료시간"/>
-                <Cell col="15" text="강좌상태"/>
-                <Cell col="16" text="승인상태"/>
-                <Cell col="17" text="전시상태"/>
-                <Cell col="18" text="연도"/>
-                <Cell col="19" text="학기"/>
-                <Cell col="20" text="강의기간"/>
-                <Cell col="21" text="강좌구분"/>
-                <Cell col="22" text="강의실"/>
-                <Cell col="23" text="지급구분"/>
-                <Cell col="24" text="강사요율"/>
-                <Cell col="25" text="옵션사용"/>
-                <Cell col="26" text="그룹여부"/>
-                <Cell col="27" text="강사수정요청"/>
-                <Cell col="28" text="등록자"/>
-                <Cell col="29" text="등록일시"/>
-                <Cell col="30" text="수정자"/>
-                <Cell col="31" text="수정일시"/>
+                <Cell text="번호"/>
+                <Cell col="1" text="지점명"/>
+                <Cell col="2" text="강의유형"/>
+                <Cell col="3" text="강좌코드"/>
+                <Cell col="4" text="강좌명"/>
+                <Cell col="5" text="강사명"/>
+                <Cell col="6" text="총정원"/>
+                <Cell col="7" text="수강인원"/>
+                <Cell col="8" text="대기자수"/>
+                <Cell col="9" text="수강료"/>
+                <Cell col="10" text="강의요일"/>
+                <Cell col="11" text="강의횟수"/>
+                <Cell col="12" text="시작시간"/>
+                <Cell col="13" text="종료시간"/>
+                <Cell col="14" text="강좌상태"/>
+                <Cell col="15" text="승인상태"/>
+                <Cell col="16" text="전시상태"/>
+                <Cell col="17" text="연도"/>
+                <Cell col="18" text="학기"/>
+                <Cell col="19" text="강의기간"/>
+                <Cell col="20" text="강좌구분"/>
+                <Cell col="21" text="강의실"/>
+                <Cell col="22" text="지급구분"/>
+                <Cell col="23" text="지급율(%)/지급액(원)"/>
+                <Cell col="24" text="옵션사용"/>
+                <Cell col="25" text="그룹여부"/>
+                <Cell col="26" text="강사수정요청"/>
+                <Cell col="27" text="등록자"/>
+                <Cell col="28" text="등록일시"/>
+                <Cell col="29" text="수정자"/>
+                <Cell col="30" text="수정일시"/>
               </Band>
               <Band id="body">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
-                <Cell col="2" text="bind:brchNm"/>
-                <Cell col="3" text="bind:lectTpNm"/>
-                <Cell col="4" text="bind:lectCd"/>
-                <Cell col="5" text="bind:lectNm" edittype="text" editmaxlength="100" displaytype="editcontrol"/>
-                <Cell col="6" text="bind:tcNm"/>
-                <Cell col="7" text="bind:gsCapaCnt"/>
+                <Cell text="expr:dataset.getRowCount() - currow"/>
+                <Cell col="1" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="2" text="bind:lectTpNm"/>
+                <Cell col="3" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
+                <Cell col="4" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="100" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
+                <Cell col="5" text="bind:tcNm" textDecoration="underline"/>
+                <Cell col="6" text="bind:gsCapaCnt"/>
+                <Cell col="7"/>
                 <Cell col="8"/>
-                <Cell col="9"/>
-                <Cell col="10" text="bind:lectAmt" displaytype="normal"/>
-                <Cell col="11" text="bind:stringStDaywNm"/>
-                <Cell col="12" text="bind:lectNbcnt"/>
-                <Cell col="13" text="bind:lectSt"/>
-                <Cell col="14" text="bind:lectEnd"/>
-                <Cell col="15" text="bind:lectStatNm"/>
-                <Cell col="16" text="bind:apvlStatNm"/>
-                <Cell col="17" text="bind:dsplyStatCd" edittype="combo" displaytype="combocontrol" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm"/>
-                <Cell col="18" text="bind:yy"/>
-                <Cell col="19" text="bind:lectSmsterNm"/>
-                <Cell col="20" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
-                <Cell col="21" text="bind:lectClNm"/>
-                <Cell col="22" text="bind:lectRmCd" edittype="combo" displaytype="combocontrol" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
-                <Cell col="23" text="expr:ppayStdCd == '1' ? '정률' : '정액'"/>
-                <Cell col="24" text="bind:ppayAmt"/>
-                <Cell col="25" text="bind:optnTypNm"/>
-                <Cell col="26" text="bind:groupYn"/>
-                <Cell col="27" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
-                <Cell col="28" text="bind:regId"/>
-                <Cell col="29" text="bind:regDtm"/>
-                <Cell col="30" text="bind:modId"/>
-                <Cell col="31" text="bind:modDtm"/>
+                <Cell col="9" text="bind:lectAmt" displaytype="normal"/>
+                <Cell col="10" text="bind:stringStDaywNm"/>
+                <Cell col="11" text="bind:lectNbcnt"/>
+                <Cell col="12" text="bind:lectSt"/>
+                <Cell col="13" text="bind:lectEnd"/>
+                <Cell col="14" text="bind:lectStatNm"/>
+                <Cell col="15" text="bind:apvlStatNm"/>
+                <Cell col="16" text="bind:dsplyStatCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? dsplyStatCd : dsplyStatNm"/>
+                <Cell col="17" text="bind:yy"/>
+                <Cell col="18" text="bind:lectSmsterNm"/>
+                <Cell col="19" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
+                <Cell col="20" text="bind:lectClNm"/>
+                <Cell col="21" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm"/>
+                <Cell col="22" text="expr:ppayStdCd == '01' ? '정률' : '정액'"/>
+                <Cell col="23" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
+                <Cell col="24" text="bind:optnTypNm"/>
+                <Cell col="25" text="bind:groupYn"/>
+                <Cell col="26" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
+                <Cell col="27" text="bind:regId"/>
+                <Cell col="28" text="bind:regDtm"/>
+                <Cell col="29" text="bind:modId"/>
+                <Cell col="30" text="bind:modDtm"/>
               </Band>
             </Format>
           </Formats>

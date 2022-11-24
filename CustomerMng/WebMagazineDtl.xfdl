@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="WebMagazineDtl" width="1280" height="1000" titletext="New Form" onload="WebMagazineDtl_onload">
+  <Form id="WebMagazineDtl" width="1280" height="700" titletext="New Form" onload="WebMagazineDtl_onload">
     <Layouts>
-      <Layout height="1000" width="1280">
+      <Layout height="700" width="1280">
         <Static id="txtMenuNm" taborder="0" text="웹매거진 등록" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Static id="Static00" taborder="1" text="기본정보" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17"/>
         <Static id="Static01" taborder="2" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="81" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="25" width="200"/>
@@ -44,7 +44,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="소개 내용" left="0" top="0" width="109" height="328" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <WebBrowser id="WebBrowser00" taborder="1" left="117" top="7" height="306" right="12"/>
+              <WebBrowser id="intrdnCont" taborder="1" left="117" top="7" height="306" right="12" onusernotify="fn_set_edit_body"/>
             </Layout>
           </Layouts>
         </Div>
@@ -219,9 +219,6 @@ this.WebMagazineDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.domain = this.application.getVariable("domain");
 	
-	this.row09.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html")
-	this.row09.form.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	
 	this.row06.form.strtDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
 	this.row06.form.endDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
 	
@@ -262,6 +259,7 @@ this.WebMagazineDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.atchFileUploadArr[0].fn_init(atchFileObj);
 		this.atchFileUploadArr[1].fn_init(atchFileObj2);
 	}
+	
 };
 
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -271,12 +269,7 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var editObj = this.fn_get_edit_body(this.row09.form.WebBrowser00);
-	var len = editObj.len;
-	
-	this.ds_detail.setColumn(0, "intrdnCont", editObj.cntn);
-	
-	this.fn_checkValidation(len);
+	this.fn_checkValidation();
 };
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -351,10 +344,10 @@ this.fn_checkValidation = function(len){
 		this.alert("썸네일(Mobile)을 등록해주세요");
 		return;
 	}
-	else if(len == 0)
+	else if(!this.fn_get_edit_body(this.row09.form.intrdnCont))
 	{
 		this.alert("소개 내용을 입력하세요");
-		this.row09.form.WebBrowser00.setFocus();
+		this.row09.form.intrdnCont.setFocus();
 		return;
 	}
 	else if(this.ds_appl_lect.rowcount < 1)
@@ -363,7 +356,9 @@ this.fn_checkValidation = function(len){
 		return;
 	}
 	else
-	{								
+	{	
+		this.ds_detail.setColumn(0, "intrdnCont", this.fn_get_edit_body(this.row09.form.intrdnCont));
+		
 		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
 		{
 			this.atchFileUploadArr[0].fn_upload(); 
@@ -395,10 +390,6 @@ this.fn_get_edit_body = function(wbObj){
 	
 	var len = _win.callMethod("getTextValueLen");
 	var bodyValue = _win.callMethod("getData");
-	var valueObj = { 
-		len : len , 
-		cntn : bodyValue
-		}
 	
 	trace("editor body length : " + len);
 	console.log("editor body length : " + len);
@@ -407,16 +398,19 @@ this.fn_get_edit_body = function(wbObj){
     {
         _win.destroy();
         _win = null;
-    }    
+    } 
+	
+	if(len == 0)
+	{
+		return false;
+	}
 
-	return valueObj;
+	return bodyValue;
 }
 
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = "";	
-	
-	content = this.ds_detail.getColumn(0, "intrdnCont");
+	var content = this.ds_detail.getColumn(0, obj.id);
 	
 	var _win = obj.getProperty("window");	 
 	
@@ -442,6 +436,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   {
 	case "detail":
 		
+		this.row09.form.intrdnCont.set_url(this.domain + "/namo/index_custom_01.html")
+	
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
 		var atchFileObj = {
 			_this : this,
