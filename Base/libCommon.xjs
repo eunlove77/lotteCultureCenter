@@ -80,24 +80,34 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 		
 		//윈도우 팝업 여부 
 		if(this.isPopup) 
-		{
+		{		
 			//모달 && 윈도우 팝업 제거
-			for(var i=0; i < nexacro.getPopupFrames(this.opener).length; i++)
+			var popLen = nexacro.getPopupFrames(this.opener).length;
+			for(var i=0; i < popLen; i++)
 			{
-				if(nexacro.getPopupFrames(this.opener)[i].opener.name != "Form_Work")
+				if(nexacro.getPopupFrames(this.opener)[0].opener.name != "Form_Work")
 				{
-					nexacro.getPopupFrames(this.opener)[i].opener.close();
+					nexacro.getPopupFrames(this.opener)[0].opener.close();
 				}
 				else
 				{
-					nexacro.getPopupFrames(this.opener)[i].form.close();
+					nexacro.getPopupFrames(this.opener)[0].form.close();
 				}
-			}			
+			}	
+		}
+		else
+		{
+			var popLen = nexacro.getPopupFrames().length;
+			for(var i=0; i < popLen; i++)
+			{
+				nexacro.getPopupFrames()[0].form.close();
+			}	
 		}
 		
 		switch(svcID)
 		{
 			case "session_check":	
+				nexacro.getApplication().isAuth = false;
 				nexacro.getApplication().gfn_initFrame();
 			break;
 		}
@@ -109,7 +119,6 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 		switch(svcID)
 		{    
 			case "session_check":
-				trace("세션 유지");
 				nexacro.getApplication().isAuth = true;
 			break; 
 		}
@@ -174,9 +183,12 @@ this.fn_codeListCallback = function(svcID,errorCode,errorMsg){
 
 	switch(svcID)
 	{    
-		case "code_list":
-			console.log("코드 조회 성공");			
+		case "code_list":		
 			var nRow = "";
+			
+			application.gdsAuthCdList.deleteAll();
+			application.gdsSpotCdList.deleteAll();
+			application.gdsSpotAreaCdList.deleteAll();
 			
 			application.gdsAuthCdList.insertRow();
 			application.gdsAuthCdList.setColumn(0, "cd", "");
