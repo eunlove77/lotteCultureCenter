@@ -250,6 +250,7 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+	this.domain = this.application.getVariable("domain");
 	
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_tclect_list, this.Grid00, 0);
@@ -426,7 +427,17 @@ this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		return false;
 	}
 	
+	this.selectCertificate_lect_hist(checkedArr[0]);
 };
+this.selectCertificate_lect_hist = function(index){
+	var param = "";
+	param += "tcCdNo=" + this.ds_tclect_list.getColumn(index, "tcCdNo");
+	
+	var url = this.domain + "/admin/teacherMng/certificate/lect_hist.do?" + param;
+	
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
+	window.open(url, "출강이력확인서", "width=840, height=1188");
+}
 this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	

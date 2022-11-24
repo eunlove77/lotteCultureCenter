@@ -67,6 +67,7 @@ this.Certificate_lect_hist_popup_onload = function(obj:nexacro.Form,e:nexacro.Lo
 	this.ds_certi_info.setColumn(0, 'tcNm', this.parent.tcNm);
 	
 	this.menuSeq = this.parent.menuSeq;
+	this.domain = this.application.getVariable("domain");
 	
 	var today = new Date();
 	this.ds_certi_info.setColumn(0, 'year', today.getYear());
@@ -90,7 +91,7 @@ this.selectCertificate_tax = function(){
 	param += "&tcNm=" + this.parent.tcNm;
 	param += "&year=" + this.ds_certi_info.getColumn(0, "year");
 	
-	var url = this.domain + "/certificate/tax.do?" + param;
+	var url = this.domain + "/admin/teacherMng/certificate/tax.do?" + param;
 	
 	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	window.open(url, "원천징수영수증", "width=840, height=1188");
