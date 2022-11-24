@@ -206,13 +206,13 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
-
+include "Base::popup.xjs";
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
+this.popCnt = 0;
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -245,10 +245,11 @@ this.BranchExhibitionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEvent
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
-		exhSeqno : ""
-	}
-	this.parent.set_url("BranchMng::BranchExhibitionDtl.xfdl");
+	this.popCnt ++;
+		
+	var oArg = { exhSeqno : ""};
+	
+	this.gfn_openPopup("branchExhibitionPop"+this.popCnt, oArg, "BranchMng::BranchExhibitionDtl.xfdl", this, null, null, true, true, null);
 };
 
 //삭제 버튼
@@ -261,10 +262,10 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	}
 	
 	if(checked_array.length == 0){
-		alert("삭제할 지점을 선택하세요.");
+		alert("삭제할 기획전을 선택하세요.");
 		return false;
 	}
-	if(!confirm("선택한 지점정보를 삭제하시겠습니까?")){
+	if(!confirm("선택한 기획전을 삭제하시겠습니까?")){
 		return false;
 	}
 	
@@ -318,13 +319,12 @@ this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 {
 	if(e.cell == 2)
 	{
-		var	exhSeqno = obj.getBindDataset().getColumn(e.row, "exhSeqno");
-		
-		this.parent.param = {
-			exhSeqno : exhSeqno
+		this.popCnt ++;
+		var oArg = {
+			exhSeqno : obj.getBindDataset().getColumn(e.row, "exhSeqno")
 		};
 		
-		this.parent.set_url("BranchMng::BranchExhibitionDtl.xfdl");
+		this.gfn_openPopup("branchExhibitionDtlPop"+this.popCnt, oArg, "BranchMng::BranchExhibitionDtl.xfdl", this, null, null, true, true, null);	
 	}
 };
 

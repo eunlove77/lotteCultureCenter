@@ -10,7 +10,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="323" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="306" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="306" right="12"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -74,16 +74,6 @@ this.CatalogMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.editorArr.push(editorObj);
 	
-	if(this.editorArr[0].cntnObj._url == 'about:blank')
-	{	
-		this.editorArr[0].cntnObj.set_url(this.domain + "/namo/index_custom_01.html")
-		this.editorArr[0].cntnObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	}
-	else
-	{
-		this.editorArr[0].cntnObj.reload();
-	}
-	
 	this.fn_list();
 	
 };
@@ -126,7 +116,7 @@ this.fn_get_edit_body = function(wbObj){
 	var valueObj = { 
 		len : len , 
 		cntn : bodyValue
-		}
+	}
 	
 	trace("editor body length : " + len);
 	console.log("editor body length : " + len);
@@ -190,7 +180,19 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		switch(svcID)
 		{
-		case "list":
+		case "catalogList":
+			
+			if(this.editorArr[0].cntnObj._url == 'about:blank')
+			{	
+				this.editorArr[0].cntnObj.set_url(this.domain + "/namo/index_custom_01.html")
+				this.editorArr[0].cntnObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+			}
+			else
+			{
+				this.editorArr[0].cntnObj.reload();
+			}
+			
+			
 			
 			break;
 			

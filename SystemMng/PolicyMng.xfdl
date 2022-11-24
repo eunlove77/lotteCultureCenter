@@ -10,7 +10,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="내용 (웹) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                    <WebBrowser id="webCnts" taborder="1" left="Static00:8" top="7" height="310" right="12" onusernotify="fn_set_edit_body"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -18,7 +18,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="내용 (모바일) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                    <WebBrowser id="mbilCnts" taborder="1" left="Static00:8" top="7" height="310" right="12" onusernotify="fn_set_edit_body"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -34,7 +34,7 @@
           </Layouts>
         </Div>
         <Static id="txtMenuNm" taborder="2" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Edit id="Edit00" taborder="3" left="12" top="72" width="106" height="18" value="P" text="P" readonly="true" visible="false"/>
+        <Edit id="Edit00" taborder="3" left="12" top="72" width="106" height="18" value="P" text="P" readonly="true" visible="false" onchanged="Edit00_onchanged"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -64,7 +64,6 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.param = null;
 this.domain = "";
-this.editorArr = [];
 
 /**************************************************************************
 * FORM EVENT 영역(onload)
@@ -77,51 +76,13 @@ this.PolicyMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.domain = this.application.getVariable("domain");
 	
-	this.editorArr = [];
-	
-	var editorObj = {
-		editorPcObj : this.Div00.form.Div01.form.WebBrowser00 ,
-		editorMbilObj : this.Div00.form.Div02.form.WebBrowser00
-	}
-	
-	this.editorArr.push(editorObj);
-	if(this.editorArr[0].editorPcObj._url == 'about:blank')
-	{
-		this.editorArr[0].editorPcObj.set_url(this.domain + "/namo/index_custom_01.html");
-		this.editorArr[0].editorPcObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	}
-	else
-	{
-		this.editorArr[0].editorPcObj.reload();
-	}
-	if(this.editorArr[0].editorMbilObj._url == 'about:blank')
-	{
-		this.editorArr[0].editorMbilObj.set_url(this.domain + "/namo/index_custom_01.html");
-		this.editorArr[0].editorMbilObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	}
-	else
-	{
-		this.editorArr[0].editorMbilObj.reload();
-	}
-	
 	this.fn_detail();
-	
 };
 
 //등록버튼
 this.Div03_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
-
-	var pcObj = this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00);
-	var mobObj = this.fn_get_edit_body(this.Div00.form.Div02.form.WebBrowser00);
-	
-	var len1 = pcObj.len;
-	var len2 = mobObj.len;
-	
-	this.ds_detail.setColumn(0, "webCnts", pcObj.cntn);
-	this.ds_detail.setColumn(0, "mbilCnts", mobObj.cntn);
-	
-	this.fn_checkValidation(len1 , len2);
+	this.fn_checkValidation();
 };
 
 //취소버튼
@@ -140,19 +101,18 @@ this.Div03_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 //조회
 this.fn_detail = function ()
 {	
-	this.ds_detail.clearData();
-	
 	var tranObj = {
 		strSvcId : "detail",
 		strSvcUrl : this.application.Admin_svc + "::/policy/policyList.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=policyList",
-		strArg : "clCd=P",
+		outData : "ds_detail=details",
+		strArg : "",//"clCd=P",
 		callBackFnc : "fnCallback",
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
 	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);
 	
 };
@@ -170,6 +130,9 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{
 	case "detail":
+	
+		this.Div00.form.Div01.form.webCnts.set_url(this.domain + "/namo/index_custom_01.html");
+		this.Div00.form.Div02.form.mbilCnts.set_url(this.domain + "/namo/index_custom_01.html");
 		
 		break;
 		
@@ -186,7 +149,7 @@ this.fn_save = function ()
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.application.Admin_svc + "::policy/insertPolicy.do",
-		inData : "data=ds_detail:U",
+		inData : "infoData=ds_detail",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
@@ -196,48 +159,34 @@ this.fn_save = function ()
 	this.gfn_transaction(tranObj);
 };
 
+//에디터GET
 this.fn_get_edit_body = function(wbObj){
 	
 	var _win = wbObj.getProperty("window");
 	
 	var len = _win.callMethod("getTextValueLen");
 	var bodyValue = _win.callMethod("getData");
-	var valueObj = { 
-		len : len , 
-		cntn : bodyValue
-		}
-	
-	trace("editor body length : " + len);
-	console.log("editor body length : " + len);
-	
+		
 	if(_win)
     {
         _win.destroy();
         _win = null;
     }    
+	
+	if(len == 0)
+	{
+		return false;
+	}
 
-	return valueObj;
+	return bodyValue;
 }
 
+//에디터SET
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = "";	
-	
-	for(var i=0; i < this.editorArr.length; i++)
-	{
-		if(this.editorArr[i].editorPcObj == obj) 
-		{
-			content = this.ds_detail.getColumn(i, "webCnts");
-		}
-		if(this.editorArr[i].editorMbilObj == obj) 
-		{
-			content = this.ds_detail.getColumn(i, "mbilCnts");
-		}
-	} 		
-	
+	var content = this.ds_detail.getColumn(0, obj.id);
 	var _win = obj.getProperty("window");	 
-
-	_win.callMethod("setData", content);
+		_win.callMethod("setData", content);
 	
 	if(_win)
 	{
@@ -247,21 +196,24 @@ this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyE
 };
 
 //유효성 체크
-this.fn_checkValidation = function(len1 , len2){
-	if(len1 == 0)
+this.fn_checkValidation = function(){
+	if(!this.fn_get_edit_body(this.Div00.form.Div01.form.webCnts))
 	{
 		this.alert("웹 에디터 내용을 입력하세요");
-		this.Div00.form.Div01.form.WebBrowser00.setFocus();
+		this.Div00.form.Div01.form.webCnts.setFocus();
 		return;
 	}
-	else if(len2 == 0)
+	else if(!this.fn_get_edit_body(this.Div00.form.Div02.form.mbilCnts))
 	{
 		this.alert("모바일 에디터 내용을 입력하세요");
-		this.Div00.form.Div02.form.WebBrowser00.setFocus();
+		this.Div00.form.Div02.form.mbilCnts.setFocus();
 		return;
 	}
 	else
-	{								
+	{	
+		this.ds_detail.setColumn(0, "webCnts", this.fn_get_edit_body(this.Div00.form.Div01.form.webCnts));
+		this.ds_detail.setColumn(0, "mbilCnts", this.fn_get_edit_body(this.Div00.form.Div02.form.mbilCnts));
+		
 		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
 		{
 			this.fn_save();

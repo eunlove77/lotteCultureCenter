@@ -10,7 +10,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                    <WebBrowser id="webCnts" taborder="1" left="Static00:8" top="7" height="310" onusernotify="fn_set_edit_body" right="12"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -59,7 +59,6 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.param = null;
 this.domain = "";
-this.editorArr = [];
 
 /**************************************************************************
 * FORM EVENT 영역(onload)
@@ -69,22 +68,8 @@ this.RefundPolicyMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	var objOwnerFrame = this.getOwnerFrame();
-	
 	this.domain = this.application.getVariable("domain");
-	this.editorArr = [];
 	
-	var editorObj = { cntnObj : this.Div00.form.Div01.form.WebBrowser00 }
-	
-	this.editorArr.push(editorObj);
-	if(this.editorArr[0].cntnObj._url == 'about:blank')
-	{
-		this.Div00.form.Div01.form.WebBrowser00.set_url(this.domain + "/namo/index_custom_01.html");
-		this.Div00.form.Div01.form.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	}
-	else
-	{
-		this.editorArr[0].cntnObj.reload();
-	}
 	this.fn_detail();
 	
 };
@@ -92,13 +77,7 @@ this.RefundPolicyMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록버튼
 this.Div03_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {					
-	var cntnObj = this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00);
-	var len = cntnObj.len;
-	
-	this.ds_detail.setColumn(0, "webCnts", cntnObj.cntn);
-	this.ds_detail.setColumn(0, "mbilCnts", cntnObj.cntn);
-	
-	this.fn_checkValidation(len);
+	this.fn_checkValidation();
 };
 
 //취소버튼
@@ -121,8 +100,8 @@ this.fn_detail = function ()
 		strSvcId : "detail",
 		strSvcUrl : this.application.Admin_svc + "::/policy/policyList.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=policyList",
-		strArg : "clCd=R",
+		outData : "ds_detail=details",
+		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
@@ -145,7 +124,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{
 	case "detail":
-		
+		this.Div00.form.Div01.form.webCnts.set_url(this.domain + "/namo/index_custom_01.html");
 		break;
 		
     case "save":
@@ -161,13 +140,16 @@ this.fn_save = function ()
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.application.Admin_svc + "::policy/insertPolicy.do",
-		inData : "data=ds_detail:U",
+		inData : "infoData=ds_detail",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+		
 	this.gfn_transaction(tranObj);
 };
 
@@ -178,53 +160,50 @@ this.fn_get_edit_body = function(wbObj){
 	
 	var len = _win.callMethod("getTextValueLen");
 	var bodyValue = _win.callMethod("getData");
-	var valueObj = { 
-		len : len , 
-		cntn : bodyValue
-		}
-	
-	trace("editor body length : " + len);
-	console.log("editor body length : " + len);
 	
 	if(_win)
     {
         _win.destroy();
         _win = null;
-    }    
+    }
+    
+	if(len == 0)
+	{
+		return false;
+	}
 
-	return valueObj;
+	return bodyValue;
 }
 
 //에디터세팅
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	this.editorInit = true;
-	var content = "";	
-	
-	content = this.ds_detail.getColumn(0, "webCnts");
-		
+	var content = this.ds_detail.getColumn(0, obj.id);
 	var _win = obj.getProperty("window");	 
-
-	_win.callMethod("setData", content);
+		_win.callMethod("setData", content);
 	
 	if(_win)
 	{
 		_win.destroy();
 		_win = null;
-	}  
+	} 
 };
 
 //유효성체크
 this.fn_checkValidation = function(len){
 	
-	if(len == 0)
+	if(!this.fn_get_edit_body(this.Div00.form.Div01.form.webCnts))
 	{
 		this.alert("에디터 내용을 입력하세요");
-		this.Div00.form.Div01.form.WebBrowser00.setFocus();
+		this.Div00.form.Div01.form.webCnts.setFocus();
 		return;
 	}
 	else
-	{								
+	{	
+		this.ds_detail.setColumn(0, "webCnts", this.fn_get_edit_body(this.Div00.form.Div01.form.webCnts));
+		this.ds_detail.setColumn(0, "mbilCnts", this.fn_get_edit_body(this.Div00.form.Div01.form.webCnts));
+		
+		
 		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
 		{
 			this.fn_save();

@@ -191,13 +191,13 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
-
+include "Base::popup.xjs";
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
+this.popCnt = 0;
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -219,10 +219,10 @@ this.MainBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
-		seqno : ""
-	}
-	this.parent.set_url("SystemMng::MainBannerMngDtl.xfdl");
+	this.popCnt ++;
+	var oArg = { seqno : ""};
+	
+	this.gfn_openPopup("mainBannerMngPop"+this.popCnt, oArg, "SystemMng::MainBannerMngDtl.xfdl", this, null, null, true, true, null);
 };
 
 //엔터키 검색
@@ -318,13 +318,10 @@ this.GridMainBannerList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 {
 	if(e.cell == 1)
 	{
-		var	seqno = obj.getBindDataset().getColumn(e.row, "seqno");
+		this.popCnt ++;
+		var oArg = { seqno : obj.getBindDataset().getColumn(e.row, "seqno")};
 		
-		this.parent.param = {
-			seqno : seqno
-		};
-		
-		this.parent.set_url("SystemMng::MainBannerMngDtl.xfdl");
+		this.gfn_openPopup("mainBannerMngDtlPop"+this.popCnt, oArg, "SystemMng::MainBannerMngDtl.xfdl", this, null, null, true, true, null);
 	}
 };
 
@@ -347,6 +344,8 @@ this.fn_list = function (page)
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
 	
 	this.gfn_transaction(tranObj);		
 	
@@ -383,7 +382,9 @@ this.fn_delete = function ()
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
-	this.gfn_transaction(tranObj);	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);
 };
 
 //노출여부 전체 선택 체크 박스 
