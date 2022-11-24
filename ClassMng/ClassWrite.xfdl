@@ -1458,20 +1458,17 @@ this.fn_close_set = function()
 //강사 설정
 this.fn_teacher_set = function()
 {
-	//정산여부
-	if(this.ds_class_dtl.getColumn(0, "npayCnt") == 0)
-	{
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 4, "edittype", "readonly");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 5, "edittype", "readonly");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 6, "edittype", "readonly");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 7, "edittype", "readonly");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 8, "edittype", "readonly");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 9, "edittype", "readonly");
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "edittype", "readonly");
-		
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Button00.destroy();
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Button01.destroy();
-	}
+	//정산체크
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 0, "edittype", "expr:npayCnt == '1' ? 'checkbox' : 'none'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 0, "displaytype", "expr:npayCnt == '1' ? 'checkboxcontrol' : 'none'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 4, "edittype", "expr:npayCnt == '1' ? 'checkbox' : 'none'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 4, "displaytype", "expr:npayCnt == '1' ? 'checkboxcontrol' : 'text'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 5, "edittype", "expr:npayCnt == '1' ? 'combo' : 'readonly'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 6, "edittype", "expr:npayCnt == '1' ? 'combo' : 'readonly'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 7, "edittype", "expr:npayCnt == '1' ? 'mask' : 'readonly'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 8, "edittype", "expr:npayCnt == '1' ? 'text' : 'readonly'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 9, "edittype", "expr:npayCnt == '1' ? 'combo' : 'readonly'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "edittype", "expr:npayCnt == '1' ? 'combo' : 'readonly'");
 }
 
 //카테고리 대분류 영역 변경
@@ -3413,7 +3410,7 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro
 	var delChk = [];
 	for(var i=0; i<this.ds_teacher_list.getRowCount(); i++)
 	{
-		if(this.ds_teacher_list.checkarray[i] == 1)
+		if(this.ds_teacher_list.checkarray[i] == 1 && this.ds_teacher_list.getColumn(i, "npayCnt") == "1")
 		{
 			delChk.push(i);
 		}
@@ -3442,17 +3439,25 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexac
 {
 	if(e.col == "4")
 	{
-		for(var i=0; i<this.ds_teacher_list.getRowCount(); i++) 
+		var findRow = this.ds_teacher_list.extractRows("rpsntYn=='Y'");
+		if(this.ds_teacher_list.getColumn(e.row, "npayCnt") == "1" && this.ds_teacher_list.getColumn(findRow[0], "npayCnt") == "1")
 		{
-			
-			if(e.row == i)
+			for(var i=0; i<this.ds_teacher_list.getRowCount(); i++) 
 			{
-				this.ds_teacher_list.setColumn(i, "rpsntYn", "Y");
+				
+				if(e.row == i)
+				{
+					this.ds_teacher_list.setColumn(i, "rpsntYn", "Y");
+				}
+				else
+				{
+					this.ds_teacher_list.setColumn(i, "rpsntYn", "N");
+				}
 			}
-			else
-			{
-				this.ds_teacher_list.setColumn(i, "rpsntYn", "N");
-			}
+		}
+		else
+		{
+			this.ds_teacher_list.setColumn(e.row, "rpsntYn", "N");
 		}
 	}
 };
@@ -3488,6 +3493,7 @@ this.ds_teacher_list_onrowsetchanged = function(obj:nexacro.NormalDataset,e:nexa
 	this.ds_teacher_list.setColumn(e.row, "ppayStdCd", "01");
 	this.ds_teacher_list.setColumn(e.row, "whdtxClCd", "C0");
 	this.ds_teacher_list.setColumn(e.row, "incmClCd", "60");
+	this.ds_teacher_list.setColumn(e.row, "npayCnt", "1");
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
 };
 
@@ -3619,7 +3625,6 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="lectClosedDtm" type="STRING" size="256"/>
           <Column id="lectClosedRsnNm" type="STRING" size="256"/>
           <Column id="lectClosedRfndCndtNm" type="STRING" size="256"/>
-          <Column id="npayCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classType_list">
@@ -3967,6 +3972,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="ppayAmtExpl" type="STRING" size="256"/>
           <Column id="whdtxClCd" type="STRING" size="256"/>
           <Column id="incmClCd" type="STRING" size="256"/>
+          <Column id="npayCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_tcGrade_list">
