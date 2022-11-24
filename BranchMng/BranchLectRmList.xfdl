@@ -229,13 +229,13 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
-
+include "Base::popup.xjs";
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
+this.popCnt = 0;
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -263,10 +263,10 @@ this.BranchLectRmList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
-		brchCd : ""
-	}
-	this.parent.set_url("BranchMng::BranchLectRmDtl.xfdl");
+	this.popCnt ++;
+	var oArg = { brchCd : ""};
+	
+	this.gfn_openPopup("branchLectRmPop"+this.popCnt, oArg, "BranchMng::BranchLectRmDtl.xfdl", this, null, null, true, true, null);
 };
 
 //삭제 버튼
@@ -336,15 +336,13 @@ this.GridBranchLectRmList_oncellclick = function(obj:nexacro.Grid,e:nexacro.Grid
 {
 	if(e.cell == 4)
 	{
-		var	brchCd = obj.getBindDataset().getColumn(e.row, "brchCd");
-		var	lectRmCd = obj.getBindDataset().getColumn(e.row, "lectRmCd");
-		
-		this.parent.param = {
-			brchCd : brchCd
-			, lectRmCd : lectRmCd
+		this.popCnt ++;
+		var oArg = {
+			brchCd 	 : obj.getBindDataset().getColumn(e.row, "brchCd") ,
+			lectRmCd : obj.getBindDataset().getColumn(e.row, "lectRmCd")
 		};
 		
-		this.parent.set_url("BranchMng::BranchLectRmDtl.xfdl");
+		this.gfn_openPopup("branchLectRmDtlPop"+this.popCnt, oArg, "BranchMng::BranchLectRmDtl.xfdl", this, null, null, true, true, null);	
 	}
 };
 

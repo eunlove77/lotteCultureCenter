@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="CouponList" width="1280" height="720" titletext="New Form">
+  <Form id="CouponList" width="1280" height="720" titletext="New Form" onload="CouponList_onload">
     <Layouts>
       <Layout height="720" width="1280">
         <Div id="Div01" taborder="0" left="10" top="15" height="420" right="10">
@@ -17,11 +17,11 @@
                       <Column size="0"/>
                       <Column size="150"/>
                       <Column size="150"/>
-                      <Column size="150"/>
                       <Column size="100"/>
+                      <Column size="150"/>
                     </Columns>
                     <Rows>
-                      <Row size="24" band="head"/>
+                      <Row size="35" band="head"/>
                       <Row size="24"/>
                     </Rows>
                     <Band id="head">
@@ -36,13 +36,13 @@
                     </Band>
                     <Band id="body">
                       <Cell expr="dataset.getRowCount() - currow"/>
-                      <Cell col="1" text="bind:cpnNm" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
-                      <Cell col="2" text="expr:dataset.getColumn(currow, &quot;dcAmt&quot;) + (dataset.getColumn(currow, &quot;dcAmtClCd&quot;) == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                      <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="none" color="#666666" expr="issueMthdClCd == &quot;AUTO&quot; ? &quot;자동발급&quot; : issueMthdClCd == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                      <Cell col="2" text="bind:cpnNm"/>
                       <Cell col="3" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
-                      <Cell col="4"/>
-                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;usePrdClCd&quot;) == &quot;DEADLINE&quot; ? (&quot;발급 후 &quot; + dataset.getColumn(currow, &quot;usePsblDd&quot;) + &quot;일간&quot; ) : (dataset.getColumn(currow, &quot;useStDt&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;useEndDt&quot;))"/>
-                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;10&quot; ? &quot;발급중&quot; : dataset.getColumn(currow, &quot;issueStatCd&quot;) == &quot;20&quot; ? &quot;발급종료&quot; : &quot;발급대기&quot;"/>
-                      <Cell col="7"/>
+                      <Cell col="4" expr="dcAmt + (dcAmtClCd == &quot;RATES&quot;? &quot;%&quot; : &quot;원&quot;) + &quot; 할인&quot;"/>
+                      <Cell col="5" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
+                      <Cell col="6" text="bind:useEndDt"/>
+                      <Cell col="7" text="bind:useStatNm"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -52,5 +52,54 @@
         </Div>
       </Layout>
     </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+this.mbrMst = this.parent.parent.parent;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.baseSvrUrl = this.application.Admin_svc + "::member/coupon/";
+
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "",
+		outData : "ds_coupon_list=cpnList",
+		strArg : "mbrNo=" + this.mbrMst.ds_detail.getColumn(0, "mbrNo"),
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		isPopup : true,
+		menuSeq : this.menuId
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_coupon_list">
+        <ColumnInfo>
+          <Column id="issueMthdClCd" type="STRING" size="256"/>
+          <Column id="cpnNm" type="STRING" size="256"/>
+          <Column id="dcAmtClCd" type="STRING" size="256"/>
+          <Column id="dcAmt" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="useEndDt" type="STRING" size="256"/>
+          <Column id="useStatNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>

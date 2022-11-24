@@ -49,19 +49,11 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div05" taborder="6" text="Div01" left="Div04:0" top="86" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="MVG 소속지점" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="Static01" left="Static00:10" top="0" bottom="0" width="249"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div06" taborder="7" text="Div01" left="0" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="">
+              <Div id="Div06" taborder="7" text="Div01" left="0" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="50%" formscrolltype="none" minwidth="330" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="기존회원 소속지점" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="Static01" left="Static00:10" top="0" bottom="0" width="887"/>
+                    <Static id="Static01" taborder="1" text="Static01" left="Static00:10" top="0" bottom="0" width="490"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -94,14 +86,30 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사번호" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <MaskEdit id="MaskEdit00" taborder="2" left="Static00:5" top="5" width="160" height="21" readonly="true"/>
-                    <Button id="btnSearch" taborder="1" text="검색" left="MaskEdit00:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80"/>
-                    <Button id="btnSearch00" taborder="3" text="삭제" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80"/>
+                    <Button id="btnSearch" taborder="1" text="검색" left="MaskEdit00:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div10_btnSearch_onclick"/>
+                    <Button id="btnSearch00" taborder="3" text="삭제" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div10_btnSearch00_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Button id="cnclBtn" taborder="12" text="취소" left="43.81%" width="79" cssclass="btn_WF_Weak" fittocontents="none" bottom="0" height="30" onclick="Div01_cnclBtn_onclick"/>
               <Button id="insBtn" taborder="13" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.994000000000028" bottom="0" height="30"/>
               <Static id="Static01" taborder="14" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="0" width="200"/>
+              <Div id="Div05" taborder="6" text="Div01" left="Div06:0" top="118" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="MVG 소속지점" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Static id="Static01" taborder="1" text="Static01" left="Static00:10" top="0" bottom="0" width="249"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div05_00" taborder="15" text="Div01" left="Div04:0" top="86" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="등급할인 사용횟수" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Static id="Static01" taborder="1" text="Static01" left="Static00:10" top="0" bottom="0" width="249"/>
+                  </Layout>
+                </Layouts>
+              </Div>
             </Layout>
           </Layouts>
         </Div>
@@ -120,12 +128,14 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
+this.menuId = this.parent.parent.param.MENU_ID;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -153,7 +163,7 @@ this.fn_detail = function ()
 		outData : "ds_detail=detail",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
@@ -189,10 +199,10 @@ this.fn_save = function(){
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.param.MENU_ID,
+		menuSeq : this.menuId,
 		isPopup : true
 	}
-	if(this.gfn_btn_auth(this.parent.parent.param.MENU_ID, "accSaveYn")){return;}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 
 	this.gfn_transaction(tranObj);
 }
@@ -212,6 +222,28 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 {
 	this.close();
 };
+
+this.Div01_Div10_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = {
+		selMultiYn : "N",
+		dataset : this.ds_teacher_pop,
+		menuSeq : this.menuId,
+		type : 2
+	};
+	
+	this.gfn_openPopup("TeacherListPop", oArg, "TeacherMng::TeacherList_popup.xfdl", this, 1000, 700, true, true, null);
+};
+
+this.ds_teacher_pop_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	this.ds_detail.setColumn(0, "tcCdNo", obj.getColumn(0, "tcCdNo"));
+};
+
+this.Div01_Div10_btnSearch00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_detail.setColumn(0, "tcCdNo", "");
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_detail">
@@ -230,6 +262,11 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
         <Rows>
           <Row/>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_teacher_pop" oncolumnchanged="ds_teacher_pop_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Bind>

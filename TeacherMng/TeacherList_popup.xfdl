@@ -97,7 +97,7 @@
                 <Row size="30"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell edittype="expr:comp.type == 1 ? 'checkbox' : 'none' " displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'none' "/>
                 <Cell col="1" text="번호"/>
                 <Cell col="2" text="강사코드"/>
                 <Cell col="3" text="강사명"/>
@@ -109,7 +109,7 @@
                 <Cell col="9" text="대표강좌"/>
               </Band>
               <Band id="body">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
+                <Cell displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemcontrol' " edittype="expr:comp.type == 1 ? 'checkbox' : 'radioitemitem' " radioitemcodevalue="1" expr="dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo"/>
                 <Cell col="3" text="bind:tcNm" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm"/>
@@ -167,6 +167,7 @@ include "TeacherMng::include/common.xjs";
 this.application = null;
 this.rowcount = 0;
 this.menuSeq = 0;
+this.type = 1;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -174,11 +175,24 @@ this.menuSeq = 0;
 this.TeacherList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	
 	this.menuSeq = this.parent.menuSeq;
 	
+	if(this.parent.type)
+	{
+		this.type = this.parent.type;
+	}
+	if(this.type == 1)
+	{
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid, 0);
+	}
+	else
+	{
+		//그리드의 라디오버튼을 Dataset 없이 사용하는 함수 실행
+		this.gfnSetRadioNoDataset(this.ds_teacher_list, this.Grid, 0);
+	}
+	this.Grid.type = this.type;
+	this.Grid.redrawExprCell(); 
 	
 	// 코드 데이터
 	this.set_dataset();
@@ -285,7 +299,10 @@ this.btnSelect_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		alert("강사를 한명만 선택하세요.");
 		return false;
 	}
-	
+	if(this.type != 1)
+	{
+		this.parent.dataset.deleteAll();
+	}
 	for(i of checkedArr){
 		var findRow = this.parent.dataset.extractRows("tcCdNo == '" + this.ds_teacher_list.getColumn(i, "tcCdNo") + "'");
 	
@@ -304,7 +321,9 @@ this.validate_checkbox = function(){
 	var res = false;
 	
 	return res;
-}]]></Script>
+}
+
+]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
@@ -320,13 +339,13 @@ this.validate_checkbox = function(){
         <Rows>
           <Row>
             <Col id="f">0</Col>
-            <Col id="pbrltnBrchCd"> </Col>
-            <Col id="hpStNo"> </Col>
-            <Col id="hpMidNo"> </Col>
-            <Col id="hpLastNo"> </Col>
-            <Col id="tcTpCdList"> </Col>
-            <Col id="age"> </Col>
-            <Col id="q"> </Col>
+            <Col id="pbrltnBrchCd"/>
+            <Col id="hpStNo"/>
+            <Col id="hpMidNo"/>
+            <Col id="hpLastNo"/>
+            <Col id="tcTpCdList"/>
+            <Col id="age"/>
+            <Col id="q"/>
           </Row>
         </Rows>
       </Dataset>
@@ -350,6 +369,7 @@ this.validate_checkbox = function(){
           <Column id="ppayAmtExpl" type="STRING" size="256"/>
           <Column id="whdtxClCd" type="STRING" size="256"/>
           <Column id="incmClCd" type="STRING" size="256"/>
+          <Column id="npayCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_spot_list">

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="BranchLectRmDtl" width="1280" height="1000" titletext="New Form" onload="BranchLectRmDtl_onload">
+  <Form id="BranchLectRmDtl" width="1280" height="700" titletext="New Form" onload="BranchLectRmDtl_onload">
     <Layouts>
-      <Layout height="1000" width="1280">
+      <Layout height="700" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div01" taborder="1" text="Div01" left="20" top="338" height="72" right="20">
           <Layouts>
@@ -165,7 +165,7 @@ include "Base::libCommon.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.param = null;
+this.menuId = this.parent.parent.param.MENU_ID;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -177,17 +177,15 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	this.param = this.parent.param;
-	
 	this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
 		
-	if(this.param.brchCd != "" && this.param.lectRmCd != ""){	
+	if(this.parent.brchCd != "" && this.parent.lectRmCd != ""){	
 	
-		this.ds_detail.setColumn(0, "brchCd", this.param.brchCd);
-		this.ds_detail.setColumn(0, "lectRmCd", this.param.lectRmCd);
+		this.ds_detail.setColumn(0, "brchCd", this.parent.brchCd);
+		this.ds_detail.setColumn(0, "lectRmCd", this.parent.lectRmCd);
 		this.fn_detail();
 	}
 	else
@@ -217,7 +215,8 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
  **************************************************************************/
 
 this.fn_list = function(){
-	this.parent.set_url("BranchMng::BranchLectRmList.xfdl");	
+	this.opener.components[0].form.fn_list();
+	this.close();	
 }
 
 this.fn_save = function ()
@@ -230,9 +229,9 @@ this.fn_save = function ()
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 	
@@ -268,7 +267,7 @@ this.fn_detail = function ()
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
+		menuSeq : this.menuId
 	}
 	
 	this.gfn_transaction(tranObj);
@@ -285,6 +284,7 @@ this.fn_rmCdList = function()
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.menuId;
 	
 	this.gfn_transaction(tranObj);
 }
