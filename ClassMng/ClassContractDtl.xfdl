@@ -80,7 +80,7 @@
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="80"/>
+                            <Column size="130"/>
                             <Column size="80"/>
                             <Column size="200"/>
                             <Column size="80"/>
@@ -106,7 +106,7 @@
                             <Cell col="8" text="수강료"/>
                           </Band>
                           <Band id="body">
-                            <Cell text="bind:brchNm"/>
+                            <Cell text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="1" text="bind:lectCd"/>
                             <Cell col="2" text="bind:lectNm"/>
                             <Cell col="3" text="bind:lectTpNm"/>
@@ -292,7 +292,6 @@ this.ClassContractDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
  * 초기화 영역
 **************************************************************************/
 
-//TODO정산 유효성 추가
 this.init = function()
 {
 	var tranObj = {
@@ -386,7 +385,14 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClassContract":	
-			alert("계약완료 되었습니다.");
+			if(this.updateCode == "00") 
+			{
+				alert("계약완료 되었습니다.");
+			}
+			else
+			{
+				alert("법인공인인증서 인증에 실패하였습니다.");
+			}
 			this.opener.components[0].form.Div00.form.Div00.form.Div00.form.Div03.form.Button00.click();
 			this.close();
 		break;
