@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="LectImgGroupMng" width="1700" height="720" titletext="New Form" onload="LectImgGroupMng_onload">
+    <Layouts>
+      <Layout height="720" width="1700">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Static id="Static00" taborder="2" text="▶ 검색" left="10" top="79" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Div id="row01" taborder="3" text="Div01" left="10" top="111" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="1000" minwidth="300" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="법인" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="corpClCd" taborder="1" text="전체" left="114" top="5" width="160" height="21" index="0" value="" innerdataset="ds_corpCl_cd" codecolumn="cd" datacolumn="cdNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="이미지분류" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="imgClsfCd" taborder="1" text="전체" left="114" top="5" width="160" height="21" index="0" value="" innerdataset="ds_imgClsf_cd" codecolumn="cd" datacolumn="cdNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="row02" taborder="4" text="Div01" left="10" top="row01:-1" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="1000" minwidth="300" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="대분류" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="lrclsCtegryCd" taborder="1" text="Combo00" left="114" top="5" width="160" height="21" innerdataset="ds_lrclsCtegry_list" codecolumn="ctegryCd" datacolumn="ctegryNm" onitemchanged="row02_Div00_lrclsCtegryCd_onitemchanged"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="중분류" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="mdclsCtegry" taborder="1" text="Combo00" left="114" top="5" width="160" height="21" innerdataset="ds_mdclsCtegry_list" codecolumn="ctegryCd" datacolumn="ctegryNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="btnInit" taborder="6" text="초기화" top="185" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="80" onclick="btnInit_onclick"/>
+        <Button id="btnSearch" taborder="5" text="검색" top="185" height="21" cssclass="btn_WF_Medium" fittocontents="width" right="btnInit:5" width="80" onclick="btnSearch_onclick"/>
+        <Static id="Static00_00" taborder="7" text="▶ 목록" left="10" top="219" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Grid id="Grid00" taborder="8" left="10" top="250" right="10" bottom="10" binddataset="ds_list" autofittype="col" oncellclick="Grid00_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50" band="left"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="150"/>
+                <Column size="150"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="28"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="법인"/>
+                <Cell col="2" text="이미지분류"/>
+                <Cell col="3" text="대분류"/>
+                <Cell col="4" text="중분류"/>
+                <Cell col="5" text="관리"/>
+              </Band>
+              <Band id="body">
+                <Cell text="expr:rowidx+1"/>
+                <Cell col="1" text="bind:corpClNm"/>
+                <Cell col="2" text="bind:imgClsfNm"/>
+                <Cell col="3" text="bind:lrclsCtegryNm"/>
+                <Cell col="4" text="bind:mdclsCtegryNm"/>
+                <Cell col="5" displaytype="buttoncontrol" edittype="button" text="이미지 관리" cursor="pointer"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.LectImgGroupMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	
+	this.ds_corpCl_cd.copyData(this.application.gdsCode);
+	this.ds_imgClsf_cd.copyData(this.application.gdsCode);
+	
+	this.ds_corpCl_cd.filter("cdId == '064' && dpth == 1");
+	this.ds_corpCl_cd.insertRow(0);
+	this.ds_corpCl_cd.setColumn(0, "cd", "");
+	this.ds_corpCl_cd.setColumn(0, "cdNm", "전체");
+	this.row01.form.Div00.form.corpClCd.set_index(0);
+	
+	this.ds_imgClsf_cd.filter("cdId == '080' && dpth == 1");
+	this.ds_imgClsf_cd.insertRow(0);
+	this.ds_imgClsf_cd.setColumn(0, "cd", "");
+	this.ds_imgClsf_cd.setColumn(0, "cdNm", "전체");
+	this.row01.form.Div01.form.imgClsfCd.set_index(0);
+	
+	this.fn_ctgry_list();
+	this.fn_list();
+};
+
+this.btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var srchCorpClCd = this.row01.form.Div00.form.corpClCd.value;
+	var srchImgClsfCd = this.row01.form.Div01.form.imgClsfCd.value;
+	var srchLrclsCtegryCd = this.row02.form.Div00.form.lrclsCtegryCd.value;
+	var srchMdclsCtegryCd = this.row02.form.Div01.form.mdclsCtegry.value;
+	
+	var filter = "";
+	
+	if(!this.gfn_isNull(srchCorpClCd)){
+		filter += "corpClCd == '" + srchCorpClCd + "'";
+	}	
+	if(!this.gfn_isNull(srchImgClsfCd)){
+		if(filter != "") filter += " && ";
+		filter += "imgClsfCd == '" + srchImgClsfCd + "'";
+	}
+	if(!this.gfn_isNull(srchLrclsCtegryCd)){
+		if(filter != "") filter += " && ";
+		filter += "lrclsCtegryCd == '" + srchLrclsCtegryCd + "'";
+	}
+		if(!this.gfn_isNull(srchMdclsCtegryCd)){
+		if(filter != "") filter += " && ";
+		filter += "mdclsCtegryCd == '" + srchMdclsCtegryCd + "'";
+	}
+	
+	console.log(filter);
+	
+	this.ds_list.filter(filter);	
+};
+
+this.btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.row01.form.Div00.form.corpClCd.set_index(0);
+	this.row01.form.Div01.form.imgClsfCd.set_index(0);
+	this.row02.form.Div00.form.lrclsCtegryCd.set_index(0);
+	this.row02.form.Div01.form.mdclsCtegry.set_index(0);
+	
+	this.ds_list.filter("");	
+};
+
+
+this.row02_Div00_lrclsCtegryCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var cd = obj.value;
+	var nRow = "";
+	
+	this.ds_mdclsCtegry_list.deleteAll();
+	this.ds_mdclsCtegry_list.insertRow(0);
+	this.ds_mdclsCtegry_list.setColumn(0, "ctegryCd", "");
+	this.ds_mdclsCtegry_list.setColumn(0, "ctegryNm", "전체");
+	this.row02.form.Div01.form.mdclsCtegry.set_index(0);
+	
+	for(var i = 0 ; i < this.ds_ctgry_list.rowcount ; i++){
+		if(cd == this.ds_ctgry_list.getColumn(i, "ctegryId")){
+			nRow = this.ds_mdclsCtegry_list.addRow();
+			this.ds_mdclsCtegry_list.setColumn(nRow, "ctegryCd", this.ds_ctgry_list.getColumn(i, "ctegryCd"));
+			this.ds_mdclsCtegry_list.setColumn(nRow, "ctegryNm", this.ds_ctgry_list.getColumn(i, "ctegryNm"));
+		}
+	}
+	
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ this.fn_list = function(){
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::imgGroup/list.do",
+		inData : "",
+		outData : "ds_list=output1",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+ this.fn_ctgry_list = function(){
+	
+	var tranObj = {
+		strSvcId : "ctgry_list",
+		strSvcUrl : this.application.Admin_svc + "::class/selectCtgyList.do",
+		inData : "",
+		outData : "ds_ctgry_list=categoryList",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":						
+		break; 		
+		case "ctgry_list":
+			this.ds_lrclsCtegry_list.copyData(this.ds_ctgry_list);
+			this.ds_lrclsCtegry_list.filter("ctegryId == 'CTEGRY'");
+			this.ds_lrclsCtegry_list.insertRow(0);
+			this.ds_lrclsCtegry_list.setColumn(0, "ctegryCd", "");
+			this.ds_lrclsCtegry_list.setColumn(0, "ctegryNm", "전체");
+			this.row02.form.Div00.form.lrclsCtegryCd.set_index(0);
+			
+		break;
+	}
+	
+}
+
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var headTitle = obj.getCellProperty("Head", e.col, "text");
+	var corpClCd = this.ds_list.getColumn(e.row, "corpClCd");
+	var corpClNm = this.ds_list.getColumn(e.row, "corpClNm");
+	var imgClsfCd = this.ds_list.getColumn(e.row, "imgClsfCd");
+	var imgClsfNm = this.ds_list.getColumn(e.row, "imgClsfNm");
+	var lrclsCtegryCd = this.ds_list.getColumn(e.row, "lrclsCtegryCd");
+	var lrclsCtegryNm = this.ds_list.getColumn(e.row, "lrclsCtegryNm");
+	var mdclsCtegryCd = this.ds_list.getColumn(e.row, "mdclsCtegryCd");
+	var mdclsCtegryNm = this.ds_list.getColumn(e.row, "mdclsCtegryNm");
+	
+	if(headTitle == "관리" && e.clickitem == "control"){
+		var oArg = {			
+			corpClCd : corpClCd,
+			corpClNm : corpClNm,
+			imgClsfCd : imgClsfCd,
+			imgClsfNm : imgClsfNm,
+			lrclsCtegryCd : lrclsCtegryCd,
+			lrclsCtegryNm : lrclsCtegryNm,
+			mdclsCtegryCd : mdclsCtegryCd,
+			mdclsCtegryNm : mdclsCtegryNm,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		};
+				
+				
+		this.gfn_openPopup("popup", oArg, "SystemMng::popup/LectImgGroup_popup.xfdl", this, 0, 0, true, true, null);
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="corpClCd" type="STRING" size="256"/>
+          <Column id="corpClNm" type="STRING" size="256"/>
+          <Column id="imgClsfCd" type="STRING" size="256"/>
+          <Column id="imgClsfNm" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="lrclsCtegryNm" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_corpCl_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_imgClsf_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_ctgry_list">
+        <ColumnInfo>
+          <Column id="ctegryId" type="STRING" size="256"/>
+          <Column id="ctegryCd" type="STRING" size="256"/>
+          <Column id="ctegryNm" type="STRING" size="256"/>
+          <Column id="ctegryLvlNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_lrclsCtegry_list">
+        <ColumnInfo>
+          <Column id="ctegryCd" type="STRING" size="256"/>
+          <Column id="ctegryNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_mdclsCtegry_list">
+        <ColumnInfo>
+          <Column id="ctegryCd" type="STRING" size="256"/>
+          <Column id="ctegryNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="ctegryNm">전체</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
