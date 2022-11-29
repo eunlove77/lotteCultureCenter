@@ -44,7 +44,6 @@
                       <Column size="80"/>
                       <Column size="120"/>
                       <Column size="120"/>
-                      <Column size="120"/>
                     </Columns>
                     <Rows>
                       <Row size="24" band="head"/>
@@ -82,8 +81,7 @@
                       <Cell col="28" text="강의횟수"/>
                       <Cell col="29" text="폐강여부"/>
                       <Cell col="30" text="환불규정 확인서명"/>
-                      <Cell col="31" text="사은품 신청여부"/>
-                      <Cell col="32" text="사은품 신청번호"/>
+                      <Cell col="31" text="사은품 신청번호"/>
                     </Band>
                     <Band id="body">
                       <Cell text="bind:rnum"/>
@@ -117,8 +115,7 @@
                       <Cell col="28" text="bind:lectNbcnt"/>
                       <Cell col="29" text="bind:lectStatCd"/>
                       <Cell col="30" text="expr:dataset.getColumn(currow,&quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'" suppress="1" suppressalign="middle"/>
-                      <Cell col="31" text="expr:dataset.getColumn(currow,&quot;fgftRecpYn&quot;) == 'N' ? '-' : dataset.getColumn(currow,&quot;fgftRecpYn&quot;)"/>
-                      <Cell col="32" text="expr:dataset.getColumn(currow,&quot;fgftRecpYn&quot;) == 'Y' ? dataset.getColumn(currow,&quot;fgftAppNo&quot;) : '-'"/>
+                      <Cell col="31" text="expr:dataset.getColumn(currow,&quot;fgftAppNo&quot;) != undefined &amp;&amp; dataset.getColumn(currow,&quot;fgftAppNo&quot;) != '' ? dataset.getColumn(currow,&quot;fgftAppNo&quot;) : '-'"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -127,7 +124,7 @@
           </Layouts>
         </Div>
         <Button id="Button02" taborder="3" text="엑셀" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button02_onclick"/>
-        <Button id="fgftAppl" taborder="4" text="사은품 신청" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="Button02:10" visible="false"/>
+        <Button id="fgftAppl" taborder="4" text="사은품 신청" top="0" width="84" height="21" cssclass="btn_WF_Medium" right="Button02:10" visible="false" onclick="fgftAppl_onclick"/>
         <Button id="Button04" taborder="5" text="관리자 취소" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button04_onclick"/>
         <Button id="btnModify" taborder="6" text="주문정보 수정" top="180" width="100" height="21" cssclass="btn_WF_Medium" right="94" onclick="Button05_onclick" visible="false"/>
         <Button id="Button06" taborder="7" text="강좌이강" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="204" onclick="Button06_onclick"/>
@@ -272,6 +269,7 @@ this.PayCmpltList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.excelImportExport = this.application.getVariable("excelImportExport");
+	//this.parent.parent.parent.parent.parent.opener.divWork.form.fn_list()
 };
 
 // 관리자 취소 버튼 클릭
@@ -306,20 +304,20 @@ this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(this.lookup("orderInfoModifyDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
 		this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno");
 		
-		this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 560);
-		this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 560);
-		this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 560);
+		this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 610);
+		this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 610);
+		this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 610);
 		var divObj = new Div("orderInfoModifyDiv");
 		divObj.set_left(0);
 		divObj.set_right(0);
 		divObj.set_top(495);
-		divObj.set_height(560);
+		divObj.set_height(610);
 		divObj.set_url("StlmMng::StlmCmpltDtl/OrderInfoModify.xfdl");
 		
 		this.parent.parent.parent.form.addChild("orderInfoModifyDiv", divObj);
 		divObj.show();
 		
-		this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 560); // div
+		this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 610); // div
 		this.parent.parent.parent.parent.resetScroll(); // form
 	}
 };
@@ -497,6 +495,82 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 		this.Button06.set_right(94);
 	}
 };
+
+// 사은품 신청 팝업
+this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var fgftApplYn = false;
+	
+	this.removeChild("ds_fgft_list");
+	var dsFgftList = new Dataset();
+	dsFgftList.name = "ds_fgft_list";
+	dsFgftList.addColumn("actlAtlctNpleNm", "string", 256);
+	dsFgftList.addColumn("brchCdNm", "string", 256);
+	dsFgftList.addColumn("lectTpCdNm", "string", 256);
+	dsFgftList.addColumn("lectCd", "string", 256);
+	dsFgftList.addColumn("lectNm", "string", 256);
+	dsFgftList.addColumn("tcNm", "string", 256);
+	dsFgftList.addColumn("actlAtlctNpleSeqno", "int", 256);
+	dsFgftList.addColumn("atlctRsvNo", "string", 256);
+	dsFgftList.addColumn("mbrNo", "string", 256);
+	dsFgftList.addColumn("brchCd", "string", 256);
+	dsFgftList.addColumn("yy", "string", 256);
+	dsFgftList.addColumn("lectSmsterCd", "int", 256);
+	this.addChild("ds_fgft_list", dsFgftList);
+	var arrPrmtnSeqno = [];
+	var fgftIndex = 0;
+	for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
+		if(this.gfn_nvl(this.ds_stlm_cmplt_list.getColumn(i, "fgftAppNo")) == "" && this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno").length > 0){
+		trace(this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno"));
+			fgftApplYn = true;
+			this.ds_fgft_list.set_enableevent(false);
+			this.ds_fgft_list.insertRow(fgftIndex);
+			this.ds_fgft_list.setColumn(fgftIndex, "actlAtlctNpleNm", this.ds_stlm_cmplt_list.getColumn(i, "actlAtlctNpleNm"));
+			this.ds_fgft_list.setColumn(fgftIndex, "brchCdNm", this.ds_stlm_cmplt_list.getColumn(i, "brchCdNm"));
+			this.ds_fgft_list.setColumn(fgftIndex, "lectTpCdNm", this.ds_stlm_cmplt_list.getColumn(i, "lectTpCdNm"));
+			this.ds_fgft_list.setColumn(fgftIndex, "lectCd", this.ds_stlm_cmplt_list.getColumn(i, "lectCd"));
+			this.ds_fgft_list.setColumn(fgftIndex, "lectNm", this.ds_stlm_cmplt_list.getColumn(i, "lectNm"));
+			this.ds_fgft_list.setColumn(fgftIndex, "tcNm", this.ds_stlm_cmplt_list.getColumn(i, "tcNm"));
+			this.ds_fgft_list.setColumn(fgftIndex, "actlAtlctNpleSeqno", this.ds_stlm_cmplt_list.getColumn(i, "actlAtlctNpleSeqno"));
+			this.ds_fgft_list.setColumn(fgftIndex, "atlctRsvNo", this.ds_stlm_cmplt_list.getColumn(i, "atlctRsvNo"));
+			this.ds_fgft_list.setColumn(fgftIndex, "mbrNo", this.ds_stlm_cmplt_list.getColumn(i, "mbrNo"));
+			this.ds_fgft_list.setColumn(fgftIndex, "brchCd", this.ds_stlm_cmplt_list.getColumn(i, "brchCd"));
+			this.ds_fgft_list.setColumn(fgftIndex, "yy", this.ds_stlm_cmplt_list.getColumn(i, "yy"));
+			this.ds_fgft_list.setColumn(fgftIndex, "lectSmsterCd", this.ds_stlm_cmplt_list.getColumn(i, "lectSmsterCd"));
+			this.ds_fgft_list.set_enableevent(true);
+			
+			for(var j=0;j<this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno").split(",").length;j++){
+				var duplYn = false;
+				for(var k=0;k<arrPrmtnSeqno.length;k++){
+					if(arrPrmtnSeqno[k] == this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno").split(",")[j]){
+						duplYn = true;
+					}
+				}
+				if(!duplYn){
+					arrPrmtnSeqno.push(this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno").split(",")[j]);
+				}
+			}
+			
+			
+			fgftIndex++;
+		}
+	}
+	
+	if(fgftApplYn){
+		var oArg = {
+			menuId : this.menuSeq
+			, ds_fgft_list : this.ds_fgft_list
+			, ds_stlm_cmplt_list : this.ds_stlm_cmplt_list
+			, parent_list_form : this.parent.parent.parent.parent.parent.opener.divWork.form
+			, arrPrmtnSeqno : arrPrmtnSeqno
+		};
+		this.cnt++;
+		this.gfn_openPopup("FgftAppPopupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/FgftApp_popup.xfdl", this, 1280, 720, true, true, null);
+	}else{
+		alert("사은품 신청대상 강좌가 없습니다.");
+		return;
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_stlm_cmplt_list">
@@ -552,6 +626,7 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
           <Column id="optnUseYn" type="STRING" size="256"/>
           <Column id="optnTypCdNm" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="prmtnSeqno" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_fmly_cd_list">

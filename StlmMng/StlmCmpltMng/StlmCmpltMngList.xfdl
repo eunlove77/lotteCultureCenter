@@ -261,6 +261,17 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	if(e.row != null && e.cell == "3"){
 	
 	}
+	
+	// 환불규정 확인서명
+	if(e.row != null && e.cell == "17"){
+		this.cnt++; 
+		var oArg = {
+			atlctRsvNo : this.ds_stlm_cmplt_list.getColumn(e.row, "atlctRsvNo"),
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		};
+		
+		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltMng/RfndRuleSign_popup.xfdl", this, 460, 450, true, true, null);
+	}
 };
 
 // 엑셀 다운로드
@@ -268,7 +279,7 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var oArg = {
 			title : "엑셀 다운로드 사유"
-			};
+	};
 	this.gfn_showModal("excelPopupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "excelPopupCallBack", this, 400, 250, true, false, null);
 };
 ]]></Script>
@@ -294,7 +305,8 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="stlmMthdCdNm" type="STRING" size="256" description="결제수단"/>
           <Column id="stlmDtm" type="DATETIME" size="256" description="결제일시"/>
           <Column id="rfndRuleCfmSignYn" type="STRING" size="256" description="환불규정 확인서명"/>
-          <Column id="fgftRecpYn" type="STRING" size="256"/>
+          <Column id="fgftAppNo" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_stlm_cmplt_excel_list">

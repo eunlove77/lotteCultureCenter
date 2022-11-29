@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="RfndRuleCfm_popup" width="1280" height="720" titletext="환불규정 안내" onload="RfndRuleCfm_popup_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Button id="Button01" taborder="0" text="취소" left="598" width="84" height="21" bottom="0" cssclass="btn_WF_Weak" visible="true" onclick="Div00_Button01_onclick"/>
+              <Static id="Static00" taborder="1" text="▶ 수강료 환불규정 안내" left="0" top="0" width="150" height="17" cssclass="sta_WF_TitGray"/>
+              <Static id="Static01" taborder="2" text="본인은 상기 내용을 확인하였으며 동의합니다." left="0" top="440" height="31" right="0" textAlign="center" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+              <WebBrowser id="WebBrowser00" taborder="3" left="0" top="30" height="400" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.menuSeq = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.RfndRuleCfm_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.menuSeq = this.parent.menuId;
+	
+	this.fn_data_list();
+};
+
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getRfndRuleCfm.do";
+	var inData      = "";
+	var outData     = "this.ds_rfnd_rule_cfm=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "dataList":
+			var objDoc = this.Div00.form.WebBrowser00.getProperty("document");
+			var sHtml = this.ds_rfnd_rule_cfm.getColumn(0, "webCnts");
+			objDoc.callMethod("open");
+			objDoc.callMethod("write", sHtml);
+			objDoc.callMethod("close");
+			break;
+	}
+};
+
+// 취소 버튼 클릭
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_rfnd_rule_cfm">
+        <ColumnInfo>
+          <Column id="seqno" type="INT" size="256"/>
+          <Column id="cntsClCd" type="STRING" size="256"/>
+          <Column id="webCnts" type="STRING" size="8000"/>
+          <Column id="mbilCnts" type="STRING" size="8000"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

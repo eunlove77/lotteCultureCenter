@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="RfndRuleSign_popup" width="640" height="360" onload="RfndRuleSign_popup_onload" ontimer="RfndRuleSign_popup_ontimer">
+    <Layouts>
+      <Layout height="360" width="640" stepcount="0">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Graphics id="Graphics00" taborder="0" left="0" top="0" height="300" border="1px solid #e6e6e6" right="0" background="#ffffff" onlbuttondown="Div00_Graphics00_onlbuttondown" onlbuttonup="Div00_Graphics00_onlbuttonup" onmousemove="Div00_Graphics00_onmousemove"/>
+              <Button id="Button02" taborder="1" text="취소" width="100" cssclass="btn_WF_Weak" height="20" bottom="10" left="160" onclick="Div00_Button02_onclick"/>
+              <Button id="Button00" taborder="2" text="확인" height="20" cssclass="btn_WF_Medium" bottom="10" width="100" left="270" onclick="Div00_Button00_onclick"/>
+              <Button id="Button01" taborder="3" text="재입력" left="380" width="100" cssclass="btn_WF_Weak" height="20" bottom="10" onclick="Div00_Button01_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.menuSeq = null;
+var bMouseButtonPressed = false;
+var preClientX;
+var preClientY;
+var nNum = 0;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.RfndRuleSign_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.menuSeq = this.parent.menuId;
+	
+	this.Div00.form.Graphics00.clear();
+	this.Div00.form.Graphics00.redraw();
+};
+
+// 취소 버튼 클릭
+this.Div00_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.opener.close();
+	this.close();
+};
+
+// 확인 버튼 클릭
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.Div00.form.Graphics00.getAllObjects().length > 0){
+		if(confirm("등록하시겠습니까?")){
+			var rtn; 	
+			if(system.navigatorname == "nexacro") {   // 전용브라우저
+				rtn = system.saveToImageBase64String(this.Div00.form.Graphics00, false, "PNG");
+			} else {
+				rtn = this.Graphics00._layer._canvas.toDataURL().src;
+			}
+			
+			var stream = rtn.split(",")[1];
+			this.ds_sign_image.insertRow(0);
+			this.ds_sign_image.setColumn(0, "filename", "test1.png");
+			this.ds_sign_image.setColumn(0, "stream", stream);
+		
+			var tranObj = {
+				strSvcId : "uploadSignImage",
+				strSvcUrl : this.application.Admin_svc + "::stlmMng/uploadSignImage.do",
+				inData : "signImage=ds_sign_image",
+				outData : "this.ds_rtn_data=output1",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				menuSeq : this.menuSeq
+			}
+			this.gfn_transaction(tranObj);
+		}
+	}else{
+		alert("고객 서명이 필요합니다.");
+		return;
+	}
+};
+
+this.fnCallback = function(sId, nErrorCd, sErrorMsg)
+{
+	if(nErrorCd<0)
+	{
+		alert("["+nErrorCd+"]"+sErrorMsg);
+		return;
+	}
+	
+	switch(sId)
+	{
+		case "uploadSignImage":
+			this.opener.atchFileId = this.ds_rtn_data.getColumn(0, "atchFileId");
+			this.opener.saveAtchFileId();
+			alert("저장되었습니다.");
+			this.opener.close();
+			this.close();
+			
+			break;
+	}
+};
+
+// 재입력 버튼 클릭
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.Div00.form.Graphics00.clear();
+	this.Div00.form.Graphics00.redraw();
+};
+
+this.Div00_Graphics00_onlbuttondown = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	bMouseButtonPressed = true;
+	preClientX = e.clientx;
+	preClientY = e.clienty;
+};
+
+this.Div00_Graphics00_onlbuttonup = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	bMouseButtonPressed = false;
+};
+
+this.Div00_Graphics00_onmousemove = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	this.fn_drawLine(e);
+};
+
+this.fn_drawLine = function(e:nexacro.MouseEventInfo)
+{
+	var nowClientX = e.clientx;
+    var nowClientY = e.clienty;
+    if(bMouseButtonPressed)
+    {
+        var objGLine = new nexacro.GraphicsLine();
+        objGLine.set_x1(preClientX);
+        objGLine.set_x2(nowClientX);
+        objGLine.set_y1(preClientY);
+        objGLine.set_y2(nowClientY);
+        objGLine.set_strokepen('3px solid black'); 
+        this.Div00.form.Graphics00.addChild( "GraphicsControl_"+nNum, objGLine );
+        this.Div00.form.Graphics00.redraw();
+        
+        preClientX = nowClientX;
+        preClientY = nowClientY;
+        nNum++;
+    }
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_sign_image">
+        <ColumnInfo>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="stream" type="BLOB" size="3000"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_rtn_data">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
