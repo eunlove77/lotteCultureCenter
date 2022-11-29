@@ -48,7 +48,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="강사명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                          <Edit id="tcNm" taborder="1" left="Static00:10" top="5" height="20" width="150" maxlength="20" value="z" text="z"/>
+                          <Edit id="tcNm" taborder="1" left="Static00:10" top="5" height="20" width="150" maxlength="20" text="z"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -170,7 +170,7 @@
           </Layouts>
         </Div>
         <Static id="txtMenuNm" taborder="1" text="강사상세정보" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div_PayInfo" taborder="8" text="Div00" left="10" top="Div01:20" height="170" right="10" visible="false">
+        <Div id="Div_PayInfo" taborder="8" text="Div00" left="10" top="Div01:20" height="170" right="10" visible="true">
           <Layouts>
             <Layout>
               <Div id="Div_p" taborder="2" text="Div01" left="0" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="" height="33" top="30">
@@ -180,8 +180,8 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="주민번호" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                          <Edit id="rrno1" taborder="1" left="130" top="5" right="860" bottom="5" maxlength="200" onchanged="Div_PayInfo_Div_p_Div00_rrno1_onchanged"/>
-                          <Edit id="rrno2" taborder="2" left="rrno1:10" top="5" right="440" bottom="5" maxlength="200"/>
+                          <Edit id="rrno1" taborder="1" left="130" top="5" right="860" bottom="5" maxlength="6" inputtype="number" onchanged="rrno_onchanged"/>
+                          <Edit id="rrno2" taborder="2" left="rrno1:10" top="5" right="440" bottom="5" maxlength="7" inputtype="number" onchanged="rrno_onchanged"/>
                           <Button id="juminChk" taborder="3" text="중복체크" left="rrno2:10" cssclass="btn_WF_Weak" fittocontents="width" top="5" bottom="5" width="100" onclick="Div_PayInfo_Div_p_Div00_juminChk_onclick"/>
                         </Layout>
                       </Layouts>
@@ -196,7 +196,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="사업자번호" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                          <Edit id="rrno" taborder="1" left="130" top="5" right="550" bottom="5" maxlength="200"/>
+                          <Edit id="rrno" taborder="1" left="130" top="5" right="550" bottom="5" maxlength="13" inputtype="number" onchanged="rrno_onchanged"/>
                           <Button id="btnCheck" taborder="2" text="중복체크" left="rrno:10" cssclass="btn_WF_Weak" fittocontents="width" top="5" bottom="5" width="100" onclick="Div_PayInfo_Div_b_Div00_btnCheck_onclick"/>
                         </Layout>
                       </Layouts>
@@ -204,19 +204,19 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="1" text="Div01" left="0" top="96" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="" height="33">
+              <Div id="Div01" taborder="1" text="Div01" left="0" top="Div_b:0" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="" height="33">
                 <Layouts>
                   <Layout>
                     <Div id="Div00" taborder="0" text="Div01" left="0" top="0" bottom="0" right="0">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="계좌정보" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                          <Edit id="hpMidNo" taborder="1" left="17.81%" top="16.13%" height="20" inputtype="number" maxlength="4" right="68.12%" displaynulltext="예금주"/>
-                          <Edit id="hpLastNo" taborder="3" left="hpMidNo:1.9510000000000218" top="5" height="20" inputtype="number" maxlength="4" right="40.30%" displaynulltext="계좌번호 ('-'없이 입력하세요)"/>
+                          <Edit id="dpstNm" taborder="1" left="224" top="5" height="20" inputtype="normal" maxlength="100" right="856" displaynulltext="예금주"/>
+                          <Edit id="accNo" taborder="3" left="dpstNm:1.9510000000000218" top="5" height="20" inputtype="number" maxlength="100" right="506" displaynulltext="계좌번호 ('-'없이 입력하세요)"/>
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Combo id="bnkNm" taborder="1" text="" left="10.25%" top="5" height="20" index="0" value="" right="82.67%"/>
+                    <Combo id="bnkNm" taborder="1" text="" left="130" top="5" height="20" index="0" value="" right="1039" innerdataset="ds_bnk_cdList" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -551,20 +551,20 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div99" taborder="7" text="Div00" left="40.63%" top="Div06:20" height="56" right="36.72%">
+        <Div id="Div99" taborder="7" text="Div00" left="40.63%" top="Div06:20" height="76" width="289">
           <Layouts>
             <Layout>
-              <Button id="btnCancel00" taborder="0" text="취소" left="0" cssclass="btn_WF_Weak" fittocontents="width" height="30" onclick="btnCancel_onclick" top="8" width="120"/>
-              <Button id="btnSave00" taborder="1" text="저장" cssclass="btn_WF_Medium" fittocontents="width" left="btnCancel00:30" height="30" onclick="btnSave_onclick" top="8" width="120"/>
+              <Button id="btnCancel00" taborder="0" text="취소" left="0" cssclass="btn_WF_Weak" height="30" onclick="btnCancel_onclick" top="0" width="120"/>
+              <Button id="btnSave00" taborder="1" text="저장" cssclass="btn_WF_Medium" left="btnCancel00:30" height="30" onclick="btnSave_onclick" top="0" width="120"/>
             </Layout>
           </Layouts>
         </Div>
         <Div id="Div_topBtn" taborder="9" text="Div00" top="72" width="342" height="40" right="10">
           <Layouts>
             <Layout>
-              <Button id="btnSave" taborder="2" text="저장" cssclass="btn_WF_Medium" fittocontents="width" height="30" onclick="btnSave_onclick" top="0" right="0" width="77"/>
-              <Button id="btnCancel" taborder="1" text="취소" cssclass="btn_WF_Weak" fittocontents="width" height="30" onclick="btnCancel_onclick" top="0" right="btnSave:15" width="77"/>
-              <Button id="btnTxReceipt" taborder="0" text="원천징수영수증" cssclass="btn_WF_Low" fittocontents="width" height="30" top="0" width="120" onclick="Div_topBtn_btnTxReceipt_onclick" right="btnCancel:15"/>
+              <Button id="btnSave" taborder="2" text="저장" cssclass="btn_WF_Medium" height="30" onclick="btnSave_onclick" top="0" right="0" width="77"/>
+              <Button id="btnCancel" taborder="1" text="취소" cssclass="btn_WF_Weak" height="30" onclick="btnCancel_onclick" top="0" right="btnSave:15" width="77"/>
+              <Button id="btnTxReceipt" taborder="0" text="원천징수영수증" cssclass="btn_WF_Low" height="30" top="0" width="120" onclick="Div_topBtn_btnTxReceipt_onclick" right="btnCancel:15"/>
             </Layout>
           </Layouts>
         </Div>
@@ -591,7 +591,7 @@ this.age = 0;
 this.menuSeq = 0;
 
 this.isRrnoDupChk = false; //지급정보 중복체크
-this.isCntr = false; 	//계약 완료 여부
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -638,6 +638,7 @@ this.select_teacher_info = function(){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
@@ -645,8 +646,7 @@ this.select_teacher_info = function(){
 
 //강사정보 세팅
 this.set_teacher_info = function(){
-	//계약완료 여부
-	this.isCntr = this.ds_teacher_info.getColumn(0, 'cntrCnt') > 0 ? true : false;
+
 	//승인여부
 	var apvlCd = this.ds_teacher_info.getColumn(0, 'apvlStatCd');
 	//강사유형
@@ -654,12 +654,7 @@ this.set_teacher_info = function(){
 
 	this.set_teacher_basic_info(apvlCd, tcTpCd);	//기본정보
 	
-	if(this.isCntr){
-		this.set_teacher_pay_info(tcTpCd);	//지급정보
-	} else {
-		this.Div_PayInfo.set_height(0);
-		this.resetScroll();
-	}
+	this.set_teacher_pay_info(tcTpCd);	//지급정보
 
 	this.set_teacher_lecture_info();	//출강정보
 	
@@ -732,19 +727,34 @@ this.set_teacher_basic_info = function(apvlCd, tcTpCd){
 /**************************************************************************
  * 지급정보
  **************************************************************************/
+this.rrno_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+{
+	this.isRrnoDupChk = false;
+}
 this.set_teacher_pay_info = function(apvlCd, tcTpCd){
 
-	this.Div_PayInfo.set_visible(true);
+	var rrno = this.ds_teacher_info.getColumn(0, "rrno");
+	if(rrno){
+		this.isRrnoDupChk = true;
+	}
 	
 	if(tcTpCd != '3'){
 		//개인
 		this.Div_PayInfo.form.Div_b.set_height(0);
-		var top = this.Div_PayInfo.form.Div01.getPixelTop();
-		this.Div_PayInfo.form.Div01.set_top(Number(top) + 33);
+ 		var top = this.Div_PayInfo.form.Div01.getOffsetTop();
+ 		this.Div_PayInfo.form.Div01.setOffsetTop(Number(top)-33);
+		
+		//주민번호
+		if(rrno){
+			this.Div_PayInfo.form.Div_p.form.Div00.form.rrno1.set_value(rrno.substring(0, 6));
+			this.Div_PayInfo.form.Div_p.form.Div00.form.rrno2.set_value(rrno.substring(6));
+		}
+		
 	} else {
 		//법인
 		this.Div_PayInfo.form.Div_p.set_height(0);
 	}
+
 	this.resetScroll();
 }
 //주민번호 중복체크 
@@ -765,9 +775,14 @@ this.Div_PayInfo_Div_p_Div00_juminChk_onclick = function(obj:nexacro.Button,e:ne
 		return;
 	}
 	
-	//중복 체크
-	this.check_duplication_rrno(tJuminID);
-	
+	//기존이랑 다른경우 중복체크
+	var rrno_ori = this.ds_teacher_info.getColumn(0, 'rrno');
+	if(rrno_ori != tJuminID){
+		this.check_duplication_rrno(tJuminID);
+	} else {
+		alert("사용 가능한 주민번호입니다.");
+		this.isRrnoDupChk = true;
+	}
 };
 //사업자번호 중복체크
 this.Div_PayInfo_Div_b_Div00_btnCheck_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -777,8 +792,16 @@ this.Div_PayInfo_Div_b_Div00_btnCheck_onclick = function(obj:nexacro.Button,e:ne
 	if(!this.chk_Saup_No(saupno)){
 		alert("사용 불가한 사업자번호입니다.");
 	}
-	//중복 체크
-	this.check_duplication_rrno(rrno);
+	
+	//기존이랑 다른경우 중복체크
+	var rrno_ori = this.ds_teacher_info.getColumn(0, 'rrno');
+	if(rrno_ori != rrno){
+		this.check_duplication_rrno(rrno);
+	} else {
+		alert("사용 가능한 사업자번호입니다.");
+		this.isRrnoDupChk = true;
+	}
+	
 };
 
 this.check_duplication_rrno = function(rrno){
@@ -793,6 +816,7 @@ this.check_duplication_rrno = function(rrno){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
@@ -903,6 +927,7 @@ this.set_dataset = function(){
 		{ds : this.ds_telNo_cdList, 	cd: "'001'"},		//지역번호
 		{ds : this.ds_lsc_cdList, 		cd: "'017'"},		//양력음력
 		{ds : this.ds_emailAddr_cdList,cd: "'CODE_80'"},	//이메일주소
+		{ds : this.ds_bnk_cdList, 		cd: "'TC_004'"},	//은행코드
 		{ds : this.ds_schlCl_cdList, 	cd: "'CODE_81'"},	//학교구분
 		{ds : this.ds_grdtCl_cdList,	cd: "'CODE_82'"},	//졸업구분 
 		{ds : this.ds_mdfStat_cdList,	cd: "'TC_010'"}		//수정요청 처리상태
@@ -921,6 +946,8 @@ this.set_dataset = function(){
 		 obj : this.Div01.form.Div03.form.Div01.form.telStNo},		//지역번호
 		{ds : this.ds_emailAddr_cdList, cdNm: '직접입력',
 		 obj : this.Div01.form.Div05.form.Div00.form.Combo00},		//이메일주소
+		{ds : this.ds_bnk_cdList, cdNm: '선택',
+		 obj : this.Div_PayInfo.form.Div01.form.bnkNm},				//은행
 		{ds : this.ds_schlCl_cdList, cdNm: '선택',
 		 obj : this.Div04.form.Div03.form.Grid00, isGrid: true},	//학교구분
 		{ds : this.ds_grdtCl_cdList, cdNm: '선택',
@@ -950,6 +977,7 @@ this.set_screen_view = function(){
 		this.Div01.form.btnFileInsert.set_visible(false);
 		this.Div01.form.Div07.form.Div02.form.btnCheckInfo.set_visible(false);
 		this.Div01.form.Static01.set_visible(false);
+		this.Div01.form.Div04.form.Div00.form.Radio00.set_readonly(true); //양력음력
 		
 		this.Div_PayInfo.set_height(0);
 		this.Div02.set_height(0);
@@ -1187,15 +1215,16 @@ this.grid_button_click = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 	}
 };
 this.validate_before_addRow = function(ds){
+	var type = "addRow";
 	switch(ds.name) {
 	case 'ds_tcedu_list':
-		return this.validate_teacher_edu();
+		return this.validate_teacher_edu(type);
 	case 'ds_tchist_list':
-		return this.validate_teacher_hist();
+		return this.validate_teacher_hist(type);
 	case 'ds_tcawrd_list':
-		return this.validate_teacher_awrd();
+		return this.validate_teacher_awrd(type);
 	case 'ds_tcathctf_list':
-		return this.validate_teacher_athctf();
+		return this.validate_teacher_athctf(type);
 	}
 	return false;
 }
@@ -1267,8 +1296,25 @@ this.update_teacher_modifyRequest = function(prcsNm, prcsStatCd){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
+	this.gfn_transaction(tranObj);
+}
+this.list_teacher_modifyRequest = function(){
+	
+	var tranObj = {};
+	tranObj.strSvcId	= "list_tcmdfreq";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/mdfreq/list.do";
+	tranObj.inData      = "search=ds_teacher_info";
+	tranObj.outData     = "ds_tcmdfreq_list=output1"
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
+	
+	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
 this.teacher_modify_request_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo){
@@ -1340,6 +1386,7 @@ this.submit_teacher_info = function(){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	this.gfn_transaction(tranObj);
@@ -1357,7 +1404,8 @@ this.confirm_online_teacher_rqst = function(){
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : false,
-		menuSeq : this.menuSeq
+		menuSeq : this.menuSeq,
+		isPopup : true
 	}
 
   if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
@@ -1366,12 +1414,20 @@ this.confirm_online_teacher_rqst = function(){
 /**************************************************************************
  * 전송 전 데이터 가공
  **************************************************************************/
- this.set_teacher_info_rrno = function(){
+this.set_teacher_info_rrno = function(){
 	var rrno = "";
 	var tcTpCd = this.ds_teacher_info.getColumn(0, 'tcTpCd');
 	
-	this.ds_teacher_info.setColumn(0, 'rrno', this.ds_sign_dtl.getColumn(0, 'atchFileId'));
- }
+	if(tcTpCd != "3"){
+		var obj_jumin1 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno1.value;
+		var obj_jumin2 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno2.value;
+		rrno = obj_jumin1 + obj_jumin2;
+	} else {
+		rrno = this.Div_PayInfo.form.Div_b.form.Div00.form.rrno.value;
+	}
+	
+	this.ds_teacher_info.setColumn(0, 'rrno', rrno);
+}
  
 /**************************************************************************
  * 유효성 검사
@@ -1380,8 +1436,8 @@ this.validate_teacher = function(){
 
 	if(!this.validate_teacher_basic()) return false;
 	
-	//지급정보
-	if(this.isCntr && !this.validate_pay_info()) return false;
+	
+	if(!this.validate_pay_info()) return false;	//지급정보
 	
 	if(!this.validate_teacher_edu()) return false;
 	if(!this.validate_teacher_hist()) return false;
@@ -1438,51 +1494,79 @@ this.validate_teacher_basic = function(){
 }
 //지급정보
 this.validate_pay_info = function(){
+	var msg = "";
+	var pass = false;
+	
 	var tcTpCd = this.ds_teacher_info.getColumn(0, "tcTpCd");
 	if(tcTpCd != "3"){
-		var obj_jumin1 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno1;
-		var obj_jumin2 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno2;
+		var obj_jumin1 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno1.value;
+		var obj_jumin2 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno2.value;
 		
-		if(!obj_jumin1 && !obj_jumin2)	return; 
-		if(this.isRrnoDupChk){
+		if(!obj_jumin1 && !obj_jumin2){
+			msg = "주민등록번호를 입력하세요.";
+			pass = true;
+		}
+		else if(!obj_jumin1 || !obj_jumin2){
+			msg = "주민등록번호를 입력하세요.";
+		}
+		else if(!this.isRrnoDupChk){
 			alert("주민등록번호 중복체크 후 저장하세요.");
 			return false;
 		}
 		
 	} else {
 		var rrno = this.Div_PayInfo.form.Div_b.form.Div00.form.rrno.value;
-		if(!rrno)	return;
-		if(this.isRrnoDupChk){
+		if(!rrno){
+			msg = "사업자등록번호를 입력하세요.";
+			pass = true;
+		}
+		else if(!this.isRrnoDupChk){
 			alert("사업자번호 중복체크 후 저장하세요.");
 			return false;
 		}
 	}
 	
-	return true;
+	//계좌정보
+	var bnkNm = this.Div_PayInfo.form.Div01.form.bnkNm.value;
+	var dpstNm = this.Div_PayInfo.form.Div01.form.Div00.form.dpstNm.value;
+	var accNo = this.Div_PayInfo.form.Div01.form.Div00.form.accNo.value;
+	if(pass && !bnkNm && !dpstNm && !accNo){ //아무것도 적지 않으면
+		return true;
+	}
+	if(!pass && bnkNm && dpstNm && accNo){ //모두 통과
+		return true;
+	} 
+	else if(msg){
+		alert(msg);
+	} else {
+		alert("계좌정보를 입력하세요");
+	}
+	
+	return false;
 }
 
 //학력
-this.validate_teacher_edu = function(){
+this.validate_teacher_edu = function(type){
 	var vali_arr= [['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
-	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr, type);
 }
 //경력
 this.validate_teacher_hist = function(){
 	var vali_arr= [['histStDt', '기간을'], ['histEndDt', '기간을'], ['histPlcNm', '기관명을']]
-	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr, type);
 }
 //수상
 this.validate_teacher_awrd = function(){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '수상내역을']]
-	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr, type);
 }
 //자격
 this.validate_teacher_athctf = function(){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '자격증명을']];
-	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr, type);
 }
 
-this.validate_teacher_ds_list = function(ds, vali_arr){
+this.validate_teacher_ds_list = function(ds, vali_arr, type){
 	var isInput = false;
 	var msg = "";
 	var ds = this[ds];
@@ -1500,8 +1584,17 @@ this.validate_teacher_ds_list = function(ds, vali_arr){
 			return false;
 		}
 	}
+	
+	if(type == "addRow" && ds.rowcount == 1 && !isInput){
+		//항목 추가시 입력값 없다면
+		alert(vali_arr[0][1] + " 입력하세요.");
+		return false;
+	}
+	
 	return true;
 }
+
+
 
 /**************************************************************************
  * UTIL
@@ -1516,6 +1609,7 @@ this.get_file_detail = function(ds, svcId){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
@@ -1543,6 +1637,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 			this.ds_sign_dtl.setColumn(0, 'atchFileId', signImgFileId);
 			this.get_file_detail('ds_sign_dtl', 'ds_sign_dtl');
 		}
+		
+		
 	
 		/*this.set_screen_view_after();*/
 		
@@ -1557,18 +1653,20 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 	}
 	else if(svcId == "update_tcmdfreq_complete"){
 		alert("요청사항 완료 처리되었습니다.");
+		this.list_teacher_modifyRequest();
 		return;
 	}
 	else if(svcId == "update_tcmdfreq_reject"){
 		alert("요청사항 반려 처리되었습니다.");
+		this.list_teacher_modifyRequest();
 		return;
 	}
 	else if(svcId == "duplication_check_rrno"){
-		var dupYn = this.ds_rrno.getColumn(0, "dupYn");
-		var rrnoNm = ds.getColumn(0, "tcTpCd") != "3" ? "주민등록번호" : "사업자번호";
+		var dupYn = this.ds_rrno.getColumn(0, "dupCnt") > 0 ? 'Y' : 'N';
+		var rrnoNm = this.ds_teacher_info.getColumn(0, "tcTpCd") != "3" ? "주민등록번호" : "사업자번호";
 		if(dupYn == "Y"){
 			alert("동일한 "+rrnoNm+"가 존재합니다.");
-			return;
+			this.isRrnoDupChk = false;
 		} else {
 			alert("사용 가능한 "+rrnoNm+"입니다.");
 			this.isRrnoDupChk = true;
@@ -1582,7 +1680,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		alert("승인되었습니다.")
 		this.close();
 	}
-}]]></Script>
+}
+]]></Script>
     <Objects>
       <Dataset id="ds_teacher_info">
         <ColumnInfo>
@@ -1964,7 +2063,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <Dataset id="ds_rrno">
         <ColumnInfo>
           <Column id="rrno" type="STRING" size="256"/>
-          <Column id="dupYn" type="STRING" size="256"/>
+          <Column id="dupCnt" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -1995,6 +2094,12 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           <Row/>
         </Rows>
       </Dataset>
+      <Dataset id="ds_bnk_cdList">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item2" compid="Div01.form.Div02.form.Div00.form.tcNm" propid="value" datasetid="ds_teacher_info" columnid="tcNm"/>
@@ -2016,8 +2121,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <BindItem id="item33" compid="Div_PayInfo.form.Div01.form.bnkNm" propid="value" datasetid="ds_teacher_info" columnid="bnkNm"/>
       <BindItem id="item37" compid="Div_PayInfo.form.Div_p.form.Div_PayInfo.form.Div00_00.form.rrno" propid="value" datasetid="ds_teacher_info" columnid="addr"/>
       <BindItem id="item1" compid="Div01.form.Div01.form.Div_txfpBizprYn.form.txfpBizprYn" propid="value" datasetid="ds_teacher_info" columnid="txfrBizprYn"/>
-      <BindItem id="item32" compid="Div_PayInfo.form.Div01.form.Div00.form.hpMidNo" propid="value" datasetid="ds_teacher_info" columnid="dpstNm"/>
-      <BindItem id="item35" compid="Div_PayInfo.form.Div01.form.Div00.form.hpLastNo" propid="value" datasetid="ds_teacher_info" columnid="accNo"/>
+      <BindItem id="item32" compid="Div_PayInfo.form.Div01.form.Div00.form.dpstNm" propid="value" datasetid="ds_teacher_info" columnid="dpstNm"/>
+      <BindItem id="item35" compid="Div_PayInfo.form.Div01.form.Div00.form.accNo" propid="value" datasetid="ds_teacher_info" columnid="accNo"/>
       <BindItem id="item20" compid="Div06.form.Div00.form.Div01.form.rgprDtm" propid="text" datasetid="ds_teacher_info" columnid="rgprDtm"/>
       <BindItem id="item23" compid="Div06.form.Div01.form.Div01.form.mdfDtm" propid="text" datasetid="ds_teacher_info" columnid="mdfDtm"/>
       <BindItem id="item18" compid="Div01.form.Div01.form.Radio00" propid="value" datasetid="ds_teacher_info" columnid="tcTpCd"/>

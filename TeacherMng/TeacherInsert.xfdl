@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TeacherDtl" width="1280" height="1000" titletext="강사 등록" onload="TeacherDtl_onload">
+  <Form id="TeacherDtl" width="1280" height="840" titletext="강사 등록" onload="TeacherDtl_onload">
     <Layouts>
-      <Layout height="1000" mobileorientation="landscape" width="1280">
+      <Layout height="840" mobileorientation="landscape" width="1280">
         <Div id="Div01" taborder="0" text="Div01" left="10" top="71" height="339" right="10" minwidth="680" maxwidth="">
           <Layouts>
             <Layout>
@@ -291,9 +291,10 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="btnSave" taborder="3" text="등록" width="80" cssclass="btn_WF_Medium" fittocontents="width" left="50.86%" height="30" onclick="btnSave_onclick" top="Div02:10"/>
-        <Button id="btnCancel" taborder="4" text="취소" cssclass="btn_WF_Weak" fittocontents="width" height="30" onclick="btnCancel_onclick" top="Div02:10" right="btnSave:10" width="80"/>
+        <Button id="btnSave" taborder="3" text="등록" width="120" cssclass="btn_WF_Medium" left="50.86%" height="30" onclick="btnSave_onclick" top="Div02:10"/>
+        <Button id="btnCancel" taborder="4" text="취소" cssclass="btn_WF_Weak" height="30" onclick="btnCancel_onclick" top="Div02:10" right="btnSave:30" width="120"/>
         <Button id="Button00" taborder="5" text="Button00" left="264" top="427" width="81" height="23" onclick="Button00_onclick"/>
+        <Div id="bottomMargin" taborder="6" left="494" top="750" width="296" height="46"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -621,15 +622,16 @@ this.grid_button_click = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 	}
 };
 this.validate_before_addRow = function(ds){
+	var type = "addRow";
 	switch(ds.name) {
 	case 'ds_tcedu_list':
-		return this.validate_teacher_edu();
+		return this.validate_teacher_edu(type);
 	case 'ds_tchist_list':
-		return this.validate_teacher_hist();
+		return this.validate_teacher_hist(type);
 	case 'ds_tcawrd_list':
-		return this.validate_teacher_awrd();
+		return this.validate_teacher_awrd(type);
 	case 'ds_tcathctf_list':
-		return this.validate_teacher_athctf();
+		return this.validate_teacher_athctf(type);
 	}
 	return false;
 }
@@ -727,6 +729,7 @@ this.submit_teacher_info = function(){
 	tranObj.callBackFnc = "fnCallback_teacher";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
   if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	this.gfn_transaction(tranObj);
@@ -809,27 +812,27 @@ this.validate_teacher_basic = function(){
 	return true;
 }
 //학력
-this.validate_teacher_edu = function(){
+this.validate_teacher_edu = function(type){
 	var vali_arr= [['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
-	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr, type);
 }
 //경력
 this.validate_teacher_hist = function(){
 	var vali_arr= [['histStDt', '기간을'], ['histEndDt', '기간을'], ['histPlcNm', '기관명을']]
-	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr, type);
 }
 //수상
 this.validate_teacher_awrd = function(){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '수상내역을']]
-	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr, type);
 }
 //자격
 this.validate_teacher_athctf = function(){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '자격증명을']];
-	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr);
+	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr, type);
 }
 
-this.validate_teacher_ds_list = function(ds, vali_arr){
+this.validate_teacher_ds_list = function(ds, vali_arr, type){
 	var isInput = false;
 	var msg = "";
 	var ds = this[ds];
@@ -847,6 +850,13 @@ this.validate_teacher_ds_list = function(ds, vali_arr){
 			return false;
 		}
 	}
+	
+	if(type == "addRow" && ds.rowcount == 1 && !isInput){
+		//항목 추가시 입력값 없다면
+		alert(vali_arr[0][1]  + " 입력하세요.");
+		return false;
+	}
+	
 	return true;
 }
 /**************************************************************************
@@ -862,6 +872,7 @@ this.get_file_detail = function(ds){
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.menuSeq;
+	tranObj.isPopup     = true;
 	
     if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
