@@ -51,7 +51,7 @@ include "Base::popup.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-
+this.useYn = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -122,8 +122,13 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 	{    
 		case "list":			
 		break; 		
-		case "occur":
-			this.alert("발생 완료");
+		case "occur":			
+			if(this.useYn == "Y"){
+				this.alert("발생 완료");
+			}else{
+				this.alert("미사용중인 스케줄입니다.");
+			}
+		
 			this.fn_list();
 		break;
 	}
