@@ -144,14 +144,14 @@
                     <Div id="Div00" taborder="1" text="Div00" top="0" height="33" right="0" width="373" cssclass="div_WF_CompWrap">
                       <Layouts>
                         <Layout>
-                          <CheckBox id="usePrivateAgree" taborder="0" text="개인정보 필수 수집 정보 동의" left="10" top="5" width="185" onclick="classified_holiday_checkbox_onclick" truevalue="Y" value="false" falsevalue="N" bottom="5"/>
+                          <CheckBox id="agree1" taborder="0" text="개인정보 수집 제공 동의" left="10" top="5" width="185" onclick="classified_holiday_checkbox_onclick" truevalue="Y" value="false" falsevalue="N" bottom="5"/>
                         </Layout>
                       </Layouts>
                     </Div>
                     <Div id="Div01" taborder="2" text="Div01" top="32" height="33" cssclass="div_WF_CompWrap" right="0" width="373">
                       <Layouts>
                         <Layout>
-                          <CheckBox id="useMarketingAgree" taborder="0" text="강의안내 및 마케팅 활용 동의" left="10" top="5" width="215" onclick="classified_holiday_checkbox_onclick" truevalue="Y" falsevalue="N" bottom="5" value="N"/>
+                          <CheckBox id="agee2" taborder="0" text="경력정보 수집 제공 동의" left="10" top="5" width="215" onclick="classified_holiday_checkbox_onclick" truevalue="Y" falsevalue="N" bottom="5" value="N"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -1462,11 +1462,12 @@ this.validate_teacher_basic = function(){
 	}
 	var vali_arr = [
 		['tcNm', tcNm], ['hpStNo', '휴대전화를'], ['hpMidNo', '휴대전화를'], ['hpLastNo', '휴대전화를'],
-		bday, ['addr', '주소를']
+		bday, ['addr', '주소를'], ['prinfClctAgrYn', '개인정보 수집 제공 동의를']
 	]
 	
 	for(var vali of vali_arr){
-		if(vali && (this.gfn_nvl(ds.getColumn(0, vali[0])) == "" || nexacro.trim(ds.getColumn(0, vali[0])) == "")){
+		var value = ds.getColumn(0, vali[0]);
+		if(this.gfn_nvl(value) == "" || nexacro.trim(value) == "" || (vali[0] == 'prinfClctAgrYn' && value == 'N')){
 			alert(vali[1] + " 입력하세요.");
 			return false;
 		}
@@ -1719,8 +1720,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           <Column id="appDt" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="mdfDtm" type="STRING" size="256"/>
-          <Column id="usePrivateAgree" type="STRING" size="256"/>
-          <Column id="useMarketingAgree" type="STRING" size="256"/>
+          <Column id="prinfClctAgrYn" type="STRING" size="256"/>
+          <Column id="carrInfoClctAgrYn" type="STRING" size="256"/>
           <Column id="cntrCnt" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprNm" type="STRING" size="256"/>
@@ -2113,8 +2114,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <BindItem id="item13" compid="Div01.form.Div05.form.Div00.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="email"/>
       <BindItem id="item14" compid="Div01.form.Div05.form.Div00.form.Combo00" propid="value" datasetid="ds_teacher_info" columnid="emailAddrCd"/>
       <BindItem id="item15" compid="Div01.form.Div06.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="addr"/>
-      <BindItem id="item16" compid="Div01.form.Div07.form.Div00.form.usePrivateAgree" propid="value" datasetid="ds_teacher_info" columnid="usePrivateAgree"/>
-      <BindItem id="item17" compid="Div01.form.Div07.form.Div01.form.useMarketingAgree" propid="value" datasetid="ds_teacher_info" columnid="useMarketingAgree"/>
+      <BindItem id="item16" compid="Div01.form.Div07.form.Div00.form.agree1" propid="value" datasetid="ds_teacher_info" columnid="usePrivateAgree"/>
+      <BindItem id="item17" compid="Div01.form.Div07.form.Div01.form.agee2" propid="value" datasetid="ds_teacher_info" columnid="useMarketingAgree"/>
       <BindItem id="item0" compid="Div01.form.Div00.form.ImageViewer00" propid="image" datasetid="ds_thnl_dtl" columnid="webPath"/>
       <BindItem id="item3" compid="Div01.form.Div07.form.signViewer" propid="image" datasetid="ds_sign_dtl" columnid="webPath"/>
       <BindItem id="item11" compid="Div01.form.Div01_00.form.tcCdNo" propid="text" datasetid="ds_teacher_info" columnid="tcCdNo"/>
