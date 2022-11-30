@@ -487,6 +487,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   {
 	case "detail":
 		
+		this.row02.form.spotDiv.form.ComboSpot.set_readonly(true); //상세에서 지점변경 불가
+		
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
 		var atchFileObj = {
 			_this : this,
@@ -542,14 +544,25 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 //적용강좌 조회
 this.row09_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.popCnt++;
-	var arrArguments = {
-		type : 1,
-		brchCd : '',
-		lectTpCd : '01',
-		dataset : this.ds_appl_lect
+	var brchVal = this.row02.form.spotDiv.form.ComboSpot.value;
+	
+	if(brchVal == '')
+	{
+		this.alert("지점을 선택해주세요");
+		return;
 	}
-	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
+	else
+	{
+		this.popCnt++;
+		var arrArguments = {
+			type : 1,
+			brchCd : brchVal,
+			lectTpCd : '01',
+			dataset : this.ds_appl_lect
+		}
+		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
+	}
+	
 };
 
 //적용강좌 삭제
