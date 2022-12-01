@@ -351,7 +351,8 @@
                     <Button id="Button03" taborder="4" text="강좌복사" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div02_Div01_Button03_onclick"/>
                     <Button id="Button02" taborder="5" text="신규강좌" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button03:10" onclick="Div02_Div01_Button02_onclick"/>
                     <Button id="Button01" taborder="6" text="일괄변경" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10" onclick="Div02_Div01_Button01_onclick"/>
-                    <Button id="Button00_01" taborder="7" text="저장" top="0" height="30" width="50" right="Button01:10" cssclass="btn_WF_Medium" onclick="Div01_Button00_onclick"/>
+                    <Button id="Button06" taborder="10" text="일괄승인" top="0" height="30" cssclass="btn_WF_Medium" right="Button01:10" width="70" onclick="Div02_Div01_Button06_onclick"/>
+                    <Button id="Button00_01" taborder="7" text="저장" top="0" height="30" width="50" right="Button06:10" cssclass="btn_WF_Medium" onclick="Div01_Button00_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -823,6 +824,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			alert("복사등록이 완료 되었습니다.");	
 			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
 		break;
+		
+		case "classSaveApvlList":
+			alert("승인 되었습니다.");
+			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
 	  }
   }
 };
@@ -1353,7 +1358,20 @@ this.fn_save_copy = function()
 	this.gfn_transaction(tranObj);
 }
 
-
+this.fn_save_apvl = function()
+{
+	var tranObj = {
+		strSvcId : "classSaveApvlList",
+		strSvcUrl : this.application.Admin_svc + "::class/updateClassApvlStatList.do",
+		inData : "classList=ds_classUpdate_list search=ds_search",
+		outData : "ds_class_list=classList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}				
+	this.gfn_transaction(tranObj);
+}
 
 /**************************************************************************
  * 이벤트 영역
@@ -1706,6 +1724,42 @@ this.Div02_Div01_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 this.Div02_Div01_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+};
+
+this.Div02_Div01_Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			if(this.ds_class_list.getColumn(i, "apvlStatCd") != "01")
+			{
+				alert("승인대기 상태의 강좌만 선택하세요.");
+				return;
+			}
+			
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		if(confirm(this.ds_classUpdate_list.getRowCount() + "개의 강좌를 승인하시겠습니까?"))
+		{
+			this.fn_save_apvl();
+		}
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
 };
 ]]></Script>
     <Bind>
