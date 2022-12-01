@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="StlmFailMngList" width="1280" height="720" titletext="New Form" onload="StlmFailMngList_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="Div02" taborder="0" text="Div02" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
+          <Layouts>
+            <Layout>
+              <Grid id="Grid00" taborder="0" left="0" top="0" binddataset="ds_stlm_fail_list" nodatatext="검색결과 없음" right="0" autofittype="col" autosizebandtype="body" autosizingtype="none" oncellclick="Div02_Grid00_oncellclick" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="150"/>
+                      <Column size="200"/>
+                      <Column size="150"/>
+                      <Column size="100"/>
+                      <Column size="150"/>
+                      <Column size="100"/>
+                      <Column size="150"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="번호"/>
+                      <Cell col="1" text="구분"/>
+                      <Cell col="2" text="결제채널"/>
+                      <Cell col="3" text="결제상태"/>
+                      <Cell col="4" text="결제실패일시"/>
+                      <Cell col="5" text="실패코드(실패사유)"/>
+                      <Cell col="6" text="주문번호"/>
+                      <Cell col="7" text="회원번호"/>
+                      <Cell col="8" text="주문자명"/>
+                      <Cell col="9" text="강좌코드"/>
+                      <Cell col="10" text="강좌명"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:rnum"/>
+                      <Cell col="1" text="bind:stlmClCdNm" suppress="2" suppressalign="middle"/>
+                      <Cell col="2" text="bind:stlmChnlCdNm" suppress="2" suppressalign="middle"/>
+                      <Cell col="3" text="bind:stlmStatCdNm" suppress="2" suppressalign="middle"/>
+                      <Cell col="4" text="bind:rsltFailDtm" suppress="2" suppressalign="middle"/>
+                      <Cell col="5" text="expr:dataset.getColumn(currow, &quot;rsltCd&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;rsltMsgCont&quot;) + &quot;)&quot;" suppress="2" suppressalign="middle"/>
+                      <Cell col="6" text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
+                      <Cell col="7" text="bind:mbrNo" suppress="2" suppressalign="middle" textDecoration="underline"/>
+                      <Cell col="8" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" suppress="2" suppressalign="middle" textDecoration="underline"/>
+                      <Cell col="9" text="bind:lectCd"/>
+                      <Cell col="10" text="bind:lectNm"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="Static00" taborder="1" text="▶ 목록" left="0" top="0" width="45" height="17" cssclass="sta_WF_TitGray"/>
+        <Static id="Static01" taborder="2" text="(0개)" left="45" top="0" width="55" height="17" cssclass="sta_WF_TitGray"/>
+        <Button id="Button02" taborder="3" text="엑셀" top="0" height="20" cssclass="btn_WF_High" width="100" right="0" onclick="Button02_onclick"/>
+        <Grid id="Grid_Excel" taborder="4" left="0" top="360" binddataset="ds_stlm_fail_list" nodatatext="검색결과 없음" right="0" autofittype="col" autosizebandtype="body" autosizingtype="none" bottom="-333" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="150"/>
+                <Column size="200"/>
+                <Column size="150"/>
+                <Column size="100"/>
+                <Column size="150"/>
+                <Column size="100"/>
+                <Column size="150"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="구분"/>
+                <Cell col="2" text="결제채널"/>
+                <Cell col="3" text="결제상태"/>
+                <Cell col="4" text="결제실패일시"/>
+                <Cell col="5" text="실패코드(실패사유)"/>
+                <Cell col="6" text="주문번호"/>
+                <Cell col="7" text="회원번호"/>
+                <Cell col="8" text="주문자명"/>
+                <Cell col="9" text="강좌코드"/>
+                <Cell col="10" text="강좌명"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:stlmClCdNm" suppress="2" suppressalign="middle"/>
+                <Cell col="2" text="bind:stlmChnlCdNm" suppress="2" suppressalign="middle"/>
+                <Cell col="3" text="bind:stlmStatCdNm" suppress="2" suppressalign="middle"/>
+                <Cell col="4" text="bind:rsltFailDtm" suppress="2"/>
+                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;rsltCd&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;rsltMsgCont&quot;) + &quot;)&quot;" suppress="2" suppressalign="middle"/>
+                <Cell col="6" text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
+                <Cell col="7" text="bind:mbrNo" suppressalign="middle" suppress="2"/>
+                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;mbrNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;mbrId&quot;) + &quot;)&quot;" suppress="2" suppressalign="middle"/>
+                <Cell col="9" text="bind:lectCd"/>
+                <Cell col="10" text="bind:lectNm"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <ExcelExportObject id="ExcelExportObject00"/>
+      <Dataset id="ds_stlm_fail_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="stlmClCd" type="STRING" size="256"/>
+          <Column id="stlmClCdNm" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="stlmChnlCdNm" type="STRING" size="256"/>
+          <Column id="stlmStatCd" type="STRING" size="256"/>
+          <Column id="stlmStatCdNm" type="STRING" size="256"/>
+          <Column id="rsltCd" type="STRING" size="256"/>
+          <Column id="rsltMsgCont" type="STRING" size="256"/>
+          <Column id="rsltFailDtm" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+var objPageingDs;
+this.cnt = 0;
+var searchFrm = this.parent.parent.parent.parent.Div00.form.Div00.form;
+this.excelFileName = "결제중단_실패_관리_";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.StlmFailMngList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.excelImportExport = this.application.getVariable("excelImportExport");
+};
+
+this.fn_list = function(page)
+{
+	this.ds_stlm_fail_list.clearData();
+	var strSvcId    = "list";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmFailMng/stlmFailList.do";
+	var inData      = "search=this.parent.parent.parent.parent.Div00.form.Div00.form.ds_search";
+	var outData     = "this.ds_stlm_fail_list=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	return;
+  }
+
+  switch(svcID)
+  {
+	case "list":
+		this.Static01.set_text("(" + this.ds_stlm_fail_list.getRowCount() + "개)");
+		
+		break;
+  }
+}
+
+// 엑셀 다운로드
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = {
+			title : "엑셀 다운로드 사유"
+	};
+	this.gfn_showModal("excelPopupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "excelPopupCallBack", this, 400, 250, true, false, null);
+};
+
+// 그리드 셀 클릭
+this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	// 회원번호, 회원명 클릭 시 회원 상세 팝업
+	if(e.row != null && (e.cell == "7" || e.cell == "8")){
+		this.popCnt ++;
+		var oArg = {
+				mbrNo : this.ds_stlm_fail_list.getColumn(e.row, "mbrNo")
+				};
+	
+		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

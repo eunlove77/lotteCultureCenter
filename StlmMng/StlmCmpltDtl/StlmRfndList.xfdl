@@ -13,15 +13,16 @@
                 <Formats>
                   <Format id="default">
                     <Columns>
-                      <Column size="48" band="left"/>
+                      <Column size="80" band="left"/>
+                      <Column size="0"/>
                       <Column size="150"/>
                       <Column size="120"/>
+                      <Column size="120"/>
                       <Column size="80"/>
                       <Column size="80"/>
+                      <Column size="120"/>
                       <Column size="80"/>
-                      <Column size="80"/>
-                      <Column size="80"/>
-                      <Column size="80"/>
+                      <Column size="200"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
@@ -33,7 +34,6 @@
                       <Column size="80"/>
                       <Column size="100"/>
                       <Column size="100"/>
-                      <Column size="80"/>
                       <Column size="80"/>
                       <Column size="120"/>
                       <Column size="120"/>
@@ -57,43 +57,44 @@
                     <Rows>
                       <Row size="24" band="head"/>
                       <Row size="24" band="head"/>
-                      <Row size="26"/>
+                      <Row size="30"/>
                     </Rows>
                     <Band id="head">
                       <Cell/>
-                      <Cell col="1" colspan="27" text=""/>
-                      <Cell col="28" colspan="5" text="결제수단"/>
+                      <Cell col="1" displaytype="normal"/>
+                      <Cell col="2" colspan="26" text=""/>
+                      <Cell col="28" colspan="5" text="취소(환불)수단"/>
                       <Cell col="33" colspan="7" text=""/>
                       <Cell row="1" text="번호"/>
-                      <Cell row="1" col="1" text="취소(환불)일시"/>
-                      <Cell row="1" col="2" text="취소(환불)사유"/>
-                      <Cell row="1" col="3" text="실수강자"/>
-                      <Cell row="1" col="4" text="지점명"/>
-                      <Cell row="1" col="5" text="강좌유형"/>
-                      <Cell row="1" col="6" text="학기"/>
-                      <Cell row="1" col="7" text="강좌코드"/>
-                      <Cell row="1" col="8" text="강좌명"/>
-                      <Cell row="1" col="9" text="강사명"/>
-                      <Cell row="1" col="10" text="옵션명"/>
-                      <Cell row="1" col="11" text="강좌료"/>
-                      <Cell row="1" col="12" text="추가금액"/>
-                      <Cell row="1" col="13" text="오프라인 할인"/>
-                      <Cell row="1" col="14" text="오프라인 할인금액"/>
-                      <Cell row="1" col="15" text="등급할인명"/>
-                      <Cell row="1" col="16" text="등급할인금액"/>
-                      <Cell row="1" col="17" text="쿠폰명"/>
-                      <Cell row="1" col="18" text="쿠폰 할인금액"/>
-                      <Cell row="1" col="19" text="추가 금액 할인"/>
-                      <Cell row="1" col="20" text="주문금액"/>
-                      <Cell row="1" col="21" text="총 결제금액"/>
+                      <Cell row="1" col="1" displaytype="normal" text="주문번호"/>
+                      <Cell row="1" col="2" text="취소(환불)일시"/>
+                      <Cell row="1" col="3" text="취소(환불)사유"/>
+                      <Cell row="1" col="4" text="실수강자"/>
+                      <Cell row="1" col="5" text="지점명"/>
+                      <Cell row="1" col="6" text="강좌유형"/>
+                      <Cell row="1" col="7" text="학기"/>
+                      <Cell row="1" col="8" text="강좌코드"/>
+                      <Cell row="1" col="9" text="강좌명"/>
+                      <Cell row="1" col="10" text="강사명"/>
+                      <Cell row="1" col="11" text="재료비/대여료"/>
+                      <Cell row="1" col="12" text="강좌료"/>
+                      <Cell row="1" col="13" text="재료비/대여료"/>
+                      <Cell row="1" col="14" text="할인"/>
+                      <Cell row="1" col="15" text="할인금액"/>
+                      <Cell row="1" col="16" text="에누리"/>
+                      <Cell row="1" col="17" text="에누리금액"/>
+                      <Cell row="1" col="18" text="쿠폰명"/>
+                      <Cell row="1" col="19" text="쿠폰 할인금액"/>
+                      <Cell row="1" col="20" text="재료비/대여료 할인"/>
+                      <Cell row="1" col="21" text="주문금액"/>
                       <Cell row="1" col="22" text="결제상태"/>
                       <Cell row="1" col="23" text="취소(환불)채널"/>
                       <Cell row="1" col="24" text="취소(환불)구분"/>
-                      <Cell row="1" col="25" text="강좌료 수수료"/>
-                      <Cell row="1" col="26" text="추가금액 수수료"/>
+                      <Cell row="1" col="25" text="강좌료 환불차감금액"/>
+                      <Cell row="1" col="26" text="재료비/대여료 환불차감금액"/>
                       <Cell row="1" col="27" text="취소(환불)금액"/>
                       <Cell row="1" col="28" text="신용카드"/>
-                      <Cell row="1" col="29" text="L.POINT"/>
+                      <Cell row="1" col="29" text="L.Point"/>
                       <Cell row="1" col="30" text="현금"/>
                       <Cell row="1" col="31" text="상품권"/>
                       <Cell row="1" col="32" text="기타"/>
@@ -107,45 +108,45 @@
                     </Band>
                     <Band id="body">
                       <Cell text="bind:rnum"/>
-                      <Cell col="1" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" edittype="expr:dataset.getColumn(currow, &quot;rfndChnlCd&quot;) == &quot;D&quot; ? 'date' : 'none'" calendareditformat="yyyy-MM-dd HH:mm:ss "/>
-                      <Cell col="2" text="bind:rfndRsnCdNm"/>
-                      <Cell col="3" text="bind:fmlyCd" displaytype="combotext" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
-                      <Cell col="4" text="bind:brchCdNm"/>
-                      <Cell col="5" text="bind:lectTpCdNm"/>
-                      <Cell col="6" text="bind:yy"/>
-                      <Cell col="7" text="bind:lectSmsterCdNm"/>
+                      <Cell col="1" displaytype="normal" text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
+                      <Cell col="2" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" edittype="date" calendareditformat="yyyy-MM-dd HH:mm:ss "/>
+                      <Cell col="3" text="bind:rfndRsnCdNm"/>
+                      <Cell col="4" text="bind:fmlyCd" displaytype="combotext" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
+                      <Cell col="5" text="bind:brchCdNm"/>
+                      <Cell col="6" text="bind:lectTpCdNm"/>
+                      <Cell col="7" text="expr:dataset.getColumn(currow, &quot;yy&quot;) + &quot; &quot; + dataset.getColumn(currow, &quot;lectSmsterCdNm&quot;)"/>
                       <Cell col="8" text="bind:lectCd"/>
-                      <Cell col="9" text="bind:tcNm"/>
-                      <Cell col="10" text="bind:optnNm"/>
-                      <Cell col="11" text="bind:lectAmt"/>
-                      <Cell col="12" text="bind:lectAddAmt"/>
-                      <Cell col="13" text="bind:oflnDcNm"/>
-                      <Cell col="14" text="bind:oflnDcAmt"/>
-                      <Cell col="15" text="bind:grdeDcNm"/>
-                      <Cell col="16" text="bind:grdeDcAmt"/>
-                      <Cell col="17" text="bind:cpnDcNm"/>
-                      <Cell col="18" text="bind:cpnDcAmt"/>
-                      <Cell col="19" text="bind:oflnAddDcAmt"/>
-                      <Cell col="20" text="bind:lectStlmAmt"/>
-                      <Cell col="21" text="bind:gsStlmAmt"/>
+                      <Cell col="9" text="bind:lectNm"/>
+                      <Cell col="10" text="bind:tcNm"/>
+                      <Cell col="11" text="bind:optnTypCdNm"/>
+                      <Cell col="12" text="bind:lectAmt"/>
+                      <Cell col="13" text="bind:lectAddAmt"/>
+                      <Cell col="14" text="expr:dataset.getColumn(currow, &quot;oflnDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;oflnDcNm&quot;)"/>
+                      <Cell col="15" text="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;oflnDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="16" text="expr:dataset.getColumn(currow, &quot;grdeDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;grdeDcNm&quot;)"/>
+                      <Cell col="17" text="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;grdeDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="18" text="expr:dataset.getColumn(currow, &quot;cpnDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cpnDcNm&quot;)"/>
+                      <Cell col="19" text="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cpnDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="20" text="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;optnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null ? 'normal' : 'mask'"/>
+                      <Cell col="21" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
                       <Cell col="22" text="bind:rfndStatCdNm"/>
                       <Cell col="23" text="bind:rfndChnlCdNm"/>
                       <Cell col="24" text="bind:rfndClCdNm"/>
-                      <Cell col="25" text="bind:lectAmtFee"/>
-                      <Cell col="26" text="bind:addAmtFee"/>
-                      <Cell col="27" text="bind:gsRfndScheAmt"/>
-                      <Cell col="28" text="bind:crdRfndAmt"/>
-                      <Cell col="29" text="bind:lpntRfndAmt"/>
-                      <Cell col="30" text="bind:cshRfndAmt"/>
-                      <Cell col="31" text="bind:ltteGiftRfndAmt"/>
-                      <Cell col="32" text="bind:etcRfndAmt"/>
+                      <Cell col="25" text="bind:lectAmtFee" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="26" text="bind:addAmtFee" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="mask"/>
+                      <Cell col="27" text="bind:gsRfndScheAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="28" text="expr:dataset.getColumn(currow, &quot;crdRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;crdRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;crdRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                      <Cell col="29" text="expr:dataset.getColumn(currow, &quot;lpntRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;lpntRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;lpntRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                      <Cell col="30" text="expr:dataset.getColumn(currow, &quot;cshRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cshRfndAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;cshRfndAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원" suppress="2" suppressalign="middle"/>
+                      <Cell col="31" text="expr:dataset.getColumn(currow, &quot;ltteGiftRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;ltteGiftRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;ltteGiftRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                      <Cell col="32" text="expr:dataset.getColumn(currow, &quot;etcRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;etcRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;etcRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
                       <Cell col="33" text="bind:lectClCdNm"/>
-                      <Cell col="34" text="bind:lectStDtmNm"/>
-                      <Cell col="35" text="bind:lectPeriod"/>
-                      <Cell col="36" text="bind:lectTimePeriod"/>
+                      <Cell col="34" text="bind:stringStDaywNm"/>
+                      <Cell col="35" text="expr:dataset.getColumn(currow, &quot;lectStDtm&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndDtm&quot;)"/>
+                      <Cell col="36" text="expr:dataset.getColumn(currow, &quot;lectStHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectStMiCd&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectEndMiCd&quot;)"/>
                       <Cell col="37" text="bind:lectNbcnt"/>
-                      <Cell col="38" text="bind:lectStatCd"/>
-                      <Cell col="39" text="bind:rfndRuleCfmSignYn"/>
+                      <Cell col="38" text="expr:dataset.getColumn(currow, &quot;lectStatCd&quot;) == &quot;09&quot; ? 'Y' : 'N'"/>
+                      <Cell col="39" text="expr:dataset.getColumn(currow, &quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -153,19 +154,20 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid_Excel" taborder="4" left="0" top="240" height="270" right="0" binddataset="ds_stlm_rfnd_list" visible="false">
+        <Grid id="Grid_Excel" taborder="4" left="0" top="200" binddataset="ds_stlm_rfnd_list" nodatatext="데이터가 없습니다." autofittype="none" right="0" autosizebandtype="allband" autosizingtype="none" bottom="-173" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="48" band="left"/>
+                <Column size="80" band="left"/>
+                <Column size="0"/>
                 <Column size="150"/>
                 <Column size="120"/>
+                <Column size="120"/>
                 <Column size="80"/>
                 <Column size="80"/>
+                <Column size="120"/>
                 <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="200"/>
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
@@ -177,7 +179,6 @@
                 <Column size="80"/>
                 <Column size="100"/>
                 <Column size="100"/>
-                <Column size="80"/>
                 <Column size="80"/>
                 <Column size="120"/>
                 <Column size="120"/>
@@ -201,43 +202,44 @@
               <Rows>
                 <Row size="24" band="head"/>
                 <Row size="24" band="head"/>
-                <Row size="24"/>
+                <Row size="30"/>
               </Rows>
               <Band id="head">
                 <Cell/>
-                <Cell col="1" colspan="27" text=""/>
-                <Cell col="28" colspan="5" text="결제수단"/>
+                <Cell col="1" displaytype="normal"/>
+                <Cell col="2" colspan="26" text=""/>
+                <Cell col="28" colspan="5" text="취소(환불)수단"/>
                 <Cell col="33" colspan="7" text=""/>
                 <Cell row="1" text="번호"/>
-                <Cell row="1" col="1" text="취소(환불)일시"/>
-                <Cell row="1" col="2" text="취소(환불)사유"/>
-                <Cell row="1" col="3" text="실수강자"/>
-                <Cell row="1" col="4" text="지점명"/>
-                <Cell row="1" col="5" text="강좌유형"/>
-                <Cell row="1" col="6" text="학기"/>
-                <Cell row="1" col="7" text="강좌코드"/>
-                <Cell row="1" col="8" text="강좌명"/>
-                <Cell row="1" col="9" text="강사명"/>
-                <Cell row="1" col="10" text="옵션명"/>
-                <Cell row="1" col="11" text="강좌료"/>
-                <Cell row="1" col="12" text="추가금액"/>
-                <Cell row="1" col="13" text="오프라인 할인"/>
-                <Cell row="1" col="14" text="오프라인 할인금액"/>
-                <Cell row="1" col="15" text="등급할인명"/>
-                <Cell row="1" col="16" text="등급할인금액"/>
-                <Cell row="1" col="17" text="쿠폰명"/>
-                <Cell row="1" col="18" text="쿠폰 할인금액"/>
-                <Cell row="1" col="19" text="추가 금액 할인"/>
-                <Cell row="1" col="20" text="주문금액"/>
-                <Cell row="1" col="21" text="총 결제금액"/>
+                <Cell row="1" col="1" displaytype="normal" text="주문번호"/>
+                <Cell row="1" col="2" text="취소(환불)일시"/>
+                <Cell row="1" col="3" text="취소(환불)사유"/>
+                <Cell row="1" col="4" text="실수강자"/>
+                <Cell row="1" col="5" text="지점명"/>
+                <Cell row="1" col="6" text="강좌유형"/>
+                <Cell row="1" col="7" text="학기"/>
+                <Cell row="1" col="8" text="강좌코드"/>
+                <Cell row="1" col="9" text="강좌명"/>
+                <Cell row="1" col="10" text="강사명"/>
+                <Cell row="1" col="11" text="재료비/대여료"/>
+                <Cell row="1" col="12" text="강좌료"/>
+                <Cell row="1" col="13" text="재료비/대여료"/>
+                <Cell row="1" col="14" text="할인"/>
+                <Cell row="1" col="15" text="할인금액"/>
+                <Cell row="1" col="16" text="에누리"/>
+                <Cell row="1" col="17" text="에누리금액"/>
+                <Cell row="1" col="18" text="쿠폰명"/>
+                <Cell row="1" col="19" text="쿠폰 할인금액"/>
+                <Cell row="1" col="20" text="재료비/대여료 할인"/>
+                <Cell row="1" col="21" text="주문금액"/>
                 <Cell row="1" col="22" text="결제상태"/>
                 <Cell row="1" col="23" text="취소(환불)채널"/>
                 <Cell row="1" col="24" text="취소(환불)구분"/>
-                <Cell row="1" col="25" text="강좌료 수수료"/>
-                <Cell row="1" col="26" text="추가금액 수수료"/>
+                <Cell row="1" col="25" text="강좌료 환불차감금액"/>
+                <Cell row="1" col="26" text="재료비/대여료 환불차감금액"/>
                 <Cell row="1" col="27" text="취소(환불)금액"/>
                 <Cell row="1" col="28" text="신용카드"/>
-                <Cell row="1" col="29" text="L.POINT"/>
+                <Cell row="1" col="29" text="L.Point"/>
                 <Cell row="1" col="30" text="현금"/>
                 <Cell row="1" col="31" text="상품권"/>
                 <Cell row="1" col="32" text="기타"/>
@@ -251,45 +253,45 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
-                <Cell col="1" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" edittype="expr:dataset.getColumn(currow, &quot;rfndChnlCd&quot;) == &quot;D&quot; ? 'date' : 'none'"/>
-                <Cell col="2" text="bind:rfndRsnCdNm"/>
-                <Cell col="3" text="bind:fmlyCd" displaytype="combotext" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
-                <Cell col="4" text="bind:brchCdNm"/>
-                <Cell col="5" text="bind:lectTpCdNm"/>
-                <Cell col="6" text="bind:yy"/>
-                <Cell col="7" text="bind:lectSmsterCdNm"/>
+                <Cell col="1" displaytype="normal" text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
+                <Cell col="2" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" edittype="none" calendareditformat="yyyy-MM-dd HH:mm:ss "/>
+                <Cell col="3" text="bind:rfndRsnCdNm"/>
+                <Cell col="4" text="expr:dataset.getColumn(currow, &quot;actlAtlctNpleNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) + &quot;)&quot;" displaytype="normal" edittype="none" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
+                <Cell col="5" text="bind:brchCdNm"/>
+                <Cell col="6" text="bind:lectTpCdNm"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;yy&quot;) + &quot; &quot; + dataset.getColumn(currow, &quot;lectSmsterCdNm&quot;)"/>
                 <Cell col="8" text="bind:lectCd"/>
-                <Cell col="9" text="bind:tcNm"/>
-                <Cell col="10" text="bind:optnNm"/>
-                <Cell col="11" text="bind:lectAmt"/>
-                <Cell col="12" text="bind:lectAddAmt"/>
-                <Cell col="13" text="bind:oflnDcNm"/>
-                <Cell col="14" text="bind:oflnDcAmt"/>
-                <Cell col="15" text="bind:grdeDcNm"/>
-                <Cell col="16" text="bind:grdeDcAmt"/>
-                <Cell col="17" text="bind:cpnDcNm"/>
-                <Cell col="18" text="bind:cpnDcAmt"/>
-                <Cell col="19" text="bind:oflnAddDcAmt"/>
-                <Cell col="20" text="bind:lectStlmAmt"/>
-                <Cell col="21" text="bind:gsStlmAmt"/>
+                <Cell col="9" text="bind:lectNm"/>
+                <Cell col="10" text="bind:tcNm"/>
+                <Cell col="11" text="bind:optnTypCdNm"/>
+                <Cell col="12" text="bind:lectAmt"/>
+                <Cell col="13" text="bind:lectAddAmt"/>
+                <Cell col="14" text="expr:dataset.getColumn(currow, &quot;oflnDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;oflnDcNm&quot;)"/>
+                <Cell col="15" text="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;oflnDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="16" text="expr:dataset.getColumn(currow, &quot;grdeDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;grdeDcNm&quot;)"/>
+                <Cell col="17" text="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;grdeDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="18" text="expr:dataset.getColumn(currow, &quot;cpnDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cpnDcNm&quot;)"/>
+                <Cell col="19" text="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cpnDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="20" text="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;optnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null ? 'normal' : 'mask'"/>
+                <Cell col="21" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
                 <Cell col="22" text="bind:rfndStatCdNm"/>
                 <Cell col="23" text="bind:rfndChnlCdNm"/>
                 <Cell col="24" text="bind:rfndClCdNm"/>
-                <Cell col="25" text="bind:lectAmtFee"/>
-                <Cell col="26" text="bind:addAmtFee"/>
-                <Cell col="27" text="bind:gsRfndScheAmt"/>
-                <Cell col="28" text="bind:crdRfndAmt"/>
-                <Cell col="29" text="bind:lpntRfndAmt"/>
-                <Cell col="30" text="bind:cshRfndAmt"/>
-                <Cell col="31" text="bind:ltteGiftRfndAmt"/>
-                <Cell col="32" text="bind:etcRfndAmt"/>
+                <Cell col="25" text="bind:lectAmtFee" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="26" text="bind:addAmtFee" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="mask"/>
+                <Cell col="27" text="bind:gsRfndScheAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="28" text="expr:dataset.getColumn(currow, &quot;crdRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;crdRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;crdRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                <Cell col="29" text="expr:dataset.getColumn(currow, &quot;lpntRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;lpntRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;lpntRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                <Cell col="30" text="expr:dataset.getColumn(currow, &quot;cshRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cshRfndAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;cshRfndAmt&quot;) == null ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원" suppress="2" suppressalign="middle"/>
+                <Cell col="31" text="expr:dataset.getColumn(currow, &quot;ltteGiftRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;ltteGiftRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;ltteGiftRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                <Cell col="32" text="expr:dataset.getColumn(currow, &quot;etcRfndAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;etcRfndAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;etcRfndAmt&quot;) == null ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
                 <Cell col="33" text="bind:lectClCdNm"/>
-                <Cell col="34" text="bind:lectStDtmNm"/>
-                <Cell col="35" text="bind:lectPeriod"/>
-                <Cell col="36" text="bind:lectTimePeriod"/>
+                <Cell col="34" text="bind:stringStDaywNm"/>
+                <Cell col="35" text="expr:dataset.getColumn(currow, &quot;lectStDtm&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndDtm&quot;)"/>
+                <Cell col="36" text="expr:dataset.getColumn(currow, &quot;lectStHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectStMiCd&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectEndMiCd&quot;)"/>
                 <Cell col="37" text="bind:lectNbcnt"/>
-                <Cell col="38" text="bind:lectStatCd"/>
-                <Cell col="39" text="bind:rfndRuleCfmSignYn"/>
+                <Cell col="38" text="expr:dataset.getColumn(currow, &quot;lectStatCd&quot;) == &quot;09&quot; ? 'Y' : 'N'"/>
+                <Cell col="39" text="expr:dataset.getColumn(currow, &quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'"/>
               </Band>
             </Format>
           </Formats>
@@ -297,64 +299,6 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_stlm_rfnd_list">
-        <ColumnInfo>
-          <Column id="rnum" type="INT" size="256"/>
-          <Column id="rfndDtm" type="STRING" size="256" description=""/>
-          <Column id="rfndRsnCdNm" type="STRING" size="256" description=""/>
-          <Column id="actlAtlctNpleNm" type="STRING" size="256" description=""/>
-          <Column id="brchCdNm" type="STRING" size="256"/>
-          <Column id="lectTpCdNm" type="STRING" size="256" description=""/>
-          <Column id="yy" type="STRING" size="256" description=""/>
-          <Column id="lectSmsterCd" type="STRING" size="256" description=""/>
-          <Column id="lectSmsterCdNm" type="STRING" size="256" description=""/>
-          <Column id="lectCd" type="STRING" size="256" description=""/>
-          <Column id="lectNm" type="STRING" size="256"/>
-          <Column id="tcNm" type="STRING" size="256" description=""/>
-          <Column id="optnNm" type="STRING" size="256" description=""/>
-          <Column id="lectAmt" type="INT" size="256" description=""/>
-          <Column id="lectAddAmt" type="INT" size="256" description=""/>
-          <Column id="oflnDcNm" type="STRING" size="256" description=""/>
-          <Column id="oflnDcAmt" type="INT" size="256" description=""/>
-          <Column id="grdeDcNm" type="STRING" size="256" description=""/>
-          <Column id="grdeDcAmt" type="INT" size="256" description=""/>
-          <Column id="cpnDcNm" type="STRING" size="256" description=""/>
-          <Column id="cpnDcAmt" type="INT" size="256" description=""/>
-          <Column id="oflnAddDcAmt" type="INT" size="256" description=""/>
-          <Column id="lectStlmAmt" type="INT" size="256" description=""/>
-          <Column id="gsStlmAmt" type="INT" size="256" description=""/>
-          <Column id="rfndStatCdNm" type="STRING" size="256" description=""/>
-          <Column id="rfndChnlCdNm" type="STRING" size="256" description=""/>
-          <Column id="rfndClCdNm" type="STRING" size="256" description=""/>
-          <Column id="lectAmtFee" type="INT" size="256" description=""/>
-          <Column id="addAmtFee" type="INT" size="256" description=""/>
-          <Column id="gsRfndScheAmt" type="INT" size="256" description=""/>
-          <Column id="crdRfndAmt" type="INT" size="256" description=""/>
-          <Column id="lpntRfndAmt" type="INT" size="256" description=""/>
-          <Column id="cshRfndAmt" type="INT" size="256" description=""/>
-          <Column id="ltteGiftRfndAmt" type="INT" size="256" description=""/>
-          <Column id="etcRfndAmt" type="INT" size="256" description=""/>
-          <Column id="lectClCdNm" type="STRING" size="256" description=""/>
-          <Column id="lectStDtmNm" type="STRING" size="256" description=""/>
-          <Column id="lectStDtm" type="STRING" size="256" description=""/>
-          <Column id="lectStHhCd" type="STRING" size="256" description=""/>
-          <Column id="lectNbcnt" type="INT" size="256"/>
-          <Column id="lectStatCd" type="STRING" size="256"/>
-          <Column id="rfndRuleCfmSignYn" type="STRING" size="256"/>
-          <Column id="lectPeriod" type="STRING" size="256"/>
-          <Column id="lectTimePeriod" type="STRING" size="256"/>
-          <Column id="fmlyCd" type="STRING" size="256"/>
-          <Column id="rfndChnlCd" type="STRING" size="256"/>
-          <Column id="stlmDtm" type="STRING" size="256"/>
-          <Column id="rfndLectTmsCd" type="STRING" size="256"/>
-          <Column id="actlAtlctNpleSeqno" type="INT" size="256"/>
-          <Column id="rfndScheLectAmt" type="INT" size="256"/>
-          <Column id="rfndScheAddAmt" type="INT" size="256"/>
-          <Column id="atlctRsvNo" type="STRING" size="256"/>
-          <Column id="lectDcAmt" type="INT" size="256"/>
-          <Column id="lectAddDcAmt" type="INT" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="ds_fmly_cd_list">
         <ColumnInfo>
           <Column id="fmlyCd" type="STRING" size="256"/>
@@ -362,6 +306,67 @@
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
+      <Dataset id="ds_stlm_rfnd_list">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="rfndRuleCfmSignYn" type="STRING" size="256"/>
+          <Column id="rfndRuleCfmSignFileId" type="STRING" size="256"/>
+          <Column id="rfndRuleAgrDtm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="lectAddAmt" type="STRING" size="256"/>
+          <Column id="lectStlmAmt" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+          <Column id="rfndStatCd" type="STRING" size="256"/>
+          <Column id="rfndChnlCd" type="STRING" size="256"/>
+          <Column id="rfndLectTmsCd" type="STRING" size="256"/>
+          <Column id="lectAmtFee" type="STRING" size="256"/>
+          <Column id="addAmtFee" type="STRING" size="256"/>
+          <Column id="rfndScheLectAmt" type="STRING" size="256"/>
+          <Column id="rfndScheAddAmt" type="STRING" size="256"/>
+          <Column id="crdRfndAmt" type="STRING" size="256"/>
+          <Column id="lpntRfndAmt" type="STRING" size="256"/>
+          <Column id="cshRfndAmt" type="STRING" size="256"/>
+          <Column id="ltteGiftRfndAmt" type="STRING" size="256"/>
+          <Column id="etcRfndAmt" type="STRING" size="256"/>
+          <Column id="rfndDtm" type="STRING" size="256"/>
+          <Column id="rfndRsnCd" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectTpCdNm" type="STRING" size="256"/>
+          <Column id="lectClCdNm" type="STRING" size="256"/>
+          <Column id="rfndRsnCdNm" type="STRING" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="lectSmsterCdNm" type="STRING" size="256"/>
+          <Column id="optnTypCd" type="STRING" size="256"/>
+          <Column id="optnTypCdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -375,7 +380,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.oldValue;
 this.targetColumn;
-this.excelFileName = "결제취소/환불_목록_";
+this.excelFileName = "결제취소_환불_목록_";
 this.excelImportExport = "";
 this.menuSeq = this.parent.parent.parent.parent.parent.menuSeq;
 
@@ -391,7 +396,7 @@ this.PayCnclList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 // 환불(취소)일자, 실수강자 변경
 this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 {
-	if(e.cell == "1"){
+	if(e.cell == "2"){
 		// 결제일시 변경
 		this.targetColumn = "rfndDtm";
 		var rfndDtm = e.value.substr(0,4) + "-" + e.value.substr(4, 2) + "-" + e.value.substr(6, 2) + " " + e.value.substr(8, 2) + ":" + e.value.substr(10, 2) + ":" + e.value.substr(12, 2);
@@ -409,7 +414,7 @@ this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			this.ds_stlm_rfnd_list.set_enableevent(true);
 			return;
 		}
-	}else if(e.cell == "3"){
+	}else if(e.cell == "4"){
 		// 실수강자 변경
 		this.targetColumn = "fmlyCd";
 		this.oldValue = this.ds_stlm_rfnd_list.getColumn(e.row, "fmlyCd");
@@ -489,7 +494,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 this.Div03_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
 {
 	var curRow = obj.getSelectedDatasetRows();
-	if(obj.getCellPos() == 1){
+	if(obj.getCellPos() == 2){
 		this.oldValue = this.ds_stlm_rfnd_list.getColumn(curRow, "rfndDtm");
 		this.ds_stlm_rfnd_list.set_enableevent(false);
 		this.ds_stlm_rfnd_list.setColumn(curRow, "rfndDtm", this.oldValue);
