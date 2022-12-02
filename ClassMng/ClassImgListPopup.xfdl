@@ -7,17 +7,32 @@
           <Layouts>
             <Layout>
               <GroupBox id="GroupBox00" taborder="0" text="강좌이미지" left="0" top="0" right="0" bottom="0"/>
-              <Div id="Div00" taborder="1" text="Div00" left="15" top="30" height="35" right="15" cssclass="div_WF_TableComp">
+              <Div id="Div00" taborder="1" text="Div00" left="15" top="30" height="70" right="15" cssclass="div_WF_TableComp">
                 <Layouts>
                   <Layout>
-                    <Div id="Div00" taborder="0" text="Div00" left="0" top="0" right="0" bottom="0" cssclass="div_WF_CompWrap">
+                    <Div id="Div01" taborder="1" text="Div01" left="0" top="0" height="35" cssclass="div_WF_CompWrap" width="50%">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="법인" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="4" width="150" height="25" innerdataset="ds_corpClCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div00" taborder="0" text="Div00" left="0" top="Div01:-1" right="0" cssclass="div_WF_CompWrap" height="35">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" width="120" cssclass="sta_WF_TableLabel" bottom="0"/>
                           <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="4" width="150" height="25" innerdataset="ds_classCtgyLarge_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_Div00_Combo00_onitemchanged"/>
                           <Combo id="Combo00_00" taborder="2" text="Combo00" left="Combo00:20" top="4" width="150" height="25" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_Div00_Combo00_00_onitemchanged"/>
-                          <Combo id="Combo00_01" taborder="3" text="Combo00" left="Combo00_00:20" top="4" width="150" height="25" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm"/>
-                          <Button id="Button00" taborder="4" text="검색" top="1" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div00_Div00_Button00_onclick"/>
+                          <Button id="Button00" taborder="3" text="검색" top="1" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div00_Div00_Button00_onclick"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                    <Div id="Div02" taborder="2" text="Div02" left="Div01:0" top="0" height="35" right="0" cssclass="div_WF_CompWrap">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="이미지분류" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="4" width="150" height="25" innerdataset="ds_imgClsfCd_list" codecolumn="cd" datacolumn="cdNm"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -31,7 +46,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="3" left="15" top="105" height="530" width="750" onsetfocus="Div00_Div02_onsetfocus">
+              <Div id="Div02" taborder="3" left="15" top="Div01:15" height="465" width="750" onsetfocus="Div00_Div02_onsetfocus">
                 <Layouts>
                   <Layout type="horizontal" flexwrap="wrap" horizontalgap="40" verticalgap="30" flexcrossaxisalign="center" flexcrossaxiswrapalign="start" flexmainaxisalign="start"/>
                 </Layouts>
@@ -55,6 +70,7 @@ this.application = null;
 this.domain = "";
 this.popThis = null;
 this.atchFileId = "";
+this.fileSeq = "";
 this.imgArr = [];
 
 /**************************************************************************
@@ -89,6 +105,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	  {
 		case "codeList":
 			this.fn_classCtgy_set();
+			this.fn_corpCl_set();
+			this.fn_imgClsf_set();
 		break;	
 		case "imgList":
 			this.fn_img_set();
@@ -108,8 +126,8 @@ this.fn_code_list = function()
 		strSvcId : "codeList",
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
-		outData : "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList",
-		strArg : "cdId=ctgy",
+		outData : "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList ds_corpClCd_list=corpClCdList ds_imgClsfCd_list=imgClsfCdList",
+		strArg : "cdId=ctgy||064||080",
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.parent.menuSeq,
@@ -161,6 +179,7 @@ this.fn_img_set = function()
 		objImageViewer.set_image(this.ds_classImg_list.getColumn(i, "webPath"));
 		objImageViewer.set_stretch("fixaspectratio");
 		objImageViewer.atchFileId = this.ds_classImg_list.getColumn(i, "atchFileId");
+		objImageViewer.fileSeq = this.ds_classImg_list.getColumn(i, "fileSeq");
 		objImageViewer.insertEventHandler("onclick", 0, this.fn_onclick, this);
 		this.imgArr.push(objImageViewer);
 	}
@@ -175,12 +194,35 @@ this.fn_onclick = function(obj)
 		this.imgArr[i].set_border("");
 	}
 	this.atchFileId = obj.atchFileId;
+	this.fileSeq = obj.fileSeq;
 	obj.set_border("1px solid brown");
 }
 
 /**************************************************************************
  * 카테고리 영역
 **************************************************************************/
+
+//법인
+this.fn_corpCl_set = function()
+{
+	this.ds_corpClCd_list.set_enableevent(false);
+	this.ds_corpClCd_list.insertRow(0);
+	this.ds_corpClCd_list.setColumn(0, "cd", "");
+	this.ds_corpClCd_list.setColumn(0, "cdNm", "전체");
+	this.Div00.form.Div00.form.Div01.form.Combo00.set_index(0);
+	this.ds_corpClCd_list.set_enableevent(true);
+}
+
+//이미지 분류
+this.fn_imgClsf_set = function()
+{
+	this.ds_imgClsfCd_list.set_enableevent(false);
+	this.ds_imgClsfCd_list.insertRow(0);
+	this.ds_imgClsfCd_list.setColumn(0, "cd", "");
+	this.ds_imgClsfCd_list.setColumn(0, "cdNm", "전체");
+	this.Div00.form.Div00.form.Div02.form.Combo00.set_index(0);
+	this.ds_imgClsfCd_list.set_enableevent(true);
+}
 
 //카테고리 대분류 영역 변경
 this.fn_classCtgyLarge_chg = function(obj)
@@ -214,8 +256,8 @@ this.fn_classCtgyLarge_chg = function(obj)
 //카테고리 중분류 영역 변경
 this.fn_classCtgyMiddle_chg = function(obj)
 {
-	this.ds_classCtgySmall_list.filter("");
-	this.ds_classCtgySmall_list.clearData();
+// 	this.ds_classCtgySmall_list.filter("");
+// 	this.ds_classCtgySmall_list.clearData();
 	
 	var tranObj = {
 		strSvcId : "getCategoryList",
@@ -231,13 +273,13 @@ this.fn_classCtgyMiddle_chg = function(obj)
 
 	this.gfn_transaction(tranObj);
 	
-	this.ds_classCtgySmall_list.set_enableevent(false);
-	this.ds_classCtgySmall_list.insertRow(0);
-	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
-	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
-	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
-	this.Div00.form.Div00.form.Div00.form.Combo00_01.set_index(0);
-	this.ds_classCtgySmall_list.set_enableevent(true);
+// 	this.ds_classCtgySmall_list.set_enableevent(false);
+// 	this.ds_classCtgySmall_list.insertRow(0);
+// 	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
+// 	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
+// 	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
+// 	this.Div00.form.Div00.form.Div00.form.Combo00_01.set_index(0);
+// 	this.ds_classCtgySmall_list.set_enableevent(true);
 }
 
 //강좌 카테고리 세팅
@@ -260,14 +302,14 @@ this.fn_classCtgy_set = function()
 	this.ds_classCtgyMiddle_list.set_enableevent(true);
 	this.ds_classCtgyMiddle_list.filter("cdId == ''");
 	
-	this.ds_classCtgySmall_list.set_enableevent(false);
-	this.ds_classCtgySmall_list.insertRow(0);
-	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
-	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
-	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
-	this.Div00.form.Div00.form.Div00.form.Combo00_01.set_index(0);
-	this.ds_classCtgySmall_list.set_enableevent(true);
-	this.ds_classCtgySmall_list.filter("cdId == ''");
+// 	this.ds_classCtgySmall_list.set_enableevent(false);
+// 	this.ds_classCtgySmall_list.insertRow(0);
+// 	this.ds_classCtgySmall_list.setColumn(0, "cdId", "");
+// 	this.ds_classCtgySmall_list.setColumn(0, "cd", "");
+// 	this.ds_classCtgySmall_list.setColumn(0, "cdNm", "소분류");
+// 	this.Div00.form.Div00.form.Div00.form.Combo00_01.set_index(0);
+// 	this.ds_classCtgySmall_list.set_enableevent(true);
+// 	this.ds_classCtgySmall_list.filter("cdId == ''");
 }
 
 this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -304,7 +346,7 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			strSvcUrl : this.domain + "/admin/file/filecopy.do",
 			inData : "",
 			outData : "",
-			strArg : "atchFileId=" + this.atchFileId,
+			strArg : "atchFileId=" + this.atchFileId + " fileSeq=" + this.fileSeq,
 			callBackFnc : "fnCallback",
 			isAsync : false,
 			menuSeq : this.parent.menuSeq,
@@ -313,7 +355,6 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 		this.gfn_transaction(tranObj);
 		
-		console.log(this.popThis)
 		var thnlFileId = this.atchFileId;
 		var thnlFileObj = {
 			_this : this.popThis,
@@ -358,19 +399,35 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="lrclsCtegryCd" type="STRING" size="256"/>
           <Column id="mdclsCtegryCd" type="STRING" size="256"/>
           <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="corpClCd" type="STRING" size="256"/>
+          <Column id="imgClsfCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classImg_list">
         <ColumnInfo>
           <Column id="atchFileId" type="STRING" size="256"/>
           <Column id="webPath" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_corpClCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_imgClsfCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="lrclsCtegryCd"/>
       <BindItem id="item1" compid="Div00.form.Div00.form.Div00.form.Combo00_00" propid="value" datasetid="ds_search" columnid="mdclsCtegryCd"/>
-      <BindItem id="item2" compid="Div00.form.Div00.form.Div00.form.Combo00_01" propid="value" datasetid="ds_search" columnid="smclsCtegryCd"/>
+      <BindItem id="item2" compid="Div00.form.Div00.form.Div01.form.Combo00" propid="value" datasetid="ds_search" columnid="corpClCd"/>
+      <BindItem id="item3" compid="Div00.form.Div00.form.Div02.form.Combo00" propid="value" datasetid="ds_search" columnid="imgClsfCd"/>
     </Bind>
   </Form>
 </FDL>
