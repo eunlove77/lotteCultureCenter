@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="BranchDtl" width="1280" height="700" titletext="New Form" onload="BranchDtl_onload">
+  <Form id="BranchDtl" width="1280" height="700" titletext="New Form" onload="BranchDtl_onload" rtl="">
     <Layouts>
       <Layout height="700" width="1280">
         <Static id="txtMenuNm" taborder="0" text="지점관리 등록" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -122,7 +122,38 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div01" taborder="13" text="Div01" left="45" top="row11:28" height="60" right="45">
+        <Static id="Static02" taborder="13" text="지점관리 등록" left="30" top="row11:19" width="80" cssclass="sta_WF_TitGray" height="19"/>
+        <Div id="Div02" taborder="14" text="Div01" left="10" top="Static02:10" height="100" right="10">
+          <Layouts>
+            <Layout>
+              <Div id="row12" taborder="0" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사업자명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="117" top="1" width="840" height="28" onchanged="Div02_row12_Edit00_onchanged"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="row13" taborder="1" text="Div01" left="0" top="row12:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사업자번호 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <MaskEdit id="MaskEdit00" taborder="1" left="117" top="1" width="840" height="28" format="###-##-#####" type="string"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="row14" taborder="2" text="Div01" left="0" top="row13:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="대표자명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="117" top="1" width="840" height="28"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div01" taborder="15" text="Div01" left="45" top="Div02:30" height="60" right="45">
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="0" text="취소" left="510" width="79" cssclass="btn_WF_Weak" fittocontents="none" height="30" top="0" onclick="Div01_btnCnl_onclick"/>
@@ -151,6 +182,9 @@
           <Column id="lat" type="STRING" size="2000"/>
           <Column id="lng" type="STRING" size="2000"/>
           <Column id="lectRmCnt" type="INT" size="2000"/>
+          <Column id="bizprNm" type="STRING" size="2000"/>
+          <Column id="bizprNo" type="STRING" size="2000"/>
+          <Column id="rpstvNm" type="STRING" size="2000"/>
         </ColumnInfo>
         <Rows>
           <Row>
@@ -171,15 +205,18 @@
       </Dataset>
     </Objects>
     <Bind>
-      <BindItem id="item0" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
-      <BindItem id="item1" compid="row03.form.spotDiv.form.ComboSpotArea" propid="value" datasetid="ds_detail" columnid="brchAreaCd"/>
-      <BindItem id="item2" compid="row05.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
-      <BindItem id="item3" compid="row06.form.Edit00" propid="value" datasetid="ds_detail" columnid="bscAddr"/>
-      <BindItem id="item4" compid="row07.form.Edit00" propid="value" datasetid="ds_detail" columnid="dtlAddr"/>
-      <BindItem id="item5" compid="row08.form.Edit00" propid="value" datasetid="ds_detail" columnid="lat"/>
-      <BindItem id="item6" compid="row09.form.Edit00" propid="value" datasetid="ds_detail" columnid="lng"/>
-      <BindItem id="item7" compid="row10.form.Edit00" propid="value" datasetid="ds_detail" columnid="telno"/>
-      <BindItem id="item8" compid="row11.form.Edit00" propid="value" datasetid="ds_detail" columnid="lectRmCnt"/>
+      <BindItem id="brchCd" compid="row02.form.spotDiv.form.ComboSpot" propid="value" datasetid="ds_detail" columnid="brchCd"/>
+      <BindItem id="brchAreaCd" compid="row03.form.spotDiv.form.ComboSpotArea" propid="value" datasetid="ds_detail" columnid="brchAreaCd"/>
+      <BindItem id="expsrYn" compid="row05.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
+      <BindItem id="bscAddr" compid="row06.form.Edit00" propid="value" datasetid="ds_detail" columnid="bscAddr"/>
+      <BindItem id="dtlAddr" compid="row07.form.Edit00" propid="value" datasetid="ds_detail" columnid="dtlAddr"/>
+      <BindItem id="lat" compid="row08.form.Edit00" propid="value" datasetid="ds_detail" columnid="lat"/>
+      <BindItem id="lng" compid="row09.form.Edit00" propid="value" datasetid="ds_detail" columnid="lng"/>
+      <BindItem id="telno" compid="row10.form.Edit00" propid="value" datasetid="ds_detail" columnid="telno"/>
+      <BindItem id="lectRmCnt" compid="row11.form.Edit00" propid="value" datasetid="ds_detail" columnid="lectRmCnt"/>
+      <BindItem id="bizprNm" compid="Div02.form.row12.form.Edit00" propid="value" datasetid="ds_detail" columnid="bizprNm"/>
+      <BindItem id="bizprNo" compid="Div02.form.row13.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="bizprNo"/>
+      <BindItem id="rpstvNm" compid="Div02.form.row14.form.Edit00" propid="value" datasetid="ds_detail" columnid="rpstvNm"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
 * include 영역 
@@ -441,6 +478,24 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		{
 			this.alert("경도를 입력해주세요");
 			this.row09.form.Edit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.Div02.form.row12.form.Edit00.value))
+		{
+			this.alert("사업자명을 입력해주세요");
+			this.Div02.form.row12.form.Edit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.Div02.form.row13.form.MaskEdit00.value))
+		{
+			this.alert("사업자 번호를 입력해주세요");
+			this.Div02.form.row13.form.MaskEdit00.setFocus();
+			return false;
+		}
+		else if(this.gfn_isNull(this.Div02.form.row14.form.Edit00.value))
+		{
+			this.alert("대표자명을 입력해주세요");
+			this.Div02.form.row14.form.Edit00.setFocus();
 			return false;
 		}
 		else
