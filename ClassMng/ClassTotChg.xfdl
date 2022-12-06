@@ -807,22 +807,19 @@ this.fn_schedule_set = function(pObjName)
 	
 		var content = ["Div07"];
 		
-		var sliceCnt = 0
 		for(var i=0; i < this.ds_schedule_list.getRowCount(); i++)
 		{
 			var id = "scheduelPlanList" + i;
-			sliceCnt = sliceCnt + this.ds_schedule_list.getColumn(i, "lectNbcnt");
-			
-			
+				
 			if(pObjName != undefined && pObjName.indexOf(id) > -1)
 			{
-				this.fn_schedule_set_code(id, i, content, sliceCnt, this.ds_schedule_list.getColumn(i, "lectStDt"));
+				this.fn_schedule_set_code(id, i, content, this.ds_schedule_list.getColumn(i, "lectStDt"));
 			}
 			else
 			{
 				if(pObjName == undefined)
 				{
-					this.fn_schedule_set_code(id, i, content, sliceCnt, this.ds_schedule_list.getColumn(i, "lectStDt"));
+					this.fn_schedule_set_code(id, i, content, this.ds_schedule_list.getColumn(i, "lectStDt"));
 				}
 			}
 			
@@ -840,7 +837,7 @@ this.fn_schedule_set = function(pObjName)
 	}
 }
 
-this.fn_schedule_set_code = function(id, i, content, sliceCnt, lectStDt)
+this.fn_schedule_set_code = function(id, i, content, lectStDt)
 {
 	var objComp = new Div();
 	objComp.init(id, 0, content[i] + ":15", null, 100, 0);
@@ -853,7 +850,9 @@ this.fn_schedule_set_code = function(id, i, content, sliceCnt, lectStDt)
 	objComp.addChild("scheduleStatic" + i, objStatic);
 	objStatic.set_cssclass("sta_WF_TableLabel");
 	
-	var text = this.ds_schedulePlan_list.getColumn(sliceCnt-1, "stDaywNm");
+	var arrDays = new Array("", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일");	
+	var text = arrDays[this.ds_schedule_list.getColumn(i, "stDaywCd")];
+	
 	var arrRow = this.ds_schedulePlan_list.extractRows("pass=='0' && lectStDt=='" + lectStDt + "'");
 	
 	if(arrRow == "")
