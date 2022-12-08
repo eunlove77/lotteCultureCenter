@@ -929,7 +929,12 @@ this.gfn_set_month = function(form, targetObj){
 	for(var i = 1 ; i <= 12 ; i++){
 		var nRow = this[dsId].addRow();
 		this[dsId].setColumn(nRow, "data", i + "월");
-		this[dsId].setColumn(nRow, "code", i);
+		if(i < 10){
+			this[dsId].setColumn(nRow, "code", "0" + i);
+		}else{
+			this[dsId].setColumn(nRow, "code", i);
+		}
+		
 	}
 	
 	targetObj.setInnerDataset(this[dsId]);				
