@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Optn_popup" width="640" height="120" titletext="옵션변경" onload="Optn_popup_onload">
+    <Layouts>
+      <Layout height="120" width="640">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="▶ 재료비/대여료" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
+              <Div id="Div00" taborder="1" text="Div00" left="0" top="20" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_optn_list" codecolumn="optnSeqno" datacolumn="optnNm" onitemchanged="Div00_Div00_Combo00_onitemchanged"/>
+                    <Static id="Static01" taborder="2" left="Combo00:10" top="5" width="150" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button00" taborder="2" text="취소" left="231" width="84" height="21" cssclass="btn_WF_Weak" visible="true" top="69" onclick="Div00_Button00_onclick"/>
+              <Button id="Button01" taborder="3" text="선택" left="325" width="84" height="21" cssclass="btn_WF_Medium" visible="true" top="69" onclick="Div00_Button01_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.cnt = 0;
+
+this.optnSeqno = null;
+this.brchCd = null;
+this.yy = null;
+this.lectSmsterCd = null;
+this.lectCd = null;
+this.optnTypNm = null;
+this.menuSeq = null;
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.Optn_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.optnSeqno = this.parent.optnSeqno;
+	this.brchCd = this.parent.brchCd;
+	this.yy = this.parent.yy;
+	this.lectSmsterCd = this.parent.lectSmsterCd;
+	this.lectCd = this.parent.lectCd;
+	this.optnTypNm = this.parent.optnTypNm;
+	this.menuSeq = this.parent.menuId;
+	
+	this.fn_data_list();
+};
+
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getOptnList.do";
+	var inData      = "";
+	var outData     = "this.ds_optn_list=output1";
+	var strArg      = "brchCd=" + this.brchCd + " yy=" + this.yy + " lectSmsterCd=" + this.lectSmsterCd + " lectCd=" + this.lectCd;
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	  // 에러 시 화면 처리 내역
+	  if(errorCode != 0)
+	  {
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	  }
+	  
+	  switch(svcID)
+	  {
+		case "dataList":
+			this.Div00.form.Div00.form.Static00.set_text(this.optnTypNm);
+			if(this.gfn_nvl(this.optnSeqno) == ""){
+				//옵션 선택하지않은 주문 내역 부를때
+				this.Div00.form.Div00.form.Combo00.set_index(0);
+			}else{
+				this.Div00.form.Div00.form.Combo00.set_value(this.optnSeqno);
+				for(var i=0;i<this.ds_optn_list.getRowCount();i++){
+					if(this.ds_optn_list.getColumn(i, "optnSeqno") == this.optnSeqno){
+						this.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(this.ds_optn_list.getColumn(i, "optnAmt")) + "원");
+					}
+				}
+			}
+		
+			break;
+	  }
+};
+
+// 취소 버튼
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+// 선택 버튼
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("등록하시겠습니까?")){
+		for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+			if(this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd") == this.brchCd
+			&& this.opener.divWork.form.ds_class_list.getColumn(i, "yy") == this.yy + "||" + this.lectSmsterCd
+			&& this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd") == Number(this.lectSmsterCd)
+			&& this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd") == this.lectCd){
+				var optnSeqno = this.ds_optn_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "optnSeqno");
+				var optnNm = this.ds_optn_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "optnSeqno") == "" ? "" : this.ds_optn_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "optnNm");
+				var optnAmt = this.ds_optn_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "optnSeqno") == "" ? 0 : this.ds_optn_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "optnAmt");
+				this.opener.divWork.form.ds_class_list.setColumn(i, "optnSeqno", optnSeqno);
+				this.opener.divWork.form.ds_class_list.setColumn(i, "optnNm", optnNm);
+				this.opener.divWork.form.ds_class_list.setColumn(i, "optnAmt", optnAmt);
+				
+				// 기존에 입력된 할인수단 값이 옵션값보다 -가 되는경우 옵션비 할인내역 초기화
+				if(this.opener.divWork.form.ds_class_list.getColumn(i, "optnDcAmt") > optnAmt){
+					this.opener.divWork.form.ds_class_list.setColumn(i, "optnDcNm", "");
+					this.opener.divWork.form.ds_class_list.setColumn(i, "optnDcAmt", 0);
+					this.opener.divWork.form.ds_class_list.setColumn(i, "optnDcCd", "");
+				}
+			}
+		}
+		
+		// 총 결제예정 금액 업데이트
+		var lectStlmAmt = 0;
+		for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+			lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "lectAmt");
+			lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "optnAmt");
+			lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "oflnDcAmt");
+			lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "grdeDcAmt");
+			lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "cpnDcAmt");
+			lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "optnDcAmt");
+		}
+		this.opener.divWork.form.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
+		
+		alert("저장되었습니다.");
+		this.close();
+	}	
+};
+
+// 옵션 선택
+this.Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.value != ""){
+		this.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(this.ds_optn_list.getColumn(e.postindex, "optnAmt")) + "원");
+	}else{
+		this.Div00.form.Div00.form.Static01.set_text("");
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_optn_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="optnSeqno" type="INT" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="optnAmt" type="INT" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+          <Column id="partRfndClCd" type="STRING" size="256"/>
+          <Column id="deltYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

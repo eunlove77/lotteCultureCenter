@@ -39,8 +39,8 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Button id="Button00" taborder="3" text="취소" left="551" width="84" bottom="10" height="21" cssclass="btn_WF_Medium" visible="false"/>
-              <Button id="Button01" taborder="4" text="저장" left="645" width="84" height="21" bottom="10" cssclass="btn_WF_Weak" visible="false"/>
+              <Button id="Button00" taborder="3" text="취소" left="551" width="84" bottom="10" height="21" cssclass="btn_WF_Medium" visible="false" onclick="Div01_Button00_onclick"/>
+              <Button id="Button01" taborder="4" text="저장" left="645" width="84" height="21" bottom="10" cssclass="btn_WF_Weak" visible="false" onclick="Div01_Button01_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -60,6 +60,8 @@ this.ds = null;
 this.menuSeq = null;
 this.yy = null;
 this.lectSmsterCd = null;
+this.mbrNo = null;
+this.mbrGrdeCd = null;
 
 // 이미 체크된 라디오버튼 다시 체크하는 행동 막기위한 변수
 this.checkedYn = false;
@@ -76,6 +78,8 @@ this.LectSearch_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.menuSeq = this.parent.menuSeq;
 	this.yy = this.parent.yy;
 	this.lectSmsterCd = this.parent.lectSmsterCd;
+	this.mbrNo = this.parent.mbrNo;
+	this.mbrGrdeCd = this.parent.mbrGrdeCd;
 	
 	// 초기 데이터 세팅
 	this.fn_data_list();
@@ -87,8 +91,8 @@ this.fn_data_list = function()
 	var strSvcId    = "dataList";
 	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectPopDataList.do";
 	var inData      = "";
-	var outData     = "ds_fmly_list=output1";
-	var strArg      = "mbrNo=" + this.parent.mbrNo;
+	var outData     = "this.ds_fmly_list=output1 this.ds_atlct_list=output2";
+	var strArg      = "mbrNo=" + this.parent.mbrNo + " yy=" + this.yy + " lectSmsterCd=" + this.lectSmsterCd;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	
@@ -147,6 +151,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_value(this.lectSmsterCd);
 			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
 			
+			// 가족회원
 			var objCheckbox;
 			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 				if(i % 2 == 0){
@@ -167,6 +172,42 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
 			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
 			this.Div01.form.Div01.set_visible(true);
+			break;
+		case "save":
+			if(this.Div01.form.Div01.visible){
+				var optnAmt = this.Div01.form.Div01.form.Div00.form.Static01.text;
+				if(optnAmt != ""){
+					optnAmt = Number(nexacro.replaceAll(optnAmt.substring(0, optnAmt.length-1), ",", ""));
+					this.opener.divWork.form.ds_class_list.set_enableevent(false);
+					for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+						this.opener.divWork.form.ds_class_list.setColumn(i, "optnAmt", optnAmt);
+					}
+					this.opener.divWork.form.ds_class_list.set_enableevent(true);
+				}
+			}
+		
+			this.gfnSetCheckBoxNoDataset(this.opener.divWork.form.ds_class_list, this.opener.divWork.form.Div00.form.Div02.form.Grid00, 0);
+			
+			// 결제정보
+			this.opener.divWork.form.Div00.form.Div04.set_visible(true);
+			this.opener.divWork.form.Div00.form.Div04.set_height(210);
+			this.opener.divWork.form.Div00.set_height(780);
+			this.opener.divWork.form.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
+			this.opener.divWork.form.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
+			
+			var lectStlmAmt = 0;
+			for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+				lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "lectAmt");
+				lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "optnAmt");
+				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "oflnDcAmt");
+				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "grdeDcAmt");
+				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "cpnDcAmt");
+				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "optnDcAmt");
+			}
+			this.opener.divWork.form.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
+			this.opener.divWork.form.resetScroll();
+			this.close();
+			
 			break;
 	  }
 };
@@ -264,12 +305,311 @@ this.Div01_Div01_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 		this.Div01.form.Div01.form.Div00.form.Static01.set_text(this.gfn_setComma(this.ds_optn_list.getColumn(obj.index, "optnAmt")) + "원");
 	}
 };
+
+// 취소 버튼
+this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+};
+
+// 저장 버튼
+this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var fmlyChkYn = false;
+	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlySeqno = [], arrFmlyRelCdNm = [], arrBday = [], arrLscCd = [];
+	for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+		if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+			fmlyChkYn = true;
+			arrActlAtlctNpleNm.push(this.ds_fmly_list.getColumn(i, "korNm"));
+			arrSexCd.push(this.ds_fmly_list.getColumn(i, "sexCd"));
+			arrFmlyRelCd.push(this.ds_fmly_list.getColumn(i, "fmlyRelCd"));
+			arrFmlySeqno.push(this.ds_fmly_list.getColumn(i, "fmlySeqno"));
+			arrFmlyRelCdNm.push(this.ds_fmly_list.getColumn(i, "fmlyRelCdNm"));
+			arrBday.push(this.ds_fmly_list.getColumn(i, "bday"));
+			arrLscCd.push(this.ds_fmly_list.getColumn(i, "lscCd"));
+		}
+	}
+	
+	if(!fmlyChkYn){
+		alert("가족회원을 선택하세요.");
+		return;
+	}
+	
+	// 새로 등록할 강좌 시간과 기존 수강내역의 시간이 겹치는지 여부
+	var overlapYn = false;
+	// 새로 등록할 강좌 정보 가져옴
+	var lectStatCd, lectStDtm, lectEndDtm, lectStHhCd, lectStMiCd, lectEndHhCd, lectEndMiCd, stringStDaywNm;
+	var brchCd, yy, lectSmsterCd, lectCd, mvgDsplyUseYn, lectNm;
+	for(var i=0; i<this.ds.getRowCount(); i++)
+	{
+		if(this.ds.checkarray[i]){
+			lectStatCd = this.ds.getColumn(i, "lectStatCd");
+			lectStDtm = this.ds.getColumn(i, "lectStDtm");
+			lectEndDtm = this.ds.getColumn(i, "lectEndDtm");
+			lectStHhCd = this.ds.getColumn(i, "lectStHhCd");
+			lectStMiCd = this.ds.getColumn(i, "lectStMiCd");
+			lectEndHhCd = this.ds.getColumn(i, "lectEndHhCd");
+			lectEndMiCd = this.ds.getColumn(i, "lectEndMiCd");
+			stringStDaywNm = this.ds.getColumn(i, "stringStDaywNm");
+			brchCd = this.ds.getColumn(i, "brchCd");
+			yy = this.ds.getColumn(i, "yy").split("||")[0];
+			lectSmsterCd = this.ds.getColumn(i, "lectSmsterCd");
+			lectCd = this.ds.getColumn(i, "lectCd");
+			mvgDsplyUseYn = this.ds.getColumn(i, "mvgDsplyUseYn");
+			lectNm = this.ds.getColumn(i, "lectNm");
+		}
+	}
+	
+	// 기존 수강내역과 비교
+	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;
+	for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
+		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+			if(this.ds_atlct_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
+				&& this.ds_atlct_list.getColumn(i, "sexCd") == arrSexCd[j]
+				&& this.ds_atlct_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
+				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]
+				&& this.ds_atlct_list.getColumn(i, "lscCd") == arrLscCd[j]){
+				
+				tgtLectStDtm = this.ds_atlct_list.getColumn(i, "lectStDtm");
+				tgtLectEndDtm = this.ds_atlct_list.getColumn(i, "lectEndDtm");
+				tgtLectStHhCd = this.ds_atlct_list.getColumn(i, "lectStHhCd");
+				tgtLectStMiCd = this.ds_atlct_list.getColumn(i, "lectStMiCd");
+				tgtLectEndHhCd = this.ds_atlct_list.getColumn(i, "lectEndHhCd");
+				tgtLectEndMiCd = this.ds_atlct_list.getColumn(i, "lectEndMiCd");
+				tgtLectStDtmNm = this.ds_atlct_list.getColumn(i, "lectStDtmNm");
+				
+				// 강의시작일, 강의종료일
+				var tgtLectStDtm = nexacro.replaceAll(tgtLectStDtm, ".", "");
+				var tgtLectEndDtm = nexacro.replaceAll(tgtLectEndDtm, ".", "");
+				if((Number(lectStDtm) >= Number(tgtLectStDtm) && Number(lectStDtm) <= Number(tgtLectEndDtm))
+					|| (Number(lectEndDtm) >= Number(tgtLectStDtm) && Number(lectEndDtm) <= Number(tgtLectEndDtm))){
+					overlapYn = true;
+				}
+				
+				// 강의시작시간
+				var aftStTime, aftEndTime;
+				if(Number(lectStMiCd) >= 30){
+					aftStTime = lectStHhCd + ((Number(lectStMiCd) - 30).toString().length < 2 ? "0" + (Number(lectStMiCd) - 30) : (Number(lectStMiCd) - 30));
+				}else{
+					aftStTime = ((Number(lectStHhCd) -1).toString().length < 2 ? "0"+(Number(lectStHhCd) -1).toString() : (Number(lectStHhCd) -1).toString()) + ((60 + (Number(lectStMiCd) - 30)) == 60 ? "00" : ((60 + (Number(lectStMiCd) - 30)).toString().length < 2 ? "0"+(60 + (Number(lectStMiCd) - 30)).toString() : (60 + (Number(lectStMiCd) - 30)).toString()));
+				}
+				
+				if(Number(lectEndMiCd) <= 30){
+					aftEndTime = lectEndHhCd + ((Number(lectEndMiCd) + 30).toString().length < 2 ? "0"+(Number(lectEndMiCd) + 30) : (Number(lectEndMiCd) + 30));
+				}else{
+					aftEndTime = ((Number(lectEndHhCd) +1).toString().length < 2 ? "0"+(Number(lectEndHhCd) +1).toString() : (Number(lectEndHhCd) +1).toString()) + ((Number(lectEndMiCd) + 30) == 60 ? "00" : ((Number(lectEndMiCd) + 30) - 60).toString().length < 2 ? "0"+((Number(lectEndMiCd) + 30) - 60).toString() : ((Number(lectEndMiCd) + 30) - 60).toString());
+				}
+				
+				if((Number(aftStTime) >= Number(tgtLectStHhCd + tgtLectStMiCd) && Number(aftStTime) <= Number(tgtLectEndHhCd + tgtLectEndMiCd))
+				|| (Number(aftEndTime) >= Number(tgtLectStHhCd + tgtLectStMiCd) && Number(aftEndTime) <= Number(tgtLectEndHhCd + tgtLectEndMiCd))){
+					overlapYn = true;
+				}
+				
+				// 요일
+				var arrTgtLectStDtmNm = tgtLectStDtmNm.split(",");
+				var arrLectStDtmNm = stringStDaywNm.split(",");
+				
+				for(var k=0;k<arrTgtLectStDtmNm.length;k++){
+					for(var l=0;l<arrLectStDtmNm.length;l++){
+						if(arrTgtLectStDtmNm[k] == arrLectStDtmNm[l]){
+							overlapYn = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04") && overlapYn){
+		// 기존 결제내역의 강좌와 시간이 겹치는경우
+		if(!confirm("강의시간이 중복되는 강좌가 있습니다. 그래도 결제하시겠습니까?")){
+			return;
+		}
+	}
+	
+	// 기존회원여부
+	var existMemberYn, initWaitMemberYn;
+	
+	var strSvcId    = "memberDtl";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getMemberDtl.do";
+	var inData      = "";
+	var outData     = "this.ds_member_dtl=output1 this.ds_stlm_list=output2 this.ds_wit_list=output3";
+	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
+	var callBackFnc = function(svcID, errorCode, errorMsg){
+		  if(errorCode != 0){
+			this.alert(errorCode+"\n"+errorMsg);
+			existMemberYn = "ERROR";
+		  }else{
+			existMemberYn = this.ds_member_dtl.getColumn(0, "existMemberYn");
+			initWaitMemberYn = this.ds_member_dtl.getColumn(0, "initWaitMemberYn");
+		  }
+	};
+	var isAsync     = false;
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+	
+	if(existMemberYn == "ERROR"){
+		return;
+	}
+	
+	// 기존회원접수 기간에 기존회원이 아닌사람이 접수하는경우
+	if(lectStatCd == "02" && existMemberYn == "N"){
+		if(!confirm("기존회원 접수가 불가능한 회원입니다. 그래도 수강 등록하시겠습니까?")){
+			return;
+		}
+	}
+	
+	// MVG 전용강좌를 MVG 등급이 아닌 회원을 등록시키는경우
+	if(mvgDsplyUseYn == "Y" && (this.mbrGrdeCd != "21" && this.mbrGrdeCd != "22" && this.mbrGrdeCd != "23")){
+		if(!confirm("MVG 회원등급이 아닌 수강자입니다. 그래도 수강 등록하시겠습니까?")){
+			return;
+		}
+	}
+	
+	// 대기신청 강좌의 최초 대기신청자로 등록하는경우
+	if(lectStatCd == "05" && initWaitMemberYn == "Y"){
+		if(!confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
+			return;
+		}
+	}
+	
+	var arrStlmActlAtlctNpleNm = [];
+	var stlmYn = false;
+	for(var i=0;i<this.ds_stlm_list.getRowCount();i++){
+		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+			if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
+				&& this.ds_stlm_list.getColumn(i, "sexCd") == arrSexCd[j]
+				&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
+				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]
+				&& this.ds_atlct_list.getColumn(i, "lscCd") == arrLscCd[j]){
+				stlmYn = true;
+				arrStlmActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+			}
+		}
+	}
+	
+	// 기존에 같은 강좌에 수강신청한 사람이 있는 경우
+	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04" || lectStatCd == "05") && stlmYn){
+		alert("수강자 : " + arrStlmActlAtlctNpleNm.join() + "\n수강신청 내역이 존재합니다.");
+		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+			}
+		}
+		if(this.Div01.form.Div01.visible){
+			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+		}
+		return;
+	}
+	
+	// 대기신청 상태인 MVG 전용강좌를 MVG 등급이 아닌 회원을 등록시키는경우
+	if(lectStatCd == "05" && mvgDsplyUseYn == "Y" && (this.mbrGrdeCd != "21" && this.mbrGrdeCd != "22" && this.mbrGrdeCd != "23")){
+		alert("MVG 전용 " + lectNm + " 강좌입니다.\nMVG 회원등급이 아닌 수강자는 대기자 접수를 하실 수 없습니다.");
+		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+			}
+		}
+		if(this.Div01.form.Div01.visible){
+			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+		}
+		return;
+	}
+	
+	var arrWitActlAtlctNpleNm = [];
+	var witYn = false;
+	for(var i=0;i<this.ds_wit_list.getRowCount();i++){
+		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+			if(this.ds_wit_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
+				&& this.ds_wit_list.getColumn(i, "sexCd") == arrSexCd[j]
+				&& this.ds_wit_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]){
+				witYn = true;
+				arrWitActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+			}
+		}
+	}
+	
+	// 대기신청 상태인 강좌에 이미 대기신청한 사람이 있는 경우
+	if(lectStatCd == "05" && witYn){
+		alert("대기자 : " + arrWitActlAtlctNpleNm.join() + "\n대기신청 내역이 존재합니다.");
+		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+			}
+		}
+		if(this.Div01.form.Div01.visible){
+			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+		}
+		return;
+	}
+	
+	// 강좌검색 윈도우 팝업에서 저장 후 강좌검색 목록에 등록된 지점 외 다른 지점 저장 시
+	for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+		if(brchCd != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
+			alert("같은 지점의 강좌만 선택 가능합니다.");
+			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+				if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+					this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+				}
+			}
+			if(this.Div01.form.Div01.visible){
+				this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+				this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+			}
+			return;
+		}
+	}
+	
+	// 저장
+	var strSvcId    = "save";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/setLectReg.do";
+	var inData      = "classList=this.opener.divWork.form.ds_class_list";
+	var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
+	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
+	strArg			+= " fmlySeqno=" + arrFmlySeqno.join() + " actlAtlctNpleNm=" + arrActlAtlctNpleNm.join() + " sexCd=" + arrSexCd.join() + " fmlyRelCd=" + arrFmlyRelCd.join() + " fmlyRelCdNm=" + arrFmlyRelCdNm.join() + " bday=" + arrBday.join() + " lscCd=" + arrLscCd.join()
+	if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
+		strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
+		strArg			+= " optnNm=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm");
+		strArg			+= " optnAmt=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
+		strArg			+= " partRfndPsblYn=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "partRfndPsblYn");
+	}
+	strArg			+= " existMemberYn=" + existMemberYn;
+	var callBackFnc = "fnCallback";
+	var isAsync     = false;
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : true,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_fmly_list">
         <ColumnInfo>
           <Column id="mbrNo" type="STRING" size="256"/>
-          <Column id="fmlySeqno" type="STRING" size="256"/>
+          <Column id="fmlySeqno" type="INT" size="256"/>
           <Column id="fmlyMbrNo" type="STRING" size="256"/>
           <Column id="korNm" type="STRING" size="256"/>
           <Column id="fmlyRelCd" type="STRING" size="256"/>
@@ -283,7 +623,7 @@ this.Div01_Div01_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
       </Dataset>
       <Dataset id="ds_optn_list">
         <ColumnInfo>
-          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="optnSeqno" type="INT" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
@@ -293,6 +633,74 @@ this.Div01_Div01_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
           <Column id="partRfndPsblYn" type="STRING" size="256"/>
           <Column id="partRfndClCd" type="STRING" size="256"/>
           <Column id="deltYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_atlct_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="lectStDtmNm" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="lscCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_member_dtl">
+        <ColumnInfo>
+          <Column id="existMemberYn" type="STRING" size="256"/>
+          <Column id="initWaitMemberYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_stlm_list">
+        <ColumnInfo>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_wit_list">
+        <ColumnInfo>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grde_list">
+        <ColumnInfo>
+          <Column id="dcNbcnt" type="INT" size="256"/>
+          <Column id="dcRt" type="INT" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="applBrchRngCd" type="STRING" size="256"/>
+          <Column id="applBrchRngCdNm" type="STRING" size="256"/>
+          <Column id="useCnt" type="INT" size="256"/>
+          <Column id="allDcCnt" type="INT" size="256"/>
+          <Column id="allUseCnt" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_ex_grde_list">
+        <ColumnInfo>
+          <Column id="brchCdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="useCnt" type="INT" size="256"/>
+          <Column id="allUseCnt" type="INT" size="256"/>
+          <Column id="dcNbcnt" type="INT" size="256"/>
+          <Column id="dcRt" type="INT" size="256"/>
+          <Column id="cdOrd" type="INT" size="256"/>
+          <Column id="cont" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_all_grde_dtl">
+        <ColumnInfo>
+          <Column id="allUseCnt" type="INT" size="256"/>
+          <Column id="allDcCnt" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

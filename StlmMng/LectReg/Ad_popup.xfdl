@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Ad_popup" width="1280" height="720" onload="Ad_popup_onload" ontimer="Ad_popup_ontimer">
+    <Layouts>
+      <Layout height="720" width="1280" stepcount="10"/>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.menuSeq = null;
+this.stepCount = 0;
+
+// 서명이미지 파일아이디
+this.atchFileId = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.Ad_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.menuSeq = this.parent.menuId;
+	this.stepCount = this.getLayoutInfo("default", "stepcount");
+	this.setTimer(1, 3000);
+	
+	this.fn_openRfndRuleSignPopup();
+};
+
+this.Ad_popup_ontimer = function(obj:nexacro.Form,e:nexacro.TimerEventInfo)
+{
+	var pos = this.fnGetNextStep();
+	this.setStepIndex(pos);
+};
+
+this.fnGetNextStep = function()
+{
+	var nStepIndex = this.getStepIndex();
+	nStepIndex ++;
+	
+	if(nStepIndex >= this.stepCount)
+	{
+		nStepIndex = 0;
+	}
+	
+	return nStepIndex;
+};
+
+this.fn_openRfndRuleSignPopup = function()
+{
+	var oArg = {
+		menuId : this.menuSeq
+	};
+	this.gfn_showModal("RfndRuleSignPopup", oArg, "StlmMng::LectReg/RfndRuleSign_popup.xfdl", "popupCallBack", this, 640, 360, true, false, null);
+};
+
+this.saveAtchFileId = function()
+{
+	this.opener.divWork.form.Div00.form.Div04.form.CheckBox00.set_value(1);
+	this.opener.divWork.form.Div00.form.Div04.form.Static03.set_text(this.atchFileId);
+};]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="FgftApp_popup" width="1280" height="720" titletext="사은품" onload="FgftApp_popup_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="사은품 수령은 구매한 강좌의 지점에서만 수령 가능합니다.&#13;&#10;사은품 수령 시 사용자는 취소 할 수 없으며, 데스크에서 사은품 회수 후 관리자가 직접 취소(환불) 할 수 있습니다.&#13;&#10;사은품 재고에 따라 신청 가능한 사은품이 없을 수 있고 이미 지급받은 사은품은 신청 하실 수 없습니다." left="0" top="0" height="60" cssclass="sta_WF_TableLabel" right="0" border="1px solid #e6e6e6"/>
+              <Static id="Static00_00" taborder="1" text="▶ 구매강좌" left="0" top="80" width="100" height="17" cssclass="sta_WF_TitGray"/>
+              <Grid id="Grid00" taborder="2" left="0" top="100" height="270" right="0" binddataset="ds_atlct_list" autofittype="col">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="48" band="left"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell/>
+                      <Cell col="1" text="실수강자"/>
+                      <Cell col="2" text="지점명"/>
+                      <Cell col="3" text="강좌유형"/>
+                      <Cell col="4" text="강좌코드"/>
+                      <Cell col="5" text="강좌명"/>
+                      <Cell col="6" text="강사명"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell displaytype="checkboxcontrol" text="expr:dataset.checkarray[currow]"/>
+                      <Cell col="1" text="bind:actlAtlctNpleNm"/>
+                      <Cell col="2" text="bind:brchCdNm"/>
+                      <Cell col="3" text="bind:lectTpCdNm"/>
+                      <Cell col="4" text="bind:lectCd"/>
+                      <Cell col="5" text="bind:lectNm"/>
+                      <Cell col="6" text="bind:tcNm"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Static id="Static00_00_00" taborder="3" text="▶ 사은품 신청" left="0" top="400" width="100" height="17" cssclass="sta_WF_TitGray"/>
+              <Div id="Div00" taborder="4" text="Div00" left="0" top="420" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" text="사은품 선택"/>
+                    <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_fgft_list" codecolumn="fgftSeqno" datacolumn="fgftNm"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button00" taborder="5" text="취소" left="551" width="84" bottom="20" height="21" cssclass="btn_WF_Medium" visible="true" onclick="Div00_Button00_onclick"/>
+              <Button id="Button01" taborder="6" text="신청" left="645" width="84" height="21" bottom="20" cssclass="btn_WF_Weak" visible="true" onclick="Div00_Button01_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.menuSeq = null;
+this.arrPrmtnSeqno = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.FgftApp_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.menuSeq = this.parent.menuId
+	this.arrPrmtnSeqno = this.parent.arrPrmtnSeqno;
+	trace(this.parent.ds_stlm_cmplt_list);
+	
+	this.ds_atlct_list.set_enableevent(false);
+	for(var i=0;i<this.parent.ds_fgft_list.getRowCount();i++){
+		this.ds_atlct_list.insertRow(i);
+		this.ds_atlct_list.setColumn(i, "actlAtlctNpleNm", this.parent.ds_fgft_list.getColumn(i, "actlAtlctNpleNm"));
+		this.ds_atlct_list.setColumn(i, "brchCdNm", this.parent.ds_fgft_list.getColumn(i, "brchCdNm"));
+		this.ds_atlct_list.setColumn(i, "lectTpCdNm", this.parent.ds_fgft_list.getColumn(i, "lectTpCdNm"));
+		this.ds_atlct_list.setColumn(i, "lectCd", this.parent.ds_fgft_list.getColumn(i, "lectCd"));
+		this.ds_atlct_list.setColumn(i, "lectNm", this.parent.ds_fgft_list.getColumn(i, "lectNm"));
+		this.ds_atlct_list.setColumn(i, "tcNm", this.parent.ds_fgft_list.getColumn(i, "tcNm"));
+		this.ds_atlct_list.setColumn(i, "actlAtlctNpleSeqno", this.parent.ds_fgft_list.getColumn(i, "actlAtlctNpleSeqno"));
+		this.ds_atlct_list.setColumn(i, "atlctRsvNo", this.parent.ds_fgft_list.getColumn(i, "atlctRsvNo"));
+		this.ds_atlct_list.setColumn(i, "mbrNo", this.parent.ds_fgft_list.getColumn(i, "mbrNo"));
+		this.ds_atlct_list.setColumn(i, "brchCd", this.parent.ds_fgft_list.getColumn(i, "brchCd"));
+		this.ds_atlct_list.setColumn(i, "yy", this.parent.ds_fgft_list.getColumn(i, "yy"));
+		this.ds_atlct_list.setColumn(i, "lectSmsterCd", this.parent.ds_fgft_list.getColumn(i, "lectSmsterCd"));
+	}
+	this.ds_atlct_list.set_enableevent(true);
+	
+	this.fn_data_list();
+	
+	this.gfnSetCheckBoxNoDataset(this.ds_atlct_list, this.Div00.form.Grid00, 0);
+};
+
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getFgftPopDataList.do";
+	var inData      = "";
+	var outData     = "this.ds_fgft_list=output1";
+	var strArg      = "arrPrmtnSeqno=" + this.arrPrmtnSeqno.join();
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	  // 에러 시 화면 처리 내역
+	  if(errorCode != 0)
+	  {
+		if(errorCode == -2){
+			alert("선택하신 사은품에 재고가 부족합니다. 다른 사은품을 선택하세요.");
+		}else{
+			this.alert(errorCode+"\n"+errorMsg);
+		}
+		
+		return;
+	  }
+	  
+	  switch(svcID)
+	  {
+		case "dataList":
+			this.Div00.form.Div00.form.Combo00.set_index(0);
+			break;
+		case "insert":
+			for(var i=0;i<this.parent.ds_stlm_cmplt_list.getRowCount();i++){
+				for(var j=0;j<this.ds_rtn_list.getRowCount();j++){
+					if(this.parent.ds_stlm_cmplt_list.getColumn(i, "atlctRsvNo") == this.ds_rtn_list.getColumn(j, "atlctRsvNo")
+					&& this.parent.ds_stlm_cmplt_list.getColumn(i, "actlAtlctNpleSeqno") == this.ds_rtn_list.getColumn(j, "actlAtlctNpleSeqno")){
+						this.parent.ds_stlm_cmplt_list.set_enableevent(false);
+						this.parent.ds_stlm_cmplt_list.setColumn(i, "fgftRecpYn", "Y");
+						this.parent.ds_stlm_cmplt_list.setColumn(i, "fgftAppNo", this.ds_rtn_list.getColumn(j, "fgftAppNo"));
+						this.parent.ds_stlm_cmplt_list.set_enableevent(true);
+					}
+				}
+			}
+			this.parent.parent_list_form.fn_list();
+			alert("저장되었습니다.");
+			this.close();
+			break;
+	  }
+};
+
+// 취소 버튼 클릭
+this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(confirm("취소하시면 사은품을 신청 하실 수 없습니다. 그래도 취소하시겠습니까?")){
+		this.close();
+	}
+};
+
+// 신청 버튼 클릭
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.Div00.form.Div00.form.Combo00.value == ""){
+		alert("사은품을 선택하세요.");
+		return;
+	}
+
+	if(confirm("사은품을 신청하시겠습니까?")){
+		this.removeChild("ds_fgft_insert");
+		var dsFgftInsert = new Dataset();
+		dsFgftInsert.name = "ds_fgft_insert";
+		this.addChild("ds_fgft_insert", dsFgftInsert);
+		dsFgftInsert.set_enableevent(false);
+		dsFgftInsert.clear();
+		dsFgftInsert.copyData(this.ds_atlct_list, false);
+		dsFgftInsert.clearData();
+		var dsFgftInsertIndex = 0;
+		for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
+			if(this.ds_atlct_list.checkarray[i]){
+				dsFgftInsert.addRow();
+				dsFgftInsert.copyRow(dsFgftInsertIndex, this.ds_atlct_list, i);
+				dsFgftInsertIndex++;
+			}
+		}
+		dsFgftInsert.set_enableevent(true);
+		
+		var strSvcId    = "insert";
+		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/insertFgftAppData.do";
+		var inData      = "fgftList=this.ds_fgft_insert";
+		var outData     = "this.ds_rtn_list=output1";
+		var strArg      = "prmtnSeqno=" + this.ds_fgft_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "prmtnSeqno");
+		strArg			+= " fgftSeqno=" + this.ds_fgft_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "fgftSeqno");
+		strArg			+= " fgftNm=" + this.ds_fgft_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "fgftNm");
+		var callBackFnc = "fnCallback";
+		var isAsync     = true;
+		
+		var tranObj = {
+			strSvcId : strSvcId,
+			strSvcUrl : strSvcUrl,
+			inData : inData,
+			outData : outData,
+			strArg : strArg,
+			callBackFnc : callBackFnc,
+			isAsync : isAsync,
+			isPopup : false,
+			menuSeq : this.menuSeq
+		};
+		
+		this.gfn_transaction(tranObj);
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_atlct_list">
+        <ColumnInfo>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="brchCdNm" type="STRING" size="256"/>
+          <Column id="lectTpCdNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="INT" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_fgft_list">
+        <ColumnInfo>
+          <Column id="fgftSeqno" type="STRING" size="256"/>
+          <Column id="fgftNm" type="STRING" size="256"/>
+          <Column id="prmtnSeqno" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_rtn_list">
+        <ColumnInfo>
+          <Column id="fgftAppNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="INT" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

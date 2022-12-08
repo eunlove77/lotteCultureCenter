@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="InputConfirm_popup" width="1280" height="720" titletext="입력확인" onload="InputConfirm_popup_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="▶ 수강신청" left="0" top="0" width="100" height="17" cssclass="sta_WF_TitGray"/>
+              <Grid id="Grid00" taborder="1" left="0" top="20" height="200" right="0" binddataset="ds_class_list" autofittype="col">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="150"/>
+                      <Column size="120"/>
+                      <Column size="120"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                      <Column size="100"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="실수강자"/>
+                      <Cell col="1" text="강좌명"/>
+                      <Cell col="2" text="강의기간"/>
+                      <Cell col="3" text="강좌요일"/>
+                      <Cell col="4" text="강의시간"/>
+                      <Cell col="5" text="강의횟수"/>
+                      <Cell col="6" text="옵션명"/>
+                      <Cell col="7" text="강좌료"/>
+                      <Cell col="8" text="재료비/대여료"/>
+                      <Cell col="9" text="할인금액"/>
+                      <Cell col="10" text="주문금액"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:actlAtlctNpleNm"/>
+                      <Cell col="1" text="bind:lectNm"/>
+                      <Cell col="2" text="expr:dataset.getColumn(currow, &quot;lectStDtm&quot;) + ' ~ ' + dataset.getColumn(currow, &quot;lectEndDtm&quot;)"/>
+                      <Cell col="3" text="bind:stringStDaywNm"/>
+                      <Cell col="4" text="expr:dataset.getColumn(currow, &quot;lectStHhCd&quot;) + ':' + dataset.getColumn(currow, &quot;lectStMiCd&quot;) + ' ~ ' + dataset.getColumn(currow, &quot;lectEndHhCd&quot;) + ':' + dataset.getColumn(currow, &quot;lectEndMiCd&quot;)"/>
+                      <Cell col="5" text="bind:lectNbcnt"/>
+                      <Cell col="6" text="expr:dataset.getColumn(currow, &quot;optnNm&quot;) == undefined ? '-' : dataset.getColumn(currow, &quot;optnNm&quot;)"/>
+                      <Cell col="7" text="bind:lectAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="8" text="bind:optnAmt" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="mask"/>
+                      <Cell col="9" text="expr:dataset(currow, &quot;oflnDcAmt&quot;) + dataset(currow, &quot;grdeDcAmt&quot;) + dataset(currow, &quot;cpnDcAmt&quot;) + dataset(currow, &quot;optnDcAmt&quot;)" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="10" text="expr:dataset.getColumn(currow, &quot;lectAmt&quot;) + dataset.getColumn(currow, &quot;optnAmt&quot;) - dataset.getColumn(currow, &quot;oflnDcAmt&quot;) - dataset.getColumn(currow, &quot;grdeDcAmt&quot;) - dataset.getColumn(currow, &quot;cpnDcAmt&quot;) - dataset.getColumn(currow, &quot;optnDcAmt&quot;)" maskeditpostfixtext="원" maskeditformat="###,##0" displaytype="mask"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Div id="Div00" taborder="2" text="Div00" left="0" top="230" height="33" right="0" cssclass="div_WF_CompWrap">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="결제 요청금액" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static01" taborder="1" left="Static00:0" top="0" height="31" cssclass="sta_WF_CompText" right="0" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="right"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button01" taborder="3" text="취소" left="598" width="84" height="21" bottom="0" cssclass="btn_WF_Weak" visible="true" onclick="Div00_Button01_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_class_list">
+        <ColumnInfo>
+          <Column id="fmlySeqno" type="INT" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="lectAmt" type="INT" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="INT" size="256"/>
+          <Column id="optnSeqno" type="INT" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="optnAmt" type="INT" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="exMbrYn" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="oflnDcNm" type="STRING" size="256"/>
+          <Column id="oflnDcAmt" type="INT" size="256"/>
+          <Column id="grdeDcNm" type="STRING" size="256"/>
+          <Column id="grdeDcRt" type="INT" size="256"/>
+          <Column id="grdeDcAmt" type="INT" size="256"/>
+          <Column id="cpnDcNm" type="STRING" size="256"/>
+          <Column id="cpnDcRt" type="INT" size="256"/>
+          <Column id="cpnDcAmt" type="INT" size="256"/>
+          <Column id="optnDcNm" type="STRING" size="256"/>
+          <Column id="optnDcAmt" type="INT" size="256"/>
+          <Column id="oflnDcCd" type="STRING" size="256"/>
+          <Column id="grdeDcCd" type="STRING" size="256"/>
+          <Column id="cpnDcCd" type="STRING" size="256"/>
+          <Column id="optnDcCd" type="STRING" size="256"/>
+          <Column id="lectStlmAmt" type="INT" size="256"/>
+          <Column id="grdeDcSubtrYn" type="STRING" size="256"/>
+          <Column id="cpnDcAmtClCd" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.InputConfirm_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	this.ds_class_list.set_enableevent(false);
+	this.ds_class_list.clearData();
+	for(var i=0;i<this.parent.classList.getRowCount();i++){
+		this.ds_class_list.addRow();
+		this.ds_class_list.copyRow(i, this.parent.classList, i);
+	}
+	this.ds_class_list.set_enableevent(true);
+	
+	var lectStlmAmt = 0;
+	for(var i=0;i<this.ds_class_list.getRowCount();i++){
+		lectStlmAmt += this.ds_class_list.getColumn(i, "lectAmt");
+		lectStlmAmt += this.ds_class_list.getColumn(i, "optnAmt");
+		lectStlmAmt -= this.ds_class_list.getColumn(i, "oflnDcAmt");
+		lectStlmAmt -= this.ds_class_list.getColumn(i, "grdeDcAmt");
+		lectStlmAmt -= this.ds_class_list.getColumn(i, "cpnDcAmt");
+		lectStlmAmt -= this.ds_class_list.getColumn(i, "optnDcAmt");
+	}
+	this.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(lectStlmAmt) + "원");
+};
+
+// 취소 버튼 클릭
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+]]></Script>
+  </Form>
+</FDL>
