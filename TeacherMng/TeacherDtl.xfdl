@@ -1231,6 +1231,8 @@ this.add_grid_row = function(grid, ds, row){
 		ds.setColumn(row, 'grdtClCd', 0);
 		ds.setColumn(row, 'yy', '');
 	}
+	ds.setColumn(row, 'tcCdNo', this.ds_teacher_info.getColumn(0, "tcCdNo"));
+	
 	grid.parent.parent.set_height(++row * 32 + 4);
 	this.Div04.set_height(Number(this.Div04.height) + 32);
 	
@@ -1418,6 +1420,10 @@ this.set_teacher_info_rrno = function(){
 	if(tcTpCd != "3"){
 		var obj_jumin1 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno1.value;
 		var obj_jumin2 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno2.value;
+		
+		obj_jumin1 = typeof obj_jumin1 == "undefined" ? "" : obj_jumin1;
+		obj_jumin2 = typeof obj_jumin2 == "undefined" ? "" : obj_jumin2;
+		
 		rrno = obj_jumin1 + obj_jumin2;
 	} else {
 		rrno = this.Div_PayInfo.form.Div_b.form.Div00.form.rrno.value;
@@ -1752,6 +1758,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <FileUpTransfer id="FileUpTransfer00" onsuccess="FileUpTransfer00_onsuccess"/>
       <Dataset id="ds_tcedu_list">
         <ColumnInfo>
+          <Column id="tceduSeqno" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="schlClCd" type="STRING" size="256"/>
           <Column id="grdtClCd" type="STRING" size="256"/>
@@ -1769,6 +1776,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       </Dataset>
       <Dataset id="ds_tchist_list">
         <ColumnInfo>
+          <Column id="tchistSeqno" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="histStDt" type="STRING" size="256"/>
           <Column id="histEndDt" type="STRING" size="256"/>
@@ -1780,6 +1788,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       </Dataset>
       <Dataset id="ds_tcawrd_list">
         <ColumnInfo>
+          <Column id="tcAwrdSeqno" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="issueAgncNm" type="STRING" size="256"/>
           <Column id="issueDt" type="STRING" size="256"/>
@@ -1791,6 +1800,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       </Dataset>
       <Dataset id="ds_tcathctf_list">
         <ColumnInfo>
+          <Column id="tcAthctfSeqno" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="issueAgncNm" type="STRING" size="256"/>
           <Column id="issueDt" type="STRING" size="256"/>
