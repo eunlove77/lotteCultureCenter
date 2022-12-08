@@ -110,7 +110,7 @@
           </Formats>
         </Grid>
         <Button id="btnC0" taborder="7" text="개인강사(C0)" top="235" width="90" height="21" cssclass="btn_WF_Medium" right="110" onclick="btnC0_onclick"/>
-        <Button id="Button00_00" taborder="9" text="SAP 상태조회" top="235" height="21" cssclass="btn_WF_Medium" left="btnC0:5" right="10"/>
+        <Button id="btnSapResult" taborder="9" text="SAP 상태조회" top="235" height="21" cssclass="btn_WF_Medium" left="btnC0:5" right="10" onclick="btnSapResult_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -206,6 +206,11 @@ this.btnC0_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.gfn_openPopup("popup", oArg, "TeacherMng::include/AdmtObjMtrl_popup.xfdl", this, 0, 0, true, true, null);
 };
 
+this.btnSapResult_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_sap_result();
+};
+
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	var headTitle = obj.getCellProperty("Head", e.col, "text");
@@ -237,7 +242,7 @@ this.fn_list = function(page){
 	
 	var tranObj = {
 		strSvcId : "list",
-		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/sapAdmtList.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getSapAdmtList.do",
 		inData : "search=ds_search pageing=gdsPageing",
 		outData : "ds_list=output1 gdsPageing=output2",
 		strArg : "",
@@ -247,6 +252,28 @@ this.fn_list = function(page){
 	};
 	
 	this.gfn_transaction(tranObj);
+}
+
+this.fn_sap_result = function(){
+	
+	var brchCd = this.row01.form.Div00.form.brchCd.value;
+	var admtYm = this.row01.form.Div01.form.yy.value + this.row01.form.Div01.form.mm.value;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+
+	var tranObj = {
+		strSvcId : "sapResult",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getSapResult.do",
+		inData : "",
+		outData : "",
+		strArg : "brchCd=" + brchCd + " admtYm=" + admtYm,
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+
 }
 
 this.fn_callback = function(svcID,errorCode,errorMsg){
@@ -278,7 +305,10 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				}	
 			}
 			
-		break; 		
+		break; 	
+		case "sapResult":
+			this.alert(errorMsg);
+		break;
 	}
 }
 

@@ -103,7 +103,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="구매처(수령부서)" left="-1" top="0" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" right="-1" textAlign="center"/>
-                          <Combo id="recpDptCd" taborder="1" text="Combo00" left="10" top="41" height="30" right="10" innerdataset="ds_recp_dpt_cd" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div01_Div02_Div05_recpDptCd_onitemchanged"/>
+                          <Combo id="recpDptCd" taborder="1" text="Combo00" left="10" top="41" height="30" right="10" innerdataset="ds_recp_dpt_cd" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div01_Div02_Div05_recpDptCd_onitemchanged" index="-1"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -156,8 +156,8 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="▶ 강사료정산 목록" left="0" top="0" width="140" height="20" cssclass="sta_WF_TitGray"/>
-              <Button id="Button01" taborder="2" text="SAP 전송" top="0" cssclass="btn_WF_High" height="21" right="0" width="70"/>
-              <Button id="btnReAdmt" taborder="1" text="정산목록 가져오기" top="0" cssclass="btn_WF_Medium" height="21" right="Button01:5" width="120" onclick="Div02_btnReAdmt_onclick"/>
+              <Button id="btnTransSap" taborder="2" text="SAP 전송" top="0" cssclass="btn_WF_High" height="21" right="0" width="70" onclick="Div02_btnTransSap_onclick"/>
+              <Button id="btnReAdmt" taborder="1" text="정산목록 가져오기" top="0" cssclass="btn_WF_Medium" height="21" right="btnTransSap:5" width="120" onclick="Div02_btnReAdmt_onclick"/>
               <Static id="Static01" taborder="3" text="※ 사업소득 소득세 천원 이하의 경우 소득세, 주민세는 '0' 으로 처리됩니다." left="170" top="0" width="410" height="20" cssclass="sta_WF_TitGray"/>
               <Grid id="Grid01" taborder="4" left="0" right="0" autofittype="col" bottom="0" top="30" binddataset="ds_mtrl_list" summarytype="top" oncellclick="Div02_Grid01_oncellclick">
                 <Formats>
@@ -195,7 +195,7 @@
                       <Cell expr="dataset.getRowCount() - currow" text="bind:rnum"/>
                       <Cell col="1" text="bind:brchNm"/>
                       <Cell col="2" text="bind:tcNm" textDecoration="underline" cursor="pointer" color="#000dcc"/>
-                      <Cell col="3" displaytype="number" text="bind:ppayAmt" textAlign="right"/>
+                      <Cell col="3" displaytype="number" text="bind:actlPpayAmt" textAlign="right"/>
                       <Cell col="4" displaytype="number" text="bind:admtYmPpayAmt" textAlign="right"/>
                       <Cell col="5" displaytype="number" text="bind:pchOptnStlmAmt" textAlign="right"/>
                       <Cell col="6" displaytype="number" text="bind:npchOptnStlmAmt" textAlign="right"/>
@@ -207,7 +207,7 @@
                       <Cell/>
                       <Cell col="1" text="합계"/>
                       <Cell col="2" expr="dataset.rowcount + &quot;건&quot;"/>
-                      <Cell col="3" displaytype="number" expr="dataset.getSum(&quot;ppayAmt&quot;)" textAlign="right"/>
+                      <Cell col="3" displaytype="number" expr="dataset.getSum(&quot;actlPpayAmt&quot;)" textAlign="right"/>
                       <Cell col="4" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;admtYmPpayAmt&quot;)"/>
                       <Cell col="5" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;pchOptnStlmAmt&quot;)"/>
                       <Cell col="6" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;npchOptnStlmAmt&quot;)"/>
@@ -297,6 +297,9 @@
           <Column id="rsdttax" type="STRING" size="256"/>
           <Column id="taxSmamt" type="STRING" size="256"/>
           <Column id="actlPpayAmt" type="STRING" size="256"/>
+          <Column id="incmClCd" type="STRING" size="256"/>
+          <Column id="juminno" type="STRING" size="256"/>
+          <Column id="addr" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -320,6 +323,7 @@ this.wthdtaxCd = "";
 this.acntGsamt_5331157921 = "";
 this.acntGsamt_2133030301 = "";
 this.acntGsamt_2133050301 = "";
+this.newData = "Y";					// 정산목록 가져오기 버튼 실행 체크 용도
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -370,30 +374,14 @@ this.Div01_Div02_Div05_recpDptCd_onitemchanged = function(obj:nexacro.Combo,e:ne
 
 this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.gfn_btn_auth(this.menuId, "accSaveYn")) return;
-	
-	// 구매처(수령부서)
-	var recpDptCd = this.Div01.form.Div02.form.Div05.form.recpDptCd.value;
-	// 희망수령일
-	var hopeRecpDt = this.Div01.form.Div02.form.Div06.form.hopeRecpDt.value;
-	// 부서코드 빈값 확인
-	var isEmptyAcntDptCd = false;
-	
-	for(var i = 0 ; i < this.ds_acntcd_list.rowcount ; i++){
-		if(this.gfn_isNull(this.ds_acntcd_list.getColumn(i, "acntDptCd"))){
-			isEmptyAcntDptCd = true;
-			break;
+	if(this.fn_check("save")){
+		if(this.confirm("저장 하시겠습니까?")){
+			
+			this.ds_admt_info.setColumn(0, "hopeRecpDt", this.Div01.form.Div02.form.Div06.form.hopeRecpDt.value);
+			
+			this.fn_save();		
 		}
-	}
-	
-	if(this.gfn_isNull(recpDptCd)){
-		this.alert("구매처(수령부서)를 선택해주세요.");		
-	}else if(this.gfn_isNull(hopeRecpDt)){
-		this.alert("희망수령일/지급일을 선택해주세요.");
-	}else if(isEmptyAcntDptCd){
-		this.alert("부서코드를 입력해주세요.");
-	}else{
-		this.fn_save();
+		
 	}
 	
 };
@@ -410,7 +398,7 @@ this.Div01_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 
 this.Div02_btnReAdmt_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	
+	this.fn_admt_list();
 };
 
 this.Div02_Grid01_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -424,9 +412,12 @@ this.Div02_Grid01_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 		
 		var oArg = {			
 			title : "강사료 정산 강좌 목록",			
+			brchCd : this.brchCd,
+			admtYm : this.ppayYear + this.ppayMonth,
 			admtNo : _admtNo,
 			tcNm : _tcNm,
 			tcCdNo : _tcCdNo,
+			newDataYn : this.newData
 		};
 				
 						
@@ -434,6 +425,18 @@ this.Div02_Grid01_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	}
 	
 };
+
+this.Div02_btnTransSap_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.fn_check("transSap")){	
+		if(this.confirm("정산자료의 등록은 마감업무를 통해\n지급이 확정된 강좌에 대해서만 진행해야 합니다.\n자료등록후 SAP화면에 접속해서\n지출결의서를 작성하세요.\n정산데이터를 전송하시겠습니까?")){
+
+			this.fn_trans_sap();		
+
+		}
+	}
+};
+
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -453,7 +456,7 @@ this.fn_create = function(){
 		strSvcId : "create",
 		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/insertSapAdmtMst.do",
 		inData : "admtInfo=ds_admt_info",
-		outData : "ds_admt_info=output1 ds_acntcd_list=output2 ds_mtrl_list=output3",
+		outData : "ds_admt_info=output1 ds_acntcd_list=output2",
 		strArg : "",
 		callBackFnc : "fn_callback",
 		isAsync : false,
@@ -463,12 +466,27 @@ this.fn_create = function(){
 	this.gfn_transaction(tranObj);
 }
 
+this.fn_admt_list = function(){
+	
+	var tranObj = {
+		strSvcId : "admt_list",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getAdmtMtrlList.do",
+		inData : "",
+		outData : "ds_mtrl_list=output1",
+		strArg : "brchCd=" + this.brchCd + " admtYm=" + (this.ppayYear + this.ppayMonth),
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.menuId
+	};
+	
+	this.gfn_transaction(tranObj);
+}
 
 this.fn_detail = function(){
 	
 	var tranObj = {
 		strSvcId : "detail",
-		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/sapAdmtDtl.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getSapAdmtDtl.do",
 		inData : "",
 		outData : "ds_admt_info=output1 ds_acntcd_list=output2 ds_mtrl_list=output3",
 		strArg : "admtNo=" + this.admtNo,
@@ -482,8 +500,6 @@ this.fn_detail = function(){
 
 this.fn_save = function(){
 		
-	this.ds_admt_info.setColumn(0, "hopeRecpDt", this.Div01.form.Div02.form.Div06.form.hopeRecpDt.value);
-	
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/updateSapAdmtMst.do",
@@ -516,11 +532,29 @@ this.fn_delete = function(){
 	this.gfn_transaction(tranObj);
 }
 
+this.fn_trans_sap = function(){
+	
+	var tranObj = {
+		strSvcId : "transSap",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/sendSapData.do",
+		inData : "",
+		outData : "",
+		strArg : "admtNo=" + this.ds_admt_info.getColumn(0, "admtNo"),
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.menuId
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
 this.fn_callback = function(svcID,errorCode,errorMsg){
+	var saveYn = "N";
 	
 	if(errorCode != 0)
 	{    
-		this.alert(errorCode+"\n"+errorMsg);
+		//this.alert(errorCode+"\n"+errorMsg);
+		this.alert(errorMsg);
 		
 		switch(svcID)
 		{ 
@@ -536,21 +570,33 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 		case "detail":
 		case "create":			
 			
-			var saveYn = this.ds_admt_info.getColumn(0, "saveYn");
+			if(svcID == "detail"){
+				this.newData = "N";
+			}
+			
+			saveYn = this.ds_admt_info.getColumn(0, "saveYn");
+			if(saveYn == "N"){				
+				for(var i = 0 ; i < this.ds_acntcd_list.rowcount ; i++){
+					this.ds_acntcd_list.setColumn(i, "acntDptCd", this.ds_admt_info.getColumn(0, "sapDptCd"));
+				}		
+				this.opener.divWork.form.fn_list(1);
+			}
+			
+			break;	
+		case "admt_list":
+			
+			this.newData = "Y";
 			
 			this.Div02.form.txtTotal.set_text("( " + this.ds_mtrl_list.rowcount  + "개 )");
 			
 			if(saveYn == "N"){
-				for(var i = 0 ; i < this.ds_acntcd_list.rowcount ; i++){
-					this.ds_acntcd_list.setColumn(i, "acntDptCd", this.ds_admt_info.getColumn(0, "sapDptCd"));
-				}		
 								
 				if(this.ds_mtrl_list.rowcount < 1){
 					this.Grid01.set_nodatatext("검색 결과 없습니다.")
 				}else{
 					
 					//Summary일 경우 -2를 입력. 
-					this.acntGsamt_5331157921 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 4).replace(/,/g,"")); 
+					this.acntGsamt_5331157921 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 3).replace(/,/g,"")); 
 					this.acntGsamt_2133030301 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 7).replace(/,/g,"")); 
 					this.acntGsamt_2133050301 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 8).replace(/,/g,"")); 
 					
@@ -558,11 +604,11 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 					this.ds_acntcd_list.setColumn(this.ds_acntcd_list.findRowExpr("acntCd == '2133030301'"), "acntGsamt", this.acntGsamt_2133030301);
 					this.ds_acntcd_list.setColumn(this.ds_acntcd_list.findRowExpr("acntCd == '2133050301'"), "acntGsamt", this.acntGsamt_2133050301);
 				}			
-				
-				this.opener.divWork.form.fn_list(1);
 			}
 			
-			break;		
+			this.alert("강사료정산 목록이 갱신되었습니다.");
+			
+			break;
 		case "save" :
 			this.alert("정상 저장되었습니다.");
 			this.opener.divWork.form.fn_list(1);
@@ -572,11 +618,72 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			this.close();
 			this.opener.divWork.form.fn_list(1);
 			break;
+		case "transSap" :
+			this.alert(errorMsg);
+			break;
 	}
 }
 
+this.fn_check = function(gb){
+	
+	var rtn = false;
+	
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")) return;
+	
+	// 구매처(수령부서)
+	var recpDptCd = this.Div01.form.Div02.form.Div05.form.recpDptCd.value;
+	// 희망수령일
+	var hopeRecpDt = this.Div01.form.Div02.form.Div06.form.hopeRecpDt.value;
+	// 부서코드 빈값 확인
+	var isEmptyAcntDptCd = false;	
+	// 부서코드 동일값 확인
+	var equalAcntDptCd = true;
+	
+	var accountDay = this.ppayYear + this.ppayMonth;
+	var sapzpDay = this.gfn_isNull(hopeRecpDt) ? "" : hopeRecpDt.substring(0,6);
+	var acntDptCd = "";
+	var admtPrcsStatCd = "";
+	
+	admtPrcsStatCd = this.ds_admt_info.getColumn(0, "admtPrcsStatCd");
+	
+	for(var i = 0 ; i < this.ds_acntcd_list.rowcount ; i++){
+		if(this.gfn_isNull(this.ds_acntcd_list.getColumn(i, "acntDptCd"))){
+			isEmptyAcntDptCd = true;
+			break;
+		}else{			
+			if(i > 0 && acntDptCd != this.ds_acntcd_list.getColumn(i, "acntDptCd")){
+				equalAcntDptCd = false
+				break;
+			}
+			acntDptCd = this.ds_acntcd_list.getColumn(i, "acntDptCd");
+		}
+	}
+	
+	if(this.gfn_isNull(recpDptCd)){
+		this.alert("구매처(수령부서)를 선택해주세요.");	
+	}else if(this.gfn_isNull(hopeRecpDt)){
+		this.alert("희망수령일/지급일을 선택해주세요.");
+	}else if(accountDay != sapzpDay){
+		this.alert("지급년,지급월과 지급일의 달이 맞지 않습니다.");		
+	}else if(isEmptyAcntDptCd){
+		this.alert("부서코드를 입력해주세요.");		
+	}else if(!equalAcntDptCd){
+		this.alert("동일한 부서코드를 입력해주세요.");
+	}else if(this.ds_mtrl_list.rowcount == 0){
+		this.alert("강사료정산 대상이 없습니다.\n정산 자료를 추가하십시오.");
+	}else if( admtPrcsStatCd == "2" || admtPrcsStatCd == "4" || admtPrcsStatCd == "5"){
+		if(gb == "save"){
+			this.alert("결재중,결재완료,지급완료된 정산자료는 저장할 수 없습니다.");
+		}else{
+			this.alert("결재중,결재완료,지급완료된 정산자료는 SAP 전송 할 수 없습니다.");
+		}
+		
+	}else{
+		rtn = true;
+	}
 
-
+	return rtn;
+}
 
 ]]></Script>
   </Form>

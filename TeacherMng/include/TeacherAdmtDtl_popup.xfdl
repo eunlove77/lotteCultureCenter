@@ -34,8 +34,8 @@
                 <Cell text="bind:rnum"/>
                 <Cell col="1" text="bind:lectCd"/>
                 <Cell col="2" text="bind:lectNm"/>
-                <Cell col="3" text="bind:ppayAmt"/>
-                <Cell col="4" text="bind:actlPpayAmt"/>
+                <Cell col="3" text="bind:actlPpayAmt"/>
+                <Cell col="4" text="bind:admtYmPpayAmt"/>
                 <Cell col="5" text="bind:pchOptnStlmAmt"/>
                 <Cell col="6" text="bind:npchOptnStlmAmt"/>
                 <Cell col="7" text="bind:taxSmamt"/>
@@ -77,10 +77,12 @@ include "Base::lib_base.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
  this.application = null;
+ this.brchCd = "";
+ this.admtYm = "";
  this.admtNo = "";
  this.tcNm = "";
  this.tcCdNo = "";
- 
+ this.newData = "";
  /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -88,9 +90,12 @@ this.TeacherAdmtDtl_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEvent
 {
 	this.application = nexacro.getApplication();
 	
+	this.brchCd = this.getOwnerFrame().brchCd;	
+	this.admtYm = this.getOwnerFrame().admtYm;	
 	this.admtNo = this.getOwnerFrame().admtNo;	
 	this.tcNm = this.getOwnerFrame().tcNm;
 	this.tcCdNo = this.getOwnerFrame().tcCdNo;
+	this.newDataYn = this.getOwnerFrame().newDataYn;
 	
 	this.txtTcNm.set_text(this.tcNm);
 	this.txtTcCd.set_text(this.tcCdNo);
@@ -108,10 +113,10 @@ this.fn_list = function(){
 	
 	var tranObj = {
 		strSvcId : "list",
-		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/sapAdmtMtrlList.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getTeacherAdmtMtrlList.do",
 		inData : "",
 		outData : "ds_list=output1",
-		strArg : "admtNo=" + this.admtNo + " tcCdNo=" + this.tcCdNo,
+		strArg : "brchCd=" + this.brchCd + " admtYm=" + this.admtYm + " admtNo=" + this.admtNo + " tcCdNo=" + this.tcCdNo + " newDataYn="+this.newDataYn,
 		callBackFnc : "fn_callback",
 		isAsync : true,
 		menuSeq : this.menuId
