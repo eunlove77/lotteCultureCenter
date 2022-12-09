@@ -683,21 +683,9 @@ this.set_teacher_basic_info = function(apvlCd, tcTpCd){
 	}
 	
 	//이메일
-	var email = this.ds_teacher_info.getColumn(0, 'email');
 	var emailAddrCd = this.ds_teacher_info.getColumn(0, 'emailAddrCd');
-	if(email){
-		if(!emailAddrCd){
-			emailAddr = email.split('@')[1];
-			email = email.split('@')[0];
-			this.Div01.form.Div05.form.Div00.form.Edit00_00.set_value(emailAddr);
-			
-			this.ds_teacher_info.setColumn(0, "email", email);
-		} else {
-			var row = this.ds_emailAddr_cdList.findRow("cd", emailAddrCd);
-			emailAddr = this.ds_emailAddr_cdList.getColumn(row, "cdNm");
-			this.Div01.form.Div05.form.Div00.form.Edit00_00.set_value(emailAddr);
-			this.Div01.form.Div05.form.Div00.form.Edit00_00.set_readonly(true);
-		}
+	if(emailAddrCd){
+		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_readonly(true);
 	}
 	
 	//섭외정보
@@ -1170,12 +1158,8 @@ this.Div01_Div05_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 {
 	//이메일 도메인
 	if(obj.value){
-		var row = this.ds_emailAddr_cdList.findRow('cd', obj.value)
-		var nm = this.ds_emailAddr_cdList.getColumn(row, 'cdNm')
-		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_value(nm);
 		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_readonly(true);
 	} else {
-		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_value("");
 		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_readonly(false);
 	}
 };
@@ -2142,6 +2126,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <BindItem id="item12" compid="Div05.form.Div03.form.Div00.form.lectIntrdnCont" propid="text" datasetid="ds_tclect_dtl" columnid="lectIntrdnCont"/>
       <BindItem id="item19" compid="Div02_00.form.selfIntrdnCont" propid="value" datasetid="ds_teacher_info" columnid="selfIntrdnCont"/>
       <BindItem id="item22" compid="Div02.form.memoCont" propid="value" datasetid="ds_memo" columnid="memoCont"/>
+      <BindItem id="item21" compid="Div01.form.Div05.form.Div00.form.Edit00_00" propid="value" datasetid="ds_teacher_info" columnid="emailAddrCd"/>
+      <BindItem id="item26" compid="Div01.form.Div04.form.Div00.form.Radio00" propid="value" datasetid="ds_teacher_info" columnid="lscCd"/>
     </Bind>
   </Form>
 </FDL>
