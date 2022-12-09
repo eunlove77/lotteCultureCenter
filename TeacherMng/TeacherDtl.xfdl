@@ -1371,10 +1371,10 @@ this.submit_teacher_info = function(){
 	var inData = "";
 	inData += "teacherDtl=ds_teacher_info";
 	inData += " memoDtl=ds_memo";
-	inData += " tceduList=ds_tcedu_list:U";
-	inData += " tchistList=ds_tchist_list:U";
-	inData += " tcawrdList=ds_tcawrd_list:U";
-	inData += " tcathctfList=ds_tcathctf_list:U";
+	inData += " tceduList=ds_tcedu_list";
+	inData += " tchistList=ds_tchist_list";
+	inData += " tcawrdList=ds_tcawrd_list";
+	inData += " tcathctfList=ds_tcathctf_list";
 	
 	var tranObj = {};
 	tranObj.strSvcId	= "update_teacher";
@@ -1593,6 +1593,9 @@ this.validate_teacher_ds_list = function(ds, vali_arr, type){
 		//항목 추가시 입력값 없다면
 		alert(vali_arr[0][1] + " 입력하세요.");
 		return false;
+	} else if(ds.rowcount == 1 && !isInput) {
+		//저장시 입력값 전혀 없을 경우 로우 삭제
+		ds.deleteRow(0);
 	}
 	
 	return true;
