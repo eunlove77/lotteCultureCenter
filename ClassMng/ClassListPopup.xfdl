@@ -237,6 +237,8 @@
           <Column id="lectStatCd" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="only" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_year_list">
@@ -325,6 +327,8 @@ this.brchCdArr = [];
 this.lectTpCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
+this.apvlStatCd = "";
+this.only = "";
 this.type = 1;
 
  /**************************************************************************
@@ -345,6 +349,16 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.gfn_nvl(this.parent.lectTpCd) != "") 
 	{
 		this.lectTpCd = this.parent.lectTpCd;
+	}
+	
+	if(this.gfn_nvl(this.parent.apvlStatCd) != "") 
+	{
+		this.apvlStatCd = this.parent.apvlStatCd;
+	}
+	
+	if(this.gfn_nvl(this.parent.only) != "") 
+	{
+		this.only = this.parent.only;
 	}
 	
 	if(this.gfn_nvl(this.parent.type) != "") 
@@ -421,6 +435,8 @@ this.init = function()
 	this.ds_search.setColumn(0, "lectTpCd", this.lectTpCd);
 	this.ds_search.setColumn(0, "f", "");
 	this.ds_search.setColumn(0, "q", "");
+	this.ds_search.setColumn(0, "apvlStatCd", this.apvlStatCd);
+	this.ds_search.setColumn(0, "only", this.only);
 
 	//강의 학기정보 조회
 	this.fn_sesterInfo();

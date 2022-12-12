@@ -210,7 +210,7 @@
                           <Div id="Div00_09" taborder="17" text="Div00" left="0" top="Div00_08:-1" width="50%" height="33" cssclass="div_WF_CompWrap">
                             <Layouts>
                               <Layout>
-                                <Static id="Static00" taborder="0" text="강의시간" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                                <Static id="Static00" taborder="0" text="강의시간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
                                 <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20" innerdataset="ds_start_hour" codecolumn="cd" datacolumn="cdNm"/>
                                 <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:6" top="5" width="100" height="20" innerdataset="ds_start_min" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
                                 <Combo id="Combo02" taborder="3" text="Combo02" left="Combo01:12" top="5" width="100" height="20" innerdataset="ds_end_hour" codecolumn="cd" datacolumn="cdNm"/>
@@ -1041,7 +1041,9 @@ this.rceptPrdEndDt = "";
 this.extngMbrRceptPrdStDt = "";
 this.extngMbrRceptPrdEndDt = "";
 
-this.updateFlag = "1";
+this.updateCode = "";
+
+this.saveCnt = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -1296,11 +1298,25 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClass":
-			this.searchButton.click();
-			if(this.updateFlag == "1") 
+			
+			if(this.updateCode == "01") 
 			{
 				this.alert("저장 되었습니다.");			
+				this.searchButton.click();
 				this.parent.parent.parent.close();			
+			}
+			else if (this.updateCode == "02") 
+			{
+				this.alert("등록 불가한 그룹강좌입니다.");
+				
+				if(this.ds_class_dtl.getColumn(0, "lectTpCd") == "02") 
+				{
+					this.Div00.form.Div00_00_00.form.Div00.form.Div00.form.Button00.setFocus();
+				}
+				else 
+				{
+					this.Div00.form.Div00_00_00_00.form.Div00.form.Div00.form.Button00.setFocus();
+				}
 			}
 			else
 			{
@@ -1351,14 +1367,15 @@ this.fn_code_list = function()
 	var outData = "ds_classType_list=classTypeList ds_classGb_list=classGbList ds_classTargetGb_list=classTargetGbList ";
 		outData += "ds_classOptType_list=classOptTypeList ds_classDispIcon_list=classDispIconList ds_classSemster_list=classSemsterList ds_classRoom_list=classRoomList ";
 		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList ";
-		outData += "ds_tcGrade_list=tcGradeList ds_whdtxCl_list=whdtxClList ds_incmCl_list=incmClList ds_ppayStd_list=ppayStdList";
+		outData += "ds_tcGrade_list=tcGradeList ds_whdtxCl_list=whdtxClList ds_incmCl_list=incmClList ds_ppayStd_list=ppayStdList ";
+		outData += "ds_start_hour=startHour ds_end_hour=endHour ds_start_min=startMin ds_end_min=endMin";
 		
 	var tranObj = {
 		strSvcId : "codeList",
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
 		outData : outData,
-		strArg : "cdId=CLASS_02||CLASS_03||CLASS_05||CLASS_06||CLASS_07||sester||ctgy||room||087||090||INCM_CL||PPAY_STD useYn=Y brchCd=" + this.brchCd,
+		strArg : "cdId=CLASS_02||CLASS_03||CLASS_05||CLASS_06||CLASS_07||sester||ctgy||room||087||090||INCM_CL||PPAY_STD||TC_005||TC_006 useYn=Y brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.menuSeq,
@@ -1694,68 +1711,21 @@ this.fn_classType_set = function(type)
 //강의 시간 세팅
 this.fn_classTime_set = function()
 {
-	this.ds_start_hour.set_enableevent(false);
-	
-	this.ds_start_hour.clearData();
-	this.ds_start_hour.addRow();
+	this.ds_start_hour.insertRow(0);
 	this.ds_start_hour.setColumn(0, "cd", "");
 	this.ds_start_hour.setColumn(0, "cdNm", "시작시간");
-	for(var i=0; i <= 23; i++) 
-	{
-		this.ds_start_hour.addRow();
-		this.ds_start_hour.setColumn(i+1, "cd", ("0"+i).slice(-2));
-		this.ds_start_hour.setColumn(i+1, "cdNm", ("0"+i).slice(-2));
-	}
 	
-	this.ds_start_hour.set_enableevent(true);
-	
-	this.ds_start_min.set_enableevent(false);
-	
-	this.ds_start_min.clearData();
-	this.ds_start_min.addRow();
+	this.ds_start_min.insertRow(0);
 	this.ds_start_min.setColumn(0, "cd", "");
 	this.ds_start_min.setColumn(0, "cdNm", "분");
-	for(var i=0; i <= 11; i++) 
-	{
-		var j = i*5;
-		this.ds_start_min.addRow();
-		this.ds_start_min.setColumn(i+1, "cd", ("0"+j).slice(-2));
-		this.ds_start_min.setColumn(i+1, "cdNm", ("0"+j).slice(-2));
-	}	
 	
-	
-	this.ds_start_min.set_enableevent(true);
-	
-	this.ds_end_hour.set_enableevent(false);
-	
-	this.ds_end_hour.clearData();
-	this.ds_end_hour.addRow();
+	this.ds_end_hour.insertRow(0);
 	this.ds_end_hour.setColumn(0, "cd", "");
 	this.ds_end_hour.setColumn(0, "cdNm", "종료시간");
-	for(var i=0; i <= 23; i++) 
-	{
-		this.ds_end_hour.addRow();
-		this.ds_end_hour.setColumn(i+1, "cd", ("0"+i).slice(-2));
-		this.ds_end_hour.setColumn(i+1, "cdNm", ("0"+i).slice(-2));
-	}
-	
-	this.ds_end_hour.set_enableevent(true);
-	
-	this.ds_end_min.set_enableevent(false);
-	
-	this.ds_end_min.clearData();
-	this.ds_end_min.addRow();
+
+	this.ds_end_min.insertRow(0);
 	this.ds_end_min.setColumn(0, "cd", "");
 	this.ds_end_min.setColumn(0, "cdNm", "분");
-	for(var i=0; i <= 11; i++) 
-	{
-		var j = i*5;
-		this.ds_end_min.addRow();
-		this.ds_end_min.setColumn(i+1, "cd", ("0"+j).slice(-2));
-		this.ds_end_min.setColumn(i+1, "cdNm", ("0"+j).slice(-2));
-	}
-	
-	this.ds_end_min.set_enableevent(true);
 }
 
 /**************************************************************************
@@ -2461,13 +2431,14 @@ this.fn_mdfreq_set = function()
 **************************************************************************/
 this.fn_save = function(_this)
 {
+	_this.saveCnt++;
 	var saveFlag = false;
 	
 	if(_this.thnlFileUpload.isPass)
 	{
 		for(var i=0; i < _this.atchfileArr.length; i++)
 		{
-			if((_this.atchfileArr[i].isPass))
+			if(_this.atchfileArr[i].isPass && (_this.atchfileArr.length + 1) == _this.saveCnt)
 			{
 				saveFlag = true;
 			}
@@ -2598,36 +2569,32 @@ this.fn_save_validation = function()
 		return;
 	}
 	
-	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStMiCd")))) != ""
-		|| nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndMiCd")))) != "")
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) == "")
 	{
-		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) == "")
-		{
-			alert("강의시간 시작시간을 선택하세요.");
-			this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo00.setFocus();
-			return;
-		}
-		
-		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStMiCd")))) == "")
-		{
-			alert("강의시간 시작분을 선택하세요.");
-			this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo01.setFocus();
-			return;
-		}
-		
-		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) == "")
-		{
-			alert("강의시간 종료시간을 선택하세요.");
-			this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo02.setFocus();
-			return;
-		}
-		
-		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndMiCd")))) == "")
-		{
-			alert("강의시간 종료분을 선택하세요.");
-			this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo03.setFocus();
-			return;
-		}
+		alert("강의시간 시작시간을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo00.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStMiCd")))) == "")
+	{
+		alert("강의시간 시작분을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo01.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) == "")
+	{
+		alert("강의시간 종료시간을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo02.setFocus();
+		return;
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndMiCd")))) == "")
+	{
+		alert("강의시간 종료분을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo03.setFocus();
+		return;
 	}
 	
 	if(this.ds_teacher_list.getRowCount() > 0)
@@ -3161,8 +3128,10 @@ this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Bu
 	this.popCnt++;
 	var arrArguments = {
 		type : 1,
-		brchCd : '',
+		brchCd : this.brchCd,
 		lectTpCd : '01',
+		apvlStatCd : '02',
+		only : 'on',
 		dataset : this.ds_multtms_list,
 		menuSeq : this.menuSeq
 	}
@@ -3200,6 +3169,8 @@ this.Div00_Div00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Butto
 		type : 1,
 		brchCd : '',
 		lectTpCd : '01',
+		apvlStatCd : '02',
+		only : 'on',
 		dataset : this.ds_cct_list,
 		menuSeq : this.menuSeq
 	}
@@ -3297,6 +3268,7 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.saveCnt = 0;
 	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	
 	for(var i=0; i < this.contentArr.length; i++)
@@ -3311,6 +3283,7 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 };
 this.Div00_Button00_00_02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.saveCnt = 0;
 	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	
 	for(var i=0; i < this.contentArr.length; i++)
