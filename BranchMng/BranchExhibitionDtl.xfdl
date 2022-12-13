@@ -167,7 +167,7 @@
                       <Cell col="4" text="bind:lectNm"/>
                       <Cell col="5" text="bind:tcNm"/>
                       <Cell col="6" text="bind:lectAmt"/>
-                      <Cell col="7" text="bind:lectSmsterNm"/>
+                      <Cell col="7" text="bind:stringStDaywNm"/>
                       <Cell col="8" text="삭제" displaytype="buttoncontrol" edittype="button"/>
                     </Band>
                   </Format>
@@ -226,6 +226,34 @@
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="rplcOptnNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_appl_lect_format">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
@@ -488,6 +516,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	case "detail":
 		
 		this.row02.form.spotDiv.form.ComboSpot.set_readonly(true); //상세에서 지점변경 불가
+		if(this.ds_appl_lect.rowcount < 1)
+		{
+			//this.ds_appl_lect.set_enableevent(false);
+			this.ds_appl_lect.copyData(this.ds_appl_lect_format);
+			//this.ds_appl_lect.set_enableevent(true);
+		}
 		
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
 		var atchFileObj = {
@@ -545,7 +579,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 this.row09_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var brchVal = this.row02.form.spotDiv.form.ComboSpot.value;
-	
 	if(brchVal == '')
 	{
 		this.alert("지점을 선택해주세요");
@@ -565,8 +598,9 @@ this.row09_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEve
 		
 		}
 		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
+		
+		
 	}
-	
 };
 
 //적용강좌 삭제
