@@ -1043,8 +1043,6 @@ this.extngMbrRceptPrdEndDt = "";
 
 this.updateCode = "";
 
-this.saveCnt = 0;
-
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -1307,6 +1305,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			}
 			else if (this.updateCode == "02") 
 			{
+				this.initAtchFile();
 				this.alert("등록 불가한 그룹강좌입니다.");
 				
 				if(this.ds_class_dtl.getColumn(0, "lectTpCd") == "02") 
@@ -2431,14 +2430,13 @@ this.fn_mdfreq_set = function()
 **************************************************************************/
 this.fn_save = function(_this)
 {
-	_this.saveCnt++;
 	var saveFlag = false;
 	
 	if(_this.thnlFileUpload.isPass)
 	{
 		for(var i=0; i < _this.atchfileArr.length; i++)
 		{
-			if(_this.atchfileArr[i].isPass && (_this.atchfileArr.length + 1) == _this.saveCnt)
+			if(_this.atchfileArr[i].isPass)
 			{
 				saveFlag = true;
 			}
@@ -2800,6 +2798,39 @@ this.fn_save_copy = function()
 	}
 
 	this.gfn_transaction(tranObj);
+}
+
+//첨부파일 초기화
+this.initAtchFile = function()
+{
+	var thnlFileId = this.ds_class_dtl.getColumn(0, "lectRpsntImgFileId");
+	var thnlFileObj = {
+		_this : this,
+		atchFileId : thnlFileId,
+		fileExtn : "jpg,jpeg,gif,png",
+		fileMaxCnt : 1,
+		fileMaxSize : 10,
+		fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+		callbackFunc : this.fn_save
+	}
+	//대표이미지 초기화
+	this.thnlFileUpload.fn_init(thnlFileObj);
+	
+	for(var i=0; i < this.atchfileArr.length; i++)
+	{
+		var atchFileId = this.ds_content_list.getColumn(i, "imgFileId");
+		var atchFileObj = {
+			_this : this,
+			atchFileId : atchFileId,
+			fileExtn : "jpg,jpeg,gif,png",
+			fileMaxCnt : 1,
+			fileMaxSize : 10,
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
+			callbackFunc : this.fn_save
+		}
+		//첨부파일 초기화
+		this.atchfileArr[i].fn_init(atchFileObj);
+	}
 }
 
 
@@ -3268,7 +3299,6 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.saveCnt = 0;
 	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	
 	for(var i=0; i < this.contentArr.length; i++)
@@ -3283,7 +3313,6 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 };
 this.Div00_Button00_00_02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.saveCnt = 0;
 	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	
 	for(var i=0; i < this.contentArr.length; i++)
