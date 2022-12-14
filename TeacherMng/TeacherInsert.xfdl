@@ -210,7 +210,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div04" taborder="4" text="Div03" left="0" top="Div03:0" height="33" right="0" cssclass="div_WF_CompWrap">
+              <Div id="Div04" taborder="4" left="0" top="Div03:0" height="33" right="0" cssclass="div_WF_CompWrap">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="경력" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
@@ -563,12 +563,8 @@ this.Div01_Div05_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 {
 	//이메일 도메인
 	if(obj.value){
-		var row = this.ds_emailAddr_cdList.findRow('cd', obj.value)
-		var nm = this.ds_emailAddr_cdList.getColumn(row, 'cdNm')
-		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_value(nm);
 		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_readonly(true);
 	} else {
-		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_value("");
 		this.Div01.form.Div05.form.Div00.form.Edit00_00.set_readonly(false);
 	}
 };
@@ -671,16 +667,6 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.ds_teacher_info.setColumn(0, 'phtFileId', this.ds_thnl_dtl.getColumn(0, 'atchFileId'));
 	this.ds_teacher_info.setColumn(0, 'signImgFileId', this.ds_sign_dtl.getColumn(0, 'atchFileId'));
 	
-	//이메일주소
-	var emailAddrCd = this.ds_teacher_info.getColumn(0, 'emailAddrCd');
-	var emailAddr = this.Div01.form.Div05.form.Div00.form.Edit00_00.value;
-	if(!emailAddrCd && emailAddr){
-		//직접 입력 시 email에 전체 정보
-		var email = this.ds_teacher_info.getColumn(0, 'email');
-		email += "@" + this.Div01.form.Div05.form.Div00.form.Edit00_00.value;
-		this.ds_teacher_info.setColumn(0, 'email', email);
-	}
-	
 	//유효성 검사
 	var vali_res = this.validate_teacher();
 	if(!vali_res){
@@ -705,7 +691,7 @@ this.delete_empty_row_2 = function(ds){
 	
 	var i = ds.rowcount - 1;	//마지막 로우만 체크
 	for(var j = 1; j < ds.colcount; j++){ //키값 제외
-		if(this.gfn_nvl(ds.getColumn(i, j)) == "" || nexacro.trim(ds.getColumn(i, j) == "")){
+		if(this.gfn_nvl(ds.getColumn(i, j)) == "" || nexacro.trim(ds.getColumn(i, j)) == ""){
 			isEmpty = true;
 		} else {
 			isInput = true;
@@ -1249,6 +1235,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
       <BindItem id="item20" compid="Div02.form.Div02.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="rpsntLectNm"/>
       <BindItem id="item4" compid="Div01.form.Div03.form.Div00.form.hpStNo" propid="value" datasetid="ds_teacher_info" columnid="hpStNo"/>
       <BindItem id="item19" compid="Div02_00.form.selfIntrdnCont" propid="value" datasetid="ds_teacher_info" columnid="selfIntrdnCont"/>
+      <BindItem id="item21" compid="Div01.form.Div05.form.Div00.form.Edit00_00" propid="value" datasetid="ds_teacher_info" columnid="emailAddrCd"/>
     </Bind>
   </Form>
 </FDL>
