@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="StlmMthdIncmTtlList" width="1280" height="500" titletext="New Form">
+  <Form id="StlmMthdIncmTtlList" width="1280" height="500" titletext="New Form" onload="StlmMthdIncmTtlList_onload">
     <Layouts>
       <Layout height="500" width="1280">
-        <Static id="Static00" taborder="0" text="▶ 목록" left="0" top="0" width="45" height="17" cssclass="sta_WF_TitGray"/>
-        <Static id="Static01" taborder="1" text="(0개)" left="45" top="0" width="55" height="17" cssclass="sta_WF_TitGray"/>
-        <Div id="Div00" taborder="2" text="Div00" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
+        <Static id="Static00" taborder="0" text="▶ 목록" left="0" top="0" width="45" height="21" cssclass="sta_WF_TitGray"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="ds_lpoint_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
+              <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="ds_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -35,9 +34,6 @@
                       <Row size="24" band="head"/>
                       <Row size="24" band="head"/>
                       <Row size="24"/>
-                      <Row size="24"/>
-                      <Row size="24"/>
-                      <Row size="24"/>
                     </Rows>
                     <Band id="head">
                       <Cell rowspan="2" text="지점"/>
@@ -62,75 +58,24 @@
                       <Cell row="1" col="17" text="소계"/>
                     </Band>
                     <Band id="body">
-                      <Cell rowspan="4" displaytype="combotext" text="bind:brchCd" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
-                      <Cell col="1" text="PC"/>
-                      <Cell col="2" displaytype="number"/>
-                      <Cell col="3" displaytype="number"/>
-                      <Cell col="4" displaytype="number"/>
-                      <Cell col="5" displaytype="number"/>
-                      <Cell col="6" displaytype="number"/>
-                      <Cell col="7" displaytype="number"/>
-                      <Cell col="8" displaytype="number"/>
-                      <Cell col="9" displaytype="number"/>
-                      <Cell col="10" displaytype="number"/>
-                      <Cell col="11" displaytype="number"/>
-                      <Cell col="12" displaytype="number"/>
-                      <Cell col="13" displaytype="number"/>
-                      <Cell col="14" displaytype="number"/>
-                      <Cell col="15" displaytype="number"/>
-                      <Cell col="16" displaytype="number"/>
-                      <Cell col="17" displaytype="number"/>
-                      <Cell row="1" col="1" text="Mobile"/>
-                      <Cell row="1" col="2" displaytype="number"/>
-                      <Cell row="1" col="3" displaytype="number"/>
-                      <Cell row="1" col="4" displaytype="number"/>
-                      <Cell row="1" col="5" displaytype="number"/>
-                      <Cell row="1" col="6" displaytype="number"/>
-                      <Cell row="1" col="7" displaytype="number"/>
-                      <Cell row="1" col="8" displaytype="number"/>
-                      <Cell row="1" col="9" displaytype="number"/>
-                      <Cell row="1" col="10" displaytype="number"/>
-                      <Cell row="1" col="11" displaytype="number"/>
-                      <Cell row="1" col="12" displaytype="number"/>
-                      <Cell row="1" col="13" displaytype="number"/>
-                      <Cell row="1" col="14" displaytype="number"/>
-                      <Cell row="1" col="15" displaytype="number"/>
-                      <Cell row="1" col="16" displaytype="number"/>
-                      <Cell row="1" col="17" displaytype="number"/>
-                      <Cell row="2" col="1" text="데스크"/>
-                      <Cell row="2" col="2" displaytype="number"/>
-                      <Cell row="2" col="3" displaytype="number"/>
-                      <Cell row="2" col="4" displaytype="number"/>
-                      <Cell row="2" col="5" displaytype="number"/>
-                      <Cell row="2" col="6" displaytype="number"/>
-                      <Cell row="2" col="7" displaytype="number"/>
-                      <Cell row="2" col="8" displaytype="number"/>
-                      <Cell row="2" col="9" displaytype="number"/>
-                      <Cell row="2" col="10" displaytype="number"/>
-                      <Cell row="2" col="11" displaytype="number"/>
-                      <Cell row="2" col="12" displaytype="number"/>
-                      <Cell row="2" col="13" displaytype="number"/>
-                      <Cell row="2" col="14" displaytype="number"/>
-                      <Cell row="2" col="15" displaytype="number"/>
-                      <Cell row="2" col="16" displaytype="number"/>
-                      <Cell row="2" col="17" displaytype="number"/>
-                      <Cell row="3" col="1" text="소계"/>
-                      <Cell row="3" col="2" displaytype="number"/>
-                      <Cell row="3" col="3" displaytype="number"/>
-                      <Cell row="3" col="4" displaytype="number"/>
-                      <Cell row="3" col="5" displaytype="number"/>
-                      <Cell row="3" col="6" displaytype="number"/>
-                      <Cell row="3" col="7" displaytype="number"/>
-                      <Cell row="3" col="8" displaytype="number"/>
-                      <Cell row="3" col="9" displaytype="number"/>
-                      <Cell row="3" col="10" displaytype="number"/>
-                      <Cell row="3" col="11" displaytype="number"/>
-                      <Cell row="3" col="12" displaytype="number"/>
-                      <Cell row="3" col="13" displaytype="number"/>
-                      <Cell row="3" col="14" displaytype="number"/>
-                      <Cell row="3" col="15" displaytype="number"/>
-                      <Cell row="3" col="16" displaytype="number"/>
-                      <Cell row="3" col="17" displaytype="number"/>
+                      <Cell text="bind:brchNm" suppress="1"/>
+                      <Cell col="1" text="bind:stlmChnlNm"/>
+                      <Cell col="2" text="bind:todayCrdStlmAmt"/>
+                      <Cell col="3" text="bind:todayLpntUseAmt"/>
+                      <Cell col="4" text="bind:todayCshStlmAmt"/>
+                      <Cell col="5" text="bind:todayLtteGiftStlmAmt"/>
+                      <Cell col="6" text="bind:todayOtgiftStlmAmt"/>
+                      <Cell col="7" text="bind:todayChngAmt"/>
+                      <Cell col="8" text="bind:todayEtcStlmAmt"/>
+                      <Cell col="9" text="bind:todayChnlTotal"/>
+                      <Cell col="10" text="bind:agrgtCrdStlmAmt"/>
+                      <Cell col="11" text="bind:agrgtLpntUseAmt"/>
+                      <Cell col="12" text="bind:agrgtCshStlmAmt"/>
+                      <Cell col="13" text="bind:agrgtLtteGiftStlmAmt"/>
+                      <Cell col="14" text="bind:agrgtOtgiftStlmAmt"/>
+                      <Cell col="15" text="bind:agrgtChngAmt"/>
+                      <Cell col="16" text="bind:agrgtEtcStlmAmt"/>
+                      <Cell col="17" text="bind:agrgtChnlTotal"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -140,5 +85,133 @@
         </Div>
       </Layout>
     </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.search_form = this.parent.parent.Div00.form;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.StlmMthdIncmTtlList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	
+};
+
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_list = function(){
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stlmMng/getStlmMthdIncmList.do",
+		inData : "search=ds_search",
+		outData : "ds_list=output1",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":			
+			
+			
+		break; 		
+	}
+}
+
+
+
+this.fn_searchValueInit = function(){
+	
+	var _brchCd = this.search_form.Div00.form.Div00.form.brchCd.value;
+	var _yy = this.search_form.Div00.form.Div01.form.yy.value;
+	var _lectSmsterCd = this.search_form.Div00.form.Div01.form.smsterCd.value;
+	
+	if(this.gfn_isNull(_brchCd)){
+		this.alert("지점명을 선택해주세요.");
+	}else if(this.gfn_isNull(_yy)){
+		this.alert("년도를 선택해주세요.");
+	}else if(this.gfn_isNull(_lectSmsterCd)){
+		this.alert("학기를 선택해주세요.");
+	}else{
+		this.ds_search.setColumn(0, "brchCd", this.search_form.Div00.form.Div00.form.brchCd.value);
+	
+		this.ds_search.setColumn(0, "yy", this.search_form.Div00.form.Div01.form.yy.value);
+		this.ds_search.setColumn(0, "lectSmsterCd", this.search_form.Div00.form.Div01.form.smsterCd.value);
+		
+		this.ds_search.setColumn(0, "strtDtm", this.search_form.Div00.form.Div02.form.strtDtm.value);
+		this.ds_search.setColumn(0, "endDtm", this.search_form.Div00.form.Div02.form.endDtm.value);
+		
+		this.fn_list();
+	}
+	
+}
+
+]]></Script>
+    <Objects>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="stlmChnlNm" type="STRING" size="256"/>
+          <Column id="todayCrdStlmAmt" type="STRING" size="256"/>
+          <Column id="todayLpntUseAmt" type="STRING" size="256"/>
+          <Column id="todayCshStlmAmt" type="STRING" size="256"/>
+          <Column id="todayLtteGiftStlmAmt" type="STRING" size="256"/>
+          <Column id="todayOtgiftStlmAmt" type="STRING" size="256"/>
+          <Column id="todayEtcStlmAmt" type="STRING" size="256"/>
+          <Column id="todayChngAmt" type="STRING" size="256"/>
+          <Column id="todayChnlTotal" type="STRING" size="256"/>
+          <Column id="agrgtCrdStlmAmt" type="STRING" size="256"/>
+          <Column id="agrgtLpntUseAmt" type="STRING" size="256"/>
+          <Column id="agrgtCshStlmAmt" type="STRING" size="256"/>
+          <Column id="agrgtLtteGiftStlmAmt" type="STRING" size="256"/>
+          <Column id="agrgtOtgiftStlmAmt" type="STRING" size="256"/>
+          <Column id="agrgtEtcStlmAmt" type="STRING" size="256"/>
+          <Column id="agrgtChngAmt" type="STRING" size="256"/>
+          <Column id="agrgtChnlTotal" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>

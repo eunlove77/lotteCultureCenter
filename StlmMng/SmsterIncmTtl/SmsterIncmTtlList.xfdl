@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="SmsterIncmTtl" width="1280" height="500" titletext="New Form">
+  <Form id="SmsterIncmTtlList" width="1280" height="500" titletext="New Form" onload="SmsterIncmTtlList_onload">
     <Layouts>
       <Layout height="500" width="1280">
-        <Static id="Static00" taborder="0" text="▶ 목록" left="0" top="0" width="45" height="17" cssclass="sta_WF_TitGray"/>
-        <Static id="Static01" taborder="1" text="(0개)" left="45" top="0" width="55" height="17" cssclass="sta_WF_TitGray"/>
-        <Div id="Div00" taborder="2" text="Div00" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="ds_lpoint_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
+              <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="ds_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -21,35 +19,19 @@
                       <Row size="24" band="head"/>
                       <Row size="24" band="head"/>
                       <Row size="24"/>
-                      <Row size="24"/>
-                      <Row size="24"/>
-                      <Row size="24"/>
-                      <Row size="24"/>
                     </Rows>
                     <Band id="head">
                       <Cell rowspan="2" text="지점"/>
                       <Cell col="1" rowspan="2" text="강좌 구분"/>
                       <Cell col="2" colspan="2" text="구분"/>
-                      <Cell row="1" col="2" text="22년 가을학기"/>
-                      <Cell row="1" col="3" text="22년 겨울학기"/>
+                      <Cell row="1" col="2" text="이전학기"/>
+                      <Cell row="1" col="3" text="현재학기"/>
                     </Band>
                     <Band id="body">
-                      <Cell rowspan="5" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
-                      <Cell col="1" text="정기"/>
-                      <Cell col="2" displaytype="number"/>
-                      <Cell col="3" displaytype="number"/>
-                      <Cell row="1" col="1" text="단기"/>
-                      <Cell row="1" col="2" displaytype="number"/>
-                      <Cell row="1" col="3" displaytype="number"/>
-                      <Cell row="2" col="1" text="일반"/>
-                      <Cell row="2" col="2" displaytype="number"/>
-                      <Cell row="2" col="3" displaytype="number"/>
-                      <Cell row="3" col="1" text="특강"/>
-                      <Cell row="3" col="2" displaytype="number"/>
-                      <Cell row="3" col="3" displaytype="number"/>
-                      <Cell row="4" col="1" text="소계"/>
-                      <Cell row="4" col="2" displaytype="number"/>
-                      <Cell row="4" col="3" displaytype="number"/>
+                      <Cell text="bind:brchNm" displaytype="normal" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" suppress="1"/>
+                      <Cell col="1" text="bind:lectClNm"/>
+                      <Cell col="2" displaytype="number" text="bind:befStlmAmt"/>
+                      <Cell col="3" displaytype="number" text="bind:nowStlmAmt"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -57,7 +39,150 @@
             </Layout>
           </Layouts>
         </Div>
+        <Static id="Static00" taborder="1" text="▶ 목록" left="0" top="0" width="45" height="21" cssclass="sta_WF_TitGray"/>
+        <Grid id="Grid00" taborder="2" left="47" top="552" width="703" height="270" binddataset="ds_list">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="brchNm"/>
+                <Cell col="1" text="lectClNm"/>
+                <Cell col="2" text="befSmsterStlmAmt"/>
+                <Cell col="3" text="nowSmsterStlmAmt"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:brchNm"/>
+                <Cell col="1" text="bind:lectClNm"/>
+                <Cell col="2" text="bind:befSmsterStlmAmt"/>
+                <Cell col="3" text="bind:nowSmsterStlmAmt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="befStlmAmt" type="STRING" size="256"/>
+          <Column id="nowStlmAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.search_form = this.parent.parent.Div00.form;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.SmsterIncmTtlList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	
+};
+
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_list = function(){
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stlmMng/getStlmSmsterIncmList.do",
+		inData : "search=ds_search",
+		outData : "ds_list=output1",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":			
+			
+			
+		break; 		
+	}
+}
+
+
+
+this.fn_searchValueInit = function(){
+	
+	var _brchCd = this.search_form.Div00.form.Div00.form.brchCd.value;
+	var _yy = this.search_form.Div00.form.Div01.form.yy.value;
+	var _lectSmsterCd = this.search_form.Div00.form.Div01.form.smsterCd.value;
+	
+	if(this.gfn_isNull(_brchCd)){
+		this.alert("지점명을 선택해주세요.");
+	}else if(this.gfn_isNull(_yy)){
+		this.alert("년도를 선택해주세요.");
+	}else if(this.gfn_isNull(_lectSmsterCd)){
+		this.alert("학기를 선택해주세요.");
+	}else{
+		this.ds_search.setColumn(0, "brchCd", this.search_form.Div00.form.Div00.form.brchCd.value);
+	
+		this.ds_search.setColumn(0, "yy", this.search_form.Div00.form.Div01.form.yy.value);
+		this.ds_search.setColumn(0, "lectSmsterCd", this.search_form.Div00.form.Div01.form.smsterCd.value);
+		
+		//this.ds_search.setColumn(0, "strtDtm", this.search_form.Div00.form.Div02.form.strtDtm.value);
+		//this.ds_search.setColumn(0, "endDtm", this.search_form.Div00.form.Div02.form.endDtm.value);
+		
+		this.fn_list();
+	}
+	
+}
+
+]]></Script>
   </Form>
 </FDL>
