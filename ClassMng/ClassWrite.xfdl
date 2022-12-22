@@ -1419,6 +1419,14 @@ this.fn_class_dtl = function()
 		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
 	}
 	
+	if(parseInt(this.ds_class_dtl.getColumn(0, "appCnt")) > 0) {
+		this.Div00.form.Div00.form.Div00.form.Div01_00.form.MaskEdit00.set_readonly(true);
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div00.form.Radio00.set_readonly(true);
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div01.form.Radio00.set_readonly(true);
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.set_readonly(true);
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div03.form.Grid00.setCellProperty( "body", 2, "displaytype", "nomal");
+		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div03.form.Grid00.setCellProperty( "body", 2, "edittype", "none");
+	}
 }
 
 /**************************************************************************
@@ -3036,26 +3044,28 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oninput = function(obj:nexacro.G
 
 this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 0)
-	{
-		if(e.row == 0)
+	if(parseInt(this.ds_class_dtl.getColumn(0, "appCnt")) == 0) {
+		if(e.col == 0)
 		{
-			if(this.ds_option_list.getRowCount() < 10)
+			if(e.row == 0)
 			{
-				var index = this.ds_option_list.addRow();
-				if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
+				if(this.ds_option_list.getRowCount() < 10)
 				{
-					this.ds_option_list.setColumn(index, "partRfndClCd", "");
+					var index = this.ds_option_list.addRow();
+					if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
+					{
+						this.ds_option_list.setColumn(index, "partRfndClCd", "");
+					}
+					else
+					{
+						this.ds_option_list.setColumn(index, "partRfndClCd", "1");
+					}
 				}
-				else
-				{
-					this.ds_option_list.setColumn(index, "partRfndClCd", "1");
-				}
+			} 
+			else
+			{
+				this.ds_option_list.deleteRow(e.row);
 			}
-		} 
-		else
-		{
-			this.ds_option_list.deleteRow(e.row);
 		}
 	}
 };
@@ -3599,6 +3609,8 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="lectNbcnt" type="STRING" size="256"/>
           <Column id="lectRmCd" type="STRING" size="256"/>
           <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
+          <Column id="stayCnt" type="STRING" size="256"/>
           <Column id="onlnCapaCnt" type="STRING" size="256"/>
           <Column id="oflnCapaCnt" type="STRING" size="256"/>
           <Column id="optnUseYn" type="STRING" size="256"/>
