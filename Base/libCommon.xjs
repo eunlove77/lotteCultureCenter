@@ -893,7 +893,8 @@ this.gfn_setMaskingTel = function(sValue)
 /**
 * @description 	   : 콤보박스에 년도를 표시 데이터셋 자동 생성 후 바인딩
 */
-this.gfn_set_year = function(form, targetObj, endYy, strtYy){
+this.gfn_set_year = function(form, targetObj, endYy, strtYy, useEmptyText){
+	
 	var ds = new Dataset;
 	var dsId = "ds_year";
 	
@@ -901,6 +902,12 @@ this.gfn_set_year = function(form, targetObj, endYy, strtYy){
 	ds.addColumn("code", "String");
 	
 	form.addChild(dsId, ds);
+	
+	if(useEmptyText != "undefined"){
+		this[dsId].insertRow(0);
+		this[dsId].setColumn(0, "data", useEmptyText);
+		this[dsId].setColumn(0, "code", "");
+	}
 	
 	for(var i = strtYy ; i >= endYy ; i--){
 		var nRow = this[dsId].addRow();
@@ -915,7 +922,7 @@ this.gfn_set_year = function(form, targetObj, endYy, strtYy){
 }
 
 /**
-* @description 	   : 콤보박스에 년도를 표시 데이터셋 자동 생성 후 바인딩
+* @description 	   : 콤보박스에 월을 표시 데이터셋 자동 생성 후 바인딩
 */
 this.gfn_set_month = function(form, targetObj){
 	var ds = new Dataset;
