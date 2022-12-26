@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_FileUpload" left="0" top="0" width="790" height="160" titletext="New Form" border="" background="" onload="Form_FileUpload_onload">
+  <Form id="Form_FileUpload" left="0" top="0" width="790" height="160" titletext="New Form" border="" background="" onload="Form_FileUpload_onload" ondrop="Grid00_ondrop" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave">
     <Layouts>
       <Layout height="160" width="790" stepcount="0">
-        <Static id="Static00" taborder="1" text="Drop Files Here" left="10" top="59" height="70" visible="true" background="aliceblue" color="dodgerblue" font="normal 30pt/normal &quot;Arial&quot;" textAlign="center" verticalAlign="middle" width="541"/>
-        <Grid id="Grid00" taborder="0" left="10" top="35" height="95" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick" width="542" binddataset="ds_atchFileList" autofittype="col" oncellposchanged="Grid00_oncellposchanged">
+        <Static id="Static00" taborder="0" text="Drop Files Here" left="10" top="30" visible="true" background="aliceblue" color="dodgerblue" font="normal 30pt/normal &quot;Arial&quot;" textAlign="center" verticalAlign="middle" opacity="0.5" width="542" height="85"/>
+        <Grid id="Grid00" taborder="1" left="10" top="35" height="95" ondragenter="Grid00_ondragenter" ondragleave="Grid00_ondragleave" ondrop="Grid00_ondrop" oncellclick="Grid00_oncellclick" width="542" binddataset="ds_atchFileList" autofittype="col" oncellposchanged="Grid00_oncellposchanged" visible="true">
           <Formats>
             <Format id="default">
               <Columns>
@@ -35,8 +35,8 @@
             </Format>
           </Formats>
         </Grid>
-        <Button id="Button00" taborder="2" text="파일찾기" left="10" top="9" width="84" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="Button00_onclick"/>
-        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" top="Static00:5" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true" left="10"/>
+        <Button id="Button00" taborder="2" text="파일찾기" left="10" top="9" width="84" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="Button00_onclick" visible="false"/>
+        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" top="Static00:5" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true" left="10" visible="false"/>
         <ImageViewer id="ImageViewer00" taborder="4" left="Static00:35" top="5" width="125" height="125" stretch="fixaspectratio" visible="false"/>
       </Layout>
     </Layouts>
@@ -333,17 +333,20 @@ this.Grid00_ondragenter = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
 	if(e.datatype == "file")
 	{
 		this.Grid00.set_opacity(0.5);
+		this.Static00.set_opacity(0);
 	}
 };
 
 this.Grid00_ondragleave = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
 {
 	this.Grid00.set_opacity(1);
+	this.Static00.set_opacity(0.5);
 };
 
 this.Grid00_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
 {
 	this.Grid00.set_opacity(1);
+	this.Static00.set_opacity(0);
 	if(e.datatype == "file")
 	{
 		this.addFileList(e.filelist);
