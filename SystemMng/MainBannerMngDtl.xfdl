@@ -297,7 +297,7 @@
                       </Dataset>
                     </Combo>
                     <Static id="Static05" taborder="11" text="분" left="Combo03:8" top="5" height="21" width="21"/>
-                    <CheckBox id="CheckBox01" taborder="12" text="상시" left="Static05:18" top="5" width="49" height="20" truevalue="Y" falsevalue="N" value="N"/>
+                    <CheckBox id="CheckBox01" taborder="12" text="상시" left="Static05:18" top="5" width="49" height="20" truevalue="Y" falsevalue="N" value="N" onchanged="Div00_Div00_CheckBox01_onchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -541,7 +541,7 @@ this.fn_save = function (_this)
 		
 		var tranObj = {
 			strSvcId : "save",
-			strSvcUrl : _this.application.Admin_svc + "::main/insertMainBanner.do",
+			strSvcUrl : _this.application.Admin_svc + "::main/insertMainBanner.do?svcId=save",
 			inData : "data=ds_detail",
 			outData : "",
 			strArg : "",
@@ -550,7 +550,7 @@ this.fn_save = function (_this)
 			menuSeq : this.menuId
 		}
 		
-		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+		//if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	
 		_this.gfn_transaction(tranObj);
 	}
@@ -561,20 +561,23 @@ this.fn_checkValidation = function(){
 	
 	var stDt = parseInt(this.Div00.form.Div00.form.strtDtm.value);
 	var endDt = parseInt(this.Div00.form.Div00.form.endDtm.value);
+	var odtmYn = this.Div00.form.Div00.form.CheckBox01.value;
 	
-	if(this.gfn_isNull(this.Div00.form.Div00.form.strtDtm.value))
+	this.alert("상시값 체크" + odtmYn);
+	
+	if(odtmYn != 'Y' && this.gfn_isNull(this.Div00.form.Div00.form.strtDtm.value))
 	{
 		this.alert("게시 시작일을 입력하세요");
 		this.Div00.form.Div00.form.strtDtm.setFocus();
 		return;
 	}
-	else if(this.gfn_isNull(this.Div00.form.Div00.form.endDtm.value))
+	else if(odtmYn != 'Y' &&  this.gfn_isNull(this.Div00.form.Div00.form.endDtm.value))
 	{
 		this.alert("게시 종료일을 입력하세요");
 		this.Div00.form.Div00.form.endtDtm.setFocus();
 		return;
 	}
-	else if(stDt > endDt)
+	else if(odtmYn != 'Y' &&  stDt > endDt)
 	{
 		this.alert("종료일이 시작일보다 이전일 수 없습니다");
 		this.Div00.form.Div00.form.endDtm.setFocus();
@@ -648,6 +651,22 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	{	
 		case "detail":
 		
+		if(this.ds_detail.getColumn(0,"alwsExpsrYn") == 'Y')
+		{
+			this.Div00.form.Div00.form.strtDtm.calendaredit.set_value(''); //캘린더 키인 막기
+			this.Div00.form.Div00.form.endDtm.calendaredit.set_value(''); //캘린더 키인 막기
+			this.Div00.form.Div00.form.Combo00.set_index(0);
+			this.Div00.form.Div00.form.Combo01.set_index(0);
+			this.Div00.form.Div00.form.Combo02.set_index(0);
+			this.Div00.form.Div00.form.Combo03.set_index(0);
+			
+			this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(false); //캘린더 키인 막기
+			this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(false); //캘린더 키인 막기
+			this.Div00.form.Div00.form.Combo00.set_readonly(true);
+			this.Div00.form.Div00.form.Combo01.set_readonly(true);
+			this.Div00.form.Div00.form.Combo02.set_readonly(true);
+			this.Div00.form.Div00.form.Combo03.set_readonly(true);
+		}
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFileId");
 		var atchFileObj = {
 			_this : this,
@@ -685,7 +704,39 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.fn_list();
 		break;
 	}
-};]]></Script>
+};
+this.Div00_Div00_CheckBox01_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)
+{
+	var value = this.Div00.form.Div00.form.CheckBox01.value;
+	if(value == 'N')
+	{
+		this.alert("N");
+		this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(true); //캘린더 키인 막기
+		this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(true); //캘린더 키인 막기
+		this.Div00.form.Div00.form.Combo00.set_readonly(false);
+		this.Div00.form.Div00.form.Combo01.set_readonly(false);
+		this.Div00.form.Div00.form.Combo02.set_readonly(false);
+		this.Div00.form.Div00.form.Combo03.set_readonly(false);
+	}
+	else
+	{
+		this.alert("Y");
+		this.Div00.form.Div00.form.strtDtm.calendaredit.set_value(''); //캘린더 키인 막기
+		this.Div00.form.Div00.form.endDtm.calendaredit.set_value(''); //캘린더 키인 막기
+		this.Div00.form.Div00.form.Combo00.set_index(0);
+		this.Div00.form.Div00.form.Combo01.set_index(0);
+		this.Div00.form.Div00.form.Combo02.set_index(0);
+		this.Div00.form.Div00.form.Combo03.set_index(0);
+		
+		this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(false); //캘린더 키인 막기
+		this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(false); //캘린더 키인 막기
+		this.Div00.form.Div00.form.Combo00.set_readonly(true);
+		this.Div00.form.Div00.form.Combo01.set_readonly(true);
+		this.Div00.form.Div00.form.Combo02.set_readonly(true);
+		this.Div00.form.Div00.form.Combo03.set_readonly(true);
+	}
+};
+]]></Script>
     <Bind>
       <BindItem id="expsrStDt" compid="Div00.form.Div00.form.strtDtm" propid="value" datasetid="ds_detail" columnid="expsrStDt"/>
       <BindItem id="expsrEndDt" compid="Div00.form.Div00.form.endDtm" propid="value" datasetid="ds_detail" columnid="expsrEndDt"/>
