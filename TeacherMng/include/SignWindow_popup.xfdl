@@ -20,12 +20,13 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.atchFileId = "";
 this.menuSeq = 0;
+this.domain = "";
 
 this.SignWindow_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	console.log('a');
 	this.menuSeq = this.opener.menuSeq;
+	this.domain = this.application.getVariable("domain");
 };
 
 var bMouseButtonPressed = false;
@@ -149,6 +150,7 @@ this.get_image_detail = function(ds){
 	this.gfn_transaction(tranObj);
 }
 this.fnCallback_img = function(sId, nErrorCd, sErrorMsg){
+	this.parent.ds.setColumn(0, "webPath", this.domain + "/admin/file/view.do?fileNo=" + this.parent.ds.getColumn(0, "atchFileId") + "&fileSeqno=" + this.parent.ds.getColumn(0, "fileSeq"));
 	this.close();
 }
 this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
