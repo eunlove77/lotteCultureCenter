@@ -133,7 +133,6 @@
     </Layouts>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00_00.form.Calendar01" propid="value" datasetid="ds_search" columnid="lectStDtmOnly"/>
-      <BindItem id="item1" compid="Div00.form.Div00.form.Div01.form.ImageViewer00" propid="image" datasetid="ds_sign_dtl" columnid="webPath"/>
     </Bind>
     <Objects>
       <Dataset id="ds_class_dtl" updatecontrol="false">
@@ -173,7 +172,7 @@
           <Column id="samplCndocFileId" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_sign_dtl">
+      <Dataset id="ds_sign_dtl" onvaluechanged="ds_sign_dtl_onvaluechanged">
         <ColumnInfo>
           <Column id="atchFileId" type="STRING" size="256"/>
           <Column id="fileSeq" type="STRING" size="256"/>
@@ -184,9 +183,6 @@
           <Column id="fileSize" type="STRING" size="256"/>
           <Column id="webPath" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row/>
-        </Rows>
       </Dataset>
       <Dataset id="ds_class_info">
         <ColumnInfo>
@@ -314,7 +310,6 @@ this.init = function()
 	this.Div00.form.Div00.form.Div00.form.Static01.set_text(strTxt);
 	
 	this.ds_sign_dtl.addRow();
-	this.ds_sign_dtl.setColumn(0, "webPath", this.ds_class_info.getColumn(0, "webPath"));
 	this.ds_class_dtl.setColumn(0, "cndocFileId", this.ds_class_info.getColumn(0, "cndocFileId"));
 	this.ds_class_dtl.setColumn(0, "signFileId", this.ds_class_info.getColumn(0, "signFileId"));
 	this.ds_class_dtl.setColumn(0, "samplCndocFileId", this.ds_class_info.getColumn(0, "samplCndocFileId"));
@@ -324,7 +319,7 @@ this.init = function()
 	{
 		this.Div00.form.Button00_00_00_01.set_visible(true);
 		this.Div00.form.Button00_00_00_01.set_left(0);
-		this.Div00.form.Div00.form.Div01.form.ImageViewer00.set_image(this.domain + "/admin/file/view.do?fileNo=" + this.ds_sign_dtl.getColumn(0, "atchFileId") + "&fileSeqno=" + this.ds_sign_dtl.getColumn(0, "fileSeq"));
+		this.Div00.form.Div00.form.Div01.form.ImageViewer00.set_image(this.domain + "/admin/file/view.do?fileNo=" + this.ds_class_dtl.getColumn(0, "signFileId") + "&fileSeqno=0");
 		mode = 2;
 		this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 	}
@@ -509,6 +504,11 @@ this.Div00_Button00_00_00_01_onclick = function(obj:nexacro.Button,e:nexacro.Cli
 	this.FileDownTransfer00.setPostData("fileInfo", this.ds_class_info.saveXML());
 	this.FileDownTransfer00.set_downloadfilename(this.ds_class_info.getColumn(0, "realFileNm"));
 	this.FileDownTransfer00.download();
+};
+
+this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	this.Div00.form.Div00.form.Div01.form.ImageViewer00.set_image(this.ds_sign_dtl.getColumn(0, "webPath"));
 };
 ]]></Script>
   </Form>

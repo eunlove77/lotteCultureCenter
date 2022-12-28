@@ -122,9 +122,8 @@ this.fnCallback = function(sId, nErrorCd, sErrorMsg)
 	{
 		if(sId=="uploadSignImage")
 		{
-			var p_ds = this.parent.ds;
-			p_ds.setColumn(0, "atchFileId", this.atchFileId);
-			this.get_image_detail(p_ds.name);
+			this.ds_sign_image.setColumn(0, "atchFileId", this.atchFileId);
+			this.get_image_detail();
 		}
 	}
 };
@@ -135,12 +134,12 @@ this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.Graphics00.clear();
 	this.Graphics00.redraw();
 };
-this.get_image_detail = function(ds){
+this.get_image_detail = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_imageDtl";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/selectFileDtl.do";
-	tranObj.inData      = "file_detail=" + ds;
-	tranObj.outData     = ds + "=file_detail";
+	tranObj.inData      = "file_detail=ds_sign_image";
+	tranObj.outData     = "ds_sign_image=file_detail";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_img";
 	tranObj.isAsync     = true;
@@ -149,9 +148,11 @@ this.get_image_detail = function(ds){
 	if(this.gfn_btn_auth(this.menuSeq, "accSrchYn")) return;
 	this.gfn_transaction(tranObj);
 }
-this.fnCallback_img = function(sId, nErrorCd, sErrorMsg){
-	this.parent.ds.setColumn(0, "webPath", this.domain + "/admin/file/view.do?fileNo=" + this.parent.ds.getColumn(0, "atchFileId") + "&fileSeqno=" + this.parent.ds.getColumn(0, "fileSeq"));
-	this.close();
+this.fnCallback_img = function(sId, nErrorCd, sErrorMsg)
+{
+	this.ds_sign_image.setColumn(0, "webPath", this.domain + "/admin/file/view.do?fileNo=" + this.ds_sign_image.getColumn(0, "atchFileId") + "&fileSeqno=" + this.ds_sign_image.getColumn(0, "fileSeq"));
+	this.parent.ds.copyData(this.ds_sign_image)
+    this.close();
 }
 this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
