@@ -1672,6 +1672,11 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		this.close();
 	}
 }
+
+this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	this.Div01.form.Div07.form.signViewer.set_image(this.ds_sign_dtl.getColumn(0, "webPath"));
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_teacher_info">
@@ -1969,7 +1974,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_sign_dtl">
+      <Dataset id="ds_sign_dtl" onvaluechanged="ds_sign_dtl_onvaluechanged">
         <ColumnInfo>
           <Column id="atchFileId" type="STRING" size="256"/>
           <Column id="fileSeq" type="STRING" size="256"/>
@@ -2111,7 +2116,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
       <BindItem id="item16" compid="Div01.form.Div07.form.Div00.form.agree1" propid="value" datasetid="ds_teacher_info" columnid="prinfClctAgrYn"/>
       <BindItem id="item17" compid="Div01.form.Div07.form.Div01.form.agree2" propid="value" datasetid="ds_teacher_info" columnid="carrInfoClctAgrYn"/>
       <BindItem id="item0" compid="Div01.form.Div00.form.ImageViewer00" propid="image" datasetid="ds_thnl_dtl" columnid="webPath"/>
-      <BindItem id="item3" compid="Div01.form.Div07.form.signViewer" propid="image" datasetid="ds_sign_dtl" columnid="webPath"/>
       <BindItem id="item11" compid="Div01.form.Div01_00.form.tcCdNo" propid="text" datasetid="ds_teacher_info" columnid="tcCdNo"/>
       <BindItem id="item33" compid="Div_PayInfo.form.Div01.form.bnkNm" propid="value" datasetid="ds_teacher_info" columnid="bnkNm"/>
       <BindItem id="item37" compid="Div_PayInfo.form.Div_p.form.Div_PayInfo.form.Div00_00.form.rrno" propid="value" datasetid="ds_teacher_info" columnid="addr"/>
