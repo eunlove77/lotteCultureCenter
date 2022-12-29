@@ -32,7 +32,7 @@
                 <Cell text="expr:currow + 1"/>
                 <Cell col="1" expr="expr: dataset.getRowType(currow) == 1 ? '' : ( dataset.getRowType(currow) == 2 ? '추가' : ( dataset.getRowType(currow) == 4 ? '변경' : '' ) )"/>
                 <Cell col="2" text="bind:cd" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
-                <Cell col="3" text="bind:cdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="3" text="bind:grpCdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
                 <Cell col="4" textAlign="left" edittype="text" text="bind:memo"/>
                 <Cell col="5" text="bind:useYn" displaytype="combotext" edittype="combo" combocodecol="useYn" combodatacol="useYn" combodataset="ds_yn"/>
                 <Cell col="6" text="bind:modDtm"/>
@@ -41,7 +41,7 @@
           </Formats>
         </Grid>
         <Button id="btnCreateRoot" taborder="1" text="그룹코드 추가" top="140" height="21" onclick="btnCreateRoot_onclick" cssclass="btn_WF_Medium" right="100" width="90"/>
-        <Button id="btnCreateChild" taborder="2" text="공통코드 추가" top="489" width="90" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium" right="100"/>
+        <Button id="btnCreateChild" taborder="2" text="상세코드 추가" top="489" width="90" height="21" onclick="btnCreateChild_onclick" cssclass="btn_WF_Medium" right="100"/>
         <Button id="btnDelete" taborder="3" text="삭제" top="140" width="84" height="21" onclick="btnDelete_onclick" cssclass="btn_WF_High" right="10"/>
         <Static id="txtMenuNm" taborder="4" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Button id="btnDeleteDtl" taborder="5" text="삭제" top="489" height="21" onclick="btnDeleteDtl_onclick" cssclass="btn_WF_High" right="10" width="84"/>
@@ -69,8 +69,8 @@
               <Band id="head">
                 <Cell text="NO"/>
                 <Cell col="1" text="상태"/>
-                <Cell col="2" text="공통코드 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
-                <Cell col="3" text="공통코드명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
+                <Cell col="2" text="상세코드 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
+                <Cell col="3" text="상세코드명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" displaytype="decoratetext"/>
                 <Cell col="4" text="사용여부"/>
                 <Cell col="5" text="정렬순서"/>
                 <Cell col="6" text="보조값1"/>
@@ -82,7 +82,7 @@
                 <Cell text="expr:currow + 1"/>
                 <Cell col="1" expr="expr: dataset.getRowType(currow) == 1 ? '' : ( dataset.getRowType(currow) == 2 ? '추가' : ( dataset.getRowType(currow) == 4 ? '변경' : '' ) )"/>
                 <Cell col="2" text="bind:cd" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
-                <Cell col="3" text="bind:cdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="3" text="bind:cdNm" textAlign="left" edittype="text"/>
                 <Cell col="4" text="bind:useYn" displaytype="combotext" edittype="combo" combodataset="ds_yn" combocodecol="useYn" combodatacol="useYn"/>
                 <Cell col="5" text="bind:cdOrd"/>
                 <Cell col="6" text="bind:cdVal1" edittype="normal"/>
@@ -117,6 +117,7 @@
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
+                <Column size="80"/>
               </Columns>
               <Rows>
                 <Row band="head" size="24"/>
@@ -125,40 +126,42 @@
               <Band id="head">
                 <Cell text="cdId"/>
                 <Cell col="1" text="cd"/>
-                <Cell col="2" text="cdNm"/>
-                <Cell col="3" text="cdOrd"/>
-                <Cell col="4" text="dpth"/>
-                <Cell col="5" text="useYn"/>
-                <Cell col="6" text="regId"/>
-                <Cell col="7" text="regIp"/>
-                <Cell col="8" text="regDtm"/>
-                <Cell col="9" text="modId"/>
-                <Cell col="10" text="modIp"/>
-                <Cell col="11" text="modDtm"/>
-                <Cell col="12" text="nextChildOrd"/>
-                <Cell col="13" text="memo"/>
-                <Cell col="14" text="cdVal1"/>
-                <Cell col="15" text="cdVal2"/>
-                <Cell col="16" text="cdVal3"/>
+                <Cell col="2" text="grpCdNm"/>
+                <Cell col="3" text="cdNm"/>
+                <Cell col="4" text="cdOrd"/>
+                <Cell col="5" text="dpth"/>
+                <Cell col="6" text="useYn"/>
+                <Cell col="7" text="regId"/>
+                <Cell col="8" text="regIp"/>
+                <Cell col="9" text="regDtm"/>
+                <Cell col="10" text="modId"/>
+                <Cell col="11" text="modIp"/>
+                <Cell col="12" text="modDtm"/>
+                <Cell col="13" text="nextChildOrd"/>
+                <Cell col="14" text="memo"/>
+                <Cell col="15" text="cdVal1"/>
+                <Cell col="16" text="cdVal2"/>
+                <Cell col="17" text="cdVal3"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:cdId"/>
                 <Cell col="1" text="bind:cd"/>
-                <Cell col="2" text="bind:cdNm"/>
-                <Cell col="3" text="bind:cdOrd"/>
-                <Cell col="4" text="bind:dpth"/>
-                <Cell col="5" text="bind:useYn"/>
-                <Cell col="6" text="bind:regId"/>
-                <Cell col="7" text="bind:regIp"/>
-                <Cell col="8" text="bind:regDtm"/>
-                <Cell col="9" text="bind:modId"/>
-                <Cell col="10" text="bind:modIp"/>
-                <Cell col="11" text="bind:modDtm"/>
-                <Cell col="12" text="bind:nextChildOrd"/>
-                <Cell col="13" text="bind:memo"/>
-                <Cell col="14" text="bind:cdVal1"/>
-                <Cell col="15" text="bind:cdVal2"/>
-                <Cell col="16" text="bind:cdVal3"/>
+                <Cell col="2" text="bind:grpCdNm"/>
+                <Cell col="3" text="bind:cdNm"/>
+                <Cell col="4" text="bind:cdOrd"/>
+                <Cell col="5" text="bind:dpth"/>
+                <Cell col="6" text="bind:useYn"/>
+                <Cell col="7" text="bind:regId"/>
+                <Cell col="8" text="bind:regIp"/>
+                <Cell col="9" text="bind:regDtm"/>
+                <Cell col="10" text="bind:modId"/>
+                <Cell col="11" text="bind:modIp"/>
+                <Cell col="12" text="bind:modDtm"/>
+                <Cell col="13" text="bind:nextChildOrd"/>
+                <Cell col="14" text="bind:memo"/>
+                <Cell col="15" text="bind:cdVal1"/>
+                <Cell col="16" text="bind:cdVal2"/>
+                <Cell col="17" text="bind:cdVal3"/>
               </Band>
             </Format>
           </Formats>
@@ -199,22 +202,26 @@ this.btnCreateRoot_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	var objGridCode = this.GridCodeList;	
 	var objDs = objGridCode.getBindDataset();	
 	
+	var tmpCdId;
 	var tmpCdOrd;
 	
 	for(var i = 0 ; i < objDs.getRowCount() ; i++){
 		var tmpDpth = objDs.getColumn(i, "dpth");		
 		if(tmpDpth == "0"){
+			tmpCdId = objDs.getColumn(i, "cdId");	
 			tmpCdOrd = objDs.getColumn(i, "cdOrd");	
 		}	
 	}
 	
+	tmpCdId++;
 	tmpCdOrd++;
 	
 	var nRow = objDs.addRow();
 
  	objDs.setColumn(nRow, "cdId", "");
- 	objDs.setColumn(nRow, "cd", "CODE_" + tmpCdOrd);
- 	objDs.setColumn(nRow, "cdNm", "임시코드명" + tmpCdOrd);
+ 	objDs.setColumn(nRow, "cd", tmpCdId);
+ 	objDs.setColumn(nRow, "grpCdNm", "임시그룹코드명");
+	//objDs.setColumn(nRow, "cdNm", "");
  	objDs.setColumn(nRow, "cdOrd", tmpCdOrd);
  	objDs.setColumn(nRow, "dpth", 0);
 	objDs.setColumn(nRow, "useYn", "Y");
@@ -231,13 +238,15 @@ this.btnCreateChild_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var objDs = objGridCode.getBindDataset();	
 	
 	var cd = objMstDs.getColumn(objMstDs.rowposition, "cd");
+	var grpCdNm = objMstDs.getColumn(objMstDs.rowposition, "grpCdNm");
 	var tmpCdOrd = objDs.getRowCount() + 1;
 	
 	var nRow = objDs.insertRow(objDs.rowposition + tmpCdOrd);
 
 	objDs.setColumn(nRow, "cdId", cd);
 	objDs.setColumn(nRow, "cd", cd + "_" + tmpCdOrd);
-	objDs.setColumn(nRow, "cdNm", "임시코드명" + tmpCdOrd);
+	objDs.setColumn(nRow, "grpCdNm", grpCdNm);
+	objDs.setColumn(nRow, "cdNm", "임시상세코드명");
 	objDs.setColumn(nRow, "cdOrd", tmpCdOrd);
 	objDs.setColumn(nRow, "dpth", 1);
 	objDs.setColumn(nRow, "useYn", "Y");
@@ -396,6 +405,7 @@ this.fn_init_code = function(objDs, dpth, parentCd){
 				
 				objDs.setColumn(nRow, "cdId", gdsCode.getColumn(i, "cdId"));
 				objDs.setColumn(nRow, "cd", gdsCode.getColumn(i, "cd"));
+				objDs.setColumn(nRow, "grpCdNm", gdsCode.getColumn(i, "grpCdNm"));
 				objDs.setColumn(nRow, "cdNm", gdsCode.getColumn(i, "cdNm"));
 				objDs.setColumn(nRow, "cdOrd", gdsCode.getColumn(i, "cdOrd"));
 				objDs.setColumn(nRow, "dpth", gdsCode.getColumn(i, "dpth"));
@@ -442,6 +452,7 @@ this.fn_search = function(){
         <ColumnInfo>
           <Column id="cdId" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
+          <Column id="grpCdNm" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="cdOrd" type="STRING" size="256"/>
           <Column id="dpth" type="STRING" size="256"/>
@@ -454,6 +465,7 @@ this.fn_search = function(){
         <ColumnInfo>
           <Column id="cdId" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
+          <Column id="grpCdNm" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="cdOrd" type="STRING" size="256"/>
           <Column id="dpth" type="STRING" size="256"/>
