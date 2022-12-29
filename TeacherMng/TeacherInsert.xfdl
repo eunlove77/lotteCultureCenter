@@ -880,6 +880,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 		this.Div01.form.Div00.form.ImageViewer00.set_text('');
 	}
 }
+
+this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	this.Div01.form.Div07.form.signViewer.set_image(this.ds_sign_dtl.getColumn(0, "webPath"));
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_teacher_info">
@@ -1197,7 +1202,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_sign_dtl">
+      <Dataset id="ds_sign_dtl" onvaluechanged="ds_sign_dtl_onvaluechanged">
         <ColumnInfo>
           <Column id="atchFileId" type="STRING" size="256"/>
           <Column id="fileSeq" type="STRING" size="256"/>
