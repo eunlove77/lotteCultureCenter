@@ -248,7 +248,6 @@
       <Dataset id="ds_detail">
         <ColumnInfo>
           <Column id="cpnSeqno" type="STRING" size="13"/>
-          <Column id="cpnUsePsblBrch" type="STRING" size="256"/>
           <Column id="cpnNm" type="STRING" size="100"/>
           <Column id="cpnExpl" type="STRING" size="1000"/>
           <Column id="dcAmtClCd" type="STRING" size="20"/>
@@ -270,7 +269,7 @@
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="dcAmtClCd">AMOUNT</Col>
+            <Col id="dcAmtClCd">02</Col>
             <Col id="applLectClCd">CTGR</Col>
             <Col id="issueMthdClCd">NORMAL</Col>
             <Col id="issueObjClCd">GRADE</Col>
@@ -298,6 +297,11 @@
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_appl_lect"/>
+      <Dataset id="ds_appl_str">
+        <ColumnInfo>
+          <Column id="strCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -336,7 +340,7 @@ this.fn_detail = function ()
 		strSvcId : "detail",
 		strSvcUrl : this.baseSvrUrl + "detail.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
+		outData : "ds_detail=infoMap ds_appl_str=applStrList ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.parent.parent.parent.parent.parent.param.MENU_ID, 
@@ -373,9 +377,9 @@ this.fn_set_spot = function()
 	{
 		var id = "chkSpot" + i;
 		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 9, 130, 20);
+		objComp.init(id, content[i] + ":10", 9, 133, 20);
 		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		objComp.set_text("["+list.getColumn(i, "cd")+"]"+list.getColumn(i, "cdNm"));		
+		objComp.set_text(list.getColumn(i, "cdNm"));		
 		objComp.set_truevalue(list.getColumn(i, "cd"));
 		objComp.set_falsevalue("N");
 		objComp.set_readonly(true);
@@ -389,7 +393,7 @@ this.fn_set_spot = function()
 //상세화면 세팅
 this.fn_set_detail = function()
 {
-	var dcTxt = this.gfn_setComma(this.ds_detail.getColumn(0, "dcAmt")) + (this.ds_detail.getColumn(0, "dcAmtClCd") == "RATES" ? "%" : "원") + " 할인";
+	var dcTxt = this.gfn_setComma(this.ds_detail.getColumn(0, "dcAmt")) + (this.ds_detail.getColumn(0, "dcAmtClCd") == "01" ? "%" : "원") + " 할인";
 	var prdTxt = "";
 	
 	this.fn_sync_checkBox();
@@ -439,18 +443,18 @@ this.fn_set_detail = function()
 //체크박스 동기화
 this.fn_sync_checkBox = function()
 {
-	var brchCdArr = this.ds_detail.getColumn(0, "cpnUsePsblBrch").split("|");
-	var brchObj = this.Div00.form.Div00.form.Div00.form.components;
+	var list = this.ds_appl_str;
+	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
 	
-	for(var i=0; i<brchCdArr.length; i++)
+	for(var i=0; i<list.getRowCount(); i++)
 	{
-		for(var j=0; j<brchObj.length; j++)
+		for(var j=0; j<spotObj.length; j++)
 		{
-			if(brchObj[j] == "[object CheckBox]" && brchObj[j].name.indexOf("All") < 0)
+			if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
 			{		
-				if(brchObj[j].truevalue == brchCdArr[i])
+				if(spotObj[j].truevalue == list.getColumn(i, "strCd"))
 				{
-					brchObj[j].set_value(brchCdArr[i]);
+					spotObj[j].set_value(list.getColumn(i, "strCd"));
 				}
 			}	
 		}

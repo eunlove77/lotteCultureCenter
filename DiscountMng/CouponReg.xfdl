@@ -279,7 +279,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="할인 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Radio id="radioDiscount" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="AMOUNT" text="정액(원) 할인" index="0" onitemchanged="Div01_Div04_radioDiscount_onitemchanged">
+                    <Radio id="radioDiscount" taborder="1" left="Static00:10" top="0" height="30" right="10" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" maxwidth="400" minwidth="" value="02" text="정액(원) 할인" index="0" onitemchanged="Div01_Div04_radioDiscount_onitemchanged">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -287,11 +287,11 @@
                         </ColumnInfo>
                         <Rows>
                           <Row>
-                            <Col id="codecolumn">AMOUNT</Col>
+                            <Col id="codecolumn">02</Col>
                             <Col id="datacolumn">정액(원) 할인</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">RATES</Col>
+                            <Col id="codecolumn">01</Col>
                             <Col id="datacolumn">정률(%) 할인</Col>
                           </Row>
                         </Rows>
@@ -445,7 +445,6 @@
       <Dataset id="ds_detail">
         <ColumnInfo>
           <Column id="cpnSeqno" type="STRING" size="13"/>
-          <Column id="cpnUsePsblBrch" type="STRING" size="256"/>
           <Column id="cpnNm" type="STRING" size="100"/>
           <Column id="cpnExpl" type="STRING" size="1000"/>
           <Column id="dcAmtClCd" type="STRING" size="20"/>
@@ -467,7 +466,7 @@
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="dcAmtClCd">AMOUNT</Col>
+            <Col id="dcAmtClCd">02</Col>
             <Col id="applLectClCd">CTGR</Col>
             <Col id="issueMthdClCd">NORMAL</Col>
             <Col id="issueObjClCd">GRADE</Col>
@@ -530,6 +529,11 @@
           <Column id="groupYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_appl_str">
+        <ColumnInfo>
+          <Column id="strCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -566,7 +570,7 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		strSvcId : "codeList",
 		strSvcUrl : this.baseSvrUrl + "codeList.do",
 		inData : "",
-		outData : "ds_category01=ctgrList",
+		outData : "ds_category01=ctgrList ds_mem_grade=mbrGrdeList",
 		strArg : "ctegryId=CTEGRY ctegryLvlNo=0",
 		callBackFnc : "fnCallback",
 		menuSeq : this.menuId,
@@ -595,7 +599,7 @@ this.fn_detail = function ()
 		strSvcId : "detail",
 		strSvcUrl : this.baseSvrUrl + "detail.do",
 		inData : "detail=ds_detail",
-		outData : "ds_detail=infoMap ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
+		outData : "ds_detail=infoMap ds_appl_str=applStrList ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.menuId,
@@ -714,7 +718,7 @@ this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexa
 		this.Div01.form.Div04.form.MaskEdit00.set_value();
 	}
 	
-	if(e.postvalue == 'RATES')
+	if(e.postvalue == '01')
 	{
 		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("both");
 		this.Div01.form.Div04.form.MaskEdit00.set_format("!##");	//2자리 입력 제한
@@ -861,13 +865,18 @@ this.fn_checkValidation = function(){
 	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
 	var spotStr = "";
 	var spotFlag = false;
+	var spotList = this.ds_appl_str
+	
+	spotList.deleteAll()
 	
 	for(var i=0; i<spotObj.length; i++)
 	{
 		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
 		{		
+			var nRowIdx = spotList.addRow();
+					
+			spotList.setColumn(nRowIdx, "strCd", spotObj[i].value);
 			spotFlag = true;
-			spotStr += spotObj[i].value + "|";
 		}	
 	}
 	if(!spotFlag)
@@ -975,8 +984,7 @@ this.fn_checkValidation = function(){
 		this.Div01.form.Div05.form.Div01.form.Edit00.setFocus();
 		return;
 	}
-	
-	this.ds_detail.setColumn(0, "cpnUsePsblBrch", spotStr);
+
 	this.fn_save();
 }
 
@@ -985,7 +993,7 @@ this.fn_save = function(){
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.baseSvrUrl + "insert.do",
-		inData : "infoData=ds_detail mbrGrdeData=ds_mem_grade mbrExclData=ds_mem_excel applCtgrData=ds_appl_ctgr applLectData=ds_appl_lect",
+		inData : "infoData=ds_detail applStrData=ds_appl_str mbrGrdeData=ds_mem_grade mbrExclData=ds_mem_excel applCtgrData=ds_appl_ctgr applLectData=ds_appl_lect",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
@@ -1011,7 +1019,7 @@ this.fn_set_spot = function()
 		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
 		objComp.set_text(list.getColumn(i, "cdNm"));
 		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("");
+		objComp.set_falsevalue("N");
 		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
 		objComp.show();	
 		content.push(id);
@@ -1067,18 +1075,18 @@ this.fn_set_detail = function()
 //체크박스 동기화
 this.fn_sync_checkBox = function()
 {
-	var brchCdArr = this.ds_detail.getColumn(0, "cpnUsePsblBrch").split("|");
-	var brchObj = this.Div00.form.Div00.form.Div00.form.components;
+	var list = this.ds_appl_str;
+	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
 	
-	for(var i=0; i<brchCdArr.length; i++)
+	for(var i=0; i<list.getRowCount(); i++)
 	{
-		for(var j=0; j<brchObj.length; j++)
+		for(var j=0; j<spotObj.length; j++)
 		{
-			if(brchObj[j] == "[object CheckBox]" && brchObj[j].name.indexOf("All") < 0)
+			if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
 			{		
-				if(brchObj[j].truevalue == brchCdArr[i])
+				if(spotObj[j].truevalue == list.getColumn(i, "strCd"))
 				{
-					brchObj[j].set_value(brchCdArr[i]);
+					spotObj[j].set_value(list.getColumn(i, "strCd"));
 				}
 			}	
 		}
@@ -1154,6 +1162,7 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 	{
 		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
 		{		
+			console.log(spotObj[i].value);
 			spotFlag = true;
 			spotStr += spotObj[i].value + ",";
 		}	
@@ -1165,18 +1174,22 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 		this.Div00.form.Div00.form.Div00.form.chkSpotAll.setFocus();
 		return;
 	}
-	
-	this.popCnt++;
-	var arrArguments = {
-		type : 1,
-		brchCd : spotStr,
-		dataset : this.ds_appl_lect
+	else
+	{
+		this.popCnt++;
+		var arrArguments = {
+			type : 1,
+			brchCd : spotStr,
+			dataset : this.ds_appl_lect
+		}
+		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 700, true, true, null);
+		
 	}
-	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 500, true, true, null);
 };
 
 this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
+console.log(e.clickitem)
 	if(e.cell == 12){		
 		this.ds_appl_lect.deleteRow(e.row);	
 	}

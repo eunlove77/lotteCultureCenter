@@ -41,7 +41,7 @@
                 <Cell col="1" text="bind:rnum"/>
                 <Cell col="2" text="expr:dataset.getColumn(currow, 'cntsCl') == 'IMAGE' ? '이미지' : 'HTML'"/>
                 <Cell col="3" text="bind:tit" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="4" text="expr:expsrStDt ?  expsrStDt + ' ~ ' + expsrEndDt: ''"/>
+                <Cell col="4" text="expr:expsrStDt  ? expsrStDt + ' ~ ' + expsrEndDt : '상시'"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="6" text="bind:rgprDtm"/>
                 <Cell col="7" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' : rgprNm + '('  + rgprId + ')'"/>
@@ -198,12 +198,13 @@
 **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
-
+include "Base::popup.xjs";
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
+this.popCnt = 0;
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -227,10 +228,15 @@ this.PopupMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.param = {
+	/*this.parent.param = {
 		seqno : ""
 	}
-	this.parent.set_url("SystemMng::PopupMngDtl.xfdl");
+	this.parent.set_url("SystemMng::PopupMngDtl.xfdl");*/
+	
+	this.popCnt ++;
+	var oArg = {seqno : ""};
+	this.gfn_openPopup("popupMngPop"+this.popCnt, oArg, "SystemMng::PopupMngDtl.xfdl", this, null, null, true, true, null);
+	
 };
 
 //삭제 버튼
@@ -310,7 +316,10 @@ this.GridPopupList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 {
 	if(e.cell == 3)
 	{
-		var	seqno = obj.getBindDataset().getColumn(e.row, "seqno");
+		this.popCnt ++;
+		var oArg = {seqno : obj.getBindDataset().getColumn(e.row, "seqno") ,cntsCl: obj.getBindDataset().getColumn(e.row, "cntsCl")};
+		this.gfn_openPopup("popupMngPop"+this.popCnt, oArg, "SystemMng::PopupMngDtl.xfdl", this, null, null, true, true, null);
+		/*var	seqno = obj.getBindDataset().getColumn(e.row, "seqno");
 		var cntsCl = obj.getBindDataset().getColumn(e.row, "cntsCl");
 		
 		this.parent.param = {
@@ -318,7 +327,7 @@ this.GridPopupList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 			cntsCl: cntsCl
 		};
 		
-		this.parent.set_url("SystemMng::PopupMngDtl.xfdl");
+		this.parent.set_url("SystemMng::PopupMngDtl.xfdl");*/
 	}
 };
 /**************************************************************************
