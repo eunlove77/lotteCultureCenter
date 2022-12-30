@@ -135,7 +135,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = this.parent.parent.param.MENU_ID;
+this.menuId = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -148,7 +148,13 @@ this.MemberDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::member/";
 	
-	if(this.parent.mbrNo != ""){
+	if(this.gfn_nvl(this.parent.menuId) != ""){
+		this.menuId = this.parent.menuId;
+	}else{
+		this.menuId = this.parent.parent.param.MENU_ID;
+	}
+	
+	if(this.gfn_nvl(this.parent.mbrNo) != ""){
 		this.ds_detail.setColumn(0, "mbrNo", this.parent.mbrNo);
 		this.fn_detail();
 	}	
