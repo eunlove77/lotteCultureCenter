@@ -381,7 +381,6 @@ this.fn_delete = function ()
 	var tranObj = {};
 	tranObj.strSvcId	= "delete";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/main/deleteMainBanner.do";
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	tranObj.inData      = "mainBannerList=mainBannerDs:U";
 	tranObj.outData     = "mainBannerDs=output1";
 	tranObj.strArg      = "";
@@ -486,13 +485,31 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		break;
 		
 	case "expsrYn":
-		this.alert("처리완료");
-		this.reload();
+		
+		if(errorCode != 0)
+		{
+			this.alert(errorCode+"\n"+errorMsg);
+			return;
+		}
+		else
+		{
+			this.alert("처리완료");
+			this.reload();
+		}
 		break;
 		
 	case "delete":
-		this.alert("삭제완료");
-		this.fn_list(1);
+		
+		if(errorCode != 0)
+		{
+			this.alert(errorCode+"\n"+errorMsg);
+			return;
+		}
+		else
+		{
+			this.alert("삭제되었습니다.");
+			this.reload();
+		}
 		break;
 	}
 };
