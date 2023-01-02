@@ -60,7 +60,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="허용IP(VDI) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <MaskEdit id="MaskEdit00" taborder="1" left="119" top="5" width="140" height="21" format="###.###.###.###" type="string"/>
+                    <Edit id="Edit00" taborder="1" left="119" top="5" width="140" height="21" inputtype="number,dot" inputfilter="alpha,comma,sign,space,symbol" maxlength="17"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -68,7 +68,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="허용IP(일반) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <MaskEdit id="MaskEdit00" taborder="1" left="119" top="5" width="140" height="21" format="###.###.###.###" type="string"/>
+                    <Edit id="Edit00" taborder="1" left="119" top="5" width="140" height="21" inputtype="number,dot" inputfilter="alpha,comma,sign,space,symbol" maxlength="17"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -305,6 +305,11 @@ this.Div03_btnModify_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 	var acntStatYn = this.Div00.form.Div10.form.radioAcntStatYn.value;
 	var apvlStatYn = this.Div00.form.Div11.form.radioApvlStatYn.value;
 	var lpntPpayPsblYn = this.Div00.form.Div12.form.radioLpntPpayPsblYn.value;
+	var ipAddr = this.Div00.form.Div09.form.Edit00.value;
+	var ipVdiAddr = this.Div00.form.Div08.form.Edit00.value;
+	var ipRegExpr = /^([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/;
+	var matchIp = ipAddr.match(ipRegExpr);
+	//var matchIpVdi = ipVdiAddr.match(ipRegExpr);
 	
 	if(this.gfn_isNull(athrCd)){
 		this.alert("권한(직무)를 선택해주세요.");
@@ -312,6 +317,10 @@ this.Div03_btnModify_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 		this.alert("지점을 선택해주세요.");
 	}else if(this.gfn_isNull(acntStatYn)){
 		this.alert("계정상태를 선택해주세요.");
+	/*}else if(ipVdiAddr != undefined || ipVdiAddr.length >0 && matchIpVdi == null){
+		this.alert("IP 형식을 확인해주세요.");*/
+	}else if(ipAddr.length > 0 && matchIp == null){
+		this.alert("IP 형식을 확인해주세요.");
 	}else if(this.gfn_isNull(apvlStatYn)){
 		this.alert("승인상태를 선택해주세요.");
 	}else if(this.gfn_isNull(lpntPpayPsblYn)){
@@ -321,7 +330,6 @@ this.Div03_btnModify_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 			this.fn_detail("modify");
 		}
 	}
-	
 	
 };
 
@@ -437,8 +445,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
       <BindItem id="item2" compid="Div00.form.Div10.form.radioAcntStatYn" propid="value" datasetid="ds_detail" columnid="acntStatYn"/>
       <BindItem id="item6" compid="Div00.form.Div00.form.roleCd" propid="value" datasetid="ds_detail" columnid="athrCd"/>
       <BindItem id="item5" compid="Div00.form.Div07.form.txtDptNm" propid="text" datasetid="ds_detail" columnid="dptNm"/>
-      <BindItem id="item7" compid="Div00.form.Div08.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddrVdi"/>
-      <BindItem id="item8" compid="Div00.form.Div09.form.MaskEdit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddr"/>
+      <BindItem id="item8" compid="Div00.form.Div09.form.Edit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddr"/>
+      <BindItem id="item7" compid="Div00.form.Div08.form.Edit00" propid="value" datasetid="ds_detail" columnid="prmtIpAddrVdi"/>
     </Bind>
   </Form>
 </FDL>
