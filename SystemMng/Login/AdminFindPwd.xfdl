@@ -16,7 +16,7 @@
               <Div id="Div02_00" taborder="1" text="" left="350" top="206" width="320" height="40" cssclass="edt_WF_LoginForm">
                 <Layouts>
                   <Layout>
-                    <Edit id="admId" taborder="0" left="0" top="0" displaynulltext="아이디" positionstep="0" password="false" right="0" bottom="0" cssclass="edt_WF_Login" onkeydown="findPwdDiv_Div02_00_id_onkeydown"/>
+                    <Edit id="admId" taborder="0" left="0" top="0" displaynulltext="사번" positionstep="0" password="false" right="0" bottom="0" cssclass="edt_WF_Login" onkeydown="findPwdDiv_Div02_00_id_onkeydown"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -42,9 +42,6 @@ this.application = null;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
 
 this.AdminFindPwd_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
@@ -64,28 +61,14 @@ this.chngPwdDiv_chngPwdBtn_onclick = function(obj:nexacro.Button,e:nexacro.Click
 		this.alert("이름을 입력하세요.");
 		this.findPwdDiv.form.Div02.form.fnm.setFocus();
 	}else if(admId == undefined || admId == ''){
-		this.alert("아이디를 입력하세요.");
+		this.alert("사번을 입력하세요.");
 		this.findPwdDiv.form.Div02_00.form.admId.setFocus();
 	}else{	
 	
 		this.ds_admin_info.setColumn(0, "fnm", fnm);
 		this.ds_admin_info.setColumn(0, "id", admId);
-	
-		var strSvcId    = "findPwd";
-		var strSvcUrl   = this.application.Loing_svc + "::findPwd.do";
-		var inData      = "admInfo=ds_admin_info";
-		var outData     = "";
-		var strArg      = "";
-		var callBackFnc = "fnCallback";
-		var isAsync     = true;
 
-		this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-				strSvcUrl ,       // trabsaction을 요청할 주소
-				inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-				outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-				strArg,         // 입력값으로 보낼 arguments, a=b
-				callBackFnc,       // transaction의 결과를 받을 Function 이름
-				isAsync);         // 비동기통신 여부 [생략가능]
+		this.transaction("findPwd", this.application.Loing_svc + "::findPwd.do", "admInfo=ds_admin_info", "", "", "fnCallback", true);
 	}
 };
 
@@ -109,7 +92,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 
 this.findPwdDiv_Div02_00_id_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
-	if(e.keycode == 13){
+	if(e.keycode == 13)
+	{
 		this.findPwdDiv.form.findPwdBtn.click();
 	}
 };

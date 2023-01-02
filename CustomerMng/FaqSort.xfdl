@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="FaqSort" width="1280" height="720" titletext="New Form" onload="FaqSortList_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Static id="Static00" taborder="1" text="FAQ TOP5 설정" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17" onclick="Static00_onclick"/>
+        <Grid id="Grid00" taborder="2" left="30" top="112" height="172" right="30" binddataset="faqSortDs" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="92" band="left"/>
+                <Column size="1034"/>
+                <Column size="30"/>
+                <Column size="30"/>
+                <Column size="30"/>
+              </Columns>
+              <Rows>
+                <Row size="34"/>
+              </Rows>
+              <Band id="body">
+                <Cell background="#f7f7f7" color="#000000" font="normal 700 12px/normal &quot;Noto Sans KR&quot;" text="expr:sortNo ? 'TOP'  + rn: ''"/>
+                <Cell col="1" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="2" text="▲" displaytype="buttoncontrol" edittype="button" cssclass="gridBtn_High"/>
+                <Cell col="3" text="bind:sortNo" displaytype="editcontrol" edittype="text" editinputfilter="alpha,comma,dot,sign,space,symbol" editmaxlength="expr:1"/>
+                <Cell col="4" text="▼" displaytype="buttoncontrol" edittype="button" cssclass="gridBtn_High"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Div id="Div01" taborder="3" text="Div03" left="45" top="Grid00:54" height="55" right="45" minwidth="400" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
+              <Button id="btnSave" taborder="0" text="등록" top="12" width="84" height="30" cssclass="btn_WF_Medium" left="btnCnl:16.036000000000058" onclick="Div01_btnSave_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+* include 영역 
+**************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::lib_date.xjs";
+
+/**************************************************************************
+* FORM 변수 선언 영역
+**************************************************************************/
+this.application = null;
+this.rowcount = 0;
+
+/**************************************************************************
+* FORM EVENT 영역(onload)
+**************************************************************************/
+this.FaqSortList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	this.fn_list();
+};
+
+//저장버튼
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
+};
+
+//취소버튼
+this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("취소시 변경사항이 저장되지 않습니다"))
+	{
+		this.reload();
+	}
+};
+
+//유효성 체크
+this.fn_checkValidation = function()
+{	
+	if(this.faqSortDs.findRow("sortNo", null) > -1 || this.faqSortDs.findRow("sortNo", "") > -1)
+	{
+		this.alert("정렬순서를 입력하세요");
+		return;
+	}	
+	/*else if(this.faqSortDs.findRow("sortNo", null) <= 0 || this.faqSortDs.findRow("sortNo", "") > 5)
+	{
+		this.alert("정렬순서는 1-5 범위내에서 입력하세요");
+		return;
+	}*/
+	else
+	{
+		if(this.confirm("저장하시겠습니까?"))
+		{
+			this.fn_save()
+		}
+	}
+}
+
+this.fn_save = function()
+{
+	var tranObj = {
+		strSvcId : "update",
+		strSvcUrl : this.application.Admin_svc + "::/customer/sort/updateFaqSort.do",
+		inData : "data=faqSortDs:U",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	
+	this.gfn_transaction(tranObj);	
+}
+
+//그리드 상세 페이지 이동
+this.GridFaqSortList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var	faqSeqno 	= obj.getBindDataset().getColumn(e.row, "faqSeqno");
+	var sortNo	 	= obj.getBindDataset().getColumn(e.row, "sortNo");
+	var top5SlctYn 	= obj.getBindDataset().getColumn(e.row, "top5SlctYn");
+		
+	if(e.cell == 1)
+	{
+		this.parent.param = {
+			faqSeqno : faqSeqno
+		};
+		
+		this.parent.set_url("CustomerMng::FaqDtl.xfdl");
+	}
+	
+	if(e.cell ==2)
+	{
+		var trgtObj={
+			faqSeqno 	: faqSeqno ,
+			sortNo	 	: sortNo,
+			top5SlctYn	: top5SlctYn,
+			rowIdx		: e.row -1
+		}
+		
+		//this.alert("trgtObjSeq" + trgtObj.faqSeqno + "타겟SortNo::::" + trgtObj.sortNo+ "타겟rowIdx[:::" + trgtObj.rowIdx);
+		
+		var prevObj={
+			faqSeqno 	: "" ,
+			sortNo	 	: "",
+			top5SlctYn	: "",
+			rowIdx		: e.row
+		}
+		
+		//this.alert("prevObj" + prevObj.faqSeqno + "@@@" + prevObj.sortNo + "기존rowIdx[" + prevObj.rowIdx);
+		
+		//obj.redrawExprCell();
+		
+	}
+};
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+//조회*
+this.fn_list = function(){
+
+	this.faqSortDs.clearData();
+	
+	var tranObj = {};
+	tranObj.strSvcId	= "select_faq";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/sort/faqSortList.do";
+	tranObj.inData      = "";
+	tranObj.outData     = "faqSortDs=sortList";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	
+	this.gfn_transaction(tranObj);
+}
+
+//콜백
+this.fnCallback = function(svcID, errorCode, errorMsg){
+	
+	if(errorCode != 0){
+		// 에러 시 화면 처리 내역
+		this.alert(errorCode+"\n"+errorMsg);
+		
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			
+		break;
+		
+		case "update":
+			this.alert("저장되었습니다.");
+			this.fn_list();
+		break;
+	}
+}]]></Script>
+    <Objects>
+      <Dataset id="faqSortDs">
+        <ColumnInfo>
+          <Column id="rn" type="INT" size="256"/>
+          <Column id="faqSeqno" type="INT" size="256"/>
+          <Column id="clCd" type="STRING" size="256"/>
+          <Column id="clNm" type="STRING" size="256"/>
+          <Column id="titNm" type="STRING" size="256"/>
+          <Column id="sortNo" type="INT" size="256"/>
+          <Column id="top5SlctYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

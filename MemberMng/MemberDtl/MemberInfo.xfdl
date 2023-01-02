@@ -155,7 +155,8 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+this.menuId = "";
+this.mbrNo = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -168,8 +169,21 @@ this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::member/info/";
 	
-	if(this.parent.parent.parent.parent.mbrNo != ""){
-		this.ds_info.setColumn(0, "mbrNo", this.parent.parent.parent.parent.mbrNo);
+	
+	if(this.gfn_nvl(this.parent.menuId) != ""){
+		this.menuId = this.parent.menuId;
+	}else{
+		this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+	}
+	
+	if(this.gfn_nvl(this.parent.mbrNo) != ""){
+		this.mbrNo = this.parent.mbrNo;
+	}else{
+		this.mbrNo = this.parent.parent.parent.parent.mbrNo;
+	}
+	
+	if(this.mbrNo != ""){
+		this.ds_info.setColumn(0, "mbrNo", this.mbrNo);
 		this.fn_detail();
 	}	
 };

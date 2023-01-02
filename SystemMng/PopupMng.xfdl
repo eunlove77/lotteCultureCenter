@@ -391,6 +391,54 @@ this.fn_delete = function ()
 	
 };
 
+//사용 버튼
+this.Div01_btnPerminY_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_chgExpsr("노출", "Y");
+};
+
+//미사용버튼
+this.Div01_btnPerminN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_chgExpsr("미노출", "N");
+};
+
+//노출여부 처리
+this.fn_chgExpsr = function(gb, expsrYn){
+	var check_array = this.popupDs.checkarray;
+	var checked_array = new Array();
+	
+	for(var i = 0; i < check_array.length; i++){
+		if(check_array[i] > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert(gb + "할 메인팝업을 선택해주세요.");
+		return false;
+	}else{
+		if(confirm("선택한 메인팝업을 " + gb + "하시겠습니까?")){
+			
+			for(var i = 0 ; i < checked_array.length ; i++){
+				this.popupDs.setColumn(checked_array[i], "expsrYn", expsrYn);
+			}
+			
+			var tranObj = {
+				strSvcId : "expsrYn",
+				strSvcUrl : this.application.Admin_svc + "::/main/updatePopExpsrYn.do?svcId=expsrYn",
+				inData : "mainPopupList=popupDs",
+				outData : "popupDs=output1",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : true,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			
+			this.gfn_transaction(tranObj);
+			
+		}
+	}	
+}
+
 //노출여부 전체 선택 체크 박스 
 this.fn_expsrAll_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
@@ -479,9 +527,32 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		}
 		break;
 		
+	case "expsrYn":
+		
+		if(errorCode != 0)
+		{
+			this.alert(errorCode+"\n"+errorMsg);
+			return;
+		}
+		else
+		{
+			this.alert("처리완료");
+			this.reload();
+		}
+		break;
+		
 	case "delete":
-		this.alert("삭제되었습니다.");
-		this.fn_list(1);
+		
+		if(errorCode != 0)
+		{
+			this.alert(errorCode+"\n"+errorMsg);
+			return;
+		}
+		else
+		{
+			this.alert("삭제되었습니다.");
+			this.reload();
+		}
 		break;
 	}
 	
