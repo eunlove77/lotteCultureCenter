@@ -948,7 +948,7 @@ this.init = function()
 	this.ds_class_dtl.setColumn(0, "lectClCd", "01");
 	this.ds_class_dtl.setColumn(0, "objClCd", "01");
 	this.ds_class_dtl.setColumn(0, "optnUseYn", "N");
-	this.ds_class_dtl.setColumn(0, "optnTypCd", "01");
+	this.ds_class_dtl.setColumn(0, "optnTypCd", "02");
 	this.ds_class_dtl.setColumn(0, "mvgDsplyUseYn", "N");
 	this.ds_class_dtl.setColumn(0, "dsplyStatCd", "Y");
 	this.ds_class_dtl.setColumn(0, "dsplyIconCd", "N");
@@ -969,13 +969,6 @@ this.init = function()
 	this.ds_schedule_list.clearData();
 	this.ds_schedulePlan_list.clearData();
 	this.fn_schedule_set();
-	
-	//강좌 옵션 초기화
-	this.ds_option_list.clearData();
-	this.ds_option_list.addRow();
-	this.ds_option_list.setColumn(0, "partRfndClCd", "");
-	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
-	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
 	
 	//강좌 상세정보 초기화
 	//대표이미지
@@ -1328,6 +1321,12 @@ this.fn_classDispIcon_set = function()
 //강좌 옵션타입 세팅
 this.fn_classOptType_set = function()
 {
+	//강좌 옵션 초기화
+	this.ds_option_list.clearData();
+	this.ds_option_list.addRow();
+	this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
 	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div01.form.Radio00.set_fittocontents("width");
 }
 
@@ -2406,12 +2405,12 @@ this.Div00_Div00_00_00_00_01_Div00_Div00_Radio00_onitemchanged = function(obj:ne
 	}
 	else
 	{
-		this.ds_class_dtl.setColumn(0, "optnTypCd", "01");
+		this.ds_class_dtl.setColumn(0, "optnTypCd", "02");
 		this.ds_option_list.clearData();
 		this.ds_option_list.addRow();
-		this.ds_option_list.setColumn(0, "partRfndClCd", "");
-		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "nomal");
-		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "none");
+		this.ds_option_list.setColumn(0, "partRfndClCd", "1");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "displaytype", "combocontrol");
+		this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setCellProperty( "body", 3, "edittype", "combo");
 	}
 	
 	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
