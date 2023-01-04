@@ -581,14 +581,15 @@ this.fn_code_list = function()
 {	
 	var	outData = "ds_classOptType_list=classOptTypeList ds_classDispIcon_list=classDispIconList ds_classSemster_list=classSemsterList ds_classRoom_list=classRoomList ";
 		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList ";
-		outData += "ds_tcGrade_list=tcGradeList ds_whdtxCl_list=whdtxClList ds_incmCl_list=incmClList ds_ppayStd_list=ppayStdList";
+		outData += "ds_tcGrade_list=tcGradeList ds_whdtxCl_list=whdtxClList ds_incmCl_list=incmClList ds_ppayStd_list=ppayStdList ";
+		outData += "ds_start_hour=startHour ds_end_hour=endHour ds_start_min=startMin ds_end_min=endMin";
 		
 	var tranObj = {
 		strSvcId : "codeList",
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
 		outData : outData,
-		strArg : "cdId=120||room||ctgy||087||090||144||147 useYn=Y brchCd=" + this.brchCd,
+		strArg : "cdId=120||room||ctgy||087||090||144||147||153||154 useYn=Y brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.parent.menuSeq,
@@ -696,75 +697,21 @@ this.fn_classRoom_set = function()
 //강의 시간 세팅
 this.fn_classTime_set = function()
 {
-	this.ds_start_hour.set_enableevent(false);
-	
-	this.ds_start_hour.clearData();
-	this.ds_start_hour.addRow();
+	this.ds_start_hour.insertRow(0);
 	this.ds_start_hour.setColumn(0, "cd", "");
 	this.ds_start_hour.setColumn(0, "cdNm", "시작시간");
-	for(var i=0; i <= 23; i++) 
-	{
-		this.ds_start_hour.addRow();
-		this.ds_start_hour.setColumn(i+1, "cd", ("0"+i).slice(-2));
-		this.ds_start_hour.setColumn(i+1, "cdNm", ("0"+i).slice(-2));
-	}
 	
-	this.Div00.form.Div00.form.Div00.form.Div03_00.form.Combo00.set_index(0);
-	
-	this.ds_start_hour.set_enableevent(true);
-	
-	this.ds_start_min.set_enableevent(false);
-	
-	this.ds_start_min.clearData();
-	this.ds_start_min.addRow();
+	this.ds_start_min.insertRow(0);
 	this.ds_start_min.setColumn(0, "cd", "");
 	this.ds_start_min.setColumn(0, "cdNm", "분");
-	for(var i=0; i <= 11; i++) 
-	{
-		var j = i*5;
-		this.ds_start_min.addRow();
-		this.ds_start_min.setColumn(i+1, "cd", ("0"+j).slice(-2));
-		this.ds_start_min.setColumn(i+1, "cdNm", ("0"+j).slice(-2));
-	}	
 	
-	this.Div00.form.Div00.form.Div00.form.Div03_00.form.Combo01.set_index(0);
-	
-	this.ds_start_min.set_enableevent(true);
-	
-	this.ds_end_hour.set_enableevent(false);
-	
-	this.ds_end_hour.clearData();
-	this.ds_end_hour.addRow();
+	this.ds_end_hour.insertRow(0);
 	this.ds_end_hour.setColumn(0, "cd", "");
 	this.ds_end_hour.setColumn(0, "cdNm", "종료시간");
-	for(var i=0; i <= 23; i++) 
-	{
-		this.ds_end_hour.addRow();
-		this.ds_end_hour.setColumn(i+1, "cd", ("0"+i).slice(-2));
-		this.ds_end_hour.setColumn(i+1, "cdNm", ("0"+i).slice(-2));
-	}
-	
-	this.Div00.form.Div00.form.Div00.form.Div03_00.form.Combo02.set_index(0);
-	
-	this.ds_end_hour.set_enableevent(true);
-	
-	this.ds_end_min.set_enableevent(false);
-	
-	this.ds_end_min.clearData();
-	this.ds_end_min.addRow();
+
+	this.ds_end_min.insertRow(0);
 	this.ds_end_min.setColumn(0, "cd", "");
 	this.ds_end_min.setColumn(0, "cdNm", "분");
-	for(var i=0; i <= 11; i++) 
-	{
-		var j = i*5;
-		this.ds_end_min.addRow();
-		this.ds_end_min.setColumn(i+1, "cd", ("0"+j).slice(-2));
-		this.ds_end_min.setColumn(i+1, "cdNm", ("0"+j).slice(-2));
-	}
-	
-	this.Div00.form.Div00.form.Div00.form.Div03_00.form.Combo03.set_index(0);
-	
-	this.ds_end_min.set_enableevent(true);
 }
 
 //강좌 전시아이콘 세팅
