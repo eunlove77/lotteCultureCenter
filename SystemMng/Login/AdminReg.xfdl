@@ -113,6 +113,11 @@ this.AdminReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.fn_resizeCenter(this.AdminRegDiv, obj.getOffsetWidth());
 };
 
+this.AdminReg_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
+{
+	this.fn_resizeCenter(this.AdminRegDiv, e.cx);
+};
+
 this.fn_resizeCenter = function(targetObj, pWidth){
 	var nCompWidth = targetObj.getOffsetWidth();
 	var nCompX = (pWidth/2) - (nCompWidth/2);
@@ -127,7 +132,7 @@ this.AdminRegDiv_Div00_Div00_btnSearch_onclick = function(obj:nexacro.Button,e:n
 {
 	if(this.gfn_isNull(this.AdminRegDiv.form.Div00.form.Div00.form.Edit00.value))
 	{
-		alert("아이디(사번)를 입력하세요.");
+		alert("사번을 입력하세요.");
 		this.AdminRegDiv.form.Div00.form.Div00.form.Edit00.setFocus();
 	}
 	else
@@ -213,7 +218,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 
-};]]></Script>
+};
+
+]]></Script>
     <Objects>
       <Dataset id="ds_join_info">
         <ColumnInfo>

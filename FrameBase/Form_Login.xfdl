@@ -10,7 +10,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="" left="0" top="0" width="40" height="38" background="url('theme://images/edt_login_icon.png') no-repeat center center /13px 14px"/>
-                    <Edit id="editId" taborder="1" left="40" top="0" width="278" height="38" cssclass="edt_WF_Login" displaynulltext="아이디를 입력해 주세요"/>
+                    <Edit id="editId" taborder="1" left="40" top="0" width="278" height="38" cssclass="edt_WF_Login" displaynulltext="사번을 입력해 주세요"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -46,74 +46,93 @@ this.application = null;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
 
 this.Form_Login_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	
 	this.fn_resizeCenter(this.loginDiv, obj.getOffsetWidth());
-	//this.fn_setSize(this.divLayer);
 };
 
-this.loginDiv_LoginBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.editPw_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
-
-	var id = this.loginDiv.form.Div02.form.editId.value;
-	var pw = this.loginDiv.form.Div02_00.form.editPw.value;
-	
-	if(id == undefined || id == ''){
-		this.alert("아이디를 입력하세요.");
-		this.loginDiv.form.Div02.form.editId.setFocus();
-	}else if(pw == undefined || pw == ''){
-		this.alert("비밀번호를 입력하세요.");
-		this.loginDiv.form.Div02_00.form.editPw.setFocus();
-	}else{	
-	
-		this.ds_login.setColumn(0, "id", id);
-		this.ds_login.setColumn(0, "pw", pw);
-	
-		var strSvcId    = "login";
-		var strSvcUrl   = this.application.Loing_svc + "::setLogin.do";
-		var inData      = "loginInfo=ds_login";
-		var outData     = "gdsLoginInfo=output1";
-		var strArg      = "";
-		var callBackFnc = "fnCallback";
-		var isAsync     = true;
-
-		this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-				strSvcUrl ,       // trabsaction을 요청할 주소
-				inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-				outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-				strArg,         // 입력값으로 보낼 arguments, a=b
-				callBackFnc,       // transaction의 결과를 받을 Function 이름
-				isAsync);         // 비동기통신 여부 [생략가능]
+	if(e.keycode == 13)
+	{
+		this.loginDiv.form.LoginBtn.click();
 	}
 };
 
-this.fn_logout = function(){
-	
-	var strSvcId    = "logout";
-	var strSvcUrl   = this.application.Loing_svc + "::setLogout.do";
-	var inData      = "";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
+this.Form_Login_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
+{	
+	this.fn_resizeCenter(this.loginDiv, e.cx);
+};
 
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync);         // 비동기통신 여부 [생략가능]
+this.fn_resizeCenter = function(targetObj, pWidth)
+{
+	var nCompWidth = targetObj.getOffsetWidth();
+	var nCompX = (pWidth/2) - (nCompWidth/2);
+	targetObj.setOffsetLeft(nCompX);
 }
 
+/**************************************************************************
+ * 로그인버튼
+ **************************************************************************/
+ 
+this.loginDiv_LoginBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var id = this.loginDiv.form.Div02.form.editId.value;
+	var pw = this.loginDiv.form.Div02_00.form.editPw.value;
+	
+	if(id == undefined || id == '')
+	{
+		this.alert("사번을 입력하세요.");
+		this.loginDiv.form.Div02.form.editId.setFocus();
+	}
+	else if(pw == undefined || pw == '')
+	{
+		this.alert("비밀번호를 입력하세요.");
+		this.loginDiv.form.Div02_00.form.editPw.setFocus();
+	}
+	else
+	{	
+	
+		this.ds_login.setColumn(0, "id", id);
+		this.ds_login.setColumn(0, "pw", pw);
 
-//처리콜백 함수
+		this.transaction("login", this.application.Loing_svc + "::setLogin.do", "loginInfo=ds_login", "gdsLoginInfo=output1", "", "fnCallback", true);
+	}
+};
+
+/**************************************************************************
+ * 계정생성 버튼
+ **************************************************************************/
+
+this.loginDiv_StaticReg_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	this.parent.set_formurl("SystemMng::Login/AdminReg.xfdl"); // 계정생성 페이지
+};
+
+/**************************************************************************
+ * 비밀번호찾기 버튼
+ **************************************************************************/
+
+this.loginDiv_StaticFind_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	this.parent.set_formurl("SystemMng::Login/AdminFindPwd.xfdl"); // 비밀번호 찾기 페이지
+};
+
+/**************************************************************************
+ * 로그아웃
+ **************************************************************************/
+ 
+this.fn_logout = function()
+{
+	this.transaction("logout", this.application.Loing_svc + "::setLogout.do", "", "", "", "fnCallback", true);
+}
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
 	
@@ -131,7 +150,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.parent.lgnCd = errorCode;
 		}
 		this.alert(errorMsg + "[Code : " + errorCode + "]");
-		//this.Error_msg.set_text(errorMsg + "[Code : " + errorCode + "]");
 		
 		return;
 	}
@@ -143,22 +161,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.loginSuccess();	
 			this.gfn_codeList(this.application.Admin_svc);
 		break;
+		
 		case "logout":			
 			this.application.gfn_initFrame();
 		break;
 	}
 };
-
-
-
-this.editPw_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
-{
-	if(e.keycode == 13){
-		this.loginDiv.form.LoginBtn.click();
-	}
-	
-};
-
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -191,41 +199,14 @@ this.fn_setAdminInfo = function(){
 	adminId = loginInfoDs.getColumn(0, "id");
 	athrCd = loginInfoDs.getColumn(0, "athrCd");
 	coprMemstrNo = loginInfoDs.getColumn(0, "coprMemstrNo");
-	console.log(adminId);
+
 	nexacro.setPrivateProfile("brchCd", brchCd);
 	nexacro.setPrivateProfile("brchNm", brchNm);
 	nexacro.setPrivateProfile("name", adminName);
 	nexacro.setPrivateProfile("id", adminId);
 	nexacro.setPrivateProfile("athrCd", athrCd);
 	nexacro.setPrivateProfile("coprMemstrNo", coprMemstrNo);
-	
-	
-	
-	//this.application.TopFrame.form.txtName.set_text("[" + brchNm + "]" + adminName);
-}
-
-this.Form_Login_onsize = function(obj:nexacro.Form,e:nexacro.SizeEventInfo)
-{	
-	this.fn_resizeCenter(this.loginDiv, e.cx);
-};
-
-this.fn_resizeCenter = function(targetObj, pWidth){
-	var nCompWidth = targetObj.getOffsetWidth();
-	var nCompX = (pWidth/2) - (nCompWidth/2);
-	targetObj.setOffsetLeft(nCompX);
-}
-
-
-this.loginDiv_StaticFind_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
-{
-	this.parent.set_formurl("SystemMng::Login/AdminFindPwd.xfdl"); // 비밀번호 찾기 페이지
-};
-
-this.loginDiv_StaticReg_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
-{
-	this.parent.set_formurl("SystemMng::Login/AdminReg.xfdl"); // 계정생성 페이지
-};
-]]></Script>
+}]]></Script>
     <Objects>
       <Dataset id="ds_login">
         <ColumnInfo>

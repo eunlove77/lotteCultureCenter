@@ -35,43 +35,28 @@ this.authNo = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
 
 this.AdminChkPhone_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.fn_resizeCenter(this.chkPhoneDiv, obj.getOffsetWidth());
-	
-	var strSvcId    = "chkPhoneNum";
-	var strSvcUrl   = this.application.Loing_svc + "::chkPhoneNum.do";
-	var inData      = "";
-	var outData     = "ds_phone=hpInfo";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
 
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-			strSvcUrl ,       // trabsaction을 요청할 주소
-			inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-			outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-			strArg,         // 입력값으로 보낼 arguments, a=b
-			callBackFnc,       // transaction의 결과를 받을 Function 이름
-			isAsync);         // 비동기통신 여부 [생략가능]
-		
+	this.transaction("chkPhoneNum", this.application.Loing_svc + "::chkPhoneNum.do", "", "ds_phone=hpInfo", "", "fnCallback", true);
 };
 
-// 인증번호 전송 버튼
+/**************************************************************************
+ * 인증번호 전송 버튼
+ **************************************************************************/
+ 
 this.chkPhoneDiv_sendAuthBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.limitTime = 300; //5분
-	this.setTimer(obj.timekey, 1000); //타이머 시작
-	
 	this.fn_makeAuthNo(); //인증번호 생성
 };
 
-// 인증번호 확인 버튼
+/**************************************************************************
+ * 인증번호 확인 버튼
+ **************************************************************************/
+
 this.chngPwdDiv_chngPwdBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var authNum = this.chkPhoneDiv.form.authNum.value;
@@ -92,27 +77,15 @@ this.chngPwdDiv_chngPwdBtn_onclick = function(obj:nexacro.Button,e:nexacro.Click
 	}
 	else
 	{
-		var strSvcId    = "completeAuth";
-		var strSvcUrl   = this.application.Loing_svc + "::completeAuth.do";
-		var inData      = "";
-		var outData     = "";
-		var strArg      = "";
-		var callBackFnc = "fnCallback";
-		var isAsync     = true;
-
-		this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-				strSvcUrl ,       // trabsaction을 요청할 주소
-				inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-				outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-				strArg,         // 입력값으로 보낼 arguments, a=b
-				callBackFnc,       // transaction의 결과를 받을 Function 이름
-				isAsync);         // 비동기통신 여부 [생략가능]
-		
+		this.transaction("completeAuth", this.application.Loing_svc + "::completeAuth.do", "", "", "", "fnCallback", true);
 	}
 	
 };
 
-//처리콜백 함수
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+ 
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
 	// 에러 시 화면 처리 내역
@@ -144,10 +117,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 				}
 				
 			break;
+			case "sendAuthNum":
+				this.limitTime = 300; //5분
+				this.setTimer(obj.timekey, 1000); //타이머 시작
+			break;
 		}
-		
 	}
-
 };
 
 this.chkPhoneDiv_authNum_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
@@ -205,8 +180,8 @@ this.fn_makeAuthNo = function(){
 	}
 	
 	this.authNo = authNo;
-	this.chkPhoneDiv.form.Static04.set_text("인증번호(임시노출): " + authNo);
-
+	
+	this.transaction("sendAuthNum", this.application.Admin_svc + "::alertMng/sendAuthNumber.do", "", "", "authNum="+authNo, "fnCallback");
 }]]></Script>
     <Objects>
       <Dataset id="ds_phone">
