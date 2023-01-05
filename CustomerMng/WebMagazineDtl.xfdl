@@ -111,7 +111,7 @@
                       <Cell col="4" text="강좌명"/>
                       <Cell col="5" text="강사명"/>
                       <Cell col="6" text="강좌료"/>
-                      <Cell col="7" text="학기"/>
+                      <Cell col="7" text="강좌요일"/>
                       <Cell col="8"/>
                     </Band>
                     <Band id="body">
@@ -122,7 +122,7 @@
                       <Cell col="4" text="bind:lectNm"/>
                       <Cell col="5" text="bind:tcNm"/>
                       <Cell col="6" text="bind:lectAmt"/>
-                      <Cell col="7" text="bind:lectSmsterNm"/>
+                      <Cell col="7" text="bind:stringStDaywNm"/>
                       <Cell col="8" text="삭제" displaytype="buttoncontrol" edittype="button"/>
                     </Band>
                   </Format>
@@ -166,6 +166,33 @@
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="rplcOptnNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_appl_lect_format">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
@@ -438,6 +465,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   {
 	case "detail":
 		
+		if(this.ds_appl_lect.rowcount < 1)
+		{
+			this.ds_appl_lect.copyData(this.ds_appl_lect_format);
+		}
 		this.row09.form.intrdnCont.set_url(this.domain + "/namo/index_custom_01.html")
 	
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
@@ -486,7 +517,10 @@ this.row09_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEve
 		type : 1,
 		brchCd : '',
 		lectTpCd : '01',
-		dataset : this.ds_appl_lect
+		apvlStatCd : '02',
+		only : 'on',
+		dataset : this.ds_appl_lect,
+		menuSeq : this.menuId
 	}
 	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
 };
