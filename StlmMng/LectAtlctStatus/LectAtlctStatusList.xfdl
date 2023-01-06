@@ -3,28 +3,36 @@
   <Form id="LectAtlctStatusList" width="1280" height="720" titletext="New Form">
     <Layouts>
       <Layout height="720" width="1280">
-        <Static id="Static00" taborder="0" text="▶ 목록" left="0" top="10" width="45" height="17" cssclass="sta_WF_TitGray"/>
-        <Static id="Static01" taborder="1" text="(0개)" left="45" top="10" width="55" height="17" cssclass="sta_WF_TitGray"/>
-        <Div id="Div00" taborder="2" text="Div00" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
+        <Static id="Static00" taborder="0" text="▶ 목록" left="0" top="20" width="45" height="21" cssclass="sta_WF_TitGray"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="47" cssclass="div_WF_TableComp" right="0" bottom="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="10" right="0" binddataset="ds_lpoint_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
+              <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="Dataset00" autofittype="none" nodatatext="데이터가 없습니다." bottom="0">
                 <Formats>
                   <Format id="default">
                     <Columns>
-                      <Column size="80" band="left"/>
-                      <Column size="80"/>
+                      <Column size="100" band="left"/>
+                      <Column size="60"/>
                       <Column size="200"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
+                      <Column size="60"/>
+                      <Column size="70"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
+                      <Column size="120"/>
                       <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="60"/>
+                      <Column size="60"/>
+                      <Column size="60"/>
                     </Columns>
                     <Rows>
                       <Row size="24" band="head"/>
@@ -39,29 +47,48 @@
                       <Cell col="4" rowspan="2" text="중분류"/>
                       <Cell col="5" rowspan="2" text="소분류"/>
                       <Cell col="6" rowspan="2" text="강좌구분"/>
-                      <Cell col="7" rowspan="2" text="강좌명"/>
+                      <Cell col="7" rowspan="2" text="강사명"/>
                       <Cell col="8" colspan="3" text="수강료"/>
-                      <Cell col="11" colspan="2" text="할인금액(에누리)"/>
+                      <Cell col="11" colspan="4" text="할인금액"/>
+                      <Cell col="15" rowspan="2" text="할인액"/>
+                      <Cell col="16" rowspan="2" text="순결제액"/>
+                      <Cell col="17" colspan="2" text="접수"/>
+                      <Cell col="19" rowspan="2" text="MVG&#13;&#10;고객수"/>
+                      <Cell col="20" rowspan="2" text="재수강&#13;&#10;고객수"/>
+                      <Cell col="21" rowspan="2" text="달성률"/>
                       <Cell row="1" col="8" text="강좌료"/>
                       <Cell row="1" col="9" text="재료비"/>
-                      <Cell row="1" col="10" text="대여비"/>
-                      <Cell row="1" col="11" text="등급할인"/>
+                      <Cell row="1" col="10" text="대여료"/>
+                      <Cell row="1" col="11" text="에누리"/>
                       <Cell row="1" col="12" text="쿠폰"/>
+                      <Cell row="1" col="13" text="할인"/>
+                      <Cell row="1" col="14" text="재료비/대여료 할인"/>
+                      <Cell row="1" col="17" text="매출금액"/>
+                      <Cell row="1" col="18" text="회원수"/>
                     </Band>
                     <Band id="body">
-                      <Cell displaytype="combotext" text="bind:brchCd" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
-                      <Cell col="1"/>
+                      <Cell displaytype="normal" text="bind:Column0" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                      <Cell col="1" text="bind:Column1"/>
                       <Cell col="2"/>
-                      <Cell col="3"/>
-                      <Cell col="4"/>
+                      <Cell col="3" text="bind:Column3"/>
+                      <Cell col="4" text="bind:Column4"/>
                       <Cell col="5"/>
-                      <Cell col="6"/>
+                      <Cell col="6" text="bind:Column6"/>
                       <Cell col="7"/>
-                      <Cell col="8" displaytype="number"/>
+                      <Cell col="8" displaytype="number" text="bind:Column7"/>
                       <Cell col="9" displaytype="number"/>
                       <Cell col="10" displaytype="number"/>
                       <Cell col="11" displaytype="number"/>
                       <Cell col="12" displaytype="number"/>
+                      <Cell col="13"/>
+                      <Cell col="14"/>
+                      <Cell col="15"/>
+                      <Cell col="16"/>
+                      <Cell col="17"/>
+                      <Cell col="18"/>
+                      <Cell col="19"/>
+                      <Cell col="20"/>
+                      <Cell col="21"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -69,8 +96,32 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="Button00" taborder="3" text="엑셀 다운로드" top="0" height="30" width="100" cssclass="btn_WF_Medium" right="10"/>
+        <Button id="Button00" taborder="2" text="엑셀 다운로드" top="20" height="21" cssclass="btn_WF_Medium" right="0" width="110"/>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="STRING" size="256"/>
+          <Column id="Column6" type="STRING" size="256"/>
+          <Column id="Column7" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">건대스타시티점</Col>
+            <Col id="Column1">0006</Col>
+            <Col id="Column3">영유아강좌</Col>
+            <Col id="Column4">언어·사회성</Col>
+            <Col id="Column6">정기</Col>
+            <Col id="Column7">3500000</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>

@@ -10,43 +10,106 @@
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="400" right="0">
                 <Layouts>
                   <Layout>
-                    <Button id="Button00" taborder="0" text="알림톡" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0"/>
-                    <Button id="Button00_00" taborder="1" text="문자발송" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00:15"/>
+                    <Button id="Button00" taborder="0" text="알림톡" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div00_Button00_onclick"/>
+                    <Button id="Button00_00" taborder="1" text="문자발송" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00:15" onclick="Div00_Div00_Button00_00_onclick"/>
                     <Button id="Button00_00_00" taborder="2" text="Print" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00_00:15"/>
                     <Static id="Static00" taborder="3" text="출석부 목록 (0명)" left="0" top="15" width="120" height="21"/>
-                    <Grid id="Grid00" taborder="4" left="0" top="Button00_00_00:15" right="0" bottom="0" binddataset="ds_class_list">
+                    <Grid id="Grid00" taborder="4" left="0" top="Button00_00_00:15" right="0" bottom="0" binddataset="ds_attendance_list" oncelldblclick="Div00_Div00_Grid00_oncelldblclick" nodatatext="검색결과 없음">
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="80"/>
-                            <Column size="80"/>
-                            <Column size="80"/>
-                            <Column size="80"/>
-                            <Column size="80"/>
+                            <Column size="49"/>
+                            <Column size="60"/>
+                            <Column size="105"/>
+                            <Column size="97"/>
+                            <Column size="109"/>
+                            <Column size="106"/>
+                            <Column size="226"/>
+                            <Column size="119"/>
                             <Column size="93"/>
                             <Column size="80"/>
+                            <Column size="97"/>
+                            <Column size="97"/>
+                            <Column size="103"/>
+                            <Column size="79"/>
+                            <Column size="117"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="156"/>
+                            <Column size="91"/>
+                            <Column size="100"/>
+                            <Column size="86"/>
+                            <Column size="95"/>
+                            <Column size="95"/>
+                            <Column size="156"/>
+                            <Column size="128"/>
+                            <Column size="91"/>
+                            <Column size="194"/>
+                            <Column size="156"/>
                           </Columns>
                           <Rows>
                             <Row size="24" band="head"/>
-                            <Row size="24"/>
+                            <Row size="34"/>
                           </Rows>
                           <Band id="head">
-                            <Cell text="brchCd"/>
-                            <Cell col="1" text="brchNm"/>
-                            <Cell col="2" text="yy"/>
-                            <Cell col="3" text="lectSmsterCd"/>
-                            <Cell col="4" text="lectSmsterNm"/>
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" text="번호"/>
+                            <Cell col="2" text="지점명"/>
+                            <Cell col="3" text="연도"/>
+                            <Cell col="4" text="학기"/>
                             <Cell col="5" text="강좌코드"/>
-                            <Cell col="6" text="lectNm"/>
+                            <Cell col="6" text="강좌명"/>
+                            <Cell col="7" text="회원번호"/>
+                            <Cell col="8" text="회원등급"/>
+                            <Cell col="9" text="재수강"/>
+                            <Cell col="10" text="회원명"/>
+                            <Cell col="11" text="실수강자"/>
+                            <Cell col="12" text="관계"/>
+                            <Cell col="13" text="성별"/>
+                            <Cell col="14" text="휴대전화"/>
+                            <Cell col="15" text="SMS"/>
+                            <Cell col="16" text="나이"/>
+                            <Cell col="17" text="신청일시"/>
+                            <Cell col="18" text="접수구분"/>
+                            <Cell col="19" text="강사명"/>
+                            <Cell col="20" text="강좌요일"/>
+                            <Cell col="21" text="시작시간"/>
+                            <Cell col="22" text="종료시간"/>
+                            <Cell col="23" text="강좌종료일"/>
+                            <Cell col="24" text="재료비/대여료"/>
+                            <Cell col="25" text="결제상태"/>
+                            <Cell col="26" text="메모"/>
+                            <Cell col="27" text="취소일시"/>
                           </Band>
                           <Band id="body">
-                            <Cell text="bind:brchCd"/>
-                            <Cell col="1" text="bind:brchNm"/>
-                            <Cell col="2" text="bind:yy"/>
-                            <Cell col="3" text="bind:lectSmsterCd"/>
+                            <Cell text="expr:dataset.checkarray[currow]" edittype="checkbox" displaytype="expr:rfndDtm  == null ? 'checkboxcontrol' : 'none'" color="#666666"/>
+                            <Cell col="1" text="expr:dataset.getRowCount() - currow" edittype="none"/>
+                            <Cell col="2" text="bind:brchCd" edittype="none" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="3" text="bind:yy" edittype="none"/>
                             <Cell col="4" text="bind:lectSmsterNm"/>
-                            <Cell col="5" text="bind:lectCd"/>
+                            <Cell col="5" text="bind:lectCd" textDecoration="underline"/>
                             <Cell col="6" text="bind:lectNm"/>
+                            <Cell col="7" text="bind:mbrNo" textDecoration="underline"/>
+                            <Cell col="8" text="bind:mbrGrdeNm"/>
+                            <Cell col="9" text="bind:reAtlctYn"/>
+                            <Cell col="10" text="bind:mbrFnm"/>
+                            <Cell col="11" text="bind:actlAtlctNpleNm"/>
+                            <Cell col="12" text="bind:fmlyRelNm"/>
+                            <Cell col="13" text="expr:sexCd == 'M' ? '남성' : '여성'"/>
+                            <Cell col="14" text="bind:hpNo"/>
+                            <Cell col="15" text="bind:smsRcvAgrYn"/>
+                            <Cell col="16" text="expr:age + '세'"/>
+                            <Cell col="17" text="bind:appCmplDtm"/>
+                            <Cell col="18" text="bind:stlmChnlNm"/>
+                            <Cell col="19" text="bind:tcNm"/>
+                            <Cell col="20" text="bind:stDaywNm"/>
+                            <Cell col="21" text="bind:lectSt"/>
+                            <Cell col="22" text="bind:lectEnd"/>
+                            <Cell col="23" text="bind:lectEndDtm"/>
+                            <Cell col="24" text="bind:optnNm"/>
+                            <Cell col="25" text="expr:rfndDtm == null  ? '결제완료' : '취소완료'"/>
+                            <Cell col="26" text="expr:comp.parent.parent.parent.parent.parent.fn_short(memoCont)" tooltiptext="bind:memoCont"/>
+                            <Cell col="27" text="bind:rfndDtm"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -62,6 +125,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Button id="Button00" taborder="2" text="검색" left="1356" top="81" width="120" height="50" onclick="Button00_onclick" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -69,6 +133,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::popup.xjs";
+include "Base::lib_alrt_talk.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -83,13 +148,23 @@ this.popCnt = 0;
 this.ClassAttendanceList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	
+	//그리드초기화
+	this.gfnSetCheckBoxNoDataset(this.ds_attendance_list, this.Div00.form.Div00.form.Grid00, 0); 	
 	this.ds_class_list.copyData(this.parent.dataset);
+	
+	this.init();
+};
+
+/**************************************************************************
+ * 초기화 영역
+**************************************************************************/
+this.init = function() 
+{
 	var tranObj = {
 		strSvcId : "selectClassAttendanceList",
 		strSvcUrl : this.application.Admin_svc + "::class/selectClassAttendanceList.do",
 		inData : "classList=ds_class_list",
-		outData : "ds_class_list=classList",
+		outData : "ds_attendance_list=attendanceList",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : false,
@@ -97,11 +172,44 @@ this.ClassAttendanceList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
-};
+	this.Div00.form.Div00.form.Static00.set_text("출석부 목록 (" + this.ds_attendance_list.getRowCount() + "명)");
+}
+
+/**************************************************************************
+ * 트랜잭션 callback
+**************************************************************************/
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+  }
+  else 
+  {
+	 switch(svcID)
+	  {
+		
+	  }
+  }
+}
+
 
 /**************************************************************************
  * 이벤트 영역
 **************************************************************************/
+
+this.fn_short = function(txt)
+{
+	var shortTxt = txt;
+	if(shortTxt.length > 15) 
+	{
+		shortTxt = shortTxt.substr(0, 15) + "...";
+	}
+
+	return shortTxt;
+};
+
 
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -109,9 +217,149 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 };
 
 
+
+this.Div00_Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accAlrtYn")){return;}
+	var flag = false;
+	this.ds_attendanceUpdate_list.clearData();
+	this.ds_attendanceUpdate_list.checkarray = new Array(); 
+	var checkArr = new Array();
+	
+	for(var i=0; i<this.ds_attendance_list.getRowCount(); i++)
+	{
+		if(this.ds_attendance_list.checkarray[i] == 1 && this.ds_attendance_list.getColumn(i, "rfndDtm") === undefined && checkArr.indexOf(this.ds_attendance_list.getColumn(i, "mbrNo")) < 0)
+		{
+			checkArr.push(this.ds_attendance_list.getColumn(i, "mbrNo"));
+			flag = true;
+			var rowIndex = this.ds_attendanceUpdate_list.addRow();
+			this.ds_attendanceUpdate_list.copyRow(rowIndex, this.ds_attendance_list, i);
+			this.ds_attendanceUpdate_list.checkarray[rowIndex] = 1;
+		}
+	}
+
+	if(flag)
+	{
+		var column_obj = {
+			mbrNo : "mbrNo"
+			,	korNm : "mbrFnm"
+			,	hpNo : "hpNo"
+			,	smsRcvAgrYn : "smsRcvAgrYn"
+		};
+
+		var dsId = this.gfn_create_ds_for_rcv_talk(this, this.ds_attendanceUpdate_list, column_obj);
+		
+		if(this[dsId].rowcount > 0){
+			var oArg = {			
+				menuSeq : this.parent.menuSeq
+			,	ds_rcv_obj : this[dsId]
+			};
+			
+			this.gfn_openPopup("popup", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, null, null, true, true, null);
+		}else{
+			this.alert("대상을 선택하세요.");
+		}
+	}
+	else
+	{
+		alert("대상을 선택하세요.");
+	}
+};
+
+this.Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.parent.menuSeq, "accAlrtYn")){return;}
+	
+	var flag = false;
+	this.ds_attendanceUpdate_list.clearData();
+	this.ds_attendanceUpdate_list.checkarray = new Array(); 
+	var checkArr = new Array();
+	
+	for(var i=0; i<this.ds_attendance_list.getRowCount(); i++)
+	{
+		if(this.ds_attendance_list.checkarray[i] == 1 && this.ds_attendance_list.getColumn(i, "rfndDtm") === undefined && checkArr.indexOf(this.ds_attendance_list.getColumn(i, "mbrNo")) < 0)
+		{
+			checkArr.push(this.ds_attendance_list.getColumn(i, "mbrNo"));
+			flag = true;
+			var rowIndex = this.ds_attendanceUpdate_list.addRow();
+			this.ds_attendanceUpdate_list.copyRow(rowIndex, this.ds_attendance_list, i);
+			this.ds_attendanceUpdate_list.checkarray[rowIndex] = 1;
+		}
+	}
+
+	if(flag)
+	{
+		var column_obj = {
+			mbrNo : "mbrNo"
+			,	korNm : "mbrFnm"
+			,	hpNo : "hpNo"
+			,	smsRcvAgrYn : "smsRcvAgrYn"
+		};
+		
+		var dsId = this.gfn_create_ds_for_rcv_talk(this, this.ds_attendanceUpdate_list, column_obj);
+		
+		if(this[dsId].rowcount > 0){	
+			var oArg = {			
+				alrtClCd : "03"	
+			,	menuSeq : this.parent.menuSeq
+			,	ds_rcv_obj : this[dsId]
+			};
+			
+			this.gfn_openPopup("popup" + this.popCnt, oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, null, null, true, true, null);
+		}else{
+			this.alert("대상을 선택하세요.");
+		}
+	}
+	else
+	{
+		alert("대상을 선택하세요.");
+	}
+};
+
+this.Div00_Div00_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 5)
+	{
+		var arrArguments = {
+			brchCd : this.ds_attendance_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_attendance_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_attendance_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_attendance_list.getColumn(e.row, "lectCd"),
+			menuSeq : this.parent.menuSeq,
+			searchButton : this.Button00
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+	
+	if(e.cell == 7)
+	{	
+		var oArg = {
+				mbrNo : this.ds_attendance_list.getColumn(e.row, "mbrNo"),
+				menuId : this.parent.menuSeq
+		};
+		
+		this.popCnt ++;
+		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");		
+	}
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.init();
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_attendance_list">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
@@ -119,7 +367,78 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectSmsterNm" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeNm" type="STRING" size="256"/>
+          <Column id="reAtlctYn" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrFnm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="smsRcvAgrYn" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
+          <Column id="appCmplDtm" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="stlmChnlNm" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="stDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="rfndDtm" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_attendanceUpdate_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeNm" type="STRING" size="256"/>
+          <Column id="reAtlctYn" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrFnm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="smsRcvAgrYn" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
+          <Column id="appCmplDtm" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="stlmChnlNm" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="stDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="rfndDtm" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classUpdate_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
