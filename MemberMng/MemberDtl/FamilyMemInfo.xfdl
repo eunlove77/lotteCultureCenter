@@ -141,9 +141,7 @@ this.mbrNo = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
+
 this.FamilyMemInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -189,39 +187,10 @@ this.Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	}
 };
 
-this.Div01_initBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_init();
-};
-
-this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.confirm("취소하시겠습니까?"))
-	{
-		this.close();
-	}
-};
-
-this.Div01_delBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_isNull(this.ds_fmly_info.getColumn(0, "fmlySeqno")))
-	{
-		alert("항목을 선택해주세요.");
-	}
-	else if(this.confirm("선택하신 항목을 삭제하시겠습니까?"))
-	{
-		this.fn_delete();
-	}
-};
-
-this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_checkValidation();
-};
-
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
+
 this.fn_list = function ()
 {	
 	var tranObj = {
@@ -237,38 +206,148 @@ this.fn_list = function ()
 	this.gfn_transaction(tranObj);
 }
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
+//상세화면 세팅
+this.fn_detail = function()
 {
-	// 에러 시 화면 처리 내역
-	if(errorCode != 0)
+	var tranObj = {
+		strSvcId : "detail",
+		strSvcUrl : this.baseSvrUrl + "detail.do",
+		inData : "infoData=ds_fmly_info",
+		outData : "ds_fmly_info=infoData",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+}
+
+//나이 세팅
+this.fn_set_age = function(bday, aFlag)
+{
+	bday += "";
+	
+	if(bday.length < 4)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
-		return;
+		return "";
 	}
 	
-	switch(svcID)
+    var today = new Date();
+    var yearDiff = today.getFullYear() - parseInt(bday.slice(0,4), 10);
+    var monthDiff = today.getMonth()+1 - parseInt(bday.slice(4,6), 10);
+    var dateDiff = today.getDate() - parseInt(bday.slice(6,8), 10);
+
+    var bFlag = monthDiff < 0 || monthDiff === 0 && dateDiff < 0;
+	
+	if(aFlag)	//만나이 여부
 	{
-		case "save":
-			this.alert("저장되었습니다.");
-			this.fn_list();
-			this.fn_init();
-
-			break;
-			
-		case "delete":
-			this.alert("삭제되었습니다.");
-			this.fn_list();
-			this.fn_init();
-
-			break;
-		case "detail":    
-			if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
-			{
-				this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)
-			}
-			break;
+		return yearDiff + (bFlag ? -1 : 0)
 	}
+	else	//한국나이
+	{
+		return yearDiff + 1;
+	}
+}
 
+/**************************************************************************
+ * 회원 검색 버튼
+ **************************************************************************/
+
+this.Div00_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var oArg = { _this : this,
+				 type : 2,
+				 maxCnt : 1,
+				 menuId : this.menuId,
+				 callBackFnc : this.fnCallback_pop
+			   };
+				
+	this.gfn_openPopup("mbrDtlPop", oArg, "MemberMng::MemberList_popup.xfdl", this, 1250, 600, true, true, null);		
+};
+
+this.fnCallback_pop = function(_this, chkDs)
+{
+	_this.ds_fmly_info.deleteAll();
+	_this.ds_fmly_info.addRow();
+	
+	_this.ds_fmly_info.setColumn(0, "mbrNo", _this.mbrNo);
+	_this.ds_fmly_info.setColumn(0, "fmlyMbrNo", chkDs.getColumn(0, "mbrNo"));
+	_this.ds_fmly_info.setColumn(0, "korNm", chkDs.getColumn(0, "korNm"));
+	_this.ds_fmly_info.setColumn(0, "sexCd", chkDs.getColumn(0, "sexCd"));
+	_this.ds_fmly_info.setColumn(0, "bday", chkDs.getColumn(0, "bday"));
+	_this.ds_fmly_info.setColumn(0, "lscCd", chkDs.getColumn(0, "lscCd"));
+}
+
+/**************************************************************************
+ * 신규 등록 버튼
+ **************************************************************************/
+
+this.Div01_initBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_init();
+};
+
+this.fn_init = function(){
+	this.ds_fmly_info.deleteAll();
+	this.ds_fmly_info.addRow();
+	this.ds_fmly_info.setColumn(0, "mbrNo", this.mbrNo);
+	this.ds_fmly_list.checkarray = new Array(); 
+	this.Div00.form.Grid00.redrawExprCell();
+}
+
+/**************************************************************************
+ * 취소 버튼
+ **************************************************************************/
+
+this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.close();
+	}
+};
+
+/**************************************************************************
+ * 삭제 버튼
+ **************************************************************************/
+
+this.Div01_delBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_isNull(this.ds_fmly_info.getColumn(0, "fmlySeqno")))
+	{
+		alert("항목을 선택해주세요.");
+	}
+	else if(this.confirm("선택하신 항목을 삭제하시겠습니까?"))
+	{
+		this.fn_delete();
+	}
+};
+
+this.fn_delete = function(){
+	var tranObj = {
+		strSvcId : "delete",
+		strSvcUrl : this.baseSvrUrl + "delete.do",
+		inData : "infoData=ds_fmly_info",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true,
+		isPopup : true
+	}
+	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);
+}
+
+/**************************************************************************
+ * 저장 버튼
+ **************************************************************************/
+
+this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
 };
 
 this.fn_checkValidation = function(){
@@ -316,14 +395,6 @@ this.fn_checkValidation = function(){
 	}
 }
 
-this.fn_init = function(){
-	this.ds_fmly_info.deleteAll();
-	this.ds_fmly_info.addRow();
-	this.ds_fmly_info.setColumn(0, "mbrNo", this.mbrNo);
-	this.ds_fmly_list.checkarray = new Array(); 
-	this.Div00.form.Grid00.redrawExprCell();
-}
-
 this.fn_save = function(){
 	var tranObj = {
 		strSvcId : "save",
@@ -341,92 +412,44 @@ this.fn_save = function(){
 	this.gfn_transaction(tranObj);
 }
 
-this.fn_delete = function(){
-	var tranObj = {
-		strSvcId : "delete",
-		strSvcUrl : this.baseSvrUrl + "delete.do",
-		inData : "infoData=ds_fmly_info",
-		outData : "",
-		strArg : "",
-		callBackFnc : "fnCallback",
-		menuSeq : this.menuId,
-		isAsync : true,
-		isPopup : true
-	}
-	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
-	
-	this.gfn_transaction(tranObj);
-}
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
 
-//상세화면 세팅
-this.fn_detail = function()
+this.fnCallback = function(svcID, errorCode, errorMsg)
 {
-	var tranObj = {
-		strSvcId : "detail",
-		strSvcUrl : this.baseSvrUrl + "detail.do",
-		inData : "infoData=ds_fmly_info",
-		outData : "ds_fmly_info=infoData",
-		strArg : "",
-		callBackFnc : "fnCallback",
-		menuSeq : this.menuId,
-		isAsync : true,
-		isPopup : true
-	}
-	this.gfn_transaction(tranObj);
-}
-
-//나이 세팅
-this.fn_set_age = function(bday, aFlag)
-{
-	bday += "";
-	
-	if(bday.length < 4)
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
 	{
-		return "";
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
 	}
 	
-    var today = new Date();
-    var yearDiff = today.getFullYear() - parseInt(bday.slice(0,4), 10);
-    var monthDiff = today.getMonth()+1 - parseInt(bday.slice(4,6), 10);
-    var dateDiff = today.getDate() - parseInt(bday.slice(6,8), 10);
-
-    var bFlag = monthDiff < 0 || monthDiff === 0 && dateDiff < 0;
-	
-	if(aFlag)	//만나이 여부
+	switch(svcID)
 	{
-		return yearDiff + (bFlag ? -1 : 0)
-	}
-	else	//한국나이
-	{
-		return yearDiff + 1;
+		case "save":
+			this.alert("저장되었습니다.");
+			this.fn_list();
+			this.fn_init();
+
+			break;
+			
+		case "delete":
+			this.alert("삭제되었습니다.");
+			this.fn_list();
+			this.fn_init();
+
+			break;
+		case "detail":    
+			if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
+			{
+				this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)
+			}
+			break;
 	}
 
-}
-
-this.Div00_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var oArg = { _this : this,
-				 type : 2,
-				 maxCnt : 1,
-				 menuId : this.menuId,
-				 callBackFnc : this.fnCallback_pop
-			   };
-				
-	this.gfn_openPopup("mbrDtlPop", oArg, "MemberMng::MemberList_popup.xfdl", this, 1250, 600, true, true, null);		
 };
-
-this.fnCallback_pop = function(_this, chkDs)
-{
-	_this.ds_fmly_info.deleteAll();
-	_this.ds_fmly_info.addRow();
-	
-	_this.ds_fmly_info.setColumn(0, "mbrNo", _this.mbrNo);
-	_this.ds_fmly_info.setColumn(0, "fmlyMbrNo", chkDs.getColumn(0, "mbrNo"));
-	_this.ds_fmly_info.setColumn(0, "korNm", chkDs.getColumn(0, "korNm"));
-	_this.ds_fmly_info.setColumn(0, "sexCd", chkDs.getColumn(0, "sexCd"));
-	_this.ds_fmly_info.setColumn(0, "bday", chkDs.getColumn(0, "bday"));
-	_this.ds_fmly_info.setColumn(0, "lscCd", chkDs.getColumn(0, "lscCd"));
-}]]></Script>
+]]></Script>
     <Objects>
       <Dataset id="ds_fmly_list">
         <ColumnInfo>
