@@ -10,7 +10,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="휴대전화" left="Static00:10" top="0" bottom="0" width="257"/>
+                    <MaskEdit id="MaskEdit00" taborder="1" left="Static00:10" top="5" height="21" format="!###" limitbymask="both" minwidth="50" maxwidth="" width="50" readonly="true"/>
+                    <MaskEdit id="MaskEdit01" taborder="2" left="MaskEdit00:5" top="5" height="21" limitbymask="both" format="!####" minwidth="50" maxwidth="" width="60" readonly="true"/>
+                    <MaskEdit id="MaskEdit02" taborder="3" left="MaskEdit01:5" top="5" height="21" format="!####" limitbymask="both" minwidth="50" maxwidth="" onchanged="Div01_Div00_MaskEdit02_onchanged" width="60" readonly="true"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -18,7 +20,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="생년월일 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="생년월일" left="Static00:10" top="0" bottom="0" width="257"/>
+                    <Calendar id="Calendar00" taborder="1" left="Static00:10" top="5" width="159" height="22" dateformat="yyyy-MM-dd" readonly="true"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -26,7 +28,28 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="성별 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="160" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" left="Static00:10" top="0" bottom="0" width="209" expr="comp.text == &quot;F&quot; ? &quot;여성&quot; : &quot;남성&quot;" text="성별"/>
+                    <Radio id="Radio00" taborder="1" left="170" top="0" width="280" bottom="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" readonly="true">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">M</Col>
+                            <Col id="datacolumn">남성</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">F</Col>
+                            <Col id="datacolumn">여성</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">N</Col>
+                            <Col id="datacolumn">무관</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Radio>
                   </Layout>
                 </Layouts>
               </Div>
@@ -34,7 +57,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이메일 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="160" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="이메일" left="Static00:10" top="0" bottom="0" width="209"/>
+                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="209"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -43,7 +66,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="주소" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="주소" left="Static00:10" top="0" bottom="0" width="887"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" width="659" height="23" readonly="true"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -59,7 +82,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="차량번호" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="160" height="21"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" width="160" height="23"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -118,12 +141,12 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="개인정보 필수 수집 동의 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="160" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="개인정보 동의여부" left="Static00:10" top="0" bottom="0" width="209"/>
+                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="209"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Button id="cnclBtn" taborder="11" text="취소" left="43.81%" width="79" cssclass="btn_WF_Weak" fittocontents="none" bottom="0" height="30" onclick="Div01_cnclBtn_onclick"/>
-              <Button id="insBtn" taborder="12" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.994000000000028" bottom="0" height="30"/>
+              <Button id="insBtn" taborder="12" text="저장" width="80" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:15.994000000000028" bottom="0" height="30" onclick="Div01_insBtn_onclick"/>
               <Div id="Div10" taborder="13" text="Div01" left="0" top="Div08:-1" height="65" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="">
                 <Layouts>
                   <Layout>
@@ -161,9 +184,7 @@ this.mbrNo = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
+
 this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -185,8 +206,14 @@ this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.mbrNo != ""){
 		this.ds_info.setColumn(0, "mbrNo", this.mbrNo);
 		this.fn_detail();
-	}	
+	}
+	
+	this.Div01.form.Div02.form.Calendar00.calendaredit.set_readonly(true);	//캘린더 키인 막기
 };
+
+/**************************************************************************
+ * 사용자 함수
+ **************************************************************************/
 
 this.fn_detail = function ()
 {	
@@ -202,6 +229,65 @@ this.fn_detail = function ()
 	}
 	this.gfn_transaction(tranObj);
 }
+
+//상세화면 세팅
+this.fn_set_detail = function()
+{
+	//데스크회원일 경우
+	if(this.ds_info.getColumn(0, "joinCorsCd") == "D")
+	{
+		this.Div01.form.Div00.form.MaskEdit00.set_readonly(false);	//휴대전화 수정 가능
+		this.Div01.form.Div00.form.MaskEdit01.set_readonly(false);	//휴대전화 수정 가능
+		this.Div01.form.Div00.form.MaskEdit02.set_readonly(false);	//휴대전화 수정 가능
+		this.Div01.form.Div02.form.Calendar00.set_readonly(false);	//생년월일 수정 가능	
+		this.Div01.form.Div03.form.Radio00.set_readonly(false);		//성별 수정 가능
+		this.Div01.form.Div04.form.Edit00.set_readonly(false);		//주소 수정 가능
+	}
+
+	if(this.ds_info.getColumn(0, "smsRcvAgrYn") == "Y")
+	{
+		this.Div01.form.Div08.form.Static01.set_left(160);
+	}
+}
+
+this.fn_save = function(){
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.baseSvrUrl + "update.do",
+		inData : "detail=ds_info",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true,
+		isPopup : true
+	}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+	this.gfn_transaction(tranObj);
+}
+
+/**************************************************************************
+ * 취소 버튼
+ **************************************************************************/
+
+this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.parent.close();
+};
+
+/**************************************************************************
+ * 저장 버튼
+ **************************************************************************/
+
+this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_save();
+};
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
 
 this.fnCallback = function(svcID, errorCode, errorMsg)
 {
@@ -222,50 +308,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 			break;
 	}
-
-};
-
-this.fn_save = function(){
-	var tranObj = {
-		strSvcId : "save",
-		strSvcUrl : this.baseSvrUrl + "insert.do",
-		inData : "infoData=ds_detail",
-		outData : "",
-		strArg : "",
-		callBackFnc : "fnCallback",
-		menuSeq : this.menuId,
-		isAsync : true,
-		isPopup : true
-	}
-	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
-
-	this.gfn_transaction(tranObj);
-}
-
-this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.close();
-};
-
-//상세화면 세팅
-this.fn_set_detail = function()
-{
-	if(this.ds_info.getColumn(0, "smsRcvAgrYn") == "Y")
-	{
-		this.Div01.form.Div08.form.Static01.set_left(160);
-	}
-}
-
-this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.close();
-};
-]]></Script>
+};]]></Script>
     <Objects>
       <Dataset id="ds_info">
         <ColumnInfo>
           <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
           <Column id="bday" type="STRING" size="256"/>
           <Column id="lscCd" type="STRING" size="256"/>
@@ -286,11 +337,7 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
       </Dataset>
     </Objects>
     <Bind>
-      <BindItem id="hpNo" compid="Div01.form.Div00.form.Static01" propid="text" datasetid="ds_info" columnid="hpNo"/>
-      <BindItem id="bday" compid="Div01.form.Div02.form.Static01" propid="text" datasetid="ds_info" columnid="bday"/>
-      <BindItem id="addr" compid="Div01.form.Div04.form.Static01" propid="text" datasetid="ds_info" columnid="addr"/>
       <BindItem id="email" compid="Div01.form.Div01.form.Static01" propid="text" datasetid="ds_info" columnid="email"/>
-      <BindItem id="sexCd" compid="Div01.form.Div03.form.Static01" propid="text" datasetid="ds_info" columnid="sexCd"/>
       <BindItem id="carNoVal" compid="Div01.form.Div06.form.Edit00" propid="value" datasetid="ds_info" columnid="carNoVal"/>
       <BindItem id="carNoClctAgrYn" compid="Div01.form.Div07.form.Radio00" propid="value" datasetid="ds_info" columnid="carNoClctAgrYn"/>
       <BindItem id="smsRcvAgrYn" compid="Div01.form.Div08.form.Radio00" propid="value" datasetid="ds_info" columnid="smsRcvAgrYn"/>
@@ -298,6 +345,12 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
       <BindItem id="itrstBrchCd" compid="Div01.form.Div05.form.ComboSpotType" propid="value" datasetid="ds_info" columnid="itrstBrchCd"/>
       <BindItem id="memoCont" compid="Div01.form.Div11.form.TextArea00" propid="value" datasetid="ds_info" columnid="memoCont"/>
       <BindItem id="smsRcvAgrDt" compid="Div01.form.Div08.form.Static01" propid="text" datasetid="ds_info" columnid="smsRcvAgrDt"/>
+      <BindItem id="item0" compid="Div01.form.Div02.form.Calendar00" propid="value" datasetid="ds_info" columnid="bday"/>
+      <BindItem id="item1" compid="Div01.form.Div04.form.Edit00" propid="value" datasetid="ds_info" columnid="addr"/>
+      <BindItem id="item3" compid="Div01.form.Div03.form.Radio00" propid="value" datasetid="ds_info" columnid="sexCd"/>
+      <BindItem id="item2" compid="Div01.form.Div00.form.MaskEdit00" propid="value" datasetid="ds_info" columnid="hpStNo"/>
+      <BindItem id="item4" compid="Div01.form.Div00.form.MaskEdit01" propid="value" datasetid="ds_info" columnid="hpMidNo"/>
+      <BindItem id="item5" compid="Div01.form.Div00.form.MaskEdit02" propid="value" datasetid="ds_info" columnid="hpLastNo"/>
     </Bind>
   </Form>
 </FDL>
