@@ -19,7 +19,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="Static00:10" top="12" width="200" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="brchCd" taborder="1" text="" left="Static00:10" top="12" width="200" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" readonly="false" onitemchanged="Div00_Div01_brchCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -35,11 +35,11 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="endSmsterCd" taborder="1" text="Combo03" left="529" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="endSmsterCd" taborder="1" text="Combo03" left="529" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
                     <Static id="Static01" taborder="2" text="~" left="415" top="12" width="9" height="20"/>
-                    <Combo id="strtYy" taborder="3" text="Combo00" left="210" top="12" width="100" height="20" type="dropdown"/>
-                    <Combo id="strtSmsterCd" taborder="4" text="Combo01" left="311" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="endYy" taborder="5" text="Combo02" left="428" top="12" width="100" height="20"/>
+                    <Combo id="strtYy" taborder="3" text="Combo00" left="210" top="12" width="100" height="20" type="dropdown" readonly="false"/>
+                    <Combo id="strtSmsterCd" taborder="4" text="Combo01" left="311" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
+                    <Combo id="endYy" taborder="5" text="Combo02" left="428" top="12" width="100" height="20" readonly="false"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -128,6 +128,10 @@ this.initSmsterCdIndex = 0;
 this.initBrchCdIndex = 0;
 this.arrRfndStat = [];
 
+this.brchCd = "";
+this.yy = "";
+this.lectSmsterCd = "";
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -141,7 +145,7 @@ this.fn_data_list = function()
 {
 	var strSvcId    = "dataList";
 	var strSvcUrl   = this.application.Admin_svc + "::stlmRfndMng/getStlmRfndDataList.do";
-	var inData      = "brchCdList=gdsSpotCdList";
+	var inData      = "";
 	var outData     = "this.ds_rfnd_chnl_list=output1 this.ds_smster_list=output2 this.ds_rfnd_mthd_list=output3 this.ds_rfnd_stat_list=output4";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
@@ -183,7 +187,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		objCalendar.btnDay2_onclick();
 		
 		// 지점선택
-		this.Div00.form.Div01.form.brchCd.set_index(0);
+		this.Div00.form.Div01.form.brchCd.set_value(this.brchCd);
 		
 		// 결제채널 체크박스 추가
 		chkboxFrm = this.Div00.form.Div05.form;
@@ -207,39 +211,60 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		chkboxFrm.rfndChnlAll.set_value(1);
 		
 		// 학기
-		for(var i=0;i<this.ds_smster_list.getRowCount();i++){
-			if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
-				this.initSmsterCdIndex = i;
-				this.Div00.form.Div03.form.strtSmsterCd.set_index(this.initSmsterCdIndex);
-				this.Div00.form.Div03.form.endSmsterCd.set_index(this.initSmsterCdIndex);
-				
-				//년도
-				this.removeChild("ds_yy_list");
-				var dsYyList = new Dataset();
-				dsYyList.name = "ds_yy_list";
-				dsYyList.addColumn("cd", "string", 256);
-				dsYyList.addColumn("cdNm", "string", 256);
-				
-				this.addChild("ds_yy_list", dsYyList);
-				
-				var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
-				this.ds_yy_list.set_enableevent(false);
-				for(var i=0;i<16;i++){
-					this.ds_yy_list.insertRow(i);
-					this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
-					this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
-				}
-				this.ds_yy_list.set_enableevent(true);
-				this.Div00.form.Div03.form.strtYy.setInnerDataset(this.ds_yy_list);
-				this.Div00.form.Div03.form.strtYy.set_codecolumn("cd");
-				this.Div00.form.Div03.form.strtYy.set_datacolumn("cdNm");
-				this.Div00.form.Div03.form.strtYy.set_index(0);
-				this.Div00.form.Div03.form.endYy.setInnerDataset(this.ds_yy_list);
-				this.Div00.form.Div03.form.endYy.set_codecolumn("cd");
-				this.Div00.form.Div03.form.endYy.set_datacolumn("cdNm");
-				this.Div00.form.Div03.form.endYy.set_index(0);
+		if(this.lectSmsterCd == ""){
+			var month = new nexacro.Date().getMonth()+1;
+	
+			if(3 <= month && month <= 5)
+			{
+				//봄
+				this.lectSmsterCd = 0;	
+			}
+			else if(6 <= month && month <= 8)
+			{
+				//여름
+				this.lectSmsterCd = 1;	
+			}
+			else if(9 <= month && month <= 11)
+			{
+				//가을
+				this.lectSmsterCd = 2;	
+			}	
+			else
+			{
+				//겨울
+				this.lectSmsterCd = 3;	
 			}
 		}
+		this.Div00.form.Div03.form.strtSmsterCd.set_value(this.lectSmsterCd);
+		this.Div00.form.Div03.form.endSmsterCd.set_value(this.lectSmsterCd);
+		
+		//년도
+		if(this.yy == ""){
+			this.yy = new nexacro.Date().getFullYear();
+		}
+		
+		this.removeChild("ds_yy_list");
+		var dsYyList = new Dataset();
+		dsYyList.name = "ds_yy_list";
+		dsYyList.addColumn("cd", "string", 256);
+		dsYyList.addColumn("cdNm", "string", 256);
+
+		this.addChild("ds_yy_list", dsYyList);
+		this.ds_yy_list.set_enableevent(false);
+		for(var i=0;i<16;i++){
+			this.ds_yy_list.insertRow(i);
+			this.ds_yy_list.setColumn(i, "cd", (Number(this.yy) - i).toString());
+			this.ds_yy_list.setColumn(i, "cdNm", (Number(this.yy) - i) + "년");
+		}
+		this.ds_yy_list.set_enableevent(true);
+		this.Div00.form.Div03.form.strtYy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div03.form.strtYy.set_codecolumn("cd");
+		this.Div00.form.Div03.form.strtYy.set_datacolumn("cdNm");
+		this.Div00.form.Div03.form.strtYy.set_index(0);
+		this.Div00.form.Div03.form.endYy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div03.form.endYy.set_codecolumn("cd");
+		this.Div00.form.Div03.form.endYy.set_datacolumn("cdNm");
+		this.Div00.form.Div03.form.endYy.set_index(0);
 		
 		// 결제수단 체크박스 추가
 		chkboxFrm = this.Div00.form.Div02.form;
@@ -308,6 +333,63 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		// 검색어 기준
 		this.Div00.form.Div06.form.searchField.set_index(0);
 		
+		break;
+	case "sesterInfo":
+		// 학기
+		if(this.lectSmsterCd == ""){
+			var month = new nexacro.Date().getMonth()+1;
+	
+			if(3 <= month && month <= 5)
+			{
+				//봄
+				this.lectSmsterCd = 0;	
+			}
+			else if(6 <= month && month <= 8)
+			{
+				//여름
+				this.lectSmsterCd = 1;	
+			}
+			else if(9 <= month && month <= 11)
+			{
+				//가을
+				this.lectSmsterCd = 2;	
+			}	
+			else
+			{
+				//겨울
+				this.lectSmsterCd = 3;	
+			}
+		}
+		this.Div00.form.Div03.form.strtSmsterCd.set_value(this.lectSmsterCd);
+		this.Div00.form.Div03.form.endSmsterCd.set_value(this.lectSmsterCd);
+		
+		//년도
+		if(this.yy == ""){
+			this.yy = new nexacro.Date().getFullYear();
+		}
+		
+		this.removeChild("ds_yy_list");
+		var dsYyList = new Dataset();
+		dsYyList.name = "ds_yy_list";
+		dsYyList.addColumn("cd", "string", 256);
+		dsYyList.addColumn("cdNm", "string", 256);
+
+		this.addChild("ds_yy_list", dsYyList);
+		this.ds_yy_list.set_enableevent(false);
+		for(var i=0;i<16;i++){
+		this.ds_yy_list.insertRow(i);
+		this.ds_yy_list.setColumn(i, "cd", (Number(this.yy) - i).toString());
+		this.ds_yy_list.setColumn(i, "cdNm", (Number(this.yy) - i) + "년");
+		}
+		this.ds_yy_list.set_enableevent(true);
+		this.Div00.form.Div03.form.strtYy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div03.form.strtYy.set_codecolumn("cd");
+		this.Div00.form.Div03.form.strtYy.set_datacolumn("cdNm");
+		this.Div00.form.Div03.form.strtYy.set_index(0);
+		this.Div00.form.Div03.form.endYy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div03.form.endYy.set_codecolumn("cd");
+		this.Div00.form.Div03.form.endYy.set_datacolumn("cdNm");
+		this.Div00.form.Div03.form.endYy.set_index(0);
 		break;
   }
 };
@@ -466,16 +548,9 @@ this.fn_searchValueInit = function()
 	this.ds_search.insertRow(0);
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
-	this.ds_search.setColumn(0, "brchCd", this.Div00.form.Div01.form.brchCd.value);
 	this.ds_search.setColumn(0, "rfndChnlCd", arrRfndChnl.join(","));
 	this.ds_search.setColumn(0, "rfndMthdCd", arrRfndMthd.join(","));
 	this.ds_search.setColumn(0, "rfndStatCd", arrRfndStat.join(","));
-	this.ds_search.setColumn(0, "strtYy", this.Div00.form.Div03.form.strtYy.value);
-	this.ds_search.setColumn(0, "strtSmsterCd", this.Div00.form.Div03.form.strtSmsterCd.value);
-	this.ds_search.setColumn(0, "endYy", this.Div00.form.Div03.form.endYy.value);
-	this.ds_search.setColumn(0, "endSmsterCd", this.Div00.form.Div03.form.endSmsterCd.value);
-	this.ds_search.setColumn(0, "searchField", this.Div00.form.Div06.form.searchField.value);
-	this.ds_search.setColumn(0, "searchQuery", this.Div00.form.Div06.form.searchQuery.value);
 };
 
 // 초기화 버튼 클릭
@@ -520,7 +595,30 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	parentFrm.Div00.form.Div01.form.Static01.set_text("(0개)");	
 	parentFrm.Div00.form.Div01.form.ds_stlm_rfnd_list.clearData();
 	parentFrm.Div00.form.Div01.form.ds_stlm_rfnd_excel_list.clearData();
-};]]></Script>
+};
+
+// 지점 변경
+this.Div00_Div01_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.ds_search.setColumn(0, "brchCd", obj.value);
+	this.fn_set_smsterCd();
+};
+
+this.fn_set_smsterCd = function(){
+	var tranObj = {
+		strSvcId : "sesterInfo",
+		strSvcUrl : this.application.Admin_svc + "::stlmMng/getSesterInfo.do",
+		inData : "search=ds_search",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+
+	this.gfn_transaction(tranObj);
+}
+]]></Script>
     <Objects>
       <Dataset id="ds_rfnd_chnl_list">
         <ColumnInfo>
@@ -563,7 +661,19 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
           <Column id="searchField" type="STRING" size="256"/>
           <Column id="searchQuery" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div06.form.searchField" propid="value" datasetid="ds_search" columnid="searchField"/>
+      <BindItem id="item1" compid="Div00.form.Div06.form.searchQuery" propid="value" datasetid="ds_search" columnid="searchQuery"/>
+      <BindItem id="item2" compid="Div00.form.Div01.form.brchCd" propid="value" datasetid="ds_search" columnid="brchCd"/>
+      <BindItem id="item3" compid="Div00.form.Div03.form.strtYy" propid="value" datasetid="ds_search" columnid="strtYy"/>
+      <BindItem id="item4" compid="Div00.form.Div03.form.strtSmsterCd" propid="value" datasetid="ds_search" columnid="strtSmsterCd"/>
+      <BindItem id="item5" compid="Div00.form.Div03.form.endYy" propid="value" datasetid="ds_search" columnid="endYy"/>
+      <BindItem id="item6" compid="Div00.form.Div03.form.endSmsterCd" propid="value" datasetid="ds_search" columnid="endSmsterCd"/>
+    </Bind>
   </Form>
 </FDL>

@@ -221,8 +221,6 @@ this.fn_searchValueInit = function()
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
 	this.ds_search.setColumn(0, "stlmClCd", arrStlmCl.join(","));
 	this.ds_search.setColumn(0, "stlmStatCd", arrStlmStat.join(","));
-	this.ds_search.setColumn(0, "searchField", this.Div00.form.Div06.form.searchField.value);
-	this.ds_search.setColumn(0, "searchQuery", this.Div00.form.Div06.form.searchQuery.value);
 };
 
 // 초기화 버튼 클릭
@@ -270,7 +268,14 @@ this.Div00_Div06_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.Key
           <Column id="searchField" type="STRING" size="256"/>
           <Column id="searchQuery" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div06.form.searchField" propid="value" datasetid="ds_search" columnid="searchField"/>
+      <BindItem id="item1" compid="Div00.form.Div06.form.searchQuery" propid="value" datasetid="ds_search" columnid="searchQuery"/>
+    </Bind>
   </Form>
 </FDL>

@@ -3,7 +3,7 @@
   <Form id="LectAtlctStatusSumList" width="1280" height="100" titletext="New Form">
     <Layouts>
       <Layout height="100" width="1280">
-        <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="ds_lpoint_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
+        <Grid id="Grid00" taborder="0" left="0" top="0" right="0" binddataset="ds_atlct_status_sum_list" autofittype="col" nodatatext="데이터가 없습니다." bottom="0">
           <Formats>
             <Format id="default">
               <Columns>
@@ -47,25 +47,46 @@
                 <Cell row="1" col="10" text="회원수"/>
               </Band>
               <Band id="body">
-                <Cell displaytype="number"/>
-                <Cell col="1" displaytype="number"/>
-                <Cell col="2" displaytype="number"/>
-                <Cell col="3" displaytype="number"/>
-                <Cell col="4" displaytype="number"/>
-                <Cell col="5" displaytype="number"/>
-                <Cell col="6" displaytype="number"/>
-                <Cell col="7" displaytype="number"/>
-                <Cell col="8" displaytype="number"/>
-                <Cell col="9" displaytype="number"/>
-                <Cell col="10" displaytype="number"/>
-                <Cell col="11" displaytype="number"/>
-                <Cell col="12" displaytype="number"/>
-                <Cell col="13" displaytype="number"/>
+                <Cell displaytype="mask" text="bind:totLectAmt" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="1" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원" text="bind:totLectAddAmt1"/>
+                <Cell col="2" displaytype="mask" text="bind:totLectAddAmt2" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="3" displaytype="mask" maskeditpostfixtext="원" maskeditformat="###,##0" text="bind:totGrdeDcAmt"/>
+                <Cell col="4" displaytype="mask" text="bind:totCpnDcAmt" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="5" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원" text="bind:totOflnDcAmt"/>
+                <Cell col="6" displaytype="mask" text="bind:totOflnDcAmt" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="7" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원" text="bind:totDcAmt"/>
+                <Cell col="8" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원" text="bind:totNetStlmAmt"/>
+                <Cell col="9" displaytype="mask" text="bind:totLectStlmAmt" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="10" displaytype="normal" text="bind:totTotCnt"/>
+                <Cell col="11" displaytype="normal" text="bind:totMvgCnt"/>
+                <Cell col="12" displaytype="normal" text="bind:totReAtlctYnCnt"/>
+                <Cell col="13" displaytype="normal" text="expr:dataset.getColumn(currow, 'avgRate') + '%'"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
       </Layout>
     </Layouts>
+    <Objects>
+      <Dataset id="ds_atlct_status_sum_list">
+        <ColumnInfo>
+          <Column id="totLectAmt" type="STRING" size="256"/>
+          <Column id="totLectAddAmt1" type="STRING" size="256"/>
+          <Column id="totLectAddAmt2" type="STRING" size="256"/>
+          <Column id="totGrdeDcAmt" type="STRING" size="256"/>
+          <Column id="totCpnDcAmt" type="STRING" size="256"/>
+          <Column id="totOflnDcAmt" type="STRING" size="256"/>
+          <Column id="totLectAddDcAmt1" type="STRING" size="256"/>
+          <Column id="totLectAddDcAmt2" type="STRING" size="256"/>
+          <Column id="totDcAmt" type="STRING" size="256"/>
+          <Column id="totNetStlmAmt" type="STRING" size="256"/>
+          <Column id="totLectStlmAmt" type="STRING" size="256"/>
+          <Column id="totTotCnt" type="STRING" size="256"/>
+          <Column id="totMvgCnt" type="STRING" size="256"/>
+          <Column id="totReAtlctYnCnt" type="STRING" size="256"/>
+          <Column id="avgRate" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>

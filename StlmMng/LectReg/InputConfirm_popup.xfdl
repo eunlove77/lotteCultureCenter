@@ -50,7 +50,7 @@
                       <Cell col="6" text="expr:dataset.getColumn(currow, &quot;optnNm&quot;) == undefined ? '-' : dataset.getColumn(currow, &quot;optnNm&quot;)"/>
                       <Cell col="7" text="bind:lectAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
                       <Cell col="8" text="bind:optnAmt" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="mask"/>
-                      <Cell col="9" text="expr:dataset(currow, &quot;oflnDcAmt&quot;) + dataset(currow, &quot;grdeDcAmt&quot;) + dataset(currow, &quot;cpnDcAmt&quot;) + dataset(currow, &quot;optnDcAmt&quot;)" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="9" text="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) + dataset.getColumn(currow, &quot;grdeDcAmt&quot;) + dataset.getColumn(currow, &quot;cpnDcAmt&quot;) + dataset.getColumn(currow, &quot;optnDcAmt&quot;)" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
                       <Cell col="10" text="expr:dataset.getColumn(currow, &quot;lectAmt&quot;) + dataset.getColumn(currow, &quot;optnAmt&quot;) - dataset.getColumn(currow, &quot;oflnDcAmt&quot;) - dataset.getColumn(currow, &quot;grdeDcAmt&quot;) - dataset.getColumn(currow, &quot;cpnDcAmt&quot;) - dataset.getColumn(currow, &quot;optnDcAmt&quot;)" maskeditpostfixtext="원" maskeditformat="###,##0" displaytype="mask"/>
                     </Band>
                   </Format>
@@ -154,6 +154,10 @@ this.InputConfirm_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	
 	var lectStlmAmt = 0;
 	for(var i=0;i<this.ds_class_list.getRowCount();i++){
+		trace(this.ds_class_list.getColumn(i, "oflnDcAmt"));
+		trace(this.ds_class_list.getColumn(i, "grdeDcAmt"));
+		trace(this.ds_class_list.getColumn(i, "cpnDcAmt"));
+		trace(this.ds_class_list.getColumn(i, "optnDcAmt"));
 		lectStlmAmt += this.ds_class_list.getColumn(i, "lectAmt");
 		lectStlmAmt += this.ds_class_list.getColumn(i, "optnAmt");
 		lectStlmAmt -= this.ds_class_list.getColumn(i, "oflnDcAmt");

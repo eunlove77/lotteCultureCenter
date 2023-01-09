@@ -99,16 +99,6 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 	switch(svcID)
 	{
 		case "detail":
-			// 주문자 정보 데이터 세팅
-			var dsOrderInfo = stlmOrderInfoFrm.ds_order_info;
-			stlmOrderInfoFrm.Div00.form.Div00.form.atlctRsvNo.set_text(dsOrderInfo.getColumn(0, "atlctRsvNo"));
-			stlmOrderInfoFrm.Div00.form.Div01.form.appCmplDtm.set_text(dsOrderInfo.getColumn(0, "appCmplDtm"));
-			stlmOrderInfoFrm.Div00.form.Div02.form.mbrNo.set_text(dsOrderInfo.getColumn(0, "mbrNo"));
-			stlmOrderInfoFrm.Div00.form.Div03.form.mbrNm.set_text(dsOrderInfo.getColumn(0, "mbrNm"));
-			stlmOrderInfoFrm.Div00.form.Div04.form.hp.set_text(dsOrderInfo.getColumn(0, "hp"));
-			stlmOrderInfoFrm.Div00.form.Div05.form.email.set_text(dsOrderInfo.getColumn(0, "email"));
-			stlmOrderInfoFrm.Div00.form.Div06.form.rgprIp.set_text(dsOrderInfo.getColumn(0, "rgprIp"));
-			
 			// 결제완료 목록 갯수 세팅
 			stlmCmpltListFrm.Static04.set_text("(" + this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() + "개)");
 			// 결제완료 목록 첫 번째 행 데이터가 채널이 데스크면 주문정보 버튼 노출, 이외는 숨김
@@ -208,6 +198,7 @@ this.fn_create_first_atlct_stlm = function()
 	}
 	
 	for(var i=0;i<dsStlmRfndList.getRowCount();i++){
+	trace(dsStlmRfndList.getColumn(i, "lectDcAmt"));
 		totLectStlmAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectStlmAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectStlmAmt");
 		totLectAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectAmt");
 		totLectAddAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAddAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectAddAmt");
@@ -228,14 +219,16 @@ this.fn_create_first_atlct_stlm = function()
 	
 	//총 재료비/대여료
 	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(totLectAddAmt) + "원");
-	
+	trace(totLectDcAmt);
+	trace(totLectAddDcAmt);
 	if(totLectDcAmt + totLectAddDcAmt > 0){
 		dcDiv.form.Static01.set_text("<fc v ='#ED5757'>(-)" + this.gfn_setComma(totLectDcAmt + totLectAddDcAmt) + "원" + "</fc>");
 	
 		// 할인금액 있는 경우
 		var arrOflnDc = [], arrGrdeDc = [], arrCpnDc = [], arrAddDc = [];
-		
+		trace(dsFirstAtlctStlmDcList.getRowCount());
 		for(var i=0;i<dsFirstAtlctStlmDcList.getRowCount();i++){
+			trace(dsFirstAtlctStlmDcList.getColumn(i, "dcNm"));
 			if(dsFirstAtlctStlmDcList.getColumn(i, "dcClCd") == "10"){
 				// 강좌료
 				if(dsFirstAtlctStlmDcList.getColumn(i, "dcMthdClCd") == "10"){
@@ -562,7 +555,7 @@ this.fn_create_last_atlct_stlm = function()
 			
 			//취소/환불자의 할인정보는 최초 할인목록에서 뺀다
 			for(var j=dsLastAtlctStlmDcList.getRowCount()-1;j>=0;j--){
-				if(dsLastAtlctStlmDcList.getColumn(j, "actlAtlctNpleSeqno") == dsStlmRfndList.getColumn(i, "actlAtlctNpleSeqno")){
+				if(Number(dsLastAtlctStlmDcList.getColumn(j, "actlAtlctNpleSeqno")) == Number(dsStlmRfndList.getColumn(i, "actlAtlctNpleSeqno"))){
 					dsLastAtlctStlmDcList.deleteRow(j);
 				}
 			}

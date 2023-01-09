@@ -1,92 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="LectAtlctStatusSearch" width="1280" height="150" titletext="New Form" onload="LectAtlctStatusSearch_onload">
+  <Form id="LectAtlctStatusSearch" width="1280" height="170" titletext="New Form" onload="LectAtlctStatusSearch_onload">
     <Layouts>
-      <Layout height="150" width="1280">
-        <Static id="Static00" taborder="0" text="▶ 검색" left="0" top="0" width="48" height="21" cssclass="sta_WF_TitGray"/>
-        <Div id="Div00" taborder="1" text="Div00" left="0" top="21" height="133" cssclass="div_WF_TableComp" right="0" formscrolltype="none">
+      <Layout height="170" width="1280">
+        <Static id="Static00" taborder="0" text="▶ 검색" left="0" top="0" width="48" height="17" cssclass="sta_WF_TitGray"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" top="27" height="133" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
-              <Div id="Div04" taborder="4" text="Div00" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div04" taborder="1" text="Div00" left="0" top="64" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Calendar id="strtDtm" taborder="1" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
-                    <Static id="Static01" taborder="3" text="~" left="strtDtm:2" top="3" width="9" height="20"/>
-                    <Calendar id="endDtm" taborder="2" left="Static01:2" top="5" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
+                    <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Calendar id="Calendar00" taborder="3" left="Static00:10" top="5" width="100" height="20" dateformat="yyyy-MM-dd" oncloseup="Div00_Div04_Calendar00_oncloseup" tabstop="true"/>
+                    <Static id="Static01" taborder="1" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
+                    <Calendar id="Calendar01" taborder="3" left="Static01:6" top="5" width="100" height="20" dateformat="yyyy-MM-dd" oncloseup="Div00_Div04_Calendar01_oncloseup" tabstop="true"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="1000" minwidth="360" maxwidth="" formscrolltype="none">
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="54%">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm"/>
+                    <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_brchCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="1" text="Div04" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div01" taborder="2" text="Div04" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="yy" taborder="1" left="116" top="5" width="100" height="20" type="dropdown" text="년도" value="" index="-1"/>
-                    <Combo id="smsterCd" taborder="2" text="학기" left="yy:5" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" value="" index="0">
-                      <Dataset id="innerdataset">
-                        <ColumnInfo>
-                          <Column id="codecolumn" size="256"/>
-                          <Column id="datacolumn" size="256"/>
-                        </ColumnInfo>
-                        <Rows>
-                          <Row>
-                            <Col id="codecolumn"/>
-                            <Col id="datacolumn">학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">1</Col>
-                            <Col id="datacolumn">봄학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">여름학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">3</Col>
-                            <Col id="datacolumn">가을학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">4</Col>
-                            <Col id="datacolumn">겨울학기</Col>
-                          </Row>
-                        </Rows>
-                      </Dataset>
-                    </Combo>
+                    <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Combo id="yy" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" type="dropdown"/>
+                    <Combo id="lectSmsterCd" taborder="2" text="Combo01" left="yy:1" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="2" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="1000" minwidth="360" maxwidth="" formscrolltype="none">
+              <Div id="Div02" taborder="3" text="Div01" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="54%">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="강좌 구분" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="ClassGbCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" displaynulltext="선택"/>
+                    <Static id="Static00" taborder="0" text="강좌 구분" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="ClassGbCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" displaynulltext="선택" innerdataset="ds_lectClCd_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="3" text="Div04" left="Div02:-1" top="32" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div03" taborder="4" text="Div04" left="Div02:-1" top="32" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" width="109" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="ClassCtgr00" taborder="1" text="Combo00" left="116" top="5" width="100" height="20" type="dropdown"/>
-                    <Combo id="ClassCtgr01" taborder="2" text="" left="ClassCtgr00:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="ClassCtgr02" taborder="3" text="Combo01" left="ClassCtgr01:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" width="200" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Combo id="ClassCtgr00" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" type="dropdown" innerdataset="ds_lrclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm" displaynulltext="1Depth"/>
+                    <Combo id="ClassCtgr01" taborder="2" text="Combo01" left="ClassCtgr00:1" top="5" width="100" height="20" innerdataset="ds_mdclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm" displaynulltext="2Depth"/>
+                    <Combo id="ClassCtgr02" taborder="3" text="Combo01" left="ClassCtgr01:1" top="5" width="100" height="20" innerdataset="ds_smclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm" displaynulltext="3Depth"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00_00_00_00" taborder="6" text="Div00" left="0" top="96" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div00_00_00_00" taborder="5" text="Div00" left="0" top="96" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="강좌명" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                    <Edit id="Edit00" taborder="1" left="116" top="5" height="20" onkeyup="Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup" right="1000" minwidth="300" maxwidth=""/>
-                    <Button id="btnSearch" taborder="2" text="검색" left="Edit00:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div00_Div02_btnSearch_onclick"/>
+                    <Static id="Static00" taborder="0" text="강좌명" left="0" top="0" width="200" bottom="0" cssclass="sta_WF_TableLabel"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="500" height="20"/>
+                    <Button id="btnSearch" taborder="2" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="19" onclick="Div00_Div00_00_00_00_btnSearch_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -96,41 +67,230 @@
       </Layout>
     </Layouts>
     <Bind>
-      <BindItem id="item1" compid="Div00.form.Div00_00_00_00.form.Edit00" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item0" compid="Div00.form.Div00_00_00_00.form.Edit00" propid="value" datasetid="ds_search" columnid="searchQuery"/>
+      <BindItem id="item1" compid="Div00.form.Div00.form.brchCd" propid="value" datasetid="ds_search" columnid="brchCd"/>
+      <BindItem id="item2" compid="Div00.form.Div01.form.yy" propid="value" datasetid="ds_search" columnid="yy"/>
+      <BindItem id="item3" compid="Div00.form.Div01.form.lectSmsterCd" propid="value" datasetid="ds_search" columnid="lectSmsterCd"/>
+      <BindItem id="item4" compid="Div00.form.Div02.form.ClassGbCd" propid="value" datasetid="ds_search" columnid="lectClCd"/>
+      <BindItem id="item5" compid="Div00.form.Div03.form.ClassCtgr00" propid="value" datasetid="ds_search" columnid="lrclsCtegryCd"/>
+      <BindItem id="item6" compid="Div00.form.Div03.form.ClassCtgr01" propid="value" datasetid="ds_search" columnid="mdclsCtegryCd"/>
+      <BindItem id="item7" compid="Div00.form.Div03.form.ClassCtgr02" propid="value" datasetid="ds_search" columnid="smclsCtegryCd"/>
+      <BindItem id="item8" compid="Div00.form.Div04.form.Calendar00" propid="value" datasetid="ds_search" columnid="strtDtm"/>
+      <BindItem id="item9" compid="Div00.form.Div04.form.Calendar01" propid="value" datasetid="ds_search" columnid="endDtm"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
-include "Base::lib_base.xjs";
+
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-this.list_form = this.parent.parent.Div01.form;
+
+var parentFrm = this.parent.parent.parent.parent;
+
+this.brchCd = "";
+this.yy = "";
+this.lectSmsterCd = "";
+
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.LectAtlctStatusSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
-	this.Div00.form.Div00.form.brchCd.set_index(0);
-	
-	var comboYyObj = this.Div00.form.Div01.form.yy;
-	
-	var data = new Date();
-	var strtYy = data.getFullYear() + 1;
-	var endYy = 2017
-	
-	this.gfn_set_year(this, comboYyObj, 2017, strtYy, "년도");	
+	this.application = nexacro.getApplication();
 };
 
-this.Div00_Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.fn_data_list = function()
 {
-	//this.list_form.fn_searchValueInit();
-	//this.list_form.fn_list();
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmStatus/getStlmStatusDataList.do";
+	var inData      = "";
+	var outData     = "this.ds_smster_list=output1 this.ds_lrclsCtegryCd_list=output2 this.ds_mdclsCtegryCd_list=output3 this.ds_smclsCtegryCd_list=output4 this.ds_lectClCd_list=output5";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);	
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	return;
+  }
+
+  switch(svcID)
+  {
+	case "dataList":
+		// 지점
+		this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
+		this.ds_brch_cd.insertRow(0);
+		this.ds_brch_cd.setColumn(0, "cd", "");
+		this.ds_brch_cd.setColumn(0, "cdNm", "전체");
+		this.Div00.form.Div00.form.brchCd.set_index(0);
+		
+		// 학기
+		if(this.lectSmsterCd == ""){
+			var month = new nexacro.Date().getMonth()+1;
+
+			if(3 <= month && month <= 5)
+			{
+				//봄
+				this.lectSmsterCd = 0;	
+			}
+			else if(6 <= month && month <= 8)
+			{
+				//여름
+				this.lectSmsterCd = 1;	
+			}
+			else if(9 <= month && month <= 11)
+			{
+				//가을
+				this.lectSmsterCd = 2;	
+			}	
+			else
+			{
+				//겨울
+				this.lectSmsterCd = 3;	
+			}
+		}
+		this.Div00.form.Div01.form.lectSmsterCd.set_value(this.lectSmsterCd);
+		
+		//년도
+		if(this.yy == ""){
+			this.yy = new nexacro.Date().getFullYear();
+		}
+		
+		this.removeChild("ds_yy_list");
+		var dsYyList = new Dataset();
+		dsYyList.name = "ds_yy_list";
+		dsYyList.addColumn("cd", "string", 256);
+		dsYyList.addColumn("cdNm", "string", 256);
+
+		this.addChild("ds_yy_list", dsYyList);
+		this.ds_yy_list.set_enableevent(false);
+		for(var i=0;i<16;i++){
+			this.ds_yy_list.insertRow(i);
+			this.ds_yy_list.setColumn(i, "cd", (Number(this.yy) - i).toString());
+			this.ds_yy_list.setColumn(i, "cdNm", (Number(this.yy) - i) + "년");
+		}
+		this.ds_yy_list.set_enableevent(true);
+		this.Div00.form.Div01.form.yy.setInnerDataset(this.ds_yy_list);
+		this.Div00.form.Div01.form.yy.set_codecolumn("cd");
+		this.Div00.form.Div01.form.yy.set_datacolumn("cdNm");
+		this.Div00.form.Div01.form.yy.set_index(0);
+		
+		break;
+  }
+};
+
+// 지점 변경
+this.Div00_Div00_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.ds_search.setColumn(0, "brchCd", obj.value);
+	this.fn_set_smsterCd();
+};
+
+// 기간 시작일 선택
+this.Div00_Div04_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	trace(obj.value);
+	if(this.gfn_nvl(this.Div00.form.Div04.form.Calendar01.value) != "" && this.Div00.form.Div04.form.Calendar01.value < obj.value)
+	{
+		obj.set_value(this.Div00.form.Div04.form.Calendar01.value);
+	}
+};
+
+// 기간 종료일 선택
+this.Div00_Div04_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div04.form.Calendar00.value) != "" && obj.value < this.Div00.form.Div04.form.Calendar00.value)
+	{
+		this.Div00.form.Div04.form.Calendar00.set_value(obj.value);
+	}
+};
+
+// 검색 버튼
+this.Div00_Div00_00_00_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//this.ds_search.setColumn(0, "yy", null);
+	//this.ds_search.setColumn(0, "lectSmsterCd", null);
+	this.parent.parent.fn_list();
 };
 ]]></Script>
+    <Objects>
+      <Dataset id="ds_brch_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_smster_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="1"/>
+          <Column id="searchQuery" type="STRING" size="256"/>
+          <Column id="lrclsCtegryCd" type="STRING" size="256"/>
+          <Column id="mdclsCtegryCd" type="STRING" size="256"/>
+          <Column id="smclsCtegryCd" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_lrclsCtegryCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_mdclsCtegryCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_smclsCtegryCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_lectClCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>

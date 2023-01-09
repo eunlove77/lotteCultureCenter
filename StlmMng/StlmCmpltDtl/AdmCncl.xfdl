@@ -238,7 +238,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		case "data_list":
 			// 금액변경 버튼 맨 끝으로
 			this.Button02.set_right(0);
-		
 			// 취소(환불) 구분 콤보박스 초기화
 			if(this.ds_adm_cncl_data.getColumn(0, "lectNbcnt") == this.ds_adm_cncl_data.getColumn(0, "rfndLectTmsCnt")){
 				// 전액환불 대상이면 전액으로 세팅
@@ -267,7 +266,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 this.fn_set_rfnd_amt = function()
 {
 	// 부분환불 금액
-	this.totRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt");
+	this.totRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt");
 	// 취소(환불) 예정 금액 세팅
 	this.totLectRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt");
 	this.totLectAddRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt");
@@ -294,7 +293,6 @@ this.fn_set_rfnd_amt = function()
 	}
 	
 	var totRfndAmt = this.totRfndAmt;
-	
 	if(totRfndAmt == 0){
 		// 환불가능금액이 없는경우
 	}else{
@@ -454,6 +452,7 @@ this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 // 취소(환불) 구분 콤보박스 선택이벤트
 this.Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
+	trace(e.postvalue);
 	this.fn_data_list(e.postvalue);
 };
 

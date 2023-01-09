@@ -251,12 +251,10 @@ this.Dc_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	// 기존에 저장했었던 할인수단 불러오는 경우
 	this.lectStlmAmt = this.classList.getColumn(0, "lectStlmAmt");
-	if(this.lectStlmAmt > 0){
-		this.oflnDcAmt = this.classList.getColumn(0, "oflnDcAmt");
-		this.grdeDcAmt = this.classList.getColumn(0, "grdeDcAmt");
-		this.cpnDcAmt = this.classList.getColumn(0, "cpnDcAmt");
-		this.addDcAmt = this.classList.getColumn(0, "optnDcAmt");
-	}
+	this.oflnDcAmt = this.classList.getColumn(0, "oflnDcAmt");
+	this.grdeDcAmt = this.classList.getColumn(0, "grdeDcAmt");
+	this.cpnDcAmt = this.classList.getColumn(0, "cpnDcAmt");
+	this.addDcAmt = this.classList.getColumn(0, "optnDcAmt");
 	
 	this.fn_data_list();
 };
@@ -264,7 +262,7 @@ this.Dc_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 this.fn_data_list = function()
 {
 	var strSvcId    = "dataList";
-	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectRegDcPopDataList.do";
+	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectRegDcPopDataList.do";
 	var inData      = "classInfo=this.classList";
 	var outData     = "this.ds_ofln_list=output1 this.ds_grde_list=output2 this.ds_adm_grde_list=output3 this.ds_cpn_list=output4";
 	var strArg      = "mbrNo=" + this.mbrNo + " mbrGrdeCd=" + this.mbrGrdeCd + " mbrId=" + this.mbrId;
@@ -389,10 +387,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					}
 				}
 				
-				if(dcAmtClCd == "AMOUNT"){
+				if(dcAmtClCd == "02"){
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(this.gfn_setComma(dcAmt) + "원");
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(dcAmt) + "원");
-				}else if(dcAmtClCd == "RATES"){
+				}else if(dcAmtClCd == "01"){
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(dcAmt + "%");
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma((this.lectAmt * (dcAmt / 100))) + "원");
 				}
@@ -781,7 +779,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					}
 				}
 				
-				if(dcAmtClCd == "AMOUNT" && dcAmt > this.lectAmt - this.oflnDcAmt - this.grdeDcAmt){
+				if(dcAmtClCd == "02" && dcAmt > this.lectAmt - this.oflnDcAmt - this.grdeDcAmt){
 					// 할인금액이 주문금액보다 큰 경우 컨펌창 띄우고 0원으로 만듬
 					if(confirm("쿠폰 사용금액보다 주문금액이 적어 마이너스 금액이 발생됩니다. 그래도 사용하시겠습니까?")){
 						dcAmt = this.lectAmt;
@@ -795,13 +793,13 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
 				this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(true);
 				
-				if(dcAmtClCd == "AMOUNT"){
+				if(dcAmtClCd == "02"){
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(this.gfn_setComma(dcAmt) + "원");
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(dcAmt) + "원");
 					this.cpnDcAmt = dcAmt;
 					//this.lectAmt = this.lectAmt - dcAmt;
 					this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma((this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt)) +"원</fc></b>");
-				}else if(dcAmtClCd == "RATES"){
+				}else if(dcAmtClCd == "01"){
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(dcAmt + "%");
 					this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma((this.lectAmt * (dcAmt / 100))) + "원");
 					this.cpnDcAmt = (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) * (dcAmt / 100);

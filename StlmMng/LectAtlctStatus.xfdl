@@ -31,7 +31,54 @@ this.LectAtlctStatus_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();	
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	searchFrm.fn_data_list();
 };
-]]></Script>
+
+this.fn_list = function(page)
+{
+	this.Div02.form.ds_atlct_status_list.clearData();
+	this.Div01.form.ds_atlct_status_sum_list.clearData();
+	
+	var strSvcId    = "list";
+	var strSvcUrl   = this.application.Admin_svc + "::stlmStatus/stlmStatusList.do";
+	var inData      = "search=this.Div00.form.ds_search";
+	var outData     = "this.Div01.form.ds_atlct_status_sum_list=output1 this.Div02.form.ds_atlct_status_list=output2";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+};
+
+// 트랜잭션 이후 콜백
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	return;
+  }
+
+  switch(svcID)
+  {
+		case "list":
+			
+			break;
+  }
+}]]></Script>
   </Form>
 </FDL>

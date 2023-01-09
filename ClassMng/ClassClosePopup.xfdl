@@ -122,6 +122,12 @@
           <Column id="lectClosedDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_cncl_fail_list">
+        <ColumnInfo>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -171,7 +177,18 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClassClose":
-			alert("폐강처리 되었습니다.");
+			var msg = "폐강처리 되었습니다.";
+			if(this.ds_cncl_fail_list.getRowCount() > 0){
+				msg += "\n환불불가 회원이 존재합니다. 결제완료 관리 메뉴에서 관리자 취소하세요.";
+				msg += "\n환불불가회원 : ";
+				var arrCnclFail = [];
+				for(var i=0;i<this.ds_cncl_fail_list.getRowCount();i++){
+					arrCnclFail.push(this.ds_cncl_fail_list.getColumn(i, "mbrId") + "/" + this.ds_cncl_fail_list.getColumn(i, "mbrNm"));
+				}
+				msg += arrCnclFail.join();
+			}
+			
+			alert(msg);
 			this.parent.callbackfunc(this.parent._this);	
 		break;
 	  }
@@ -262,7 +279,7 @@ this.fn_save = function()
 			strSvcId : "updateClassClose",
 			strSvcUrl : this.application.Admin_svc + "::class/updateClassClose.do",
 			inData : "classDtl=ds_class_dtl",
-			outData : "",
+			outData : "ds_cncl_fail_list=output1",
 			strArg : "",
 			callBackFnc : "fnCallback",
 			isAsync : false,

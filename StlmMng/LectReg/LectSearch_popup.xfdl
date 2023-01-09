@@ -89,10 +89,10 @@ this.LectSearch_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 this.fn_data_list = function()
 {
 	var strSvcId    = "dataList";
-	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectPopDataList.do";
+	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectPopDataList.do";
 	var inData      = "";
 	var outData     = "this.ds_fmly_list=output1 this.ds_atlct_list=output2";
-	var strArg      = "mbrNo=" + this.parent.mbrNo + " yy=" + this.yy + " lectSmsterCd=" + this.lectSmsterCd;
+	var strArg      = "mbrNo=" + this.mbrNo + " yy=" + this.yy + " lectSmsterCd=" + this.lectSmsterCd;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	
@@ -141,8 +141,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			}
 			
 			this.Div01.form.divLectReg.form.brchCd = this.Div01.form.divLectReg.form.ds_search.getColumn(0, "brchCd");
-			this.Div01.form.divLectReg.form.fn_sesterInfo();
-			this.Div01.form.divLectReg.form.fn_year_add();
+			//this.Div01.form.divLectReg.form.fn_sesterInfo();
+			//this.Div01.form.divLectReg.form.fn_year_add();
 			
 			// 년도
 			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_value(this.yy);
@@ -266,7 +266,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			dsClassInfo.set_enableevent(true);
 			
 			var strSvcId    = "optnList";
-			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectOptnList.do";
+			var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectOptnList.do";
 			var inData      = "classInfo=this.ds_class_info";
 			var outData     = "this.ds_optn_list=output1";
 			var strArg      = "";
@@ -316,17 +316,18 @@ this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var fmlyChkYn = false;
-	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlySeqno = [], arrFmlyRelCdNm = [], arrBday = [], arrLscCd = [];
+	//arrFmlySeqno = [], , arrLscCd = []
+	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlyRelCdNm = [], arrBday = [];
 	for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 		if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
 			fmlyChkYn = true;
 			arrActlAtlctNpleNm.push(this.ds_fmly_list.getColumn(i, "korNm"));
 			arrSexCd.push(this.ds_fmly_list.getColumn(i, "sexCd"));
 			arrFmlyRelCd.push(this.ds_fmly_list.getColumn(i, "fmlyRelCd"));
-			arrFmlySeqno.push(this.ds_fmly_list.getColumn(i, "fmlySeqno"));
+			//arrFmlySeqno.push(this.ds_fmly_list.getColumn(i, "fmlySeqno"));
 			arrFmlyRelCdNm.push(this.ds_fmly_list.getColumn(i, "fmlyRelCdNm"));
 			arrBday.push(this.ds_fmly_list.getColumn(i, "bday"));
-			arrLscCd.push(this.ds_fmly_list.getColumn(i, "lscCd"));
+			//arrLscCd.push(this.ds_fmly_list.getColumn(i, "lscCd"));
 		}
 	}
 	
@@ -361,14 +362,13 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	}
 	
 	// 기존 수강내역과 비교
-	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;
+	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;	
 	for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
 		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
 			if(this.ds_atlct_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
 				&& this.ds_atlct_list.getColumn(i, "sexCd") == arrSexCd[j]
 				&& this.ds_atlct_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
-				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]
-				&& this.ds_atlct_list.getColumn(i, "lscCd") == arrLscCd[j]){
+				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
 				
 				tgtLectStDtm = this.ds_atlct_list.getColumn(i, "lectStDtm");
 				tgtLectEndDtm = this.ds_atlct_list.getColumn(i, "lectEndDtm");
@@ -411,7 +411,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 				
 				for(var k=0;k<arrTgtLectStDtmNm.length;k++){
 					for(var l=0;l<arrLectStDtmNm.length;l++){
-						if(arrTgtLectStDtmNm[k] == arrLectStDtmNm[l]){
+						if(arrTgtLectStDtmNm[k].trim() == arrLectStDtmNm[l].trim()){
 							overlapYn = true;
 						}
 					}
@@ -431,7 +431,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var existMemberYn, initWaitMemberYn;
 	
 	var strSvcId    = "memberDtl";
-	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getMemberDtl.do";
+	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getMemberDtl.do";
 	var inData      = "";
 	var outData     = "this.ds_member_dtl=output1 this.ds_stlm_list=output2 this.ds_wit_list=output3";
 	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
@@ -491,8 +491,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
 				&& this.ds_stlm_list.getColumn(i, "sexCd") == arrSexCd[j]
 				&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
-				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]
-				&& this.ds_atlct_list.getColumn(i, "lscCd") == arrLscCd[j]){
+				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
 				stlmYn = true;
 				arrStlmActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
 			}
@@ -576,11 +575,11 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	// 저장
 	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/setLectReg.do";
+	var strSvcUrl   = this.application.Admin_svc + "::lectReg/setLectReg.do";
 	var inData      = "classList=this.opener.divWork.form.ds_class_list";
 	var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
 	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
-	strArg			+= " fmlySeqno=" + arrFmlySeqno.join() + " actlAtlctNpleNm=" + arrActlAtlctNpleNm.join() + " sexCd=" + arrSexCd.join() + " fmlyRelCd=" + arrFmlyRelCd.join() + " fmlyRelCdNm=" + arrFmlyRelCdNm.join() + " bday=" + arrBday.join() + " lscCd=" + arrLscCd.join()
+	strArg			+= " actlAtlctNpleNm=" + arrActlAtlctNpleNm.join() + " sexCd=" + arrSexCd.join() + " fmlyRelCd=" + arrFmlyRelCd.join() + " fmlyRelCdNm=" + arrFmlyRelCdNm.join() + " bday=" + arrBday.join()
 	if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
 		strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
 		strArg			+= " optnNm=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm");

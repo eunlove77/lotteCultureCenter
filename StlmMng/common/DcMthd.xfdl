@@ -573,7 +573,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					}
 				}
 				
-				if(dcAmtClCd == "AMOUNT" && dcAmt > lectAmt){
+				if(dcAmtClCd == "02" && dcAmt > lectAmt){
 					// 할인금액이 주문금액보다 큰 경우 컨펌창 띄우고 0원으로 만듬
 					if(confirm("쿠폰 사용금액보다 주문금액이 적어 마이너스 금액이 발생됩니다. 그래도 사용하시겠습니까?")){
 						dcAmt = lectAmt;
@@ -587,7 +587,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				this.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
 				this.Div00.form.Div04.form.Div02.form.Static01.set_visible(true);
 				
-				if(dcAmtClCd == "AMOUNT"){
+				if(dcAmtClCd == "02"){
 					this.Div00.form.Div04.form.Div02.form.Static01.set_text(this.gfn_setComma(dcAmt) + "원");
 					this.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(dcAmt) + "원");
 					this.cpnDcAmt = dcAmt;
@@ -597,7 +597,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma((gsStlmAmt - this.addDcAmt)) +"</fc>원</b>");
 					this.parent.parent.parent.parent.lectStlmAmt = lectAmt + lectAddAmt - this.addDcAmt;
 					this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.addDcAmt;
-				}else if(dcAmtClCd == "RATES"){
+				}else if(dcAmtClCd == "01"){
 					this.Div00.form.Div04.form.Div02.form.Static01.set_text(dcAmt + "%");
 					this.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma((lectAmt * (dcAmt / 100))) + "원");
 					this.cpnDcAmt = lectAmt * (dcAmt / 100);

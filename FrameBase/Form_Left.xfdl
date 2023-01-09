@@ -102,7 +102,6 @@ this.LeftMenuGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 
 
 this.fn_openMenu = function(objSelectMenu){
-	
 	var objMdiFrame = this.application.MdiFrame;
 	var objWorkFrame = this.application.WorkFrame;
 	var objOpenMenuDs = this.application.gdsOpenMenu;
@@ -140,6 +139,15 @@ this.fn_openMenu = function(objSelectMenu){
 			   FORM_URL : formUrl,
 			   TAB_CLOSE : true
 			   };
+	
+	// 대기자 현황 -> 수강등록
+	if(sMenuId == 209 && objSelectMenu.hasOwnProperty('mbrNo')){
+		trace(objSelectMenu.mbrNo);
+		oParam.mbrNo = objSelectMenu.mbrNo;
+		oParam.yy = objSelectMenu.yy;
+		oParam.lectSmsterCd = objSelectMenu.lectSmsterCd;
+		oParam.mbrGrdeCd = objSelectMenu.mbrGrdeCd;
+	}
 			   
 	var objChildFrame = new ChildFrame();
 	objChildFrame.init(sWinId,  0, 0, null, null, 0, 0);
