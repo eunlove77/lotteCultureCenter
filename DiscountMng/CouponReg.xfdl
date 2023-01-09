@@ -35,7 +35,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" text="123123" right="10" displaynulltext="쿠폰명"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" text="123123" right="10" displaynulltext="쿠폰명" maxlength="50"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -43,7 +43,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰 설명" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="5" right="10" displaynulltext="쿠폰 설명" bottom="5"/>
+                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="5" right="10" displaynulltext="쿠폰 설명" bottom="5" maxlength="500"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -59,7 +59,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 방식 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Radio id="radioIssuCd" taborder="1" left="Static00:10" top="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" minwidth="" maxwidth="600" text="일반(수동)발급" index="0" onitemchanged="Div01_Div00_radioIssuCd_onitemchanged" value="NORMAL" bottom="22" width="600">
+                    <Radio id="radioIssuCd" taborder="1" left="Static00:10" top="0" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" minwidth="" maxwidth="600" text="일반(수동)발급" index="0" onitemchanged="Div01_Div00_radioIssuCd_onitemchanged" value="NORMAL" bottom="22" width="600" enable="true" enableevent="true" readonly="false">
                       <Dataset id="innerdataset">
                         <ColumnInfo>
                           <Column id="codecolumn" size="256"/>
@@ -133,7 +133,7 @@
                       <Layouts>
                         <Layout>
                           <Button id="uploadBtn" taborder="0" text="파일찾기" top="4" width="84" height="30" cssclass="btn_WF_Medium" left="2" onclick="Div01_Div01_Div00_uploadBtn_onclick"/>
-                          <Static id="Static00" taborder="1" text="샘플 양식.xlxs" left="uploadBtn:10" top="4" width="379" height="30" cursor="pointer" textDecoration="underline"/>
+                          <Static id="Static00" taborder="1" text="샘플 양식.xlxs" left="uploadBtn:10" top="4" width="379" height="30" cursor="pointer" textDecoration="underline" onclick="Div01_Div01_Div00_Static00_onclick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -297,7 +297,7 @@
                         </Rows>
                       </Dataset>
                     </Radio>
-                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,###" limitbymask="both"/>
                     <Static id="Static01" taborder="2" text="원" left="MaskEdit00:10" top="32" width="120" height="21"/>
                   </Layout>
                 </Layouts>
@@ -337,7 +337,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="발급일로부터" left="10" top="5" width="81" usedecorate="false" height="21" fittocontents="width"/>
-                          <Edit id="Edit00" taborder="1" left="Static00:5" top="5" width="129" height="21"/>
+                          <Edit id="Edit00" taborder="1" left="Static00:5" top="5" width="129" height="21" maxlength="5" inputtype="number"/>
                           <Static id="Static01" taborder="2" text="일까지 사용 가능" left="Edit00:5" top="5" width="105" usedecorate="false" height="21"/>
                         </Layout>
                       </Layouts>
@@ -392,31 +392,31 @@
           </Layouts>
         </Div>
         <Static id="txtMenuNm" taborder="5" text="쿠폰등록" left="10" top="20" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Grid id="Grid00" taborder="6" left="415" top="525" width="405" height="225" binddataset="ds_mem_excel">
+        <Grid id="Grid00" taborder="6" left="167" top="565" width="773" height="186" binddataset="ds_mem_excel" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="111"/>
+                <Column size="182"/>
+                <Column size="93"/>
+                <Column size="142"/>
               </Columns>
               <Rows>
-                <Row band="head" size="24"/>
+                <Row size="24" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="onlnCustNo"/>
-                <Cell col="1" text="mbrNo"/>
-                <Cell col="2" text="id"/>
-                <Cell col="3" text="korNm"/>
-                <Cell col="4" text="hpNo"/>
+                <Cell text="백화점 회원번호"/>
+                <Cell col="1" text="문화센터 회원번호"/>
+                <Cell col="2" text="회원ID"/>
+                <Cell col="3" text="회원명"/>
+                <Cell col="4" text="연락처"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:onlnCustNo"/>
+                <Cell text="bind:dpmCustNo"/>
                 <Cell col="1" text="bind:mbrNo"/>
-                <Cell col="2" text="bind:id"/>
+                <Cell col="2" text="bind:mbrId"/>
                 <Cell col="3" text="bind:korNm"/>
                 <Cell col="4" text="bind:hpNo"/>
               </Band>
@@ -485,7 +485,7 @@
       </Dataset>
       <Dataset id="ds_mem_excel">
         <ColumnInfo>
-          <Column id="onlnCustNo" type="STRING" size="256"/>
+          <Column id="dpmCustNo" type="STRING" size="256"/>
           <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="korNm" type="STRING" size="256"/>
@@ -534,6 +534,22 @@
           <Column id="strCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <FileDownTransfer id="FileDownTransfer00"/>
+      <Dataset id="ds_sampleDownList">
+        <ColumnInfo>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="realFileNm">쿠폰_샘플양식.xlsx</Col>
+            <Col id="saveFileNm">cpn_mbr_sample.xlsx</Col>
+            <Col id="phyPath">/file_sample/</Col>
+          </Row>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -550,20 +566,18 @@ this.menuId = this.parent.parent.param.MENU_ID;
 this.popCnt = 0;
 
 this.rsltMsg = ""
-this.rsltList = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
 
 this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
+	this.domain = this.application.getVariable("domain");
 	
+	//지점선택 체크박스 세팅
 	this.fn_set_spot();	
 
 	var tranObj = {
@@ -580,6 +594,7 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfn_transaction(tranObj);
 	
+	//발급대기 상태인 경우
 	if(this.parent.cpnSeqno != ""){	
 		this.ds_detail.setColumn(0, "cpnSeqno", this.parent.cpnSeqno);
 		this.txtMenuNm.set_text("쿠폰 상세");
@@ -591,7 +606,27 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.gfnSetCheckBoxNoDataset(this.ds_mem_grade, this.Div01.form.Div01.form.Grid00, 0); 
 	this.Div01.form.Div05.form.Div00.form.strtDtm.calendaredit.set_readonly(true);	//캘린더 키인 막기
 	this.Div01.form.Div05.form.Div00.form.endDtm.calendaredit.set_readonly(true);	//캘린더 키인 막기
+	
+	//파일 다운로드경로
+	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 };
+
+/* 시작일 input 클릭 시 캘린더 노출 */
+this.Div01_Div05_Div00_strtDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
+{
+	this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
+	
+};
+
+/* 종료일 input 클릭 시 캘린더 노출 */
+this.Div01_Div05_Div00_endDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
+{
+	this.Div01.form.Div05.form.Div00.form.endDtm.dropdown();
+};
+
+/**************************************************************************
+ * 사용자 함수
+ **************************************************************************/
 
 this.fn_detail = function ()
 {	
@@ -609,34 +644,173 @@ this.fn_detail = function ()
 	this.gfn_transaction(tranObj);
 };
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
+/* 상세화면 세팅 */
+this.fn_set_detail = function()
 {
-	// 에러 시 화면 처리 내역
-	if(errorCode != 0)
-	{
-		this.alert(errorCode+"\n"+errorMsg);
-		return;
-	}
+	this.fn_sync_checkBox();
+	this.fn_sync_mbrGrde();
 	
-	switch(svcID)
+	//발급방식 변경불가
+	this.Div01.form.Div00.form.radioIssuCd.set_readonly(true);
+	//발급수량 변경불가
+	this.Div01.form.Div02.form.MaskEdit00.set_readonly(true);
+	
+	//라디오버튼 값에 따른 div 변경 이벤트
+	var itemInfo = new nexacro.ItemChangeEventInfo();
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "issueObjClCd");
+	this.Div01_Div01_radioTrgtMem_onitemchanged(this.Div01.form.Div01.form.radioTrgtMem, itemInfo);
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "applLectClCd");
+	this.Div01_Div03_radioTrgtLect_onitemchanged(this.Div01.form.Div03.form.radioTrgtLect, itemInfo);
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "issueMthdClCd");
+	this.Div01_Div00_radioIssuCd_onitemchanged(this.Div01.form.Div00.form.radioIssuCd, itemInfo);
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "dcAmtClCd");
+	this.Div01_Div04_radioDiscount_onitemchanged(this.Div01.form.Div04.form.radioDiscount, itemInfo);
+	
+	itemInfo.postvalue = this.ds_detail.getColumn(0, "usePrdClCd");
+	this.Div01_Div05_radioPeriod_onitemchanged(this.Div01.form.Div05.form.radioPeriod, itemInfo);
+	
+	this.Div00.form.Div10.set_height(33);
+	this.Div00.form.resetScroll();
+	
+}
+
+/* 지점 체크박스 세팅 */
+this.fn_set_spot = function()
+{
+	var content = ["chkSpotAll"];
+	var list = this.application.gdsSpotCdList;
+	
+	for(var i=0; i < list.getRowCount(); i++) 
 	{
+		var id = "chkSpot" + i;
+		var objComp = new CheckBox();
+		objComp.init(id, content[i] + ":10", 9, 133, 20);
+		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
+		objComp.set_text(list.getColumn(i, "cdNm"));
+		objComp.set_truevalue(list.getColumn(i, "cd"));
+		objComp.set_falsevalue("N");
+		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
+		objComp.show();	
+		content.push(id);
 		
-		case "checkMbr":
-			this.fn_set_mbr_list();
-			break;
-		case "save":
-			this.alert("저장되었습니다.");
-			this.opener.components[0].form.fn_list();
-			this.close();
-			break;
-		case "detail":    
-			this.fn_set_detail();
-			break;
+		this.Div00.form.Div00.form.Div00.form.resetScroll()
 	}
+}
 
-};
+/* '전체' 체크박스 이벤트 */
+this.fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]")
+			{
+				arrObj[i].set_value(arrObj[i].truevalue);
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+		}
+	}
+}
 
-//발급 방식 라디오 버튼
+/* 체크박스 이벤트 */
+this.fn_checkbox = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+
+/* 지점 체크박스 동기화 */
+this.fn_sync_checkBox = function()
+{
+	var list = this.ds_appl_str;
+	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		for(var j=0; j<spotObj.length; j++)
+		{
+			if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
+			{		
+				if(spotObj[j].truevalue == list.getColumn(i, "strCd"))
+				{
+					spotObj[j].set_value(list.getColumn(i, "strCd"));
+				}
+			}	
+		}
+	}
+}
+
+/* 회원등급 체크박스 동기화 */
+this.fn_sync_mbrGrde = function()
+{
+	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
+	{
+		if(this.gfn_nvl(this.ds_mem_grade.getColumn(i, "mbrGrdeCd")) != "")
+		{
+			this.ds_mem_grade.checkarray[i] = 1;
+		}
+	}
+	this.Div01.form.Div01.form.Grid00.redrawExprCell()
+}
+
+/**************************************************************************
+ * 발급방식 라디오 버튼 이벤트
+ **************************************************************************/
+
 this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
 	var discountItmChngInf = new nexacro.ItemChangeEventInfo();
@@ -676,24 +850,107 @@ this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 	this.resetScroll();
 };
 
-//발급대상 라디오버튼
+/**************************************************************************
+ * 발급대상 라디오버튼 이벤트
+ **************************************************************************/
+
 this.Div01_Div01_radioTrgtMem_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
 	if(e.postvalue == 'EXCEL')
 	{	
 		this.Div01.form.Div01.form.Div00.set_visible(true);
 		this.Div01.form.Div01.form.Grid00.set_visible(false);
+		this.Grid00.set_visible(true);
 		this.ds_mem_grade.checkarray = new Array();
 	}
 	else
 	{
 		this.Div01.form.Div01.form.Div00.set_visible(false);
 		this.Div01.form.Div01.form.Grid00.set_visible(true);
+		this.Grid00.set_visible(false);
 		this.ds_mem_excel.deleteAll();
 	}
 };
 
-//적용강좌 라디오버튼
+/**************************************************************************
+ * 회원 엑셀업로드
+ **************************************************************************/
+
+this.Div01_Div01_Div00_uploadBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.importObj = new ExcelImportObject("Import00", this);
+	this.importObj.set_importtype(nexacro.ImportTypes.EXCEL);
+	this.importObj.set_importurl(this.application.Domain + this.application.getVariable("excelImportExport"));
+	
+	this.importObj.addEventHandler("onsuccess", this.Import00_onsuccess, this);
+	this.importObj.addEventHandler("onerror", this.Import00_onerror, this);
+	
+	this.importObj.importData("", "", "ds_mem_excel=output1");
+};
+
+this.Import00_onsuccess = function(obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
+{
+	this.ds_mem_excel.updateColID("Column0", "dpmCustNo");
+	this.ds_mem_excel.updateColID("Column1", "mbrNo");
+	this.ds_mem_excel.updateColID("Column2", "mbrId");
+	this.ds_mem_excel.updateColID("Column3", "korNm");
+	this.ds_mem_excel.updateColID("Column4", "hpNo");
+	
+	this.excel_import_validation_check();
+}
+
+this.Import00_onerror = function(obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
+{
+	console.log(e.errormsg);
+}
+
+/* 엑셀 업로드 유효성 검사 */
+this.excel_import_validation_check = function(){
+	this.ds_mem_excel.deleteRow(0);	//헤드제거
+	
+	var tranObj = {
+		strSvcId : "checkMbr",
+		strSvcUrl : this.baseSvrUrl + "checkMbr.do",
+		inData : "mbrList=ds_mem_excel",
+		outData : "ds_mem_excel=mbrList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : false,
+		isPopup : true
+	}
+	
+	this.gfn_transaction(tranObj);
+}
+
+/* callback */
+this.fn_set_mbr_list = function(){
+	if(this.rsltMsg == "")
+	{
+		alert(this.ds_mem_excel.getRowCount() + "명 등록되었습니다.")
+	}
+	else
+	{
+		this.ds_mem_excel.deleteAll()
+		alert(this.rsltMsg);
+	}
+}
+
+/**************************************************************************
+ * 회원 엑셀업로드 샘플 다운로드
+ **************************************************************************/
+
+this.Div01_Div01_Div00_Static00_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	this.FileDownTransfer00.setPostData("fileInfo", this.ds_sampleDownList.saveXML());
+	this.FileDownTransfer00.set_downloadfilename(this.ds_sampleDownList.getColumn(0, "realFileNm"));
+	this.FileDownTransfer00.download();	
+};
+
+/**************************************************************************
+ * 적용강좌 라디오버튼 이벤트
+ **************************************************************************/
+
 this.Div01_Div03_radioTrgtLect_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
 	if(e.postvalue == 'CLASS')
@@ -710,45 +967,11 @@ this.Div01_Div03_radioTrgtLect_onitemchanged = function(obj:nexacro.Radio,e:nexa
 	}
 };
 
-//할인 금액 라디오 버튼
-this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
-{
-	if(e.postindex != null)
-	{
-		this.Div01.form.Div04.form.MaskEdit00.set_value();
-	}
-	
-	if(e.postvalue == '01')
-	{
-		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("both");
-		this.Div01.form.Div04.form.MaskEdit00.set_format("!##");	//2자리 입력 제한
-		this.Div01.form.Div04.form.Static01.set_text("%");
-	}
-	else
-	{
-		this.Div01.form.Div04.form.MaskEdit00.set_limitbymask("decimal");
-		this.Div01.form.Div04.form.MaskEdit00.set_format("!#,###");
-		this.Div01.form.Div04.form.Static01.set_text("원");
-	}
-};
+/**************************************************************************
+ * 카테고리 영역
+ **************************************************************************/
 
-//사용기간 라디오 버튼 
-this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
-{
-	if(e.postvalue == 'DEADLINE')
-	{
-		this.Div01.form.Div05.form.Div00.set_visible(false);
-		this.Div01.form.Div05.form.Div01.set_visible(true);
-	}
-	else
-	{
-		this.Div01.form.Div05.form.Div00.set_visible(true);
-		this.Div01.form.Div05.form.Div01.set_visible(false);
-		this.Div01.form.Div05.form.Div01.form.Edit00.set_text();
-	}
-};
-
-//대분류 선택 시
+/* 대분류 선택 이벤트 */
 this.Div01_Div03_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	var tranObj = {
@@ -767,7 +990,7 @@ this.Div01_Div03_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 
 };
 
-//중분류 선택 시
+/* 중분류 클릭 이벤트 */
 this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	if(e.itemvalue == "")
@@ -800,6 +1023,9 @@ this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacr
 	}
 	else
 	{
+		//소분류 초기화 발생 시점에 값을 못 읽어 미리 변경해줌.
+		obj.set_value(e.itemvalue);
+	
 		var tranObj = {
 		strSvcId : "ctgrList",
 		strSvcUrl : this.baseSvrUrl + "codeList.do",
@@ -816,13 +1042,15 @@ this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacr
 	}
 };
 
-//소분류 선택 시
+/* 소분류 선택 이벤트 */
 this.Div01_Div03_Div00_Combo02_onitemclick = function(obj:nexacro.Combo,e:nexacro.ItemClickEventInfo)
 {
 	if(this.ds_appl_ctgr.getRowCount() < 10)
 	{
 		var lrclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo00.value;
 		var mdclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo01.value;
+		console.log(this.Div01.form.Div03.form.Div00.form.Combo01)
+		console.log(mdclsCtegryCd)
 		
 		//중복체크
  		if(0 > this.ds_appl_ctgr.findRowExpr("lrclsCtegryCd=="+"'"+lrclsCtegryCd+"'"+" && mdclsCtegryCd=="+"'"+mdclsCtegryCd+"'"+" && smclsCtegryCd=="+"'"+e.itemvalue+"'"))
@@ -847,7 +1075,52 @@ this.Div01_Div03_Div00_Combo02_onitemclick = function(obj:nexacro.Combo,e:nexacr
 	}	
 };
 
-//카테고리 그리드 삭제 버튼
+/* 중분류 데이터 초기화 이벤트 */
+this.ds_category02_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo)
+{
+	if(this.ds_category02.getRowCount() != 0)
+	{
+		this.ds_category02.insertRow(0);
+		this.ds_category02.setColumn(0, "cd", "");
+		this.ds_category02.setColumn(0, "cdNm", "전체");
+		this.Div01.form.Div03.form.Div00.form.Combo01.set_text("전체");
+		
+		this.ds_category03.deleteAll();
+		this.ds_category03.addRow();
+		this.ds_category03.setColumn(0, "cd", "");
+		this.ds_category03.setColumn(0, "cdNm", "전체");
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
+	}
+};
+
+/* 소분류 데이터 초기화 이벤트 */
+this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo)
+{
+	if(this.ds_category03.getColCount() == 0)
+	{
+		var smclsCtegryInf = new nexacro.ItemClickEventInfo();
+		
+		this.ds_category03.addColumn("cd", "STRING", 10);
+		this.ds_category03.addColumn("cdNm", "STRING", 50);
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);
+		
+		smclsCtegryInf.itemtext = "";
+		smclsCtegryInf.itemvalue = "전체";
+		
+		this.Div01_Div03_Div00_Combo02_onitemclick(this.Div01.form.Div03.form.Div00.form.Combo02, smclsCtegryInf);
+	}
+	else
+	{
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(true);
+		this.ds_category03.insertRow(0); 
+		this.ds_category03.setColumn(0, "cd", "");
+		this.ds_category03.setColumn(0, "cdNm", "전체");
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
+	}
+	
+};
+
+/* 카테고리 그리드 삭제 버튼 */
 this.Div01_Div03_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	if(e.cell == 3){		
@@ -855,6 +1128,109 @@ this.Div01_Div03_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 	}
 };
 
+/**************************************************************************
+ * 강좌 영역
+ **************************************************************************/
+
+/* 강좌검색 버튼 */
+this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
+	var spotStr = "";
+	var spotFlag = false;
+	
+	for(var i=0; i<spotObj.length; i++)
+	{
+		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
+		{		
+			console.log(spotObj[i].value);
+			spotFlag = true;
+			spotStr += spotObj[i].value + ",";
+		}	
+	}
+	
+	if(!spotFlag)
+	{
+		this.alert("지점을 선택하세요.");
+		this.Div00.form.Div00.form.Div00.form.chkSpotAll.setFocus();
+		return;
+	}
+	else
+	{
+		this.popCnt++;
+		var arrArguments = {
+			type : 1,
+			brchCd : spotStr,
+			dataset : this.ds_appl_lect
+		}
+		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 700, true, true, null);
+		
+	}
+};
+
+/* 강좌 그리드 삭제 버튼 */
+this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 12){		
+		this.ds_appl_lect.deleteRow(e.row);	
+	}
+};
+
+/**************************************************************************
+ * 할인 금액 라디오 버튼 이벤트
+ **************************************************************************/
+
+this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postindex != null)
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_value();
+	}
+	
+	if(e.postvalue == '01')
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_format("!##");	//2자리 입력 제한
+		this.Div01.form.Div04.form.Static01.set_text("%");
+	}
+	else
+	{
+		this.Div01.form.Div04.form.MaskEdit00.set_format("!###,###,###");	//9자리 입력 제한
+		this.Div01.form.Div04.form.Static01.set_text("원");
+	}
+};
+
+/**************************************************************************
+ * 사용기간 라디오 버튼 이벤트
+ **************************************************************************/
+ 
+this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
+{
+	if(e.postvalue == 'DEADLINE')
+	{
+		this.Div01.form.Div05.form.Div00.set_visible(false);
+		this.Div01.form.Div05.form.Div01.set_visible(true);
+	}
+	else
+	{
+		this.Div01.form.Div05.form.Div00.set_visible(true);
+		this.Div01.form.Div05.form.Div01.set_visible(false);
+		this.Div01.form.Div05.form.Div01.form.Edit00.set_text();
+	}
+};
+
+/**************************************************************************
+ * 취소 버튼
+ **************************************************************************/
+
+this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+/**************************************************************************
+ * 저장 버튼
+ **************************************************************************/
+ 
 this.Div03_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
 	this.fn_checkValidation();
@@ -988,7 +1364,6 @@ this.fn_checkValidation = function(){
 	this.fn_save();
 }
 
-
 this.fn_save = function(){
 	var tranObj = {
 		strSvcId : "save",
@@ -1005,328 +1380,35 @@ this.fn_save = function(){
 	this.gfn_transaction(tranObj);
 }
 
-//지점 체크박스 세팅
-this.fn_set_spot = function()
-{
-	var content = ["chkSpotAll"];
-	var list = this.application.gdsSpotCdList;
-	
-	for(var i=0; i < list.getRowCount(); i++) 
-	{
-		var id = "chkSpot" + i;
-		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 9, 133, 20);
-		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		objComp.set_text(list.getColumn(i, "cdNm"));
-		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
-		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
-		objComp.show();	
-		content.push(id);
-		
-		this.Div00.form.Div00.form.Div00.form.resetScroll()
-	}
-}
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
 
-//캘린더 선택시 팝업 노출
-this.Div01_Div05_Div00_strtDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
+this.fnCallback = function(svcID, errorCode, errorMsg)
 {
-	this.Div01.form.Div05.form.Div00.form.strtDtm.dropdown();
-	
-};
-this.Div01_Div05_Div00_endDtm_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
-{
-	this.Div01.form.Div05.form.Div00.form.endDtm.dropdown();
-};
-
-this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.close();
-};
-
-//상세화면 세팅
-this.fn_set_detail = function()
-{
-	this.fn_sync_checkBox();
-	this.fn_sync_mbrGrde();
-	
-	var itemInfo = new nexacro.ItemChangeEventInfo();
-	
-	itemInfo.postvalue = this.ds_detail.getColumn(0, "issueObjClCd");
-	this.Div01_Div01_radioTrgtMem_onitemchanged(this.Div01.form.Div01.form.radioTrgtMem, itemInfo);
-	
-	itemInfo.postvalue = this.ds_detail.getColumn(0, "applLectClCd");
-	this.Div01_Div03_radioTrgtLect_onitemchanged(this.Div01.form.Div03.form.radioTrgtLect, itemInfo);
-	
-	itemInfo.postvalue = this.ds_detail.getColumn(0, "issueMthdClCd");
-	this.Div01_Div00_radioIssuCd_onitemchanged(this.Div01.form.Div00.form.radioIssuCd, itemInfo);
-	
-	itemInfo.postvalue = this.ds_detail.getColumn(0, "dcAmtClCd");
-	this.Div01_Div04_radioDiscount_onitemchanged(this.Div01.form.Div04.form.radioDiscount, itemInfo);
-	
-	itemInfo.postvalue = this.ds_detail.getColumn(0, "usePrdClCd");
-	this.Div01_Div05_radioPeriod_onitemchanged(this.Div01.form.Div05.form.radioPeriod, itemInfo);
-	
-	this.Div00.form.Div10.set_height(33);
-	this.Div00.form.resetScroll();
-	
-}
-
-//체크박스 동기화
-this.fn_sync_checkBox = function()
-{
-	var list = this.ds_appl_str;
-	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
-	
-	for(var i=0; i<list.getRowCount(); i++)
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
 	{
-		for(var j=0; j<spotObj.length; j++)
-		{
-			if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
-			{		
-				if(spotObj[j].truevalue == list.getColumn(i, "strCd"))
-				{
-					spotObj[j].set_value(list.getColumn(i, "strCd"));
-				}
-			}	
-		}
-	}
-}
-
-//회원등급 동기화
-this.fn_sync_mbrGrde = function()
-{
-	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
-	{
-		if(this.gfn_nvl(this.ds_mem_grade.getColumn(i, "mbrGrdeCd")) != "")
-		{
-			this.ds_mem_grade.checkarray[i] = 1;
-		}
-	}
-	this.Div01.form.Div01.form.Grid00.redrawExprCell()
-}
-
-//중분류 초기화
-this.ds_category02_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo)
-{
-	if(this.ds_category02.getRowCount() != 0)
-	{
-		this.ds_category02.insertRow(0);
-		this.ds_category02.setColumn(0, "cd", "");
-		this.ds_category02.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo01.set_text("전체");
-		
-		this.ds_category03.deleteAll();
-		this.ds_category03.addRow();
-		this.ds_category03.setColumn(0, "cd", "");
-		this.ds_category03.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
-	}
-};
-
-//소분류 초기화
-this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo)
-{
-	if(this.ds_category03.getColCount() == 0)
-	{
-		var smclsCtegryInf = new nexacro.ItemClickEventInfo();
-		
-		this.ds_category03.addColumn("cd", "STRING", 10);
-		this.ds_category03.addColumn("cdNm", "STRING", 50);
-		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);
-		
-		smclsCtegryInf.itemtext = "";
-		smclsCtegryInf.itemvalue = "";
-		
-		this.Div01_Div03_Div00_Combo02_onitemclick(this.Div01.form.Div03.form.Div00.form.Combo02, smclsCtegryInf);
-	}
-	else
-	{
-		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(true);
-		this.ds_category03.insertRow(0); 
-		this.ds_category03.setColumn(0, "cd", "");
-		this.ds_category03.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
-	}
-	
-};
-
-//강좌검색 버튼 
-this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
-	var spotStr = "";
-	var spotFlag = false;
-	
-	for(var i=0; i<spotObj.length; i++)
-	{
-		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
-		{		
-			console.log(spotObj[i].value);
-			spotFlag = true;
-			spotStr += spotObj[i].value + ",";
-		}	
-	}
-	
-	if(!spotFlag)
-	{
-		this.alert("지점을 선택하세요.");
-		this.Div00.form.Div00.form.Div00.form.chkSpotAll.setFocus();
+		this.alert(errorCode+"\n"+errorMsg);
 		return;
 	}
-	else
+	
+	switch(svcID)
 	{
-		this.popCnt++;
-		var arrArguments = {
-			type : 1,
-			brchCd : spotStr,
-			dataset : this.ds_appl_lect
-		}
-		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 700, true, true, null);
-		
+		case "detail":    
+			this.fn_set_detail();
+			break;
+		case "checkMbr":
+			this.fn_set_mbr_list();
+			break;
+		case "save":
+			this.alert("저장되었습니다.");
+			this.opener.components[0].form.fn_list();
+			this.close();
+			break;
 	}
-};
 
-this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-console.log(e.clickitem)
-	if(e.cell == 12){		
-		this.ds_appl_lect.deleteRow(e.row);	
-	}
-};
-
-
-this.fn_checkboxAll = function(pObj) 
-{
-	var arrObj = pObj.parent.components;
-		
-	if(pObj.isChecked())
-	{		
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]")
-			{
-				arrObj[i].set_value(arrObj[i].truevalue);
-			}
-		}
-	}
-	else 
-	{
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
-			{				
-				arrObj[i].set_value(arrObj[i].falsevalue);
-			}
-			
-		}
-	}
-	
-}
-
-this.fn_checkbox = function(pObj) 
-{
-	var arrObj = pObj.parent.components;
-		
-	if(pObj.isChecked())
-	{
-		var len = 0;
-		var chkLen = 0;
-		var chkAll;
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
-			{				
-				chkAll = arrObj[i];
-			}
-			
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
-			{
-				len++;
-				if(arrObj[i].isChecked())
-				{
-					chkLen++;
-				}
-			}
-		}
-		
-		if(len == chkLen) 
-		{
-			chkAll.set_value(true);
-		}
-	}
-	else 
-	{
-		for(var i=0; i<arrObj.length; i++)
-		{
-			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
-			{				
-				arrObj[i].set_value(false);	
-				return;
-			}			
-		}
-	}
-}
-
-this.Div01_Div01_Div00_uploadBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.importObj = new ExcelImportObject("Import00", this);
-	this.importObj.set_importtype(nexacro.ImportTypes.EXCEL);
-	this.importObj.set_importurl(this.application.Domain + this.application.getVariable("excelImportExport"));
-	
-	this.importObj.addEventHandler("onsuccess", this.Import00_onsuccess, this);
-	this.importObj.addEventHandler("onerror", this.Import00_onerror, this);
-	
-	this.importObj.importData("", "", "ds_mem_excel=output1");
-};
-
-this.Import00_onsuccess = function(obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
-{
-	this.ds_mem_excel.updateColID("Column0", "onlnCustNo");
-	this.ds_mem_excel.updateColID("Column1", "mbrNo");
-	this.ds_mem_excel.updateColID("Column2", "mbrId");
-	this.ds_mem_excel.updateColID("Column3", "korNm");
-	this.ds_mem_excel.updateColID("Column4", "hpNo");
-	
-	this.excel_import_validation_check();
-
-	this.Div01.form.Div01.form.Div00.form.Static00.set_text(e.url.split("/")[2]);
-	
-	this.Grid00.createFormat();
-}
-
-this.Import00_onerror = function(obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
-{
-	console.log(e.errormsg);
-}
-
-
-/* 엑셀 업로드 유효성 검사 */
-this.excel_import_validation_check = function(){
-	this.ds_mem_excel.deleteRow(0);	//헤드제거
-	
-	var tranObj = {
-		strSvcId : "checkMbr",
-		strSvcUrl : this.baseSvrUrl + "checkMbr.do",
-		inData : "mbrList=ds_mem_excel",
-		outData : "",
-		strArg : "",
-		callBackFnc : "fnCallback",
-		menuSeq : this.menuId,
-		isAsync : false,
-		isPopup : true
-	}
-	
-	this.gfn_transaction(tranObj);
-}
-
-this.fn_set_mbr_list = function(){
-	var delRowArr = this.rsltList.split(",");
-	this.ds_mem_excel.deleteMultiRows(delRowArr);
-	
-	alert(this.rsltMsg);
-}
-]]></Script>
+};]]></Script>
     <Bind>
       <BindItem id="cpnNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="cpnNm"/>
       <BindItem id="cpnExpl" compid="Div00.form.Div02.form.TextArea00" propid="value" datasetid="ds_detail" columnid="cpnExpl"/>
