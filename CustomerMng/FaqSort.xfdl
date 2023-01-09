@@ -5,7 +5,7 @@
       <Layout height="720" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Static id="Static00" taborder="1" text="FAQ TOP5 설정" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17" onclick="Static00_onclick"/>
-        <Grid id="Grid00" taborder="2" left="30" top="112" height="172" right="30" binddataset="faqSortDs" autofittype="col">
+        <Grid id="GridFaqSortList" taborder="2" left="30" top="112" height="172" right="30" binddataset="faqSortDs" autofittype="col" oncellclick="GridFaqSortList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -22,13 +22,13 @@
                 <Cell background="#f7f7f7" color="#000000" font="normal 700 12px/normal &quot;Noto Sans KR&quot;" text="expr:sortNo ? 'TOP'  + rn: ''"/>
                 <Cell col="1" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="2" text="▲" displaytype="buttoncontrol" edittype="button" cssclass="gridBtn_High"/>
-                <Cell col="3" text="bind:sortNo" displaytype="editcontrol" edittype="text" editinputfilter="alpha,comma,dot,sign,space,symbol" editmaxlength="expr:1"/>
+                <Cell col="3" text="bind:rn" displaytype="editcontrol" edittype="text" editinputfilter="alpha,comma,dot,sign,space,symbol" editmaxlength="expr:1"/>
                 <Cell col="4" text="▼" displaytype="buttoncontrol" edittype="button" cssclass="gridBtn_High"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div01" taborder="3" text="Div03" left="45" top="Grid00:54" height="55" right="45" minwidth="400" maxwidth="">
+        <Div id="Div01" taborder="3" text="Div03" left="45" top="GridFaqSortList:54" height="55" right="45" minwidth="400" maxwidth="">
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
@@ -44,13 +44,13 @@
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
-
+include "Base::popup.xjs";
 /**************************************************************************
 * FORM 변수 선언 영역
 **************************************************************************/
 this.application = null;
 this.rowcount = 0;
-
+this.popCnt = 0;
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -119,40 +119,37 @@ this.fn_save = function()
 this.GridFaqSortList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	var	faqSeqno 	= obj.getBindDataset().getColumn(e.row, "faqSeqno");
-	var sortNo	 	= obj.getBindDataset().getColumn(e.row, "sortNo");
-	var top5SlctYn 	= obj.getBindDataset().getColumn(e.row, "top5SlctYn");
+	//var sortNo	 	= obj.getBindDataset().getColumn(e.row, "rn");
+	//var top5SlctYn 	= obj.getBindDataset().getColumn(e.row, "top5SlctYn");
 		
 	if(e.cell == 1)
 	{
-		this.parent.param = {
-			faqSeqno : faqSeqno
+		this.popCnt ++;
+		var oArg = {
+			faqSeqno : obj.getBindDataset().getColumn(e.row, "faqSeqno")
 		};
 		
-		this.parent.set_url("CustomerMng::FaqDtl.xfdl");
+		this.gfn_openPopup("faqDtlPop"+this.popCnt, oArg, "CustomerMng::FaqDtl.xfdl", this, null, null, true, true, null);	
 	}
 	
 	if(e.cell ==2)
 	{
 		var trgtObj={
 			faqSeqno 	: faqSeqno ,
-			sortNo	 	: sortNo,
-			top5SlctYn	: top5SlctYn,
+		//	sortNo	 	: sortNo,
+		//	top5SlctYn	: top5SlctYn,
 			rowIdx		: e.row -1
 		}
-		
-		//this.alert("trgtObjSeq" + trgtObj.faqSeqno + "타겟SortNo::::" + trgtObj.sortNo+ "타겟rowIdx[:::" + trgtObj.rowIdx);
+		//this.alert("trgtObjSeq[" + trgtObj.faqSeqno + "] 타겟rowIdx[" + trgtObj.rowIdx + "]");
 		
 		var prevObj={
 			faqSeqno 	: "" ,
-			sortNo	 	: "",
-			top5SlctYn	: "",
+		//	sortNo	 	: "",
+		//	top5SlctYn	: "",
 			rowIdx		: e.row
 		}
 		
-		//this.alert("prevObj" + prevObj.faqSeqno + "@@@" + prevObj.sortNo + "기존rowIdx[" + prevObj.rowIdx);
-		
-		//obj.redrawExprCell();
-		
+		//this.alert("prevObj" + prevObj.faqSeqno + "] 기존rowIdx[" + prevObj.rowIdx + "]");
 	}
 };
 

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="NoticeReg" width="1280" height="800" titletext="New Form" onload="NoticeReg_onload">
+  <Form id="NoticeReg" width="1280" height="750" titletext="New Form" onload="NoticeReg_onload">
     <Layouts>
-      <Layout height="800" width="1280">
+      <Layout height="750" width="1280">
         <Static id="txtMenuNm" taborder="0" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu" text="공지사항/이벤트 관리"/>
         <Div id="row01" taborder="1" text="Div01" left="10" top="152" height="33" right="10" formscrolltype="none">
           <Layouts>
@@ -11,24 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="구분 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Radio id="radioGb" taborder="1" left="117" top="-2" width="151" height="33" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" columncount="-1" rowcount="-1">
-                      <Dataset id="innerdataset">
-                        <ColumnInfo>
-                          <Column id="codecolumn" size="256"/>
-                          <Column id="datacolumn" size="256"/>
-                        </ColumnInfo>
-                        <Rows>
-                          <Row>
-                            <Col id="codecolumn">4</Col>
-                            <Col id="datacolumn">이벤트</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">8</Col>
-                            <Col id="datacolumn">공지사항</Col>
-                          </Row>
-                        </Rows>
-                      </Dataset>
-                    </Radio>
+                    <Radio id="radioGb" taborder="1" left="117" top="-2" width="151" height="33" innerdataset="categoryDs" codecolumn="cd" datacolumn="cdNm" direction="vertical" columncount="-1" rowcount="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -176,6 +159,15 @@
           </Row>
         </Rows>
       </Dataset>
+      <Dataset id="categoryDs">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="10"/>
+          <Column id="cdNm" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
 * include 영역 
@@ -206,9 +198,12 @@ this.NoticeReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
 	
+	this.fn_data_list();
+	
 	if(this.parent.notcSeqno != ""){	
 		
 		this.ds_detail.setColumn(0, "notcSeqno", this.parent.notcSeqno);
+		this.Div01.form.btnSave.set_text("수정");
 		this.fn_detail();
 	}
 	else
@@ -245,6 +240,32 @@ this.fn_list = function()
 	this.opener.components[0].form.fn_list();
 	this.close();
 }
+
+// 코드 세팅
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::/customer/getCodeList.do";
+	var inData      = "";
+	var outData     = "categoryDs=clCdList";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuId
+	};
+	
+	this.gfn_transaction(tranObj);
+};
 //상세조회
 this.fn_detail = function ()
 {	
@@ -385,7 +406,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{
     case "save":
-		this.alert("저장되었습니다.");
+		if(this.parent.notcSeqno !=''){
+			gb = "수정"
+		}else{
+			gb="등록"
+		}
+		this.alert(gb + " 완료되었습니다.");
 		this.fn_list();
 	break;
 	}

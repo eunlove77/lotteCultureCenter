@@ -252,6 +252,7 @@ this.WebMagazineDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.parent.webMgznSeqno != ""){	
 		
 		this.ds_detail.setColumn(0, "webMgznSeqno", this.parent.webMgznSeqno);
+		this.Div01.form.btnSave.set_text("수정");
 		this.fn_detail();
 	}
 	else
@@ -388,7 +389,7 @@ this.fn_checkValidation = function(len){
 	{	
 		this.ds_detail.setColumn(0, "intrdnCont", this.fn_get_edit_body(this.row09.form.intrdnCont));
 		
-		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		if(this.confirm("입력하신 내용으로 저장하시겠습니까"))
 		{
 			this.atchFileUploadArr[0].fn_upload(); 
 			this.atchFileUploadArr[1].fn_upload();
@@ -504,7 +505,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	break;
 	
     case "save":
-		this.alert("저장되었습니다.");
+		if(this.parent.webMgznSeqno !=''){
+			gb = "수정"
+		}else{
+			gb="등록"
+		}
+		this.alert(gb + " 완료되었습니다.");
 		this.fn_list();
 	break;
   }
