@@ -67,7 +67,7 @@
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div00_02" taborder="6" text="Div00" left="0" top="Div00_01:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                          <Div id="Div00_02" taborder="6" text="Div00" left="0" top="Div00_01:-1" height="33" cssclass="div_WF_CompWrap" width="50%">
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="카테고리 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
@@ -237,6 +237,14 @@
                               </Layout>
                             </Layouts>
                           </Div>
+                          <Div id="Div03" taborder="20" text="Div03" left="Div00_02:0" top="Div01_01:-1" height="33" right="0" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="강좌옵션" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" width="300" height="21" maxlength="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -308,23 +316,22 @@
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌선택" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" usedecorate="true" bottom="0"/>
                                 <Button id="Button00" taborder="1" text="강좌검색" left="Static00:6" top="5" width="68" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_Div00_Div00_Button00_onclick"/>
-                                <Grid id="Grid00" taborder="2" left="Static00:6" top="Button00:5" right="6" bottom="0" binddataset="ds_cct_list" oninput="Div00_Div00_00_00_Div00_Div00_Grid00_oninput" ondrag="Div00_Div00_00_00_Div00_Div00_Grid00_ondrag" ondrop="Div00_Div00_00_00_Div00_Div00_Grid00_ondrop" oncellclick="Div00_Div00_00_00_Div00_Div00_Grid00_oncellclick" autoenter="select">
+                                <Grid id="Grid00" taborder="2" left="Static00:6" top="Button00:5" right="6" bottom="0" binddataset="ds_cct_list" ondrag="Div00_Div00_00_00_Div00_Div00_Grid00_ondrag" ondrop="Div00_Div00_00_00_Div00_Div00_Grid00_ondrop" oncellclick="Div00_Div00_00_00_Div00_Div00_Grid00_oncellclick" autoenter="select" autofittype="none">
                                   <Formats>
                                     <Format id="default">
                                       <Columns>
-                                        <Column size="66"/>
-                                        <Column size="142"/>
+                                        <Column size="55"/>
+                                        <Column size="128"/>
                                         <Column size="113"/>
                                         <Column size="208"/>
-                                        <Column size="205"/>
                                         <Column size="63"/>
                                         <Column size="133"/>
-                                        <Column size="102"/>
+                                        <Column size="83"/>
                                         <Column size="220"/>
                                         <Column size="302"/>
-                                        <Column size="197"/>
-                                        <Column size="146"/>
-                                        <Column size="110"/>
+                                        <Column size="158"/>
+                                        <Column size="150"/>
+                                        <Column size="150"/>
                                         <Column size="48"/>
                                       </Columns>
                                       <Rows>
@@ -336,32 +343,30 @@
                                         <Cell col="1" text="지점명"/>
                                         <Cell col="2" text="강좌코드"/>
                                         <Cell col="3" text="강좌명"/>
-                                        <Cell col="4" text="추가옵션명"/>
-                                        <Cell col="5" text="총정원"/>
-                                        <Cell col="6" text="수강료"/>
-                                        <Cell col="7" text="강의횟수"/>
-                                        <Cell col="8" text="강의기간"/>
-                                        <Cell col="9" text="요일"/>
-                                        <Cell col="10" text="강의시간"/>
-                                        <Cell col="11" text="강의실"/>
-                                        <Cell col="12" text="옵션사용"/>
-                                        <Cell col="13"/>
+                                        <Cell col="4" text="총정원"/>
+                                        <Cell col="5" text="수강료"/>
+                                        <Cell col="6" text="강의횟수"/>
+                                        <Cell col="7" text="강의기간"/>
+                                        <Cell col="8" text="요일"/>
+                                        <Cell col="9" text="강의시간"/>
+                                        <Cell col="10" text="강의실"/>
+                                        <Cell col="11" text="옵션사용"/>
+                                        <Cell col="12"/>
                                       </Band>
                                       <Band id="body">
                                         <Cell text="expr:currow+1"/>
                                         <Cell col="1" text="expr:'['+ brchCd + ']'  + ' ' +brchNm"/>
                                         <Cell col="2" text="bind:lectCd"/>
                                         <Cell col="3" text="bind:lectNm"/>
-                                        <Cell col="4" text="bind:rplcOptnNm" displaytype="editcontrol" edittype="text"/>
-                                        <Cell col="5" text="bind:gsCapaCnt"/>
-                                        <Cell col="6" text="bind:lectAmt"/>
-                                        <Cell col="7" text="bind:lectNbcnt"/>
-                                        <Cell col="8" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
-                                        <Cell col="9" displaytype="normal" edittype="none" text="bind:stringStDaywNm"/>
-                                        <Cell col="10" text="expr:lectSt == '' ? '' : lectSt + ' ~ ' lectEnd"/>
-                                        <Cell col="11" text="bind:lectRmNm"/>
-                                        <Cell col="12" text="bind:optnTypNm"/>
-                                        <Cell col="13" text="삭제" displaytype="buttoncontrol" edittype="button"/>
+                                        <Cell col="4" text="bind:gsCapaCnt"/>
+                                        <Cell col="5" text="bind:lectAmt" displaytype="normal" edittype="none" maskeditformat="expr:!##,###,###,##0"/>
+                                        <Cell col="6" text="bind:lectNbcnt"/>
+                                        <Cell col="7" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
+                                        <Cell col="8" displaytype="normal" edittype="none" text="bind:stringStDaywNm"/>
+                                        <Cell col="9" text="expr:lectSt + '~' + lectEnd"/>
+                                        <Cell col="10" text="bind:lectRmNm"/>
+                                        <Cell col="11" text="bind:optnTypNm"/>
+                                        <Cell col="12" text="삭제" displaytype="buttoncontrol" edittype="button"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -387,23 +392,22 @@
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌선택" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" usedecorate="true" bottom="0"/>
                                 <Button id="Button00" taborder="1" text="강좌검색" left="Static00:6" top="5" width="68" height="20" cssclass="btn_WF_Medium" onclick="Div00_Div00_00_00_00_Div00_Div00_Button00_onclick"/>
-                                <Grid id="Grid00" taborder="2" left="Static00:6" top="Button00:5" right="6" bottom="0" binddataset="ds_multtms_list" oninput="Div00_Div00_00_00_00_Div00_Div00_Grid00_oninput" ondrag="Div00_Div00_00_00_00_Div00_Div00_Grid00_ondrag" ondrop="Div00_Div00_00_00_00_Div00_Div00_Grid00_ondrop" oncellclick="Div00_Div00_00_00_00_Div00_Div00_Grid00_oncellclick" autoenter="select">
+                                <Grid id="Grid00" taborder="2" left="Static00:6" top="Button00:5" right="6" bottom="0" binddataset="ds_multtms_list" ondrag="Div00_Div00_00_00_00_Div00_Div00_Grid00_ondrag" ondrop="Div00_Div00_00_00_00_Div00_Div00_Grid00_ondrop" oncellclick="Div00_Div00_00_00_00_Div00_Div00_Grid00_oncellclick" autoenter="select" autofittype="none">
                                   <Formats>
                                     <Format id="default">
                                       <Columns>
-                                        <Column size="66"/>
-                                        <Column size="142"/>
+                                        <Column size="55"/>
+                                        <Column size="128"/>
                                         <Column size="113"/>
                                         <Column size="208"/>
-                                        <Column size="205"/>
                                         <Column size="63"/>
                                         <Column size="133"/>
-                                        <Column size="102"/>
+                                        <Column size="83"/>
                                         <Column size="220"/>
                                         <Column size="302"/>
-                                        <Column size="197"/>
-                                        <Column size="146"/>
-                                        <Column size="110"/>
+                                        <Column size="158"/>
+                                        <Column size="150"/>
+                                        <Column size="150"/>
                                         <Column size="48"/>
                                       </Columns>
                                       <Rows>
@@ -415,32 +419,30 @@
                                         <Cell col="1" text="지점명"/>
                                         <Cell col="2" text="강좌코드"/>
                                         <Cell col="3" text="강좌명"/>
-                                        <Cell col="4" text="추가옵션명"/>
-                                        <Cell col="5" text="총정원"/>
-                                        <Cell col="6" text="수강료"/>
-                                        <Cell col="7" text="강의횟수"/>
-                                        <Cell col="8" text="강의기간"/>
-                                        <Cell col="9" text="요일"/>
-                                        <Cell col="10" text="강의시간"/>
-                                        <Cell col="11" text="강의실"/>
-                                        <Cell col="12" text="옵션사용"/>
-                                        <Cell col="13"/>
+                                        <Cell col="4" text="총정원"/>
+                                        <Cell col="5" text="수강료"/>
+                                        <Cell col="6" text="강의횟수"/>
+                                        <Cell col="7" text="강의기간"/>
+                                        <Cell col="8" text="요일"/>
+                                        <Cell col="9" text="강의시간"/>
+                                        <Cell col="10" text="강의실"/>
+                                        <Cell col="11" text="옵션사용"/>
+                                        <Cell col="12"/>
                                       </Band>
                                       <Band id="body">
                                         <Cell text="expr:currow+1"/>
                                         <Cell col="1" text="expr:'['+ brchCd + ']'  + ' ' +brchNm"/>
                                         <Cell col="2" text="bind:lectCd"/>
                                         <Cell col="3" text="bind:lectNm"/>
-                                        <Cell col="4" text="bind:rplcOptnNm" displaytype="editcontrol" edittype="text"/>
-                                        <Cell col="5" text="bind:gsCapaCnt"/>
-                                        <Cell col="6" text="bind:lectAmt"/>
-                                        <Cell col="7" text="bind:lectNbcnt"/>
-                                        <Cell col="8" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
-                                        <Cell col="9" text="bind:stringStDaywNm"/>
-                                        <Cell col="10" text="expr:lectSt == '' ? '' : lectSt + ' ~ ' lectEnd"/>
-                                        <Cell col="11" text="bind:lectRmNm"/>
-                                        <Cell col="12" text="bind:optnTypNm"/>
-                                        <Cell col="13" text="삭제" displaytype="buttoncontrol" edittype="button"/>
+                                        <Cell col="4" text="bind:gsCapaCnt"/>
+                                        <Cell col="5" text="bind:lectAmt" displaytype="normal" edittype="none" maskeditformat="expr:!##,###,###,##0"/>
+                                        <Cell col="6" text="bind:lectNbcnt"/>
+                                        <Cell col="7" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
+                                        <Cell col="8" text="bind:stringStDaywNm"/>
+                                        <Cell col="9" text="expr:lectSt + '~' + lectEnd"/>
+                                        <Cell col="10" text="bind:lectRmNm"/>
+                                        <Cell col="11" text="bind:optnTypNm"/>
+                                        <Cell col="12" text="삭제" displaytype="buttoncontrol" edittype="button"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -2624,28 +2626,6 @@ this.Div00_Div00_00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Bu
 	this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1280, 720, true, true, null);
 };
 
-this.Div00_Div00_00_00_00_Div00_Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
-{
-	if(obj.currentcol == 4)
-	{
-		if(obj.getEditingValue() != "" && obj.getEditingValue() != undefined)
-		{		
-			obj.setEditingValue(obj.getEditingValue().substr(0, 20));
-		}
-	}
-};
-
-this.Div00_Div00_00_00_Div00_Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
-{
-	if(obj.currentcol == 4)
-	{
-		if(obj.getEditingValue() != "" && obj.getEditingValue() != undefined)
-		{		
-			obj.setEditingValue(obj.getEditingValue().substr(0, 20));
-		}
-	}
-};
-
 this.Div00_Div00_00_00_Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_btn_auth(this.parent.menuSeq, "accSrchYn")) return;
@@ -2699,7 +2679,7 @@ this.Div00_Div00_00_00_Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:n
 
 this.Div00_Div00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 13)
+	if(e.col == 12)
 	{
 		this.ds_cct_list.deleteRow(e.row);
 	}
@@ -2707,7 +2687,7 @@ this.Div00_Div00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Gri
 
 this.Div00_Div00_00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 13)
+	if(e.col == 12)
 	{
 		this.ds_multtms_list.deleteRow(e.row);
 	}
@@ -2950,6 +2930,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
           <Column id="lectKwrdVal" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="2000"/>
           <Column id="dsplyIconCd" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -3293,6 +3274,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
       <BindItem id="item36" compid="Div00.form.Div00.form.Div00.form.Div00_06.form.Calendar00" propid="accessibilityaction" datasetid="ds_class_dtl" columnid="lectStDtm"/>
       <BindItem id="item42" compid="Div00.form.Div00.form.Div00.form.Div00_06.form.Calendar01" propid="accessibilityaction" datasetid="ds_class_dtl" columnid="lectEndDtm"/>
       <BindItem id="item44" compid="Div00.form.Div00.form.Div00.form.Div01_06.form.Static01" propid="accessibilitydesclevel" datasetid="ds_class_dtl" columnid="lectNbcnt"/>
+      <BindItem id="item18" compid="Div00.form.Div00.form.Div00.form.Div03.form.Edit00" propid="value" datasetid="ds_class_dtl" columnid="lectAddOptnNm"/>
     </Bind>
   </Form>
 </FDL>

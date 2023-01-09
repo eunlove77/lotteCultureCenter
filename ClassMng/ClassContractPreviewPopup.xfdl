@@ -24,24 +24,23 @@ this.ClassContractPreviewPopup_onload = function(obj:nexacro.Form,e:nexacro.Load
 {
 	this.application = nexacro.getApplication();
 	this.domain = this.application.getVariable("domain");
-	this.WebBrowser00.set_url(this.domain + "/popup/POPUP_contract_lecture_prev.html");
-	this.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
+
+	var brchCd = "";
+	var yy = "";
+	var lectSmsterCd = "";
+	var lectCd = "";
+	var tcCdNo = "";
+	for(var i=0; i<this.parent.dataset.getRowCount(); i++) {
+		brchCd += brchCd == "" ? this.parent.dataset.getColumn(i, "brchCd") : "," + this.parent.dataset.getColumn(i, "brchCd");
+		yy += yy == "" ? this.parent.dataset.getColumn(i, "yy") : "," + this.parent.dataset.getColumn(i, "yy");
+		lectSmsterCd += lectSmsterCd == "" ? this.parent.dataset.getColumn(i, "lectSmsterCd") : "," + this.parent.dataset.getColumn(i, "lectSmsterCd");
+		lectCd += lectCd == "" ? this.parent.dataset.getColumn(i, "lectCd") : "," + this.parent.dataset.getColumn(i, "lectCd");
+		tcCdNo += tcCdNo == "" ? this.parent.dataset.getColumn(i, "tcCdNo") : "," + this.parent.dataset.getColumn(i, "tcCdNo");
+	}
+	
+	this.WebBrowser00.set_url(this.domain + "/admin/class/selectClassContractListPopup.do?brchCd=" + brchCd + "&yy=" + yy + "&lectSmsterCd=" + lectSmsterCd + "&lectCd=" + lectCd + "&tcCdNo=" + tcCdNo);
 };
 
-this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
-{		
-
-	var _win = obj.getProperty("window");	 
-	
-	
-	_win.callMethod("setData", this.parent.dataset.saveJSON());
-	
-	if(_win)
-	{
-		_win.destroy();
-		_win = null;
-	}  
-};
 
 ]]></Script>
   </Form>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ClassAttendanceListPopup" width="1280" height="720" titletext="출석부 출력" onload="ClassAttendanceListPopup_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <WebBrowser id="WebBrowser00" taborder="0" left="0" top="0" right="0" bottom="0"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.domain = "";
+
+ /**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.ClassAttendanceListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.domain = this.application.getVariable("domain");
+	
+	var brchCd = "";
+	var yy = "";
+	var lectSmsterCd = "";
+	var lectCd = "";
+	for(var i=0; i<this.parent.dataset.getRowCount(); i++) {
+		brchCd += brchCd == "" ? this.parent.dataset.getColumn(i, "brchCd") : "," + this.parent.dataset.getColumn(i, "brchCd");
+		yy += yy == "" ? this.parent.dataset.getColumn(i, "yy") : "," + this.parent.dataset.getColumn(i, "yy");
+		lectSmsterCd += lectSmsterCd == "" ? this.parent.dataset.getColumn(i, "lectSmsterCd") : "," + this.parent.dataset.getColumn(i, "lectSmsterCd");
+		lectCd += lectCd == "" ? this.parent.dataset.getColumn(i, "lectCd") : "," + this.parent.dataset.getColumn(i, "lectCd");
+	}
+	
+	this.WebBrowser00.set_url(this.domain + "/admin/class/selectClassAttendanceListPopup.do?brchCd=" + brchCd + "&yy=" + yy + "&lectSmsterCd=" + lectSmsterCd + "&lectCd=" + lectCd);
+};
+]]></Script>
+  </Form>
+</FDL>

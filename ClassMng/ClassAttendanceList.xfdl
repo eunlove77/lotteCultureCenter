@@ -12,7 +12,7 @@
                   <Layout>
                     <Button id="Button00" taborder="0" text="알림톡" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div00_Button00_onclick"/>
                     <Button id="Button00_00" taborder="1" text="문자발송" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00:15" onclick="Div00_Div00_Button00_00_onclick"/>
-                    <Button id="Button00_00_00" taborder="2" text="Print" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00_00:15"/>
+                    <Button id="Button00_00_00" taborder="2" text="Print" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00_00:15" onclick="Div00_Div00_Button00_00_00_onclick"/>
                     <Static id="Static00" taborder="3" text="출석부 목록 (0명)" left="0" top="15" width="120" height="21"/>
                     <Grid id="Grid00" taborder="4" left="0" top="Button00_00_00:15" right="0" bottom="0" binddataset="ds_attendance_list" oncelldblclick="Div00_Div00_Grid00_oncelldblclick" nodatatext="검색결과 없음">
                       <Formats>
@@ -25,6 +25,7 @@
                             <Column size="109"/>
                             <Column size="106"/>
                             <Column size="226"/>
+                            <Column size="150"/>
                             <Column size="119"/>
                             <Column size="93"/>
                             <Column size="80"/>
@@ -59,27 +60,28 @@
                             <Cell col="4" text="학기"/>
                             <Cell col="5" text="강좌코드"/>
                             <Cell col="6" text="강좌명"/>
-                            <Cell col="7" text="회원번호"/>
-                            <Cell col="8" text="회원등급"/>
-                            <Cell col="9" text="재수강"/>
-                            <Cell col="10" text="회원명"/>
-                            <Cell col="11" text="실수강자"/>
-                            <Cell col="12" text="관계"/>
-                            <Cell col="13" text="성별"/>
-                            <Cell col="14" text="휴대전화"/>
-                            <Cell col="15" text="SMS"/>
-                            <Cell col="16" text="나이"/>
-                            <Cell col="17" text="신청일시"/>
-                            <Cell col="18" text="접수구분"/>
-                            <Cell col="19" text="강사명"/>
-                            <Cell col="20" text="강좌요일"/>
-                            <Cell col="21" text="시작시간"/>
-                            <Cell col="22" text="종료시간"/>
-                            <Cell col="23" text="강좌종료일"/>
-                            <Cell col="24" text="재료비/대여료"/>
-                            <Cell col="25" text="결제상태"/>
-                            <Cell col="26" text="메모"/>
-                            <Cell col="27" text="취소일시"/>
+                            <Cell col="7" text="강좌옵션"/>
+                            <Cell col="8" text="회원번호"/>
+                            <Cell col="9" text="회원등급"/>
+                            <Cell col="10" text="재수강"/>
+                            <Cell col="11" text="회원명"/>
+                            <Cell col="12" text="실수강자"/>
+                            <Cell col="13" text="관계"/>
+                            <Cell col="14" text="성별"/>
+                            <Cell col="15" text="휴대전화"/>
+                            <Cell col="16" text="SMS"/>
+                            <Cell col="17" text="나이"/>
+                            <Cell col="18" text="신청일시"/>
+                            <Cell col="19" text="접수구분"/>
+                            <Cell col="20" text="강사명"/>
+                            <Cell col="21" text="강좌요일"/>
+                            <Cell col="22" text="시작시간"/>
+                            <Cell col="23" text="종료시간"/>
+                            <Cell col="24" text="강좌종료일"/>
+                            <Cell col="25" text="재료비/대여료"/>
+                            <Cell col="26" text="결제상태"/>
+                            <Cell col="27" text="메모"/>
+                            <Cell col="28" text="취소일시"/>
                           </Band>
                           <Band id="body">
                             <Cell text="expr:dataset.checkarray[currow]" edittype="checkbox" displaytype="expr:rfndDtm  == null ? 'checkboxcontrol' : 'none'" color="#666666"/>
@@ -89,27 +91,28 @@
                             <Cell col="4" text="bind:lectSmsterNm"/>
                             <Cell col="5" text="bind:lectCd" textDecoration="underline"/>
                             <Cell col="6" text="bind:lectNm"/>
-                            <Cell col="7" text="bind:mbrNo" textDecoration="underline"/>
-                            <Cell col="8" text="bind:mbrGrdeNm"/>
-                            <Cell col="9" text="bind:reAtlctYn"/>
-                            <Cell col="10" text="bind:mbrFnm"/>
-                            <Cell col="11" text="bind:actlAtlctNpleNm"/>
-                            <Cell col="12" text="bind:fmlyRelNm"/>
-                            <Cell col="13" text="expr:sexCd == 'M' ? '남성' : '여성'"/>
-                            <Cell col="14" text="bind:hpNo"/>
-                            <Cell col="15" text="bind:smsRcvAgrYn"/>
-                            <Cell col="16" text="expr:age + '세'"/>
-                            <Cell col="17" text="bind:appCmplDtm"/>
-                            <Cell col="18" text="bind:stlmChnlNm"/>
-                            <Cell col="19" text="bind:tcNm"/>
-                            <Cell col="20" text="bind:stDaywNm"/>
-                            <Cell col="21" text="bind:lectSt"/>
-                            <Cell col="22" text="bind:lectEnd"/>
-                            <Cell col="23" text="bind:lectEndDtm"/>
-                            <Cell col="24" text="bind:optnNm"/>
-                            <Cell col="25" text="expr:rfndDtm == null  ? '결제완료' : '취소완료'"/>
-                            <Cell col="26" text="expr:comp.parent.parent.parent.parent.parent.fn_short(memoCont)" tooltiptext="bind:memoCont"/>
-                            <Cell col="27" text="bind:rfndDtm"/>
+                            <Cell col="7" text="bind:lectAddOptnNm"/>
+                            <Cell col="8" text="bind:mbrNo" textDecoration="underline"/>
+                            <Cell col="9" text="bind:mbrGrdeNm"/>
+                            <Cell col="10" text="bind:reAtlctYn"/>
+                            <Cell col="11" text="bind:mbrFnm"/>
+                            <Cell col="12" text="bind:actlAtlctNpleNm"/>
+                            <Cell col="13" text="bind:fmlyRelNm"/>
+                            <Cell col="14" text="expr:sexCd == 'M' ? '남성' : '여성'"/>
+                            <Cell col="15" text="bind:hpNo"/>
+                            <Cell col="16" text="bind:smsRcvAgrYn"/>
+                            <Cell col="17" text="expr:age + '세'"/>
+                            <Cell col="18" text="bind:appCmplDtm"/>
+                            <Cell col="19" text="bind:stlmChnlNm"/>
+                            <Cell col="20" text="bind:tcNm"/>
+                            <Cell col="21" text="bind:stDaywNm"/>
+                            <Cell col="22" text="bind:lectSt"/>
+                            <Cell col="23" text="bind:lectEnd"/>
+                            <Cell col="24" text="bind:lectEndDtm"/>
+                            <Cell col="25" text="bind:optnNm"/>
+                            <Cell col="26" text="expr:rfndDtm == null  ? '결제완료' : '취소완료'"/>
+                            <Cell col="27" text="expr:comp.parent.parent.parent.parent.parent.fn_short(memoCont)" tooltiptext="bind:memoCont"/>
+                            <Cell col="28" text="bind:rfndDtm"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -349,6 +352,15 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.init();
 };
+
+this.Div00_Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var arrArguments = {
+		dataset : this.ds_class_list
+	}
+	this.gfn_openPopup("ClassAttendanceListPopup" + this.popCnt, arrArguments, "ClassMng::ClassAttendanceListPopup.xfdl", this, 1280, 720, true, true, null);
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_list">
@@ -394,6 +406,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="rfndDtm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_attendanceUpdate_list">
@@ -431,14 +444,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="rfndDtm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
-      <Dataset id="ds_classUpdate_list">
-        <ColumnInfo>
-          <Column id="brchCd" type="STRING" size="256"/>
-          <Column id="yy" type="STRING" size="256"/>
-          <Column id="lectSmsterCd" type="STRING" size="256"/>
-          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
