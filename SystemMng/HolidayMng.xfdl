@@ -132,7 +132,7 @@
                 <Cell col="4" text="bind:brchCd" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="7" text="expr:rgprId ? mdfNm + '('  + mdfId + ')' : ''"/>
+                <Cell col="7" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' : ''"/>
                 <Cell col="8" text="bind:mdfDtm" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
             </Format>
@@ -151,7 +151,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="true">
+        <Grid id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -179,7 +179,7 @@
             </Format>
           </Formats>
         </Grid>
-        <Grid id="Grid01" taborder="8" left="440" top="820" width="324" height="200" binddataset="excelImportDs" visible="true">
+        <Grid id="Grid01" taborder="8" left="440" top="820" width="324" height="200" binddataset="excelImportDs" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -492,7 +492,6 @@ this.classified_holiday_checkbox_onclick = function(obj:nexacro.CheckBox,e:nexac
 this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.reset_search_form();
-	this.fn_list();
 };
 
 this.reset_search_form = function(){
