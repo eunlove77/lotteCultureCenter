@@ -52,7 +52,7 @@
           </Formats>
         </Grid>
         <Static id="txtTotal" taborder="3" left="10" top="206" width="80" height="21" text="목록"/>
-        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" height="139" right="9" minwidth="680" maxwidth="">
+        <Div id="Div01" taborder="4" text="Div01" left="7" top="66" height="115" right="9" minwidth="680" maxwidth="">
           <Layouts>
             <Layout>
               <Div id="Div00_03" taborder="0" text="Div01" left="0" top="42" height="33" cssclass="div_WF_CompWrap" right="0">
@@ -143,11 +143,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="insBtn" taborder="8" text="쿠폰 신규등록" top="191" height="30" cssclass="btn_WF_Medium" onclick="insBtn_onclick" right="10" width="101"/>
-        <Button id="copyBtn" taborder="7" text="쿠폰 복사" top="191" height="30" width="75" cssclass="btn_WF_Medium" right="insBtn:10" onclick="copyBtn_onclick"/>
-        <Button id="endBtn" taborder="6" text="발급 종료" top="191" height="30" width="83" wordWrap="char" cssclass="btn_WF_High" right="copyBtn:10" onclick="endBtn_onclick"/>
-        <Button id="excelDownBtn" taborder="5" text="엑셀 다운로드" top="191" height="30" width="98" cssclass="btn_WF_Weak" right="endBtn:10" onclick="excelDownBtn_onclick"/>
-        <Grid id="Grid_Excel" taborder="9" left="10" top="730" binddataset="ds_coupon_excel" autofittype="col" right="10" height="100" visible="false">
+        <Grid id="Grid_Excel" taborder="5" left="10" top="730" binddataset="ds_coupon_excel" autofittype="col" right="10" height="100" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -190,6 +186,16 @@
             </Format>
           </Formats>
         </Grid>
+        <Div id="Div02" taborder="6" text="Div02" top="177" width="391" height="50" right="10">
+          <Layouts>
+            <Layout>
+              <Button id="insBtn" taborder="0" text="쿠폰 신규등록" top="11" height="30" cssclass="btn_WF_Medium" right="1" width="101" onclick="insBtn_onclick"/>
+              <Button id="copyBtn" taborder="1" text="쿠폰 복사" top="11" height="30" width="75" cssclass="btn_WF_Medium" right="112" onclick="copyBtn_onclick"/>
+              <Button id="endBtn" taborder="2" text="발급 종료" top="11" height="30" width="83" wordWrap="char" cssclass="btn_WF_High" right="197" onclick="endBtn_onclick"/>
+              <Button id="excelDownBtn" taborder="3" text="엑셀 다운로드" top="11" height="30" width="98" cssclass="btn_WF_Weak" right="290" onclick="excelDownBtn_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -217,21 +223,8 @@ this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
 	
 	this.fn_init_code();
-	this.fn_list(1);
 	
 	this.gfnSetCheckBoxNoDataset(this.ds_coupon_list, this.Grid00, 0); 
-};
-
-this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.parent.parent.parent.param.TAB_CLOSE = false;
-	this.popCnt ++;
-	
-	var oArg = {
-				cpnSeqno : ""
-				};
-	
-	this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 등록");
 };
 
 /**************************************************************************
@@ -269,57 +262,18 @@ this.fn_list = function (page)
 	this.gfn_transaction(tranObj);	
 };
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
-{
-	// 에러 시 화면 처리 내역
-	if(errorCode != 0)
-	{
-		this.alert(errorCode+"\n"+errorMsg);
-	}
-	
-	switch(svcID)
-	{
-		case "list":
-			this.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_coupon_list.getCount()) + "개)")
-			break;
-		case "save":
-			this.alert("저장되었습니다.");
-			this.fn_list();
-			break;
-		case "codeList":    
-			this.ds_stat_cd.insertRow(0);
-			this.ds_stat_cd.setColumn(0, "cd", "");
-			this.ds_stat_cd.setColumn(0, "cdNm", "전체");
-			break;
-		case "end":
-			this.alert("발급종료되었습니다.");
-			this.fn_list();
-			break;
-	}
-
-};
-
-this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-	if(e.cell == 2){	
-		this.popCnt ++;
-		var oArg = { cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno") };
-	
-		if(obj.getBindDataset().getColumn(e.row, "issueStatCd") == "00")
-		{
-			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 상세");
-		}
-		else
-		{
-			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, null, null, true, true, null, "쿠폰 상세");
-		}		
-	}
-};
+/**************************************************************************
+ * 검색 버튼
+ **************************************************************************/
 
 this.Div01_Div00_04_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_list(1);
+	this.fn_list();
 };
+
+/**************************************************************************
+ * 초기화 버튼
+ **************************************************************************/
 
 this.Div01_Div00_04_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -328,42 +282,12 @@ this.Div01_Div00_04_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.Clic
 	{
 		this.ds_search.setColumn(0, i, "");
 	}
-	this.fn_list(1);
+	this.ds_coupon_list.deleteAll();
 };
 
-this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var list = this.ds_coupon_list;
-	var chkCnt = 0;
-	var chkRow = -1;
-	
-	for(var i=0; i<list.getRowCount(); i++)
-	{
-		if(list.checkarray[i] == 1)
-		{
-			chkCnt ++;
-			chkRow = i;
-		}
-	}
-	
-	if(chkCnt == 0)
-	{
-		alert("항목을 선택하세요.");
-	}
-	else if(chkCnt > 1)
-	{
-		alert("1개만 선택하세요.");
-	}
-	else
-	{
-		this.popCnt ++;
-		var oArg = {
-				cpnSeqno : list.getColumn(chkRow, "cpnSeqno")
-				};
-	
-		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 복사");
-	}
-};
+/**************************************************************************
+ * 엑셀 다운로드 버튼
+ **************************************************************************/
 
 this.excelDownBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -400,6 +324,10 @@ this.excelDownBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 		this.exportObj.exportData();
 	}
 };
+
+/**************************************************************************
+ * 발급 종료 버튼
+ **************************************************************************/
 
 this.endBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -451,6 +379,111 @@ this.fn_end_coupon = function()
 		
 	}
 }
+
+/**************************************************************************
+ * 쿠폰 복사 버튼
+ **************************************************************************/
+
+this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var list = this.ds_coupon_list;
+	var chkCnt = 0;
+	var chkRow = -1;
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkCnt ++;
+			chkRow = i;
+		}
+	}
+	
+	if(chkCnt == 0)
+	{
+		alert("항목을 선택하세요.");
+	}
+	else if(chkCnt > 1)
+	{
+		alert("1개만 선택하세요.");
+	}
+	else
+	{
+		this.popCnt ++;
+		var oArg = {
+				cpnSeqno : list.getColumn(chkRow, "cpnSeqno")
+				};
+	
+		this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 복사");
+	}
+};
+
+/**************************************************************************
+ * 쿠폰 신규등록 버튼
+ **************************************************************************/
+
+this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.parent.param.TAB_CLOSE = false;
+	this.popCnt ++;
+	
+	var oArg = {
+				cpnSeqno : ""
+				};
+	
+	this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 등록");
+};
+
+/**************************************************************************
+ * 그리드 이벤트
+ **************************************************************************/
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 2){	
+		this.popCnt ++;
+		var oArg = { cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno") };
+	
+		if(obj.getBindDataset().getColumn(e.row, "issueStatCd") == "00")
+		{
+			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null, "쿠폰 상세");
+		}
+		else
+		{
+			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, null, null, true, true, null, "쿠폰 상세");
+		}		
+	}
+};
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			this.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_coupon_list.getCount()) + "개)")
+			break;
+		case "codeList":    
+			this.ds_stat_cd.insertRow(0);
+			this.ds_stat_cd.setColumn(0, "cd", "");
+			this.ds_stat_cd.setColumn(0, "cdNm", "전체");
+			break;
+		case "end":
+			this.alert("발급종료되었습니다.");
+			this.fn_list();
+			break;
+	}
+
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_search">
