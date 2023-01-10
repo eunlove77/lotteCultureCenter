@@ -9,23 +9,25 @@
               <Div id="Div01" taborder="0" text="Div01" left="18" top="775" height="160" right="18">
                 <Layouts>
                   <Layout>
-                    <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="45.16%" height="17.65%" border="0px none, 0px none, 1px solid darkgray">
+                    <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="19.38%" border="0px none, 0px none, 1px solid darkgray" right="50%">
                       <Layouts>
                         <Layout>
-                          <Static id="Static01" taborder="0" text="더보기 &gt;&gt;" top="0" width="70" height="20" right="1" textAlign="right" color="#6ea1cd"/>
+                          <Static id="Static01" taborder="0" text="더보기 &gt;&gt;" top="0" width="70" height="20" right="1" textAlign="right" color="#6ea1cd" cursor="pointer"/>
                           <Static id="Static00" taborder="1" text="1:1 문의" left="0" top="0" width="145" height="20" font="14px/normal &quot;Noto Sans KR&quot;"/>
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="Div00_00" taborder="1" text="Div00" top="0" height="19.38%" border="0px none, 0px none, 1px solid darkgray" right="0" width="608">
+                    <Div id="Div00_00" taborder="1" text="Div00" top="0" height="19.38%" border="0px none, 0px none, 1px solid darkgray" right="0" left="Div00:20">
                       <Layouts>
                         <Layout>
-                          <Static id="Static00" taborder="1" text="1:1 문의" left="0" top="0" width="145" height="20" font="14px/normal &quot;Noto Sans KR&quot;"/>
+                          <Static id="Static00" taborder="1" text="업무 요청 및 결과" left="0" top="0" width="145" height="20" font="14px/normal &quot;Noto Sans KR&quot;"/>
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Static id="Static00" taborder="2" text="강좌정보 승인요청:" left="668" top="41" width="174" height="30"/>
-                    <Static id="Static01" taborder="3" text="더보기 &gt;&gt;" top="40" width="70" height="20" right="12" textAlign="right" color="#6ea1cd" onclick="Div00_Div01_Static01_onclick"/>
+                    <Static id="Static00" taborder="2" text="강좌정보 승인요청:" left="Div00:20" top="33" width="174" height="30"/>
+                    <Static id="Static01" taborder="3" top="33" width="70" height="30" right="12" textAlign="right" color="#6ea1cd" onclick="Div00_Div01_Static01_onclick" text="0건" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" cursor="pointer"/>
+                    <Static id="Static02" taborder="4" top="Static01:0" width="70" height="30" right="12" textAlign="right" color="#6ea1cd" text="0건" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" onclick="Div00_Div01_Static02_onclick" cursor="pointer"/>
+                    <Static id="Static00_00" taborder="5" text="강사 승인요청:" left="Div00:20" top="Static00:0" width="174" height="30"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -323,6 +325,9 @@ this.selectedDate = null;
 this.selectedKey = null;
 this.grdSchedule = this.Div00.form.grdSchedule;
 this.cur_brchCd = null;
+
+this.rqstCnt = 0;
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -332,7 +337,9 @@ this.Form_Main_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.set_default_data();
 	
-	this.get_schedule_list();	
+	this.get_schedule_list();
+	
+	this.get_teacher_approval_list(); //온라인강사지원자 수
 	
 	//버튼 css세팅
 	if(this.application.HFSet00.LeftFrame.width > 0){
@@ -503,21 +510,42 @@ this.get_schedule_list = function(){
 	tranObj.inData      = "search=ds_search";
 	tranObj.outData     = "ds_schd_list=output1";
 	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback_schedule_list";
+	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	
 	this.gfn_transaction(tranObj);
 };
-this.fnCallback_schedule_list = function(svcID, errorCode, errorMsg){
-	if(errorCode == 0){
-		this.set_calendar();
-	} else {
+
+this.get_teacher_approval_list = function(){
+	var tranObj = {};
+	tranObj.strSvcId	= "select_teacher_approval";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/onlineTeacherRqst/cnt.do";
+	tranObj.inData      = "";
+	tranObj.outData     = "";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	
+	this.gfn_transaction(tranObj);
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg){
+	if(errorCode != 0) {
 		// 에러 시 화면 처리 내역
 		this.alert(errorCode+"\n"+errorMsg);
 		return;
 	}
+
+	if(svcID == "select_schedule"){
+		this.set_calendar();
+	}
+	else if(svcID == "select_teacher_approval"){
+		this.Div00.form.Div01.form.Static02.set_text(this.rqstCnt + "건");
+	}
+
 }
 
+// 왼쪽 메뉴 버튼
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.application.HFSet00.LeftFrame.width > 0){
@@ -527,6 +555,21 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.application.HFSet00.set_separatesize("150,*");
 		this.Button00.set_cssclass("btn_LF_MenuClose");
 	}
+};
+
+this.Div00_Div01_Static02_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	//온라인 강사지원 메뉴번호 67
+	var ds = this.application.gdsMenu;
+	var row = ds.findRow("menuSeq", 67);
+	var objSelectMenu = {
+		menuSeq : "67",
+		menuNm : ds.getColumn(row, "menuNm"),
+		pagePath : ds.getColumn(row, "pagePath"),
+		pageId : ds.getColumn(row, "pageId")
+	};
+	
+	this.application.LeftFrame.form.fn_openMenu(objSelectMenu);
 };
 ]]></Script>
     <Objects>
