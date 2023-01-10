@@ -278,23 +278,33 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 {
 	var check_array = this.noticeDs.checkarray;
 	var checked_array = new Array();
+	var fixCnt = 0;
 	for(var i = 0; i < check_array.length; i++){
 		if(check_array[i] > 0) checked_array.push(i);
 	}
-	
+	for(var j =0; j<checked_array.length; j++)
+	{
+		if(this.noticeDs.getColumn(checked_array[j], "fixYn") =="Y") fixCnt ++;
+	}
 	if(checked_array.length == 0){
 		alert("삭제할 게시글을 선택하세요.");
 		return false;
 	}
-	if(!confirm("선택한 게시물을 삭제하시겠습니까?")){
-		return false;
+	if(fixCnt > 0)
+	{
+		if(!confirm("상단 고정된 공지사항이 포함됐습니다\n삭제하시겠습니까?")) return false;
+	}
+	else
+	{
+		if(!confirm("선택한 게시글을 삭제하시겠습니까?")) return false;
 	}
 	
 	this.noticeDs.deleteMultiRows(checked_array);
 	for(i of checked_array){
 		check_array[i] = 0;
 	}
-	this.fn_delete();	
+	this.fn_delete();
+	
 };
 
 //검색버튼
@@ -631,7 +641,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		
 		case "delete":
 			this.alert("삭제 완료되었습니다");
-			this.fn_list(1);
+			this.reload();
 		break;
 	}
 	
