@@ -692,7 +692,8 @@ this.set_teacher_basic_info = function(apvlCd, tcTpCd){
 	var pbrlRow = this.ds_spot_list.findRow("cd", this.ds_teacher_info.getColumn(0, 'pbrltnBrchCd'));
 	var pbrltnBrchCdNm = this.ds_spot_list.getColumn(pbrlRow, 'cdNm');
 	var pbrlId = this.ds_teacher_info.getColumn(0, 'pbrltnChrgprId')
-	this.Div01.form.Div04.form.Div01.form.pbrltnInfo.set_text(pbrltnBrchCdNm + "(" + pbrlId + ")");
+	var pbrlText = (pbrltnBrchCdNm ? pbrltnBrchCdNm : '- ') + (pbrlId ? "(" + pbrlId + ")" : "(-)");
+	this.Div01.form.Div04.form.Div01.form.pbrltnInfo.set_text(pbrlText);
 	
 	//등록자
 	var rgpr_info = this.ds_teacher_info.getColumn(0, 'rgprId') + '(' + this.ds_teacher_info.getColumn(0, 'rgprNm') + ')';
