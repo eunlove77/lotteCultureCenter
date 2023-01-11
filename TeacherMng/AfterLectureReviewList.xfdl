@@ -420,31 +420,43 @@ this.Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
  **************************************************************************/
 this.set_duplication = function(){
 	this.dupObj = new Object();
+  var rvwSeqno;
 	
 	for(var i = 0; i < this.ds_dupBest_list.rowcount; i++){
 		var bestRvwCd = this.ds_dupBest_list.getColumn(i, 'bestRvwCd');
-		var atlctRvwSeqno = this.ds_dupBest_list.getColumn(i, 'atlctRvwSeqno');
 		
-		this.dupObj[Number(bestRvwCd)] = Number(atlctRvwSeqno);
+    rvwSeqno = this.ds_dupBest_list.getColumn(i, 'brchCd');
+		rvwSeqno += this.ds_dupBest_list.getColumn(i, 'yy');
+		rvwSeqno += this.ds_dupBest_list.getColumn(i, 'lectSmsterCd');
+		rvwSeqno += this.ds_dupBest_list.getColumn(i, 'lectCd');
+		rvwSeqno += this.ds_dupBest_list.getColumn(i, 'tcCdNo');
+		rvwSeqno += this.ds_dupBest_list.getColumn(i, 'mbrNo');
+		
+		this.dupObj[Number(bestRvwCd)] = Number(rvwSeqno);
 	}
 }
 this.validate_duplication = function(row, value){
 	var bestRvwCd = Number(value);
-	var atlctRvwSeqno = Number(this.ds_atlctrvw_list.getColumn(row, "atlctRvwSeqno"));
+
+  var rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'yy');
+  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'lectSmsterCd');
+  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'lectCd');
+  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'tcCdNo');
+  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'mbrNo');
 	
 	if(bestRvwCd){
 		var preSeq = this.dupObj[bestRvwCd];
-		if(preSeq && atlctRvwSeqno != preSeq){
+		if(preSeq && rvwSeqno != preSeq){
 			return false;
 		} else {
-			var index = Object.values(this.dupObj).indexOf(atlctRvwSeqno);
+			var index = Object.values(this.dupObj).indexOf(rvwSeqno);
 			if(index > -1) delete this.dupObj[bestRvwCd];
 			
-			this.dupObj[bestRvwCd] = atlctRvwSeqno;
+			this.dupObj[bestRvwCd] = rvwSeqno;
 		}
 	}
 	else {
-		var index = Object.values(this.dupObj).indexOf(atlctRvwSeqno);
+		var index = Object.values(this.dupObj).indexOf(rvwSeqno);
 		if(index > -1) delete this.dupObj[bestRvwCd];
 	}
 	
