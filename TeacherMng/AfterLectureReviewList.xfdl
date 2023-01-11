@@ -371,7 +371,8 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
-				atlctRvwSeqno : obj.getBindDataset().getColumn(e.row, "atlctRvwSeqno"),
+				ds : obj.getBindDataset(),
+        key_row: e.row,
 				menuSeq : this.menuSeq
 				};
 		this.gfn_openPopup("AfterLectureReviewDtl"+this.popCnt, oArg, "TeacherMng::AfterLectureReviewDtl.xfdl", this, 1300, 850, true, true, null, "수강후기 상세");
@@ -493,7 +494,6 @@ this.rollback_dataset_data_onGrid = function(obj, dsColNm){
       </Dataset>
       <Dataset id="ds_atlctrvw_list">
         <ColumnInfo>
-          <Column id="atlctRvwSeqno" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
@@ -536,7 +536,12 @@ this.rollback_dataset_data_onGrid = function(obj, dsColNm){
       <Dataset id="ds_gdsSpotCd_list"/>
       <Dataset id="ds_dupBest_list">
         <ColumnInfo>
-          <Column id="atlctRvwSeqno" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="bestRvwCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
