@@ -1010,6 +1010,8 @@ this.Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:nexacr
 				this.ds_appl_ctgr.setColumn(nRowIdx, "lrclsCtegryNm", this.Div01.form.Div03.form.Div00.form.Combo00.text);
 				this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryCd", e.itemvalue);
 				this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryNm", e.itemtext);
+				this.ds_appl_ctgr.setColumn(nRowIdx, "smclsCtegryCd", "");
+				this.ds_appl_ctgr.setColumn(nRowIdx, "smclsCtegryNm", "전체");
 			}
 			else
 			{
@@ -1049,9 +1051,7 @@ this.Div01_Div03_Div00_Combo02_onitemclick = function(obj:nexacro.Combo,e:nexacr
 	{
 		var lrclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo00.value;
 		var mdclsCtegryCd = this.Div01.form.Div03.form.Div00.form.Combo01.value;
-		console.log(this.Div01.form.Div03.form.Div00.form.Combo01)
-		console.log(mdclsCtegryCd)
-		
+			
 		//중복체크
  		if(0 > this.ds_appl_ctgr.findRowExpr("lrclsCtegryCd=="+"'"+lrclsCtegryCd+"'"+" && mdclsCtegryCd=="+"'"+mdclsCtegryCd+"'"+" && smclsCtegryCd=="+"'"+e.itemvalue+"'"))
  		{
@@ -1104,8 +1104,8 @@ this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 		this.ds_category03.addColumn("cdNm", "STRING", 50);
 		this.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);
 		
-		smclsCtegryInf.itemtext = "";
-		smclsCtegryInf.itemvalue = "전체";
+		smclsCtegryInf.itemtext = "전체";
+		smclsCtegryInf.itemvalue = "";
 		
 		this.Div01_Div03_Div00_Combo02_onitemclick(this.Div01.form.Div03.form.Div00.form.Combo02, smclsCtegryInf);
 	}
