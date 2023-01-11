@@ -916,6 +916,8 @@ this.ClassReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//지점 초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
 	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
 	if(nexacro.getPrivateProfile("brchCd") != "0000")
 	{
@@ -1014,6 +1016,8 @@ this.init = function()
 			ord : 0
 		}
 		this.contentArr.push(contentObj);
+		this.contentArr[0].contentType.set_value(0);
+		this.contentArr[0].content.set_value("");
 	}
 	this.ds_content_list.clearData();
 	this.ds_content_list.addRow();

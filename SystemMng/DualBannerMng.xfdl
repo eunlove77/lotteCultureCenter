@@ -6,7 +6,7 @@
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00_00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Static id="Static00" taborder="2" text="▶ 광고 콘텐츠 설정" left="30" top="79" width="120" height="21" cssclass="sta_WF_TitGray"/>
-        <Grid id="Grid00" taborder="3" left="30" top="Static00:10" right="30" bottom="173" binddataset="dualBannerDs" autofittype="col" oncellclick="Grid00_oncellclick" cssclass="grd_WF_TableType">
+        <Grid id="Grid00" taborder="3" left="30" top="Static00:10" right="30" binddataset="dualBannerDs" autofittype="col" oncellclick="Grid00_oncellclick" cssclass="grd_WF_TableType" height="450">
           <Formats>
             <Format id="default">
               <Columns>
@@ -32,22 +32,21 @@
                 <Cell col="1" text="expr:rowidx+1"/>
                 <Cell col="2" text="bind:tit" displaytype="editcontrol" edittype="text"/>
                 <Cell col="3" displaytype="buttoncontrol" edittype="button" text="이미지 관리" cursor="pointer"/>
-                <Cell col="4" text="bind:expsrYn" combodataset="ds_use_yn_cd" combocodecol="cd" combodatacol="cdNm" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combocontrol' : 'combocontrol'"/>
+                <Cell col="4" text="bind:expsrYn" combodataset="ds_use_yn_cd" combocodecol="cd" combodatacol="cdNm" edittype="combo" displaytype="combocontrol"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div99" taborder="4" text="Div03" left="45" top="Grid00:23" height="55" right="45">
+        <Button id="btnNew" taborder="4" text="추가" top="76" height="21" cssclass="btn_WF_Weak" width="75" right="115" onclick="btnNew_onclick"/>
+        <Button id="btnDel" taborder="5" text="삭제" top="76" height="21" cssclass="btn_WF_High" width="72" right="30" onclick="btnDel_onclick"/>
+        <Div id="Div01" taborder="6" text="Div01" left="45" top="Grid00:30" height="60" right="45">
           <Layouts>
             <Layout>
-              <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="21" cssclass="btn_WF_Weak" fittocontents="width" visible="false"/>
-              <Button id="btnSave" taborder="0" text="등록" top="12" width="84" height="21" cssclass="btn_WF_Medium" fittocontents="width" left="btnCnl:16.036000000000058" onclick="Div99_btnSave_onclick" visible="false"/>
+              <Button id="btnSave" taborder="1" text="저장" width="75" cssclass="btn_WF_Medium" fittocontents="none" height="21" top="0" right="43.19%"/>
+              <Button id="btnCnl" taborder="0" text="취소" cssclass="btn_WF_Weak" fittocontents="none" height="21" top="0" onclick="Div01_btnCnl_onclick" right="btnSave:15.038999999999987" width="75"/>
             </Layout>
           </Layouts>
         </Div>
-        <Button id="btnNew" taborder="5" text="추가" top="76" height="21" cssclass="btn_WF_Weak" width="75" right="202" onclick="btnNew_onclick"/>
-        <Button id="btnDel" taborder="6" text="삭제" top="76" height="21" cssclass="btn_WF_High" width="72" right="115" onclick="btnDel_onclick"/>
-        <Button id="btnSave" taborder="7" text="저장" top="76" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="30" onclick="btnSave_onclick"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -64,7 +63,7 @@
           <Column id="chk" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_imgClsf_cd">
+      <Dataset id="ds_atchFileList">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
@@ -86,6 +85,19 @@
           </Row>
         </Rows>
       </Dataset>
+      <Dataset id="dualBannerDs_format">
+        <ColumnInfo>
+          <Column id="seqno" type="STRING" size="256"/>
+          <Column id="tit" type="STRING" size="256"/>
+          <Column id="webImgFleNo" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -96,7 +108,7 @@ include "Base::popup.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-
+this.popCnt = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -116,11 +128,18 @@ this.DualBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.fn_list();
 };
 
+//추가 버튼 클릭
 this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var n_row = this.dualBannerDs.addRow();
-	this.dualBannerDs.setColumn(n_row, "expsrYn", "");
+	if(this.dualBannerDs.rowcount >=10){
+		this.alert("배너는 10개까지만 설정 가능합니다");
+	}else{	
+		var n_row = this.dualBannerDs.addRow();
+		this.dualBannerDs.setColumn(n_row, "expsrYn", "");
+	}
 };
+
+//삭제 버튼 클릭
 this.btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var check_array = this.dualBannerDs.checkarray;
@@ -143,29 +162,55 @@ this.btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	 this.Grid00.redrawExprCell();
 };
-this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+
+//저장 버튼
+this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	//this.fn_checkValidation();
 	if(!confirm("저장하시겠습니까?")){
 		return false;
 	}
-	
-	this.update_dualBanner("dualBannerDs");
+	this.fn_update_dualBanner("dualBannerDs");
+};
+//취소 버튼
+this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("취소하시겠습니까"))
+	{
+		this.reload();
+	}
 };
 
-this.update_dualBanner = function(datasetName){
-	var tranObj = {};
-	tranObj.strSvcId	= "update";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::main/dualBanner/update.do";
-	tranObj.inData      = "dualBannerList="+ datasetName +":U";
-	tranObj.outData     = "dualBannerDs=output1";
-	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback";
-	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+//이미지 등록팝업
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var headTitle = obj.getCellProperty("Head", e.col, "text");
+	var seqno = null
+	var rowIdx;
+	if(this.dualBannerDs.getColumn(e.row, "seqno")){
+		seqno = this.dualBannerDs.getColumn(e.row , "seqno");
+	}else{ 
+		seqno = "";
+	}
+	var webImgFleNo = this.dualBannerDs.getColumn(e.row, "webImgFleNo");
+	var expsrYn = this.dualBannerDs.getColumn(e.row, "expsrYn");
 	
-	this.gfn_transaction(tranObj);
-}
+	if(headTitle == "이미지" && e.clickitem == "control"){
+		var oArg = {
+			seqno : seqno,
+			rowIdx : e.row,
+			dataset : this.dualBannerDs,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		};
+		this.gfn_openPopup("DualBannerPopup" + this.popCnt, oArg, "SystemMng::popup/DualBanner_popup.xfdl", this, 1000, 420, true, true);
+	}
+};
 
+/**************************************************************************
+* 트랜잭션 callback
+**************************************************************************/
+
+//리스트 조회
 this.fn_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "list";
@@ -180,34 +225,27 @@ this.fn_list = function(){
 	this.gfn_transaction(tranObj);
 }
 
-this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-	var headTitle = obj.getCellProperty("Head", e.col, "text");
-	var seqno = this.dualBannerDs.getColumn(e.row, "seqno");
-	//var tit = this.dualBannerDs.getColumn(e.row, "tit");
-	var webImgFleNo = this.dualBannerDs.getColumn(e.row, "webImgFleNo");
-	//var imgClsfCd = this.dualBannerDs.getColumn(e.row, "webImgFleNo");
-	//var imgClsfNm = this.dualBannerDs.getColumn(e.row, "imgClsfNm");
-	var expsrYn = this.dualBannerDs.getColumn(e.row, "expsrYn");
-	
-	//this.alert("헤드타이틀" + headTitle);
-	if(headTitle == "이미지" && e.clickitem == "control"){
-		var oArg = {
-			seqno : seqno,
-			//tit : tit,
-			//imgClsfCd : imgClsfCd,
-			webImgFleNo : webImgFleNo,
-			//imgClsfNm : imgClsfNm,
-			//expsrYn : expsrYn,
-			menuSeq : this.getOwnerFrame().param.MENU_ID
-		};
-		this.gfn_openPopup("popup", oArg, "SystemMng::popup/DualBanner_popup.xfdl", this, 0, 0, true, true, null);
-	}
-};
+//유효성 체크
+/*this.fn_checkValidation = function(){
 
-/**************************************************************************
-* 트랜잭션 callback
-**************************************************************************/
+};*/
+
+//그리드 수정
+this.fn_update_dualBanner = function(datasetName){
+	var tranObj = {};
+	tranObj.strSvcId	= "update";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::main/dualBanner/update.do";
+	tranObj.inData      = "dualBannerList="+ datasetName +":U";
+	tranObj.outData     = "dualBannerDs=output1";
+	tranObj.strArg      = "";
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.isAsync     = true;
+	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	this.gfn_transaction(tranObj);
+}
+
+//콜백처리
 this.fnCallback = function(svcID, errorCode, errorMsg, rtnCode)
 {
 	// 에러 시 화면 처리 내역
@@ -220,7 +258,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg, rtnCode)
 		switch(svcID)
 		{
 		case "list":
-			
+			if(this.dualBannerDs.rowcount < 1)
+			{
+				this.dualBannerDs.copyData(this.dualBannerDs_format);
+			}
 		break;
 		
 		case "update":

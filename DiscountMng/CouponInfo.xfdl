@@ -65,7 +65,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="50" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false" onclick="Div01_Div01_Grid00_onclick">
+                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="50" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false" onclick="Div01_Div01_Grid00_onclick" readonly="true">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -87,7 +87,7 @@
                         </Format>
                       </Formats>
                     </Grid>
-                    <Static id="Static01" taborder="2" text="샘플 양식.xlxs" left="Static00:10" top="-1" width="379" height="30" cursor="pointer" textDecoration="underline" visible="false" onclick="Div01_Div01_Static01_onclick"/>
+                    <Static id="Static01" taborder="2" text="쿠폰발급 회원리스트.xlxs" left="Static00:10" top="-1" width="379" height="30" cursor="pointer" textDecoration="underline" visible="false" onclick="Div01_Div01_Static01_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -145,7 +145,6 @@
                             <Column size="80"/>
                             <Column size="80"/>
                             <Column size="80"/>
-                            <Column size="48"/>
                           </Columns>
                           <Rows>
                             <Row size="24" band="head"/>
@@ -164,7 +163,6 @@
                             <Cell col="9" text="강의시작일"/>
                             <Cell col="10" text="강의종료일"/>
                             <Cell col="11" text="그룹여부"/>
-                            <Cell col="12"/>
                           </Band>
                           <Band id="body">
                             <Cell text="bind:brchNm"/>
@@ -179,7 +177,6 @@
                             <Cell col="9" text="bind:lectStDtm"/>
                             <Cell col="10" text="bind:lectEndDtm"/>
                             <Cell col="11" text="bind:groupYn"/>
-                            <Cell col="12" displaytype="buttoncontrol" edittype="button" text="삭제"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -226,11 +223,36 @@
         <Div id="Div03" taborder="4" text="Div03" left="5" top="Div04:15" height="55" right="5" minwidth="400" maxwidth="">
           <Layouts>
             <Layout>
-              <Button id="copyBtn" taborder="1" text="쿠폰 복사" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_Medium" onclick="Div03_cnclBtn_onclick"/>
+              <Button id="copyBtn" taborder="1" text="쿠폰 복사" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_Medium" onclick="Div03_copyBtn_onclick"/>
               <Button id="cncl" taborder="0" text="목록" top="12" width="84" height="30" cssclass="btn_WF_Weak" left="copyBtn:16.036000000000058" onclick="Div03_cncl_onclick"/>
             </Layout>
           </Layouts>
         </Div>
+        <Grid id="Grid00" taborder="5" left="370" top="435" width="773" height="225" binddataset="ds_mem_excel" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="182"/>
+                <Column size="93"/>
+                <Column size="142"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="회원ID"/>
+                <Cell col="1" text="회원명"/>
+                <Cell col="2" text="연락처"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:mbrId"/>
+                <Cell col="1" text="bind:korNm"/>
+                <Cell col="2" text="bind:hpNo"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Bind>
@@ -307,19 +329,18 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
+this.popCnt = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
 
 this.CouponInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
@@ -333,6 +354,10 @@ this.CouponInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.fn_detail();
 	}
 };
+
+/**************************************************************************
+ * 사용자 함수
+ **************************************************************************/
 
 this.fn_detail = function ()
 {	
@@ -349,25 +374,7 @@ this.fn_detail = function ()
 	this.gfn_transaction(tranObj);
 };
 
-this.fnCallback = function(svcID, errorCode, errorMsg)
-{
-	// 에러 시 화면 처리 내역
-	if(errorCode != 0)
-	{
-		this.alert(errorCode+"\n"+errorMsg);
-	}
-	
-	switch(svcID)
-	{
-		case "detail":    
-			this.fn_set_detail();
-
-			break;
-	}
-
-};
-
-//지점 체크박스 세팅
+/* 지점 체크박스 세팅 */
 this.fn_set_spot = function()
 {
 	var content = [];
@@ -390,7 +397,7 @@ this.fn_set_spot = function()
 	}
 }
 
-//상세화면 세팅
+/* 상세화면 세팅 */
 this.fn_set_detail = function()
 {
 	var dcTxt = this.gfn_setComma(this.ds_detail.getColumn(0, "dcAmt")) + (this.ds_detail.getColumn(0, "dcAmtClCd") == "01" ? "%" : "원") + " 할인";
@@ -440,7 +447,7 @@ this.fn_set_detail = function()
 	this.Div01.form.resetScroll();
 }
 
-//체크박스 동기화
+/* 지점 체크박스 동기화 */
 this.fn_sync_checkBox = function()
 {
 	var list = this.ds_appl_str;
@@ -461,7 +468,7 @@ this.fn_sync_checkBox = function()
 	}
 }
 
-//회원등급 동기화
+/* 회원등급 체크박스 동기화 */
 this.fn_sync_mbrGrde = function()
 {
 	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
@@ -474,10 +481,64 @@ this.fn_sync_mbrGrde = function()
 	this.Div01.form.Div01.form.Grid00.redrawExprCell()
 }
 
+/**************************************************************************
+ * 엑셀업로드 회원리스트 다운로드 버튼
+ **************************************************************************/
+
+this.Div01_Div01_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	this.exportObj = new ExcelExportObject("Export00", this);
+	
+	this.exportObj.set_exporturl(this.application.Domain + this.application.getVariable("excelImportExport"));
+	this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid00, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
+	this.exportObj.set_exporttype(nexacro.ExportTypes.EXCEL2007);
+	this.exportObj.set_exportfilename("쿠폰발급_회원리스트_" + this.ds_detail.getColumn(0, "cpnNm"));
+
+	this.exportObj.exportData();
+};
+
+/**************************************************************************
+ * 복사버튼
+ **************************************************************************/
+
+this.Div03_copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var oArg = {
+			cpnSeqno : this.ds_detail.getColumn(0, "cpnSeqno")
+	};
+
+	this.gfn_openPopup("couponCopyPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null);
+};
+
+/**************************************************************************
+ * 취소버튼
+ **************************************************************************/
 
 this.Div03_cncl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.parent.parent.parent.close();
+};
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "detail":    
+			this.fn_set_detail();
+
+			break;
+	}
 };
 ]]></Script>
   </Form>
