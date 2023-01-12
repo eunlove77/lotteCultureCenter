@@ -127,6 +127,7 @@ this.loginDiv_StaticFind_onclick = function(obj:nexacro.Static,e:nexacro.ClickEv
 this.fn_logout = function()
 {
 	this.transaction("logout", this.application.Loing_svc + "::setLogout.do", "", "", "", "fnCallback", true);
+
 }
 
 /**************************************************************************
@@ -162,8 +163,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.gfn_codeList(this.application.Admin_svc);
 		break;
 		
-		case "logout":			
-			this.application.gfn_initFrame();
+		case "logout":		
+			this.logOutSuccess();
 		break;
 	}
 };
@@ -206,6 +207,20 @@ this.fn_setAdminInfo = function(){
 	nexacro.setPrivateProfile("id", adminId);
 	nexacro.setPrivateProfile("athrCd", athrCd);
 	nexacro.setPrivateProfile("coprMemstrNo", coprMemstrNo);
+}
+
+this.logOutSuccess = function()
+{
+	var menuGrid = this.application.MenuFrame.form.Grid00;
+	//LNB 초기화
+	this.application.LeftFrame.form.LeftMenuGrid.setCellProperty("head", 0, "text", "");	
+	this.application.LeftFrame.form.ds_left_menu.clearData();
+	//GNB 초기화
+	for(var i = 0 ; i < menuGrid.getCellCount("Head") ; i++){
+		menuGrid.setCellProperty("Head", i, "cssclass", "");	
+	}
+	this.application.gfn_initFrame();
+	
 }]]></Script>
     <Objects>
       <Dataset id="ds_login">
