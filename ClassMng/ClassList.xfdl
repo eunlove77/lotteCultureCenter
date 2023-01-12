@@ -52,12 +52,12 @@
                           <Div id="Div01_00" taborder="4" text="Div01" left="Div00_00:0" top="Div02:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                             <Layouts>
                               <Layout type="default">
-                                <Static id="Static00" taborder="0" text="강의유형" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Static id="Static00" taborder="0" text="강좌유형" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
                                 <CheckBox id="chkTypeAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div00_00_00" taborder="5" text="Div00" left="0" top="Div00_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                          <Div id="Div00_00_00" taborder="5" text="Div00" left="0" top="Div00_00:-1" height="33" cssclass="div_WF_CompWrap" width="60%">
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌상태" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
@@ -222,6 +222,16 @@
                               </Layout>
                             </Layouts>
                           </Div>
+                          <Div id="Div03" taborder="15" text="Div03" left="Div00_00_00:0" top="Div01_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="강사 수정요청" left="0" top="0" bottom="0" width="109" cssclass="sta_WF_TableLabel"/>
+                                <CheckBox id="chkMdfAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                                <CheckBox id="chkMdf0" taborder="2" text="요청" left="chkMdfAll:6" top="5" width="41" height="20" truevalue="Y"/>
+                                <CheckBox id="chkMdf1" taborder="3" text="미요청" left="chkMdf0:6" top="5" width="53" height="20" truevalue="N"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -276,7 +286,7 @@
                             <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
                             <Cell col="1" text="번호"/>
                             <Cell col="2" text="지점명"/>
-                            <Cell col="3" text="강의유형"/>
+                            <Cell col="3" text="강좌유형"/>
                             <Cell col="4" text="강좌코드"/>
                             <Cell col="5" text="강좌명"/>
                             <Cell col="6" text="강사명"/>
@@ -605,6 +615,8 @@
           <Column id="chkDis1" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
+          <Column id="chkMdf0" type="STRING" size="256"/>
+          <Column id="chkMdf1" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classCtgyLarge_list">
@@ -756,6 +768,7 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//지점초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
 	this.fn_classBrch_set();
 	
 	//캘린더 초기화
@@ -788,8 +801,10 @@ this.init = function()
 	this.ds_search.setColumn(0, "f", "");
 	this.ds_search.setColumn(0, "q", "");
 	this.ds_search.setColumn(0, "stDaywCd", "");
-	this.ds_search.setColumn(0, "chkDis0", "");
-	this.ds_search.setColumn(0, "chkDis1", "");
+	this.Div02.form.Div00.form.Div00.form.Div03.form.chkMdf1.set_falsevalue("");
+	this.Div02.form.Div00.form.Div00.form.Div03.form.chkMdf0.set_falsevalue("");
+	this.Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis0.set_falsevalue("");
+	this.Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis1.set_falsevalue("");
 	
 	// 코드 데이터
 	this.fn_code_list();
@@ -1135,23 +1150,34 @@ this.fn_sesterInfo = function()
 //학기 연도 추가
 this.fn_year_add = function() 
 {
+	this.ds_year_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getSesterYearList",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
+		inData : "",
+		outData : "ds_year_list=yearList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+		
+	}
+	this.gfn_transaction(tranObj);
+	
 	var year = new nexacro.Date().getFullYear();
-
 	if(this.yy != "")
 	{
 		year = nexacro.toNumber(this.yy);
 	}
-
-	this.ds_year_list.clearData();
-
-	for(var i =0; i <= 15; i++) 
-	{
+	
+	if(this.ds_year_list.getRowCount() == 0) {
 		this.ds_year_list.addRow();
-		this.ds_year_list.setColumn(i, "cd", year-i);
-		this.ds_year_list.setColumn(i, "cdNm", (year-i) + "년");
-		
+		this.ds_year_list.setColumn(0, "cd", year);
+		this.ds_year_list.setColumn(0, "cdNm", year + "년");
 	}
-	this.Div02.form.Div00.form.Div00.form.Div01.form.Combo00.set_index(0);
+
+	this.ds_search.setColumn(0, "yy", year);
 }
 
 //학기 설정
@@ -1832,6 +1858,8 @@ this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacr
       <BindItem id="item16" compid="Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Edit00" propid="value" datasetid="ds_search" columnid="q"/>
       <BindItem id="item17" compid="Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis1" propid="value" datasetid="ds_search" columnid="chkDis1"/>
       <BindItem id="item18" compid="Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis0" propid="value" datasetid="ds_search" columnid="chkDis0"/>
+      <BindItem id="item19" compid="Div02.form.Div00.form.Div00.form.Div03.form.chkMdf0" propid="value" datasetid="ds_search" columnid="chkMdf0"/>
+      <BindItem id="item20" compid="Div02.form.Div00.form.Div00.form.Div03.form.chkMdf1" propid="value" datasetid="ds_search" columnid="chkMdf1"/>
     </Bind>
   </Form>
 </FDL>
