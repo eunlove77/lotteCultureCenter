@@ -1,0 +1,477 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ClassWaitingReg" width="1280" height="720" titletext="대기자 등록" onload="ClassWaitingReg_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="대기자 등록" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
+          <Layouts>
+            <Layout>
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="80" right="0" binddataset="ds_class_list" autofittype="col" oncelldblclick="Div00_Grid00_oncelldblclick" autoupdatetype="none" oncloseup="Div00_Grid00_oncloseup">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="116"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="243"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="158"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="120"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="34"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="지점명"/>
+                      <Cell col="1" text="연도/학기"/>
+                      <Cell col="2" text="강좌코드"/>
+                      <Cell col="3" text="강좌명"/>
+                      <Cell col="4" text="강좌옵션"/>
+                      <Cell col="5" text="강사명"/>
+                      <Cell col="6" text="강의기간"/>
+                      <Cell col="7" text="수강/정원"/>
+                      <Cell col="8" text="대기자"/>
+                      <Cell col="9" text="재료비/대여료"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                      <Cell col="1" text="expr:yy + '년 ' + lectSmsterNm"/>
+                      <Cell col="2" text="bind:lectCd"/>
+                      <Cell col="3" text="bind:lectNm"/>
+                      <Cell col="4" tooltiptext="bind:lectAddOptnNm"/>
+                      <Cell col="5" text="bind:tcNm"/>
+                      <Cell col="6" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
+                      <Cell col="7" text="expr:dataset.getColumn(currow, &quot;appCnt&quot;) + '/' + dataset.getColumn(currow, &quot;lectNbcnt&quot;)" textDecoration="underline"/>
+                      <Cell col="8" text="bind:stayCnt"/>
+                      <Cell col="9" displaytype="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == 'N' ? 'normal' : 'combocontrol'" edittype="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == &quot;N&quot; ? 'none' : 'combo'" combocodecol="optnSeqno" combodatacol="optnNm" combodisplaynulltype="nulltext" combodataset="ds_optn_list" text="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == &quot;Y&quot; ? dataset.getColumn(currow, &quot;optnSeqno&quot;) : '-'" combodisplaynulltext="선택"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Div id="Div00" taborder="1" text="Div00" left="0" top="Grid00:15" height="130" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 검색" left="0" top="0" width="120" height="21"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="0" top="Static00:15" bottom="0" right="0" cssclass="div_WF_TableComp">
+                      <Layouts>
+                        <Layout>
+                          <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="50%" height="33" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="회원번호" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Edit id="Edit00" taborder="1" left="126" top="5" width="150" height="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div00_00" taborder="1" text="Div00" left="Div00:0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Edit id="Edit00" taborder="1" left="126" top="5" width="150" height="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div00_01" taborder="3" text="Div00" left="0" top="Div00:-1" width="50.00%" height="33" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" width="150" height="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div00_00_00" taborder="2" text="Div00" left="Div00_01:0" top="Div00_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel" text="실수강자명"/>
+                                <Button id="Button00" taborder="1" text="초기화" top="5" height="20" width="80" right="0" cssclass="btn_WF_Low" onclick="Div00_Div00_Div00_Div00_00_00_Button00_onclick"/>
+                                <Button id="Button00_00" taborder="2" text="검색" top="5" height="20" width="80" right="Button00:15" cssclass="btn_WF_Medium" onclick="Div00_Div00_Div00_Div00_00_00_Button00_00_onclick"/>
+                                <Edit id="Edit00" taborder="3" left="126" top="5" width="150" height="20"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                        </Layout>
+                      </Layouts>
+                    </Div>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="2" text="Div01" left="0" top="Div00:15" height="330" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="▶ 대기자 목록" left="0" top="0" width="90" height="21"/>
+                    <Grid id="Grid00" taborder="1" left="0" top="Static00:15" right="0" bottom="0" autofittype="col" nodatatext="검색결과 없음" binddataset="ds_member_list">
+                      <Formats>
+                        <Format id="default">
+                          <Columns>
+                            <Column size="48" band="left"/>
+                            <Column size="46"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                            <Column size="80"/>
+                          </Columns>
+                          <Rows>
+                            <Row size="24" band="head"/>
+                            <Row size="34"/>
+                          </Rows>
+                          <Band id="head">
+                            <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" displaytype="normal" text="번호"/>
+                            <Cell col="2" text="회원번호"/>
+                            <Cell col="3" text="회원명"/>
+                            <Cell col="4" text="실수강자명"/>
+                            <Cell col="5" text="관계"/>
+                            <Cell col="6" text="생년월일"/>
+                            <Cell col="7" text="휴대전화"/>
+                          </Band>
+                          <Band id="body">
+                            <Cell text="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                            <Cell col="1" text="expr:currow + 1"/>
+                            <Cell col="2" text="bind:mbrNo"/>
+                            <Cell col="3" text="bind:mbrNm"/>
+                            <Cell col="4" text="bind:actlAtlctNpleNm"/>
+                            <Cell col="5" text="bind:fmlyRelCdNm"/>
+                            <Cell col="6" text="bind:bday"/>
+                            <Cell col="7" text="expr:dataset.getColumn(currow, &quot;hpStNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpMidNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpLastNo&quot;)"/>
+                          </Band>
+                        </Format>
+                      </Formats>
+                    </Grid>
+                    <Static id="Static01" taborder="2" text="(0개)" left="85" top="0" width="40" height="20" cssclass="sta_WF_TitGray"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Button id="Button01" taborder="3" text="취소" left="535" top="Div01:30" width="100" height="30" cssclass="btn_WF_High" onclick="Div00_Button01_onclick"/>
+              <Button id="Button01_00" taborder="4" text="대기자 등록" left="645" top="Div01:30" width="100" height="30" cssclass="btn_WF_Medium" onclick="Div00_Button01_00_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.popCnt = 0;
+this.searchButton = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.ClassWaitingReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.searchButton = this.parent.searchButton;
+	this.init_grid();
+};
+
+// 강좌 그리드 초기화
+this.init_grid = function()
+{
+	this.ds_class_list.clearData();
+	this.ds_class_list.copyData(this.parent.dataset);
+	this.ds_class_list.addColumn("optnSeqno", "string", "256");
+	this.ds_class_list.addColumn("optnNm", "string", "256");
+	this.ds_class_list.addColumn("optnAmt", "string", "256");
+	this.ds_class_list.addColumn("partRfndPsblYn", "string", "256");
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::class/selectWaitingDataList.do",
+		inData : "classDtl=ds_class_list",
+		outData : "ds_optn_list=output1",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.parent.menuSeq,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+};
+
+// 취소 버튼
+this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+// 검색 버튼
+this.Div00_Div00_Div00_Div00_00_00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_nvl(this.ds_search.getColumn(0, "mbrNo")) == ""
+		&& this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm")) == ""
+		&& this.gfn_nvl(this.ds_search.getColumn(0, "hpNo")) == ""
+		&& this.gfn_nvl(this.ds_search.getColumn(0, "actlAtlctNpleNm")) == ""){
+		alert("1개 이상의 조건을 입력하세요.");
+	}else{
+		this.fn_list();
+	}
+};
+
+// 회원 리스트
+this.fn_list = function()
+{
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::class/selectMemberList.do",
+		inData : "search=ds_search",
+		outData : "ds_member_list=output1",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.parent.menuSeq,
+		isPopup : true
+	}
+	this.gfn_transaction(tranObj);
+	this.Div00.form.Div01.form.Static01.set_text("(" + this.ds_member_list.getRowCount() + "명)");
+	this.gfnSetCheckBoxNoDataset(this.ds_member_list, this.Div00.form.Div01.form.Grid00, 0);
+};
+
+// 초기화 버튼
+this.Div00_Div00_Div00_Div00_00_00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_search.clearData();
+	this.ds_search.addRow();
+	this.ds_search.setColumn(0, "mbrNo", "");
+	this.ds_search.setColumn(0, "mbrNm", "");
+	this.ds_search.setColumn(0, "hpNo", "");
+	this.ds_search.setColumn(0, "actlAtlctNpleNm", "");
+	this.ds_member_list.clearData();
+};
+
+// 강좌 리스트 수강정원 클릭
+this.Div00_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 7){
+ 		var arrArguments = {
+ 			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+ 			yy : this.ds_class_list.getColumn(e.row, "yy"),
+ 			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+ 			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+ 			menuSeq : this.parent.menuSeq,
+ 			searchButton : this.searchButton
+ 		}
+ 		
+ 		this.popCnt++;
+ 		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+};
+
+// 대기자 등록 버튼
+this.Div00_Button01_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.ds_waiting_list.clearData();
+	var flag = false;
+	
+	for(var i=0; i<this.ds_member_list.getRowCount(); i++)
+	{
+		if(this.ds_member_list.checkarray[i] == 1)
+		{
+			this.ds_waiting_list.addRow();
+			this.ds_waiting_list.copyRow(this.ds_waiting_list.getRowCount() - 1, this.ds_member_list, i);
+			flag = true;
+		}
+	}
+	
+	if(this.gfn_nvl(this.ds_class_list.getColumn(0, "optnSeqno")) == ""){
+		alert("재료비/대여료를 선택하세요.");
+		return;
+	}
+
+	if(flag)
+	{
+		if(confirm(this.ds_waiting_list.getRowCount() + "명의 대기자를 등록하시겠습니까?")){
+			var tranObj = {
+				strSvcId : "insert",
+				strSvcUrl : this.application.Admin_svc + "::class/insertWaitingList.do",
+				inData : "classList=ds_class_list waitingList=ds_waiting_list",
+				outData : "",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				menuSeq : this.parent.menuSeq,
+				isPopup : true
+			}
+			this.gfn_transaction(tranObj);
+		}else{
+			this.ds_waiting_list.clearData();
+		}
+	}
+	else
+	{
+		alert("대상을 선택하세요.");
+	}
+};
+
+// 옵션 선택 후
+this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
+{
+	if(e.col == 9){
+		this.ds_class_list.set_enableevent(false);
+		for(var i=0;i<this.ds_optn_list.getRowCount();i++){
+			if(e.value == this.ds_optn_list.getColumn(i, "optnSeqno")){
+				this.ds_class_list.setColumn(e.row, "optnSeqno", this.ds_optn_list.getColumn(i, "optnSeqno"));
+				this.ds_class_list.setColumn(e.row, "optnNm", this.ds_optn_list.getColumn(i, "optnNm"));
+				this.ds_class_list.setColumn(e.row, "optnAmt", this.ds_optn_list.getColumn(i, "optnAmt"));
+				this.ds_class_list.setColumn(e.row, "partRfndPsblYn", this.ds_optn_list.getColumn(i, "partRfndPsblYn"));
+			}
+		}
+		this.ds_class_list.set_enableevent(true);
+	}
+	obj.moveToNextCell();
+};
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+	if(svcID == "insert"){
+		if(errorCode == -1){
+			alert("강좌상태가 대기접수인 강좌만 대기자 등록이 가능합니다.");
+		}else if(errorCode == -2){
+			alert("대기신청 내역이 존재합니다.");
+		}else if(errorCode == -3){
+			alert("강좌상태가 대기접수인 강좌만 대기자 등록이 가능합니다.");
+		}else{
+			this.alert(errorCode+"\n"+errorMsg);
+		}
+		this.ds_waiting_list.clearData();
+	}else{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+    
+  }
+  else 
+  {
+	 switch(svcID)
+	  {
+		case "insert":
+			alert("등록 되었습니다.");
+		break;
+	  }
+  }
+};]]></Script>
+    <Objects>
+      <Dataset id="ds_class_list">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
+          <Column id="stayCnt" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="apvlStatNm" type="STRING" size="256"/>
+          <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="dsplyStatNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="lectRmCd" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="ppayStdCd" type="STRING" size="256"/>
+          <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="ppayTms" type="STRING" size="256"/>
+          <Column id="ppayordr" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="groupYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="mdfreqCnt" type="STRING" size="256"/>
+          <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
+          <Column id="schdCnt" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_member_list">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_waiting_list">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_optn_list">
+        <ColumnInfo>
+          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="optnAmt" type="STRING" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00.form.Edit00" propid="value" datasetid="ds_search" columnid="mbrNo"/>
+      <BindItem id="item1" compid="Div00.form.Div00.form.Div00.form.Div00_01.form.Edit00" propid="value" datasetid="ds_search" columnid="mbrNm"/>
+      <BindItem id="item2" compid="Div00.form.Div00.form.Div00.form.Div00_00.form.Edit00" propid="value" datasetid="ds_search" columnid="hpNo"/>
+      <BindItem id="item3" compid="Div00.form.Div00.form.Div00.form.Div00_00_00.form.Edit00" propid="value" datasetid="ds_search" columnid="actlAtlctNpleNm"/>
+    </Bind>
+  </Form>
+</FDL>

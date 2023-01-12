@@ -138,7 +138,7 @@ this.menuSeq = "";
 
 this.totCnt = 0;
 this.cnt = 0;
-
+this.popCnt = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -220,10 +220,20 @@ this.Div00_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 	}
 };
 
-// 테스트
+// 강사 출석부
 this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.ds_classUpdate_list.clearData();
 	
+	var rowIndex = this.ds_classUpdate_list.addRow();
+	this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_dtl, 0);
+	
+	this.popCnt++;
+	var arrArguments = {
+		dataset : this.ds_classUpdate_list,
+		menuSeq : this.menuSeq
+	}
+	this.gfn_openPopup("ClassTeacherAttendanceList" + this.popCnt, arrArguments, "ClassMng::ClassTeacherAttendanceList.xfdl", this, 1280, 720, true, true, null);
 };
 ]]></Script>
     <Objects>
@@ -335,6 +345,54 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="rfndStatCdNm" type="STRING" size="256"/>
           <Column id="rfndDtm" type="STRING" size="256"/>
           <Column id="hp" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classUpdate_list" updatecontrol="false">
+        <ColumnInfo>
+          <ConstColumn id="ConstColumn0" type="STRING" size="30"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="apvlStatCd" type="STRING" size="256"/>
+          <Column id="apvlStatNm" type="STRING" size="256"/>
+          <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectSmsterNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="lectRmCd" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="ppayStdCd" type="STRING" size="256"/>
+          <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="ppayTms" type="STRING" size="256"/>
+          <Column id="ppayordr" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="groupYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regDtm" type="STRING" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
+          <Column id="schdCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
