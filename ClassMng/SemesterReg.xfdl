@@ -350,13 +350,13 @@ this.fn_refresh = function()
 this.fn_year_add = function() 
 {
 	this.ds_year_list.clearData();
-	
+	console.log(this.brchCd)
 	var tranObj = {
 		strSvcId : "getSesterYearList",
 		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
 		inData : "",
 		outData : "ds_year_list=yearList",
-		strArg : "",
+		strArg : "brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.getOwnerFrame().param.MENU_ID

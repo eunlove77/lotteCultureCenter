@@ -1052,7 +1052,7 @@ this.updateCode = "";
 this.ClassWrite_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.domain = this.application.getVariable("domain");
+	this.domain = this.application.Domain;
 	
 	this.brchCd = this.parent.parent.parent.parent.brchCd;
 	this.yy = this.parent.parent.parent.parent.yy;
@@ -1177,7 +1177,7 @@ this.init = function()
 	this.editorArr.push(editorObj);
 	if(this.editorArr[0].divPcObj._url == 'about:blank')
 	{
-		this.editorArr[0].divPcObj.set_url(this.domain + "/namo/index_custom_01.html");
+		this.editorArr[0].divPcObj.set_url(this.application.Namo);
 		this.editorArr[0].divPcObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 	}
 	else
@@ -1186,7 +1186,7 @@ this.init = function()
 	}
 	if(this.editorArr[0].divMoObj._url == 'about:blank')
 	{
-		this.editorArr[0].divMoObj.set_url(this.domain + "/namo/index_custom_01.html");
+		this.editorArr[0].divMoObj.set_url(this.application.Namo);
 		this.editorArr[0].divMoObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 	}
 	else
@@ -2080,10 +2080,10 @@ this.fn_content_set = function()
 		}
 		this.editorArr.push(editorObj);
 		
-		objContentPc.set_url(this.domain + "/namo/index_custom_01.html");
+		objContentPc.set_url(this.application.Namo);
 		objContentPc.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		
-		objContentMo.set_url(this.domain + "/namo/index_custom_01.html");
+		objContentMo.set_url(this.application.Namo);
 		objContentMo.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		
 		var objTemplateArea = new Div();
@@ -2302,14 +2302,14 @@ this.fn_content_add = function()
 		objContentPc.init("objContentPc" + ord, 0, 0, null, null, 0, 0);
 		objTab["PC"].form.addChild("objContentPc" + ord, objContentPc);	
 		objContentPc.show();	
-		objContentPc.set_url(this.domain + "/namo/index_custom_01.html");
+		objContentPc.set_url(this.application.Namo);
 		objContentPc.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		
 		var objContentMo = new WebBrowser();
 		objContentMo.init("objContentMo" + ord, 0, 0, null, null, 0, 0);
 		objTab["MO"].form.addChild("objContentMo" + ord, objContentMo);	
 		objContentMo.show();	
-		objContentMo.set_url(this.domain + "/namo/index_custom_01.html");
+		objContentMo.set_url(this.application.Namo);
 		objContentMo.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		//에디터 추가
 		var editorObj = {

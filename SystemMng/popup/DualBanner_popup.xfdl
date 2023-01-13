@@ -1,0 +1,362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="DualBanner_popup" width="1000" height="420" titletext="이미지 관리" onload="DualBanner_popup_onload">
+    <Layouts>
+      <Layout height="420" width="1000">
+        <Static id="ctegryInfo" taborder="0" left="10" top="10" width="250" height="21" text=""/>
+        <ListView id="ListView00" taborder="1" left="10" top="210" right="10" binddataset="ds_atchFileList" oncellclick="ListView00_oncellclick" height="200">
+          <Formats>
+            <Format id="default">
+              <Band id="body" width="25%" height="100">
+                <Cell id="Cell01" left="45" top="5" width="140" text="bind:webPath" displaytype="imagecontrol" bottom="5" imagestretch="fit"/>
+                <Cell id="Cell03" left="190" top="5" font="12px &quot;Malgun Gothic&quot;" displaytype="text" edittype="none" right="5" bottom="70" text="expr:comp.parent.gfn_cutFileSize(fileSize);"/>
+                <Cell id="Cell02" left="190" top="Cell03:5" font="12px &quot;Malgun Gothic&quot;" displaytype="text" edittype="none" right="5" bottom="42" text="bind:realFileNm"/>
+                <Cell id="CellChk" left="5" top="5" width="35" bottom="5" displaytype="checkboxcontrol" edittype="checkbox" text="expr:chk == 0 ? 0 : 1"/>
+              </Band>
+            </Format>
+          </Formats>
+        </ListView>
+        <Button id="btnDelete" taborder="3" text="삭제" top="10" height="21" cssclass="btn_WF_High" right="10" width="100" onclick="btnDelete_onclick"/>
+        <Button id="btnSave" taborder="2" text="저장" top="10" height="21" cssclass="btn_WF_Medium" right="btnDelete:5" width="100" onclick="btnSave_onclick"/>
+        <Div id="Div00" taborder="4" text="Drop Zone" left="10" top="40" height="157" border="1px solid lightslategray" right="10" ondragenter="dropZone_ondragenter" ondragleave="dropZone_ondragleave" ondrop="dropZone_ondrop">
+          <Layouts>
+            <Layout>
+              <Static id="dropZone" taborder="0" text="Drop Files Here" left="5" top="5" right="5" bottom="5" background="aliceblue" color="dodgerblue" opacity="1" textAlign="center" font="normal 30pt/normal &quot;Arial&quot;" onclick="Div00_dropZone_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.domain = "";
+
+this.fileExtn = "jpg,jpeg,gif,png"; //확장자
+this.fileMaxCnt = 1;  	//최대 파일개수
+this.fileMaxSize= 10; 	//최대 파일크기 10MB
+this.atchFileId = "";
+this.updateType = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.DualBanner_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.domain = this.application.getVariable("domain");
+	
+	this.seqno = this.parent.seqno;
+	this.rowIdx = this.parent.rowIdx;
+	this.expsrYn = this.getOwnerFrame().expsrYn;
+	
+	this.FileUpTransfer00.removePostData("delFileSeq");
+	this.FileUpTransfer00.clearFileList();
+	
+	if(this.parent.seqno != "")
+	{	
+		this.fn_list();
+		console.log(this.atchFileId);
+	}
+}
+
+this.dropZone_ondragenter = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
+{
+	if(e.datatype == "file")
+	{		
+		this.Div00.form.dropZone.set_opacity(0.5);
+	}
+};
+
+this.dropZone_ondragleave = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
+{
+	this.Div00.form.dropZone.set_opacity(1);
+};
+
+
+this.dropZone_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.Div00.form.dropZone.set_opacity(1);
+	if(e.datatype == "file")
+	{
+		this.addFileList(e.filelist);
+	}
+};
+
+
+this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().menuSeq, "accSaveYn")) return;
+	
+	var atchFileList = this.FileUpTransfer00.filelist;
+	
+	// 업로드할 첨부파일이 있을 경우
+	if(atchFileList.length > 0 || this.FileUpTransfer00.getPostData("delFileSeq") != null)
+	{		
+		if(this.confirm("저장하시겠습니까?")){			
+			this.updateType = "save";
+			this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?atchFileId=' + this.atchFileId);
+		}
+	}else{
+		this.alert("저장 또는 삭제할 이미지가 없습니다.");
+	}
+	
+};
+
+this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var checked_array = new Array();
+
+	if(this.gfn_btn_auth(this.getOwnerFrame().menuSeq, "accDelYn")){return;}
+		
+	for(var i = 0; i < this.ds_atchFileList.rowcount; i++){		
+		if(this.ds_atchFileList.getColumn(i, "chk") > 0) checked_array.push(i);
+	}
+	
+	if(checked_array.length == 0){
+		alert("삭제할 이미지를 선택해주세요.");
+		return false;
+	}else{
+		if(confirm("선택한 이미지를 삭제하시겠습니까?")){			
+			this.updateType = "delete";
+			this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?atchFileId=' + this.atchFileId);			
+		}
+	}
+	
+};
+
+this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventInfo)
+{		
+	this.atchFileId = e.datasets[0].getColumn(0,"atchFileId");
+	
+	this.parent.dataset.setColumn(this.rowIdx , "webImgFleNo", this.atchFileId);
+	this.close();
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_list = function(){
+
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::main/dualBannerImgList.do",
+		inData : "",
+		outData : "ds_atchFileList=output1" , 
+		strArg : "seqno=" + this.seqno,
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().menuSeq
+	};
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		this.fn_list();
+		
+		switch(svcID)
+		{    
+			case "save":
+				this.fn_list();
+			break;
+		}
+		
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":		
+			/*if(this.ds_info.rowcount > 0){
+				this.atchFileId = this.ds_info.getColumn(0, "imgFileId");
+			}*/
+			
+			if(this.ds_atchFileList.rowcount < 1){
+				this.ds_atchFileList.addColumn("atchFileId", "STRING", 256);
+				this.ds_atchFileList.addColumn("fileSeq", "STRING", 256);
+				this.ds_atchFileList.addColumn("phyPath", "STRING", 256);
+				this.ds_atchFileList.addColumn("saveFileNm", "STRING", 256);
+				this.ds_atchFileList.addColumn("realFileNm", "STRING", 256);
+				this.ds_atchFileList.addColumn("fileExtn", "STRING", 256);
+				this.ds_atchFileList.addColumn("fileSize", "STRING", 256);
+				this.ds_atchFileList.addColumn("webPath", "STRING", 256);
+			}
+		break; 		
+		case "save":
+		case "delete":
+			if(svcID == "save"){
+				this.alert("저장되었습니다.");
+			}else if(svcID == "delete"){
+				this.alert("삭제되었습니다.");
+			}
+			this.FileUpTransfer00.removePostData("delFileSeq");
+			this.FileUpTransfer00.clearFileList();
+			this.fn_list();
+			
+			
+		break;
+	}
+	
+}
+
+this.addFileList = function(filelist)
+{
+	if(this.fileMaxCnt < filelist.length)
+	{
+		alert("파일은 최대 "+this.fileMaxCnt+"개 등록 가능합니다.");
+	}
+	else
+	{
+		for(var i = 0, len = filelist.length, vFile; i < len ; i++){
+			vFile = filelist[i];
+			
+			if(this.FileUpTransfer00.existFile(vFile))
+			{
+				alert("이미 등록한 파일입니다.");
+			}
+			else if(this.fileExtn.indexOf(vFile.filename.split('.').pop().toLowerCase()) < 0)
+			{
+				alert("등록가능한 확장자가 아닙니다.");
+			}
+			else
+			{
+				vFile.addEventHandler("onsuccess", this.FileList_onsuccess, this);
+				vFile.addEventHandler("onerror", this.FileList_onerror, this);	
+			}
+			vFile.open(null, 1);
+		}
+	}		
+}
+
+this.FileList_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileEventInfo)
+{	
+	switch (e.reason)
+	{
+		case 1:
+			obj.getFileSize();
+			break;
+		case 9:
+			if(this.fileMaxSize * 1024 * 1024 < e.filesize)
+			{
+				alert("첨부파일은 최대 " + this.fileMaxSize + "MB까지 등록 가능합니다.");
+			}
+			else
+			{
+				var nRowIdx = this.ds_atchFileList.addRow();
+				
+				this.ds_atchFileList.setColumn(nRowIdx, "atchFileId", "");
+				this.ds_atchFileList.setColumn(nRowIdx, "realFileNm", obj.filename);			
+				this.ds_atchFileList.setColumn(nRowIdx, "fileExtn", obj.filename.split('.').pop().toLowerCase());
+				this.ds_atchFileList.setColumn(nRowIdx, "fileSize", e.filesize);
+				this.ds_atchFileList.setColumn(nRowIdx, "chk", 0);
+				
+				if("jpg,jpeg,gif,png".indexOf(obj.filename.split('.').pop().toLowerCase()) > -1)
+				{
+					var ds = this.ds_atchFileList;
+					var reader = new FileReader();
+					reader.addEventListener(
+						'load',
+						function () {
+							ds.setColumn(nRowIdx, "webPath", reader.result);							
+						},
+						false
+					);
+					reader.readAsDataURL(obj._handle);
+				}
+				
+				this.FileUpTransfer00.addFile(obj.filename, obj);
+			}
+			
+			break;
+	}
+}
+
+this.FileList_onerror = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileErrorEventInfo)
+{
+	trace("errortype: "+e.errortype);
+	trace("errormsg: "+e.errormsg);
+	trace("statuscode: "+e.statuscode);
+}
+
+
+
+
+this.ListView00_oncellclick = function(obj:nexacro.ListView,e:nexacro.ListViewClickEventInfo)
+{	
+	var ds = obj.getBindDataset();
+		
+	
+	if(e.clickitem == "control" && e.cellid == "CellChk"){
+		
+		var fileId = ds.getColumn(e.row, "atchFileId");
+		var fileName = ds.getColumn(e.row, "realFileNm");
+		
+ 		if(ds.getColumn(e.row, "chk") == 0){
+ 			e.fromreferenceobject.set_value(1);
+ 			ds.setColumn(e.row, "chk", 1);
+			
+			if(!this.gfn_isNull(fileId)){
+				var delFileSeq = this.FileUpTransfer00.getPostData("delFileSeq");
+				if(delFileSeq != null)
+				{
+					delFileSeq += ("," + this.ds_atchFileList.getColumn(e.row, "fileSeq"));
+				}
+				else
+				{
+					delFileSeq = this.ds_atchFileList.getColumn(e.row, "fileSeq");
+				}
+				
+				this.FileUpTransfer00.setPostData("delFileSeq", delFileSeq);
+				
+			}else{
+				delResult = this.FileUpTransfer00.removeFile(fileName);
+				if(delResult > -1){
+					this.ds_atchFileList.deleteRow(e.row);
+				}
+			}		
+			
+ 		}else{
+ 			e.fromreferenceobject.set_value(0);
+ 			ds.setColumn(e.row, "chk", 0);
+ 		}
+		
+	}
+	
+};]]></Script>
+    <Objects>
+      <FileDialog id="FileDialog00" onclose="FileDialog00_onclose"/>
+      <FileUpTransfer id="FileUpTransfer00" onsuccess="FileUpTransfer00_onsuccess"/>
+      <Dataset id="ds_atchFileList">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_info">
+        <ColumnInfo>
+          <Column id="imgFileId" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

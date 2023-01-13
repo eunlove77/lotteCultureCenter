@@ -65,7 +65,7 @@ this.CatalogMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	var objOwnerFrame = this.getOwnerFrame();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-	this.domain = this.application.getVariable("domain");
+	this.domain = this.application.Domain;
 	
 	this.param = this.parent.param;
 	this.editorArr = [];
@@ -184,7 +184,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			if(this.editorArr[0].cntnObj._url == 'about:blank')
 			{	
-				this.editorArr[0].cntnObj.set_url(this.domain + "/namo/index_custom_01.html")
+				this.editorArr[0].cntnObj.set_url(this.application.Namo)
 				this.editorArr[0].cntnObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 			}
 			else

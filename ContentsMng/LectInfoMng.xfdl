@@ -76,7 +76,7 @@ this.LectInfoMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	var objOwnerFrame = this.getOwnerFrame();
 	
-	this.domain = this.application.getVariable("domain");
+	this.domain = this.application.Domain;
 	
 	this.editorArr = [];
 	
@@ -154,7 +154,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		
 		if(this.editorArr[0].editorPcObj._url == 'about:blank')
 		{
-			this.editorArr[0].editorPcObj.set_url(this.domain + "/namo/index_custom_01.html");
+			this.editorArr[0].editorPcObj.set_url(this.application.Namo);
 			this.editorArr[0].editorPcObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		}
 		else
@@ -163,7 +163,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		}
 		if(this.editorArr[0].editorMbilObj._url == 'about:blank')
 		{
-			this.editorArr[0].editorMbilObj.set_url(this.domain + "/namo/index_custom_01.html");
+			this.editorArr[0].editorMbilObj.set_url(this.application.Namo);
 			this.editorArr[0].editorMbilObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		}
 		else

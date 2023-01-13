@@ -10,7 +10,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="제목 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Edit id="Edit00" taborder="1" left="117" top="1" width="840" height="28"/>
+              <Edit id="Edit00" taborder="1" left="117" top="1" width="840" height="28" maxlength="50"/>
             </Layout>
           </Layouts>
         </Div>
@@ -244,7 +244,7 @@ this.WebMagazineDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	var objOwnerFrame = this.getOwnerFrame();
 	
-	this.domain = this.application.getVariable("domain");
+	this.domain = this.application.Domain;
 	
 	this.row06.form.strtDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
 	this.row06.form.endDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
@@ -257,7 +257,7 @@ this.WebMagazineDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}
 	else
 	{
-		this.row09.form.intrdnCont.set_url(this.domain + "/namo/index_custom_01.html")
+		this.row09.form.intrdnCont.set_url(this.application.Namo)
 		
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
 		var atchFileObj = {
@@ -470,7 +470,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		{
 			this.ds_appl_lect.copyData(this.ds_appl_lect_format);
 		}
-		this.row09.form.intrdnCont.set_url(this.domain + "/namo/index_custom_01.html")
+		this.row09.form.intrdnCont.set_url(this.application.Namo)
 	
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
 		var atchFileObj = {
