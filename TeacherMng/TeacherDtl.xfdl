@@ -656,6 +656,8 @@ this.set_teacher_info = function(){
 	
 	this.set_teacher_pay_info(tcTpCd);	//지급정보
 
+  this.set_career_info();//학력 및 경력정보
+
 	this.set_teacher_lecture_info();	//출강정보
 	
 	this.set_screen_view_after();	//데이터 수신이후
@@ -1178,6 +1180,14 @@ this.Div01_Div05_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 /**************************************************************************
  * 그리드 학력 및 경력정보
  **************************************************************************/
+this.set_career_info = function(){
+  //데이터 세팅
+  //기존정보 없을경우 키값 세팅
+  var dsArr = [this.ds_tcedu_list ,this.ds_tchist_list ,this.ds_tcawrd_list ,this.ds_tcathctf_list];
+  for(var ds of dsArr){
+    ds.setColumn(0, 'tcCdNo', this.ds_teacher_info.getColumn(0, "tcCdNo"));
+  }
+}
 this.grid_button_click = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	var ds = obj.getBindDataset();
@@ -1212,9 +1222,7 @@ this.validate_before_addRow = function(ds){
 }
 this.add_grid_row = function(grid, ds, row){
 	if(ds.name == 'ds_tcedu_list'){
-		ds.setColumn(row, 'schlClCd', 0);
-		ds.setColumn(row, 'grdtClCd', 0);
-		ds.setColumn(row, 'yy', '');
+		this.add_grid_edu_row(row);
 	}
 	ds.setColumn(row, 'tcCdNo', this.ds_teacher_info.getColumn(0, "tcCdNo"));
 	
@@ -1222,6 +1230,11 @@ this.add_grid_row = function(grid, ds, row){
 	this.Div04.set_height(Number(this.Div04.height) + 32);
 	
 	this.resetScroll();
+}
+this.add_grid_edu_row = function(row){
+  this.ds_tcedu_list.setColumn(row, 'schlClCd', 0);
+  this.ds_tcedu_list.setColumn(row, 'grdtClCd', 0);
+  this.ds_tcedu_list.setColumn(row, 'yy', '');
 }
 this.remove_grid_row = function(grid, ds){
 	var t_row = grid.rowcount;
@@ -1350,7 +1363,24 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(confirm("강사정보를 저장 하시겠습니까?")){
 		this.submit_teacher_info();
 	}
+  else{
+    //저장 취소시 입력값 전혀 없을 경우 삭제된 로우 복구
+    var dsArr = [this.ds_tcedu_list ,this.ds_tchist_list ,this.ds_tcawrd_list ,this.ds_tcathctf_list];
+    for(var ds of dsArr){
+      if(ds.rowcount == 0){
+        this.restore_grid_row(ds);
+      }
+    }
+  }
 };
+this.restore_grid_row = function(ds){
+  ds.addRow();
+  ds.setColumn(0, 'tcCdNo', this.ds_teacher_info.getColumn(0, "tcCdNo"));
+  if(ds.name == "ds_tcedu_list"){
+    this.add_grid_edu_row(0);
+  }
+}
+
 this.submit_teacher_info = function(){
 
 	var inData = "";
