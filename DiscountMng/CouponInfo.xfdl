@@ -65,7 +65,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="50" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false" onclick="Div01_Div01_Grid00_onclick" readonly="true">
+                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="222" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="true" onclick="Div01_Div01_Grid00_onclick" readonly="true">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -471,6 +471,7 @@ this.fn_sync_checkBox = function()
 /* 회원등급 체크박스 동기화 */
 this.fn_sync_mbrGrde = function()
 {
+	this.ds_mem_grade.checkarray = new Array(); 
 	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
 	{
 		if(this.gfn_nvl(this.ds_mem_grade.getColumn(i, "mbrGrdeCd")) != "")
@@ -478,7 +479,7 @@ this.fn_sync_mbrGrde = function()
 			this.ds_mem_grade.checkarray[i] = 1;
 		}
 	}
-	this.Div01.form.Div01.form.Grid00.redrawExprCell()
+	this.Div01.form.Div01.form.Grid00.redrawExprCell();
 }
 
 /**************************************************************************
