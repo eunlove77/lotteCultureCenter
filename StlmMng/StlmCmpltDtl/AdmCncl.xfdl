@@ -35,7 +35,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="카드 취소(환불) 금액 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                    <Static id="Static01" taborder="1" text="삼성" left="210" top="5" width="50" height="20" cssclass="sta_WF_CompText"/>
+                    <Static id="Static01" taborder="1" left="210" top="5" width="50" height="20" cssclass="sta_WF_CompText"/>
                     <Edit id="Edit00" taborder="2" left="260" top="5" width="200" height="20" readonly="true" text="30,000" textAlign="right" inputtype="digit" maxlength="10" oninput="fn_num_format"/>
                     <Static id="Static02" taborder="3" text="원" left="460" top="5" width="120" height="20" cssclass="sta_WF_CompText"/>
                   </Layout>
@@ -107,7 +107,7 @@
               <Div id="Div02" taborder="2" text="Div02" left="640" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="1,000원" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                    <Static id="Static00" taborder="0" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -123,7 +123,7 @@
               <Div id="Div04" taborder="4" text="Div02" left="640" top="Div02:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="1,000원" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                    <Static id="Static00" taborder="0" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -138,7 +138,7 @@
               <Div id="Div06" taborder="6" text="Div02" left="640" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="1,000원" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                    <Static id="Static00" taborder="0" left="0" top="5" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -173,16 +173,15 @@ this.oldEtcRfndAmt = 0;
 this.oldLpntUseAmt = 0;
 this.oldGiftRfndAmt = 0;
 
-// 부분환불 금액(강좌료 + 추가비) 저장 변수
-this.totRfndAmt = 0;
+// 환불 금액(강좌료 + 추가비) 저장 변수
+this.gsRfndScheAmt = 0;
+this.gsRfndAmtFee = 0;
 
 // 부분환불 강좌료 + 수수료 저장 변수
 this.totLectRfndAmt = 0
 // 부분환불 추가금액 + 수수료 저장 변수 
 this.totLectAddRfndAmt = 0;
 
-// 환불예정금액(강좌료 + 추가금액) 저장 변수
-this.expctTotRfndAmt = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -205,7 +204,7 @@ this.fn_data_list = function(rfndLectTmsCd)
 	
 	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getAdmCnclDataList.do";
 	var inData      = "";
-	var outData     = "this.ds_rfnd_rsn_cd_list=output1 this.ds_adm_cncl_data=output2 this.ds_rfnd_lect_tms_cd_list=output3";
+	var outData     = "this.ds_rfnd_rsn_cd_list=output1 this.ds_update_info=output2 this.ds_rfnd_lect_tms_cd_list=output3";
 	var strArg      = "atlctRsvNo=" + this.atlctRsvNo + " actlAtlctNpleSeqno=" + this.actlAtlctNpleSeqno + " rfndLectTmsCd=" + rfndLectTmsCd;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
@@ -238,13 +237,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		case "data_list":
 			// 금액변경 버튼 맨 끝으로
 			this.Button02.set_right(0);
+			
 			// 취소(환불) 구분 콤보박스 초기화
-			if(this.ds_adm_cncl_data.getColumn(0, "lectNbcnt") == this.ds_adm_cncl_data.getColumn(0, "rfndLectTmsCnt")){
-				// 전액환불 대상이면 전액으로 세팅
-				this.Div00.form.Div00.form.Combo00.set_index(0);
-			}else{
-				this.Div00.form.Div00.form.Combo00.set_value(this.ds_adm_cncl_data.getColumn(0, "lectNbcnt") - this.ds_adm_cncl_data.getColumn(0, "rfndLectTmsCnt"));
-			}
+			this.Div00.form.Div00.form.Combo00.set_value(this.ds_update_info.getColumn(0, "rfndLectTmsCd"));
 			
 			// 취소(환불) 사유 콤보박스 초기화
 			this.Div00.form.Div01.form.Combo00.set_index(0);
@@ -265,25 +260,20 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 // 취소(환불) 예정금액, 취소(환불) 금액 세팅
 this.fn_set_rfnd_amt = function()
 {
-	// 부분환불 금액
-	this.totRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt");
-	// 취소(환불) 예정 금액 세팅
-	this.totLectRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt");
-	this.totLectAddRfndAmt = this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt");
-	
-	this.Div02.form.Div01.form.Edit00.set_value(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt")));
-	this.Div02.form.Div02.form.Static00.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt")) + "원");
-	this.Div02.form.Div03.form.Edit00.set_value(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt")));
-	this.Div02.form.Div04.form.Static00.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt")) + "원");
-	this.Div02.form.Div05.form.Static01.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndAmt")) + "원");
-	this.Div02.form.Div06.form.Static00.set_text(this.gfn_setComma(this.ds_adm_cncl_data.getColumn(0, "totLectRfndDeducAmt") + this.ds_adm_cncl_data.getColumn(0, "totLectAddRfndDeducAmt")) + "원");
+	this.ds_update_info.setColumn(0, "lectAmtFee", this.gfn_setComma(this.ds_update_info.getColumn(0, "lectAmtFee")) + "원");
+	this.ds_update_info.setColumn(0, "addAmtFee", this.gfn_setComma(this.ds_update_info.getColumn(0, "addAmtFee")) + "원");
+	this.ds_update_info.setColumn(0, "gsRfndScheAmt", this.gfn_setComma(this.ds_update_info.getColumn(0, "gsRfndScheAmt")) + "원");
+	this.ds_update_info.setColumn(0, "gsRfndAmtFee", this.gfn_setComma(this.ds_update_info.getColumn(0, "gsRfndAmtFee")) + "원");
+	// 강좌료 환불금액, 추가금액 환불금액 콤마처리
+	this.ds_update_info.setColumn(0, "rfndScheLectAmt", this.gfn_setComma(this.ds_update_info.getColumn(0, "rfndScheLectAmt")));
+	this.ds_update_info.setColumn(0, "rfndScheAddAmt", this.gfn_setComma(this.ds_update_info.getColumn(0, "rfndScheAddAmt")));
 	
 	// 취소(환불) 금액 세팅
-	var crdStlmAmt = this.ds_adm_cncl_data.getColumn(0, "crdStlmAmt");
-	var lpntUseAmt = this.ds_adm_cncl_data.getColumn(0, "lpntUseAmt");
-	var cshStlmAmt = this.ds_adm_cncl_data.getColumn(0, "cshStlmAmt");
-	var giftStlmAmt = this.ds_adm_cncl_data.getColumn(0, "giftStlmAmt");
-	var etcStlmAmt = this.ds_adm_cncl_data.getColumn(0, "etcStlmAmt");
+	var crdStlmAmt = this.ds_update_info.getColumn(0, "crdStlmAmt");
+	var lpntUseAmt = this.ds_update_info.getColumn(0, "lpntUseAmt");
+	var cshStlmAmt = this.ds_update_info.getColumn(0, "cshStlmAmt");
+	var giftStlmAmt = this.ds_update_info.getColumn(0, "giftStlmAmt");
+	var etcStlmAmt = this.ds_update_info.getColumn(0, "etcStlmAmt");
 	
 	// 기존 카드 결제금액이 0원이면 카드사 영역 숨김 
 	if(crdStlmAmt == 0){
@@ -292,54 +282,55 @@ this.fn_set_rfnd_amt = function()
 		this.Div01.form.Div00.form.Static02.set_left(410);
 	}
 	
-	var totRfndAmt = this.totRfndAmt;
-	if(totRfndAmt == 0){
-		// 환불가능금액이 없는경우
-	}else{
+	//this.gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
+	//this.gsRfndAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndAmtFee").substring(0, this.ds_update_info.getColumn(0, "gsRfndAmtFee").length - 1), ",", ""));
+	
+	var gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
+	
+	if(gsRfndScheAmt > 0){
 		if(crdStlmAmt > 0){
-			this.Div01.form.Div00.form.Static01.set_text(this.ds_adm_cncl_data.getColumn(0, "crdcoCdNm"));
-			if(totRfndAmt >= crdStlmAmt){
-				this.Div01.form.Div00.form.Edit00.set_value(this.gfn_setComma(crdStlmAmt));
-				totRfndAmt -= crdStlmAmt;
+			if(gsRfndScheAmt >= crdStlmAmt){
+				this.ds_update_info.setColumn(0, "crdRfndAmt", this.gfn_setComma(crdStlmAmt))
+				gsRfndScheAmt -= crdStlmAmt;
 			}else{
-				this.Div01.form.Div00.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
-				totRfndAmt = 0;
+				this.ds_update_info.setColumn(0, "crdRfndAmt", this.gfn_setComma(gsRfndScheAmt));
+				gsRfndScheAmt = 0;
 			}
 		}
 		if(lpntUseAmt > 0){
-			if(totRfndAmt >= lpntUseAmt){
-				this.Div01.form.Div01.form.Edit00.set_value(this.gfn_setComma(lpntUseAmt));
-				totRfndAmt -= lpntUseAmt;
+			if(gsRfndScheAmt >= lpntUseAmt){
+				this.ds_update_info.setColumn(0, "lpntRfndAmt", this.gfn_setComma(lpntUseAmt));
+				gsRfndScheAmt -= lpntUseAmt;
 			}else{
-				this.Div01.form.Div01.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
-				totRfndAmt = 0;
+				this.ds_update_info.setColumn(0, "lpntRfndAmt", this.gfn_setComma(gsRfndScheAmt));
+				gsRfndScheAmt = 0;
 			}
 		}
 		if(cshStlmAmt > 0){
-			if(totRfndAmt >= cshStlmAmt){
-				this.Div01.form.Div02.form.Edit00.set_value(this.gfn_setComma(cshStlmAmt));
-				totRfndAmt -= cshStlmAmt;
+			if(gsRfndScheAmt >= cshStlmAmt){
+				this.ds_update_info.setColumn(0, "cshRfndAmt", this.gfn_setComma(cshStlmAmt));
+				gsRfndScheAmt -= cshStlmAmt;
 			}else{
-				this.Div01.form.Div02.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
-				totRfndAmt = 0;
+				this.ds_update_info.setColumn(0, "cshRfndAmt", this.gfn_setComma(gsRfndScheAmt));
+				gsRfndScheAmt = 0;
 			}
 		}
 		if(giftStlmAmt > 0){
-			if(totRfndAmt >= giftStlmAmt){
-				this.Div01.form.Div03.form.Edit00.set_value(this.gfn_setComma(giftStlmAmt));
-				totRfndAmt -= giftStlmAmt;
+			if(gsRfndScheAmt >= giftStlmAmt){
+				this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", this.gfn_setComma(giftStlmAmt));
+				gsRfndScheAmt -= giftStlmAmt;
 			}else{
-				this.Div01.form.Div03.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
-				totRfndAmt = 0;
+				this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", this.gfn_setComma(gsRfndScheAmt));
+				gsRfndScheAmt = 0;
 			}
 		}
 		if(etcStlmAmt > 0){
-			if(totRfndAmt >= etcStlmAmt){
-				this.Div01.form.Div04.form.Edit00.set_value(this.gfn_setComma(etcStlmAmt));
-				totRfndAmt -= etcStlmAmt;
+			if(gsRfndScheAmt >= etcStlmAmt){
+				this.ds_update_info.setColumn(0, "etcRfndAmt", this.gfn_setComma(etcStlmAmt));
+				gsRfndScheAmt -= etcStlmAmt;
 			}else{
-				this.Div01.form.Div04.form.Edit00.set_value(this.gfn_setComma(totRfndAmt));
-				totRfndAmt = 0;
+				this.ds_update_info.setColumn(0, "etcRfndAmt", this.gfn_setComma(gsRfndScheAmt));
+				gsRfndScheAmt = 0;
 			}
 		}
 	}
@@ -369,7 +360,12 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.Button04.set_visible(true);
 	
 	this.Div02.form.Div01.form.Edit00.set_readonly(false);
-	this.Div02.form.Div03.form.Edit00.set_readonly(false);
+	
+	// 재료비/대여료가 있으면 활성화 
+	if(this.ds_update_info.getColumn(0, "optnUseYn") == "Y"){
+		this.Div02.form.Div03.form.Edit00.set_readonly(false);
+	}
+	
 	this.oldLectAmt = this.Div02.form.Div01.form.Edit00.value;
 	this.oldLectAddAmt = this.Div02.form.Div03.form.Edit00.value;
 };
@@ -392,48 +388,47 @@ this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 // 금액변경 저장 버튼 클릭
 this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var lectAmt = this.Div02.form.Div01.form.Edit00.value;
-	lectAmt = nexacro.replaceAll(lectAmt.toString(), ",", "");
-	if(lectAmt == ""){
+	var gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
+	var gsRfndAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndAmtFee").substring(0, this.ds_update_info.getColumn(0, "gsRfndAmtFee").length - 1), ",", ""));
+	
+	var rfndScheLectAmt = this.ds_update_info.getColumn(0, "rfndScheLectAmt");
+	rfndScheLectAmt = nexacro.replaceAll(rfndScheLectAmt.toString(), ",", "");
+	if(rfndScheLectAmt == ""){
 		alert("환불예정금액을 입력하세요.");
 		this.Div02.form.Div01.form.Edit00.setFocus();
 		return;
 	}
 	
-	if(Number(lectAmt) > Number(this.totRfndAmt)){
+	if(Number(rfndScheLectAmt) > Number(gsRfndScheAmt) + Number(gsRfndAmtFee)){
 		alert("주문금액 보다 강좌료 취소(환불) 예정금액을 초과하여 입력 할 수 없습니다.");
 		this.Div02.form.Div01.form.Edit00.setFocus();
 		return;
 	}
 	
-	var lectAddAmt = this.Div02.form.Div03.form.Edit00.value;
-	if(lectAddAmt == ""){
+	var rfndScheAddAmt = this.ds_update_info.getColumn(0, "rfndScheAddAmt");
+	if(rfndScheAddAmt == ""){
 		alert("환불예정금액을 입력하세요.");
 		this.Div02.form.Div03.form.Edit00.setFocus();
 		return;
 	}
-	lectAddAmt = nexacro.replaceAll(lectAddAmt.toString(), ",", "");
-	if(Number(lectAddAmt) > Number(this.totRfndAmt)){
+	rfndScheAddAmt = nexacro.replaceAll(rfndScheAddAmt.toString(), ",", "");
+	if(Number(rfndScheAddAmt) > Number(gsRfndScheAmt) + Number(gsRfndAmtFee)){
 		alert("주문금액 보다 재료비/대여료 취소(환불) 예정금액을 초과하여 입력 할 수 없습니다.");
 		this.Div02.form.Div03.form.Edit00.setFocus();
 		return;
 	}
 	
-	if(Number(lectAmt) + Number(lectAddAmt) > Number(this.totRfndAmt)){
+	if(Number(rfndScheLectAmt) + Number(rfndScheAddAmt) > Number(gsRfndScheAmt) + Number(gsRfndAmtFee)){
 		alert("주문금액 보다 강좌료 취소(환불) 예정금액을 초과하여 입력 할 수 없습니다.");
 		return;
 	}
 	
 	if(confirm("저장하시겠습니까?")){
 		// 취소(환불) 예정 금액 업데이트
-		var lectRfndDeducAmt = this.totLectRfndAmt - Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", ""));
-		var lectAddRfndDeducAmt = this.totLectAddRfndAmt - Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", ""));
-		
-		// 수수료
-		this.Div02.form.Div02.form.Static00.set_text(this.gfn_setComma(lectRfndDeducAmt) + "원");
-		this.Div02.form.Div04.form.Static00.set_text(this.gfn_setComma(lectAddRfndDeducAmt) + "원");
-		this.Div02.form.Div05.form.Static01.set_text(this.gfn_setComma((Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", "")) + Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", "")))) + "원");
-		this.Div02.form.Div06.form.Static00.set_text(this.gfn_setComma(lectRfndDeducAmt + lectAddRfndDeducAmt) + "원");
+		this.ds_update_info.setColumn(0, "lectAmtFee", this.gfn_setComma(gsRfndScheAmt - rfndScheLectAmt) + "원");
+		this.ds_update_info.setColumn(0, "addAmtFee", this.gfn_setComma(gsRfndAmtFee - rfndScheAddAmt) + "원");
+		this.ds_update_info.setColumn(0, "gsRfndScheAmt", this.gfn_setComma(Number(rfndScheLectAmt) + Number(rfndScheAddAmt)) + "원");
+		this.ds_update_info.setColumn(0, "gsRfndAmtFee", this.gfn_setComma(gsRfndScheAmt - rfndScheLectAmt + gsRfndAmtFee - rfndScheAddAmt) + "원");
 		
 		this.Div02.form.Div01.form.Edit00.set_readonly(true);
 		this.Div02.form.Div03.form.Edit00.set_readonly(true);
@@ -452,7 +447,6 @@ this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 // 취소(환불) 구분 콤보박스 선택이벤트
 this.Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	trace(e.postvalue);
 	this.fn_data_list(e.postvalue);
 };
 
@@ -468,29 +462,25 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 
 // 환불완료 버튼 클릭
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	// 환불예정금액
-	this.expctTotRfndAmt = Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", "")) + Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", ""));
+{	
+	var crdRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "crdRfndAmt"), ",", "")));
+	var lpntRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "lpntRfndAmt"), ",", "")));
+	var cshRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "cshRfndAmt"), ",", "")));
+	var ltteGiftRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "ltteGiftRfndAmt"), ",", "")));
+	var etcRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "etcRfndAmt"), ",", "")));
+	var gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
+	var lectAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "lectAmtFee").substring(0, this.ds_update_info.getColumn(0, "lectAmtFee").length - 1), ",", ""));
+	var addAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "addAmtFee").substring(0, this.ds_update_info.getColumn(0, "addAmtFee").length - 1), ",", ""));
+	var gsRfndAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndAmtFee").substring(0, this.ds_update_info.getColumn(0, "gsRfndAmtFee").length - 1), ",", ""));
+	var rfndScheLectAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheLectAmt"), ",", "")));
+	var rfndScheAddAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheAddAmt"), ",", "")));
 	
-	var crdRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div00.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div00.form.Edit00.value), ",", ""));
-	var lpntRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div01.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div01.form.Edit00.value), ",", ""));
-	var cshRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div02.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div02.form.Edit00.value), ",", ""));
-	var giftRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div03.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div03.form.Edit00.value), ",", ""));
-	var etcRfndAmt = Number(nexacro.replaceAll(this.gfn_nvl(this.Div01.form.Div04.form.Edit00.value) == "" ? "0" : this.gfn_nvl(this.Div01.form.Div04.form.Edit00.value), ",", ""));
-	var rfndScheLectAmt = this.gfn_nvl(this.Div02.form.Div01.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div02.form.Div01.form.Edit00.value, ",", ""));
-	var rfndScheAddAmt = this.gfn_nvl(this.Div02.form.Div03.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div02.form.Div03.form.Edit00.value, ",", ""));
-	var lectAmtFee = this.Div02.form.Div02.form.Static00.text;
-	lectAmtFee = Number(nexacro.replaceAll(lectAmtFee.substring(0, lectAmtFee.length - 1), ",", ""));
-	var addAmtFee = this.Div02.form.Div04.form.Static00.text;
-	addAmtFee = Number(nexacro.replaceAll(addAmtFee.substring(0, addAmtFee.length - 1), ",", ""));
-	// 수수료율 삭제
-	//var feeRt = nexacro.round((lectAmtFee + addAmtFee) / (rfndScheLectAmt + rfndScheAddAmt + lectAmtFee + addAmtFee) * 100);
 	
-	var crdStlmAmt = this.ds_adm_cncl_data.getColumn(0, "crdStlmAmt");
-	var lpntUseAmt = this.ds_adm_cncl_data.getColumn(0, "lpntUseAmt");
-	var cshStlmAmt = this.ds_adm_cncl_data.getColumn(0, "cshStlmAmt");
-	var giftStlmAmt = this.ds_adm_cncl_data.getColumn(0, "giftStlmAmt");
-	var etcStlmAmt = this.ds_adm_cncl_data.getColumn(0, "etcStlmAmt");
+	var crdStlmAmt = this.ds_update_info.getColumn(0, "crdStlmAmt");
+	var lpntUseAmt = this.ds_update_info.getColumn(0, "lpntUseAmt");
+	var cshStlmAmt = this.ds_update_info.getColumn(0, "cshStlmAmt");
+	var giftStlmAmt = this.ds_update_info.getColumn(0, "giftStlmAmt");
+	var etcStlmAmt = this.ds_update_info.getColumn(0, "etcStlmAmt");
 	
 	if(crdRfndAmt > crdStlmAmt){
 		alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
@@ -503,105 +493,82 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	
 	// 상품권 결제금액만큼 현금으로 환불 가능
-	if(cshRfndAmt > cshStlmAmt && (cshRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+giftRfndAmt) > giftStlmAmt)){
+	if(cshRfndAmt > cshStlmAmt && (cshRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+ltteGiftRfndAmt) > giftStlmAmt)){
 		alert("현금 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
 		return;
 	}
 	
-	if(giftRfndAmt > giftStlmAmt){
+	if(ltteGiftRfndAmt > giftStlmAmt){
 		alert("상품권 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
 		return;
 	}
 	
 	// 상품권 결제금액만큼 기타로 환불 가능
-	if(etcRfndAmt > etcStlmAmt && (etcRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+giftRfndAmt) > giftStlmAmt)){
+	if(etcRfndAmt > etcStlmAmt && (etcRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+ltteGiftRfndAmt) > giftStlmAmt)){
 		alert("기타 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
 		return;
 	}
 	
- 	if(crdRfndAmt > this.expctTotRfndAmt){
+ 	if(crdRfndAmt > gsRfndScheAmt){
 		alert("카드 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
  	}
 	
-	if(lpntRfndAmt > this.expctTotRfndAmt){
+	if(lpntRfndAmt > gsRfndScheAmt){
 		alert("L.Point 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
  	}
 	
-	if(cshRfndAmt > this.expctTotRfndAmt){
+	if(cshRfndAmt > gsRfndScheAmt){
 		alert("현금 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
  	}
 	
-	if(giftRfndAmt > this.expctTotRfndAmt){
+	if(ltteGiftRfndAmt > gsRfndScheAmt){
 		alert("상품권 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
  	}
 	
-	if(etcRfndAmt > this.expctTotRfndAmt){
+	if(etcRfndAmt > gsRfndScheAmt){
 		alert("기타 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
  	}
 	
-	if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + giftRfndAmt + etcRfndAmt > this.expctTotRfndAmt){
+	if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + ltteGiftRfndAmt + etcRfndAmt > gsRfndScheAmt){
 		alert("환불예정 금액 보다 환불금액을 초과하여 입력 할 수 없습니다.");
 		return;
-	}else if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + giftRfndAmt + etcRfndAmt < this.expctTotRfndAmt){
+	}else if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + ltteGiftRfndAmt + etcRfndAmt < gsRfndScheAmt){
 		alert("환불예정 금액 만큼 환불금액을 입력하세요.");
 		return;
 	}
-	trace(this.Div00.form.Div00.form.Combo00.value);
+	
 	if(confirm("결제 건을 취소(환불)하시겠습니까?")){
-		var dsUpdate = new Dataset();
-		dsUpdate.name = "ds_update_info";
-		dsUpdate.addColumn("atlctRsvNo", "string", 256);
-		dsUpdate.addColumn("actlAtlctNpleSeqno", "int", 256);
-		dsUpdate.addColumn("rfndClCd", "string", 256);
-		dsUpdate.addColumn("rfndStatCd", "string", 256);
-		dsUpdate.addColumn("rfndChnlCd", "string", 256);
-		dsUpdate.addColumn("rfndLectTmsCd", "string", 256);
-		dsUpdate.addColumn("rfndRsnCd", "string", 256);
-		dsUpdate.addColumn("gsRfndScheAmt", "int", 256);
-		dsUpdate.addColumn("rfndScheLectAmt", "int", 256);
-		dsUpdate.addColumn("rfndScheAddAmt", "int", 256);
-		//dsUpdate.addColumn("feeRt", "int", 256);
-		dsUpdate.addColumn("lectAmtFee", "int", 256);
-		dsUpdate.addColumn("addAmtFee", "int", 256);
-		dsUpdate.addColumn("crdRfndAmt", "int", 256);
-		dsUpdate.addColumn("lpntRfndAmt", "int", 256);
-		dsUpdate.addColumn("cshRfndAmt", "int", 256);
-		dsUpdate.addColumn("ltteGiftRfndAmt", "int", 256);
-		dsUpdate.addColumn("etcRfndAmt", "int", 256);
+		this.ds_param_info.clearData();
+		var rowIndex = this.ds_param_info.addRow();
+		this.ds_param_info.copyRow(rowIndex, this.ds_update_info, 0);
 		
-		this.addChild("ds_update_info", dsUpdate);
+		this.ds_param_info.set_enableevent(false);
+		this.ds_param_info.setColumn(0, "rfndClCd", gsRfndAmtFee > 0 ? "20" : "10");
+		this.ds_param_info.setColumn(0, "rfndStatCd", "13");
+		this.ds_param_info.setColumn(0, "rfndChnlCd", "D");
+		this.ds_param_info.setColumn(0, "rfndLectTmsCd", this.Div00.form.Div00.form.Combo00.value);
+		this.ds_param_info.setColumn(0, "rfndRsnCd", this.Div00.form.Div01.form.Combo00.value);
+		this.ds_param_info.setColumn(0, "gsRfndScheAmt", gsRfndScheAmt);
+		this.ds_param_info.setColumn(0, "rfndScheLectAmt", rfndScheLectAmt);
+		this.ds_param_info.setColumn(0, "rfndScheAddAmt", rfndScheAddAmt);
+		this.ds_param_info.setColumn(0, "lectAmtFee", lectAmtFee);
+		this.ds_param_info.setColumn(0, "addAmtFee", addAmtFee);
+		this.ds_param_info.setColumn(0, "crdRfndAmt", crdRfndAmt);
+		this.ds_param_info.setColumn(0, "lpntRfndAmt", lpntRfndAmt);
+		this.ds_param_info.setColumn(0, "cshRfndAmt", cshRfndAmt);
+		this.ds_param_info.setColumn(0, "ltteGiftRfndAmt", ltteGiftRfndAmt);
+		this.ds_param_info.setColumn(0, "etcRfndAmt", etcRfndAmt);
 		
-		this.ds_update_info.set_enableevent(false);
-		this.ds_update_info.insertRow(0);
-		this.ds_update_info.setColumn(0, "atlctRsvNo", this.ds_adm_cncl_data.getColumn(0, "atlctRsvNo"));
-		this.ds_update_info.setColumn(0, "actlAtlctNpleSeqno", this.ds_adm_cncl_data.getColumn(0, "actlAtlctNpleSeqno"));
-		this.ds_update_info.setColumn(0, "rfndClCd", lectAmtFee + addAmtFee > 0 ? "20" : "10");
-		this.ds_update_info.setColumn(0, "rfndStatCd", lectAmtFee + addAmtFee > 0 ? "60" : "40");
-		this.ds_update_info.setColumn(0, "rfndChnlCd", "D");
-		this.ds_update_info.setColumn(0, "rfndLectTmsCd", this.Div00.form.Div00.form.Combo00.value == "" ? "1" : this.Div00.form.Div00.form.Combo00.value);
-		this.ds_update_info.setColumn(0, "rfndRsnCd", this.Div00.form.Div01.form.Combo00.value);
-		this.ds_update_info.setColumn(0, "gsRfndScheAmt", rfndScheLectAmt + rfndScheAddAmt);
-		this.ds_update_info.setColumn(0, "rfndScheLectAmt", rfndScheLectAmt);
-		this.ds_update_info.setColumn(0, "rfndScheAddAmt", rfndScheAddAmt);
-		//this.ds_update_info.setColumn(0, "feeRt", lectAmtFee + addAmtFee > 0 ? feeRt : 0);
-		this.ds_update_info.setColumn(0, "lectAmtFee", lectAmtFee);
-		this.ds_update_info.setColumn(0, "addAmtFee", addAmtFee);
-		this.ds_update_info.setColumn(0, "crdRfndAmt", crdRfndAmt);
-		this.ds_update_info.setColumn(0, "lpntRfndAmt", lpntRfndAmt);
-		this.ds_update_info.setColumn(0, "cshRfndAmt", cshRfndAmt);
-		this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", giftRfndAmt);
-		this.ds_update_info.setColumn(0, "etcRfndAmt", etcRfndAmt);
-		
-		this.ds_update_info.set_enableevent(true);
+		this.ds_param_info.set_enableevent(true);
 	
 		var strSvcId    = "update";
 		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
-		var inData      = "updateInfo=this.ds_update_info";
+		var inData      = "updateInfo=this.ds_param_info";
 		var outData     = "";
 		var strArg      = "updateType=rfnd";
 		var callBackFnc = "fnCallback";
@@ -663,6 +630,92 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="totLectAddRfndDeducAmt" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_update_info">
+        <ColumnInfo>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="rfndClCd" type="STRING" size="256"/>
+          <Column id="rfndStatCd" type="STRING" size="256"/>
+          <Column id="rfndChnlCd" type="STRING" size="256"/>
+          <Column id="rfndLectTmsCd" type="STRING" size="256"/>
+          <Column id="rfndRsnCd" type="STRING" size="256"/>
+          <Column id="gsRfndScheAmt" type="STRING" size="256"/>
+          <Column id="rfndScheLectAmt" type="STRING" size="256"/>
+          <Column id="rfndScheAddAmt" type="STRING" size="256"/>
+          <Column id="lectAmtFee" type="STRING" size="256"/>
+          <Column id="addAmtFee" type="STRING" size="256"/>
+          <Column id="crdRfndAmt" type="STRING" size="256"/>
+          <Column id="lpntRfndAmt" type="STRING" size="256"/>
+          <Column id="cshRfndAmt" type="STRING" size="256"/>
+          <Column id="ltteGiftRfndAmt" type="STRING" size="256"/>
+          <Column id="etcRfndAmt" type="STRING" size="256"/>
+          <Column id="crdStlmAmt" type="STRING" size="256"/>
+          <Column id="lpntUseAmt" type="STRING" size="256"/>
+          <Column id="cshStlmAmt" type="STRING" size="256"/>
+          <Column id="giftStlmAmt" type="STRING" size="256"/>
+          <Column id="etcStlmAmt" type="STRING" size="256"/>
+          <Column id="crdcoCdNm" type="STRING" size="256"/>
+          <Column id="gsRfndAmtFee" type="STRING" size="256"/>
+          <Column id="lectStlmAmt" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="ltteGiftStlmAmt" type="STRING" size="256"/>
+          <Column id="otgiftStlmAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_param_info">
+        <ColumnInfo>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="rfndClCd" type="STRING" size="256"/>
+          <Column id="rfndStatCd" type="STRING" size="256"/>
+          <Column id="rfndChnlCd" type="STRING" size="256"/>
+          <Column id="rfndLectTmsCd" type="STRING" size="256"/>
+          <Column id="rfndRsnCd" type="STRING" size="256"/>
+          <Column id="gsRfndScheAmt" type="STRING" size="256"/>
+          <Column id="rfndScheLectAmt" type="STRING" size="256"/>
+          <Column id="rfndScheAddAmt" type="STRING" size="256"/>
+          <Column id="lectAmtFee" type="STRING" size="256"/>
+          <Column id="addAmtFee" type="STRING" size="256"/>
+          <Column id="crdRfndAmt" type="STRING" size="256"/>
+          <Column id="lpntRfndAmt" type="STRING" size="256"/>
+          <Column id="cshRfndAmt" type="STRING" size="256"/>
+          <Column id="ltteGiftRfndAmt" type="STRING" size="256"/>
+          <Column id="etcRfndAmt" type="STRING" size="256"/>
+          <Column id="crdStlmAmt" type="STRING" size="256"/>
+          <Column id="lpntUseAmt" type="STRING" size="256"/>
+          <Column id="cshStlmAmt" type="STRING" size="256"/>
+          <Column id="giftStlmAmt" type="STRING" size="256"/>
+          <Column id="etcStlmAmt" type="STRING" size="256"/>
+          <Column id="crdcoCdNm" type="STRING" size="256"/>
+          <Column id="gsRfndAmtFee" type="STRING" size="256"/>
+          <Column id="lectStlmAmt" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="ltteGiftStlmAmt" type="STRING" size="256"/>
+          <Column id="otgiftStlmAmt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div01.form.Div00.form.Edit00" propid="value" datasetid="ds_update_info" columnid="crdRfndAmt"/>
+      <BindItem id="item1" compid="Div01.form.Div02.form.Edit00" propid="value" datasetid="ds_update_info" columnid="cshRfndAmt"/>
+      <BindItem id="item2" compid="Div01.form.Div04.form.Edit00" propid="value" datasetid="ds_update_info" columnid="etcRfndAmt"/>
+      <BindItem id="item3" compid="Div01.form.Div01.form.Edit00" propid="value" datasetid="ds_update_info" columnid="lpntRfndAmt"/>
+      <BindItem id="item4" compid="Div01.form.Div03.form.Edit00" propid="value" datasetid="ds_update_info" columnid="ltteGiftRfndAmt"/>
+      <BindItem id="item5" compid="Div02.form.Div01.form.Edit00" propid="value" datasetid="ds_update_info" columnid="rfndScheLectAmt"/>
+      <BindItem id="item6" compid="Div02.form.Div03.form.Edit00" propid="value" datasetid="ds_update_info" columnid="rfndScheAddAmt"/>
+      <BindItem id="item7" compid="Div02.form.Div05.form.Static01" propid="text" datasetid="ds_update_info" columnid="gsRfndScheAmt"/>
+      <BindItem id="item8" compid="Div02.form.Div02.form.Static00" propid="text" datasetid="ds_update_info" columnid="lectAmtFee"/>
+      <BindItem id="item9" compid="Div02.form.Div04.form.Static00" propid="text" datasetid="ds_update_info" columnid="addAmtFee"/>
+      <BindItem id="item10" compid="Div01.form.Div00.form.Static01" propid="text" datasetid="ds_update_info" columnid="crdcoCdNm"/>
+      <BindItem id="item11" compid="Div02.form.Div06.form.Static00" propid="text" datasetid="ds_update_info" columnid="gsRfndAmtFee"/>
+    </Bind>
   </Form>
 </FDL>
