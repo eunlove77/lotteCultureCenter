@@ -212,7 +212,7 @@
                           <Div id="Div06" taborder="11" text="Div06" left="0" top="Div05:-1" height="63" right="0" cssclass="div_WF_CompWrap">
                             <Layouts>
                               <Layout>
-                                <Static id="Static00" taborder="0" text="강의스케줄 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel" usedecorate="true"/>
+                                <Static id="Static00" taborder="0" text="강의스케줄" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel" usedecorate="true"/>
                                 <Grid id="Grid00" taborder="1" left="Static00:0" top="0" right="0" bottom="0" binddataset="ds_scheduleTemp_list" autosizingtype="none" cellsizingtype="none" extendsizetype="none" autofittype="col" oncloseup="Div00_Div00_Div00_Div06_Grid00_oncloseup" oninput="Div00_Div00_Div00_Div06_Grid00_oninput" autoenter="select">
                                   <Formats>
                                     <Format id="default">
@@ -838,6 +838,10 @@ this.fn_schedule_set_code = function(id, i, content, lectStDt)
 		objDiv.addChild(calId, objCal);
 		objCal.set_value(this.ds_schedulePlan_list.getColumn(calRow[j], "lectDt"));	
 		objCal.set_readonly(true);
+		if(this.ds_schedulePlan_list.getColumn(calRow[j], "pass") == '0') 
+		{
+			objCal.set_background("#aea7a8");
+		}
 		objCal.show();
 		
 		objCal.insertEventHandler("oncloseup", 0, this.fn_schedule_cal, this);
@@ -947,14 +951,15 @@ this.fn_schedule_cmpl = function(pObj, type)
 				}
 				else
 				{
-					var calRow = this.ds_schedulePlan_list.extractRows("lectDt==" + arrObj[i].value);			
+					var calRow = this.ds_schedulePlan_list.extractRows("lectDt==" + arrObj[i].value);		
+					arrObj[i].set_readonly(false);
 					if(this.ds_schedulePlan_list.getColumn(calRow[0], "pass") == '0')
 					{
-						arrObj[i].set_readonly(true);
+						arrObj[i].set_background("#aea7a8");
 					}
 					else
 					{
-						arrObj[i].set_readonly(false);
+						arrObj[i].set_background("");
 					}
 				}		
 			}
@@ -1064,12 +1069,6 @@ this.fn_save_validation = function()
 				this.ds_teacher_list.setColumn(i, "ppayAmt", 0);
 			}
 		}
-	}
-	
-	if(this.ds_schedulePlan_list.getRowCount() == 0)
-	{
-		alert("강의스케줄을 생성하세요.");
-		return;
 	}
 	
 	if(confirm("강좌정보를 일괄변경 하시겠습니까?"))

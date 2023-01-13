@@ -201,11 +201,11 @@ this.SemesterReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
 	if(nexacro.getPrivateProfile("brchCd") != "0000")
 	{
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'")
 	}
-	this.ds_gdsSpotCd_list.deleteRow(0);
 	
 	this.init();
 	
