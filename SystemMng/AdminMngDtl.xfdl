@@ -352,14 +352,14 @@ this.Div00_Div00_roleCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.Ite
 
 this.fn_detail = function (strSvcId)
 {	
-
 	var strSvcUrl   = this.application.Admin_svc;
 	var inData      = "detail=ds_detail";
 	var outData     = "ds_detail=output1 ds_athr_list=output2 ds_adm_chg_list=output3";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
-
+	var trans = null;
+	
 	if(strSvcId == "detail"){
 		strSvcUrl += "::adminMngDtl.do";
 	}else if(strSvcId == "modify"){
@@ -378,7 +378,7 @@ this.fn_detail = function (strSvcId)
  		isAsync : isAsync,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
-	this.gfn_transaction(tranObj);			
+	this.gfn_transaction(tranObj);
 };
 
 this.fn_athr_menu = function(athrCd){
@@ -420,7 +420,14 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		
 		case "modify":
 			this.alert("수정되었습니다.");
-			this.parent.set_url("SystemMng::AdminMng.xfdl");	
+			if(nexacro.getPrivateProfile("id") == this.param.id)
+			{
+				this.application.LoginFrame.form.fn_logout();
+			}
+			else
+			{
+				this.parent.set_url("SystemMng::AdminMng.xfdl");	
+			}
 		break;
 		
 		case "delete":
