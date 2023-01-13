@@ -108,7 +108,7 @@
                           <Edit id="Edit00" taborder="1" left="130" top="5" width="150" maxlength="100" bottom="5"/>
                           <Static id="Static01" taborder="2" text="@" left="Edit00:10" top="5" width="20" bottom="5"/>
                           <Edit id="Edit00_00" taborder="3" left="Static01:0" top="5" width="150" maxlength="100" bottom="5"/>
-                          <Combo id="Combo00" taborder="4" text="" left="Edit00_00:5" top="5" onitemchanged="Div01_Div05_Div00_Combo00_onitemchanged" innerdataset="ds_emailAddr_cdList" datacolumn="cdNm" codecolumn="cd" bottom="5" width="120"/>
+                          <Combo id="Combo00" taborder="4" text="" left="Edit00_00:5" top="5" onitemchanged="Div01_Div05_Div00_Combo00_onitemchanged" innerdataset="ds_emailAddr_cdList" datacolumn="cdNm" codecolumn="cd" bottom="5" width="120" displaynulltext="직접입력"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -343,13 +343,6 @@ this.TeacherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
  * 데이터 세팅
  **************************************************************************/
  this.set_dataset = function(){
- 
-	//로그인정보 -> 섭외정보
-	var pbrltnBrchCd = nexacro.getPrivateProfile("brchCd");
-	var pbrltnChrgprNm = nexacro.getPrivateProfile("brchNm");
-	this.ds_teacher_info.setColumn(0, 'pbrltnBrchCd', pbrltnBrchCd);
-	this.ds_teacher_info.setColumn(0, 'pbrltnChrgprNm', pbrltnChrgprNm);
-	
 	var ds_codes_list = [
 		{ds : this.ds_tcTp_cdList,		cd: "'127'"},	//강사유형
 		{ds : this.ds_hpStNo_cdList,	cd: "'002'"},		//핸드폰통신사
@@ -389,7 +382,7 @@ this.TeacherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
  * 뷰 세팅
  **************************************************************************/
 this.set_screen_view = function(){
-	//로그인정보 -> 섭외정보
+	//로그인정보 -> 섭외자정보
 	var pbrltnBrchNm = nexacro.getPrivateProfile("brchNm");
 	var pbrltnChrgprid = nexacro.getPrivateProfile("id");
 	var pbrltnInfo_txt = pbrltnBrchNm + '(' + pbrltnChrgprid + ')';
@@ -915,6 +908,7 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
           <Column id="accNo" type="STRING" size="256"/>
           <Column id="rpsntLectNm" type="STRING" size="256"/>
           <Column id="pbrltnBrchCd" type="STRING" size="256"/>
+          <Column id="pbrltnChrgprId" type="STRING" size="256"/>
           <Column id="pbrltnChrgprNm" type="STRING" size="256"/>
           <Column id="signImgFileId" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
@@ -927,36 +921,36 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
           <Row>
             <Col id="tcCdNo"/>
             <Col id="tcTpCd">1</Col>
-            <Col id="apvlStatCd"> </Col>
-            <Col id="txfrBizprYn"> </Col>
-            <Col id="tcNm"> </Col>
-            <Col id="tcStgNm"> </Col>
-            <Col id="hpStNo">  </Col>
-            <Col id="hpMidNo"> </Col>
-            <Col id="hpLastNo"> </Col>
-            <Col id="telStNo"> </Col>
-            <Col id="telMidNo"> </Col>
-            <Col id="telLastNo"> </Col>
-            <Col id="bday"> </Col>
+            <Col id="apvlStatCd"/>
+            <Col id="txfrBizprYn"/>
+            <Col id="tcNm"/>
+            <Col id="tcStgNm"/>
+            <Col id="hpStNo"> </Col>
+            <Col id="hpMidNo"/>
+            <Col id="hpLastNo"/>
+            <Col id="telStNo"/>
+            <Col id="telMidNo"/>
+            <Col id="telLastNo"/>
+            <Col id="bday"/>
             <Col id="lscCd">01</Col>
-            <Col id="emailAddrCd"> </Col>
-            <Col id="email"> </Col>
-            <Col id="pstno"> </Col>
-            <Col id="addr"> </Col>
-            <Col id="carrInfoClctAgrYn"> </Col>
-            <Col id="prinfClctAgrYn"> </Col>
-            <Col id="mdfDtm"> </Col>
-            <Col id="rgprDtm"> </Col>
-            <Col id="signImgFileId"> </Col>
-            <Col id="pbrltnChrgprNm"> </Col>
-            <Col id="dpstNm"> </Col>
-            <Col id="accNo"> </Col>
-            <Col id="rpsntLectNm"> </Col>
-            <Col id="pbrltnBrchCd"> </Col>
-            <Col id="dtlAddr"> </Col>
-            <Col id="rrno"> </Col>
-            <Col id="phtFileId"> </Col>
-            <Col id="bnkNm"> </Col>
+            <Col id="emailAddrCd"/>
+            <Col id="email"/>
+            <Col id="pstno"/>
+            <Col id="addr"/>
+            <Col id="carrInfoClctAgrYn"/>
+            <Col id="prinfClctAgrYn"/>
+            <Col id="mdfDtm"/>
+            <Col id="rgprDtm"/>
+            <Col id="signImgFileId"/>
+            <Col id="pbrltnChrgprNm"/>
+            <Col id="dpstNm"/>
+            <Col id="accNo"/>
+            <Col id="rpsntLectNm"/>
+            <Col id="pbrltnBrchCd"/>
+            <Col id="dtlAddr"/>
+            <Col id="rrno"/>
+            <Col id="phtFileId"/>
+            <Col id="bnkNm"/>
           </Row>
         </Rows>
       </Dataset>
