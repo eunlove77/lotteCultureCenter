@@ -34,7 +34,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌코드 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" width="100" height="20" readonly="false" enable="false"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" width="100" height="20" readonly="true" enable="true"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -58,7 +58,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="정원 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <MaskEdit id="MaskEdit01" taborder="3" left="Static00:6" top="5" width="50" height="20" limitbymask="both" enable="false" format="!9,990"/>
+                                <MaskEdit id="MaskEdit01" taborder="3" left="Static00:6" top="5" width="50" height="20" limitbymask="both" enable="true" format="!9,990" readonly="true"/>
                                 <Static id="Static01" taborder="1" text="명 (온라인" left="MaskEdit01:6" top="5" width="56" height="20" cssclass="sta_WF_TitGray"/>
                                 <MaskEdit id="MaskEdit00" taborder="2" left="Static01:6" top="5" width="50" height="20" limitbymask="both" format="!990" onkeyup="Div00_Div00_Div00_Div01_01_MaskEdit00_onkeyup"/>
                                 <Static id="Static02" taborder="4" text=" / 오프라인" left="MaskEdit00:6" top="5" width="62" height="20"/>
@@ -995,6 +995,56 @@ this.init = function()
 	//대표이미지 초기화
 	this.thnlFileUpload.fn_init(thnlFileObj);
 	
+	//컨텐츠 초기화
+	this.contentInit("0");
+	
+	//강좌 특이사항 초기화
+	this.ds_unusl_list.clearData();
+	this.ds_unusl_list.addRow();
+	
+	//페이지 사이즈 조절
+	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(0/100)");
+	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(0/100)");
+	
+	this.Div00.form.Div00.set_height(536);
+	this.Div00.form.Div00.form.Div00.form.Div02.set_bottom(0);
+	
+	this.Div00.form.Div00_00.set_height(0);
+	this.Div00.form.Div00_00.set_top("Div00:15");
+	this.Div00.form.Div00_00_00.set_height(0);
+	this.Div00.form.Div00_00_00.set_top("Div00:15");
+	this.Div00.form.Div00_00_00_00.set_height(0);
+	this.Div00.form.Div00_00_00_00.set_top("Div00:15");
+	this.Div00.form.Div00_00_00_00_00.set_top("Div00:15");
+	
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div05.set_top("Div04:0");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div05.set_height(0);
+	
+	this.Div00.form.Div00_00_00_00_01.set_height(71);
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div01.set_height(0);
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.set_height(0);
+	
+	this.Div00.form.Div00_00_00_00_00.set_height(526);
+	
+	this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div02.form.Grid00.setRealRowSize(-1, 0);
+	
+	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
+
+	this.Div00.form.resetScroll();
+}
+
+//컨텐츠 초기화	
+this.contentInit = function(type)
+{
+	if(type == "1") 
+	{
+		this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.Button00.set_visible(false);
+	}
+	else
+	{
+		this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.Button00.set_visible(true);
+	}
+	
 	//컨텐츠 초기화	
 	if(this.contentArr.length > 0)
 	{
@@ -1003,9 +1053,9 @@ this.init = function()
 			this.fn_content_remove(this.contentArr[this.contentArr.length-1].divObj);
 		}
 		
-		this.contentArr[0].contentType.set_value(0);
+		this.contentArr[0].contentType.set_value(type);
 		this.contentArr[0].content.set_value("");
-		this.fn_content_chg(this.contentArr[0].contentType.parent.parent.parent, 0)
+		this.fn_content_chg(this.contentArr[0].contentType.parent.parent.parent, type)
 	} 
 	else 
 	{
@@ -1016,7 +1066,7 @@ this.init = function()
 			ord : 0
 		}
 		this.contentArr.push(contentObj);
-		this.contentArr[0].contentType.set_value(0);
+		this.contentArr[0].contentType.set_value(type);
 		this.contentArr[0].content.set_value("");
 	}
 	this.ds_content_list.clearData();
@@ -1067,40 +1117,6 @@ this.init = function()
 	{
 		this.editorArr[0].divMoObj.reload();
 	}
-	
-	//강좌 특이사항 초기화
-	this.ds_unusl_list.clearData();
-	this.ds_unusl_list.addRow();
-	
-	//페이지 사이즈 조절
-	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(0/100)");
-	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(0/100)");
-	
-	this.Div00.form.Div00.set_height(536);
-	this.Div00.form.Div00.form.Div00.form.Div02.set_bottom(0);
-	
-	this.Div00.form.Div00_00.set_height(0);
-	this.Div00.form.Div00_00.set_top("Div00:15");
-	this.Div00.form.Div00_00_00.set_height(0);
-	this.Div00.form.Div00_00_00.set_top("Div00:15");
-	this.Div00.form.Div00_00_00_00.set_height(0);
-	this.Div00.form.Div00_00_00_00.set_top("Div00:15");
-	this.Div00.form.Div00_00_00_00_00.set_top("Div00:15");
-	
-	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div05.set_top("Div04:0");
-	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div05.set_height(0);
-	
-	this.Div00.form.Div00_00_00_00_01.set_height(71);
-	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div01.set_height(0);
-	this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.set_height(0);
-	
-	this.Div00.form.Div00_00_00_00_00.set_height(526);
-	
-	this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div02.form.Grid00.setRealRowSize(-1, 0);
-	
-	this.Div00.form.Div00_00_00_00_01.form.Div00.form.resetScroll();
-
-	this.Div00.form.resetScroll();
 }
 
 /**************************************************************************
@@ -1480,6 +1496,11 @@ this.fn_schedule_set_code = function(id, i, content, lectStDt)
 		objDiv.addChild(calId, objCal);
 		objCal.set_value(this.ds_schedulePlan_list.getColumn(calRow[j], "lectDt"));	
 		objCal.set_readonly(true);
+		if(this.ds_schedulePlan_list.getColumn(calRow[j], "pass") == '0') 
+		{
+			objCal.set_background("#aea7a8");
+		}
+		
 		objCal.show();
 		
 		objCal.insertEventHandler("oncloseup", 0, this.fn_schedule_cal, this);
@@ -1589,14 +1610,15 @@ this.fn_schedule_cmpl = function(pObj, type)
 				}
 				else
 				{
-					var calRow = this.ds_schedulePlan_list.extractRows("lectDt==" + arrObj[i].value);			
+					var calRow = this.ds_schedulePlan_list.extractRows("lectDt==" + arrObj[i].value);	
+					arrObj[i].set_readonly(false);
 					if(this.ds_schedulePlan_list.getColumn(calRow[0], "pass") == '0')
 					{
-						arrObj[i].set_readonly(true);
+						arrObj[i].set_background("#aea7a8");
 					}
 					else
 					{
-						arrObj[i].set_readonly(false);
+						arrObj[i].set_background("");
 					}
 				}		
 			}
@@ -1741,7 +1763,7 @@ this.fn_content_add = function()
 		objCompSub.init("objCompSub" + ord, 0, 0, null, 40, 0);
 		objComp.form.addChild("objCompSub" + ord, objCompSub);	
 		objCompSub.show();	
-		objCompSub.set_border("0px none, 0px none, 1px solid");
+		objCompSub.set_visible(false);
 		
 		var objCompSubRadio = new Radio();
 		objCompSubRadio.init("objCompSubRadio" + ord, 15, 0, 126, 39);
@@ -1752,7 +1774,7 @@ this.fn_content_add = function()
 		objCompSubRadio.set_datacolumn("cdNm");
 		objCompSubRadio.set_direction("vertical");
 		objCompSubRadio.set_index(0);
-		objCompSubRadio.insertEventHandler("onitemchanged", 0, this.fn_content_chg_event, this);
+		objCompSubRadio.set_visible(false);
 		
 		var objEditorArea = new Div();
 		objEditorArea.init("editorArea" + ord, 0, "objCompSub" + ord + ":15", null, null, 0, 40);
@@ -2463,7 +2485,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexac
 
 this.fn_content_chg_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo) 
 {
-	this.fn_content_chg(obj.parent.parent.parent, obj.value);
+	this.contentInit(obj.value);
 };
 
 this.fn_content_remove_event = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInf)
@@ -2783,6 +2805,14 @@ this.ds_teacher_list_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexac
 	if(this.ds_teacher_list.getColumn(e.row, "tcTpCd") != undefined && this.ds_teacher_list.getColumn(e.row, "tcTpCd") != 1)
 	{
 		this.ds_teacher_list.setColumn(e.row, "incmClCd", "");
+	}
+	
+	if(this.ds_teacher_list.getColumn(e.row, "ppayAmt") != undefined && this.ds_teacher_list.getColumn(e.row, "ppayAmt") != "" && this.ds_teacher_list.getColumn(e.row, "ppayStdCd") == "01")
+	{
+		if(parseInt(this.ds_teacher_list.getColumn(e.row, "ppayAmt")) > 100) 
+		{
+			this.ds_teacher_list.setColumn(e.row, "ppayAmt", "100");
+		}
 	}
 };
 
