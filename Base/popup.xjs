@@ -148,10 +148,17 @@ this.gfn_openPopup = function(sPopupId, arrArguments, sPopupUrl, obj, nPopupWidt
 	
 	var parentFrame = obj.getOwnerFrame();
 	
-	var popupLeft = 0;
-	var popupTop = 0;
-	var sOpt = sAutoSize+"showtitlebar="+sShowTitle+" showstatusbar="+sShowStatus+" openalign='"+sOpenAlignType+"'";	//only runtime
+	var popupLeft = 100;
+	if(this.gfn_nvl(arrArguments.left) != ""){
+		popupLeft = arrArguments.left;
+	}
 	
+	var popupTop = 100;
+	if(this.gfn_nvl(arrArguments.top) != ""){
+		popupTop = arrArguments.top;
+	}
+	
+	var sOpt = sAutoSize+"showtitlebar="+sShowTitle+" showstatusbar="+sShowStatus+" openalign='"+sOpenAlignType+"'";	//only runtime
 	/*
 	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
 	{
@@ -165,7 +172,8 @@ this.gfn_openPopup = function(sPopupId, arrArguments, sPopupUrl, obj, nPopupWidt
 	*/
 	// 신규 Modeless 팝업 호출
 	// application.open(sID, sURL, objMyFrame, sArg, sOpt, popupLeft, popupTop, nWidth, nHeight, this);
-	nexacro.open(sPopupId, sPopupUrl, parentFrame, arrArguments, sOpt, 100, 100, nPopupWidth, nPopupHeight);
+	
+	nexacro.open(sPopupId, sPopupUrl, parentFrame, arrArguments, sOpt, popupLeft, popupTop, nPopupWidth, nPopupHeight);
 };
 
 /**************************************************************************
