@@ -128,7 +128,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" binddataset="ds_tceval_list">
+        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="140" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_tceval_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -173,7 +173,7 @@
                 <Cell text="bind:tcCdNo" color="blue" textDecoration="underline" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="1" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="2" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:evlPnt" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
-                <Cell col="3" text="bind:brchCd" displaytype="combotext" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
+                <Cell col="3" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="4" text="bind:yy" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="5" text="bind:lectSmsterCd" calendardateformat="yyyy-MM-dd HH:mm:ss" displaytype="combotext" combodataset="ds_semester_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="6" text="bind:lectCd" textDecoration="underline" color="blue" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
@@ -241,7 +241,6 @@ this.set_dataset = function(){
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
 
 	var ds_codes_list = [
-		{ds : this.ds_spot_list,		cd: "'150'"},	//지점
 		{ds : this.ds_semester_list,	cd: "'034'"},		//학기구분
 		{ds : this.ds_classGb_list,	cd: "'006'"},			//강좌구분
 		{ds : this.ds_classCtgy_list,	cd: "'115'"},	//강좌유형

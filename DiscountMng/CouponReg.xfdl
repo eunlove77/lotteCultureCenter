@@ -146,6 +146,7 @@
                     <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
                     <Static id="Static01" taborder="1" text="개" left="290" top="5" width="120" height="21"/>
                     <MaskEdit id="MaskEdit00" taborder="2" left="120" top="5" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                    <Button id="btnEnd" taborder="3" text="난수번호 다운로드" left="364" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="130" visible="true" onclick="Div01_Div02_btnEnd_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -423,6 +424,28 @@
             </Format>
           </Formats>
         </Grid>
+        <Grid id="Grid01" taborder="7" left="1240" top="767" width="370" height="225" binddataset="ds_random_list" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="300"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="쿠폰명"/>
+                <Cell col="1" text="난수번호"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:cpnNm"/>
+                <Cell col="1" text="bind:cpnNo" displaytype="mask" maskeditformat="####-####-####-####" maskeditlimitbymask="both" maskedittype="string"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
@@ -575,7 +598,7 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
-	this.domain = this.application.getVariable("domain");
+	this.domain = this.application.Domain;
 	
 	//지점선택 체크박스 세팅
 	this.fn_set_spot();	
@@ -851,6 +874,22 @@ this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 };
 
 /**************************************************************************
+ * 난수번호 다운로드 버튼
+ **************************************************************************/
+
+this.Div01_Div02_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.exportObj = new ExcelExportObject("Export01", this);
+	
+	this.exportObj.set_exporturl(this.application.Domain + this.application.getVariable("excelImportExport"));
+	this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid01, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
+	this.exportObj.set_exporttype(nexacro.ExportTypes.EXCEL2007);
+	this.exportObj.set_exportfilename("난수번호_리스트_" + this.ds_detail.getColumn(0, "cpnNm"));
+
+	this.exportObj.exportData();
+};
+
+/**************************************************************************
  * 발급대상 라디오버튼 이벤트
  **************************************************************************/
 
@@ -1083,13 +1122,13 @@ this.ds_category02_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 		this.ds_category02.insertRow(0);
 		this.ds_category02.setColumn(0, "cd", "");
 		this.ds_category02.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo01.set_text("전체");
+		this.Div01.form.Div03.form.Div00.form.Combo01.set_value(null);
 		
 		this.ds_category03.deleteAll();
 		this.ds_category03.addRow();
 		this.ds_category03.setColumn(0, "cd", "");
 		this.ds_category03.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_value(null);
 	}
 };
 
@@ -1115,7 +1154,7 @@ this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 		this.ds_category03.insertRow(0); 
 		this.ds_category03.setColumn(0, "cd", "");
 		this.ds_category03.setColumn(0, "cdNm", "전체");
-		this.Div01.form.Div03.form.Div00.form.Combo02.set_text("전체");
+		this.Div01.form.Div03.form.Div00.form.Combo02.set_value(null);
 	}
 	
 };
@@ -1209,6 +1248,8 @@ this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 	{
 		this.Div01.form.Div05.form.Div00.set_visible(false);
 		this.Div01.form.Div05.form.Div01.set_visible(true);
+		this.Div01.form.Div05.form.Div00.form.strtDtm.set_value();
+		this.Div01.form.Div05.form.Div00.form.endDtm.set_value();
 	}
 	else
 	{

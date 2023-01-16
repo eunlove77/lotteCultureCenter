@@ -84,19 +84,11 @@
                             <Col id="datacolumn">회원번호</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">회원명</Col>
-                          </Row>
-                          <Row>
                             <Col id="datacolumn">회원ID</Col>
+                            <Col id="codecolumn">2</Col>
+                          </Row>
+                          <Row>
                             <Col id="codecolumn">3</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">4</Col>
-                            <Col id="datacolumn">연락처</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">5</Col>
                             <Col id="datacolumn">이메일</Col>
                           </Row>
                         </Rows>
@@ -176,9 +168,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <MaskEdit id="MaskEdit00" taborder="1" left="Static00:10" top="5" height="21" format="!###" limitbymask="both" minwidth="50" maxwidth="" right="50%"/>
-                    <MaskEdit id="MaskEdit01" taborder="2" left="MaskEdit00:5" top="5" height="21" limitbymask="both" format="!####" minwidth="50" maxwidth="" right="26.51%"/>
-                    <MaskEdit id="MaskEdit02" taborder="3" left="MaskEdit01:5" top="5" height="21" format="!####" limitbymask="both" minwidth="50" maxwidth="" right="3.36%"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="49.99%"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.17%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5" top="5" height="21" right="2.70%" inputtype="digit" maxlength="4"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -239,10 +231,10 @@
                       <Cell displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemcontrol' " edittype="expr:comp.type == 1 ? 'checkbox' : 'radioitemitem' " radioitemcodevalue="1" expr="dataset.checkarray[currow]"/>
                       <Cell col="1" expr="dataset.getRowCount() - currow"/>
                       <Cell col="2" text="bind:mbrNo" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666"/>
-                      <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)"/>
-                      <Cell col="4" color="#666666" expr="comp.parent.parent.parent.gfn_setMasking(mbrId, 3)"/>
-                      <Cell col="5" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)"/>
-                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd"/>
+                      <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)" tooltiptype="hover" tooltiptext="bind:korNm"/>
+                      <Cell col="4" color="#666666" expr="comp.parent.parent.parent.gfn_setMasking(mbrId, 3)" tooltiptext="bind:mbrId" tooltiptype="hover"/>
+                      <Cell col="5" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
+                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd" tooltiptype="hover"/>
                       <Cell col="7" text="bind:mbrGrdeCdNm" displaytype="normal" combodataset="ds_grade_cd" combocodecol="cd" combodatacol="cdNm"/>
                       <Cell col="8" text="bind:mvgBlstrVal" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                       <Cell col="9" text="bind:itrstBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
@@ -316,7 +308,6 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.Div02.form.Grid00.redrawExprCell(); 
 	
 	this.fn_init_code();
-	this.fn_list();
 };
 
 /**************************************************************************
@@ -332,7 +323,7 @@ this.fn_init_code = function ()
 		outData : "ds_grade_cd=gradeList ds_join_cd=joinCdList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		menuSeq : this.menuId,
 		isAsync : false
 	}
 	this.gfn_transaction(tranObj);	
@@ -353,14 +344,6 @@ this.fn_init_code = function ()
 
 this.fn_list = function ()
 {	
-	var isKorNm = this.gfn_isNull(this.ds_search.getColumn(0, "korNm"));
-	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
-	console.log(isKorNm)
-	console.log(this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")));
-	console.log((this.ds_search.getColumn(0, "hpMidNo")))
-	console.log(this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo")));
-	console.log((this.ds_search.getColumn(0, "hpLastNo")))
-
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.baseSvrUrl + "list.do",
@@ -382,7 +365,17 @@ this.fn_list = function ()
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_list();
+	var isKorNm = this.gfn_isNull(this.ds_search.getColumn(0, "korNm"));
+	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+	
+	if(isKorNm != isHpNo)
+	{
+		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+	}
+	else
+	{
+		this.fn_list();
+	}
 };
 
 /**************************************************************************
@@ -398,7 +391,6 @@ this.Div01_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	}
 	
 	this.fn_init(this.Div01.form);
-	this.fn_list();
 };
 
 //필터 초기화
@@ -576,11 +568,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="item9" compid="Div01.form.Div01_00.form.ComboAgrType" propid="value" datasetid="ds_search" columnid="smsRcvAgrYn"/>
       <BindItem id="item10" compid="Div01.form.Div06.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item11" compid="Div01.form.Div06.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
-      <BindItem id="item6" compid="Div01.form.Div04_01.form.MaskEdit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
-      <BindItem id="item7" compid="Div01.form.Div04_01.form.MaskEdit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
-      <BindItem id="item8" compid="Div01.form.Div04_01.form.MaskEdit02" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
       <BindItem id="item12" compid="Div01.form.Div04_00.form.Edit00" propid="value" datasetid="ds_search" columnid="korNm"/>
-      <BindItem id="item13" compid="Div01.form.Div04_00.form.Edit00" propid="accessibilityaction" datasetid="ds_search" columnid="korNm"/>
+      <BindItem id="item6" compid="Div01.form.Div04_01.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item7" compid="Div01.form.Div04_01.form.Edit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item8" compid="Div01.form.Div04_01.form.Edit01_00" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
+      <BindItem id="item13" compid="Div01.form.Div02.form.ComboGrade" propid="value" datasetid="ds_search" columnid="mbrGrdeCd"/>
     </Bind>
   </Form>
 </FDL>

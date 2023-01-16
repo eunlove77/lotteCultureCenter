@@ -57,7 +57,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 방식 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="Static01" taborder="1" left="Static00:10" top="5" usedecorate="false" height="21" right="10" expr="comp.text == &quot;AUTO&quot; ? &quot;자동발급&quot; :  comp.text == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
+                    <Static id="Static01" taborder="1" left="Static00:10" top="5" usedecorate="false" height="21" right="10" expr="comp.text == &quot;AUTO&quot; ? &quot;자동발급&quot; :  comp.text == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;" text=""/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -65,7 +65,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 대상 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="50" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false" onclick="Div01_Div01_Grid00_onclick" readonly="true">
+                    <Grid id="Grid00" taborder="1" left="Static00:10" top="10" width="235" height="222" binddataset="ds_mem_grade" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="true" onclick="Div01_Div01_Grid00_onclick" readonly="true">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -88,15 +88,16 @@
                       </Formats>
                     </Grid>
                     <Static id="Static01" taborder="2" text="쿠폰발급 회원리스트.xlxs" left="Static00:10" top="-1" width="379" height="30" cursor="pointer" textDecoration="underline" visible="false" onclick="Div01_Div01_Static01_onclick"/>
+                    <Static id="Static02" taborder="3" left="Static00:10" top="5" usedecorate="false" height="21" right="10" text="신규가입 회원에게 자동 발송" visible="false"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="7" text="Div01" left="0" top="Div01:-1" height="0" cssclass="div_WF_CompWrap" right="0" visible="true" minwidth="660" maxwidth="">
+              <Div id="Div02" taborder="7" text="Div01" left="0" top="Div01:-1" height="0" cssclass="div_WF_CompWrap" visible="true" minwidth="660" maxwidth="" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="Static01" taborder="1" text="개" left="290" top="5" width="120" height="21"/>
-                    <MaskEdit id="MaskEdit00" taborder="2" left="120" top="5" width="160" height="21" format="#,###" limitbymask="decimal"/>
+                    <Static id="Static01" taborder="1" text="개" left="Static00:10" top="5" width="120" height="21"/>
+                    <Button id="btnEnd" taborder="2" text="난수번호 다운로드" left="364" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="130" visible="false" onclick="Div01_Div02_btnEnd_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -253,6 +254,28 @@
             </Format>
           </Formats>
         </Grid>
+        <Grid id="Grid01" taborder="7" left="1290" top="677" width="370" height="225" binddataset="ds_random_list" autosizingtype="none" autofittype="col" mouseovertype="row" extendsizetype="none" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="300"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="쿠폰명"/>
+                <Cell col="1" text="난수번호"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:cpnNm"/>
+                <Cell col="1" text="bind:cpnNo" displaytype="mask" maskeditformat="####-####-####-####" maskeditlimitbymask="both" maskedittype="string"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Bind>
@@ -300,7 +323,12 @@
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_random_list"/>
+      <Dataset id="ds_random_list">
+        <ColumnInfo>
+          <Column id="cpnNm" type="STRING" size="256"/>
+          <Column id="cpnNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
       <Dataset id="ds_mem_grade" oncolumnchanged="ds_mem_grade_oncolumnchanged">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
@@ -411,16 +439,32 @@ this.fn_set_detail = function()
 		this.Div00.form.Div10.form.btnEnd.set_visible(true);		
 	}
 	
-	if(this.ds_detail.getColumn(0, "issueObjClCd") == "EXCEL")
+	if(this.ds_detail.getColumn(0, "issueMthdClCd") == "AUTO")
 	{
-		this.Div01.form.Div01.form.Static01.set_visible(true);
 		this.Div01.form.Div01.set_height(33);
+		this.Div01.form.Div01.form.Static02.set_visible(true);
+		this.Div01.form.Div01.form.Grid00.set_visible(false);
+		this.Div01.form.Div03.set_top("Div01:-1");
+	}
+	else if(this.ds_detail.getColumn(0, "issueMthdClCd") == "RANDOM")
+	{
+		this.Div01.form.Div01.set_height(0);
+		this.Div01.form.Div02.set_height(33);
+		this.Div01.form.Div02.form.Static01.set_text(this.ds_detail.getColumn(0, "issueCqty") + " 개");
 	}
 	else
 	{
-		this.Div01.form.Div01.form.Grid00.set_visible(true);
-		this.Div01.form.Div01.form.Grid00.set_height(225);
-		this.Div01.form.Div01.set_height(245);
+		if(this.ds_detail.getColumn(0, "issueObjClCd") == "EXCEL")
+		{
+			this.Div01.form.Div01.form.Static01.set_visible(true);
+			this.Div01.form.Div01.set_height(33);
+		}
+		else
+		{
+			this.Div01.form.Div01.form.Grid00.set_visible(true);
+			this.Div01.form.Div01.form.Grid00.set_height(225);
+			this.Div01.form.Div01.set_height(245);
+		}
 	}
 	
 	if(this.ds_detail.getColumn(0, "applLectClCd") == "CLASS")
@@ -471,6 +515,7 @@ this.fn_sync_checkBox = function()
 /* 회원등급 체크박스 동기화 */
 this.fn_sync_mbrGrde = function()
 {
+	this.ds_mem_grade.checkarray = new Array(); 
 	for(var i=0; i < this.ds_mem_grade.getRowCount(); i++)
 	{
 		if(this.gfn_nvl(this.ds_mem_grade.getColumn(i, "mbrGrdeCd")) != "")
@@ -478,7 +523,7 @@ this.fn_sync_mbrGrde = function()
 			this.ds_mem_grade.checkarray[i] = 1;
 		}
 	}
-	this.Div01.form.Div01.form.Grid00.redrawExprCell()
+	this.Div01.form.Div01.form.Grid00.redrawExprCell();
 }
 
 /**************************************************************************
@@ -493,6 +538,22 @@ this.Div01_Div01_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickE
 	this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid00, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
 	this.exportObj.set_exporttype(nexacro.ExportTypes.EXCEL2007);
 	this.exportObj.set_exportfilename("쿠폰발급_회원리스트_" + this.ds_detail.getColumn(0, "cpnNm"));
+
+	this.exportObj.exportData();
+};
+
+/**************************************************************************
+ * 난수번호 다운로드 버튼
+ **************************************************************************/
+
+this.Div01_Div02_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.exportObj = new ExcelExportObject("Export01", this);
+	
+	this.exportObj.set_exporturl(this.application.Domain + this.application.getVariable("excelImportExport"));
+	this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid01, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
+	this.exportObj.set_exporttype(nexacro.ExportTypes.EXCEL2007);
+	this.exportObj.set_exportfilename("난수번호_리스트_" + this.ds_detail.getColumn(0, "cpnNm"));
 
 	this.exportObj.exportData();
 };
@@ -540,6 +601,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 };
+
 ]]></Script>
   </Form>
 </FDL>

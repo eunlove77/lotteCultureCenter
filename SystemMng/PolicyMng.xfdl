@@ -51,6 +51,19 @@
           </Row>
         </Rows>
       </Dataset>
+      <Dataset id="ds_detail_format">
+        <ColumnInfo>
+          <Column id="seqno" type="INT" size="256"/>
+          <Column id="cntsClCd" type="STRING" size="256"/>
+          <Column id="webCnts" type="STRING" size="256"/>
+          <Column id="mbilCnts" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cntsClCd">P</Col>
+          </Row>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
 * include 영역 
@@ -130,6 +143,11 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{
 	case "detail":
+	
+		if(this.ds_detail.rowcount < 1)
+		{
+			this.ds_detail.copyData(this.ds_detail_format);
+		}
 	
 		this.Div00.form.Div01.form.webCnts.set_url(this.application.Namo);
 		this.Div00.form.Div02.form.mbilCnts.set_url(this.application.Namo);

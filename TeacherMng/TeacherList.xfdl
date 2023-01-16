@@ -161,7 +161,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -216,7 +216,7 @@
                 <Cell col="19" text="섭외자"/>
                 <Cell col="20" text="등록일시"/>
                 <Cell col="21" text="수정일시" calendardateformat="yyyy-MM-dd hh:mi:ss"/>
-                <Cell col="22" text="승인일시"/>
+                <Cell col="22" text="승인일"/>
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
@@ -225,11 +225,11 @@
                 <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="4" text="bind:tcTpCdNm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="5" text="bind:hpNo" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="6" calendardateformat="yyyy-MM-dd HH:mm:ss" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="combotext" text="bind:pbrltnBrchCd"/>
+                <Cell col="6" calendardateformat="yyyy-MM-dd HH:mm:ss" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="combotext" text="bind:pbrltnBrchCd"/>
                 <Cell col="7" text="expr:tcTpCd == '3' ? '' : age" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="8" text="expr:mdfReqCount &gt; 0 ? '요청' : ''" calendardateformat="yyyy-MM-dd HH:mm:ss" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="9" text="bind:frstHopeBrchCd" displaytype="combotext" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="10" displaytype="combotext" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:secHopeBrchCd"/>
+                <Cell col="9" text="bind:frstHopeBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="10" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:secHopeBrchCd"/>
                 <Cell col="11" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" combodataset="ds_classCtgyLarge_list" combocodecol="cd" combodatacol="cdNm" displaytype="combotext" text="bind:frstLrclsCtegryCd"/>
                 <Cell col="12" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="combotext" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" text="bind:frstMdclsCtegryCd"/>
                 <Cell col="13" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="combotext" text="bind:frstSmclsCtegryCd" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd"/>
@@ -241,7 +241,7 @@
                 <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:pbrltnChrgprId"/>
                 <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="22" text="expr:appDt ? appDt : rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="22" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:appDt" displaytype="expr:appDt ? 'date' : 'none'" calendardateformat="yyyy-MM-dd"/>
               </Band>
             </Format>
           </Formats>
@@ -280,6 +280,9 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid00, 0);
 	
+	//지점 콤보박스 세팅
+	this.com_set_branch_list();
+	
 	// 코드 데이터
 	this.set_dataset();
 	
@@ -296,7 +299,6 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 this.set_dataset = function(){
  
 	var ds_codes_list = [
-		{ds : this.ds_spot_list,		cd: "'150'"},	//지점
 		{ds : this.ds_day_cdList,		cd: "'008'"},	//요일
 		{ds : this.ds_tcTp_list,		cd: "'127'"},	//강사유형
 		{ds : this.ds_payStd_list,		cd: "'PPAY_STD'"},	//지급기준
@@ -312,9 +314,6 @@ this.set_dataset = function(){
 	
 	//콤보박스 기본값 설정
  	var ds_list = [
-		{ds : this.ds_spot_list,	cdNm: '전체',
-		 objs : [this.Div01.form.Div00.form.hopeBrchCd
-			, this.Div03.form.Div01.form.pbrltnBrchCd]},		//지점코드
 		{ds : this.ds_day_cdList,	cdNm: '전체',
 		 obj : this.Div01.form.Div02.form.hopeDaywCd},			//희망요일
 	];

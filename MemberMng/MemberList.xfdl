@@ -49,9 +49,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <MaskEdit id="MaskEdit00" taborder="1" left="Static00:10" top="5" height="21" format="!###" limitbymask="both" minwidth="50" maxwidth="" right="50.00%"/>
-                    <MaskEdit id="MaskEdit01" taborder="2" left="MaskEdit00:5" top="5" height="21" limitbymask="both" format="!####" minwidth="50" maxwidth="" right="26.51%"/>
-                    <MaskEdit id="MaskEdit02" taborder="3" left="MaskEdit01:5" top="5" height="21" format="!####" limitbymask="both" minwidth="50" maxwidth="" right="3.69%"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -230,10 +230,10 @@
                       <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                       <Cell col="1" expr="dataset.getRowCount() - currow"/>
                       <Cell col="2" text="bind:mbrNo" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" color="blue" cursor="pointer"/>
-                      <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)"/>
-                      <Cell col="4" color="blue" cursor="pointer" textDecoration="underline" expr="comp.parent.parent.parent.gfn_setMasking(mbrId, 3)"/>
-                      <Cell col="5" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)"/>
-                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd"/>
+                      <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)" tooltiptype="hover" tooltiptext="bind:korNm"/>
+                      <Cell col="4" color="blue" cursor="pointer" textDecoration="underline" expr="comp.parent.parent.parent.gfn_setMasking(mbrId, 3)" tooltiptype="hover" tooltiptext="bind:mbrId"/>
+                      <Cell col="5" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptype="hover" tooltiptext="bind:hpNo"/>
+                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd" tooltiptype="hover" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd"/>
                       <Cell col="7" text="bind:mbrGrdeCdNm" combodataset="ds_grade_cd" combocodecol="cd" combodatacol="cdNm" displaytype="normal"/>
                       <Cell col="8" text="bind:mvgBlstrCd" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" displaytype="combotext"/>
                       <Cell col="9" text="bind:itrstBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
@@ -252,7 +252,7 @@
                     <Button id="btnSms" taborder="2" text="SMS 발송" top="0" height="30" cssclass="btn_WF_Medium" width="80" right="0" onclick="Div02_Div00_btnSms_onclick"/>
                     <Button id="btnDown" taborder="1" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" right="btnSms:10" width="105" onclick="Div02_Div00_btnDown_onclick"/>
                     <Button id="btnMerge" taborder="0" text="회원 통합" top="0" height="30" cssclass="btn_WF_Medium" width="80" right="btnDown:10" onclick="Div02_Div00_btnMerge_onclick"/>
-                    <Button id="btnDel" taborder="3" text="회원 삭제" top="0" height="30" cssclass="btn_WF_High" right="btnMerge:10" width="80"/>
+                    <Button id="btnDel" taborder="3" text="회원 삭제" top="0" height="30" cssclass="btn_WF_High" right="btnMerge:10" width="80" onclick="Div02_Div00_btnDel_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -349,6 +349,7 @@
       <Dataset id="ds_member_list">
         <ColumnInfo>
           <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="membCustNo" type="STRING" size="256"/>
           <Column id="korNm" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="hpNo" type="STRING" size="256"/>
@@ -556,6 +557,119 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 };
 
 /**************************************************************************
+ * 회원삭제 버튼
+ **************************************************************************/
+
+this.Div02_Div00_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var list = this.ds_member_list;
+	var chkCnt = 0;
+	var chkRow = -1;
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkCnt ++;
+			chkRow = i;
+		}
+	}
+	
+	if(chkCnt == 0)
+	{
+		alert("회원을 선택하세요.");
+	}
+	else if(chkCnt > 1)
+	{
+		alert("1명의 회원을 선택하세요.");
+	}
+	else if(this.confirm("선택하신 회원을 삭제하시겠습니까?"))
+	{
+		this.fn_delete(list.getColumn(chkRow, "mbrNo"));
+	}
+};
+
+this.fn_delete = function(mbrNo)
+{
+	var tranObj = {
+		strSvcId : "delete",
+		strSvcUrl : this.baseSvrUrl + "delete.do",
+		inData : "",
+		outData : "",
+		strArg : "mbrNo="+mbrNo,
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);	
+}
+
+/**************************************************************************
+ * 회원통합 버튼
+ **************************************************************************/
+
+this.Div02_Div00_btnMerge_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var list = this.ds_member_list;
+	var chkCnt = 0;
+	var chkRow = new Array();
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkCnt ++;
+			chkRow.push(i);
+		}
+	}
+	
+	if(chkCnt != 2)
+	{
+		alert("2명의 회원을 선택하세요.");
+	}
+	else
+	{
+		var chkRow1 = chkRow[0];
+		var chkRow2 = chkRow[1];
+		
+		if(list.getColumn(chkRow1, "korNm") != list.getColumn(chkRow2, "korNm") || list.getColumn(chkRow1, "hpNo") != list.getColumn(chkRow2, "hpNo"))
+		{
+			alert("이름, 연락처가 같은 회원만 통합 가능합니다.");
+		}
+		else if(this.gfn_isNull(list.getColumn(chkRow1, "membCustNo")) == this.gfn_isNull(list.getColumn(chkRow2, "membCustNo")))
+		{
+			alert("1건의 멤버스 번호가 존재해야 통합 가능합니다. \n멤버스 번호를 확인하세요.");
+		}
+		else if(this.confirm("멤버스번호 기준으로 통합되며, \n가족회원은 통합되지 않습니다. \n회원통합을 진행하시겠습니까?"))
+		{
+			this.fn_combine(list.getColumn(chkRow1, "mbrNo"), list.getColumn(chkRow2, "mbrNo"));
+		}
+
+	}
+};
+
+this.fn_combine = function(mbrNo1, mbrNo2)
+{
+	var tranObj = {
+		strSvcId : "combine",
+		strSvcUrl : this.baseSvrUrl + "combine.do",
+		inData : "",
+		outData : "",
+		strArg : "mbrNo1="+mbrNo1+" mbrNo2="+mbrNo2,
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);	
+}
+
+/**************************************************************************
  * 엑셀다운로드 버튼
  **************************************************************************/
 
@@ -627,7 +741,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
+		this.alert(errorMsg);
+		return false;
 	}
 	
 	switch(svcID)
@@ -642,13 +757,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.alert("저장되었습니다.");
 			this.fn_list();
 			break;
-		case "detail":    
-						
+		case "delete":    
+			this.alert("삭제되었습니다.");
 			break;
 	}
-
-};
-]]></Script>
+};]]></Script>
     <Bind>
       <BindItem id="brchTypeCd" compid="Div01.form.Div00.form.ComboSpotType" propid="value" datasetid="ds_search" columnid="brchTypeCd"/>
       <BindItem id="brchCd" compid="Div01.form.Div00.form.ComboSpot" propid="value" datasetid="ds_search" columnid="brchCd"/>
@@ -656,14 +769,14 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="dateTypeCd" compid="Div01.form.Div03.form.ComboDateType" propid="value" datasetid="ds_search" columnid="dateTypeCd"/>
       <BindItem id="strtDtm" compid="Div01.form.Div03.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDtm"/>
       <BindItem id="endDtm" compid="Div01.form.Div03.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDtm"/>
-      <BindItem id="hpStNo" compid="Div01.form.Div04_01.form.MaskEdit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
-      <BindItem id="hpMidNo" compid="Div01.form.Div04_01.form.MaskEdit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
-      <BindItem id="hpLastNo" compid="Div01.form.Div04_01.form.MaskEdit02" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
       <BindItem id="smsRcvAgrYn" compid="Div01.form.Div01_00.form.ComboSmsAgr" propid="value" datasetid="ds_search" columnid="smsRcvAgrYn"/>
       <BindItem id="f" compid="Div01.form.Div06.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="q" compid="Div01.form.Div06.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
       <BindItem id="mbrGrdeCd" compid="Div01.form.Div02.form.ComboGrade" propid="value" datasetid="ds_search" columnid="mbrGrdeCd"/>
       <BindItem id="korNm" compid="Div01.form.Div04_00.form.Edit00" propid="value" datasetid="ds_search" columnid="korNm"/>
+      <BindItem id="item0" compid="Div01.form.Div04_01.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item1" compid="Div01.form.Div04_01.form.Edit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item2" compid="Div01.form.Div04_01.form.Edit01_00" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
     </Bind>
   </Form>
 </FDL>

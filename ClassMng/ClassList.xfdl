@@ -162,9 +162,9 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="시작시간" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Edit id="Edit00" taborder="2" left="Static00:6" top="5" width="50" height="20" maxlength="2" imemode="direct" inputtype="number" inputfilter="dot,comma,sign" onkeyup="Div02_Div00_Div00_Div01_01_00_Edit00_onkeyup"/>
+                                <Edit id="Edit00" taborder="2" left="Static00:6" top="5" width="50" height="20" maxlength="2" imemode="direct" inputtype="number" inputfilter="dot,comma,sign" onkeyup="Div02_Div00_Div00_Div01_01_00_Edit00_onkeyup" onkillfocus="Div02_Div00_Div00_Div01_01_00_Edit00_onkillfocus"/>
                                 <Static id="Static01" taborder="1" text=":" left="Edit00:6" top="5" width="3" height="20"/>
-                                <Edit id="Edit00_00" taborder="3" left="Static01:6" top="5" width="50" height="20" imemode="direct" inputtype="number" maxlength="2" inputfilter="comma,sign,dot" onkeyup="Div02_Div00_Div00_Div01_01_00_Edit00_00_onkeyup"/>
+                                <Edit id="Edit00_00" taborder="3" left="Static01:6" top="5" width="50" height="20" imemode="direct" inputtype="number" maxlength="2" inputfilter="comma,sign,dot" onkeyup="Div02_Div00_Div00_Div01_01_00_Edit00_00_onkeyup" onkillfocus="Div02_Div00_Div00_Div01_01_00_Edit00_00_onkillfocus"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -172,9 +172,9 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="종료시간" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Edit id="Edit00" taborder="2" left="Static00:6" top="5" width="50" height="20" maxlength="2" imemode="direct" inputtype="number" inputfilter="dot,comma,sign" onkeyup="Div02_Div00_Div00_Div02_00_00_Edit00_onkeyup"/>
+                                <Edit id="Edit00" taborder="2" left="Static00:6" top="5" width="50" height="20" maxlength="2" imemode="direct" inputtype="number" inputfilter="dot,comma,sign" onkeyup="Div02_Div00_Div00_Div02_00_00_Edit00_onkeyup" onchanged="Div02_Div00_Div00_Div02_00_00_Edit00_onchanged" onkillfocus="Div02_Div00_Div00_Div02_00_00_Edit00_onkillfocus"/>
                                 <Static id="Static01" taborder="1" text=":" left="Edit00:6" top="5" width="3" height="20"/>
-                                <Edit id="Edit00_00" taborder="3" left="Static01:6" top="5" width="50" height="20" maxlength="2" imemode="direct" inputtype="number" inputfilter="dot,comma,sign" onkeyup="Div02_Div00_Div00_Div02_00_00_Edit00_00_onkeyup"/>
+                                <Edit id="Edit00_00" taborder="3" left="Static01:6" top="5" width="50" height="20" maxlength="2" imemode="direct" inputtype="number" inputfilter="dot,comma,sign" onkeyup="Div02_Div00_Div00_Div02_00_00_Edit00_00_onkeyup" onkillfocus="Div02_Div00_Div00_Div02_00_00_Edit00_00_onkillfocus"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -318,7 +318,7 @@
                           </Band>
                           <Band id="body">
                             <Cell displaytype="expr:pblPmprcustBrchCd == '' ? 'checkboxcontrol' : 'none'" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
-                            <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
+                            <Cell col="1" text="expr:currow + 1"/>
                             <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="3" text="bind:lectTpNm"/>
                             <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
@@ -1411,7 +1411,7 @@ this.Div02_Div00_Div00_Div01_01_00_Edit00_onkeyup = function(obj:nexacro.Edit,e:
 {
 	if(obj.value > 23)
 	{
-		obj.set_value(obj.value.substr(0,1));
+		obj.set_value(23);
 	}
 };
 
@@ -1419,7 +1419,7 @@ this.Div02_Div00_Div00_Div01_01_00_Edit00_00_onkeyup = function(obj:nexacro.Edit
 {
 	if(obj.value > 59)
 	{
-		obj.set_value(obj.value.substr(0,1));
+		obj.set_value(59);
 	}
 };
 
@@ -1427,7 +1427,7 @@ this.Div02_Div00_Div00_Div02_00_00_Edit00_onkeyup = function(obj:nexacro.Edit,e:
 {
 	if(obj.value > 23)
 	{
-		obj.set_value(obj.value.substr(0,1));
+		obj.set_value(23);
 	}
 };
 
@@ -1435,7 +1435,7 @@ this.Div02_Div00_Div00_Div02_00_00_Edit00_00_onkeyup = function(obj:nexacro.Edit
 {
 	if(obj.value > 59)
 	{
-		obj.set_value(obj.value.substr(0,1));
+		obj.set_value(59);
 	}
 };
 
@@ -1837,6 +1837,41 @@ this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacr
 {
 	this.ds_class_list.checkarray[e.row] = 1;
 };
+
+
+this.Div02_Div00_Div00_Div01_01_00_Edit00_onkillfocus = function(obj:nexacro.Edit,e:nexacro.KillFocusEventInfo)
+{
+	if(obj.value > 23)
+	{
+		obj.set_value(23);
+	}
+};
+
+this.Div02_Div00_Div00_Div01_01_00_Edit00_00_onkillfocus = function(obj:nexacro.Edit,e:nexacro.KillFocusEventInfo)
+{
+	if(obj.value > 59)
+	{
+		obj.set_value(59);
+	}
+};
+
+this.Div02_Div00_Div00_Div02_00_00_Edit00_onkillfocus = function(obj:nexacro.Edit,e:nexacro.KillFocusEventInfo)
+{
+	if(obj.value > 23)
+	{
+		obj.set_value(23);
+	}
+};
+
+this.Div02_Div00_Div00_Div02_00_00_Edit00_00_onkillfocus = function(obj:nexacro.Edit,e:nexacro.KillFocusEventInfo)
+{
+	if(obj.value > 59)
+	{
+		obj.set_value(59);
+	}
+};
+
+
 ]]></Script>
     <Bind>
       <BindItem id="item7" compid="Div02.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
