@@ -12,7 +12,7 @@
                     <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="19.38%" border="0px none, 0px none, 1px solid darkgray" right="50%">
                       <Layouts>
                         <Layout>
-                          <Static id="Static01" taborder="0" text="더보기 &gt;&gt;" top="0" width="70" height="20" right="1" textAlign="right" color="#6ea1cd" cursor="pointer"/>
+                          <Static id="Static01" taborder="0" text="더보기 &gt;&gt;" top="0" width="70" height="20" right="1" textAlign="right" color="#6ea1cd" cursor="pointer" onclick="Div00_Div01_Div00_Static01_onclick"/>
                           <Static id="Static00" taborder="1" text="1:1 문의" left="0" top="0" width="145" height="20" font="14px/normal &quot;Noto Sans KR&quot;"/>
                         </Layout>
                       </Layouts>
@@ -563,33 +563,33 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 this.Div00_Div01_Static02_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
 {
 	//온라인 강사지원 메뉴번호 67
-	var ds = this.application.gdsMenu;
-	var row = ds.findRow("menuSeq", 67);
-	var objSelectMenu = {
-		menuSeq : "67",
-		menuNm : ds.getColumn(row, "menuNm"),
-		pagePath : ds.getColumn(row, "pagePath"),
-		pageId : ds.getColumn(row, "pageId")
-	};
-	
-	this.application.LeftFrame.form.fn_openMenu(objSelectMenu);
+	this.open_menu(67);
 };
 
 this.Div00_Div01_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
 {
 	//강좌 목록 메뉴번호 59
+	this.open_menu(59);
+};
+
+this.Div00_Div01_Div00_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	//1:1 문의
+	this.open_menu(160);
+};
+
+this.open_menu = function(menuSeq){
 	var ds = this.application.gdsMenu;
-	var row = ds.findRow("menuSeq", 59);
+	var row = ds.findRow("menuSeq", menuSeq);
 	var objSelectMenu = {
-		menuSeq : "59",
+		menuSeq : menuSeq,
 		menuNm : ds.getColumn(row, "menuNm"),
 		pagePath : ds.getColumn(row, "pagePath"),
 		pageId : ds.getColumn(row, "pageId")
 	};
 	
 	this.application.LeftFrame.form.fn_openMenu(objSelectMenu);
-};
-]]></Script>
+}]]></Script>
     <Objects>
       <Dataset id="ds_notice">
         <ColumnInfo>
