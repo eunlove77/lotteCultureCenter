@@ -76,7 +76,7 @@
                                         <Cell text="bind:lrclsCtegryNm" textAlign="center" controlautosizingtype="none"/>
                                         <Cell col="1" displaytype="normal" edittype="none" text="bind:mdclsCtegryNm" controlautosizingtype="none"/>
                                         <Cell col="2" text="bind:smclsCtegryNm" controlautosizingtype="none"/>
-                                        <Cell col="3" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                                        <Cell col="3" displaytype="buttoncontrol" edittype="button" text="삭제" cssclass="gridBtn_High"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -117,7 +117,7 @@
                                         <Cell col="2" text="bind:lectCd"/>
                                         <Cell col="3" text="bind:lectTpNm"/>
                                         <Cell col="4" text="bind:lectNm"/>
-                                        <Cell col="5" displaytype="buttoncontrol" edittype="button" text="삭제"/>
+                                        <Cell col="5" displaytype="buttoncontrol" edittype="button" text="삭제" cssclass="gridBtn_High"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -440,6 +440,8 @@ this.Div00_Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:
 				this.ds_appl_ctgr.setColumn(nRowIdx, "lrclsCtegryNm", this.Div00.form.Div01.form.Div03.form.Div00.form.Combo00.text);
 				this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryCd", e.itemvalue);
 				this.ds_appl_ctgr.setColumn(nRowIdx, "mdclsCtegryNm", e.itemtext);
+				this.ds_appl_ctgr.setColumn(nRowIdx, "smclsCtegryCd", "");
+				this.ds_appl_ctgr.setColumn(nRowIdx, "smclsCtegryNm", "전체");
 			}
 			else
 			{
@@ -453,6 +455,9 @@ this.Div00_Div01_Div03_Div00_Combo01_onitemclick = function(obj:nexacro.Combo,e:
 	}
 	else
 	{
+		//소분류 초기화 발생 시점에 값을 못 읽어 미리 변경해줌.
+		obj.set_value(e.itemvalue);
+	
 		var tranObj = {
 		strSvcId : "ctgrList",
 		strSvcUrl : this.application.Admin_svc + "::discount/coupon/codeList.do",
@@ -529,7 +534,7 @@ this.ds_category03_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadE
 		this.ds_category03.addColumn("cdNm", "STRING", 50);
 		this.Div00.form.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);
 		
-		smclsCtegryInf.itemtext = "";
+		smclsCtegryInf.itemtext = "전체";
 		smclsCtegryInf.itemvalue = "";
 		
 		this.Div00_Div01_Div03_Div00_Combo02_onitemclick(this.Div00.form.Div01.form.Div03.form.Div00.form.Combo02, smclsCtegryInf);
