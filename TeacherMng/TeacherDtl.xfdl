@@ -120,9 +120,9 @@
                         <Layout>
                           <Static id="Static00" taborder="0" text="이메일" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                           <Edit id="Edit00" taborder="1" left="130" top="5" width="150" maxlength="100" bottom="5"/>
-                          <Static id="Static01" taborder="2" text="@" left="Edit00:10" top="0" width="20" bottom="5"/>
-                          <Edit id="Edit00_00" taborder="3" left="Static01:0" top="5" width="150" maxlength="100" bottom="5"/>
-                          <Combo id="Combo00" taborder="4" text="" left="Edit00_00:5" top="5" onitemchanged="Div01_Div05_Div00_Combo00_onitemchanged" innerdataset="ds_emailAddr_cdList" datacolumn="cdNm" codecolumn="cd" width="120" bottom="5"/>
+                          <Static id="Static01" taborder="2" text="@" left="Edit00:10" top="0" width="20" bottom="5" fittocontents="width"/>
+                          <Edit id="Edit00_00" taborder="3" left="Static01:10" top="5" width="150" maxlength="100" bottom="5"/>
+                          <Combo id="Combo00" taborder="4" text="" left="Edit00_00:10" top="5" onitemchanged="Div01_Div05_Div00_Combo00_onitemchanged" innerdataset="ds_emailAddr_cdList" datacolumn="cdNm" codecolumn="cd" width="120" bottom="5"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -162,7 +162,7 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <ImageViewer id="signViewer" taborder="4" left="130" top="9" height="80" right="Div00:10" cssclass="img_WF_LibThu" stretch="fixaspectratio"/>
+                    <ImageViewer id="signViewer" taborder="4" left="130" top="10" height="80" right="Div00:10" cssclass="img_WF_LibThu" stretch="fixaspectratio"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -1092,13 +1092,24 @@ this.addFile = function(filelist){
 this.atch_file_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileEventInfo){
 	switch (e.reason)
 	{
-		case 1:
+		case 1: 
 			obj.getFileSize();
 			break;
 		case 9:
 			if(this.fileMaxSize * 1024 < e.filesize){
 				alert("첨부파일은 최대 " + this.fileMaxSize + "Kb까지 등록 가능합니다.");
 			} else {
+				var imageViewer = this.Div01.form.Div00.form.ImageViewer00;
+				var reader = new FileReader();
+				reader.addEventListener(
+					'load',
+					function () {
+						imageViewer.set_image(reader.result);
+					},
+					false
+				);
+				reader.readAsDataURL(obj._handle);
+
 				this.ds_atch_file.setColumn(0, "atchFileId", "");
 				this.ds_atch_file.setColumn(0, "realFileNm", obj.filename);			
 				this.ds_atch_file.setColumn(0, "fileExtn", obj.filename.split('.').pop().toLowerCase());
@@ -1732,6 +1743,7 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
           <Column id="dtlAddr" type="STRING" size="256"/>
           <Column id="rrno" type="STRING" size="256"/>
           <Column id="phtFileId" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
           <Column id="bnkNm" type="STRING" size="256"/>
           <Column id="dpstNm" type="STRING" size="256"/>
           <Column id="accNo" type="STRING" size="256"/>
@@ -2144,7 +2156,6 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
       <BindItem id="item15" compid="Div01.form.Div06.form.Edit00" propid="value" datasetid="ds_teacher_info" columnid="addr"/>
       <BindItem id="item16" compid="Div01.form.Div07.form.Div00.form.agree1" propid="value" datasetid="ds_teacher_info" columnid="prinfClctAgrYn"/>
       <BindItem id="item17" compid="Div01.form.Div07.form.Div01.form.agree2" propid="value" datasetid="ds_teacher_info" columnid="carrInfoClctAgrYn"/>
-      <BindItem id="item0" compid="Div01.form.Div00.form.ImageViewer00" propid="image" datasetid="ds_thnl_dtl" columnid="webPath"/>
       <BindItem id="item11" compid="Div01.form.Div01_00.form.tcCdNo" propid="text" datasetid="ds_teacher_info" columnid="tcCdNo"/>
       <BindItem id="item33" compid="Div_PayInfo.form.Div01.form.bnkNm" propid="value" datasetid="ds_teacher_info" columnid="bnkNm"/>
       <BindItem id="item37" compid="Div_PayInfo.form.Div_p.form.Div_PayInfo.form.Div00_00.form.rrno" propid="value" datasetid="ds_teacher_info" columnid="addr"/>
@@ -2161,6 +2172,7 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
       <BindItem id="item22" compid="Div02.form.memoCont" propid="value" datasetid="ds_memo" columnid="memoCont"/>
       <BindItem id="item21" compid="Div01.form.Div05.form.Div00.form.Edit00_00" propid="value" datasetid="ds_teacher_info" columnid="emailAddrCd"/>
       <BindItem id="item26" compid="Div01.form.Div04.form.Div00.form.Radio00" propid="value" datasetid="ds_teacher_info" columnid="lscCd"/>
+      <BindItem id="item0" compid="Div01.form.Div00.form.ImageViewer00" propid="image" datasetid="ds_teacher_info" columnid="webPath"/>
     </Bind>
   </Form>
 </FDL>
