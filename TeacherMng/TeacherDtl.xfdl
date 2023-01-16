@@ -697,10 +697,14 @@ this.set_teacher_basic_info = function(apvlCd, tcTpCd){
 	var pbrlText = (pbrltnBrchCdNm ? pbrltnBrchCdNm : '- ') + (pbrlId ? "(" + pbrlId + ")" : "(-)");
 	this.Div01.form.Div04.form.Div01.form.pbrltnInfo.set_text(pbrlText);
 	
-	//등록자
+	//등록자, 수정자
 	var rgpr_info = this.ds_teacher_info.getColumn(0, 'rgprId') + '(' + this.ds_teacher_info.getColumn(0, 'rgprNm') + ')';
 	this.Div06.form.Div00.form.Div00.form.rgprInfo.set_text(rgpr_info);
-	var mdf_info = this.ds_teacher_info.getColumn(0, 'mdfId') + '(' + this.ds_teacher_info.getColumn(0, 'mdfNm') + ')';
+	var mdf_info = this.ds_teacher_info.getColumn(0, 'mdfId');
+	if(mdf_info)
+		mdf_info += '(' + this.ds_teacher_info.getColumn(0, 'mdfNm') + ')';
+	else
+		mdf_info = "";
 	this.Div06.form.Div01.form.Div00.form.mdfInfo.set_text(mdf_info);
 	
 	//등록, 수정일시 소수점 초 제거
