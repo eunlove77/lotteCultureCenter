@@ -336,32 +336,27 @@ this.com_set_branch_list = function(){
  * 핸드폰 번호 세팅
  **************************************************************************/
 this.com_set_hpNo_to_stmidlastNo = function(str){
-	if(!str) return [];
+	if(!str) return ;
 	
-	var arr = str.split('-');
-	if(arr.length > 1){
-		if(arr[0].length == 4){
-			var tmp = arr[0];
-			arr[2] = arr[1];
-			arr[1] = arr[2];
-		}
-	} else {
-		arr = new Array(3);
-		if(str.length == 11){
-			arr[0] = str.slice(0, 3);
-			arr[1] = str.slice(3, 7);
-			arr[2] = str.slice(7, 11);
-		} else if(str.length == 8){
-			arr[1] = str.slice(0, 4);
-			arr[2] = str.slice(4, 8);
-		} else if(str.length == 4){
-			arr[2] = str;
-		}
+	str = str.replaceAll("-", "");
+	var hpStNo, hpMidNo, hpLastNo;
+
+	if(str.length == 10){
+		//10자리 전화번호는 전부 입력해야한다. 가운데 번호를 3자리로 처리
+		hpStNo = str.slice(0, 3);
+		hpMidNo = str.slice(3, 6);
+		hpLastNo = str.slice(6, 10);
+	}
+	else{
+		//앞자리부터 채워서 검색
+		hpStNo = str.slice(0, 3);
+		hpMidNo = str.slice(3, 7);
+		hpLastNo = str.slice(7, 11);
 	}
 	
-	this.ds_search.setColumn(0, 'hpStNo', arr[0] ? arr[0] : '');
-	this.ds_search.setColumn(0, 'hpMidNo', arr[1] ? arr[1] : '');
-	this.ds_search.setColumn(0, 'hpLastNo', arr[2] ? arr[2] : '');
+	this.ds_search.setColumn(0, 'hpStNo', hpStNo);
+	this.ds_search.setColumn(0, 'hpMidNo', hpMidNo);
+	this.ds_search.setColumn(0, 'hpLastNo', hpLastNo);
 
 }
 
