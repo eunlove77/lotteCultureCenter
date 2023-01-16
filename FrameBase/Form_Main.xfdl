@@ -25,7 +25,7 @@
                       </Layouts>
                     </Div>
                     <Static id="Static00" taborder="2" text="강좌정보 승인요청:" left="Div00:20" top="33" width="174" height="30"/>
-                    <Static id="Static01" taborder="3" top="33" width="70" height="30" right="12" textAlign="right" color="#6ea1cd" onclick="Div00_Div01_Static01_onclick" text="0건" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" cursor="pointer"/>
+                    <Static id="Static01" taborder="3" top="33" width="70" height="30" right="12" textAlign="right" color="#6ea1cd" text="0건" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" cursor="pointer" onclick="Div00_Div01_Static01_onclick"/>
                     <Static id="Static02" taborder="4" top="Static01:0" width="70" height="30" right="12" textAlign="right" color="#6ea1cd" text="0건" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="underline" onclick="Div00_Div01_Static02_onclick" cursor="pointer"/>
                     <Static id="Static00_00" taborder="5" text="강사 승인요청:" left="Div00:20" top="Static00:0" width="174" height="30"/>
                   </Layout>
@@ -326,7 +326,8 @@ this.selectedKey = null;
 this.grdSchedule = this.Div00.form.grdSchedule;
 this.cur_brchCd = null;
 
-this.rqstCnt = 0;
+this.teacherApvlCnt = 0;
+this.classApvlCnt = 0;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -339,7 +340,7 @@ this.Form_Main_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.get_schedule_list();
 	
-	this.get_teacher_approval_list(); //온라인강사지원자 수
+	this.get_approval_cnt(); //지원 수 가져오기
 	
 	//버튼 css세팅
 	if(this.application.HFSet00.LeftFrame.width > 0){
@@ -363,6 +364,7 @@ this.Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChan
 	this.ds_search.setColumn(0, "brchCd", this.cur_brchCd);
 	
 	this.get_schedule_list();
+	this.get_approval_cnt();
 };
 
 // 캘린더 세팅
@@ -516,11 +518,11 @@ this.get_schedule_list = function(){
 	this.gfn_transaction(tranObj);
 };
 
-this.get_teacher_approval_list = function(){
+this.get_approval_cnt = function(){
 	var tranObj = {};
-	tranObj.strSvcId	= "select_teacher_approval";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/onlineTeacherRqst/cnt.do";
-	tranObj.inData      = "";
+	tranObj.strSvcId	= "select_approval_cnt";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/main/apvl/cnt.do";
+	tranObj.inData      = "search=ds_search";
 	tranObj.outData     = "";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
@@ -539,8 +541,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 	if(svcID == "select_schedule"){
 		this.set_calendar();
 	}
-	else if(svcID == "select_teacher_approval"){
-		this.Div00.form.Div01.form.Static02.set_text(this.rqstCnt + "건");
+	else if(svcID == "select_approval_cnt"){
+		this.Div00.form.Div01.form.Static02.set_text(this.teacherApvlCnt + "건");
+		this.Div00.form.Div01.form.Static01.set_text(this.classApvlCnt + "건");
 	}
 
 }
@@ -564,6 +567,21 @@ this.Div00_Div01_Static02_onclick = function(obj:nexacro.Static,e:nexacro.ClickE
 	var row = ds.findRow("menuSeq", 67);
 	var objSelectMenu = {
 		menuSeq : "67",
+		menuNm : ds.getColumn(row, "menuNm"),
+		pagePath : ds.getColumn(row, "pagePath"),
+		pageId : ds.getColumn(row, "pageId")
+	};
+	
+	this.application.LeftFrame.form.fn_openMenu(objSelectMenu);
+};
+
+this.Div00_Div01_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	//강좌 목록 메뉴번호 59
+	var ds = this.application.gdsMenu;
+	var row = ds.findRow("menuSeq", 59);
+	var objSelectMenu = {
+		menuSeq : "59",
 		menuNm : ds.getColumn(row, "menuNm"),
 		pagePath : ds.getColumn(row, "pagePath"),
 		pageId : ds.getColumn(row, "pageId")
