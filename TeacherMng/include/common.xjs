@@ -315,26 +315,20 @@ this.com_reset_search_semester = function(obj){
  * 지점명 콤보박스 세팅
  **************************************************************************/
 this.com_set_branch_list = function(){
-	//gdsSpotList사용
-// 	for(var i = 0; i < this.ds_spot_list.rowcount; i++){
-// 		var cd = this.ds_spot_list.getColumn(i, 'cd');
-// 		var cdNm = this.ds_spot_list.getColumn(i, 'cdNm');
-// 		this.ds_spot_list.setColumn(i, 'cdNm', '[' + cd + '] ' + cdNm);
-// 	}
+	//지점초기화
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_spot_list.copyData(this.application.gdsSpotCdList);
+	this.ds_spot_list.deleteRow(0);
 
-	this.com_set_branch_on_user();
-}
-this.com_set_branch_on_user = function(){
-
-	var user_brchCd = nexacro.getPrivateProfile("brchCd");
-	var user_brchCdNm = nexacro.getPrivateProfile("brchNm");
-	var ds = this.ds_spot_list;
-	
-	if(user_brchCdNm != '본사'){
-		ds.filter('cd == "' + user_brchCd + '"');
-		this.ds_search.setColumn(0, 'brchCd', user_brchCd ? user_brchCd : "");
-	} else {
-		this.ds_search.setColumn(0, 'brchCd', "");
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.ds_spot_list.insertRow(0);
+		this.ds_spot_list.setColumn(0, "cd", "");
+		this.ds_spot_list.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.ds_spot_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
 }
 
