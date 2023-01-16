@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="popup_modal" width="400" height="250" onclose="popup_onclose">
+  <Form id="popup_modal" width="400" height="250" onclose="popup_onclose" onload="popup_modal_onload">
     <Layouts>
       <Layout height="250" mobileorientation="landscape" width="400">
         <GroupBox id="GroupBox03" text="다운로드 사유" taborder="0" enableevent="false" left="10" top="10" width="380" height="230"/>
@@ -21,8 +21,32 @@
 /*
 * 부모 form에 ExcelExportObject00, excelImportExport, Grid_Excel, excelFileName 필요
 */
+include "Base::libCommon.xjs";
 include "Base::popup.xjs";
 include "Base::lib_date.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+
+this.popup_modal_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	
+	var tranObj = {
+		strSvcId : "exceldown",
+		strSvcUrl : this.application.Admin_svc + "::updateExcelDownReason.do",
+		inData : "",
+		outData : "",
+		strArg : "targetLogId=" + this.getOwnerFrame().logId + " inqRsnCont=111",
+		callBackFnc : "excelCallback",
+		//menuSeq : 1,
+		isAsync : true
+	}
+
+	this.gfn_transaction(tranObj);	
+};
 
 this.popup_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
 {
@@ -41,7 +65,10 @@ this.btnSubmit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(txt === undefined ? true : !txt.replace(/\s/g, '')){
 		alert('다운로드 사유를 입력하세요');
 	} else {
-		this.close("OK");
+		
+		// 엑셀 다운로드 사유 저장
+		this.call_exceldown(txt);
+		
 		this.excel_export();
 	}
 };
@@ -66,7 +93,27 @@ this.excel_export = function(){
 	this.exportObj.set_exportfilename(opener.excelFileName + this.gfnGetToDay());
 
 	this.exportObj.exportData();
+	
+	this.close("OK");
 }
+
+this.call_exceldown = function(txt){
+
+	var tranObj = {
+		strSvcId : "exceldown",
+		strSvcUrl : this.application.Admin_svc + "::updateExcelDownReason.do",
+		inData : "",
+		outData : "",
+		strArg : "targetLogId=" + this.getOwnerFrame().logId + " inqRsnCont=" + txt,
+		callBackFnc : "excelCallback",
+		//menuSeq : 1,
+		isAsync : true
+	}
+
+	this.gfn_transaction(tranObj);	
+}
+
+
 ]]></Script>
   </Form>
 </FDL>

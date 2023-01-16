@@ -416,6 +416,7 @@ this.baseSvrUrl = "";
 this.excelImportExport = "";
 this.excelFileName = "회원_목록_";
 this.popCnt = 0;
+this.logId = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -583,7 +584,7 @@ this.Div02_Div00_btnDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	}
 	else
 	{
-		this.gfn_showModal("popupModal", {}, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
+		this.gfn_showModal("popupModal", { logId : this.logId }, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
 	}
 	
 };
@@ -633,6 +634,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "list":
 			this.Div02.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_member_list.getCount()) + "개)")
+			
+			this.alert(this.logId);
+			
 			break;
 		case "save":
 			this.alert("저장되었습니다.");
