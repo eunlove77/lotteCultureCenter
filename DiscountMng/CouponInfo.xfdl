@@ -365,6 +365,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.baseSvrUrl = "";
 this.popCnt = 0;
+this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -396,7 +397,7 @@ this.fn_detail = function ()
 		outData : "ds_detail=infoMap ds_appl_str=applStrList ds_random_list=cpnRndmList ds_mem_grade=mbrGrdeList ds_mem_excel=mbrExclList ds_appl_ctgr=applCtgrList ds_appl_lect=applLectList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		menuSeq : this.parent.parent.parent.parent.parent.param.MENU_ID, 
+		menuSeq : this.menuId, 
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
@@ -506,18 +507,15 @@ this.fn_sync_checkBox = function()
 	var list = this.ds_appl_str;
 	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
 	
-	for(var i=0; i<list.getRowCount(); i++)
+	for(var j=0; j<spotObj.length; j++)
 	{
-		for(var j=0; j<spotObj.length; j++)
-		{
-			if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
-			{		
-				if(spotObj[j].truevalue == list.getColumn(i, "strCd"))
-				{
-					spotObj[j].set_value(list.getColumn(i, "strCd"));
-				}
-			}	
-		}
+		if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
+		{		
+			if(list.findRow("strCd", spotObj[j].truevalue) > -1)
+			{
+				spotObj[j].set_value(spotObj[j].truevalue);
+			}
+		}	
 	}
 }
 
@@ -574,6 +572,8 @@ this.Div03_copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	this.popCnt++;
 	var oArg = {
 			cpnSeqno : this.ds_detail.getColumn(0, "cpnSeqno")
+		,	type : "copy"
+		,	menuId : this.menuId
 	};
 
 	this.gfn_openPopup("couponCopyPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null);

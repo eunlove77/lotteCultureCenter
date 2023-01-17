@@ -587,7 +587,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = this.parent.parent.param.MENU_ID;
+this.menuId = "";
 this.popCnt = 0;
 
 this.rsltMsg = ""
@@ -601,6 +601,15 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
 	this.domain = this.application.Domain;
+	
+	if(this.parent.menuId != "")
+	{
+		this.menuId = this.parent.menuId;
+	}
+	else
+	{
+		this.menuId = this.parent.parent.param.MENU_ID;
+	}
 	
 	//지점선택 체크박스 세팅
 	this.fn_set_spot();	
@@ -625,7 +634,7 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.txtMenuNm.set_text("쿠폰 상세");
 		this.fn_detail();
 		this.Div04.set_height(95);
-		this.resetScroll()
+		this.resetScroll();
 	}
 		
 	this.gfnSetCheckBoxNoDataset(this.ds_mem_grade, this.Div01.form.Div01.form.Grid00, 0); 
@@ -698,9 +707,6 @@ this.fn_set_detail = function()
 	itemInfo.postvalue = this.ds_detail.getColumn(0, "usePrdClCd");
 	this.Div01_Div05_radioPeriod_onitemchanged(this.Div01.form.Div05.form.radioPeriod, itemInfo);
 	
-	this.Div00.form.Div10.set_height(33);
-	this.Div00.form.resetScroll();
-	
 	//등록자, 수정자 정보
 	var rgprNm = this.gfn_isNull(this.ds_detail.getColumn(0, "rgprNm")) ? "" : "(" + this.ds_detail.getColumn(0, "rgprNm") + ")";
 	var rgprInfo = this.ds_detail.getColumn(0, "rgprId") + rgprNm;
@@ -710,6 +716,17 @@ this.fn_set_detail = function()
 	this.Div04.form.Div00.form.Static01.set_text(rgprInfo);
 	this.Div04.form.Div02.form.Static01.set_text(mdfInfo);
 	
+	if(this.parent.type == "copy")
+	{
+		this.Div01.form.Div05.form.Div00.form.strtDtm.set_value("");
+		this.Div01.form.Div05.form.Div00.form.endDtm.set_value("");
+		this.ds_detail.setColumn(0, "cpnSeqno", "");
+	}
+	else
+	{
+		this.Div00.form.Div10.set_height(33);
+		this.Div00.form.resetScroll();
+	}
 }
 
 /* 지점 체크박스 세팅 */
@@ -812,19 +829,32 @@ this.fn_sync_checkBox = function()
 {
 	var list = this.ds_appl_str;
 	var spotObj = this.Div00.form.Div00.form.Div00.form.components;
+	var len = 0;
+	var chkLen = 0;
+	var chkAll;
 	
-	for(var i=0; i<list.getRowCount(); i++)
+
+	for(var j=0; j<spotObj.length; j++)
 	{
-		for(var j=0; j<spotObj.length; j++)
-		{
-			if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
-			{		
-				if(spotObj[j].truevalue == list.getColumn(i, "strCd"))
-				{
-					spotObj[j].set_value(list.getColumn(i, "strCd"));
-				}
-			}	
+		if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") > -1)
+		{				
+			chkAll = spotObj[j];
 		}
+		
+		if(spotObj[j] == "[object CheckBox]" && spotObj[j].name.indexOf("All") < 0)
+		{		
+			len++;
+			if(list.findRow("strCd", spotObj[j].truevalue) > -1)
+			{
+				spotObj[j].set_value(spotObj[j].truevalue);
+				chkLen++;
+			}
+		}	
+	}
+	
+	if(len == chkLen) 
+	{
+		chkAll.set_value(true);
 	}
 }
 
@@ -1192,7 +1222,6 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 	{
 		if(spotObj[i] == "[object CheckBox]" && spotObj[i].name.indexOf("All") < 0 && spotObj[i].value != "N")
 		{		
-			console.log(spotObj[i].value);
 			spotFlag = true;
 			spotStr += spotObj[i].value + ",";
 		}	
@@ -1328,7 +1357,6 @@ this.fn_checkValidation = function(){
 			for(var i=0; i < this.ds_mem_grade.checkarray.length; i++){
 				if(this.ds_mem_grade.checkarray[i] == 1)
 				{	
-					console.log(this.ds_mem_grade.getColumn(i, "cd"))
 					this.ds_mem_grade.setColumn(i, "mbrGrdeCd", this.ds_mem_grade.getColumn(i, "cd"));
 					gradeFlag = true;
 				}
@@ -1427,7 +1455,7 @@ this.fn_save = function(){
 		isAsync : true,
 		isPopup : true
 	}
-	 if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);
 }
 

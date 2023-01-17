@@ -180,6 +180,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Div id="Div00_00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -559,6 +560,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	
 	switch(svcID)
 	{
+		case "list" :
+			this.Div01.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_promotion_list.getCount()) + "개)");
+			break;
 		case "delete":
 			this.alert("삭제되었습니다.");
 			this.fn_list();
