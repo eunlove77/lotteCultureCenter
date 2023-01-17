@@ -243,6 +243,8 @@ include "TeacherMng::include/common.xjs";
  **************************************************************************/
 this.application = null;
 this.brchCd = "";
+this.yy = "";
+this.lectSmsterCd = "";
 this.menuSeq = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -267,6 +269,7 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	//체크박스 세팅
 	this.set_dynamic_checkbox();
 	
+	//검색폼 초기화
 	this.reset_search_form();
 };
  /**************************************************************************
@@ -296,9 +299,6 @@ this.set_dataset = function(){
 	this.com_set_dataset_year(this.ds_year_list, startYear);
 	
 	//콤보박스 기본값 설정
-	//학기
-	this.com_reset_search_semester(this.Div01.form.Div01.form.Combo01);
-	
  	var ds_list = [
 		{ds : this.ds_year_list,
 		 obj : this.Div01.form.Div01.form.Combo00} 				//년도
@@ -473,9 +473,16 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.gfn_openPopup("ClassDtlPop"+this.popCnt, oArg, "ClassMng::ClassDtl.xfdl", this, 1300, 850, true, true, null, "강좌 상세");
 	}
 };
+
+this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if(e.columnid == "brchCd"){
+		this.com_reset_search_semester();
+	}
+};
 ]]></Script>
     <Objects>
-      <Dataset id="ds_search">
+      <Dataset id="ds_search" oncolumnchanged="ds_search_oncolumnchanged">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>

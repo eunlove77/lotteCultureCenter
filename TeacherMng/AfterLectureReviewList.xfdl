@@ -235,9 +235,6 @@ this.set_dataset = function(){
 	this.com_set_dataset_year(this.ds_year_list, startYear);
 	
 	//콤보박스 기본값 설정
-	//학기
-	this.com_reset_search_semester(this.Div01.form.Div01.form.Combo01);
-	
  	var ds_list = [{
 			ds : this.ds_gdsSpotCd_list, cdNm: '전체',	//지점
 			obj : this.Div01.form.Div00.form.brchCd
@@ -470,9 +467,16 @@ this.rollback_dataset_data_onGrid = function(obj, dsColNm){
 	
 	ds.setColumn(curRow, dsColNm, oriValue);
 	obj.setEditingValue(oriValue);
-}]]></Script>
+}
+this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if(e.columnid == "brchCd"){
+		this.com_reset_search_semester();
+	}
+};
+]]></Script>
     <Objects>
-      <Dataset id="ds_search">
+      <Dataset id="ds_search" oncolumnchanged="ds_search_oncolumnchanged">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
