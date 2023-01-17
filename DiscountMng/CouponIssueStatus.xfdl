@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CouponIssueStatus" width="1280" height="720" titletext="New Form" onload="CouponIssueStatus_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Grid id="Grid00" taborder="0" left="10" top="200" binddataset="ds_issue_list" autofittype="col" right="10" bottom="10" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" selectscrollmode="default">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="40" band="left"/>
+                <Column size="50"/>
+                <Column size="70"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="150"/>
+                <Column size="100"/>
+                <Column size="110"/>
+                <Column size="130"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="130"/>
+              </Columns>
+              <Rows>
+                <Row size="40" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="구분"/>
+                <Cell col="3" text="회원등급"/>
+                <Cell col="4" text="회원번호"/>
+                <Cell col="5" text="회원ID"/>
+                <Cell col="6" text="회원명"/>
+                <Cell col="7" text="연락처"/>
+                <Cell col="8" text="발급일시"/>
+                <Cell col="9" text="만료일"/>
+                <Cell col="10" text="쿠폰 상태"/>
+                <Cell col="11" text="사용일시"/>
+              </Band>
+              <Band id="body">
+                <Cell expr="dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                <Cell col="2" text="bind:cultMbrTypCd"/>
+                <Cell col="3" text="bind:mbrGrdeCd" combodataset="ds_grade_cd" combocodecol="cd" combodatacol="cdNm" displaytype="combotext"/>
+                <Cell col="4" text="bind:mbrNo"/>
+                <Cell col="5" expr="comp.parent.gfn_setMasking(mbrId, 3)" tooltiptype="hover" tooltiptext="bind:mbrId"/>
+                <Cell col="6" expr="comp.parent.gfn_setMasking(korNm, 1, 1)" tooltiptext="bind:korNm" tooltiptype="hover"/>
+                <Cell col="7" expr="comp.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
+                <Cell col="8" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" text="bind:rgstDtm"/>
+                <Cell col="9" text="bind:cpnEndDt" displaytype="date" calendardateformat="yyyy-MM-dd" calendardisplayinvalidtype="none" calendardisplaynulltype="none"/>
+                <Cell col="10" combodataset="ds_stat_cd" combocodecol="cd" combodatacol="cdNm" text="bind:useStatCd" displaytype="combotext"/>
+                <Cell col="11" text="bind:cpnUseDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplayinvalidtype="none" calendardisplaynulltype="none"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="txtTotal" taborder="1" left="10" top="166" width="80" height="21" text="목록"/>
+        <Button id="endBtn" taborder="2" text="사용불가" top="160" height="30" width="83" wordWrap="char" cssclass="btn_WF_High" right="11" onclick="endBtn_onclick"/>
+        <Div id="Div01" taborder="3" text="Div01" left="7" top="16" height="115" right="9" minwidth="680" maxwidth="">
+          <Layouts>
+            <Layout>
+              <Div id="Div02_01" taborder="5" text="Div01" left="291" top="44" height="33" cssclass="div_WF_CompWrap" right="49.84%" formscrolltype="none" minwidth="300" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit02" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div03" taborder="0" text="Div01" left="Div02_01:-1" top="43" height="33" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="사용일" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none" innerdataset="ds_coupon_list" datecolumn=""/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="1" text="Div01" left="0" top="75" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="searchField" taborder="1" text="전체" left="116" top="5" width="100" height="21" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup">
+                      <Dataset id="innerdataset">
+                        <ColumnInfo>
+                          <Column id="codecolumn" size="256"/>
+                          <Column id="datacolumn" size="256"/>
+                        </ColumnInfo>
+                        <Rows>
+                          <Row>
+                            <Col id="codecolumn">1</Col>
+                            <Col id="datacolumn">회원번호</Col>
+                          </Row>
+                          <Row>
+                            <Col id="codecolumn">2</Col>
+                            <Col id="datacolumn">회원ID</Col>
+                          </Row>
+                        </Rows>
+                      </Dataset>
+                    </Combo>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+                    <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_04_btnSearch_onclick"/>
+                    <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div00_04_btnInit_onclick"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div00" taborder="2" text="Div01" left="0" top="12" height="33" cssclass="div_WF_CompWrap" right="49.92%" formscrolltype="none" minwidth="330" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="쿠폰 상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboStat" taborder="1" text="전체" left="116" top="5" width="100" height="21" innerdataset="ds_stat_cd" codecolumn="cd" datacolumn="cdNm" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="3" text="Div01" left="Div00:0" top="12" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="회원 등급" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="ComboGrade" taborder="1" text="특강" left="116" top="5" width="130" height="21" innerdataset="ds_grade_cd" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02_00" taborder="4" text="Div01" left="0" top="44" height="33" cssclass="div_WF_CompWrap" right="76.82%" formscrolltype="none" minwidth="250" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="cpnSeqno" type="STRING" size="256"/>
+          <Column id="useStatCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="f" type="STRING" size="256"/>
+          <Column id="q" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="useStatCd"/>
+            <Col id="mbrGrdeCd"/>
+            <Col id="f">1</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_issue_list">
+        <ColumnInfo>
+          <Column id="cpnSeqno" type="STRING" size="256"/>
+          <Column id="cultCpnNo" type="STRING" size="256"/>
+          <Column id="cultMbrTypCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="rgstDtm" type="STRING" size="256"/>
+          <Column id="cpnEndDt" type="STRING" size="256"/>
+          <Column id="useStatCd" type="STRING" size="256"/>
+          <Column id="cpnUseDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_stat_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grade_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_date.xjs";
+
+ /**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+//this.menuId = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.CouponIssueStatus_onload = function(obj,e)
+{
+	this.application = nexacro.getApplication();
+	this.baseSvrUrl = this.application.Admin_svc + "::discount/coupon/";
+
+	this.fn_init_code();
+
+	if(this.parent.parent.parent.parent.cpnSeqno != ""){
+		this.ds_search.setColumn(0, "cpnSeqno", this.parent.parent.parent.parent.cpnSeqno);
+		this.fn_list();
+	}
+
+	console.log(this.ds_search)
+
+	this.gfnSetCheckBoxNoDataset(this.ds_issue_list, this.Grid00, 0);
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+this.fn_init_code = function (page)
+{
+	var tranObj = {
+		strSvcId : "statCodeList",
+		strSvcUrl : this.baseSvrUrl + "codeList.do",
+		inData : "",
+		outData : "ds_stat_cd=codeList",
+		strArg : "cdId=143",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true
+	}
+	this.gfn_transaction(tranObj);
+
+	var tranObj = {
+		strSvcId : "gradeCodeList",
+		strSvcUrl : this.baseSvrUrl + "codeList.do",
+		inData : "",
+		outData : "ds_grade_cd=codeList",
+		strArg : "cdId=075",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true
+	}
+	this.gfn_transaction(tranObj);
+};
+
+this.fn_list = function ()
+{
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "issueList.do",
+		inData : "search=ds_search",
+		outData : "ds_issue_list=issueList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true
+	}
+	if(this.gfn_btn_auth(this.menuId, "accSrchYn")){return;}
+
+	this.gfn_transaction(tranObj);
+};
+
+/**************************************************************************
+ * 검색 버튼
+ **************************************************************************/
+
+this.Div01_Div00_04_btnSearch_onclick = function(obj,e)
+{
+	var isKorNm = this.gfn_isNull(this.ds_search.getColumn(0, "korNm"));
+	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+
+	if(isKorNm != isHpNo)
+	{
+		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+	}
+	else
+	{
+		this.fn_list();
+	}
+};
+
+/**************************************************************************
+ * 초기화 버튼
+ **************************************************************************/
+
+this.Div01_Div00_04_btnInit_onclick = function(obj,e)
+{
+	var cnt = this.ds_search.getColCount();
+	for(var i=0; i<cnt; i++)
+	{
+		if(this.ds_search.getColID(i) != 'cpnSeqno')
+		{
+			this.ds_search.setColumn(0, i, "");
+		}
+	}
+	this.ds_search.setColumn(0, "f", 1);
+	this.fn_list();
+};
+
+/**************************************************************************
+ * 사용불가 버튼
+ **************************************************************************/
+
+this.endBtn_onclick = function(obj,e)
+{
+	this.fn_end_coupon();
+};
+
+this.fn_end_coupon = function()
+{
+	var list = this.ds_issue_list;
+	var chkStr = "";
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkStr += list.getColumn(i, "cultCpnNo")+",";
+		}
+	}
+	
+	if(chkStr == "")
+	{
+		alert("항목을 선택하세요.");
+	}
+	else if(this.confirm("선택한 항목을 사용불가 처리하시겠습니까? \n사용완료 쿠폰은 처리되지 않습니다."))
+	{
+		var tranObj = {
+			strSvcId : "unable",
+			strSvcUrl : this.baseSvrUrl + "unable.do",
+			inData : "",
+			outData : "",
+			strArg : "chkStr="+chkStr,
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isAsync : true
+		}
+		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+		this.gfn_transaction(tranObj);
+
+	}
+}
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+		return false;
+	}
+
+	switch(svcID)
+	{
+		case "list":
+			this.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_coupon_list.getCount()) + "개)")
+			break;
+		case "statCodeList":
+			this.ds_stat_cd.insertRow(0);
+			this.ds_stat_cd.setColumn(0, "cd", "");
+			this.ds_stat_cd.setColumn(0, "cdNm", "전체");
+			break;
+		case "gradeCodeList":
+			this.ds_grade_cd.insertRow(0);
+			this.ds_grade_cd.setColumn(0, "cd", "");
+			this.ds_grade_cd.setColumn(0, "cdNm", "전체");
+			break;
+		case "unable":
+			this.alert("사용불가 처리되었습니다.");
+			this.fn_list();
+			break;
+	}
+
+};]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="Div01.form.Div00.form.ComboStat" propid="value" datasetid="ds_search" columnid="issueStatCd"/>
+      <BindItem id="item1" compid="Div01.form.Div01.form.ComboGrade" propid="value" datasetid="ds_search" columnid="issueMthdClCd"/>
+      <BindItem id="item2" compid="Div01.form.Div03.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDtm"/>
+      <BindItem id="item3" compid="Div01.form.Div03.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDtm"/>
+      <BindItem id="item4" compid="Div01.form.Div04.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
+      <BindItem id="item5" compid="Div01.form.Div04.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item6" compid="Div01.form.Div02_00.form.Edit00" propid="value" datasetid="ds_search" columnid="korNm"/>
+      <BindItem id="item7" compid="Div01.form.Div02_01.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item8" compid="Div01.form.Div02_01.form.Edit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item9" compid="Div01.form.Div02_01.form.Edit02" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
+    </Bind>
+  </Form>
+</FDL>
