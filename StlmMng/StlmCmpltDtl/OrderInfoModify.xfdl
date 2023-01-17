@@ -235,7 +235,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.set_value(dsDcDtl.getColumn(0, "oflnDcAmtClCd"));
 				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
 				var oflnDcAmt = dsDcDtl.getColumn(0, "oflnDcAmt");
-				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(oflnDcAmt));
+				if(this.lectAmt < oflnDcAmt){
+					this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(this.lectAmt));
+				}else{
+					this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(oflnDcAmt));
+				}
 				this.lectAmt = this.lectAmt - oflnDcAmt;
 				if(this.lectAmt < 0){
 					this.lectAmt = 0;
@@ -245,7 +249,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			}
 			
 			// 등급할인은 정기강좌에만 노출
-			if(this.ds_order_modify_info.getColumn(0, "lectClCd") != "01"){
+			if(this.ds_order_modify_info.getColumn(0, "lectClCd") != "1"){
 				this.dcMthdFrm.Div00.form.Div04.form.Static02.set_visible(false);
 				this.dcMthdFrm.Div00.form.Div04.form.Static03.set_top(49);
 				this.dcMthdFrm.Div00.form.Div04.form.Div01.set_visible(false);
@@ -298,7 +302,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_value(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
-				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(cpnDcAmt) + "원");
+				if(this.lectAmt < cpnDcAmt){
+					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(this.lectAmt) + "원");
+				}else{
+					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(cpnDcAmt) + "원");
+				}
 				
 				this.lectAmt = this.lectAmt - cpnDcAmt;
 				if(this.lectAmt < 0){
@@ -420,7 +428,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 			alert("초과 된 총 결제예정금액 만큼 거스름돈을 입력하세요.");
 			return;
 		}else{
-			if(gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
+			if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
 				alert("입력된 금액이 총 결제금액보다 초과되어 결제 할 수 없습니다.");
 				this.Div01.form.Div00.form.Edit00.set_value("");
 				this.Div01.form.Div01.form.Edit00.set_value("");
@@ -470,10 +478,12 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 
 	if(confirm("저장하시겠습니까?")){
+		this.removeChild("ds_update_info");
 		var dsUpdate = new Dataset();
 		dsUpdate.name = "ds_update_info";
 		dsUpdate.addColumn("atlctRsvNo", "string", 256);
 		dsUpdate.addColumn("actlAtlctNpleSeqno", "int", 256);
+		dsUpdate.addColumn("mbrId", "string", 256);
 		dsUpdate.addColumn("gsStlmAmt", "int", 256);
 		dsUpdate.addColumn("crdcoCd", "string", 256);
 		dsUpdate.addColumn("crdStlmAmt", "int", 256);
@@ -503,6 +513,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_update_info.insertRow(0);
 		this.ds_update_info.setColumn(0, "atlctRsvNo", this.atlctRsvNo);
 		this.ds_update_info.setColumn(0, "actlAtlctNpleSeqno", this.actlAtlctNpleSeqno);
+		this.ds_update_info.setColumn(0, "mbrId", this.ds_order_modify_info.getColumn(0, "mbrId"));
 		this.ds_update_info.setColumn(0, "gsStlmAmt", this.gsStlmAmt);
 		this.ds_update_info.setColumn(0, "crdcoCd", this.Div01.form.Div00.form.Combo00.value);
 		this.ds_update_info.setColumn(0, "crdStlmAmt", crdStlmAmt);
@@ -511,12 +522,21 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_update_info.setColumn(0, "ltteGiftStlmAmt", ltteGiftStlmAmt);
 		this.ds_update_info.setColumn(0, "otgiftStlmAmt", otgiftStlmAmt);
 		this.ds_update_info.setColumn(0, "etcStlmAmt", etcStlmAmt);
+		this.ds_update_info.setColumn(0, "chngAmt", chngAmt);
+		
+		var lectAmt = Number(this.ds_order_modify_info.getColumn(0, "lectAmt"));
+		var lectAddAmt = Number(this.ds_order_modify_info.getColumn(0, "lectAddAmt"));
 		
 		// 오프라인 할인
 		if(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.value != ""){
 			this.ds_update_info.setColumn(0, "oflnDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.text);
 			this.ds_update_info.setColumn(0, "oflnDcAmtClCd", this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.value);
-			this.ds_update_info.setColumn(0, "oflnDcAmt", Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.value, ",", "")));
+			if(lectAmt < Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.value, ",", ""))){
+				this.ds_update_info.setColumn(0, "oflnDcAmt", lectAmt);
+			}else{
+				this.ds_update_info.setColumn(0, "oflnDcAmt", Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.value, ",", "")));
+				lectAmt -= Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.value, ",", ""));
+			}	
 		}
 		
 		// 등급 할인
@@ -529,20 +549,26 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 				// 관리자 수기
 				this.ds_update_info.setColumn(0, "grdeDcRt", Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo01.value));
 			}
+			lectAmt -= lectAmt * (Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo01.value) / 100);
 			this.ds_update_info.setColumn(0, "grdeDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.text);
 			this.ds_update_info.setColumn(0, "grdeDcAmtClCd", this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.value);
 		}
 		
 		// 쿠폰 할인
 		if(this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value != ""){
-			this.ds_update_info.setColumn(0, "cpnDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value);
+			this.ds_update_info.setColumn(0, "cpnDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.text);
 			this.ds_update_info.setColumn(0, "cpnDcAmtClCd", this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value);
 			for(var i=0;i<this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getRowCount();i++){
 				if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cd") == this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value){
 					if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmtClCd") == "02"){
-						this.ds_update_info.setColumn(0, "cpnDcAmt", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
+						if(lectAmt < Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"))){
+							this.ds_update_info.setColumn(0, "cpnDcAmt", lectAmt);
+						}else{
+							this.ds_update_info.setColumn(0, "cpnDcAmt", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
+						}
 					}else if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmtClCd") == "01"){
 						this.ds_update_info.setColumn(0, "cpnDcRt", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
+						lectAmt -= lectAmt * (Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt")) / 100);
 					}
 				}
 			}
@@ -552,11 +578,14 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		if(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.dcMthdFrm.Div00.form.Div05.form.Radio00.value == "Y"){
 			this.ds_update_info.setColumn(0, "addDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.text);
 			this.ds_update_info.setColumn(0, "addDcAmtClCd", this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.value);
-			this.ds_update_info.setColumn(0, "addDcAmt", Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div05.form.editAdd.value, ",", "")));
+			if(lectAddAmt < Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div05.form.editAdd.value, ",", ""))){
+				this.ds_update_info.setColumn(0, "addDcAmt", lectAddAmt);
+			}else{
+				this.ds_update_info.setColumn(0, "addDcAmt", Number(nexacro.replaceAll(this.dcMthdFrm.Div00.form.Div05.form.editAdd.value, ",", "")));
+			}
 		}
 		
 		this.ds_crdco_cd_list.set_enableevent(true);
-		
 		
 		var strSvcId    = "update";
 		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateOrderInfo.do";

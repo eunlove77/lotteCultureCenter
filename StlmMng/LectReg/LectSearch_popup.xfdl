@@ -30,7 +30,7 @@
                     <Div id="Div00" taborder="1" text="Div00" left="0" top="20" height="33" cssclass="div_WF_CompWrap" right="0">
                       <Layouts>
                         <Layout>
-                          <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
+                          <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" text="재료비/대여료 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" usedecorate="true"/>
                           <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" onitemchanged="Div01_Div01_Div00_Combo00_onitemchanged" innerdataset="ds_optn_list" codecolumn="optnSeqno" datacolumn="optnNm"/>
                           <Static id="Static01" taborder="2" left="Combo00:10" top="5" width="200" height="20"/>
                         </Layout>
@@ -146,10 +146,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			// 년도
 			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_value(this.yy);
-			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_readonly(true);
+			//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_readonly(true);
 			// 학기
 			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_value(this.lectSmsterCd);
-			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
+			//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
 			
 			// 가족회원
 			var objCheckbox;
@@ -168,7 +168,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			break;
 		case "optnList":
-			this.Div01.form.Div01.form.Div00.form.Static00.set_text(this.ds.getColumn(this.ds.rowposition, "optnTypNm"));
 			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
 			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
 			this.Div01.form.Div01.set_visible(true);
@@ -214,12 +213,16 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 // 그리드 라디오버튼 선택이벤트
 this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo){
+	this.ds_class_dtl.clearData();
+
 	var objDs = obj.getBindDataset();
 	
 	for(var i=0; i<objDs.getRowCount(); i++)
 	{
 		if(objDs.checkarray[i] == 1){
 			if(this.selectedIndex != i){
+				var rowIndex = this.ds_class_dtl.addRow();
+				this.ds_class_dtl.copyRow(rowIndex, objDs, i);
 				this.checkedYn = false;
 				this.selectedIndex = i;
 			}
@@ -230,7 +233,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		this.checkedYn = true;
 		
 		// 강좌 상태 체크
-		if(this.ds.getColumn(e.row, "lectStatCd") != "02" && this.ds.getColumn(e.row, "lectStatCd") != "03" && this.ds.getColumn(e.row, "lectStatCd") != "04"){
+		if(this.ds_class_dtl.getColumn(0, "lectStatCd") != "02" && this.ds_class_dtl.getColumn(0, "lectStatCd") != "03" && this.ds_class_dtl.getColumn(0, "lectStatCd") != "04"){
 			alert("수강등록이 불가능한 강좌가 포함되어 있습니다.\n강좌상태를 확인 후 수강등록 바랍니다.");
 			for(var i=0; i<objDs.getRowCount(); i++)
  			{
@@ -252,22 +255,10 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		this.Div01.form.Div00.set_visible(true);
 		
 		// 재료비/대여료
-		if(this.ds.getColumn(e.row, "optnUseYn") == "Y"){
-			this.removeChild("ds_class_info");
-			var dsClassInfo = new Dataset();
-			dsClassInfo.name = "ds_class_info";
-			this.addChild("ds_class_info", dsClassInfo);
-			dsClassInfo.set_enableevent(false);
-			dsClassInfo.clear();
-			dsClassInfo.copyData(this.ds, false);
-			dsClassInfo.clearData();
-			dsClassInfo.addRow();
-			dsClassInfo.copyRow(0, this.ds, this.ds.rowposition);
-			dsClassInfo.set_enableevent(true);
-			
+		if(this.ds_class_dtl.getColumn(0, "optnUseYn") == "Y"){
 			var strSvcId    = "optnList";
 			var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectOptnList.do";
-			var inData      = "classInfo=this.ds_class_info";
+			var inData      = "classInfo=this.ds_class_dtl";
 			var outData     = "this.ds_optn_list=output1";
 			var strArg      = "";
 			var callBackFnc = "fnCallback";
@@ -309,14 +300,13 @@ this.Div01_Div01_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 취소 버튼
 this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	
+	this.close();
 };
 
 // 저장 버튼
 this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var fmlyChkYn = false;
-	//arrFmlySeqno = [], , arrLscCd = []
 	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlyRelCdNm = [], arrBday = [];
 	for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 		if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
@@ -324,10 +314,8 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			arrActlAtlctNpleNm.push(this.ds_fmly_list.getColumn(i, "korNm"));
 			arrSexCd.push(this.ds_fmly_list.getColumn(i, "sexCd"));
 			arrFmlyRelCd.push(this.ds_fmly_list.getColumn(i, "fmlyRelCd"));
-			//arrFmlySeqno.push(this.ds_fmly_list.getColumn(i, "fmlySeqno"));
 			arrFmlyRelCdNm.push(this.ds_fmly_list.getColumn(i, "fmlyRelCdNm"));
 			arrBday.push(this.ds_fmly_list.getColumn(i, "bday"));
-			//arrLscCd.push(this.ds_fmly_list.getColumn(i, "lscCd"));
 		}
 	}
 	
@@ -336,30 +324,31 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		return;
 	}
 	
+	// 재료비/대여료 필수값 체크
+	if(this.Div01.form.Div01.visible && this.Div01.form.Div01.form.Div00.form.Combo00.value == ""){
+		alert("옵션을 선택하세요.");
+		return;
+	}
+	
 	// 새로 등록할 강좌 시간과 기존 수강내역의 시간이 겹치는지 여부
 	var overlapYn = false;
 	// 새로 등록할 강좌 정보 가져옴
 	var lectStatCd, lectStDtm, lectEndDtm, lectStHhCd, lectStMiCd, lectEndHhCd, lectEndMiCd, stringStDaywNm;
 	var brchCd, yy, lectSmsterCd, lectCd, mvgDsplyUseYn, lectNm;
-	for(var i=0; i<this.ds.getRowCount(); i++)
-	{
-		if(this.ds.checkarray[i]){
-			lectStatCd = this.ds.getColumn(i, "lectStatCd");
-			lectStDtm = this.ds.getColumn(i, "lectStDtm");
-			lectEndDtm = this.ds.getColumn(i, "lectEndDtm");
-			lectStHhCd = this.ds.getColumn(i, "lectStHhCd");
-			lectStMiCd = this.ds.getColumn(i, "lectStMiCd");
-			lectEndHhCd = this.ds.getColumn(i, "lectEndHhCd");
-			lectEndMiCd = this.ds.getColumn(i, "lectEndMiCd");
-			stringStDaywNm = this.ds.getColumn(i, "stringStDaywNm");
-			brchCd = this.ds.getColumn(i, "brchCd");
-			yy = this.ds.getColumn(i, "yy").split("||")[0];
-			lectSmsterCd = this.ds.getColumn(i, "lectSmsterCd");
-			lectCd = this.ds.getColumn(i, "lectCd");
-			mvgDsplyUseYn = this.ds.getColumn(i, "mvgDsplyUseYn");
-			lectNm = this.ds.getColumn(i, "lectNm");
-		}
-	}
+	lectStatCd = this.ds_class_dtl.getColumn(0, "lectStatCd");
+	lectStDtm = this.ds_class_dtl.getColumn(0, "lectStDtm");
+	lectEndDtm = this.ds_class_dtl.getColumn(0, "lectEndDtm");
+	lectStHhCd = this.ds_class_dtl.getColumn(0, "lectStHhCd");
+	lectStMiCd = this.ds_class_dtl.getColumn(0, "lectStMiCd");
+	lectEndHhCd = this.ds_class_dtl.getColumn(0, "lectEndHhCd");
+	lectEndMiCd = this.ds_class_dtl.getColumn(0, "lectEndMiCd");
+	stringStDaywNm = this.ds_class_dtl.getColumn(0, "stringStDaywNm");
+	brchCd = this.ds_class_dtl.getColumn(0, "brchCd");
+	yy = this.ds_class_dtl.getColumn(0, "yy").split("||")[0];
+	lectSmsterCd = this.ds_class_dtl.getColumn(0, "lectSmsterCd");
+	lectCd = this.ds_class_dtl.getColumn(0, "lectCd");
+	mvgDsplyUseYn = this.ds_class_dtl.getColumn(0, "mvgDsplyUseYn");
+	lectNm = this.ds_class_dtl.getColumn(0, "lectNm");
 	
 	// 기존 수강내역과 비교
 	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;	
@@ -700,6 +689,42 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
         <ColumnInfo>
           <Column id="allUseCnt" type="INT" size="256"/>
           <Column id="allDcCnt" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_class_dtl">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpNm" type="STRING" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="lectStatNm" type="STRING" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectSt" type="STRING" size="256"/>
+          <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
+          <Column id="optnTypNm" type="STRING" size="256"/>
+          <Column id="rplcOptnNm" type="STRING" size="256"/>
+          <Column id="groupYn" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="optnTypCd" type="STRING" size="256"/>
+          <Column id="oflnCapaCnt" type="STRING" size="256"/>
+          <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
