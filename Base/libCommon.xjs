@@ -15,7 +15,7 @@ this.gfn_transaction = function(tranObj)
 	//윈도우 팝업여부
 	this.isPopup = this.gfn_nvl(tranObj.isPopup);
 	//세션 체크
-	this.gfn_sessionCheck();
+	this.gfn_sessionCheck(false);
 	
 	if(nexacro.getApplication().isAuth)
 	{		
@@ -48,7 +48,12 @@ this.gfn_transaction = function(tranObj)
 * Arguments     : 
 * Return        : 
 */
-this.gfn_sessionCheck = function(){
+
+this.isLoginPage = false;
+this.gfn_sessionCheck = function(isLoginPage){
+	//로그인페이지 여부
+	this.isLoginPage = isLoginPage !== undefined ? isLoginPage : false;
+
 	var sessionSvc = nexacro.getApplication().Session_svc;
 	var fnc = "gfn_sessionCallback";
 	
@@ -69,6 +74,7 @@ this.gfn_sessionCheck = function(){
 			
 }
 
+this.sessionCnt = 0;
 
 // 세션 확인 후 처리콜백 함수
 this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
@@ -76,32 +82,35 @@ this.gfn_sessionCallback = function(svcID,errorCode,errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
-		
+		if(!this.isLoginPage && this.sessionCnt == 0) 
+		{
+			this.sessionCnt++;
+			this.alert(errorCode+"\n"+errorMsg);
+		}
 		//윈도우 팝업 여부 
 		if(this.isPopup) 
 		{		
 			//모달 && 윈도우 팝업 제거
-			var popLen = nexacro.getPopupFrames(this.opener).length;
-			for(var i=0; i < popLen; i++)
-			{
-				if(nexacro.getPopupFrames(this.opener)[0].opener.name != "Form_Work")
-				{
-					nexacro.getPopupFrames(this.opener)[0].opener.close();
-				}
-				else
-				{
-					nexacro.getPopupFrames(this.opener)[0].form.close();
-				}
-			}	
+// 			var popLen = nexacro.getPopupFrames(this.opener).length;
+// 			for(var i=0; i < popLen; i++)
+// 			{
+// 				if(nexacro.getPopupFrames(this.opener)[0].opener.name != "Form_Work")
+// 				{
+// 					nexacro.getPopupFrames(this.opener)[0].opener.close();
+// 				}
+// 				else
+// 				{
+// 					nexacro.getPopupFrames(this.opener)[0].form.close();
+// 				}
+// 			}	
 		}
 		else
 		{
-			var popLen = nexacro.getPopupFrames().length;
-			for(var i=0; i < popLen; i++)
-			{
-				nexacro.getPopupFrames()[0].form.close();
-			}	
+// 			var popLen = nexacro.getPopupFrames().length;
+// 			for(var i=0; i < popLen; i++)
+// 			{
+// 				nexacro.getPopupFrames()[0].form.close();
+// 			}	
 		}
 		
 		switch(svcID)

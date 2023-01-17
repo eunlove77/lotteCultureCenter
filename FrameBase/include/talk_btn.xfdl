@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="talk_btn" width="370" height="30" titletext="New Form">
+    <Layouts>
+      <Layout height="30" width="370">
+        <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="370" height="50">
+          <Layouts>
+            <Layout>
+              <Button id="btnTalk01" taborder="3" text="알림톡" top="0" height="30" cssclass="btn_WF_Weak" width="80" right="280"/>
+              <Button id="btnTalk02" taborder="0" text="친구톡" top="0" height="30" cssclass="btn_WF_Weak" width="80" onclick="Div00_btnTalk02_onclick" left="btnTalk01:10"/>
+              <Button id="btnTalk03" taborder="1" text="안내메시지" top="0" height="30" cssclass="btn_WF_Weak" width="80" onclick="Div00_btnTalk03_onclick" left="btnTalk02:10"/>
+              <Button id="btnTalk04" taborder="2" text="LMS" top="0" height="30" cssclass="btn_WF_Weak" width="80" onclick="Div00_btnTalk04_onclick" left="btnTalk03:10"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+include "Base::lib_base.xjs";
+include "Base::popup.xjs";
+include "Base::lib_alrt_talk.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.talkObj = {};
+this.popCnt = 0;
+
+/**************************************************************************
+ * 초기화 영역
+ **************************************************************************/
+this.fn_init = function(talkObj)
+{
+	if(talkObj != undefined) {
+		this.talkObj = talkObj;
+	}
+}
+
+/**************************************************************************
+ * 알림톡 버튼
+ **************************************************************************/
+
+this.btnTalk01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
+	
+	if(this[this.dsId].rowcount > 0){	
+		var oArg = {			
+			alrtClCd : "03"	
+		,	menuSeq : this.talkObj.menuId
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, 600, 800, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+};
+
+/**************************************************************************
+ * 친구톡 버튼
+ **************************************************************************/
+
+this.Div00_btnTalk02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
+	
+	if(this[dsId].rowcount > 0){
+		var oArg = {			
+			menuSeq : this.talkObj.menuId
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopFT.xfdl", this, 600, 800, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+};
+
+/**************************************************************************
+ * 안내메시지 버튼
+ **************************************************************************/
+
+this.Div00_btnTalk03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
+	
+	if(this[dsId].rowcount > 0){
+		var oArg = {			
+			menuSeq : this.talkObj.menuId
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+};
+
+/**************************************************************************
+ * LMS 버튼
+ **************************************************************************/
+
+this.Div00_btnTalk04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
+
+	if(this[dsId].rowcount > 0){
+		var oArg = {			
+			menuSeq : this.talkObj.menuId
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
+	}else{
+		this.alert("수신 대상자를 선택해주세요.");
+	}
+};]]></Script>
+  </Form>
+</FDL>

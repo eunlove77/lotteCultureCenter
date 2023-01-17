@@ -318,7 +318,6 @@ this.excelDownBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 		
 		this.exportObj.set_exporturl(this.application.Domain + this.application.getVariable("excelImportExport"));
 		this.exportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid_Excel, "Sheet1!A1", "allband", "allrecord", "merge", "allstyle", "none", "none", "both");
-		this.exportObj.set_exporttype(nexacro.ExportTypes.EXCEL2007);
 		this.exportObj.set_exportfilename("쿠폰_목록_" + this.gfnGetToDay());
 
 		this.exportObj.exportData();
@@ -440,9 +439,12 @@ this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 2){	
+	if(e.cell == 2 || e.cell == 7){	
 		this.popCnt ++;
-		var oArg = { cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno") };
+		var oArg = { 
+				cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno") 
+			,	tabIndex : e.cell == 7 ? 1 : 0	//사용자수/발급자수 클릭 시 현황탭으로 이동
+		};
 	
 		if(obj.getBindDataset().getColumn(e.row, "issueStatCd") == "00")
 		{
@@ -453,6 +455,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 			this.gfn_openPopup("couponDtlPop"+this.popCnt, oArg, "DiscountMng::CouponDtl.xfdl", this, null, null, true, true, null, "쿠폰 상세");
 		}		
 	}
+
 };
 
 /**************************************************************************

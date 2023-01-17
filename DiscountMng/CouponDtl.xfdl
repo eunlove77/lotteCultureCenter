@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="CouponDtl" width="1280" height="720" titletext="쿠폰 상세">
+  <Form id="CouponDtl" width="1280" height="720" titletext="쿠폰 상세" onload="CouponDtl_onload">
     <Layouts>
       <Layout height="720" width="1280">
-        <Tab id="Tab00" taborder="0" tabindex="0" left="10" top="70" right="10" bottom="10" tabbuttonheight="40" tabbuttongap="2" onchanged="Tab00_onchanged" tabbuttonwidth="100">
+        <Tab id="Tab00" taborder="0" tabindex="0" left="10" top="70" right="10" bottom="10" tabbuttonheight="40" tabbuttongap="2" onchanged="Tab00_onchanged" tabbuttonwidth="100" positionstep="0">
           <Tabpages>
             <Tabpage id="Tabpage1" text="쿠폰상세정보" url="DiscountMng::CouponInfo.xfdl"/>
             <Tabpage id="Tabpage2" text="발급현황" url="DiscountMng::CouponIssueStatus.xfdl"/>
@@ -12,6 +12,13 @@
         <Static id="txtMenuNm" taborder="1" text="쿠폰 상세" left="10" top="20" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[]]></Script>
+    <Script type="xscript5.1"><![CDATA[
+this.CouponDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	if(this.parent.tabIndex != ""){	
+		this.Tab00.set_tabindex(this.parent.tabIndex);
+	}
+};
+]]></Script>
   </Form>
 </FDL>

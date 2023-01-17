@@ -81,7 +81,8 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			this.checkedYn = false;
 			return;
 		}
-		
+		trace(Number(this.ds.getColumn(e.row, "lectAmt")));
+		trace(this.parent.lectAmt);
 		if(Number(this.ds.getColumn(e.row, "lectAmt")) != this.parent.lectAmt){
 			alert("강좌 이강을 하실 수 없습니다.\n강좌료가 동일하지 않습니다.");
 			for(var i=0; i<objDs.getRowCount(); i++)
@@ -171,7 +172,8 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		}
 
 		// 요일
-		var befLectStDtmNm = this.parent.lectStDtmNm;
+		var befLectStDtmNm = this.parent.stringStDaywNm;
+		trace(befLectStDtmNm);
 		var arrBefLectStDtmNm = befLectStDtmNm.split(",");
 		var aftLectStDtmNm = this.ds.getColumn(e.row, "stringStDaywNm");
 		var arrAftLectStDtmNm = aftLectStDtmNm.split(",");
@@ -197,7 +199,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		}
 		
 		// 이강 대상 강좌가 옵션이 있고, 이강 전 강좌 추가결제금액이 있는경우
-		if(this.gfn_nvl(this.ds.getColumn(e.row, "optnUseYn")) == "Y" && this.parent.lectAddAmt > 0){
+		if(this.gfn_nvl(this.ds.getColumn(e.row, "optnUseYn")) == "Y"){
 			this.removeChild("ds_class_info");
 			var dsClassInfo = new Dataset();
 			dsClassInfo.name = "ds_class_info";
@@ -211,7 +213,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			dsClassInfo.set_enableevent(true);
 			
 			var strSvcId    = "data_list";
-			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getLectOptnList.do";
+			var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectOptnList.do";
 			var inData      = "classInfo=this.ds_class_info";
 			var outData     = "this.ds_optn_list=output1";
 			var strArg      = "atlctRsvNo=" + this.parent.atlctRsvNo + " actlAtlctNpleSeqno=" + this.parent.actlAtlctNpleSeqno;
