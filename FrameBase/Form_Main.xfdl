@@ -34,8 +34,8 @@
               <Static id="monthTitle" taborder="3" top="16" height="34" text="선택 날짜" textAlign="center" width="179" font="bold 15px/normal &quot;Noto Sans KR&quot;" right="43.92%"/>
               <Button id="btnNext" taborder="1" left="monthTitle:5.009999999999991" top="22" width="25" height="25" onclick="btnNext_onclick" cssclass="btn_WF_GridCalNext"/>
               <Button id="btnPrev" taborder="2" top="22" height="25" onclick="btnPrev_onclick" cssclass="btn_WF_GridCalPrev" right="monthTitle:4.990000000000009" width="25"/>
-              <Combo id="Combo00" taborder="4" text="특강" left="20" top="20" width="127" height="30" innerdataset="ds_spot_list" codecolumn="cd" datacolumn="cdNm" index="0" onitemchanged="Div00_Combo00_onitemchanged"/>
-              <Button id="Button13_00" taborder="5" text="등록" top="20" height="30" cssclass="btn_WF_Medium" fittocontents="width" width="76" right="20" onclick="Div00_Button13_00_onclick"/>
+              <Combo id="Combo00" taborder="4" text="특강" left="20" top="20" width="150" height="30" innerdataset="ds_spot_list" codecolumn="cd" datacolumn="cdNm" index="0" onitemchanged="Div00_Combo00_onitemchanged"/>
+              <Button id="Button13_00" taborder="5" text="등록" top="20" height="30" cssclass="btn_WF_Medium" width="100" right="20" onclick="Div00_Button13_00_onclick"/>
               <Grid id="grdSchedule" taborder="6" left="20" top="65" height="615" autofittype="col" selecttype="cell" cssclass="grd_WF_Calendar" right="20" onheadclick="grdSchedule_onheadclick" scrollbartype="none none">
                 <Formats>
                   <Format id="default">
@@ -324,7 +324,7 @@ this.curCalendar = new Date();
 this.selectedDate = null;
 this.selectedKey = null;
 this.grdSchedule = this.Div00.form.grdSchedule;
-
+this.brchCd = "";
 this.teacherApvlCnt = 0;
 this.classApvlCnt = 0;
 
@@ -353,6 +353,8 @@ this.Form_Main_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //지점 변경
 this.Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
+	this.brchCd = e.postvalue;
+	
 	this.get_schedule_list();
 	this.get_approval_cnt();
 };
@@ -592,9 +594,9 @@ this.set_branch_list = function(){
 
 	if(nexacro.getPrivateProfile("brchCd") == "0000")
 	{
-		this.ds_spot_list.insertRow(0);
-		this.ds_spot_list.setColumn(0, "cd", "");
-		this.ds_spot_list.setColumn(0, "cdNm", "전체");
+// 		this.ds_spot_list.insertRow(0);
+// 		this.ds_spot_list.setColumn(0, "cd", "");
+// 		this.ds_spot_list.setColumn(0, "cdNm", "전체");
 	}
 	else
 	{
