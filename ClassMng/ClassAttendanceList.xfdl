@@ -38,7 +38,7 @@
                             <Column size="80"/>
                             <Column size="156"/>
                             <Column size="91"/>
-                            <Column size="100"/>
+                            <Column size="117"/>
                             <Column size="86"/>
                             <Column size="95"/>
                             <Column size="95"/>
@@ -95,16 +95,16 @@
                             <Cell col="8" text="bind:mbrNo" textDecoration="underline"/>
                             <Cell col="9" text="bind:mbrGrdeNm"/>
                             <Cell col="10" text="bind:reAtlctYn"/>
-                            <Cell col="11" text="bind:mbrFnm"/>
-                            <Cell col="12" text="bind:actlAtlctNpleNm"/>
+                            <Cell col="11" text="expr:comp.parent.parent.setMasking(mbrFnm,1,1, '')" tooltiptext="bind:mbrFnm" tooltiptype="hover"/>
+                            <Cell col="12" text="expr:comp.parent.parent.setMasking(actlAtlctNpleNm,1,1, '')" tooltiptext="bind:actlAtlctNpleNm" tooltiptype="hover"/>
                             <Cell col="13" text="bind:fmlyRelNm"/>
                             <Cell col="14" text="expr:sexCd == 'M' ? '남성' : '여성'"/>
-                            <Cell col="15" text="bind:hpNo"/>
+                            <Cell col="15" text="expr:comp.parent.parent.setMasking(hpNo,4,4, '')" tooltiptext="bind:hpNo" tooltiptype="hover"/>
                             <Cell col="16" text="bind:smsRcvAgrYn"/>
                             <Cell col="17" text="expr:age + '세'"/>
                             <Cell col="18" text="bind:appCmplDtm"/>
                             <Cell col="19" text="bind:stlmChnlNm"/>
-                            <Cell col="20" text="bind:tcNm"/>
+                            <Cell col="20" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '')" tooltiptext="bind:tcNm" tooltiptype="hover"/>
                             <Cell col="21" text="bind:stDaywNm"/>
                             <Cell col="22" text="bind:lectSt"/>
                             <Cell col="23" text="bind:lectEnd"/>
@@ -361,6 +361,38 @@ this.Div00_Div00_Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.
 	}
 	this.gfn_openPopup("ClassAttendanceListPopup" + this.popCnt, arrArguments, "ClassMng::ClassAttendanceListPopup.xfdl", this, 1280, 720, true, true, null);
 };
+
+this.Div00.form.Div00.setMasking = function(sValue, startIndex, maskLen, excpChar)
+{
+	var sReplaceValue;
+	var sMask = "";
+	var _startIndex = 0;
+	var _maskLen;
+	
+	if(startIndex != '')
+	{
+		_startIndex = startIndex;
+	}
+	
+	sReplaceValue = nexacro.replaceAll(sValue, " ", "");
+	
+	_maskLen = maskLen == '' ? (sReplaceValue.length - _startIndex) : maskLen;
+	
+	for(var i = 0; i < sReplaceValue.length; i++)
+	{
+		if(i >= _startIndex && _maskLen > 0 && sReplaceValue[i] != excpChar)
+		{
+			sMask += "*";
+			_maskLen --;
+		}
+		else
+		{
+			sMask += sReplaceValue[i];
+		}
+	}
+	
+	return sMask;
+}
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_list">
