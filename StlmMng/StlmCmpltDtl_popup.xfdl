@@ -101,7 +101,17 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 		case "detail":
 			// 결제완료 목록 갯수 세팅
 			stlmCmpltListFrm.Static04.set_text("(" + this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() + "개)");
-			// 결제완료 목록 첫 번째 행 데이터가 채널이 데스크면 주문정보 버튼 노출, 이외는 숨김
+			
+			// 결제완료 목록 데이터가 있으면 강좌이강, 관리자 취소 버튼 노출
+			if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() > 0){
+				this.Div00.form.Div02.form.Button04.set_visible(true);
+				this.Div00.form.Div02.form.Button06.set_visible(true);
+			}else{
+				this.Div00.form.Div02.form.Button04.set_visible(false);
+				this.Div00.form.Div02.form.Button06.set_visible(false);
+			}
+			
+			// 결제완료 목록 첫 번째 행 데이터가 채널이 데스크면 주문정보수정 버튼 노출, 이외는 숨김
 			if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() > 0 && this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(this.Div00.form.Div02.form.ds_stlm_cmplt_list.rowposition, "stlmChnlCd") == "D"){
 				this.Div00.form.Div02.form.btnModify.set_visible(true);
 			}else{

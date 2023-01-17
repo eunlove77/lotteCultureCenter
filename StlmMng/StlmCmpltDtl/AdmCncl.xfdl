@@ -164,23 +164,13 @@ this.menuSeq = this.parent.parent.parent.parent.parent.menuSeq;
 this.atlctRsvNo = this.parent.parent.parent.parent.parent.atlctRsvNo;
 this.actlAtlctNpleSeqno = this.parent.parent.parent.parent.actlAtlctNpleSeqno;
 
-// 금액변경 이전 값 저장을 위한 변수
-this.oldLectAmt = 0;
-this.oldLectAddAmt = 0;
-this.oldCrdRfndAmt = 0;
-this.oldCshRfndAmt = 0;
-this.oldEtcRfndAmt = 0;
-this.oldLpntUseAmt = 0;
-this.oldGiftRfndAmt = 0;
+// 관리자 취소 초기 수강료, 추가금액 저장
+this.initLectAmt = "";
+this.initLectAddAmt = "";
 
-// 환불 금액(강좌료 + 추가비) 저장 변수
-this.gsRfndScheAmt = 0;
-this.gsRfndAmtFee = 0;
-
-// 부분환불 강좌료 + 수수료 저장 변수
-this.totLectRfndAmt = 0
-// 부분환불 추가금액 + 수수료 저장 변수 
-this.totLectAddRfndAmt = 0;
+// 금액변경 이전 원 수강료, 추가금액 저장
+this.oldLectAmt = "";
+this.oldLectAddAmt = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -268,6 +258,9 @@ this.fn_set_rfnd_amt = function()
 	this.ds_update_info.setColumn(0, "rfndScheLectAmt", this.gfn_setComma(this.ds_update_info.getColumn(0, "rfndScheLectAmt")));
 	this.ds_update_info.setColumn(0, "rfndScheAddAmt", this.gfn_setComma(this.ds_update_info.getColumn(0, "rfndScheAddAmt")));
 	
+	this.initLectAmt = this.ds_update_info.getColumn(0, "rfndScheLectAmt");
+	this.initLectAddAmt = this.ds_update_info.getColumn(0, "rfndScheAddAmt");
+	
 	// 취소(환불) 금액 세팅
 	var crdStlmAmt = this.ds_update_info.getColumn(0, "crdStlmAmt");
 	var lpntUseAmt = this.ds_update_info.getColumn(0, "lpntUseAmt");
@@ -281,9 +274,6 @@ this.fn_set_rfnd_amt = function()
 		this.Div01.form.Div00.form.Edit00.set_left(210);
 		this.Div01.form.Div00.form.Static02.set_left(410);
 	}
-	
-	//this.gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
-	//this.gsRfndAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndAmtFee").substring(0, this.ds_update_info.getColumn(0, "gsRfndAmtFee").length - 1), ",", ""));
 	
 	var gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
 	
@@ -366,8 +356,10 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.Div02.form.Div03.form.Edit00.set_readonly(false);
 	}
 	
-	this.oldLectAmt = this.Div02.form.Div01.form.Edit00.value;
-	this.oldLectAddAmt = this.Div02.form.Div03.form.Edit00.value;
+// 	this.oldLectAmt = this.Div02.form.Div01.form.Edit00.value;
+// 	this.oldLectAddAmt = this.Div02.form.Div03.form.Edit00.value;
+	this.oldLectAmt = this.ds_update_info.getColumn(0, "rfndScheLectAmt");
+	this.oldLectAddAmt = this.ds_update_info.getColumn(0, "rfndScheAddAmt");
 };
 
 // 금액변경 취소 버튼 클릭
@@ -475,12 +467,19 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var rfndScheLectAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheLectAmt"), ",", "")));
 	var rfndScheAddAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheAddAmt"), ",", "")));
 	
-	
 	var crdStlmAmt = this.ds_update_info.getColumn(0, "crdStlmAmt");
 	var lpntUseAmt = this.ds_update_info.getColumn(0, "lpntUseAmt");
 	var cshStlmAmt = this.ds_update_info.getColumn(0, "cshStlmAmt");
 	var giftStlmAmt = this.ds_update_info.getColumn(0, "giftStlmAmt");
 	var etcStlmAmt = this.ds_update_info.getColumn(0, "etcStlmAmt");
+	
+	if(this.ds_update_info.getColumn(0, "rfndLectTmsCd") != this.Div00.form.Div00.form.Combo00.value
+		|| this.initLectAmt != this.ds_update_info.getColumn(0, "rfndScheLectAmt")
+		|| this.initLectAddAmt != this.ds_update_info.getColumn(0, "rfndScheAddAmt")){
+		if(!confirm("환불 받을 수 있는 강좌의 회차 환불금액이 아닌 변경된 환불금액으로 취소(환불)하시겠습니까?")){
+			return;
+		}
+	}
 	
 	if(crdRfndAmt > crdStlmAmt){
 		alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
