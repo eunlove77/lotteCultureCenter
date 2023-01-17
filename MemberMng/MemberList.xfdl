@@ -246,16 +246,16 @@
                 </Formats>
               </Grid>
               <Static id="txtTotal" taborder="1" left="0" top="10" width="80" height="21" text="총 100개"/>
-              <Div id="Div00" taborder="2" text="Div00" top="0" height="30" right="10" width="375">
+              <Div id="Div00" taborder="2" text="Div00" top="0" height="30" right="10" width="290">
                 <Layouts>
                   <Layout>
-                    <Button id="btnSms" taborder="2" text="SMS 발송" top="0" height="30" cssclass="btn_WF_Medium" width="80" right="0" onclick="Div02_Div00_btnSms_onclick"/>
-                    <Button id="btnDown" taborder="1" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" right="btnSms:10" width="105" onclick="Div02_Div00_btnDown_onclick"/>
+                    <Button id="btnDown" taborder="1" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" right="0" width="105" onclick="Div02_Div00_btnDown_onclick"/>
                     <Button id="btnMerge" taborder="0" text="회원 통합" top="0" height="30" cssclass="btn_WF_Medium" width="80" right="btnDown:10" onclick="Div02_Div00_btnMerge_onclick"/>
-                    <Button id="btnDel" taborder="3" text="회원 삭제" top="0" height="30" cssclass="btn_WF_High" right="btnMerge:10" width="80" onclick="Div02_Div00_btnDel_onclick"/>
+                    <Button id="btnDel" taborder="2" text="회원 삭제" top="0" height="30" cssclass="btn_WF_High" right="btnMerge:10" width="80" onclick="Div02_Div00_btnDel_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
+              <Div id="Div03" taborder="3" text="Div03" top="0" width="390" height="40" url="FrameBase::include/talk_btn.xfdl" formscrolltype="none" left="txtTotal:10"/>
             </Layout>
           </Layouts>
         </Div>
@@ -433,6 +433,21 @@ this.MemberList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.fn_init_code();
 	
 	this.gfnSetCheckBoxNoDataset(this.ds_member_list, this.Div02.form.Grid00, 0); 
+	
+					
+	//톡전송 버튼 세팅
+	var talkObj = {
+		columnObj : {
+						mbrNo : "mbrNo"		//trgtDs의 회원번호 컬럼 매칭
+					,	korNm : "korNm"		//trgtDs의 회원명 컬럼 매칭
+					,	hpNo : "hpNo"		//trgtDs의 수신번호 컬럼 매칭
+					,	smsRcvAgrYn : "smsRcvAgrYn"	//trgtDs의 수신여부 컬럼 매칭
+					},
+		trgtDs : this.ds_member_list,	
+		menuId : this.getOwnerFrame().param.MENU_ID
+	}
+	this.Div02.form.Div03.form.fn_init(talkObj);	//톡전송 버튼div의 init 실행
+	
 };
 
 /**************************************************************************
