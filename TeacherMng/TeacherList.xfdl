@@ -11,7 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망지점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
+                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list_hope" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -282,6 +282,14 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//지점 콤보박스 세팅
 	this.com_set_branch_list();
+	//희망지점 검색은 '전체' 추가
+	this.ds_spot_list_hope.copyData(this.ds_spot_list, true); // 필터링된 데이터만 복사
+	if(nexacro.getPrivateProfile("brchCd") != "0000")
+	{
+		this.ds_spot_list_hope.insertRow(0);
+		this.ds_spot_list_hope.setColumn(0, "cd", "");
+		this.ds_spot_list_hope.setColumn(0, "cdNm", "전체");
+	}
 	
 	// 코드 데이터
 	this.set_dataset();
@@ -755,6 +763,12 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_payStd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_spot_list_hope">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
