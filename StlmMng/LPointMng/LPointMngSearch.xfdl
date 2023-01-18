@@ -19,7 +19,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm" index="-1"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -30,6 +30,8 @@
                     <CheckBox id="chkAcumUseAll" taborder="1" text="전체" left="Static00:10" top="5" width="50" height="20" onclick="Div00_Div02_chkAcumUseAll_onclick"/>
                     <CheckBox id="chkUse" taborder="2" text="사용" left="chkAcumUseAll:10" top="5" width="50" height="20" onclick="fn_checkbox_click"/>
                     <CheckBox id="chkAcum" taborder="3" text="적립" left="chkUse:10" top="5" width="50" height="20" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkAcum00" taborder="4" text="적립취소" left="chkAcum:10" top="5" width="70" height="20"/>
+                    <CheckBox id="chkAcum00_00" taborder="5" text="사용취소" left="chkAcum00:10" top="5" width="70" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -85,6 +87,7 @@ include "Base::lib_base.xjs";
  **************************************************************************/
 this.application = null;
 this.list_form = this.parent.parent.Div01.form;
+this.brchCd = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -92,11 +95,12 @@ this.LPointMngSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 
-	this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
-	this.ds_brch_cd.insertRow(0);
-	this.ds_brch_cd.setColumn(0, "cd", "");
-	this.ds_brch_cd.setColumn(0, "cdNm", "전체");
-	this.Div00.form.Div01.form.brchCd.set_index(0);	
+	// 지점선택
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	this.fn_classBrch_set();
+	this.Div00.form.Div01.form.brchCd.set_index(0);
 	
 	this.fn_set_checkbox_value(0);
 };
@@ -116,12 +120,18 @@ this.Div00_Div03_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	objCalendar.strtDtm.set_value('');
 	objCalendar.endDtm.set_value('');
 	
-	this.Div00.form.Div01.form.brchCd.set_value('');
+	// 지점선택
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	this.fn_classBrch_set();
+	this.Div00.form.Div01.form.brchCd.set_index(0);
+	
 	this.Div00.form.Div02.form.chkAcumUseAll.set_value(1);
 	this.Div00.form.Div02.form.chkUse.set_value(1);
 	this.Div00.form.Div02.form.chkAcum.set_value(1);
 	this.Div00.form.Div03.form.searchField.set_index(0);
-	this.Div00.form.Div03.form.searchQuery.set_value('');	
+	this.Div00.form.Div03.form.searchQuery.set_value('');
 	
 	this.list_form.ds_list.clearData();	
 	this.list_form.txtTotal.set_text("( 0개 )");		
@@ -169,11 +179,24 @@ this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 	}
 };
 
-
+//지점 세팅
+this.fn_classBrch_set = function()
+{	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+	}
+}
 
 ]]></Script>
     <Objects>
-      <Dataset id="ds_brch_cd">
+      <Dataset id="ds_gdsSpotCd_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>

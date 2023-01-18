@@ -22,7 +22,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -80,12 +80,20 @@ include "Base::lib_base.xjs";
  **************************************************************************/
 this.application = null;
 this.list_form = this.parent.parent.Div01.form;
+this.brchCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.StlmMthdIncmTtlSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
+	this.application = nexacro.getApplication();
+	
+	// 지점선택
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	this.fn_classBrch_set();
 	this.Div00.form.Div00.form.brchCd.set_index(0);
 	
 	var comboYyObj = this.Div00.form.Div01.form.yy;
@@ -94,14 +102,37 @@ this.StlmMthdIncmTtlSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEven
 	var strtYy = data.getFullYear() + 1;
 	var endYy = 2017
 	
-	this.gfn_set_year(this, comboYyObj, 2017, strtYy, "년도");	
+	this.gfn_set_year(this, comboYyObj, 2017, strtYy, "년도");
 };
 
 this.Div00_Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	this.list_form.fn_searchValueInit();
 	//this.list_form.fn_list();
 };
-]]></Script>
+
+//지점 세팅
+this.fn_classBrch_set = function()
+{	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+	}
+}]]></Script>
+    <Objects>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>

@@ -19,7 +19,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="" left="Static00:10" top="12" width="200" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" readonly="false" onitemchanged="Div00_Div01_brchCd_onitemchanged"/>
+                    <Combo id="brchCd" taborder="1" text="" left="Static00:10" top="12" width="200" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" readonly="false" onitemchanged="Div00_Div01_brchCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -187,8 +187,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		objCalendar.btnDay2_onclick();
 		
 		// 지점선택
-		trace(this.brchCd);
-		this.Div00.form.Div01.form.brchCd.set_value(this.brchCd);
+		this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+		this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+		this.ds_gdsSpotCd_list.deleteRow(0);
+		this.fn_classBrch_set();
+		this.Div00.form.Div01.form.brchCd.set_index(0);
 		
 		// 결제채널 체크박스 추가
 		chkboxFrm = this.Div00.form.Div05.form;
@@ -503,6 +506,7 @@ this.fn_rfndStatAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEvent
 // 검색 버튼 클릭
 this.fn_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	this.fn_searchValueInit();
 	parentFrm.fn_list();
 };
@@ -559,6 +563,10 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	var objCalendar = this.Div00.form.Div00.form.rfndDtmDiv.form;
 	objCalendar.btnDay2_onclick();
 	
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	this.fn_classBrch_set();
 	this.Div00.form.Div01.form.brchCd.set_index(0);
 	
 	var chkboxFrm;
@@ -618,7 +626,21 @@ this.fn_set_smsterCd = function(){
 
 	this.gfn_transaction(tranObj);
 }
-]]></Script>
+
+//지점 세팅
+this.fn_classBrch_set = function()
+{	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+	}
+}]]></Script>
     <Objects>
       <Dataset id="ds_rfnd_chnl_list">
         <ColumnInfo>
@@ -664,6 +686,12 @@ this.fn_set_smsterCd = function(){
         <Rows>
           <Row/>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Bind>
