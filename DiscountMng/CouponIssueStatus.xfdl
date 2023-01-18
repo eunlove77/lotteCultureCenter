@@ -60,7 +60,15 @@
         <Div id="Div01" taborder="3" text="Div01" left="7" top="16" height="115" right="9" minwidth="680" maxwidth="">
           <Layouts>
             <Layout>
-              <Div id="Div02_01" taborder="5" text="Div01" left="291" top="44" height="33" cssclass="div_WF_CompWrap" right="49.84%" formscrolltype="none" minwidth="300" maxwidth="">
+              <Div id="Div02_00" taborder="4" text="Div01" left="0" top="44" height="33" cssclass="div_WF_CompWrap" right="76.82%" formscrolltype="none" minwidth="250" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02_01" taborder="5" text="Div01" left="Div02_00:-1" top="44" height="33" cssclass="div_WF_CompWrap" right="49.84%" formscrolltype="none" minwidth="300" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -118,15 +126,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원 등급" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboGrade" taborder="1" text="특강" left="116" top="5" width="130" height="21" innerdataset="ds_grade_cd" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div02_00" taborder="4" text="Div01" left="0" top="44" height="33" cssclass="div_WF_CompWrap" right="76.82%" formscrolltype="none" minwidth="250" maxwidth="">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10"/>
+                    <Combo id="ComboGrade" taborder="1" text="특강" left="116" top="5" width="130" height="21" innerdataset="ds_grade_cd" codecolumn="cd" datacolumn="cdNm" index="0" value="1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -155,6 +155,7 @@
             <Col id="useStatCd"/>
             <Col id="mbrGrdeCd"/>
             <Col id="f">1</Col>
+            <Col id="korNm"></Col>
           </Row>
         </Rows>
       </Dataset>
@@ -274,8 +275,8 @@ this.fn_list = function ()
 
 this.Div01_Div00_04_btnSearch_onclick = function(obj,e)
 {
-	var isKorNm = this.gfn_isNull(this.ds_search.getColumn(0, "korNm"));
-	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpStNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
 
 	if(isKorNm != isHpNo)
 	{
@@ -387,7 +388,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 };]]></Script>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.ComboStat" propid="value" datasetid="ds_search" columnid="useStatCd"/>
-      <BindItem id="item1" compid="Div01.form.Div01.form.ComboGrade" propid="value" datasetid="ds_search" columnid="issueMthdClCd"/>
+      <BindItem id="item1" compid="Div01.form.Div01.form.ComboGrade" propid="value" datasetid="ds_search" columnid="mbrGrdeCd"/>
       <BindItem id="item2" compid="Div01.form.Div03.form.Div00.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDtm"/>
       <BindItem id="item3" compid="Div01.form.Div03.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDtm"/>
       <BindItem id="item4" compid="Div01.form.Div04.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>

@@ -135,7 +135,17 @@
                 </Layouts>
               </Div>
               <Static id="Static00" taborder="4" left="0" top="0" width="80" height="21" text="검색"/>
-              <Div id="Div01_00" taborder="6" text="Div01" left="540" top="86" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div04_01" taborder="7" text="Div01" left="239" top="86" height="33" cssclass="div_WF_CompWrap" right="57.14%" formscrolltype="none" minwidth="300" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="49.99%"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.17%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5" top="5" height="21" right="2.70%" inputtype="digit" maxlength="4"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01_00" taborder="6" text="Div01" left="Div04_01:0" top="86" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="SMS동의여부" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -161,16 +171,6 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div04_01" taborder="7" text="Div01" left="240" top="86" height="33" cssclass="div_WF_CompWrap" right="57.14%" formscrolltype="none" minwidth="300" maxwidth="">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="49.99%"/>
-                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.17%" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit01_00" taborder="3" left="Edit01:5" top="5" height="21" right="2.70%" inputtype="digit" maxlength="4"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -365,8 +365,8 @@ this.fn_list = function ()
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var isKorNm = this.gfn_isNull(this.ds_search.getColumn(0, "korNm"));
-	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpStNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
 	
 	if(isKorNm != isHpNo)
 	{
@@ -554,6 +554,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
             <Col id="smsRcvAgrYn"/>
             <Col id="dateTypeCd">1</Col>
             <Col id="mbrGrdeCd"/>
+            <Col id="korNm"></Col>
           </Row>
         </Rows>
       </Dataset>

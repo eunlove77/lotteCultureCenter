@@ -343,6 +343,7 @@
             <Col id="smsRcvAgrYn"/>
             <Col id="dateTypeCd">1</Col>
             <Col id="mbrGrdeCd"/>
+            <Col id="korNm"></Col>
           </Row>
         </Rows>
       </Dataset>
@@ -506,8 +507,8 @@ this.fn_list = function ()
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var isKorNm = this.gfn_isNull(this.ds_search.getColumn(0, "korNm"));
-	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpStNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
 	
 	if(isKorNm != isHpNo)
 	{

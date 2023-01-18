@@ -286,9 +286,11 @@ this.PromotionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 this.fn_set_spotCd = function()
 {
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	this.ds_gdsSpotCd_list.insertRow(0);
-	this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
-	this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	this.ds_gdsSpotCd_list.filter("cd=='"+nexacro.getPrivateProfile("brchCd")+"'");
+	this.ds_search.setColumn(0, "brchCd", nexacro.getPrivateProfile("brchCd"))
+// 	this.ds_gdsSpotCd_list.insertRow(0);
+// 	this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+// 	this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
 }
 
 //체크박스 세팅

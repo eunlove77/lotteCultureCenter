@@ -10,9 +10,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <MaskEdit id="MaskEdit00" taborder="1" left="Static00:10" top="5" height="21" format="!###" limitbymask="both" minwidth="50" maxwidth="" width="50" readonly="true"/>
-                    <MaskEdit id="MaskEdit01" taborder="2" left="MaskEdit00:5" top="5" height="21" limitbymask="both" format="!####" minwidth="50" maxwidth="" width="60" readonly="true"/>
-                    <MaskEdit id="MaskEdit02" taborder="3" left="MaskEdit01:5" top="5" height="21" format="!####" limitbymask="both" minwidth="50" maxwidth="" onchanged="Div01_Div00_MaskEdit02_onchanged" width="60" readonly="true"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" minwidth="50" maxwidth="" width="50" readonly="true" inputtype="digit" maxlength="3"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" minwidth="50" maxwidth="" width="60" readonly="true" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit02" taborder="3" left="Edit01:5" top="5" height="21" minwidth="50" maxwidth="" width="60" readonly="true" inputtype="digit" maxlength="4"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -236,9 +236,9 @@ this.fn_set_detail = function()
 	//데스크회원일 경우
 	if(this.ds_info.getColumn(0, "joinCorsCd") == "D")
 	{
-		this.Div01.form.Div00.form.MaskEdit00.set_readonly(false);	//휴대전화 수정 가능
-		this.Div01.form.Div00.form.MaskEdit01.set_readonly(false);	//휴대전화 수정 가능
-		this.Div01.form.Div00.form.MaskEdit02.set_readonly(false);	//휴대전화 수정 가능
+		this.Div01.form.Div00.form.Edit00.set_readonly(false);	//휴대전화 수정 가능
+		this.Div01.form.Div00.form.Edit01.set_readonly(false);	//휴대전화 수정 가능
+		this.Div01.form.Div00.form.Edit02.set_readonly(false);	//휴대전화 수정 가능
 		this.Div01.form.Div02.form.Calendar00.set_readonly(false);	//생년월일 수정 가능	
 		this.Div01.form.Div03.form.Radio00.set_readonly(false);		//성별 수정 가능
 		this.Div01.form.Div04.form.Edit00.set_readonly(false);		//주소 수정 가능
@@ -282,7 +282,18 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 
 this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_save();
+	if(this.gfn_isNull(this.ds_info.getColumn(0, "hpStNo")) || this.gfn_isNull(this.ds_info.getColumn(0, "hpMidNo")) || this.gfn_isNull(this.ds_info.getColumn(0, "hpLastNo")))
+	{
+		alert("휴대전화를 입력하세요.");
+	}
+	else if(this.gfn_isNull(this.ds_info.getColumn(0, "bday")))
+	{
+		alert("생년월일을 입력하세요.");		
+	}
+	else
+	{
+		this.fn_save();
+	}
 };
 
 /**************************************************************************
@@ -348,9 +359,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="item0" compid="Div01.form.Div02.form.Calendar00" propid="value" datasetid="ds_info" columnid="bday"/>
       <BindItem id="item1" compid="Div01.form.Div04.form.Edit00" propid="value" datasetid="ds_info" columnid="addr"/>
       <BindItem id="item3" compid="Div01.form.Div03.form.Radio00" propid="value" datasetid="ds_info" columnid="sexCd"/>
-      <BindItem id="item2" compid="Div01.form.Div00.form.MaskEdit00" propid="value" datasetid="ds_info" columnid="hpStNo"/>
-      <BindItem id="item4" compid="Div01.form.Div00.form.MaskEdit01" propid="value" datasetid="ds_info" columnid="hpMidNo"/>
-      <BindItem id="item5" compid="Div01.form.Div00.form.MaskEdit02" propid="value" datasetid="ds_info" columnid="hpLastNo"/>
+      <BindItem id="item2" compid="Div01.form.Div00.form.Edit00" propid="value" datasetid="ds_info" columnid="hpStNo"/>
+      <BindItem id="item4" compid="Div01.form.Div00.form.Edit01" propid="value" datasetid="ds_info" columnid="hpMidNo"/>
+      <BindItem id="item5" compid="Div01.form.Div00.form.Edit02" propid="value" datasetid="ds_info" columnid="hpLastNo"/>
     </Bind>
   </Form>
 </FDL>
