@@ -161,6 +161,25 @@
           <Column id="ctegryNmDept" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_categoryUpdate_list">
+        <ColumnInfo>
+          <Column id="ctegryId" type="STRING" size="256"/>
+          <Column id="ctegryCd" type="STRING" size="256"/>
+          <Column id="ctegryNm" type="STRING" size="256"/>
+          <Column id="ctegrySortNo" type="INT" size="256"/>
+          <Column id="ctegryLvlNo" type="INT" size="256"/>
+          <Column id="rpsntImgFileId" type="STRING" size="256"/>
+          <Column id="useYn" type="STRING" size="256"/>
+          <Column id="regId" type="STRING" size="256"/>
+          <Column id="regIp" type="STRING" size="256"/>
+          <Column id="regDtm" type="DATETIME" size="256"/>
+          <Column id="modId" type="STRING" size="256"/>
+          <Column id="modIp" type="STRING" size="256"/>
+          <Column id="modDtm" type="DATETIME" size="256"/>
+          <Column id="ctegryNmDept" type="STRING" size="256"/>
+          <Column id="onlCtegryCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -461,19 +480,74 @@ this.Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div00_Div00_Grid00_ondrag = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
 {
-// 	this.Div00.form.Div00.form.Grid00.set_cursor("move");
-// 	if(e.row >= 0) {
-// 		e.userdata = e.row;
-// 		return true;
-// 	}
+	this.Div00.form.Div00.form.Grid00.set_cursor("move");
+	if(e.row >= 0) {
+		e.userdata = e.row;
+		return true;
+	}
 };
 
 this.Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
 {
-// 	this.Div00.form.Div00.form.Grid00.set_cursor("default");
-// 	if(e.row >= 0 ) {
-// 		this.ds_category_list.moveRow(e.userdata, e.row);
-// 	}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	this.Div00.form.Div00.form.Grid00.set_cursor("default");
+	if(parseInt(this.ds_category_list.getColumn(e.userdata, "ctegryLvlNo")) > 0 && parseInt(this.ds_category_list.getColumn(e.row, "ctegryLvlNo")) > 0 
+		&& (this.ds_category_list.getColumn(e.userdata, "ctegryId") == this.ds_category_list.getColumn(e.row, "ctegryId"))
+		&& (this.ds_category_list.getColumn(e.userdata, "ctegryLvlNo") == this.ds_category_list.getColumn(e.row, "ctegryLvlNo"))
+		&& (this.ds_category_list.getColumn(e.userdata, "ctegryCd") != this.ds_category_list.getColumn(e.row, "ctegryCd"))) {
+		
+		if(confirm("이동하시겠습니까?")) 
+		{
+			
+			var prevCtegryId = this.ds_category_list.getColumn(e.userdata, "ctegryId");
+			var prevCtegryCd = this.ds_category_list.getColumn(e.userdata, "ctegryCd");
+			var prevCtegrySortNo = this.ds_category_list.getColumn(e.userdata, "ctegrySortNo");
+			
+			var nextCtegryId = this.ds_category_list.getColumn(e.row, "ctegryId");
+			var nextCtegryCd = this.ds_category_list.getColumn(e.row, "ctegryCd");
+			var nextCtegrySortNo = this.ds_category_list.getColumn(e.row, "ctegrySortNo");
+			
+// 			if(e.userdata > e.row) 
+// 			{
+// 				this.ds_category_list.moveRow(e.row + 1, e.userdata);
+// 			}
+// 			else
+// 			{
+// 				this.ds_category_list.moveRow(e.row - 1, e.userdata);
+// 			}
+			
+			this.ds_category_list.addColumn("onlCtegryCd", "string");
+			
+			this.ds_category_list.setColumn(e.row, "ctegryId", prevCtegryId); 
+			this.ds_category_list.setColumn(e.row, "ctegryCd", prevCtegryCd); 
+			this.ds_category_list.setColumn(e.row, "ctegrySortNo", prevCtegrySortNo); 
+			this.ds_category_list.setColumn(e.row, "onlCtegryCd", nextCtegryCd);
+			
+			this.ds_category_list.setColumn(e.userdata, "ctegryId", nextCtegryId);
+			this.ds_category_list.setColumn(e.userdata, "ctegryCd", nextCtegryCd);
+			this.ds_category_list.setColumn(e.userdata, "ctegrySortNo", nextCtegrySortNo);
+			this.ds_category_list.setColumn(e.userdata, "onlCtegryCd", prevCtegryCd);
+			
+			this.ds_categoryUpdate_list.clearData();
+			this.ds_categoryUpdate_list.copyRow(this.ds_categoryUpdate_list.addRow(), this.ds_category_list, e.row);
+			this.ds_categoryUpdate_list.copyRow(this.ds_categoryUpdate_list.addRow(), this.ds_category_list, e.userdata);
+			
+			var tranObj = {
+				strSvcId : "updateCtgyList",
+				strSvcUrl : this.application.Admin_svc + "::class/updateCtgyList.do",
+				inData : "categoryList=ds_categoryUpdate_list",
+				outData : "ds_category_list=categoryList",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			}
+			this.gfn_transaction(tranObj);
+			
+			this.ds_category_list.set_rowposition(e.row);
+		}
+	}
 };
 ]]></Script>
     <Bind>
