@@ -113,11 +113,11 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:buenNm" color="blue" textDecoration="underline"/>
-                <Cell col="3" text="bind:chrgprNm"/>
-                <Cell col="4" text="expr:hpStNo + &quot;-&quot; + hpMidNo + &quot;-&quot; + hpLastNo"/>
-                <Cell col="5" text="bind:email"/>
+                <Cell col="3" expr="comp.parent.com_setMasking(chrgprNm, 'name')" tooltiptype="hover" tooltiptext="bind:chrgprNm"/>
+                <Cell col="4" expr="comp.parent.com_setMasking(hpNo, 'tel')" tooltiptype="hover" tooltiptext="bind:hpNo"/>
+                <Cell col="5" expr="comp.parent.com_setMasking(email, 'email')" tooltiptype="hover" tooltiptext="bind:email"/>
                 <Cell col="6" text="bind:mbrNo"/>
-                <Cell col="7" text="bind:mbrNm"/>
+                <Cell col="7" expr="comp.parent.com_setMasking(mbrNm, 'name')" tooltiptype="hover" tooltiptext="bind:mbrNm"/>
                 <Cell col="8" text="bind:appDtm" displaytype="date" calendardateformat="yyyy-MM-dd hh:mm:ss"/>
                 <Cell col="9" text="bind:answrYn" displaytype="combotext" combodataset="ds_answrCd_list" combodatacol="cdNm" combocodecol="cd"/>
               </Band>
@@ -173,12 +173,6 @@ this.reset_search_form = function(){
 
 	//공통
 	this.com_reset_search_form(this);
-
-	//휴대전화
-	this.ds_search.setColumn(0, "hpStNo", "");
-	this.ds_search.setColumn(0, "hpMidNo", "");
-	this.ds_search.setColumn(0, "hpLastNo", "");
-	
 }
 this.get_cooperationApply_list = function()
 {	

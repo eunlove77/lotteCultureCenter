@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TeacherList_popup" width="850" height="620" titletext="New Form" onload="TeacherList_popup_onload">
+  <Form id="TeacherList_popup" width="850" height="620" titletext="강사 조회" onload="TeacherList_popup_onload">
     <Layouts>
       <Layout height="620" width="850">
         <Div id="Div02" taborder="0" text="Div01" left="10" top="110" height="33" right="10">
@@ -112,10 +112,10 @@
                 <Cell displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemcontrol' " edittype="expr:comp.type == 1 ? 'checkbox' : 'radioitemitem' " radioitemcodevalue="1" expr="dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo"/>
-                <Cell col="3" text="bind:tcNm" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="3" expr="comp.parent.com_setMasking(tcNm, 'name')" tooltiptype="hover" tooltiptext="bind:tcNm"/>
                 <Cell col="4" text="bind:tcStgNm" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="5" text="bind:tcTpCd" displaytype="combotext" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd"/>
-                <Cell col="6" text="bind:hpNo" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="6" expr="comp.parent.com_setMasking(hpNo, 'tel')" tooltiptype="hover" tooltiptext="bind:hpNo"/>
                 <Cell col="7" text="bind:pbrltnBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="8" text="bind:age" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="9" text="bind:rpsntLectNm"/>

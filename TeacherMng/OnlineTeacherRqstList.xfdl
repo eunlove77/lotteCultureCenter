@@ -176,10 +176,10 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
-                <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:tcNm" textDecoration="underline" color="blue"/>
+                <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')" tooltiptype="hover" tooltiptext="bind:tcNm"/>
                 <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
-                <Cell col="5" text="bind:hpNo"/>
-                <Cell col="6" text="bind:email"/>
+                <Cell col="5" expr="comp.parent.com_setMasking(hpNo, 'tel')" tooltiptype="hover" tooltiptext="bind:hpNo"/>
+                <Cell col="6" expr="comp.parent.com_setMasking(email, 'email')" tooltiptype="hover" tooltiptext="bind:email"/>
                 <Cell col="7" text="bind:frstHopeBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="8" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" text="bind:secHopeBrchCd"/>
                 <Cell col="9" text="bind:frstLrclsCtegryCd" displaytype="combotext" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd"/>
@@ -360,14 +360,8 @@ this.process_teacher_list = function(){
 		//이메일
 		var email = this.ds_teacher_list.getColumn(i, 'email');
 		var emailAddrCd = this.ds_teacher_list.getColumn(i, 'emailAddrCd');
-		if(email){
-			if(emailAddrCd){
-				var row = this.ds_emailAddr_cdList.findRow("cd", emailAddrCd);
-				emailAddr = this.ds_emailAddr_cdList.getColumn(row, "cdNm");
-				email += '@' + emailAddr;
-				this.ds_teacher_list.setColumn(i, 'email', email);
-			}
-		}
+    email += '@' + emailAddr;
+    this.ds_teacher_list.setColumn(i, 'email', email);
 		
 		//희망요일
 		var hopeDaywVal = this.ds_teacher_list.getColumn(i, 'hopeDaywVal');

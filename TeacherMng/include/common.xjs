@@ -629,4 +629,48 @@ this.com_have_value_in_ds = function(ds){
 	}
 	return true;
 }
+/**************************************************************************
+ * 문자열 마스킹 처리
+ **************************************************************************/
+this.com_setMasking = function(str, type){
+	if(!str) return "";
+
+	switch(type){
+		case "name":
+			return this.masking_name(str);
+		case "tel": 
+			return this.gfn_setMaskingTel(str);
+		case "email":
+			return this.masking_email(str);
+		case "id":
+			return this.gfn_setMasking(str, 3);
+	}
+	
+}
+this.masking_name = function(str){
+	//국문 이름
+	const regExp = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+	if(regExp.test(str)){
+		return this.gfn_setMasking(str, 1, 1);
+	}
+
+	//영문 이름
+	const strArr = str.split(' ');
+	let firstName = strArr[0];
+	let makingLength = firstName.length - 2;
+	if(makingLength === 0){
+		strArr[0] = strArr[0].replace(/.$/, '*');
+	}
+	else if(makingLength > 0){
+		strArr[0] = this.gfn_setMasking(firstName, 1, makingLength);
+	}
+	return strArr.join(' ');
+}
+this.masking_email = function(str){
+	const strArr = str.split('@');
+
+	const id = this.gfn_setMasking(strArr[0], 3);
+
+	return id + (strArr[1] ? ('@' + strArr[1]) : '');
+}
 ]]></Script>
