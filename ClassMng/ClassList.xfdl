@@ -326,10 +326,10 @@
                             <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
                             <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="100" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
                             <Cell col="6" text="bind:lectAddOptnNm"/>
-                            <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" displaytype="normal" maskeditlimitbymask="decimal"/>
+                            <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" displaytype="normal" maskeditlimitbymask="decimal"/>
                             <Cell col="8" text="bind:gsCapaCnt"/>
                             <Cell col="9" text="bind:appCnt"/>
-                            <Cell col="10" text="bind:stayCnt"/>
+                            <Cell col="10" text="bind:stayCnt" textDecoration="underline"/>
                             <Cell col="11" text="bind:lectAmt" displaytype="normal"/>
                             <Cell col="12" text="bind:stringStDaywNm"/>
                             <Cell col="13" text="bind:lectNbcnt"/>
@@ -348,9 +348,9 @@
                             <Cell col="26" text="bind:optnTypNm"/>
                             <Cell col="27" text="bind:groupYn"/>
                             <Cell col="28" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
-                            <Cell col="29" text="bind:regId"/>
+                            <Cell col="29" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" tooltiptext="expr:regId + '(' + regNm + ')'" tooltiptype="hover"/>
                             <Cell col="30" text="bind:regDtm"/>
-                            <Cell col="31" text="bind:modId"/>
+                            <Cell col="31" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" tooltiptext="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'" tooltiptype="hover"/>
                             <Cell col="32" text="bind:modDtm"/>
                           </Band>
                         </Format>
@@ -472,13 +472,13 @@
                 <Cell col="21" text="bind:lectClNm"/>
                 <Cell col="22" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm"/>
                 <Cell col="23" text="expr:ppayStdCd == '01' ? '정률' : '정액'"/>
-                <Cell col="24" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
+                <Cell col="24" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##0' : '!##,###,###,##0'" maskeditlimitbymask="both" maskedittype="number"/>
                 <Cell col="25" text="bind:optnTypNm"/>
                 <Cell col="26" text="bind:groupYn"/>
                 <Cell col="27" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
-                <Cell col="28" text="bind:regId"/>
+                <Cell col="28" text="expr:regId + '(' + regNm + ')'"/>
                 <Cell col="29" text="bind:regDtm"/>
-                <Cell col="30" text="bind:modId"/>
+                <Cell col="30" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
                 <Cell col="31" text="bind:modDtm"/>
               </Band>
             </Format>
@@ -526,8 +526,10 @@
           <Column id="optnTypNm" type="STRING" size="256"/>
           <Column id="groupYn" type="STRING" size="256"/>
           <Column id="regId" type="STRING" size="256"/>
+          <Column id="regNm" type="STRING" size="256"/>
           <Column id="regDtm" type="STRING" size="256"/>
           <Column id="modId" type="STRING" size="256"/>
+          <Column id="modNm" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="mdfreqCnt" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
@@ -693,8 +695,8 @@
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
           <Column id="gsCapaCnt" type="STRING" size="256"/>
-          <Column id="Column0" type="STRING" size="256"/>
-          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
+          <Column id="stayCnt" type="STRING" size="256"/>
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="stringStDaywNm" type="STRING" size="256"/>
           <Column id="lectNbcnt" type="STRING" size="256"/>
@@ -705,13 +707,12 @@
           <Column id="apvlStatCd" type="STRING" size="256"/>
           <Column id="apvlStatNm" type="STRING" size="256"/>
           <Column id="dsplyStatCd" type="STRING" size="256"/>
+          <Column id="dsplyStatNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectSmsterNm" type="STRING" size="256"/>
           <Column id="lectStDtm" type="STRING" size="256"/>
           <Column id="lectEndDtm" type="STRING" size="256"/>
-          <Column id="Column2" type="STRING" size="256"/>
-          <Column id="Column3" type="STRING" size="256"/>
           <Column id="lectClCd" type="STRING" size="256"/>
           <Column id="lectClNm" type="STRING" size="256"/>
           <Column id="lectRmCd" type="STRING" size="256"/>
@@ -723,13 +724,18 @@
           <Column id="optnTypNm" type="STRING" size="256"/>
           <Column id="groupYn" type="STRING" size="256"/>
           <Column id="regId" type="STRING" size="256"/>
+          <Column id="regNm" type="STRING" size="256"/>
           <Column id="regDtm" type="STRING" size="256"/>
           <Column id="modId" type="STRING" size="256"/>
+          <Column id="modNm" type="STRING" size="256"/>
           <Column id="modDtm" type="STRING" size="256"/>
+          <Column id="mdfreqCnt" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
           <Column id="schdCnt" type="STRING" size="256"/>
-          <Column id="appCnt" type="STRING" size="256"/>
-          <Column id="stayCnt" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="optnUseYn" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
@@ -1543,7 +1549,23 @@ this.Div02_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.Gri
 		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 	}
 	
-	if(e.col == 6)
+	if(e.col == 10)
+	{
+		var arrArguments = {
+			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_class_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+			menuSeq : this.getOwnerFrame().param.MENU_ID,
+			type : 'stay',
+			searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+	
+	if(e.col == 7)
 	{
 		this.popCnt++;
 		var oArg = {
@@ -1877,32 +1899,64 @@ this.Div02_Div00_Div00_Div02_00_00_Edit00_00_onkillfocus = function(obj:nexacro.
 	}
 };
 
-this.Div02.form.Div01.setMasking = function(sValue, startIndex, maskLen, excpChar)
+this.Div02.form.Div01.setMasking = function(sValue, startIndex, maskLen, flag)
 {
 	var sReplaceValue;
 	var sMask = "";
 	var _startIndex = 0;
 	var _maskLen;
+	var regex = /^[a-z|A-Z]+$/;
 	
 	if(startIndex != '')
 	{
 		_startIndex = startIndex;
 	}
 	
-	sReplaceValue = nexacro.replaceAll(sValue, " ", "");
-	
-	_maskLen = maskLen == '' ? (sReplaceValue.length - _startIndex) : maskLen;
-	
-	for(var i = 0; i < sReplaceValue.length; i++)
+	if(flag != '' && regex.test(sValue.split(' ')[0])) 
 	{
-		if(i >= _startIndex && _maskLen > 0 && sReplaceValue[i] != excpChar)
+	
+		var sValueArr = sValue.split(' ');
+		sReplaceValue = sValueArr[0];
+		_maskLen = sReplaceValue.length > 2 ? (sReplaceValue.length - (_startIndex + 1)) : maskLen;
+		
+		for(var i = 0; i < sReplaceValue.length; i++)
 		{
-			sMask += "*";
-			_maskLen --;
+			if(i >= _startIndex && _maskLen > 0)
+			{
+				sMask += "*";
+				_maskLen --;
+			}
+			else
+			{
+				sMask += sReplaceValue[i];
+			}
 		}
-		else
+		
+		if(sValueArr[1] !== undefined) 
+		{		
+			for(var i=1; i<sValueArr.length; i++) 
+			{
+				sMask +=  ' ' + sValueArr[i];
+			}
+		}
+	}
+	else 
+	{
+		sReplaceValue = nexacro.replaceAll(sValue, " ", "");
+		
+		_maskLen = maskLen == '' ? (sReplaceValue.length - _startIndex) : maskLen;
+		
+		for(var i = 0; i < sReplaceValue.length; i++)
 		{
-			sMask += sReplaceValue[i];
+			if(i >= _startIndex && _maskLen > 0)
+			{
+				sMask += "*";
+				_maskLen --;
+			}
+			else
+			{
+				sMask += sReplaceValue[i];
+			}
 		}
 	}
 	
