@@ -28,9 +28,9 @@
               </Div>
               <Static id="Static00" taborder="1" text="▶ 신청자 목록" left="0" top="83" width="90" height="20" cssclass="sta_WF_TitGray"/>
               <Static id="Static01" taborder="2" text="(0개)" left="85" top="83" width="40" height="20" cssclass="sta_WF_TitGray"/>
-              <Button id="Button05" taborder="3" text="알림톡" top="73" height="30" cssclass="btn_WF_Medium" right="0" width="60"/>
-              <Button id="Button00_00" taborder="4" text="문자발송" top="73" width="80" height="30" cssclass="btn_WF_Medium" right="Button05:10"/>
-              <Button id="Button04" taborder="5" text="Print" top="73" height="30" width="60" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10"/>
+              <Button id="Button05" taborder="3" text="알림톡" top="73" height="30" cssclass="btn_WF_Medium" right="0" width="60" onclick="Div00_Button05_onclick"/>
+              <Button id="Button00_00" taborder="4" text="문자발송" top="73" width="80" height="30" cssclass="btn_WF_Medium" right="Button05:10" onclick="Div00_Button00_00_onclick"/>
+              <Button id="Button04" taborder="5" text="Print" top="73" height="30" width="60" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10" onclick="Div00_Button04_onclick"/>
               <Button id="Button03" taborder="6" text="강사 출석부" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div00_Button03_onclick"/>
               <Grid id="Grid00" taborder="7" left="0" top="113" right="0" bottom="0" binddataset="ds_atlct_list" oncelldblclick="Div00_Grid00_oncelldblclick">
                 <Formats>
@@ -126,6 +126,7 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_alrt_talk.xjs";
 include "Base::popup.xjs";
 
 
@@ -234,6 +235,103 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		menuSeq : this.menuSeq
 	}
 	this.gfn_openPopup("ClassTeacherAttendanceList" + this.popCnt, arrArguments, "ClassMng::ClassTeacherAttendanceList.xfdl", this, 1280, 720, true, true, null);
+};
+
+// Print
+this.Div00_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var arrArguments = {
+		dataset : this.ds_class_dtl
+	}
+	this.gfn_openPopup("ClassAttendanceListPopup" + this.popCnt, arrArguments, "ClassMng::ClassAttendanceListPopup.xfdl", this, 1280, 720, true, true, null);
+};
+
+// 알림톡
+this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var chkYn = false;
+	var nRow = -1;
+	this.ds_rcv_obj.clearData();
+	for(var i=0; i<this.ds_atlct_list.getRowCount(); i++){
+		if(this.ds_atlct_list.checkarray[i] > 0){
+			chkYn = true;
+			var duplYn = false;
+			if(nRow > -1){
+				for(var j=0;j<=this.ds_rcv_obj.getRowCount();j++){
+					if(this.ds_rcv_obj.getColumn(j, "mbrNo") == this.ds_atlct_list.getColumn(i, "mbrNo")){
+						duplYn = true;
+					}
+				}
+			}
+			
+			if(!duplYn){
+				nRow = this.ds_rcv_obj.addRow();
+				this.ds_rcv_obj.setColumn(nRow, "mbrNo", this.ds_atlct_list.getColumn(i, "mbrNo"));
+				this.ds_rcv_obj.setColumn(nRow, "korNm", this.ds_atlct_list.getColumn(i, "mbrNm"));
+				this.ds_rcv_obj.setColumn(nRow, "hpNo", this.ds_atlct_list.getColumn(i, "hp"));
+				this.ds_rcv_obj.setColumn(nRow, "smsRcvAgrYn", this.ds_atlct_list.getColumn(i, "smsRcvAgrYn"));
+			}
+		}
+	}
+	
+	if(!chkYn){
+		alert("대상을 선택하세요.");
+	}else{
+		var oArg = {			
+			alrtClCd : "03"	
+		,	menuSeq : this.menuSeq
+		,	ds_rcv_obj : this.ds_rcv_obj
+		};
+		
+		this.gfn_openPopup("talkPop" + this.popCnt, oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, 600, 800, true, true, null);
+	}
+};
+
+// 문자발송
+this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var chkYn = false;
+	var smsYn = false;
+	var nRow = -1;
+	this.ds_rcv_obj.clearData();
+	for(var i=0; i<this.ds_atlct_list.getRowCount(); i++){
+		if(this.ds_atlct_list.checkarray[i] > 0){
+			chkYn = true;
+			var duplYn = false;
+			if(nRow > -1){
+				for(var j=0;j<=this.ds_rcv_obj.getRowCount();j++){
+					if(this.ds_rcv_obj.getColumn(j, "mbrNo") == this.ds_atlct_list.getColumn(i, "mbrNo")){
+						duplYn = true;
+					}
+				}
+			}
+			
+			if(this.ds_atlct_list.getColumn(i, "smsRcvAgrYn") == "Y"){
+				smsYn = true;
+			}
+			
+			if(!duplYn && this.ds_atlct_list.getColumn(i, "smsRcvAgrYn") == "Y"){
+				nRow = this.ds_rcv_obj.addRow();
+				this.ds_rcv_obj.setColumn(nRow, "mbrNo", this.ds_atlct_list.getColumn(i, "mbrNo"));
+				this.ds_rcv_obj.setColumn(nRow, "korNm", this.ds_atlct_list.getColumn(i, "mbrNm"));
+				this.ds_rcv_obj.setColumn(nRow, "hpNo", this.ds_atlct_list.getColumn(i, "hp"));
+				this.ds_rcv_obj.setColumn(nRow, "smsRcvAgrYn", this.ds_atlct_list.getColumn(i, "smsRcvAgrYn"));
+			}
+		}
+	}
+	
+	if(!chkYn || !smsYn){
+		alert("대상을 선택하세요.");
+		return;
+	}
+	
+	var oArg = {			
+		menuSeq : this.menuSeq
+	,	ds_rcv_obj : this.ds_rcv_obj
+	};
+	
+	this.gfn_openPopup("talkPop" + this.popCnt, oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
 };
 ]]></Script>
     <Objects>
@@ -393,6 +491,14 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
           <Column id="schdCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_rcv_obj">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="smsRcvAgrYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

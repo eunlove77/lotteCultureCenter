@@ -31,8 +31,8 @@
               <Static id="Static00" taborder="1" text="▶ 대기자 목록" left="0" top="83" width="90" height="20" cssclass="sta_WF_TitGray"/>
               <Static id="Static01" taborder="2" text="(0개)" left="85" top="83" width="40" height="20" cssclass="sta_WF_TitGray"/>
               <Button id="Button03" taborder="3" text="수강등록" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="270" onclick="Div00_Button03_onclick"/>
-              <Button id="Button04" taborder="4" text="문자발송" top="73" height="30" width="80" wordWrap="char" cssclass="btn_WF_Medium" right="180"/>
-              <Button id="Button00_00" taborder="5" text="알림톡" top="73" width="80" height="30" cssclass="btn_WF_Medium" right="90"/>
+              <Button id="Button04" taborder="4" text="문자발송" top="73" height="30" width="80" wordWrap="char" cssclass="btn_WF_Medium" right="180" onclick="Div00_Button04_onclick"/>
+              <Button id="Button00_00" taborder="5" text="알림톡" top="73" width="80" height="30" cssclass="btn_WF_Medium" right="90" onclick="Div00_Button00_00_onclick"/>
               <Button id="Button05" taborder="6" text="대기취소" top="73" height="30" cssclass="btn_WF_Medium" right="0" width="80" onclick="Div00_Button05_onclick"/>
               <Button id="Button03_00" taborder="7" text="결제요청" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="370" onclick="Div00_Button03_00_onclick"/>
               <Button id="Button03_00_00" taborder="8" text="메모저장" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="470" onclick="Div00_Button03_00_00_onclick"/>
@@ -115,6 +115,7 @@ this.menuSeq = "";
 
 this.totCnt = 0;
 this.cnt = 0;
+this.popCnt = 0;
 
 // 수강등록 파라미터로 넘길 데이터
 this.mbrNo = "";
@@ -391,6 +392,93 @@ this.fn_init = function()
 	}
 	this.ds_waiting_list.set_enableevent(true);
 }
+
+// 알림톡
+this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var chkYn = false;
+	var nRow = -1;
+	this.ds_rcv_obj.clearData();
+	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
+		if(this.ds_waiting_list.checkarray[i] > 0){
+			chkYn = true;
+			var duplYn = false;
+			if(nRow > -1){
+				for(var j=0;j<=this.ds_rcv_obj.getRowCount();j++){
+					if(this.ds_rcv_obj.getColumn(j, "mbrNo") == this.ds_waiting_list.getColumn(i, "mbrNo")){
+						duplYn = true;
+					}
+				}
+			}
+			
+			if(!duplYn){
+				nRow = this.ds_rcv_obj.addRow();
+				this.ds_rcv_obj.setColumn(nRow, "mbrNo", this.ds_waiting_list.getColumn(i, "mbrNo"));
+				this.ds_rcv_obj.setColumn(nRow, "korNm", this.ds_waiting_list.getColumn(i, "mbrNm"));
+				this.ds_rcv_obj.setColumn(nRow, "hpNo", this.ds_waiting_list.getColumn(i, "hp"));
+				this.ds_rcv_obj.setColumn(nRow, "smsRcvAgrYn", this.ds_waiting_list.getColumn(i, "smsRcvAgrYn"));
+			}
+		}
+	}
+	
+	if(!chkYn){
+		alert("대상을 선택하세요.");
+	}else{
+		var oArg = {			
+			alrtClCd : "03"	
+		,	menuSeq : this.menuSeq
+		,	ds_rcv_obj : this.ds_rcv_obj
+		};
+		
+		this.gfn_openPopup("talkPop" + this.popCnt, oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, 600, 800, true, true, null);
+	}
+};
+
+// 문자발송
+this.Div00_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var chkYn = false;
+	var smsYn = false;
+	var nRow = -1;
+	this.ds_rcv_obj.clearData();
+	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
+		if(this.ds_waiting_list.checkarray[i] > 0){
+			chkYn = true;
+			var duplYn = false;
+			if(nRow > -1){
+				for(var j=0;j<=this.ds_rcv_obj.getRowCount();j++){
+					if(this.ds_rcv_obj.getColumn(j, "mbrNo") == this.ds_waiting_list.getColumn(i, "mbrNo")){
+						duplYn = true;
+					}
+				}
+			}
+			
+			if(this.ds_waiting_list.getColumn(i, "smsRcvAgrYn") == "Y"){
+				smsYn = true;
+			}
+			
+			if(!duplYn && this.ds_waiting_list.getColumn(i, "smsRcvAgrYn") == "Y"){
+				nRow = this.ds_rcv_obj.addRow();
+				this.ds_rcv_obj.setColumn(nRow, "mbrNo", this.ds_waiting_list.getColumn(i, "mbrNo"));
+				this.ds_rcv_obj.setColumn(nRow, "korNm", this.ds_waiting_list.getColumn(i, "mbrNm"));
+				this.ds_rcv_obj.setColumn(nRow, "hpNo", this.ds_waiting_list.getColumn(i, "hp"));
+				this.ds_rcv_obj.setColumn(nRow, "smsRcvAgrYn", this.ds_waiting_list.getColumn(i, "smsRcvAgrYn"));
+			}
+		}
+	}
+	
+	if(!chkYn || !smsYn){
+		alert("대상을 선택하세요.");
+		return;
+	}
+	
+	var oArg = {			
+		menuSeq : this.menuSeq
+	,	ds_rcv_obj : this.ds_rcv_obj
+	};
+	
+	this.gfn_openPopup("talkPop" + this.popCnt, oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_dtl">
@@ -508,6 +596,14 @@ this.fn_init = function()
         <ColumnInfo>
           <Column id="lectCnt" type="INT" size="256"/>
           <Column id="waitCnt" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_rcv_obj">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="smsRcvAgrYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
