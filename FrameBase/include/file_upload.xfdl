@@ -36,8 +36,8 @@
           </Formats>
         </Grid>
         <Button id="Button00" taborder="2" text="파일찾기" left="10" top="9" width="84" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="Button00_onclick" visible="true"/>
-        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" top="Static00:5" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true" left="10" visible="false"/>
-        <ImageViewer id="ImageViewer00" taborder="4" left="Static00:35" top="5" width="125" height="125" stretch="fixaspectratio" visible="true"/>
+        <Static id="fileStatic" taborder="3" text="※ ooo * ooo 사이즈에 맞게 등록해주세요. (jpg,jpeg,gif,png,pdf,ppt,pptx,xls,xlsx,doc,docx 최대 10MB 1개만 등록 가능합니다.)&#13;&#10;" top="Static00:15" width="696" height="20" cssclass="sta_WF_CompText" usedecorate="true" left="0" visible="true"/>
+        <ImageViewer id="ImageViewer00" taborder="4" left="Static00:35" top="5" width="125" height="125" stretch="fixaspectratio" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -147,7 +147,7 @@ this.fn_init = function(atchFileObj)
 		this.FileUpTransfer00.removePostData("delFileSeq");
 		this.FileUpTransfer00.clearFileList();
 		this.fileStatic.set_text(this.fileTxt);
-		
+	
 		if(this.mode == 2)
 		{
 			this.Button00.destroy();
@@ -430,10 +430,8 @@ this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.
 this.Grid00_oncellposchanged = function(obj:nexacro.Grid,e:nexacro.GridSelectEventInfo)
 {
 	var fileExtn = this.ds_atchFileList.getColumn(e.row, "fileExtn");
-
 	if("jpg,jpeg,gif,png".indexOf(fileExtn) > -1)
 	{
-
 		this.ImageViewer00.set_visible(true);
 		this.ImageViewer00.set_image(this.ds_atchFileList.getColumn(e.row, "webPath"));
 	}

@@ -565,7 +565,7 @@
                                         <Cell col="7" text="bind:ppayAmt" displaytype="maskeditcontrol" edittype="mask" maskeditlimitbymask="both" maskeditformat="expr:ppayStdCd == '01' ? '!##0' : '!##,###,###,##0'"/>
                                         <Cell col="8" text="bind:ppayAmtExpl" edittype="text" displaytype="editcontrol" editmaxlength="20"/>
                                         <Cell col="9" displaytype="combocontrol" edittype="combo" combodataset="ds_whdtxCl_list" combocodecol="cd" combodatacol="cdNm" text="bind:whdtxClCd" comboautoselect="false"/>
-                                        <Cell col="10" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd" displaytype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'nomal' : 'combocontrol'" edittype="expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'none' : 'combo'"/>
+                                        <Cell col="10" combodataset="ds_incmCl_list" combocodecol="cd" combodatacol="cd" text="bind:incmClCd" displaytype="combocontrol" edittype="combo"/>
                                       </Band>
                                     </Format>
                                   </Formats>
@@ -1589,6 +1589,7 @@ this.fn_teacher_set = function()
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 7, "edittype", "expr:npayCnt == '1' ? 'mask' : 'readonly'");
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 8, "edittype", "expr:npayCnt == '1' ? 'text' : 'readonly'");
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 9, "edittype", "expr:npayCnt == '1' ? 'combo' : 'readonly'");
+	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "displaytype", "expr:(whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'nomal' : 'combocontrol'");
 	this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty( "body", 10, "edittype", "expr:npayCnt == '1' ? (whdtxClCd == 'C0' || whdtxClCd == 'C3' || tcTpCd != '1') ? 'none' : 'combo' : 'readonly'");
 	
 }
