@@ -29,7 +29,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="yy" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" type="dropdown"/>
+                    <Combo id="yy" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" type="dropdown" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
                     <Combo id="lectSmsterCd" taborder="2" text="Combo01" left="yy:1" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
@@ -146,34 +146,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		this.ds_brch_cd.insertRow(0);
 		this.ds_brch_cd.setColumn(0, "cd", "");
 		this.ds_brch_cd.setColumn(0, "cdNm", "전체");
-		this.Div00.form.Div00.form.brchCd.set_index(0);
+		this.ds_search.setColumn(0, "brchCd", "");
 		
 		// 학기
-		if(this.lectSmsterCd == ""){
-			var month = new nexacro.Date().getMonth()+1;
-
-			if(3 <= month && month <= 5)
-			{
-				//봄
-				this.lectSmsterCd = 0;	
-			}
-			else if(6 <= month && month <= 8)
-			{
-				//여름
-				this.lectSmsterCd = 1;	
-			}
-			else if(9 <= month && month <= 11)
-			{
-				//가을
-				this.lectSmsterCd = 2;	
-			}	
-			else
-			{
-				//겨울
-				this.lectSmsterCd = 3;	
-			}
-		}
-		this.Div00.form.Div01.form.lectSmsterCd.set_value(this.lectSmsterCd);
+		this.fn_sesterInfo();
 		
 		//년도
 		if(this.yy == ""){
@@ -200,14 +176,45 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		this.Div00.form.Div01.form.yy.set_index(0);
 		
 		break;
+	case "sesterInfo":
+		// 학기
+		if(this.lectSmsterCd == ""){
+			var month = new nexacro.Date().getMonth()+1;
+	
+			if(3 <= month && month <= 5)
+			{
+				//봄
+				this.lectSmsterCd = 0;	
+			}
+			else if(6 <= month && month <= 8)
+			{
+				//여름
+				this.lectSmsterCd = 1;	
+			}
+			else if(9 <= month && month <= 11)
+			{
+				//가을
+				this.lectSmsterCd = 2;	
+			}	
+			else
+			{
+				//겨울
+				this.lectSmsterCd = 3;	
+			}
+		}
+		
+		this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+		this.fn_year_add();
+	
+		break;
   }
 };
 
 // 지점 변경
 this.Div00_Div00_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	this.ds_search.setColumn(0, "brchCd", obj.value);
-	this.fn_set_smsterCd();
+	this.brchCd = obj.value;
+	this.fn_sesterInfo();
 };
 
 // 기간 시작일 선택
@@ -235,6 +242,58 @@ this.Div00_Div00_00_00_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexa
 	//this.ds_search.setColumn(0, "lectSmsterCd", null);
 	this.parent.parent.fn_list();
 };
+
+//학기 조회
+this.fn_sesterInfo = function()
+{	
+	this.ds_search.setColumn(0, "brchCd", this.brchCd);
+	
+	var tranObj = {
+		strSvcId : "sesterInfo",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
+		inData : "search=ds_search",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+
+	this.gfn_transaction(tranObj);
+};
+
+//학기 연도 추가
+this.fn_year_add = function() 
+{
+	this.ds_year_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getSesterYearList",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
+		inData : "",
+		outData : "ds_year_list=yearList",
+		strArg : "brchCd=" + this.brchCd,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+		
+	}
+	this.gfn_transaction(tranObj);
+	
+	var year = new nexacro.Date().getFullYear();
+	if(this.yy != "")
+	{
+		year = nexacro.toNumber(this.yy);
+	}
+	
+	if(this.ds_year_list.getRowCount() == 0) {
+		this.ds_year_list.addRow();
+		this.ds_year_list.setColumn(0, "cd", year);
+		this.ds_year_list.setColumn(0, "cdNm", year + "년");
+	}
+
+	this.ds_search.setColumn(0, "yy", year);
+}
 ]]></Script>
     <Objects>
       <Dataset id="ds_brch_cd">
@@ -285,6 +344,12 @@ this.Div00_Div00_00_00_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexa
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_lectClCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_year_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>

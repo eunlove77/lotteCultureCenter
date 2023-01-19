@@ -43,10 +43,10 @@
                       <Cell col="1" text="expr:yy + '년 ' + lectSmsterNm"/>
                       <Cell col="2" text="bind:lectCd"/>
                       <Cell col="3" text="bind:lectNm"/>
-                      <Cell col="4" tooltiptext="bind:lectAddOptnNm"/>
+                      <Cell col="4" text="bind:lectAddOptnNm"/>
                       <Cell col="5" text="bind:tcNm"/>
                       <Cell col="6" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
-                      <Cell col="7" text="expr:dataset.getColumn(currow, &quot;appCnt&quot;) + '/' + dataset.getColumn(currow, &quot;lectNbcnt&quot;)" textDecoration="underline"/>
+                      <Cell col="7" text="expr:dataset.getColumn(currow, &quot;appCnt&quot;) + '/' + dataset.getColumn(currow, &quot;gsCapaCnt&quot;)" textDecoration="underline"/>
                       <Cell col="8" text="bind:stayCnt"/>
                       <Cell col="9" displaytype="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == 'N' ? 'normal' : 'combocontrol'" edittype="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == &quot;N&quot; ? 'none' : 'combo'" combocodecol="optnSeqno" combodatacol="optnNm" combodisplaynulltype="nulltext" combodataset="ds_optn_list" text="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == &quot;Y&quot; ? dataset.getColumn(currow, &quot;optnSeqno&quot;) : '-'" combodisplaynulltext="선택"/>
                     </Band>
@@ -135,11 +135,11 @@
                             <Cell text="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                             <Cell col="1" text="expr:currow + 1"/>
                             <Cell col="2" text="bind:mbrNo"/>
-                            <Cell col="3" text="bind:mbrNm"/>
-                            <Cell col="4" text="bind:actlAtlctNpleNm"/>
+                            <Cell col="3" expr="comp.parent.parent.parent.parent.parent.gfn_setMasking(mbrNm, 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover"/>
+                            <Cell col="4" expr="comp.parent.parent.parent.parent.parent.gfn_setMasking(actlAtlctNpleNm, 1, 1)" tooltiptext="bind:actlAtlctNpleNm" tooltiptype="hover"/>
                             <Cell col="5" text="bind:fmlyRelCdNm"/>
                             <Cell col="6" text="bind:bday"/>
-                            <Cell col="7" text="expr:dataset.getColumn(currow, &quot;hpStNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpMidNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpLastNo&quot;)"/>
+                            <Cell col="7" expr="comp.parent.parent.parent.parent.parent.gfn_setMaskingTel(dataset.getColumn(currow, &quot;hpStNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpMidNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpLastNo&quot;))" tooltiptext="expr:dataset.getColumn(currow, &quot;hpStNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpMidNo&quot;) + '-' + dataset.getColumn(currow, &quot;hpLastNo&quot;)" tooltiptype="hover"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -187,6 +187,7 @@ this.init_grid = function()
 	this.ds_class_list.addColumn("optnNm", "string", "256");
 	this.ds_class_list.addColumn("optnAmt", "string", "256");
 	this.ds_class_list.addColumn("partRfndPsblYn", "string", "256");
+	trace(this.ds_class_list.getColumn(0, "lectAddOptnNm"));
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.application.Admin_svc + "::class/selectWaitingDataList.do",

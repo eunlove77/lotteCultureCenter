@@ -30,37 +30,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="yy" taborder="1" left="116" top="5" width="100" height="20" type="dropdown" text="년도" value="" index="-1"/>
-                    <Combo id="smsterCd" taborder="2" text="학기" left="yy:5" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" value="" index="0">
-                      <Dataset id="innerdataset">
-                        <ColumnInfo>
-                          <Column id="codecolumn" size="256"/>
-                          <Column id="datacolumn" size="256"/>
-                        </ColumnInfo>
-                        <Rows>
-                          <Row>
-                            <Col id="codecolumn"/>
-                            <Col id="datacolumn">학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">1</Col>
-                            <Col id="datacolumn">봄학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">여름학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">3</Col>
-                            <Col id="datacolumn">가을학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">4</Col>
-                            <Col id="datacolumn">겨울학기</Col>
-                          </Row>
-                        </Rows>
-                      </Dataset>
-                    </Combo>
+                    <Combo id="yy" taborder="1" left="116" top="5" width="100" height="20" type="dropdown" text="년도" value="" index="-1" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="smsterCd" taborder="2" text="학기" left="yy:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" value="" index="0"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -81,6 +52,8 @@ include "Base::lib_base.xjs";
 this.application = null;
 this.list_form = this.parent.parent.Div01.form;
 this.brchCd = "";
+this.yy = "";
+this.lectSmsterCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -94,15 +67,16 @@ this.SmsterIncmTtlSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
 	this.ds_gdsSpotCd_list.deleteRow(0);
 	this.fn_classBrch_set();
-	this.Div00.form.Div00.form.brchCd.set_index(0);
+	this.fn_sesterInfo();
+	this.ds_search.setColumn(0, "brchCd", "");
 	
-	var comboYyObj = this.Div00.form.Div01.form.yy;
-	
-	var data = new Date();
-	var strtYy = data.getFullYear() + 1;
-	var endYy = 2017
-	
-	this.gfn_set_year(this, comboYyObj, 2017, strtYy, "년도");	
+// 	var comboYyObj = this.Div00.form.Div01.form.yy;
+// 	
+// 	var data = new Date();
+// 	var strtYy = data.getFullYear() + 1;
+// 	var endYy = 2017
+// 	
+// 	this.gfn_set_year(this, comboYyObj, 2017, strtYy, "년도");	
 };
 
 this.Div00_Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -116,15 +90,118 @@ this.fn_classBrch_set = function()
 {	
 	if(nexacro.getPrivateProfile("brchCd") == "0000")
 	{
-		this.ds_gdsSpotCd_list.insertRow(0);
-		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
-		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+		
 	}
 	else
 	{
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
-}]]></Script>
+	
+	this.ds_gdsSpotCd_list.insertRow(0);
+	this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+	this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "선택");
+}
+
+//학기 조회
+this.fn_sesterInfo = function()
+{	
+	this.ds_search.setColumn(0, "brchCd", this.brchCd);
+	
+	var tranObj = {
+		strSvcId : "sesterInfo",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
+		inData : "search=ds_search",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+
+	this.gfn_transaction(tranObj);
+};
+
+//학기 연도 추가
+this.fn_year_add = function() 
+{
+	this.ds_year_list.clearData();
+	var tranObj = {
+		strSvcId : "getSesterYearList",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
+		inData : "",
+		outData : "ds_year_list=yearList",
+		strArg : "brchCd=" + this.brchCd,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+		
+	}
+	this.gfn_transaction(tranObj);
+	
+	var year = new nexacro.Date().getFullYear();
+	if(this.yy != "")
+	{
+		year = nexacro.toNumber(this.yy);
+	}
+	
+	if(this.ds_year_list.getRowCount() == 0) {
+		this.ds_year_list.addRow();
+		this.ds_year_list.setColumn(0, "cd", year);
+		this.ds_year_list.setColumn(0, "cdNm", year + "년");
+	}
+	
+	this.ds_year_list.insertRow(0);
+	this.ds_year_list.setColumn(0, "cd", "");
+	this.ds_year_list.setColumn(0, "cdNm", "년도");
+	
+	this.ds_search.setColumn(0, "yy", "");
+}
+
+// 트랜잭션 이후 콜백
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+  // 에러 시 화면 처리 내역
+  if(errorCode != 0)
+  {
+    this.alert(errorCode+"\n"+errorMsg);
+	return;
+  }
+
+  switch(svcID)
+  {
+	case "sesterInfo":
+		// 학기
+		if(this.lectSmsterCd == ""){
+			var month = new nexacro.Date().getMonth()+1;
+	
+			if(3 <= month && month <= 5)
+			{
+				//봄
+				this.lectSmsterCd = 0;	
+			}
+			else if(6 <= month && month <= 8)
+			{
+				//여름
+				this.lectSmsterCd = 1;	
+			}
+			else if(9 <= month && month <= 11)
+			{
+				//가을
+				this.lectSmsterCd = 2;	
+			}	
+			else
+			{
+				//겨울
+				this.lectSmsterCd = 3;	
+			}
+		}
+		
+		//this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+		this.fn_year_add();
+	
+		break;
+  }
+};]]></Script>
     <Objects>
       <Dataset id="ds_gdsSpotCd_list">
         <ColumnInfo>
@@ -132,6 +209,58 @@ this.fn_classBrch_set = function()
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_year_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_smster_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cdNm">학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">1</Col>
+            <Col id="cdNm">봄학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">2</Col>
+            <Col id="cdNm">여름학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">3</Col>
+            <Col id="cdNm">가을학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">4</Col>
+            <Col id="cdNm">겨울학기</Col>
+          </Row>
+        </Rows>
+      </Dataset>
     </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.Div00.form.brchCd" propid="value" datasetid="ds_search" columnid="brchCd"/>
+      <BindItem id="item1" compid="Div00.form.Div01.form.yy" propid="value" datasetid="ds_search" columnid="yy"/>
+      <BindItem id="item2" compid="Div00.form.Div01.form.smsterCd" propid="value" datasetid="ds_search" columnid="lectSmsterCd"/>
+      <BindItem id="item3" compid="Div00.form.Div02.form.strtDtm" propid="value" datasetid="ds_search" columnid="strtDtm"/>
+      <BindItem id="item4" compid="Div00.form.Div02.form.endDtm" propid="value" datasetid="ds_search" columnid="endDtm"/>
+    </Bind>
   </Form>
 </FDL>
