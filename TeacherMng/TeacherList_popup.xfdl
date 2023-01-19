@@ -24,7 +24,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연령" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hp" taborder="1" left="115" top="5" height="21" text="123123" right="10" inputtype="number,digit" maxlength="3"/>
+                    <Edit id="hp" taborder="1" left="115" top="5" height="21"   right="10" inputtype="number,digit" maxlength="3"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -37,7 +37,7 @@
               <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
               <Button id="btnReset" taborder="4" text="초기화" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="79" onclick="reset_search_form"/>
               <Button id="btnSearch" taborder="3" text="검색" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div05_btnSearch_onclick" right="btnReset:5" width="80"/>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" text="123123" left="221" right="btnSearch:5"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21"   left="221" right="btnSearch:5" onkeyup="searchQuery_onkeyup"/>
               <Combo id="searchField" taborder="1" text="전체" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" width="100">
                 <Dataset id="innerdataset">
                   <ColumnInfo>
@@ -139,7 +139,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hpNo" taborder="1" left="115" top="5" height="21" text="123123" right="10" inputtype="number" maxlength="13" inputfilter="dot,comma"/>
+                    <Edit id="hpNo" taborder="1" left="115" top="5" height="21"   right="10" inputtype="number" maxlength="13" inputfilter="dot,comma"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -233,6 +233,13 @@ this.set_dynamic_checkbox = function()
 /**************************************************************************
  * 검색 영역
  **************************************************************************/
+this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+    this.set_search_info();
+	  this.select_teacher_list();
+  }
+};
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();

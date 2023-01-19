@@ -70,7 +70,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" text="123123" left="searchField:10" right="btnSearch:5" maxlength="20"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -157,9 +157,8 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	//유효성 검사
+this.fn_search = function(){
+  //유효성 검사
 	if(!this.check_validation()) return;
 	
 	//검색조건 - 휴대전화
@@ -167,6 +166,16 @@ this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 	this.com_set_hpNo_to_stmidlastNo(hpNo);
 	
 	this.get_cooperationApply_list();
+}
+this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+    this.fn_search();
+  }
+};
+this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_search();
 };
 //초기화 버튼 
 this.reset_search_form = function(){

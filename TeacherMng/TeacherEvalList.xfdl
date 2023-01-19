@@ -81,7 +81,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20" text="123123" right="10" maxlength="13" inputfilter="dot,comma" inputtype="number"/>
+                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20"   right="10" maxlength="13" inputfilter="dot,comma" inputtype="number"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -124,7 +124,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" text="123123" left="searchField:10" right="btnSearch:5" maxlength="20"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21"   left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -304,6 +304,13 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
+this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13){
+    this.set_search_info();
+	  this.get_teacher_evaluation_list();
+  }
+};
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();	//검색 데이터 세팅
