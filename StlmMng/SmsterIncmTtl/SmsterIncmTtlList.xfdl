@@ -43,18 +43,6 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Dataset id="ds_search">
-        <ColumnInfo>
-          <Column id="brchCd" type="STRING" size="256"/>
-          <Column id="yy" type="STRING" size="256"/>
-          <Column id="lectSmsterCd" type="STRING" size="256"/>
-          <Column id="strtDtm" type="STRING" size="256"/>
-          <Column id="endDtm" type="STRING" size="256"/>
-        </ColumnInfo>
-        <Rows>
-          <Row/>
-        </Rows>
-      </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="brchNm" type="STRING" size="256"/>
@@ -75,6 +63,7 @@ include "Base::lib_base.xjs";
  **************************************************************************/
 this.application = null;
 this.search_form = this.parent.parent.Div00.form;
+this.ds_search = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -83,8 +72,7 @@ this.search_form = this.parent.parent.Div00.form;
 this.SmsterIncmTtlList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	
-	
+	this.ds_search = this.parent.parent.Div00.form.ds_search;
 };
 
 
@@ -131,21 +119,21 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 
 this.fn_searchValueInit = function(){
 	
-	var _brchCd = this.search_form.Div00.form.Div00.form.brchCd.value;
-	var _yy = this.search_form.Div00.form.Div01.form.yy.value;
-	var _lectSmsterCd = this.search_form.Div00.form.Div01.form.smsterCd.value;
+// 	var _brchCd = this.search_form.Div00.form.Div00.form.brchCd.value;
+// 	var _yy = this.search_form.Div00.form.Div01.form.yy.value;
+// 	var _lectSmsterCd = this.search_form.Div00.form.Div01.form.smsterCd.value;
 	
-	if(this.gfn_isNull(_brchCd)){
+	if(this.gfn_isNull(this.ds_search.getColumn(0, "brchCd"))){
 		this.alert("지점명을 선택해주세요.");
-	}else if(this.gfn_isNull(_yy)){
+	}else if(this.gfn_isNull(this.ds_search.getColumn(0, "yy"))){
 		this.alert("년도를 선택해주세요.");
-	}else if(this.gfn_isNull(_lectSmsterCd)){
+	}else if(this.gfn_isNull(this.ds_search.getColumn(0, "lectSmsterCd"))){
 		this.alert("학기를 선택해주세요.");
 	}else{
-		this.ds_search.setColumn(0, "brchCd", this.search_form.Div00.form.Div00.form.brchCd.value);
-	
-		this.ds_search.setColumn(0, "yy", this.search_form.Div00.form.Div01.form.yy.value);
-		this.ds_search.setColumn(0, "lectSmsterCd", this.search_form.Div00.form.Div01.form.smsterCd.value);
+// 		this.ds_search.setColumn(0, "brchCd", this.search_form.Div00.form.Div00.form.brchCd.value);
+// 	
+// 		this.ds_search.setColumn(0, "yy", this.search_form.Div00.form.Div01.form.yy.value);
+// 		this.ds_search.setColumn(0, "lectSmsterCd", this.search_form.Div00.form.Div01.form.smsterCd.value);
 		
 		//this.ds_search.setColumn(0, "strtDtm", this.search_form.Div00.form.Div02.form.strtDtm.value);
 		//this.ds_search.setColumn(0, "endDtm", this.search_form.Div00.form.Div02.form.endDtm.value);

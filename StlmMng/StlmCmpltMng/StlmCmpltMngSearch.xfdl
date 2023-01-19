@@ -43,10 +43,10 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="strtYy" taborder="1" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown"/>
+                    <Combo id="strtYy" taborder="1" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
                     <Combo id="strtSmsterCd" taborder="2" text="Combo01" left="strtYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
                     <Static id="Static01" taborder="3" text="~" left="strtSmsterCd:4" top="12" width="9" height="20"/>
-                    <Combo id="endYy" taborder="4" text="Combo02" left="Static01:4" top="12" width="100" height="20"/>
+                    <Combo id="endYy" taborder="4" text="Combo02" left="Static01:4" top="12" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
                     <Combo id="endSmsterCd" taborder="5" text="Combo03" left="endYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
@@ -145,7 +145,7 @@ this.fn_data_list = function()
 	var strSvcId    = "dataList";
 	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getStlmCmpltDataList.do";
 	var inData      = "";
-	var outData     = "ds_stlm_chnl_list=output1 ds_smster_list=output2 ds_stlm_mthd_list=output3";
+	var outData     = "this.ds_stlm_chnl_list=output1 this.ds_smster_list=output2 this.ds_stlm_mthd_list=output3";
 	var strArg      = "";
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
@@ -190,7 +190,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
 		this.ds_gdsSpotCd_list.deleteRow(0);
 		this.fn_classBrch_set();
-		this.Div00.form.Div01.form.brchCd.set_index(0);
+		this.ds_search.setColumn(0, "brchCd", this.brchCd);
 		
 		// 결제채널 체크박스 추가
 		chkboxFrm = this.Div00.form.Div02.form;
@@ -214,61 +214,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		chkboxFrm.stlmChnlAll.set_value(0);
 		
 		// 학기
-		if(this.lectSmsterCd == ""){
-			var month = new nexacro.Date().getMonth()+1;
-	
-			if(3 <= month && month <= 5)
-			{
-				//봄
-				this.lectSmsterCd = 0;	
-			}
-			else if(6 <= month && month <= 8)
-			{
-				//여름
-				this.lectSmsterCd = 1;	
-			}
-			else if(9 <= month && month <= 11)
-			{
-				//가을
-				this.lectSmsterCd = 2;	
-			}	
-			else
-			{
-				//겨울
-				this.lectSmsterCd = 3;	
-			}
-		}
-		this.Div00.form.Div04.form.strtSmsterCd.set_value(this.lectSmsterCd);
-		this.Div00.form.Div04.form.endSmsterCd.set_value(this.lectSmsterCd);
-		
-		//년도
-		if(this.yy == ""){
-			this.yy = new nexacro.Date().getFullYear();
-		}
-		
-		this.removeChild("ds_yy_list");
-		var dsYyList = new Dataset();
-		dsYyList.name = "ds_yy_list";
-		dsYyList.addColumn("cd", "string", 256);
-		dsYyList.addColumn("cdNm", "string", 256);
-
-		this.addChild("ds_yy_list", dsYyList);
-		this.ds_yy_list.set_enableevent(false);
-		for(var i=0;i<16;i++){
-			this.ds_yy_list.insertRow(i);
-			this.ds_yy_list.setColumn(i, "cd", (Number(this.yy) - i).toString());
-			this.ds_yy_list.setColumn(i, "cdNm", (Number(this.yy) - i) + "년");
-		}
-		this.ds_yy_list.set_enableevent(true);
-		this.Div00.form.Div04.form.strtYy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div04.form.strtYy.set_codecolumn("cd");
-		this.Div00.form.Div04.form.strtYy.set_datacolumn("cdNm");
-		this.Div00.form.Div04.form.strtYy.set_index(0);
-		this.Div00.form.Div04.form.endYy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div04.form.endYy.set_codecolumn("cd");
-		this.Div00.form.Div04.form.endYy.set_datacolumn("cdNm");
-		this.Div00.form.Div04.form.endYy.set_index(0);
-		
+		this.fn_sesterInfo();
 		
 		// 결제수단 체크박스 추가
 		chkboxFrm = this.Div00.form.Div03.form;
@@ -333,36 +279,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.lectSmsterCd = 3;	
 			}
 		}
-		this.Div00.form.Div04.form.strtSmsterCd.set_value(this.lectSmsterCd);
-		this.Div00.form.Div04.form.endSmsterCd.set_value(this.lectSmsterCd);
 		
-		//년도
-		if(this.yy == ""){
-			this.yy = new nexacro.Date().getFullYear();
-		}
-		
-		this.removeChild("ds_yy_list");
-		var dsYyList = new Dataset();
-		dsYyList.name = "ds_yy_list";
-		dsYyList.addColumn("cd", "string", 256);
-		dsYyList.addColumn("cdNm", "string", 256);
-
-		this.addChild("ds_yy_list", dsYyList);
-		this.ds_yy_list.set_enableevent(false);
-		for(var i=0;i<16;i++){
-		this.ds_yy_list.insertRow(i);
-		this.ds_yy_list.setColumn(i, "cd", (Number(this.yy) - i).toString());
-		this.ds_yy_list.setColumn(i, "cdNm", (Number(this.yy) - i) + "년");
-		}
-		this.ds_yy_list.set_enableevent(true);
-		this.Div00.form.Div04.form.strtYy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div04.form.strtYy.set_codecolumn("cd");
-		this.Div00.form.Div04.form.strtYy.set_datacolumn("cdNm");
-		this.Div00.form.Div04.form.strtYy.set_index(0);
-		this.Div00.form.Div04.form.endYy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div04.form.endYy.set_codecolumn("cd");
-		this.Div00.form.Div04.form.endYy.set_datacolumn("cdNm");
-		this.Div00.form.Div04.form.endYy.set_index(0);
+		this.ds_search.setColumn(0, "strtSmsterCd", this.lectSmsterCd);
+		this.ds_search.setColumn(0, "endSmsterCd", this.lectSmsterCd);
+		this.fn_year_add();
+	
 		break;
   }
 };
@@ -528,50 +449,52 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	this.ds_gdsSpotCd_list.deleteRow(0);
 	this.fn_classBrch_set();
 	this.Div00.form.Div01.form.brchCd.set_index(0);
 	
 	var chkboxFrm;
 
 	chkboxFrm = this.Div00.form.Div02.form;
-	chkboxFrm.stlmChnlAll.set_value(1);
+	chkboxFrm.stlmChnlAll.set_value(0);
 	for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
-		chkboxFrm["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].set_value(1);
+		chkboxFrm["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].set_value(0);
 	}
 	
 	chkboxFrm = this.Div00.form.Div03.form;
-	chkboxFrm.stlmMthdAll.set_value(1);
+	chkboxFrm.stlmMthdAll.set_value(0);
 	for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
-		chkboxFrm["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].set_value(1);
+		chkboxFrm["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].set_value(0);
 	}
 	
 	this.ds_search.setColumn(0, "brchCd", this.brchCd);
-	this.fn_set_smsterCd();
+	this.fn_sesterInfo();
 	
-	this.Div00.form.Div05.form.fgftRecpAll.set_value(1);
-	this.Div00.form.Div05.form.fgftRecpStatusY.set_value(1);
-	this.Div00.form.Div05.form.fgftRecpStatusN.set_value(1);
+	this.Div00.form.Div05.form.fgftRecpAll.set_value(0);
+	this.Div00.form.Div05.form.fgftRecpStatusY.set_value(0);
+	this.Div00.form.Div05.form.fgftRecpStatusN.set_value(0);
 	
 	this.Div00.form.Div06.form.searchField.set_value('');
 	this.Div00.form.Div06.form.searchQuery.set_value('');
 	
 	parentFrm.Div00.form.Div01.form.Static01.set_text("(0개)");	
 	parentFrm.Div00.form.Div01.form.ds_stlm_cmplt_list.clearData();
-	parentFrm.Div00.form.Div01.form.ds_stlm_cmplt_excel_list.clearData();
 };
 
 // 지점 변경
 this.Div00_Div01_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	this.ds_search.setColumn(0, "brchCd", obj.value);
-	this.fn_set_smsterCd();
+	this.brchCd = obj.value;
+	this.fn_sesterInfo();
 };
 
-this.fn_set_smsterCd = function(){
+//학기 조회
+this.fn_sesterInfo = function()
+{	
+	this.ds_search.setColumn(0, "brchCd", this.brchCd);
+	
 	var tranObj = {
 		strSvcId : "sesterInfo",
-		strSvcUrl : this.application.Admin_svc + "::stlmMng/getSesterInfo.do",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
 		inData : "search=ds_search",
 		outData : "",
 		strArg : "",
@@ -581,6 +504,40 @@ this.fn_set_smsterCd = function(){
 	}
 
 	this.gfn_transaction(tranObj);
+};
+
+//학기 연도 추가
+this.fn_year_add = function() 
+{
+	this.ds_year_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getSesterYearList",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
+		inData : "",
+		outData : "ds_year_list=yearList",
+		strArg : "brchCd=" + this.brchCd,
+		callBackFnc : "fnCallback",
+		isAsync : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+		
+	}
+	this.gfn_transaction(tranObj);
+	
+	var year = new nexacro.Date().getFullYear();
+	if(this.yy != "")
+	{
+		year = nexacro.toNumber(this.yy);
+	}
+	
+	if(this.ds_year_list.getRowCount() == 0) {
+		this.ds_year_list.addRow();
+		this.ds_year_list.setColumn(0, "cd", year);
+		this.ds_year_list.setColumn(0, "cdNm", year + "년");
+	}
+
+	this.ds_search.setColumn(0, "strtYy", year);
+	this.ds_search.setColumn(0, "endYy", year);
 }
 
 //지점 세팅
@@ -636,6 +593,12 @@ this.fn_classBrch_set = function()
         </Rows>
       </Dataset>
       <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_year_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>

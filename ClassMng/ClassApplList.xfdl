@@ -96,11 +96,11 @@
                       <Cell col="3" text="bind:mbrNo" textDecoration="underline"/>
                       <Cell col="4" text="bind:mbrGrdeCdNm"/>
                       <Cell col="5" text="bind:reAtlctYn"/>
-                      <Cell col="6" text="bind:mbrNm"/>
-                      <Cell col="7" text="bind:actlAtlctNpleNm"/>
+                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(mbrNm, 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover"/>
+                      <Cell col="7" expr="comp.parent.parent.parent.gfn_setMasking(actlAtlctNpleNm, 1, 1)" tooltiptext="bind:actlAtlctNpleNm" tooltiptype="hover"/>
                       <Cell col="8" text="bind:fmlyRelCdNm"/>
                       <Cell col="9" text="bind:sexCdNm"/>
-                      <Cell col="10" text="bind:hp"/>
+                      <Cell col="10" expr="comp.parent.parent.parent.gfn_setMaskingTel(hp)" tooltiptext="bind:hp" tooltiptype="hover"/>
                       <Cell col="11" text="bind:smsRcvAgrYn"/>
                       <Cell col="12" text="expr:dataset.getColumn(currow, &quot;age&quot;) + &quot;세&quot;"/>
                       <Cell col="13" text="bind:appCmplDtm"/>
@@ -194,7 +194,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			var lectEndDtm = this.ds_class_dtl.getColumn(0, "lectEndDtm");
 			lectEndDtm = lectEndDtm.substring(0, 4) + "-" + lectEndDtm.substring(4,6) + "-" + lectEndDtm.substring(6,8);
 			this.Div00.form.Div00.form.Static12.set_text(lectStDtm + " ~ " + lectEndDtm);
-			this.Div00.form.Div00.form.Static13.set_text(this.ds_cnt.getColumn(0, "atlctCnt") + "/" + this.ds_class_dtl.getColumn(0, "lectNbcnt"));
+			this.Div00.form.Div00.form.Static13.set_text(this.ds_cnt.getColumn(0, "atlctCnt") + "/" + this.ds_class_dtl.getColumn(0, "gsCapaCnt"));
 			this.Div00.form.Div00.form.Static14.set_text(this.ds_cnt.getColumn(0, "waitCnt"));
 			
 			this.Div00.form.Static01.set_text("("+ this.totCnt +"개)");
