@@ -27,7 +27,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌명" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="150" maxlength="100"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="150" maxlength="100" onkeyup="Div00_Div00_Div00_Div01_Edit00_onkeyup"/>
                                 <Static id="Static01" taborder="2" text="(0/100)" left="Edit00:6" top="5" width="120" height="20"/>
                               </Layout>
                             </Layouts>
@@ -1026,6 +1026,57 @@ this.fn_save_validation = function()
 			return;
 		}
 	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "rceptPrdStDt")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "rceptPrdEndDt")))) != "")
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "rceptPrdStDt")))) == "")
+		{
+			alert("접수기간 시작일을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div02.form.Calendar00.setFocus();
+			return;
+		}
+		
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "rceptPrdEndDt")))) == "")
+		{
+			alert("접수기간 종료일을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div02.form.Calendar01.setFocus();
+			return;
+		}
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "extngMbrRceptPrdStDt")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "extngMbrRceptPrdEndDt")))) != "")
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "extngMbrRceptPrdStDt")))) == "")
+		{
+			alert("기존회원 접수기간 시작일을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div03.form.Calendar00.setFocus();
+			return;
+		}
+		
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "extngMbrRceptPrdEndDt")))) == "")
+		{
+			alert("기존회원 접수기간 종료일을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div03.form.Calendar01.setFocus();
+			return;
+		}
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "onlnCapaCnt")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "oflnCapaCnt")))) != "")
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "onlnCapaCnt")))) == "")
+		{
+			alert("온라인 정원을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit00.setFocus();
+			return;
+		}
+		
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "oflnCapaCnt")))) == "")
+		{
+			alert("오프라인 정원을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit02.setFocus();
+			return;
+		}
+	}
 
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStMiCd")))) != ""
 		|| nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndMiCd")))) != "")
@@ -1058,7 +1109,30 @@ this.fn_save_validation = function()
 			return;
 		}
 	}
-
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_scheduleTemp_list.getColumn(0, "lectStDt")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_scheduleTemp_list.getColumn(0, "lectNbcnt")))) != "")
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_scheduleTemp_list.getColumn(0, "lectStDt")))) == "")
+		{
+			alert("강의시작일을 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div06.form.Grid00.setFocus();
+			return;
+		}
+		
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_scheduleTemp_list.getColumn(0, "lectNbcnt")))) == "")
+		{
+			alert("강의횟수를 입력하세요.");
+			this.Div00.form.Div00.form.Div00.form.Div06.form.Grid00.setFocus();
+			return;
+		}
+	}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_scheduleTemp_list.getColumn(0, "lectStDt")))) != "" && nexacro.trim(new String(this.gfn_nvl(this.ds_scheduleTemp_list.getColumn(0, "lectNbcnt")))) != "" && this.ds_schedulePlan_list.getRowCount() == 0)
+	{
+		alert("스케줄을 생성 하세요.");
+		this.Div00.form.Div00.form.Div00.form.Div06.form.Grid00.setFocus();
+		return;
+	}
 
 	if(this.ds_teacher_list.getRowCount() > 0)
 	{
@@ -1363,6 +1437,16 @@ this.Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup = function(obj:nexacro.MaskEd
 	this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.set_value(nexacro.toNumber(obj.value, 0) + nexacro.toNumber(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit00.value, 0));
 };
 
+
+this.Div00_Div00_Div00_Div01_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	var len = 0;
+	if(obj.value != undefined)
+	{
+		len = obj.value.length;
+	}
+	this.Div00.form.Div00.form.Div00.form.Div01.form.Static01.set_text("(" + len + "/100)");
+};
 ]]></Script>
   </Form>
 </FDL>
