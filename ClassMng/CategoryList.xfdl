@@ -177,7 +177,6 @@
           <Column id="modIp" type="STRING" size="256"/>
           <Column id="modDtm" type="DATETIME" size="256"/>
           <Column id="ctegryNmDept" type="STRING" size="256"/>
-          <Column id="onlCtegryCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -305,7 +304,15 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	if (arrRow.length)
 	{
-		ctegryCd = this.ds_category_list.getColumn(arrRow[arrRow.length-1], "ctegryCd");
+		//ctegryCd = this.ds_category_list.getColumn(arrRow[arrRow.length-1], "ctegryCd");
+		
+		for(var j=0; j<arrRow.length; j++) 
+		{
+			console.log('ddddd');
+			ctegryCd = parseInt(ctegryCd) < parseInt(this.ds_category_list.getColumn(arrRow[j], "ctegryCd")) ? this.ds_category_list.getColumn(arrRow[j], "ctegryCd") : ctegryCd;
+		}
+		
+		
 		ctegryCd = ("0" + (nexacro.toNumber(ctegryCd) + 1)).slice(-2);
 	}
 	
@@ -348,7 +355,11 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			if(arrRow.length > 0)
 			{
 				tmpChildCnt = arrRow[arrRow.length-1];
-				newCtegryCd = this.ds_category_list.getColumn(tmpChildCnt, "ctegryCd")
+				
+				for(var j=0; j<arrRow.length; j++) 
+				{
+					newCtegryCd =  parseInt(newCtegryCd) < parseInt(this.ds_category_list.getColumn(arrRow[j], "ctegryCd")) ? this.ds_category_list.getColumn(arrRow[j], "ctegryCd") : newCtegryCd;
+				}
 		
 				var subArrRow = this.ds_category_list.extractRows("ctegryId=='" + newCtegryCd + "'");
 				if(subArrRow.length > 0)
@@ -500,11 +511,11 @@ this.Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEve
 		if(confirm("이동하시겠습니까?")) 
 		{
 			
-			var prevCtegryId = this.ds_category_list.getColumn(e.userdata, "ctegryId");
+			
 			var prevCtegryCd = this.ds_category_list.getColumn(e.userdata, "ctegryCd");
 			var prevCtegrySortNo = this.ds_category_list.getColumn(e.userdata, "ctegrySortNo");
 			
-			var nextCtegryId = this.ds_category_list.getColumn(e.row, "ctegryId");
+	
 			var nextCtegryCd = this.ds_category_list.getColumn(e.row, "ctegryCd");
 			var nextCtegrySortNo = this.ds_category_list.getColumn(e.row, "ctegrySortNo");
 			
@@ -517,17 +528,12 @@ this.Div00_Div00_Grid00_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEve
 // 				this.ds_category_list.moveRow(e.row - 1, e.userdata);
 // 			}
 			
-			this.ds_category_list.addColumn("onlCtegryCd", "string");
-			
-			this.ds_category_list.setColumn(e.row, "ctegryId", prevCtegryId); 
+
 			this.ds_category_list.setColumn(e.row, "ctegryCd", prevCtegryCd); 
-			this.ds_category_list.setColumn(e.row, "ctegrySortNo", prevCtegrySortNo); 
-			this.ds_category_list.setColumn(e.row, "onlCtegryCd", nextCtegryCd);
-			
-			this.ds_category_list.setColumn(e.userdata, "ctegryId", nextCtegryId);
+			this.ds_category_list.setColumn(e.row, "ctegrySortNo", nextCtegrySortNo); 
+		
 			this.ds_category_list.setColumn(e.userdata, "ctegryCd", nextCtegryCd);
-			this.ds_category_list.setColumn(e.userdata, "ctegrySortNo", nextCtegrySortNo);
-			this.ds_category_list.setColumn(e.userdata, "onlCtegryCd", prevCtegryCd);
+			this.ds_category_list.setColumn(e.userdata, "ctegrySortNo", prevCtegrySortNo);
 			
 			this.ds_categoryUpdate_list.clearData();
 			this.ds_categoryUpdate_list.copyRow(this.ds_categoryUpdate_list.addRow(), this.ds_category_list, e.row);
