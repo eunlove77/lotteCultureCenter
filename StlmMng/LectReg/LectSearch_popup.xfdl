@@ -118,98 +118,117 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	  if(errorCode != 0)
 	  {
-		this.alert(errorCode+"\n"+errorMsg);
-		return;
-	  }
-
-	  switch(svcID)
-	  {
-		case "dataList":
-			// 라디오 버튼
-			this.grid.type = 2;
-			this.grid.redrawExprCell();
-			
-			this.gfnSetRadioNoDataset(this.ds, this.grid, 0);
-			this.grid.addEventHandler("oncellclick", this.fn_grid_oncellclick, this);
-			
-			// classlistpopup 지점 설정 시 후처리
-			if(nexacro.getPrivateProfile("athrCd") == "99"){
-				// 슈퍼관리자는 모든 지점 가능
-				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
-			}else{
-				// 슈퍼 이외 관리자는 설정 지점만 가능
-				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_value(nexacro.getPrivateProfile("brchCd"));
-				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_readonly(true);
-			}
-			
-			this.Div01.form.divLectReg.form.brchCd = this.Div01.form.divLectReg.form.ds_search.getColumn(0, "brchCd");
-			//this.Div01.form.divLectReg.form.fn_sesterInfo();
-			//this.Div01.form.divLectReg.form.fn_year_add();
-			
-			// 년도
-			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_value(this.yy);
-			//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_readonly(true);
-			// 학기
-			this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_value(this.lectSmsterCd);
-			//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
-			
-			// 가족회원
-			var objCheckbox;
-			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
-				if(i % 2 == 0){
-					objCheckbox = new CheckBox("fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), 5, (5 + (nexacro.floor(i/2) * 20)), 105, 20, null, null);
+			if(svcID == "insert"){
+				if(errorCode == -1){
+					alert("강좌상태가 대기접수인 강좌만 대기자 등록이 가능합니다.");
+				}else if(errorCode == -2){
+					alert("대기신청 내역이 존재합니다.");
+				}else if(errorCode == -3){
+					alert("수강신청 내역이 존재합니다.");
 				}else{
-					objCheckbox = new CheckBox("fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), 500, (5 + (nexacro.floor(i/2) * 20)), 105, 20, null, null);
+					this.alert(errorCode+"\n"+errorMsg);
+				}
+				this.ds_waiting_list.clearData();
+			}else{
+				this.alert(errorCode+"\n"+errorMsg);
+			}
+	  }else{
+		  switch(svcID)
+		  {
+			case "dataList":
+				// 라디오 버튼
+				this.grid.type = 2;
+				this.grid.redrawExprCell();
+				
+				this.gfnSetRadioNoDataset(this.ds, this.grid, 0);
+				this.grid.addEventHandler("oncellclick", this.fn_grid_oncellclick, this);
+				
+				// classlistpopup 지점 설정 시 후처리
+				if(nexacro.getPrivateProfile("athrCd") == "99"){
+					// 슈퍼관리자는 모든 지점 가능
+					this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
+				}else{
+					// 슈퍼 이외 관리자는 설정 지점만 가능
+					this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_value(nexacro.getPrivateProfile("brchCd"));
+					this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_readonly(true);
 				}
 				
-				objCheckbox.set_text(this.ds_fmly_list.getColumn(i, "korNm") + "(" + this.ds_fmly_list.getColumn(i, "fmlyRelCdNm") + ")");
-				this.Div01.form.Div00.form.Div00.form.Div00.form.addChild("chk_fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), objCheckbox);
-				objCheckbox.set_value(0);
-				objCheckbox.show();
-			}
-			break;
-		case "optnList":
-			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
-			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
-			this.Div01.form.Div01.set_visible(true);
-			break;
-		case "save":
-			if(this.Div01.form.Div01.visible){
-				var optnAmt = this.Div01.form.Div01.form.Div00.form.Static01.text;
-				if(optnAmt != ""){
-					optnAmt = Number(nexacro.replaceAll(optnAmt.substring(0, optnAmt.length-1), ",", ""));
-					this.opener.divWork.form.ds_class_list.set_enableevent(false);
-					for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
-						this.opener.divWork.form.ds_class_list.setColumn(i, "optnAmt", optnAmt);
+				this.Div01.form.divLectReg.form.brchCd = this.Div01.form.divLectReg.form.ds_search.getColumn(0, "brchCd");
+				//this.Div01.form.divLectReg.form.fn_sesterInfo();
+				//this.Div01.form.divLectReg.form.fn_year_add();
+				
+				// 년도
+				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_value(this.yy);
+				//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_readonly(true);
+				// 학기
+				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_value(this.lectSmsterCd);
+				//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
+				
+				// 가족회원
+				var objCheckbox;
+				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+					if(i % 2 == 0){
+						objCheckbox = new CheckBox("fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), 5, (5 + (nexacro.floor(i/2) * 20)), 105, 20, null, null);
+					}else{
+						objCheckbox = new CheckBox("fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), 500, (5 + (nexacro.floor(i/2) * 20)), 105, 20, null, null);
 					}
-					this.opener.divWork.form.ds_class_list.set_enableevent(true);
+					
+					objCheckbox.set_text(this.ds_fmly_list.getColumn(i, "korNm") + "(" + this.ds_fmly_list.getColumn(i, "fmlyRelCdNm") + ")");
+					this.Div01.form.Div00.form.Div00.form.Div00.form.addChild("chk_fmly_" + this.ds_fmly_list.getColumn(i, "fmlySeqno"), objCheckbox);
+					objCheckbox.set_value(0);
+					objCheckbox.show();
 				}
-			}
-		
-			this.gfnSetCheckBoxNoDataset(this.opener.divWork.form.ds_class_list, this.opener.divWork.form.Div00.form.Div02.form.Grid00, 0);
+				break;
+			case "optnList":
+				this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+				this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+				this.Div01.form.Div01.set_visible(true);
+				break;
+			case "save":
+				if(this.Div01.form.Div01.visible){
+					var optnAmt = this.Div01.form.Div01.form.Div00.form.Static01.text;
+					if(optnAmt != ""){
+						optnAmt = Number(nexacro.replaceAll(optnAmt.substring(0, optnAmt.length-1), ",", ""));
+						this.opener.divWork.form.ds_class_list.set_enableevent(false);
+						for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+							this.opener.divWork.form.ds_class_list.setColumn(i, "optnAmt", optnAmt);
+						}
+						this.opener.divWork.form.ds_class_list.set_enableevent(true);
+					}
+				}
 			
-			// 결제정보
-			this.opener.divWork.form.Div00.form.Div04.set_visible(true);
-			this.opener.divWork.form.Div00.form.Div04.set_height(210);
-			this.opener.divWork.form.Div00.set_height(780);
-			this.opener.divWork.form.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
-			this.opener.divWork.form.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
-			
-			var lectStlmAmt = 0;
-			for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
-				lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "lectAmt");
-				lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "optnAmt");
-				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "oflnDcAmt");
-				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "grdeDcAmt");
-				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "cpnDcAmt");
-				lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "optnDcAmt");
-			}
-			this.opener.divWork.form.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
-			this.opener.divWork.form.resetScroll();
-			this.close();
-			
-			break;
+				this.gfnSetCheckBoxNoDataset(this.opener.divWork.form.ds_class_list, this.opener.divWork.form.Div00.form.Div02.form.Grid00, 0);
+				
+				// 결제정보
+				this.opener.divWork.form.Div00.form.Div04.set_visible(true);
+				this.opener.divWork.form.Div00.form.Div04.set_height(210);
+				this.opener.divWork.form.Div00.set_height(780);
+				this.opener.divWork.form.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
+				this.opener.divWork.form.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
+				
+				var lectStlmAmt = 0;
+				for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+					lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "lectAmt");
+					lectStlmAmt += this.opener.divWork.form.ds_class_list.getColumn(i, "optnAmt");
+					lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "oflnDcAmt");
+					lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "grdeDcAmt");
+					lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "cpnDcAmt");
+					lectStlmAmt -= this.opener.divWork.form.ds_class_list.getColumn(i, "optnDcAmt");
+				}
+				this.opener.divWork.form.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
+				this.opener.divWork.form.resetScroll();
+				this.close();
+				
+				break;
+			case "saveWait":
+				alert("등록 되었습니다.");
+				this.opener.divWork.form.Div00_Div01_Button00_onclick();
+				this.close();
+				break;
+		  }
 	  }
+
+	  
 };
 
 // 그리드 라디오버튼 선택이벤트
@@ -459,87 +478,54 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	// 대기신청 강좌의 최초 대기신청자로 등록하는경우
 	if(lectStatCd == "05" && this.initWaitMemberYn == "Y"){
-		if(!confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
-			return;
+		if(confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
+			var strSvcId    = "saveWait";
+			var strSvcUrl   = this.application.Admin_svc + "::lectReg/insertWaitList.do";
+			var inData      = "classList=this.opener.divWork.form.ds_class_list";
+			var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
+			var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
+			strArg			+= " actlAtlctNpleNm=" + arrActlAtlctNpleNm.join() + " sexCd=" + arrSexCd.join() + " fmlyRelCd=" + arrFmlyRelCd.join() + " fmlyRelCdNm=" + arrFmlyRelCdNm.join() + " bday=" + arrBday.join()
+			if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
+				strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
+				strArg			+= " optnNm=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm");
+				strArg			+= " optnAmt=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
+				strArg			+= " partRfndPsblYn=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "partRfndPsblYn");
+			}
+			strArg			+= " existMemberYn=" + this.existMemberYn;
+			var callBackFnc = "fnCallback";
+			var isAsync     = false;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.menuSeq
+			};
+			
+			this.gfn_transaction(tranObj);
 		}
-	}
-	
-	var arrStlmActlAtlctNpleNm = [];
-	var stlmYn = false;
-	for(var i=0;i<this.ds_stlm_list.getRowCount();i++){
-		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
-			if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
-				&& this.ds_stlm_list.getColumn(i, "sexCd") == arrSexCd[j]
-				&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
-				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
-				stlmYn = true;
-				arrStlmActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+	}else{
+		var arrStlmActlAtlctNpleNm = [];
+		var stlmYn = false;
+		for(var i=0;i<this.ds_stlm_list.getRowCount();i++){
+			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+				if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
+					&& this.ds_stlm_list.getColumn(i, "sexCd") == arrSexCd[j]
+					&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
+					&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
+					stlmYn = true;
+					arrStlmActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+				}
 			}
 		}
-	}
-	
-	// 기존에 같은 강좌에 수강신청한 사람이 있는 경우
-	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04" || lectStatCd == "05") && stlmYn){
-		alert("수강자 : " + arrStlmActlAtlctNpleNm.join() + "\n수강신청 내역이 존재합니다.");
-		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
-			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
-				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
-			}
-		}
-		if(this.Div01.form.Div01.visible){
-			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
-			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
-		}
-		return;
-	}
-	
-	// 대기신청 상태인 MVG 전용강좌를 MVG 등급이 아닌 회원을 등록시키는경우
-	if(lectStatCd == "05" && mvgDsplyUseYn == "Y" && (this.mbrGrdeCd != "21" && this.mbrGrdeCd != "22" && this.mbrGrdeCd != "23")){
-		alert("MVG 전용 " + lectNm + " 강좌입니다.\nMVG 회원등급이 아닌 수강자는 대기자 접수를 하실 수 없습니다.");
-		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
-			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
-				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
-			}
-		}
-		if(this.Div01.form.Div01.visible){
-			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
-			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
-		}
-		return;
-	}
-	
-	var arrWitActlAtlctNpleNm = [];
-	var witYn = false;
-	for(var i=0;i<this.ds_wit_list.getRowCount();i++){
-		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
-			if(this.ds_wit_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
-				&& this.ds_wit_list.getColumn(i, "sexCd") == arrSexCd[j]
-				&& this.ds_wit_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]){
-				witYn = true;
-				arrWitActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
-			}
-		}
-	}
-	
-	// 대기신청 상태인 강좌에 이미 대기신청한 사람이 있는 경우
-	if(lectStatCd == "05" && witYn){
-		alert("대기자 : " + arrWitActlAtlctNpleNm.join() + "\n대기신청 내역이 존재합니다.");
-		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
-			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
-				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
-			}
-		}
-		if(this.Div01.form.Div01.visible){
-			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
-			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
-		}
-		return;
-	}
-	
-	// 강좌검색 윈도우 팝업에서 저장 후 강좌검색 목록에 등록된 지점 외 다른 지점 저장 시
-	for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
-		if(brchCd != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
-			alert("같은 지점의 강좌만 선택 가능합니다.");
+		
+		// 기존에 같은 강좌에 수강신청한 사람이 있는 경우
+		if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04" || lectStatCd == "05") && stlmYn){
+			alert("수강자 : " + arrStlmActlAtlctNpleNm.join() + "\n수강신청 내역이 존재합니다.");
 			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 				if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
 					this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
@@ -551,37 +537,99 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			}
 			return;
 		}
+		
+		// 대기신청 상태인 MVG 전용강좌를 MVG 등급이 아닌 회원을 등록시키는경우
+		if(lectStatCd == "05" && mvgDsplyUseYn == "Y" && (this.mbrGrdeCd != "21" && this.mbrGrdeCd != "22" && this.mbrGrdeCd != "23")){
+			alert("MVG 전용 " + lectNm + " 강좌입니다.\nMVG 회원등급이 아닌 수강자는 대기자 접수를 하실 수 없습니다.");
+			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+				if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+					this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+				}
+			}
+			if(this.Div01.form.Div01.visible){
+				this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+				this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+			}
+			return;
+		}
+		
+		var arrWitActlAtlctNpleNm = [];
+		var witYn = false;
+		for(var i=0;i<this.ds_wit_list.getRowCount();i++){
+			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+				if(this.ds_wit_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
+					&& this.ds_wit_list.getColumn(i, "sexCd") == arrSexCd[j]
+					&& this.ds_wit_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]){
+					witYn = true;
+					arrWitActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+				}
+			}
+		}
+		
+		// 대기신청 상태인 강좌에 이미 대기신청한 사람이 있는 경우
+		if(lectStatCd == "05" && witYn){
+			alert("대기자 : " + arrWitActlAtlctNpleNm.join() + "\n대기신청 내역이 존재합니다.");
+			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+				if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+					this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+				}
+			}
+			if(this.Div01.form.Div01.visible){
+				this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+				this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+			}
+			return;
+		}
+		
+		// 강좌검색 윈도우 팝업에서 저장 후 강좌검색 목록에 등록된 지점 외 다른 지점 저장 시
+		for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
+			if(brchCd != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
+				alert("같은 지점의 강좌만 선택 가능합니다.");
+				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+					}
+				}
+				if(this.Div01.form.Div01.visible){
+					this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+				}
+				return;
+			}
+		}
+		
+		// 저장
+		var strSvcId    = "save";
+		var strSvcUrl   = this.application.Admin_svc + "::lectReg/setLectReg.do";
+		var inData      = "classList=this.opener.divWork.form.ds_class_list";
+		var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
+		var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
+		strArg			+= " actlAtlctNpleNm=" + arrActlAtlctNpleNm.join() + " sexCd=" + arrSexCd.join() + " fmlyRelCd=" + arrFmlyRelCd.join() + " fmlyRelCdNm=" + arrFmlyRelCdNm.join() + " bday=" + arrBday.join()
+		if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
+			strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
+			strArg			+= " optnNm=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm");
+			strArg			+= " optnAmt=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
+			strArg			+= " partRfndPsblYn=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "partRfndPsblYn");
+		}
+		strArg			+= " existMemberYn=" + this.existMemberYn;
+		var callBackFnc = "fnCallback";
+		var isAsync     = false;
+		var tranObj = {
+			strSvcId : strSvcId,
+			strSvcUrl : strSvcUrl,
+			inData : inData,
+			outData : outData,
+			strArg : strArg,
+			callBackFnc : callBackFnc,
+			isAsync : isAsync,
+			isPopup : true,
+			menuSeq : this.menuSeq
+		};
+		
+		this.gfn_transaction(tranObj);
 	}
 	
-	// 저장
-	var strSvcId    = "save";
-	var strSvcUrl   = this.application.Admin_svc + "::lectReg/setLectReg.do";
-	var inData      = "classList=this.opener.divWork.form.ds_class_list";
-	var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
-	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
-	strArg			+= " actlAtlctNpleNm=" + arrActlAtlctNpleNm.join() + " sexCd=" + arrSexCd.join() + " fmlyRelCd=" + arrFmlyRelCd.join() + " fmlyRelCdNm=" + arrFmlyRelCdNm.join() + " bday=" + arrBday.join()
-	if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
-		strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
-		strArg			+= " optnNm=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm");
-		strArg			+= " optnAmt=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
-		strArg			+= " partRfndPsblYn=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "partRfndPsblYn");
-	}
-	strArg			+= " existMemberYn=" + this.existMemberYn;
-	var callBackFnc = "fnCallback";
-	var isAsync     = false;
-	var tranObj = {
-		strSvcId : strSvcId,
-		strSvcUrl : strSvcUrl,
-		inData : inData,
-		outData : outData,
-		strArg : strArg,
-		callBackFnc : callBackFnc,
-		isAsync : isAsync,
-		isPopup : true,
-		menuSeq : this.menuSeq
-	};
 	
-	this.gfn_transaction(tranObj);
 };
 ]]></Script>
     <Objects>

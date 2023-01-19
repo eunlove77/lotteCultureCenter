@@ -26,7 +26,7 @@
               <Div id="Div02" taborder="2" text="Div02" left="639" height="48" cssclass="div_WF_CompWrap" top="32" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="취소(환불)수단" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
+                    <Static id="Static00" taborder="0" text="취소(환불)수단" left="0" top="0" width="160" height="46" cssclass="sta_WF_TableLabel"/>
                     <CheckBox id="rfndMthdAll" taborder="1" text="전체" left="Static00:10" top="2" width="105" height="20"/>
                   </Layout>
                 </Layouts>
@@ -46,12 +46,12 @@
               <Div id="Div04" taborder="4" text="Div04" left="639" top="79" height="48" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="결제상태" left="0" top="0" height="46" cssclass="sta_WF_TableLabel" width="200"/>
-                    <CheckBox id="rfndStatAll" taborder="1" text="전체" left="210" top="5" width="105" height="20"/>
+                    <Static id="Static00" taborder="0" text="결제상태" left="0" top="0" height="46" cssclass="sta_WF_TableLabel" width="160"/>
+                    <CheckBox id="rfndStatAll" taborder="1" text="전체" left="Static00:10" top="5" width="105" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div05" taborder="5" text="Div05" left="0" top="126" height="48" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div05" taborder="5" text="Div05" left="0" top="126" height="48" cssclass="div_WF_CompWrap" width="640">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="취소(환불)채널" left="0" top="0" width="200" height="46" cssclass="sta_WF_TableLabel"/>
@@ -91,12 +91,8 @@
                             <Col id="codecolumn">4</Col>
                           </Row>
                           <Row>
-                            <Col id="datacolumn">회원명</Col>
-                            <Col id="codecolumn">5</Col>
-                          </Row>
-                          <Row>
                             <Col id="datacolumn">회원 아이디</Col>
-                            <Col id="codecolumn">6</Col>
+                            <Col id="codecolumn">5</Col>
                           </Row>
                         </Rows>
                       </Dataset>
@@ -104,6 +100,24 @@
                     <Button id="btnInit" taborder="4" text="초기화" top="5" height="20" cssclass="btn_WF_Weak" right="10" width="100" onclick="Div00_Div06_btnInit_onclick"/>
                     <Button id="btnSearch" taborder="3" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="btnInit:10" onclick="fn_btnSearch_onclick"/>
                     <Edit id="searchQuery" taborder="2" left="searchField:10" top="5" height="20" right="btnSearch:10" onkeydown="Div00_Div06_searchQuery_onkeydown" text="aaaa"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div07" taborder="7" text="Div04" left="639" top="126" height="48" cssclass="div_WF_CompWrap" right="340">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="회원명" left="0" top="0" height="46" cssclass="sta_WF_TableLabel" width="160"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="12" height="20" width="120" maxlength="100"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div08" taborder="8" text="Div04" left="939" top="126" height="48" cssclass="div_WF_CompWrap" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연락처" left="0" top="0" height="46" cssclass="sta_WF_TableLabel" width="160"/>
+                    <Edit id="Edit00" taborder="1" left="164" top="12" height="20" width="55" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit01" taborder="2" left="224" top="12" height="20" width="55" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit02" taborder="3" left="284" top="12" height="20" width="55" inputtype="digit" maxlength="4"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -429,6 +443,18 @@ this.fn_rfndStatAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEvent
 this.fn_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var mbrNm = this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm"), "");
+	var hpStNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpStNo"), "");
+	var hpMidNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpMidNo"), "");
+	var hpLastNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpLastNo"), "");
+	
+	if((mbrNm == "" && (hpStNo != "" || hpMidNo != "" || hpLastNo != ""))
+		|| (mbrNm != "" && (hpStNo == "" && hpMidNo == "" && hpLastNo == ""))){
+		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+		return;
+	}
+	
 	this.fn_searchValueInit();
 	parentFrm.fn_list();
 };
@@ -512,8 +538,12 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 		}
 	}
 	
-	this.Div00.form.Div06.form.searchField.set_value('');
-	this.Div00.form.Div06.form.searchQuery.set_value('');
+	this.ds_search.setColumn(0, "searchField", "");
+	this.ds_search.setColumn(0, "searchQuery", "");
+	this.ds_search.setColumn(0, "mbrNm", "");
+	this.ds_search.setColumn(0, "hpStNo", "");
+	this.ds_search.setColumn(0, "hpMidNo", "");
+	this.ds_search.setColumn(0, "hpLastNo", "");
 	
 	parentFrm.Div00.form.Div01.form.Static01.set_text("(0개)");	
 	parentFrm.Div00.form.Div01.form.ds_stlm_rfnd_list.clearData();
@@ -634,6 +664,10 @@ this.fn_classBrch_set = function()
           <Column id="endSmsterCd" type="STRING" size="256"/>
           <Column id="searchField" type="STRING" size="256"/>
           <Column id="searchQuery" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -660,6 +694,10 @@ this.fn_classBrch_set = function()
       <BindItem id="item4" compid="Div00.form.Div03.form.strtSmsterCd" propid="value" datasetid="ds_search" columnid="strtSmsterCd"/>
       <BindItem id="item5" compid="Div00.form.Div03.form.endYy" propid="value" datasetid="ds_search" columnid="endYy"/>
       <BindItem id="item6" compid="Div00.form.Div03.form.endSmsterCd" propid="value" datasetid="ds_search" columnid="endSmsterCd"/>
+      <BindItem id="item7" compid="Div00.form.Div07.form.Edit00" propid="value" datasetid="ds_search" columnid="mbrNm"/>
+      <BindItem id="item8" compid="Div00.form.Div08.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item9" compid="Div00.form.Div08.form.Edit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item10" compid="Div00.form.Div08.form.Edit02" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
     </Bind>
   </Form>
 </FDL>
