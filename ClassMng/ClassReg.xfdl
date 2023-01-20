@@ -742,25 +742,7 @@
                                       <Div id="editorArea0" taborder="2" text="Div02" left="0" top="Div00:15" right="0" bottom="40" visible="false">
                                         <Layouts>
                                           <Layout>
-                                            <Tab id="Tab00" taborder="0" tabindex="0" left="0" top="0" right="0" bottom="0">
-                                              <Tabpages>
-                                                <Tabpage id="Tabpage1" text="PC" tabbuttonwidth="80" edge="">
-                                                  <Layouts>
-                                                    <Layout>
-                                                      <WebBrowser id="contentPc" taborder="0" left="0" top="0" right="0" bottom="0"/>
-                                                    </Layout>
-                                                  </Layouts>
-                                                </Tabpage>
-                                                <Tabpage id="Tabpage2" text="MO" tabbuttonwidth="80">
-                                                  <Layouts>
-                                                    <Layout>
-                                                      <WebBrowser id="contentMo" taborder="0" left="0" top="0" right="0" bottom="0"/>
-                                                    </Layout>
-                                                  </Layouts>
-                                                </Tabpage>
-                                              </Tabpages>
-                                            </Tab>
-                                            <Static id="Static00" taborder="1" text="※ 모바일(MO) 버전 미등록 시 PC 버전에 등록된 내용과 동일하게 노출됩니다." top="0" height="21" right="0" cssclass="sta_WF_CompText" width="441"/>
+                                            <WebBrowser id="contentPc" taborder="0" left="0" top="0" right="0" bottom="0"/>
                                           </Layout>
                                         </Layouts>
                                       </Div>
@@ -1096,8 +1078,7 @@ this.contentInit = function(type)
 	//에디터 초기화
 	this.editorArr = [];
 	var editorObj = {
-		divPcObj : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.editorArea0.form.Tab00.Tabpage1.form.contentPc,
-		divMoObj : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.editorArea0.form.Tab00.Tabpage2.form.contentMo
+		divPcObj : this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div01.form.contentArea0.form.editorArea0.form.contentPc
 	}
 	this.editorArr.push(editorObj);
 	if(this.editorArr[0].divPcObj._url == 'about:blank')
@@ -1108,15 +1089,6 @@ this.contentInit = function(type)
 	else
 	{
 		this.editorArr[0].divPcObj.reload();
-	}
-	if(this.editorArr[0].divMoObj._url == 'about:blank')
-	{
-		this.editorArr[0].divMoObj.set_url(this.application.Namo);
-		this.editorArr[0].divMoObj.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
-	}
-	else
-	{
-		this.editorArr[0].divMoObj.reload();
 	}
 }
 
@@ -1695,10 +1667,6 @@ this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyE
 		{
 			content = this.ds_content_list.getColumn(i, "webCont");
 		}
-		if(this.editorArr[i].divMoObj == obj) 
-		{
-			content = this.ds_content_list.getColumn(i, "mbilCont");
-		}
 	} 		
 	
 	var _win = obj.getProperty("window");	 
@@ -1787,40 +1755,16 @@ this.fn_content_add = function()
 		objEditorArea.show();
 		objEditorArea.set_visible(false);
 		
-		var objStatic = new Static();
-		objStatic.init("objStatic" + ord, null, 0, 441, 21, 0);
-		objEditorArea.form.addChild("objStatic" + ord, objStatic);	
-		objStatic.show();	
-		objStatic.set_cssclass("sta_WF_CompText");
-		objStatic.set_text("※ 모바일(MO) 버전 미등록 시 PC 버전에 등록된 내용과 동일하게 노출됩니다.");
-		
-		var objTab = new Tab();
-		objTab.init("objTab" + ord, 0, 0, null, null, 0, 0);
-		objEditorArea.form.addChild("objTab" + ord, objTab);	
-		objTab.show();	
-		objTab.insertTabpage("PC", 0);
-		objTab.insertTabpage("MO", 1);
-		objTab["PC"].set_tabbuttonwidth("80");
-		objTab["MO"].set_tabbuttonwidth("80");
-		objTab.set_tabindex(0);
-		
 		var objContentPc = new WebBrowser();
 		objContentPc.init("objContentPc" + ord, 0, 0, null, null, 0, 0);
-		objTab["PC"].form.addChild("objContentPc" + ord, objContentPc);	
+		objEditorArea.form.addChild("objContentPc" + ord, objContentPc);	
 		objContentPc.show();	
 		objContentPc.set_url(this.application.Namo);
 		objContentPc.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		
-		var objContentMo = new WebBrowser();
-		objContentMo.init("objContentMo" + ord, 0, 0, null, null, 0, 0);
-		objTab["MO"].form.addChild("objContentMo" + ord, objContentMo);	
-		objContentMo.show();	
-		objContentMo.set_url(this.application.Namo);
-		objContentMo.insertEventHandler("onusernotify", 0, this.fn_set_edit_body, this);
 		//에디터 추가
 		var editorObj = {
-			divPcObj : objContentPc,
-			divMoObj : objContentMo
+			divPcObj : objContentPc
 		}
 		this.editorArr.push(editorObj);
 		
@@ -2622,7 +2566,6 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
 		this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
 		this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
-		this.ds_content_list.setColumn(i, "mbilCont", this.fn_get_edit_body(this.editorArr[i].divMoObj));
 	}
 	
 	this.fn_save_validation();
