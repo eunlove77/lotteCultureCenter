@@ -6,7 +6,7 @@
         <Div id="Div00" taborder="0" text="Div00" left="0" top="0" width="370" height="50">
           <Layouts>
             <Layout>
-              <Button id="btnTalk01" taborder="3" text="알림톡" top="0" height="30" cssclass="btn_WF_Weak" width="80" right="280"/>
+              <Button id="btnTalk01" taborder="3" text="알림톡" top="0" height="30" cssclass="btn_WF_Weak" width="80" right="280" onclick="Div00_btnTalk01_onclick"/>
               <Button id="btnTalk02" taborder="0" text="친구톡" top="0" height="30" cssclass="btn_WF_Weak" width="80" onclick="Div00_btnTalk02_onclick" left="btnTalk01:10"/>
               <Button id="btnTalk03" taborder="1" text="안내메시지" top="0" height="30" cssclass="btn_WF_Weak" width="80" onclick="Div00_btnTalk03_onclick" left="btnTalk02:10"/>
               <Button id="btnTalk04" taborder="2" text="LMS" top="0" height="30" cssclass="btn_WF_Weak" width="80" onclick="Div00_btnTalk04_onclick" left="btnTalk03:10"/>
@@ -43,11 +43,13 @@ this.fn_init = function(talkObj)
  * 알림톡 버튼
  **************************************************************************/
 
-this.btnTalk01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div00_btnTalk01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
 	
-	if(this[this.dsId].rowcount > 0){	
+	
+	
+	if(this[dsId].rowcount > 0){
 		var oArg = {			
 			alrtClCd : "03"	
 		,	menuSeq : this.talkObj.menuId
@@ -118,6 +120,8 @@ this.Div00_btnTalk04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 	}else{
 		this.alert("수신 대상자를 선택해주세요.");
 	}
-};]]></Script>
+};
+
+]]></Script>
   </Form>
 </FDL>
