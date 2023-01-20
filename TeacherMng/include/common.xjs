@@ -330,21 +330,27 @@ this.fn_sesterInfo = function()
 this.fn_year_add = function() 
 {
 	this.ds_year_list.deleteAll();
-	var year = new nexacro.Date().getFullYear();
 
 	var tranObj = {
 		strSvcId : "getSesterYearList",
 		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
-		inData : "search=ds_search",
+		inData : "",
 		outData : "ds_year_list=yearList",
-		strArg : "",
+		strArg : "brchCd="+this.ds_search.getColumn(0, 'brchCd'),
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 		
 	}
 	this.gfn_transaction(tranObj);
-		
+	
+	var year = new nexacro.Date().getFullYear();
+	this.initYy = year;
+	if(this.yy != "")
+	{
+		year = nexacro.toNumber(this.yy);
+	}
+	
 	if(this.ds_year_list.getRowCount() == 0) {
 		this.ds_year_list.addRow();
 		this.ds_year_list.setColumn(0, "cd", year);
