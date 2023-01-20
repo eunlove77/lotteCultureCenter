@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="AfterLectureReviewDtl" width="1280" height="810" titletext="New Form" onload="AfterLectureReviewDtl_onload">
+  <Form id="AfterLectureReviewDtl" width="1280" height="810" titletext="수강후기상세" onload="AfterLectureReviewDtl_onload">
     <Layouts>
       <Layout height="810" width="1280">
         <Static id="txtMenuNm" taborder="0" text="수강후기상세" left="10" top="20" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -268,12 +268,6 @@
           <Row/>
         </Rows>
       </Dataset>
-      <Dataset id="ds_spot_list">
-        <ColumnInfo>
-          <Column id="cd" type="STRING" size="256"/>
-          <Column id="cdNm" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="ds_semester_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
@@ -332,7 +326,7 @@ this.AfterLectureReviewDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEven
 	//this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 
 	this.domain = this.application.Domain;
-  this.menuSeq = this.parent.menuSeq;
+	this.menuSeq = this.parent.menuSeq;
 
 	//상세페이지 키값 설정
 	this.ds_atlctrvw_dtl.copyRow(0,this.parent.ds, this.parent.key_row);
@@ -429,8 +423,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 this.set_info_dtl = function(){
 	//지점
 	var brchCd = this.ds_atlctrvw_dtl.getColumn(0, 'brchCd');
-	var row = this.ds_spot_list.findRow('cd', brchCd);
-	var brchNm = this.ds_spot_list.getColumn(row, 'cdNm');
+	var row = this.application.gdsSpotCdList.findRow('cd', brchCd);
+	var brchNm = this.application.gdsSpotCdList.getColumn(row, 'cdNm');
 	this.Div01.form.Div00.form.Div00.form.Static01.set_text(brchNm);
 	
 	//학기
