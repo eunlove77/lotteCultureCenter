@@ -7,26 +7,27 @@
         <Div id="Div00" taborder="1" text="Div00" left="0" top="21" height="65" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
-              <Div id="Div02" taborder="0" text="Div00" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div02" taborder="3" text="Div00" left="0" top="32" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Calendar id="strtDtm" taborder="1" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
+                    <Calendar id="strtDtm" taborder="2" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oncloseup="Div00_Div02_strtDtm_oncloseup"/>
                     <Static id="Static01" taborder="4" text="~" left="strtDtm:2" top="3" width="9" height="20"/>
-                    <Calendar id="endDtm" taborder="2" left="Static01:2" top="5" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
-                    <Button id="btnSearch" taborder="3" text="검색" left="endDtm:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div00_Div02_btnSearch_onclick"/>
+                    <Calendar id="endDtm" taborder="1" left="Static01:2" top="5" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oncloseup="Div00_Div02_endDtm_oncloseup"/>
+                    <Button id="btnSearch" taborder="3" text="검색" left="endDtm:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="none" width="80" onclick="Div00_Div02_btnSearch_onclick"/>
+                    <Button id="btnInit" taborder="5" text="초기화" top="5" height="21" cssclass="btn_WF_Weak" width="80" left="btnSearch:5" onclick="Div00_Div02_btnInit_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="1000" formscrolltype="none" minwidth="360" maxwidth="">
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="1000" formscrolltype="none" minwidth="360" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_brchCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="2" text="Div04" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+              <Div id="Div01" taborder="1" text="Div04" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" cssclass="sta_WF_TableLabel" bottom="0"/>
@@ -45,6 +46,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::lib_date.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -54,6 +56,7 @@ this.list_form = this.parent.parent.Div01.form;
 this.brchCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
+this.changeBrchYn = false;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -69,14 +72,6 @@ this.SmsterIncmTtlSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	this.fn_classBrch_set();
 	this.fn_sesterInfo();
 	this.ds_search.setColumn(0, "brchCd", "");
-	
-// 	var comboYyObj = this.Div00.form.Div01.form.yy;
-// 	
-// 	var data = new Date();
-// 	var strtYy = data.getFullYear() + 1;
-// 	var endYy = 2017
-// 	
-// 	this.gfn_set_year(this, comboYyObj, 2017, strtYy, "년도");	
 };
 
 this.Div00_Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -154,7 +149,13 @@ this.fn_year_add = function()
 	this.ds_year_list.setColumn(0, "cd", "");
 	this.ds_year_list.setColumn(0, "cdNm", "년도");
 	
-	this.ds_search.setColumn(0, "yy", "");
+	if(this.changeBrchYn){
+		this.ds_search.setColumn(0, "yy", year);
+	}else{
+		this.ds_search.setColumn(0, "yy", "");
+	}
+	
+	this.changeBrchYn = false;
 }
 
 // 트랜잭션 이후 콜백
@@ -196,12 +197,69 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			}
 		}
 		
-		//this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+		if(this.changeBrchYn){
+			this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+		}else{
+			this.ds_search.setColumn(0, "lectSmsterCd", undefined);
+		}
+		
 		this.fn_year_add();
 	
 		break;
   }
-};]]></Script>
+};
+
+// 초기화
+this.Div00_Div02_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 지점선택
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	this.fn_classBrch_set();
+	this.fn_sesterInfo();
+	this.ds_search.setColumn(0, "brchCd", "");
+	
+	this.ds_search.setColumn(0, "strtDtm", "");
+	this.ds_search.setColumn(0, "endDtm", "");
+	
+	this.list_form.ds_list.clearData();
+};
+
+this.Div00_Div02_strtDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div00.form.Div02.form.endDtm.value) == "" && this.gfnGetToDay() < obj.value){
+		this.Div00.form.Div02.form.strtDtm.set_value(this.gfnGetToDay());
+		obj.value = this.gfnGetToDay();
+	}
+	
+	if(this.gfn_nvl(this.Div00.form.Div02.form.endDtm.value) != "" && this.Div00.form.Div02.form.endDtm.value < obj.value)
+	{
+		obj.set_value(this.Div00.form.Div02.form.endDtm.value);
+	}
+};
+
+this.Div00_Div02_endDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfnGetToDay() < obj.value){
+		this.Div00.form.Div02.form.endDtm.set_value(this.gfnGetToDay());
+		obj.value = this.gfnGetToDay();
+	}
+
+	if(this.gfn_nvl(this.Div00.form.Div02.form.strtDtm.value) != "" && obj.value < this.Div00.form.Div02.form.strtDtm.value)
+	{
+		this.Div00.form.Div02.form.strtDtm.set_value(obj.value);
+	}
+};
+
+// 지점 변경
+this.Div00_Div00_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.changeBrchYn = true;
+	this.brchCd = obj.value;
+	this.fn_sesterInfo();
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_gdsSpotCd_list">
         <ColumnInfo>

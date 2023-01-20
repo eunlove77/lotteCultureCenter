@@ -492,6 +492,7 @@ this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 {
 	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00.form.Static01.text) != ""){
 		if(confirm("수강등록을 취소하시겠습니까? 입력된 내용은 초기화 됩니다.")){
+			this.Div00_Div01_Button00_onclick();
 			var oArg = {
 				_this : this
 				, type : 2
@@ -556,72 +557,76 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		alert("등록된 회원이 없습니다.");
 		return;
 	}else{
-		if(confirm("수강등록을 취소하시겠습니까? 입력된 내용은 초기화 됩니다.")){
-			this.Div00.form.Div01.form.Div00.form.Static01.set_text("");
-			this.Div00.form.Div01.form.Div00.form.Static03.set_text("");
-			this.Div00.form.Div01.form.Div00.form.Static05.set_text("");
-			this.Div00.form.Div01.form.Div01.form.Static01.set_text("");
-			this.Div00.form.Div01.form.Div01.form.Static03.set_text("");
-			
-			for(var i=0;i<this.ds_smster_list.getRowCount();i++){
-				if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
-					this.Div00.form.Div00.form.Div00.form.Combo01.set_index(i);
-					
-					//년도
-					this.removeChild("ds_yy_list");
-					var dsYyList = new Dataset();
-					dsYyList.name = "ds_yy_list";
-					dsYyList.addColumn("cd", "string", 256);
-					dsYyList.addColumn("cdNm", "string", 256);
-					
-					this.addChild("ds_yy_list", dsYyList);
-					
-					var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
-					this.ds_yy_list.set_enableevent(false);
-					for(var i=0;i<16;i++){
-						this.ds_yy_list.insertRow(i);
-						this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
-						this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
-					}
-					this.ds_yy_list.set_enableevent(true);
-					this.Div00.form.Div00.form.Div00.form.Combo00.setInnerDataset(this.ds_yy_list);
-					this.Div00.form.Div00.form.Div00.form.Combo00.set_codecolumn("cd");
-					this.Div00.form.Div00.form.Div00.form.Combo00.set_datacolumn("cdNm");
-					this.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
-				}
+		if(obj !== undefined && e !== undefined){
+			if(!confirm("수강등록을 취소하시겠습니까? 입력된 내용은 초기화 됩니다.")){
+				return;
 			}
-			
-			// 등급할인목록 초기화
-			this.Div00.form.Div03.form.Grid00.set_visible(false);
-			this.Div00.form.Div03.form.Static00.set_visible(false);
-			this.Div00.form.Div03.form.Button00.set_bottom();
-			this.Div00.form.Div03.form.Button00.set_top(0);
-			this.Div00.form.Div03.form.Button01.set_bottom();
-			this.Div00.form.Div03.form.Button01.set_top(0);
-			this.ds_tot_grde_list.clearData();
-			
-			// 강좌목록 초기화
-			this.ds_class_list.clearData();
-			
-			// 결제정보 초기화
-			this.Div00.form.Div04.set_visible(false);
-			this.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
-			this.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
-			this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
-			this.Div00.form.Div04.form.Static03.set_text("");
-			this.Div00.form.Div04.form.CheckBox00.set_value(0);
-			
-			this.Div00.form.Div04.set_height(80);
-			this.Div00.set_height(670);
-			this.resetScroll();
 		}
+		
+		this.Div00.form.Div01.form.Div00.form.Static01.set_text("");
+		this.Div00.form.Div01.form.Div00.form.Static03.set_text("");
+		this.Div00.form.Div01.form.Div00.form.Static05.set_text("");
+		this.Div00.form.Div01.form.Div01.form.Static01.set_text("");
+		this.Div00.form.Div01.form.Div01.form.Static03.set_text("");
+		
+		for(var i=0;i<this.ds_smster_list.getRowCount();i++){
+			if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
+				this.Div00.form.Div00.form.Div00.form.Combo01.set_index(i);
+				
+				//년도
+				this.removeChild("ds_yy_list");
+				var dsYyList = new Dataset();
+				dsYyList.name = "ds_yy_list";
+				dsYyList.addColumn("cd", "string", 256);
+				dsYyList.addColumn("cdNm", "string", 256);
+				
+				this.addChild("ds_yy_list", dsYyList);
+				
+				var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
+				this.ds_yy_list.set_enableevent(false);
+				for(var i=0;i<16;i++){
+					this.ds_yy_list.insertRow(i);
+					this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
+					this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
+				}
+				this.ds_yy_list.set_enableevent(true);
+				this.Div00.form.Div00.form.Div00.form.Combo00.setInnerDataset(this.ds_yy_list);
+				this.Div00.form.Div00.form.Div00.form.Combo00.set_codecolumn("cd");
+				this.Div00.form.Div00.form.Div00.form.Combo00.set_datacolumn("cdNm");
+				this.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
+			}
+		}
+		
+		// 등급할인목록 초기화
+		this.Div00.form.Div03.form.Grid00.set_visible(false);
+		this.Div00.form.Div03.form.Static00.set_visible(false);
+		this.Div00.form.Div03.form.Button00.set_bottom();
+		this.Div00.form.Div03.form.Button00.set_top(0);
+		this.Div00.form.Div03.form.Button01.set_bottom();
+		this.Div00.form.Div03.form.Button01.set_top(0);
+		this.ds_tot_grde_list.clearData();
+		
+		// 강좌목록 초기화
+		this.ds_class_list.clearData();
+		
+		// 결제정보 초기화
+		this.Div00.form.Div04.set_visible(false);
+		this.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
+		this.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
+		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Static03.set_text("");
+		this.Div00.form.Div04.form.CheckBox00.set_value(0);
+		
+		this.Div00.form.Div04.set_height(80);
+		this.Div00.set_height(670);
+		this.resetScroll();
 	}
 	
 };

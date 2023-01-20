@@ -21,7 +21,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_brchCd_onitemchanged"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_brchCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -38,7 +38,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌 구분" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="ClassGbCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" displaynulltext="선택" innerdataset="ds_lectClCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="ClassGbCd" taborder="1" text="Combo00" left="Static00:10" top="5" width="200" height="20" innerdataset="ds_lectClCd_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -46,9 +46,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" width="200" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="ClassCtgr00" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" type="dropdown" innerdataset="ds_lrclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm" displaynulltext="1Depth"/>
-                    <Combo id="ClassCtgr01" taborder="2" text="Combo01" left="ClassCtgr00:1" top="5" width="100" height="20" innerdataset="ds_mdclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm" displaynulltext="2Depth"/>
-                    <Combo id="ClassCtgr02" taborder="3" text="Combo01" left="ClassCtgr01:1" top="5" width="100" height="20" innerdataset="ds_smclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm" displaynulltext="3Depth"/>
+                    <Combo id="ClassCtgr00" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" type="dropdown" innerdataset="ds_lrclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="ClassCtgr01" taborder="2" text="Combo01" left="ClassCtgr00:1" top="5" width="100" height="20" innerdataset="ds_mdclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="ClassCtgr02" taborder="3" text="Combo01" left="ClassCtgr01:1" top="5" width="100" height="20" innerdataset="ds_smclsCtegryCd_list" codecolumn="cd" datacolumn="cdNm"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -57,7 +57,8 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌명" left="0" top="0" width="200" bottom="0" cssclass="sta_WF_TableLabel"/>
                     <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="500" height="20"/>
-                    <Button id="btnSearch" taborder="2" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="19" onclick="Div00_Div00_00_00_00_btnSearch_onclick"/>
+                    <Button id="btnInit" taborder="3" text="초기화" top="5" height="20" cssclass="btn_WF_Weak" right="10" width="100" onclick="Div00_Div00_00_00_00_btnInit_onclick"/>
+                    <Button id="btnSearch" taborder="2" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="btnInit:10" onclick="Div00_Div00_00_00_00_btnSearch_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -82,14 +83,13 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::lib_date.xjs";
 
 
 /**************************************************************************
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
-
-var parentFrm = this.parent.parent.parent.parent;
 
 this.brchCd = "";
 this.yy = "";
@@ -141,39 +141,41 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
   switch(svcID)
   {
 	case "dataList":
-		// 지점
-		this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
-		this.ds_brch_cd.insertRow(0);
-		this.ds_brch_cd.setColumn(0, "cd", "");
-		this.ds_brch_cd.setColumn(0, "cdNm", "전체");
-		this.ds_search.setColumn(0, "brchCd", "");
+		// 지점선택
+		this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+		this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+		//this.ds_gdsSpotCd_list.deleteRow(0);
+		this.fn_classBrch_set();
+		this.ds_search.setColumn(0, "brchCd", this.brchCd);
 		
 		// 학기
 		this.fn_sesterInfo();
 		
-		//년도
-		if(this.yy == ""){
-			this.yy = new nexacro.Date().getFullYear();
-		}
+		this.ds_search.setColumn(0, "brchCd", "");
 		
-		this.removeChild("ds_yy_list");
-		var dsYyList = new Dataset();
-		dsYyList.name = "ds_yy_list";
-		dsYyList.addColumn("cd", "string", 256);
-		dsYyList.addColumn("cdNm", "string", 256);
-
-		this.addChild("ds_yy_list", dsYyList);
-		this.ds_yy_list.set_enableevent(false);
-		for(var i=0;i<16;i++){
-			this.ds_yy_list.insertRow(i);
-			this.ds_yy_list.setColumn(i, "cd", (Number(this.yy) - i).toString());
-			this.ds_yy_list.setColumn(i, "cdNm", (Number(this.yy) - i) + "년");
-		}
-		this.ds_yy_list.set_enableevent(true);
-		this.Div00.form.Div01.form.yy.setInnerDataset(this.ds_yy_list);
-		this.Div00.form.Div01.form.yy.set_codecolumn("cd");
-		this.Div00.form.Div01.form.yy.set_datacolumn("cdNm");
-		this.Div00.form.Div01.form.yy.set_index(0);
+		// 강좌 구분
+		this.ds_lectClCd_list.insertRow(0);
+		this.ds_lectClCd_list.setColumn(0, "cd", "");
+		this.ds_lectClCd_list.setColumn(0, "cdNm", "선택");
+		this.ds_search.setColumn(0, "lectClCd", "");
+		
+		// 대분류
+		this.ds_lrclsCtegryCd_list.insertRow(0);
+		this.ds_lrclsCtegryCd_list.setColumn(0, "cd", "");
+		this.ds_lrclsCtegryCd_list.setColumn(0, "cdNm", "1Depth");
+		this.ds_search.setColumn(0, "lrclsCtegryCd", "");
+		
+		// 중분류
+		this.ds_mdclsCtegryCd_list.insertRow(0);
+		this.ds_mdclsCtegryCd_list.setColumn(0, "cd", "");
+		this.ds_mdclsCtegryCd_list.setColumn(0, "cdNm", "2Depth");
+		this.ds_search.setColumn(0, "mdclsCtegryCd", "");
+		
+		// 소분류
+		this.ds_smclsCtegryCd_list.insertRow(0);
+		this.ds_smclsCtegryCd_list.setColumn(0, "cd", "");
+		this.ds_smclsCtegryCd_list.setColumn(0, "cdNm", "3Depth");
+		this.ds_search.setColumn(0, "smclsCtegryCd", "");
 		
 		break;
 	case "sesterInfo":
@@ -220,6 +222,11 @@ this.Div00_Div00_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.Ite
 // 기간 시작일 선택
 this.Div00_Div04_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
 {
+	if(this.gfn_nvl(this.Div00.form.Div04.form.Calendar01.value) == "" && this.gfnGetToDay() < obj.value){
+		this.Div00.form.Div04.form.Calendar00.set_value(this.gfnGetToDay());
+		obj.value = this.gfnGetToDay();
+	}
+	
 	if(this.gfn_nvl(this.Div00.form.Div04.form.Calendar01.value) != "" && this.Div00.form.Div04.form.Calendar01.value < obj.value)
 	{
 		obj.set_value(this.Div00.form.Div04.form.Calendar01.value);
@@ -229,6 +236,11 @@ this.Div00_Div04_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.
 // 기간 종료일 선택
 this.Div00_Div04_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
 {
+	if(this.gfnGetToDay() < obj.value){
+		this.Div00.form.Div04.form.Calendar01.set_value(this.gfnGetToDay());
+		obj.value = this.gfnGetToDay();
+	}
+
 	if(this.gfn_nvl(this.Div00.form.Div04.form.Calendar00.value) != "" && obj.value < this.Div00.form.Div04.form.Calendar00.value)
 	{
 		this.Div00.form.Div04.form.Calendar00.set_value(obj.value);
@@ -294,14 +306,45 @@ this.fn_year_add = function()
 
 	this.ds_search.setColumn(0, "yy", year);
 }
+
+// 초기화
+this.Div00_Div00_00_00_00_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.fn_classBrch_set();
+	
+	this.fn_sesterInfo();
+	
+	this.ds_search.setColumn(0, "brchCd", "");
+	this.ds_search.setColumn(0, "lectClCd", "");
+	this.ds_search.setColumn(0, "lrclsCtegryCd", "");
+	this.ds_search.setColumn(0, "mdclsCtegryCd", "");
+	this.ds_search.setColumn(0, "smclsCtegryCd", "");
+	this.ds_search.setColumn(0, "strtDtm", "");
+	this.ds_search.setColumn(0, "endDtm", "");
+	this.ds_search.setColumn(0, "searchQuery", "");
+	
+	this.parent.parent.Div01.form.ds_atlct_status_sum_list.clearData();
+	this.parent.parent.Div02.form.ds_atlct_status_list.clearData();
+};
+
+//지점 세팅
+this.fn_classBrch_set = function()
+{	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+	}
+}
 ]]></Script>
     <Objects>
-      <Dataset id="ds_brch_cd">
-        <ColumnInfo>
-          <Column id="cd" type="STRING" size="256"/>
-          <Column id="cdNm" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="ds_smster_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
@@ -350,6 +393,12 @@ this.fn_year_add = function()
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_year_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
