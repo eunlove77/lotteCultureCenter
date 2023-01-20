@@ -217,6 +217,10 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+
+	var str = "cntrDt=" + this.Div00.form.Div00.form.Div00_00.form.Calendar01.value;
+	str += " rrno=" + this.ds_class_list.getColumn(0, "rrno") + " cntrBrchCd=" + nexacro.getPrivateProfile("brchCd");
+	
 	if(confirm("계약서를 생성하시겠습니까?"))
 	{
 		var tranObj = {
@@ -224,7 +228,7 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 			strSvcUrl : this.application.Admin_svc + "::class/insertClassContract.do",
 			inData : "classList=ds_class_list",
 			outData : "",
-			strArg : "cntrDt=" + this.Div00.form.Div00.form.Div00_00.form.Calendar01.value,
+			strArg : str,
 			callBackFnc : "fnCallback",
 			isAsync : false,
 			menuSeq : this.parent.menuSeq,
