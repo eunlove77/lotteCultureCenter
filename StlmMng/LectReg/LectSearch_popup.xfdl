@@ -118,7 +118,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	  if(errorCode != 0)
 	  {
-			if(svcID == "insert"){
+			if(svcID == "saveWait"){
 				if(errorCode == -1){
 					alert("강좌상태가 대기접수인 강좌만 대기자 등록이 가능합니다.");
 				}else if(errorCode == -2){
@@ -154,15 +154,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				}
 				
 				this.Div01.form.divLectReg.form.brchCd = this.Div01.form.divLectReg.form.ds_search.getColumn(0, "brchCd");
-				//this.Div01.form.divLectReg.form.fn_sesterInfo();
-				//this.Div01.form.divLectReg.form.fn_year_add();
 				
 				// 년도
 				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_value(this.yy);
-				//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00.set_readonly(true);
 				// 학기
 				this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_value(this.lectSmsterCd);
-				//this.Div01.form.divLectReg.form.Div00.form.Div00.form.Div00.form.Div00_00.form.Combo00_00.set_readonly(true);
 				
 				// 가족회원
 				var objCheckbox;
@@ -359,6 +355,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	// 새로 등록할 강좌 정보 가져옴
 	var lectStatCd, lectStDtm, lectEndDtm, lectStHhCd, lectStMiCd, lectEndHhCd, lectEndMiCd, stringStDaywNm;
 	var brchCd, yy, lectSmsterCd, lectCd, mvgDsplyUseYn, lectNm;
+	var optnSeqno, optnNm, optnAmt;
 	lectStatCd = this.ds_class_dtl.getColumn(0, "lectStatCd");
 	lectStDtm = this.ds_class_dtl.getColumn(0, "lectStDtm");
 	lectEndDtm = this.ds_class_dtl.getColumn(0, "lectEndDtm");
@@ -373,6 +370,9 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	lectCd = this.ds_class_dtl.getColumn(0, "lectCd");
 	mvgDsplyUseYn = this.ds_class_dtl.getColumn(0, "mvgDsplyUseYn");
 	lectNm = this.ds_class_dtl.getColumn(0, "lectNm");
+	optnSeqno = this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
+	optnNm = this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm");
+	optnAmt = this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
 	
 	// 기존 수강내역과 비교
 	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;	
@@ -595,6 +595,46 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
 				}
 				return;
+			}
+			
+			// 동일한 강좌의 서로 다른 옵션으로 수강등록하는 경우
+			if(brchCd == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
+				&& yy == this.opener.divWork.form.ds_class_list.getColumn(i, "yy")
+				&& lectSmsterCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")
+				&& lectCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
+				&& optnSeqno != this.opener.divWork.form.ds_class_list.getColumn(i, "optnSeqno")){
+				alert("강좌명: " + lectNm + "\n강좌 목록에 선택된 재료비/대여료 옵션과 동일해야 결제 하실 수 있습니다.");
+				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+					}
+				}
+				if(this.Div01.form.Div01.visible){
+					this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+				}
+				return;
+			}
+			
+			// 동일한 강좌의 동일한 실수강자가 있을때
+			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+				if(brchCd == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
+					&& yy == this.opener.divWork.form.ds_class_list.getColumn(i, "yy")
+					&& lectSmsterCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")
+					&& lectCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
+					&& arrActlAtlctNpleNm[j] == this.opener.divWork.form.ds_class_list.getColumn(i, "actlAtlctNpleNm")){
+					alert("강좌명: " + lectNm + "\n같은 강좌에 중복된 실수강자가 있어 결제 하실 수 없습니다.");
+					for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+						if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+							this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+						}
+					}
+					if(this.Div01.form.Div01.visible){
+						this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+						this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+					}
+					return;
+				}
 			}
 		}
 		
