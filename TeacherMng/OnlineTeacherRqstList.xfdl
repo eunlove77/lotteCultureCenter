@@ -11,7 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망지점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
+                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="130" height="20" innerdataset="ds_spot_list" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -40,10 +40,10 @@
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="450">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="희망분야" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="Combo00" taborder="1" text="" left="116" top="5" width="100" height="20" index="-1" value="-1" usesoftkeyboard="false" innerdataset="ds_classCtgyLarge_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="first_class_category_onchanged"/>
-                    <Combo id="Combo01" taborder="2" text="" left="226" top="5" width="100" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="second_class_category_onchanged"/>
-                    <Combo id="Combo02" taborder="3" text="" left="336" top="5" width="100" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
+                    <Static id="Static00" taborder="0" text="희망분야" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                    <Combo id="Combo00" taborder="1" text="" left="116" top="5" width="130" height="20" index="-1" value="-1" usesoftkeyboard="false" innerdataset="ds_classCtgyLarge_list" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div02_Div00_Combo00_onitemchanged"/>
+                    <Combo id="Combo01" taborder="2" text="" left="Combo00:5" top="5" width="130" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="Div02_Div00_Combo01_onitemchanged"/>
+                    <Combo id="Combo02" taborder="3" text="" left="Combo01:5" top="5" width="130" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -95,8 +95,7 @@
               <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
               <Button id="btnReset" taborder="4" text="초기화" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="79" onclick="reset_search_form"/>
               <Button id="btnSearch" taborder="3" text="검색" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div05_btnSearch_onclick" right="btnReset:5" width="80"/>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" left="221" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
-              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" width="100">
+              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" width="130">
                 <Dataset id="innerdataset">
                   <ColumnInfo>
                     <Column id="codecolumn" size="256"/>
@@ -122,6 +121,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:5" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -277,6 +277,23 @@ this.set_dynamic_checkbox = function()
 	//클릭 이벤트 추가
 	this.com_fn_click_add(this);
 }
+/**************************************************************************
+ * 카테고리 분류 영역 변경
+ **************************************************************************/
+ this.Div02_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	//대분류
+	var mdObj = this.Div02.form.Div00.form.Combo01;
+	var smObj = this.Div02.form.Div00.form.Combo02;
+	this.com_fn_classCtgyLarge_chg(obj, mdObj, smObj);
+};
+
+this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	//중분류
+	var smObj = this.Div02.form.Div00.form.Combo02;
+	this.com_fn_classCtgyMiddle_chg(obj, smObj);
+};
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
