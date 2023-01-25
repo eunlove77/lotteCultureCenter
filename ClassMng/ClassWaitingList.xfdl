@@ -12,19 +12,21 @@
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="132" height="31" cssclass="sta_WF_TableLabel" border="0px none" textAlign="center" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
                     <Static id="Static00_00" taborder="1" text="연도/학기" left="132" top="0" width="182" height="31" cssclass="sta_WF_TableLabel" border="0px none" textAlign="center" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
                     <Static id="Static00_00_00" taborder="2" text="강좌코드" left="314" top="0" width="132" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
-                    <Static id="Static00_00_00_00" taborder="3" text="강좌명" left="446" top="0" width="282" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
-                    <Static id="Static00_00_00_00_00" taborder="4" text="강의기간" left="728" top="0" width="212" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static00_00_00_00" taborder="3" text="강좌명" left="446" top="0" width="192" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static00_00_00_00_00" taborder="4" text="강의기간" left="798" top="0" width="142" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static00_00_00_00_00_00" taborder="5" text="수강/정원" left="1050" top="0" height="31" cssclass="sta_WF_TableLabel" border="0px none" width="100" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static00_00_00_00_00_00_00" taborder="6" text="대기자" left="1150" top="0" height="31" cssclass="sta_WF_TableLabel" border="0px none" right="0" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static08" taborder="7" left="0" top="30" width="132" height="31" border="0px none" textAlign="center"/>
                     <Static id="Static09" taborder="8" left="132" top="30" width="182" height="31" border="0px none" textAlign="center"/>
                     <Static id="Static10" taborder="9" left="314" top="30" width="132" height="31" border="0px none" textAlign="center"/>
-                    <Static id="Static11" taborder="10" left="446" top="30" width="282" height="31" border="0px none" textAlign="center"/>
-                    <Static id="Static12" taborder="11" left="728" top="30" width="212" height="31" border="0px none" textAlign="center"/>
+                    <Static id="Static11" taborder="10" left="446" top="30" width="192" height="31" border="0px none" textAlign="center"/>
+                    <Static id="Static12" taborder="11" left="798" top="30" width="142" height="31" border="0px none" textAlign="center"/>
                     <Static id="Static14" taborder="12" left="1050" top="30" height="31" border="0px none" width="100" textAlign="center"/>
                     <Static id="Static15" taborder="13" left="1150" top="30" height="31" border="0px none" right="0" textAlign="center"/>
                     <Static id="Static00_00_00_00_00_01" taborder="14" text="강의시작시간" left="940" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static13" taborder="15" left="940" top="30" width="110" height="31" border="0px none" textAlign="center"/>
+                    <Static id="Static00_00_00_00_01" taborder="16" text="강좌옵션" left="638" top="0" width="160" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static16" taborder="17" left="638" top="30" width="160" height="31" border="0px none" textAlign="center"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -76,7 +78,7 @@
                       <Cell col="13" text="접수채널"/>
                     </Band>
                     <Band id="body">
-                      <Cell edittype="expr:dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;31&quot; || dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;41&quot; || dataset.getColumn(currow, &quot;fmlyRelCd&quot;) != &quot;00&quot; ? &quot;none&quot; : &quot;checkbox&quot;" displaytype="expr:dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;31&quot; || dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;41&quot; || dataset.getColumn(currow, &quot;fmlyRelCd&quot;) != &quot;00&quot; ? &quot;none&quot; : &quot;checkboxcontrol&quot;" text="expr:dataset.checkarray[currow]"/>
+                      <Cell edittype="expr:dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;31&quot; || dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;41&quot; || (currow != 0 &amp;&amp; dataset.getColumn(currow-1, &quot;atlctRsvNo&quot;) == dataset.getColumn(currow, &quot;atlctRsvNo&quot;) &amp;&amp; dataset.getColumn(currow, &quot;fmlyRelCd&quot;) != &quot;00&quot;) ? &quot;none&quot; : &quot;checkbox&quot;" displaytype="expr:dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;31&quot; || dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;41&quot; || (currow != 0 &amp;&amp; dataset.getColumn(currow-1, &quot;atlctRsvNo&quot;) == dataset.getColumn(currow, &quot;atlctRsvNo&quot;) &amp;&amp; dataset.getColumn(currow, &quot;fmlyRelCd&quot;) != &quot;00&quot;) ? &quot;none&quot; : &quot;checkboxcontrol&quot;" text="expr:dataset.checkarray[currow]"/>
                       <Cell col="1" text="expr:currow + 1"/>
                       <Cell col="2" text="bind:brchCdNm"/>
                       <Cell col="3" text="bind:mbrNo"/>
@@ -194,6 +196,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div00.form.Div00.form.Static13.set_text(this.ds_class_dtl.getColumn(0, "lectStHhCd") + ":" + this.ds_class_dtl.getColumn(0, "lectStMiCd"));
 			this.Div00.form.Div00.form.Static14.set_text(this.ds_cnt.getColumn(0, "atlctCnt") + "/" + this.ds_class_dtl.getColumn(0, "gsCapaCnt"));
 			this.Div00.form.Div00.form.Static15.set_text(this.ds_cnt.getColumn(0, "waitCnt"));
+			this.Div00.form.Div00.form.Static16.set_text(this.ds_class_dtl.getColumn(0, "lectAddOptnNm"));
 			
 			this.Div00.form.Static01.set_text("("+ this.totCnt +"개)");
 			
@@ -541,6 +544,7 @@ this.Div00_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="lectClosedRsnNm" type="STRING" size="256"/>
           <Column id="lectClosedRfndCndtNm" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_waiting_list">

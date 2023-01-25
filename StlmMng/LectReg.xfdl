@@ -425,7 +425,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			break;
 		case "payment":
-		
 			// 에러
 			if(this.ds_err_info.getRowCount() > 0){
 				if(this.ds_err_info.getColumn(0, "errCd") == "CAPA_CNT"){
@@ -1044,6 +1043,7 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		this.ds_payment_param.setColumn(0, "posRcptNo", posRcptNo);
 		this.ds_payment_param.set_enableevent(true);
 	
+		this.ds_err_info.clearData();
 		var strSvcId    = "payment";
 		var strSvcUrl   = this.application.Admin_svc + "::lectReg/payment.do";
 		var inData      = "classList=this.ds_class_list paymentParam=this.ds_payment_param mbrParam=this.ds_member_info";
