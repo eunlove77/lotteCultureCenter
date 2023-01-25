@@ -3,7 +3,7 @@
   <Form id="TeacherDtl" width="1280" height="1950" titletext="강사 상세" onload="TeacherDtl_onload">
     <Layouts>
       <Layout height="1950" mobileorientation="landscape" width="1280">
-        <Div id="Div01" taborder="0" text="Div01" left="10" top="131" height="381" right="10" minwidth="930" maxwidth="">
+        <Div id="Div01" taborder="0" text="Div01" left="10" top="131" height="405" right="10" minwidth="930" maxwidth="">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" left="0" top="0" width="80" height="21" text="기본정보"/>
@@ -129,11 +129,13 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div06" taborder="9" text="Div01" left="Div00:0" top="Div05:0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="660" maxwidth="">
+              <Div id="Div06" taborder="9" text="Div01" left="Div00:0" top="Div05:0" height="60" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="660" maxwidth="">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="주소 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" right="10" bottom="5" maxlength="200"/>
+                    <Static id="Static00" taborder="0" text="주소 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Edit id="Edit01" taborder="1" left="130" top="5" width="152" height="21" displaynulltext="우편번호" maxlength="5" inputtype="number"/>
+                    <Edit id="Edit00" taborder="2" left="Edit01:5" right="10" maxlength="100" bottom="32" height="21" displaynulltext="주소"/>
+                    <Edit id="Edit02" taborder="3" left="130" height="21" bottom="5" right="10" displaynulltext="상세 주소" maxlength="100"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -1495,7 +1497,8 @@ this.validate_teacher_basic = function(){
 	}
 	var vali_arr = [
 		['tcNm', tcNm], ['hpStNo', '휴대전화를'], ['hpMidNo', '휴대전화를'], ['hpLastNo', '휴대전화를'],
-		bday, ['addr', '주소를'], ['prinfClctAgrYn', '개인정보 수집 제공 동의를']
+		bday, ['pstno', '우편번호를'], ['addr', '주소를'], ['dtlAddr', '상세 주소를'],
+		['prinfClctAgrYn', '개인정보 수집 제공 동의를']
 	]
 	
 	for(var vali of vali_arr){
@@ -2177,6 +2180,8 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
       <BindItem id="item21" compid="Div01.form.Div05.form.Div00.form.Edit00_00" propid="value" datasetid="ds_teacher_info" columnid="emailAddrCd"/>
       <BindItem id="item26" compid="Div01.form.Div04.form.Div00.form.Radio00" propid="value" datasetid="ds_teacher_info" columnid="lscCd"/>
       <BindItem id="item0" compid="Div01.form.Div00.form.ImageViewer00" propid="image" datasetid="ds_teacher_info" columnid="webPath"/>
+      <BindItem id="item3" compid="Div01.form.Div06.form.Edit01" propid="value" datasetid="ds_teacher_info" columnid="pstno"/>
+      <BindItem id="item27" compid="Div01.form.Div06.form.Edit02" propid="value" datasetid="ds_teacher_info" columnid="dtlAddr"/>
     </Bind>
   </Form>
 </FDL>
