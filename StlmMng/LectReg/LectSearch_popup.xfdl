@@ -128,7 +128,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				}else{
 					this.alert(errorCode+"\n"+errorMsg);
 				}
-				this.ds_waiting_list.clearData();
 			}else{
 				this.alert(errorCode+"\n"+errorMsg);
 			}
@@ -585,6 +584,20 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
 			if(brchCd != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
 				alert("같은 지점의 강좌만 선택 가능합니다.");
+				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+					}
+				}
+				if(this.Div01.form.Div01.visible){
+					this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+				}
+				return;
+			}
+			
+			if(yy != this.opener.divWork.form.ds_class_list.getColumn(i, "yy") || lectSmsterCd != this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")){
+				alert("동일 학기의 강좌만 수강신청 하실 수 있습니다.");
 				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
 						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
