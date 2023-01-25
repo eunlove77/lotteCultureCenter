@@ -30,8 +30,8 @@
                     <CheckBox id="chkAcumUseAll" taborder="1" text="전체" left="Static00:10" top="5" width="50" height="20" onclick="Div00_Div02_chkAcumUseAll_onclick"/>
                     <CheckBox id="chkUse" taborder="2" text="사용" left="chkAcumUseAll:10" top="5" width="50" height="20" onclick="fn_checkbox_click"/>
                     <CheckBox id="chkAcum" taborder="3" text="적립" left="chkUse:10" top="5" width="50" height="20" onclick="fn_checkbox_click"/>
-                    <CheckBox id="chkAcum00" taborder="4" text="적립취소" left="chkAcum:10" top="5" width="70" height="20"/>
-                    <CheckBox id="chkAcum00_00" taborder="5" text="사용취소" left="chkAcum00:10" top="5" width="70" height="20"/>
+                    <CheckBox id="chkAcumCncl" taborder="4" text="적립취소" left="chkAcum:10" top="5" width="70" height="20"/>
+                    <CheckBox id="chkUseCncl" taborder="5" text="사용취소" left="chkAcumCncl:10" top="5" width="70" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -127,9 +127,11 @@ this.Div00_Div03_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	this.fn_classBrch_set();
 	this.Div00.form.Div01.form.brchCd.set_index(0);
 	
-	this.Div00.form.Div02.form.chkAcumUseAll.set_value(1);
-	this.Div00.form.Div02.form.chkUse.set_value(1);
-	this.Div00.form.Div02.form.chkAcum.set_value(1);
+	this.Div00.form.Div02.form.chkAcumUseAll.set_value(0);
+	this.Div00.form.Div02.form.chkUse.set_value(0);
+	this.Div00.form.Div02.form.chkAcum.set_value(0);
+	this.Div00.form.Div02.form.chkUseCncl.set_value(0);
+	this.Div00.form.Div02.form.chkAcumCncl.set_value(0);
 	this.Div00.form.Div03.form.searchField.set_index(0);
 	this.Div00.form.Div03.form.searchQuery.set_value('');
 	
@@ -152,11 +154,15 @@ this.Div00_Div02_chkAcumUseAll_onclick = function(obj:nexacro.CheckBox,e:nexacro
 	{
 		obj.parent.chkUse.set_value(1);
 		obj.parent.chkAcum.set_value(1);
+		obj.parent.chkUseCncl.set_value(1);
+		obj.parent.chkAcumCncl.set_value(1);
 	}
 	else
 	{
 		obj.parent.chkUse.set_value(0);
 		obj.parent.chkAcum.set_value(0);
+		obj.parent.chkUseCncl.set_value(0);
+		obj.parent.chkAcumCncl.set_value(0);
 	}
 };
 
@@ -170,6 +176,8 @@ this.fn_set_checkbox_value = function(value){
 	this.Div00.form.Div02.form.chkAcumUseAll.set_value(value);
 	this.Div00.form.Div02.form.chkUse.set_value(value);
 	this.Div00.form.Div02.form.chkAcum.set_value(value);
+	this.Div00.form.Div02.form.chkUseCncl.set_value(value);
+	this.Div00.form.Div02.form.chkAcumCncl.set_value(value);
 }
 
 this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
