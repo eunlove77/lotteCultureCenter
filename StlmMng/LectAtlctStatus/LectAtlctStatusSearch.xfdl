@@ -144,7 +144,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		// 지점선택
 		this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 		this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-		//this.ds_gdsSpotCd_list.deleteRow(0);
+		if(nexacro.getPrivateProfile("brchCd") == "0000"){
+			this.ds_gdsSpotCd_list.deleteRow(0);
+		}
 		this.fn_classBrch_set();
 		this.ds_search.setColumn(0, "brchCd", this.brchCd);
 		
@@ -250,6 +252,7 @@ this.Div00_Div04_Calendar01_oncloseup = function(obj:nexacro.Calendar,e:nexacro.
 // 검색 버튼
 this.Div00_Div00_00_00_00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	//this.ds_search.setColumn(0, "yy", null);
 	//this.ds_search.setColumn(0, "lectSmsterCd", null);
 	this.parent.parent.fn_list();
@@ -312,6 +315,9 @@ this.Div00_Div00_00_00_00_btnInit_onclick = function(obj:nexacro.Button,e:nexacr
 {
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	if(nexacro.getPrivateProfile("brchCd") == "0000"){
+		this.ds_gdsSpotCd_list.deleteRow(0);
+	}
 	this.fn_classBrch_set();
 	
 	this.fn_sesterInfo();

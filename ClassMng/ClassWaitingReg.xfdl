@@ -187,7 +187,6 @@ this.init_grid = function()
 	this.ds_class_list.addColumn("optnNm", "string", "256");
 	this.ds_class_list.addColumn("optnAmt", "string", "256");
 	this.ds_class_list.addColumn("partRfndPsblYn", "string", "256");
-	trace(this.ds_class_list.getColumn(0, "lectAddOptnNm"));
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.application.Admin_svc + "::class/selectWaitingDataList.do",
@@ -322,11 +321,11 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 	if(e.col == 9){
 		this.ds_class_list.set_enableevent(false);
 		for(var i=0;i<this.ds_optn_list.getRowCount();i++){
-			if(e.value == this.ds_optn_list.getColumn(i, "optnSeqno")){
+			if(e.value == Number(this.ds_optn_list.getColumn(i, "optnSeqno"))){
 				this.ds_class_list.setColumn(e.row, "optnSeqno", this.ds_optn_list.getColumn(i, "optnSeqno"));
-				this.ds_class_list.setColumn(e.row, "optnNm", this.ds_optn_list.getColumn(i, "optnNm"));
-				this.ds_class_list.setColumn(e.row, "optnAmt", this.ds_optn_list.getColumn(i, "optnAmt"));
-				this.ds_class_list.setColumn(e.row, "partRfndPsblYn", this.ds_optn_list.getColumn(i, "partRfndPsblYn"));
+ 				this.ds_class_list.setColumn(e.row, "optnNm", this.ds_optn_list.getColumn(i, "optnNm"));
+ 				this.ds_class_list.setColumn(e.row, "optnAmt", this.ds_optn_list.getColumn(i, "optnAmt"));
+ 				this.ds_class_list.setColumn(e.row, "partRfndPsblYn", this.ds_optn_list.getColumn(i, "partRfndPsblYn"));
 			}
 		}
 		this.ds_class_list.set_enableevent(true);
@@ -417,8 +416,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="optnUseYn" type="STRING" size="256"/>
-          <Column id="optnSeqno" type="STRING" size="256"/>
-          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="optnTypCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
@@ -457,6 +455,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_optn_list">

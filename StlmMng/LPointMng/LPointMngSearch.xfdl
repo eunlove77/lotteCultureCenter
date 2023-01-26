@@ -98,7 +98,9 @@ this.LPointMngSearch_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	// 지점선택
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	this.ds_gdsSpotCd_list.deleteRow(0);
+	if(nexacro.getPrivateProfile("brchCd") == "0000"){
+		this.ds_gdsSpotCd_list.deleteRow(0);
+	}
 	this.fn_classBrch_set();
 	this.Div00.form.Div01.form.brchCd.set_index(0);
 	
@@ -123,7 +125,9 @@ this.Div00_Div03_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	// 지점선택
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	this.ds_gdsSpotCd_list.deleteRow(0);
+	if(nexacro.getPrivateProfile("brchCd") == "0000"){
+		this.ds_gdsSpotCd_list.deleteRow(0);
+	}
 	this.fn_classBrch_set();
 	this.Div00.form.Div01.form.brchCd.set_index(0);
 	

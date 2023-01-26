@@ -349,11 +349,13 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.Button03.set_visible(true);
 	this.Button04.set_visible(true);
 	
-	this.Div02.form.Div01.form.Edit00.set_readonly(false);
-	
-	// 재료비/대여료가 있으면 활성화 
-	if(this.ds_update_info.getColumn(0, "optnUseYn") == "Y"){
-		this.Div02.form.Div03.form.Edit00.set_readonly(false);
+	if(this.Div00.form.Div00.form.Combo00.value != "0"){
+		this.Div02.form.Div01.form.Edit00.set_readonly(false);
+		
+		// 재료비/대여료가 있으면 활성화 
+		if(this.ds_update_info.getColumn(0, "optnUseYn") == "Y"){
+			this.Div02.form.Div03.form.Edit00.set_readonly(false);
+		}
 	}
 	
 // 	this.oldLectAmt = this.Div02.form.Div01.form.Edit00.value;
@@ -417,10 +419,10 @@ this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	if(confirm("저장하시겠습니까?")){
 		// 취소(환불) 예정 금액 업데이트
-		this.ds_update_info.setColumn(0, "lectAmtFee", this.gfn_setComma(gsRfndScheAmt - rfndScheLectAmt) + "원");
-		this.ds_update_info.setColumn(0, "addAmtFee", this.gfn_setComma(gsRfndAmtFee - rfndScheAddAmt) + "원");
-		this.ds_update_info.setColumn(0, "gsRfndScheAmt", this.gfn_setComma(Number(rfndScheLectAmt) + Number(rfndScheAddAmt)) + "원");
-		this.ds_update_info.setColumn(0, "gsRfndAmtFee", this.gfn_setComma(gsRfndScheAmt - rfndScheLectAmt + gsRfndAmtFee - rfndScheAddAmt) + "원");
+// 		this.ds_update_info.setColumn(0, "lectAmtFee", this.gfn_setComma(gsRfndScheAmt - rfndScheLectAmt) + "원");
+// 		this.ds_update_info.setColumn(0, "addAmtFee", this.gfn_setComma(gsRfndAmtFee - rfndScheAddAmt) + "원");
+// 		this.ds_update_info.setColumn(0, "gsRfndScheAmt", this.gfn_setComma(Number(rfndScheLectAmt) + Number(rfndScheAddAmt)) + "원");
+// 		this.ds_update_info.setColumn(0, "gsRfndAmtFee", this.gfn_setComma(gsRfndScheAmt - rfndScheLectAmt + gsRfndAmtFee - rfndScheAddAmt) + "원");
 		
 		this.Div02.form.Div01.form.Edit00.set_readonly(true);
 		this.Div02.form.Div03.form.Edit00.set_readonly(true);
