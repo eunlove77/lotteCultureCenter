@@ -144,7 +144,7 @@
                 <Column size="120"/>
                 <Column size="120"/>
                 <Column size="120"/>
-                <Column size="120"/>
+                <Column size="150"/>
                 <Column size="120"/>
                 <Column size="200"/>
               </Columns>
@@ -248,7 +248,7 @@ this.set_dataset = function(){
 	var ds_codes_list = [
 		{ds : this.ds_day_cdList,		cd: "'008'"},	//요일
 		{ds : this.ds_tcTp_list,		cd: "'127'"},	//강사유형
-		{ds : this.ds_emailAddr_cdList,cd: "'CODE_80'"},	//이메일주소
+		{ds : this.ds_emailAddr_cdList, cd: "'003'"},	//이메일주소
 	];
 	//코드 데이터셋 설정
 	this.com_set_code_dataset(ds_codes_list);
@@ -381,25 +381,19 @@ this.reset_search_form = function(){
 this.process_teacher_list = function(){
 
 	for(var i = 0; i < this.ds_teacher_list.rowcount; i++){
-		//이메일
-		var email = this.ds_teacher_list.getColumn(i, 'email');
-		var emailAddrCd = this.ds_teacher_list.getColumn(i, 'emailAddrCd');
-    email += '@' + emailAddr;
-    this.ds_teacher_list.setColumn(i, 'email', email);
-		
-		//희망요일
-		var hopeDaywVal = this.ds_teacher_list.getColumn(i, 'hopeDaywVal');
-		if(hopeDaywVal){
-			var rtnStr = "", comma = "";
-			var arr = hopeDaywVal.split(",");
+		//hopeDaywVal 파싱
+		var str = this.ds_teacher_list.getColumn(i, "hopeDaywVal");
+		if(str){
+			var arr = str.split(",");
+			var resStr = "", comma = "";
 			for(var item of arr){
-				var row = this.ds_day_cdList.findRow('cd', item);
-				var dayNm = this.ds_day_cdList.getColumn(row, 'cdNm');
-				rtnStr += comma + dayNm;
+				row = this.ds_day_cdList.findRow("cd", item);
+				var dayNm = this.ds_day_cdList.getColumn(row, "cdNm");
+				resStr += comma + dayNm;
 				comma = ",";
 			}
+			this.ds_teacher_list.setColumn(i, "hopeDaywVal", resStr);
 		}
-		this.ds_teacher_list.setColumn(i, 'hopeDaywVal', rtnStr);
 	}
 	
 }
