@@ -45,7 +45,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원 등급 " left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="257"/>
+                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="99" fittocontents="none"/>
+                    <Static id="Static01_00" taborder="2" text="" left="Static01:10" top="0" bottom="0" width="193" fittocontents="none" expr="comp.text == 'Y' ? '(멤버스 가족회원)' : ''"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -61,7 +62,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="기존회원 소속지점" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="490"/>
+                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="490" onclick="Div01_Div06_Static01_onclick" wordWrap="english"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -209,10 +210,20 @@ this.fn_set_detail = function()
 		this.Div01.form.Div00.form.Edit00.set_readonly(false); //이름 수정 가능
 	}
 	
-	var mdfNm = this.gfn_isNull(this.ds_detail.getColumn(0, "mdfNm")) ? "" : "(" + this.ds_detail.getColumn(0, "mdfNm") + ")";
-	var mdfInfo = this.ds_detail.getColumn(0, "mdfId") + mdfNm;
+	if(this.gfn_isNull(this.ds_detail.getColumn(0, "mdfId")))
+	{
+		this.Div00.set_visible(false)
+	}
+	else
+	{
+		var mdfNm = this.gfn_isNull(this.ds_detail.getColumn(0, "mdfNm")) ? "" : "(" + this.ds_detail.getColumn(0, "mdfNm") + ")";
+		var mdfInfo = this.ds_detail.getColumn(0, "mdfId") + mdfNm;
+		
+		this.Div00.form.Div02.form.Static01.set_text(mdfInfo);
+	}
 	
-	this.Div00.form.Div02.form.Static01.set_text(mdfInfo);
+	this.Div01.form.Div04.form.Static01.set_fittocontents("width");
+	this.Div01.form.Div04.form.Static01_00.set_left("Static01:10");
 }
 
 this.fn_save = function(){
@@ -312,7 +323,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 
-};]]></Script>
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_detail">
         <ColumnInfo>
@@ -321,9 +333,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
           <Column id="mbrGrdeCdNm" type="STRING" size="256"/>
+          <Column id="lpntFmlyYn" type="STRING" size="256"/>
           <Column id="dcCnt" type="STRING" size="256"/>
           <Column id="membCustNo" type="STRING" size="256"/>
           <Column id="mvgBlstrCdNm" type="STRING" size="256"/>
+          <Column id="exStrCdNm" type="STRING" size="256"/>
           <Column id="joinCorsCdNm" type="STRING" size="256"/>
           <Column id="joinDtm" type="STRING" size="256"/>
           <Column id="lastLoginDtm" type="STRING" size="256"/>
@@ -355,6 +369,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="item10" compid="Div00.form.Div03.form.Static01" propid="text" datasetid="ds_detail" columnid="mdfDtm"/>
       <BindItem id="item0" compid="Div01.form.Div00.form.Edit00" propid="value" datasetid="ds_detail" columnid="korNm"/>
       <BindItem id="item11" compid="Div01.form.Div05_00.form.Static01" propid="text" datasetid="ds_detail" columnid="dcCnt"/>
+      <BindItem id="item12" compid="Div01.form.Div06.form.Static01" propid="text" datasetid="ds_detail" columnid="exStrCdNm"/>
+      <BindItem id="item13" compid="Div01.form.Div04.form.Static01_00" propid="text" datasetid="ds_detail" columnid="lpntFmlyYn"/>
     </Bind>
   </Form>
 </FDL>
