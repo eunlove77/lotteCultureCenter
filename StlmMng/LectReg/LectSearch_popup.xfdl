@@ -217,8 +217,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				break;
 			case "saveWait":
 				alert("등록 되었습니다.");
-				this.opener.divWork.form.Div00_Div01_Button00_onclick();
-				this.close();
+				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+					}
+				}
+				if(this.Div01.form.Div01.visible){
+					this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+				}
 				break;
 		  }
 	  }
@@ -325,6 +332,7 @@ this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 // 저장 버튼
 this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	var actlAtlctCnt = 0;
 	var fmlyChkYn = false;
 	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlyRelCdNm = [], arrBday = [];
 	for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
@@ -335,6 +343,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			arrFmlyRelCd.push(this.ds_fmly_list.getColumn(i, "fmlyRelCd"));
 			arrFmlyRelCdNm.push(this.ds_fmly_list.getColumn(i, "fmlyRelCdNm"));
 			arrBday.push(this.ds_fmly_list.getColumn(i, "bday"));
+			actlAtlctCnt++;
 		}
 	}
 	
@@ -434,7 +443,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04") && overlapYn){
 		// 기존 결제내역의 강좌와 시간이 겹치는경우
-		if(!confirm("강의시간이 중복되는 강좌가 있습니다. 그래도 결제하시겠습니까?")){
+		if(!confirm("강의기간(시간, 요일)이 중복되는 강좌가 있습니다. 그래도 결제하시겠습니까?")){
 			return;
 		}
 	}
@@ -460,6 +469,21 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	};
 	
 	this.gfn_transaction(tranObj);
+	
+	// 인원 수 체크
+	if(Number(this.ds_class_dtl.getColumn(0, "lectNbcnt")) < actlAtlctCnt + Number(this.ds_stlm_list.getRowCount())){
+		alert("강좌명 : " + lectNm + "\n접수 불가 강좌가 있어 결제 하실 수 없습니다.");
+		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+			}
+		}
+		if(this.Div01.form.Div01.visible){
+			this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
+			this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
+		}
+		return;
+	}
 	
 	// 기존회원접수 기간에 기존회원이 아닌사람이 접수하는경우
 	if(lectStatCd == "02" && this.existMemberYn == "N"){
@@ -515,7 +539,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 				if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
 					&& this.ds_stlm_list.getColumn(i, "sexCd") == arrSexCd[j]
 					&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
-					&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
+					&& this.ds_stlm_list.getColumn(i, "bday") == arrBday[j]){
 					stlmYn = true;
 					arrStlmActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
 				}
@@ -743,6 +767,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
           <Column id="sexCd" type="STRING" size="256"/>
           <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_wit_list">
