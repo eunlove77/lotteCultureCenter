@@ -77,7 +77,7 @@
         <Div id="Div01" taborder="1" text="Div02" left="10" top="Div00:20" right="10" minwidth="680" maxwidth="" bottom="60">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_app_list" autofittype="none" right="0" bottom="0" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" oncellclick="Div01_Grid00_oncellclick">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_app_list" autofittype="none" right="0" bottom="0" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" oncellclick="Div01_Grid00_oncellclick" cellsizingtype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -138,7 +138,7 @@
                       <Cell col="12" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                       <Cell col="13" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
                       <Cell col="14" text="expr:wdwYn == 'Y' ? 'O' : recpYn == 'Y' ? '회수' : '취소'" displaytype="expr:wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:wdwYn == 'Y' ? 'none' : 'button'" cssclass="gridBtn_Weak"/>
-                      <Cell col="15" expr="wdwYn == 'Y' ? wdwChrgprNm +'(' +wdwChrgprId + ')' : ''"/>
+                      <Cell col="15" expr="wdwYn == 'Y' &amp;&amp; wdwChrgprId  ? wdwChrgprNm +'(' +wdwChrgprId + ')' : ''"/>
                       <Cell col="16" text="bind:wdwDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
                     </Band>
                   </Format>

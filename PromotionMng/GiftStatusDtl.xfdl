@@ -163,12 +163,17 @@ this.fn_detail = function ()
 
 this.fn_set_detail = function()
 {
+	var onlnStkCnt = this.ds_detail.getColumn(0, "onlnStkCnt");
+	var oflnStkCnt = this.ds_detail.getColumn(0, "oflnStkCnt");
+	var onlnAppCnt = this.ds_detail.getColumn(0, "onlnAppCnt");
+	var oflnAppCnt = this.ds_detail.getColumn(0, "oflnAppCnt");
+
 	//이름(아이디)
 	this.Div00.form.Div00.form.Static01.set_text(this.ds_detail.getColumn(0, "appMbrNm") + "("+this.ds_detail.getColumn(0, "appMbrId")+")");
 	//온라인 재고
-	this.Div02.form.Div02.form.Static02.set_text(this.ds_detail.getColumn(0, "onlnAppCnt") + " / "+this.ds_detail.getColumn(0, "onlnStkCnt"));
+	this.Div02.form.Div02.form.Static02.set_text( onlnStkCnt-onlnAppCnt + " / "+onlnStkCnt);
 	//오프라인 재고
-	this.Div02.form.Div02.form.Static03.set_text(this.ds_detail.getColumn(0, "oflnAppCnt") + " / "+this.ds_detail.getColumn(0, "oflnStkCnt"));
+	this.Div02.form.Div02.form.Static03.set_text( oflnStkCnt-oflnAppCnt + " / "+oflnStkCnt);
 }
 
 /**************************************************************************
