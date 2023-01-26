@@ -120,6 +120,7 @@
           <Column id="clNm" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
           <Column id="hpNo" type="STRING" size="256"/>
@@ -238,6 +239,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   {
 	case "detail":
 			
+			var mbrName = this.ds_detail.getColumn(0, "mbrNm");
+			var mbrId = this.ds_detail.getColumn(0,"mbrId");
+			this.row04.form.Static01.set_text(mbrName+"("+mbrId+")");
+	
 			if(!this.gfn_isNull(this.row11.form.TextArea00.value))
 			{
 				this.row11.form.TextArea00.set_readonly(true);
@@ -270,7 +275,6 @@ this.fn_checkValidation = function(){
       <BindItem id="item0" compid="row01.form.Static01" propid="text" datasetid="ds_detail" columnid="clNm"/>
       <BindItem id="item1" compid="row02.form.Static01" propid="text" datasetid="ds_detail" columnid="titNm"/>
       <BindItem id="item9" compid="row03.form.Static01" propid="text" datasetid="ds_detail" columnid="brchNm"/>
-      <BindItem id="item2" compid="row04.form.Static01" propid="text" datasetid="ds_detail" columnid="mbrId"/>
       <BindItem id="item3" compid="row05.form.Static01" propid="text" datasetid="ds_detail" columnid="email"/>
       <BindItem id="item4" compid="row06.form.Static01" propid="text" datasetid="ds_detail" columnid="hpNo"/>
       <BindItem id="item5" compid="row07.form.Static01" propid="text" datasetid="ds_detail" columnid="rgprDtm"/>
