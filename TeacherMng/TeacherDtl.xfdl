@@ -649,12 +649,10 @@ this.select_teacher_info = function(){
 //강사정보 세팅
 this.set_teacher_info = function(){
 
-	//승인여부
-	var apvlCd = this.ds_teacher_info.getColumn(0, 'apvlStatCd');
 	//강사유형
 	var tcTpCd = this.ds_teacher_info.getColumn(0, 'tcTpCd');
 
-	this.set_teacher_basic_info(apvlCd, tcTpCd);	//기본정보
+	this.set_teacher_basic_info(tcTpCd);	//기본정보
 	
 	this.set_teacher_pay_info(tcTpCd);	//지급정보
 
@@ -665,7 +663,7 @@ this.set_teacher_info = function(){
 	this.set_screen_view_after();	//데이터 수신이후
 	
 }
-this.set_teacher_basic_info = function(apvlCd, tcTpCd){
+this.set_teacher_basic_info = function(tcTpCd){
 	//강사유형 라디오
 	this.ds_tcTp_cdList.filter('cd ==' + tcTpCd);
 	
@@ -730,7 +728,7 @@ this.rrno_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
 {
 	this.isRrnoDupChk = false;
 }
-this.set_teacher_pay_info = function(apvlCd, tcTpCd){
+this.set_teacher_pay_info = function(tcTpCd){
 
 	var rrno = this.ds_teacher_info.getColumn(0, "rrno");
 	if(rrno){
