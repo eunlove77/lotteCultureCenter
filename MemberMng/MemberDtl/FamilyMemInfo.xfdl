@@ -76,7 +76,7 @@
               <Div id="Div03" taborder="0" text="Div01" left="Div02:0" top="74" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="음양 구분 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="160" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Static id="Static00" taborder="0" text="음양 구분 " left="0" top="0" width="160" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <Combo id="Combo00" taborder="1" left="Static00:10" top="5" width="100" height="20" codecolumn="cd" datacolumn="cdNm" index="0" value="1" innerdataset="ds_lsc_cd" displaynulltext="선택"/>
                   </Layout>
                 </Layouts>
@@ -224,7 +224,7 @@ this.fn_detail = function()
 }
 
 //나이 세팅
-this.fn_set_age = function(bday, aFlag)
+this.fn_set_age = function(bday)
 {
 	bday += "";
 	
@@ -236,18 +236,12 @@ this.fn_set_age = function(bday, aFlag)
     var today = new Date();
     var yearDiff = today.getFullYear() - parseInt(bday.slice(0,4), 10);
     var monthDiff = today.getMonth()+1 - parseInt(bday.slice(4,6), 10);
-    var dateDiff = today.getDate() - parseInt(bday.slice(6,8), 10);
+    var dayDiff = today.getDate() - parseInt(bday.slice(6,8), 10);
 
-    var bFlag = monthDiff < 0 || monthDiff === 0 && dateDiff < 0;
+	//생일 지났는지 여부
+    var bFlag = monthDiff < 0 || monthDiff === 0 && dayDiff < 0;
 	
-	if(aFlag)	//만나이 여부
-	{
-		return yearDiff + (bFlag ? -1 : 0)
-	}
-	else	//한국나이
-	{
-		return yearDiff + 1;
-	}
+	return yearDiff + (bFlag ? -1 : 0)
 }
 
 /**************************************************************************
@@ -276,7 +270,6 @@ this.fnCallback_pop = function(_this, chkDs)
 	_this.ds_fmly_info.setColumn(0, "korNm", chkDs.getColumn(0, "korNm"));
 	_this.ds_fmly_info.setColumn(0, "sexCd", chkDs.getColumn(0, "sexCd"));
 	_this.ds_fmly_info.setColumn(0, "bday", chkDs.getColumn(0, "bday"));
-	_this.ds_fmly_info.setColumn(0, "lscCd", chkDs.getColumn(0, "lscCd"));
 }
 
 /**************************************************************************
@@ -304,7 +297,7 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 {
 	if(this.confirm("취소하시겠습니까?"))
 	{
-		this.close();
+		this.parent.parent.parent.close();
 	}
 };
 
@@ -370,18 +363,12 @@ this.fn_checkValidation = function(){
 		this.Div01.form.Div02.form.Calendar00.setFocus();
 		return;
 	}
-	else if(this.gfn_isNull(this.Div01.form.Div03.form.Combo00.value))
-	{
-		this.alert("음양 구분을 선택하세요.");
-		this.Div01.form.Div03.form.Combo00.setFocus();
-		return;
-	}
 	else if(this.gfn_isNull(this.Div01.form.Div05.form.Combo00.value))
 	{
 		this.alert("관계를 선택하세요.");
 		return;
 	}
-	else if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "" && this.fn_set_age(this.Div01.form.Div04.form.Static01.text, true) >= 14)
+	else if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "" && this.fn_set_age(this.Div01.form.Div04.form.Static01.text) >= 14)
 	{
 		console.log(this.Div01.form.Div04.form.Static01.text)
 		alert("만14세 미만의 가족회원만 수기 등록이 가능합니다. \n만14세 이상 회원은 회원검색을 통해 등록하세요.")
@@ -510,7 +497,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="item0" compid="Div01.form.Div00.form.Edit00" propid="readonly" datasetid="ds_fmly_info" columnid="fmlyMbrNo"/>
       <BindItem id="item1" compid="Div01.form.Div02.form.Calendar00" propid="readonly" datasetid="ds_fmly_info" columnid="fmlyMbrNo"/>
       <BindItem id="item2" compid="Div01.form.Div01.form.Radio00" propid="readonly" datasetid="ds_fmly_info" columnid="fmlyMbrNo"/>
-      <BindItem id="item3" compid="Div01.form.Div03.form.Combo00" propid="readonly" datasetid="ds_fmly_info" columnid="fmlyMbrNo"/>
     </Bind>
   </Form>
 </FDL>
