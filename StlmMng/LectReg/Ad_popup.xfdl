@@ -2,7 +2,18 @@
 <FDL version="2.1">
   <Form id="Ad_popup" width="1280" height="720" onload="Ad_popup_onload" ontimer="Ad_popup_ontimer">
     <Layouts>
-      <Layout height="720" width="1280" stepcount="10"/>
+      <Layout height="720" width="1280" stepcount="10">
+        <ImageViewer id="ImageViewer00" taborder="0" text="ImageViewer00" left="0" top="0" right="0" bottom="0" stretch="fit"/>
+        <ImageViewer id="ImageViewer01" taborder="1" text="ImageViewer01" left="0" top="0" positionstep="1" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer02" taborder="2" text="ImageViewer02" left="0" top="0" positionstep="2" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer03" taborder="3" text="ImageViewer03" left="0" top="0" positionstep="3" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer04" taborder="4" text="ImageViewer04" left="0" top="0" positionstep="4" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer05" taborder="5" text="ImageViewer05" left="0" top="0" positionstep="5" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer06" taborder="6" text="ImageViewer06" left="0" top="0" positionstep="6" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer07" taborder="7" text="ImageViewer07" left="0" top="0" positionstep="7" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer08" taborder="8" text="ImageViewer08" left="0" top="0" positionstep="8" right="0" bottom="0"/>
+        <ImageViewer id="ImageViewer09" taborder="9" text="ImageViewer09" left="0" top="0" positionstep="9" right="0" bottom="0"/>
+      </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -27,10 +38,40 @@ this.Ad_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.menuSeq = this.parent.menuId;
+	this.fn_data_list();
 	this.stepCount = this.getLayoutInfo("default", "stepcount");
 	this.setTimer(1, 3000);
-	
 	this.fn_openRfndRuleSignPopup();
+};
+
+this.fn_data_list = function()
+{
+	var strSvcId    = "dataList";
+	var strSvcUrl   = this.application.Admin_svc + "::main/dualBannerImgList.do";
+	var inData      = "";
+	var outData     = "this.ds_atchFileList=output1";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = false;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+	this.setStepCount(this.ds_atchFileList.getRowCount());
+	for(var i=0;i<this.ds_atchFileList.getRowCount();i++){
+		this["ImageViewer0" + i].set_image(this.ds_atchFileList.getColumn(i, "webPath"));
+		this["ImageViewer0" + i].set_stretch("fit");
+	}
 };
 
 this.Ad_popup_ontimer = function(obj:nexacro.Form,e:nexacro.TimerEventInfo)
@@ -59,7 +100,6 @@ this.fn_openRfndRuleSignPopup = function()
 		, left : 400
 		, top : 300
 	};
-	console.log('asfsafsaf');
 	//this.gfn_showModal("RfndRuleSignPopup", oArg, "StlmMng::LectReg/RfndRuleSign_popup.xfdl", "popupCallBack", this, 640, 360, true, false, null); 
 	this.gfn_openPopup("RfndRuleSignPopup", oArg, "StlmMng::LectReg/RfndRuleSign_popup.xfdl", this, 640, 360, true, false, null);
 };
@@ -69,5 +109,20 @@ this.saveAtchFileId = function()
 	this.opener.divWork.form.Div00.form.Div04.form.CheckBox00.set_value(1);
 	this.opener.divWork.form.Div00.form.Div04.form.Static03.set_text(this.atchFileId);
 };]]></Script>
+    <Objects>
+      <Dataset id="ds_atchFileList">
+        <ColumnInfo>
+          <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="fileSeq" type="STRING" size="256"/>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="fileExtn" type="STRING" size="256"/>
+          <Column id="fileSize" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
   </Form>
 </FDL>
