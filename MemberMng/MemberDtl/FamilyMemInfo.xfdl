@@ -6,7 +6,7 @@
         <Div id="Div00" taborder="1" left="10" top="15" height="200" right="10">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" left="0" top="5" height="21" text="가족 회원 목록" width="200"/>
+              <Static id="Static00" taborder="0" left="0" top="5" height="21" text="동반 수강자 목록" width="200"/>
               <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_fmly_list" autofittype="col" right="0" bottom="0" oncellclick="Div00_Grid00_oncellclick">
                 <Formats>
                   <Format id="default">
@@ -371,7 +371,7 @@ this.fn_checkValidation = function(){
 	else if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "" && this.fn_set_age(this.Div01.form.Div04.form.Static01.text) >= 14)
 	{
 		console.log(this.Div01.form.Div04.form.Static01.text)
-		alert("만14세 미만의 가족회원만 수기 등록이 가능합니다. \n만14세 이상 회원은 회원검색을 통해 등록하세요.")
+		alert("만14세 미만의 동반 수강자만 수기 등록이 가능합니다. \n만14세 이상 회원은 회원검색을 통해 등록하세요.")
 	}
 	else
 	{
@@ -408,33 +408,34 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
+		this.alert(errorMsg);
 		return;
 	}
-	
-	switch(svcID)
+	else
 	{
-		case "save":
-			this.alert("저장되었습니다.");
-			this.fn_list();
-			this.fn_init();
+		switch(svcID)
+		{
+			case "save":
+				this.alert("저장되었습니다.");
+				this.fn_list();
+				this.fn_init();
 
-			break;
-			
-		case "delete":
-			this.alert("삭제되었습니다.");
-			this.fn_list();
-			this.fn_init();
+				break;
+				
+			case "delete":
+				this.alert("삭제되었습니다.");
+				this.fn_list();
+				this.fn_init();
 
-			break;
-		case "detail":    
-			if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
-			{
-				this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)
-			}
-			break;
+				break;
+			case "detail":    
+				if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
+				{
+					this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)
+				}
+				break;
+		}
 	}
-
 };
 ]]></Script>
     <Objects>
