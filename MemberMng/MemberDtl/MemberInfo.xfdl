@@ -158,7 +158,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="메모" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="10" right="10" bottom="10"/>
+                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="10" right="10" bottom="10" maxlength="300"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -273,7 +273,10 @@ this.fn_save = function(){
 
 this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.parent.parent.parent.close();
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.parent.parent.parent.close();
+	}
 };
 
 /**************************************************************************
@@ -312,7 +315,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "save":
 			this.alert("저장되었습니다.");
-
+			this.parent.parent.parent.close();
 			break;
 		case "detail":    
 			this.fn_set_detail();

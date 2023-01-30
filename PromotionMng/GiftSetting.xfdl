@@ -14,7 +14,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점선택" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="ComboSpot" taborder="1" text="" left="Static00:10" top="5" width="150" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+                          <Combo id="ComboSpot" taborder="1" text="" left="Static00:10" top="5" width="150" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -113,7 +113,7 @@
                                       </Band>
                                       <Band id="body">
                                         <Cell font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="bind:brchCd"/>
-                                        <Cell col="1" color="#666666" expr="lrclsCtegryNm + &quot; &gt; &quot; + mdclsCtegryNm + &quot; &gt; &quot; + smclsCtegryNm"/>
+                                        <Cell col="1" color="#666666" expr="(lrclsCtegryNm + &quot; &gt; &quot; + mdclsCtegryNm) + (smclsCtegryNm ? &quot; &gt; &quot; + smclsCtegryNm : '')"/>
                                         <Cell col="2" text="bind:lectCd"/>
                                         <Cell col="3" text="bind:lectTpNm"/>
                                         <Cell col="4" text="bind:lectNm"/>
@@ -159,7 +159,7 @@
                           <Band id="body">
                             <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                             <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combocontrol" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
-                            <Cell col="2" color="#666666" displaytype="editcontrol" edittype="text" text="bind:fgftNm"/>
+                            <Cell col="2" color="#666666" displaytype="editcontrol" edittype="text" text="bind:fgftNm" editmaxlength="200"/>
                             <Cell col="3" displaytype="maskeditcontrol" edittype="mask" maskeditformat="9,999" text="bind:onlnStkCnt" maskeditpostfixtext="개" expr="onlnStkCnt ? onlnStkCnt : ' '"/>
                             <Cell col="4" displaytype="maskeditcontrol" edittype="mask" maskeditformat="9,999" text="bind:oflnStkCnt" maskeditpostfixtext="개" expr="oflnStkCnt ? oflnStkCnt : ' '"/>
                           </Band>
@@ -288,6 +288,12 @@
           <Row/>
         </Rows>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -333,8 +339,16 @@ this.GiftSetting_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}
 	this.gfnSetCheckBoxNoDataset(this.ds_gift_list, this.Div00.form.Div02.form.Grid00, 0); 
 	
-	this.Div00.form.Div00.form.Div00.form.ComboSpot.set_value(nexacro.getPrivateProfile("brchCd"));
-	this.Div00.form.Div00.form.Div00.form.ComboSpot.set_readonly(true);
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	this.Div00.form.Div00.form.Div00.form.ComboSpot.set_index(0);
 };
 
 this.fn_detail = function ()
@@ -680,14 +694,18 @@ this.fn_checkValidation = function()
 			alert("오프라인 재고를 입력하세요.");
 			return;
 		}
+		else
+		{
+			this.prmtnMst.ds_detail.setColumn(0, "brchCd", this.Div00.form.Div00.form.Div00.form.ComboSpot.value);
+			this.prmtnMst.ds_detail.setColumn(0, "prmtnClCd", this.Div00.form.Div01.form.Div03.form.radioTrgtCd.value);
+			this.prmtnMst.ds_appl_ctgr.copyData(this.ds_appl_ctgr);
+			this.prmtnMst.ds_appl_lect.copyData(this.ds_appl_lect);
+			this.prmtnMst.ds_gift_list.copyData(this.ds_gift_list);
+			this.prmtnMst.atchFileUpload.fn_upload(); 
+		}
 	}
 	
-	this.prmtnMst.ds_detail.setColumn(0, "brchCd", this.Div00.form.Div00.form.Div00.form.ComboSpot.value);
-	this.prmtnMst.ds_detail.setColumn(0, "prmtnClCd", this.Div00.form.Div01.form.Div03.form.radioTrgtCd.value);
-	this.prmtnMst.ds_appl_ctgr.copyData(this.ds_appl_ctgr);
-	this.prmtnMst.ds_appl_lect.copyData(this.ds_appl_lect);
-	this.prmtnMst.ds_gift_list.copyData(this.ds_gift_list);
-	this.prmtnMst.fn_save();
+	
 }
 
 /**************************************************************************

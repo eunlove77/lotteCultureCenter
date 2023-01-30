@@ -385,6 +385,10 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 				if(delResult > -1){
 					this.ds_atchFileList.deleteRow(e.row);
 				}
+
+				if(this.ds_atchFileList.getRowCount() == 0) {
+					this.atchFileId = "";
+				}
 			}		
 		}
 	}
@@ -430,15 +434,23 @@ this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.
 this.Grid00_oncellposchanged = function(obj:nexacro.Grid,e:nexacro.GridSelectEventInfo)
 {
 	var fileExtn = this.ds_atchFileList.getColumn(e.row, "fileExtn");
-	if("jpg,jpeg,gif,png".indexOf(fileExtn) > -1)
+	if(fileExtn !== undefined)
 	{
-		this.ImageViewer00.set_visible(true);
-		this.ImageViewer00.set_image(this.ds_atchFileList.getColumn(e.row, "webPath"));
+		if("jpg,jpeg,gif,png".indexOf(fileExtn.toLowerCase()) > -1)
+		{
+			this.ImageViewer00.set_visible(true);
+			this.ImageViewer00.set_image(this.ds_atchFileList.getColumn(e.row, "webPath"));
+		}
+		else
+		{
+			this.ImageViewer00.set_visible(false);
+		}
 	}
-	else
+	else 
 	{
 		this.ImageViewer00.set_visible(false);
 	}
+	
 };
 ]]></Script>
   </Form>
