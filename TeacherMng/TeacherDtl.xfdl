@@ -122,7 +122,7 @@
                           <Edit id="Edit00" taborder="1" left="130" top="5" width="150" maxlength="100" bottom="5"/>
                           <Static id="Static01" taborder="2" text="@" left="Edit00:10" top="0" width="20" bottom="5" fittocontents="width"/>
                           <Edit id="Edit00_00" taborder="3" left="Static01:10" top="5" width="150" maxlength="100" bottom="5"/>
-                          <Combo id="Combo00" taborder="4" text="" left="Edit00_00:10" top="5" onitemchanged="Div01_Div05_Div00_Combo00_onitemchanged" innerdataset="ds_emailAddr_cdList" datacolumn="cdNm" codecolumn="cd" width="120" bottom="5"/>
+                          <Combo id="Combo00" taborder="4" text="" left="Edit00_00:10" top="5" onitemchanged="Div01_Div05_Div00_Combo00_onitemchanged" innerdataset="ds_emailAddr_cdList" datacolumn="cdNm" codecolumn="cdVal1" width="120" bottom="5"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -1250,8 +1250,8 @@ this.add_grid_row = function(grid, ds, row){
 	this.resetScroll();
 }
 this.add_grid_edu_row = function(row){
-  this.ds_tcedu_list.setColumn(row, 'schlClCd', 0);
-  this.ds_tcedu_list.setColumn(row, 'grdtClCd', 0);
+  this.ds_tcedu_list.setColumn(row, 'schlClCd', '');
+  this.ds_tcedu_list.setColumn(row, 'grdtClCd', '');
   this.ds_tcedu_list.setColumn(row, 'yy', '');
 }
 this.remove_grid_row = function(grid, ds){
@@ -1585,7 +1585,7 @@ this.validate_pay_info = function(){
 
 //학력
 this.validate_teacher_edu = function(type){
-	var vali_arr= [['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
+	var vali_arr= [['schlClCd', '학교구분을'], ['grdtClCd', '졸업구분을'], ['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
 	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr, type);
 }
 //경력
@@ -1809,8 +1809,8 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="schlClCd">0</Col>
-            <Col id="grdtClCd">0</Col>
+            <Col id="schlClCd"></Col>
+            <Col id="grdtClCd"></Col>
             <Col id="yy"/>
           </Row>
         </Rows>
@@ -1918,6 +1918,7 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
         <ColumnInfo>
           <Column id="cdId" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
+          <Column id="grpCdNm" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="cdOrd" type="STRING" size="256"/>
           <Column id="dpth" type="STRING" size="256"/>
@@ -1930,10 +1931,10 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="nextChildOrd" type="STRING" size="256"/>
           <Column id="memo" type="STRING" size="256"/>
+          <Column id="cdVal1" type="STRING" size="256"/>
+          <Column id="cdVal2" type="STRING" size="256"/>
+          <Column id="cdVal3" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row/>
-        </Rows>
       </Dataset>
       <Dataset id="ds_schlCl_cdList">
         <ColumnInfo>
