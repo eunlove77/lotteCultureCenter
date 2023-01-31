@@ -56,7 +56,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="450" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <WebBrowser id="notcCont" taborder="1" left="Static00:8" top="7" height="430" onusernotify="fn_set_edit_body" right="8"/>
+              <WebBrowser id="notcCont" taborder="1" left="Static00:8" top="7" height="430" right="8" onloadcompleted="fn_set_edit_body" onusernotify="fn_set_edit_body"/>
             </Layout>
           </Layouts>
         </Div>
@@ -127,6 +127,8 @@
             <Layout>
               <Button id="btnCnl" taborder="0" text="취소" top="17" height="30" width="50" left="10" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
               <Button id="btnSave" taborder="1" text="등록" top="17" height="30" width="50" right="10" cssclass="btn_WF_Medium" onclick="Div01_btnSave_onclick"/>
+              <Button id="btnList" taborder="2" text="목록" left="0.73%" width="79" cssclass="btn_WF_Weak" fittocontents="none" height="30" top="17" onclick="Div01_btnList_onclick"/>
+              <Button id="btnDel" taborder="3" text="삭제" left="109" width="79" cssclass="btn_WF_High" fittocontents="none" height="30" top="17" onclick="Div01_btnDel_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -204,11 +206,16 @@ this.NoticeReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		
 		this.ds_detail.setColumn(0, "notcSeqno", this.parent.notcSeqno);
 		this.Static00.set_text("공지사항/이벤트 수정");
+		this.Div01.form.btnList.set_visible(true);
+		this.Div01.form.btnDel.set_visible(true);
+		this.Div01.form.btnCnl.set_visible(false);
 		this.Div01.form.btnSave.set_text("수정");
 		this.fn_detail();
 	}
 	else
-	{
+	{	
+		this.Div01.form.btnList.set_visible(false);
+		this.Div01.form.btnDel.set_visible(false);
 		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
 	}
 	
@@ -230,6 +237,21 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 {
 	/*유효성 검사*/
 	this.fn_checkValidation();
+};
+
+//목록 버튼
+this.Div01_btnList_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+/*삭제버튼*/
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("삭제하시겠습니까?"))
+	{
+		this.fn_delete();
+	}
 };
 
 /**************************************************************************
@@ -299,6 +321,25 @@ this.fn_save = function ()
 	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);	
 };
+
+//삭제
+this.fn_delete = function()
+{
+	var tranObj = {
+		strSvcId : "delete",
+		strSvcUrl : this.application.Admin_svc + "::/customer/deleteNotice.do",
+		inData : "",
+		outData : "",
+		strArg : "delStr="+this.ds_detail.getColumn(0, "notcSeqno"),
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isAsync : true,
+		isPopup : true
+	}
+	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);	
+}
 
 //유효성 체크
 this.fn_checkValidation = function(flag){
@@ -415,8 +456,20 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		this.alert(gb + " 완료되었습니다.");
 		this.fn_list();
 	break;
+	
+	case "delete":
+		this.alert("삭제 완료되었습니다");
+		this.close();
+		this.fn_list();
+	break;
+	
 	}
-};]]></Script>
+};
+this.row04_notcCont_onusernotify = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+{
+	
+};
+]]></Script>
     <Bind>
       <BindItem id="postStDt" compid="row07.form.strtDtm" propid="value" datasetid="ds_detail" columnid="postStDt"/>
       <BindItem id="postEndDt" compid="row07.form.endDtm" propid="value" datasetid="ds_detail" columnid="postEndDt"/>
