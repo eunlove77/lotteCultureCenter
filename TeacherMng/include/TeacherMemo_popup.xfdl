@@ -5,13 +5,13 @@
       <Layout height="600" mobileorientation="landscape" width="740">
         <GroupBox id="GroupBox03" text="관리자 메모 이력" taborder="0" enableevent="false" left="10" top="10" width="720" height="520"/>
         <Button id="btnCancel" taborder="1" text="취소" left="310" top="550" height="21" cssclass="btn_WF_Weak" fittocontents="none" onclick="btnCancel_onclick" width="100"/>
-        <Grid id="Grid00" taborder="2" left="27" top="80" width="686" height="440" autofittype="col" binddataset="ds_tcmemo_list" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="27" top="80" width="686" height="440" autofittype="col" binddataset="ds_tcmemo_list" oncellclick="Grid00_oncellclick" autosizingtype="row" extendsizetype="row">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="500"/>
-                <Column size="100"/>
-                <Column size="100"/>
+                <Column size="450"/>
+                <Column size="150"/>
+                <Column size="150"/>
                 <Column size="100"/>
               </Columns>
               <Rows>
@@ -25,8 +25,8 @@
                 <Cell col="3"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:memoCont"/>
-                <Cell col="1" text="expr:tcMemoSeqno ? rgprId + '(' + rgprNm + ')' : &quot;&quot;"/>
+                <Cell text="bind:memoCont" wordWrap="char"/>
+                <Cell col="1" text="expr:tcMemoSeqno ? rgprId + '(' + rgprNm + ')' : &quot;&quot;" wordWrap="char"/>
                 <Cell col="2" text="bind:rgprDtm"/>
                 <Cell col="3" displaytype="expr:tcMemoSeqno ? &quot;buttoncontrol&quot; : &quot;none&quot;" text="삭제"/>
               </Band>
@@ -141,7 +141,13 @@ this.delete_teacher_memo= function(){
           <Column id="rgprDtm" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
-          <Row/>
+          <Row>
+            <Col id="tcMemoSeqno"></Col>
+            <Col id="rgprNm"></Col>
+            <Col id="rgprDtm"></Col>
+            <Col id="rgprId"></Col>
+            <Col id="memoCont"></Col>
+          </Row>
         </Rows>
       </Dataset>
     </Objects>
