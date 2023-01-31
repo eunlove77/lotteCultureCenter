@@ -150,12 +150,12 @@ this.fn_checkValidation = function()
 		alert("할인율을 입력하세요.");
 		return;
 	}
- 	else if(this.ds_discount_list.findRowExpr("applStDt == null || applStDt == ''") > -1)
+ 	else if(this.ds_discount_list.getColumn(this.ds_discount_list.findRowExpr("applStDt == null || applStDt == ''"), "useYn") == "Y")
 	{
 		alert("적용시작일을 입력하세요.");
 		return;
 	}
-	else if(this.ds_discount_list.findRowExpr("applEndDt == null || applEndDt == ''") > -1)
+	else if(this.ds_discount_list.getColumn(this.ds_discount_list.findRowExpr("applEndDt == null || applEndDt == ''"), "useYn") == "Y")
 	{
 		alert("적용종료일을 입력하세요.");
 		return;
