@@ -248,7 +248,7 @@
             <Layout>
               <Static id="Static00" taborder="2" left="0" top="0" width="80" height="21" text="수정요청"/>
               <Button id="btnDel" taborder="0" text="반려" left="209" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div03_btnDel_onclick"/>
-              <Grid id="tcmdfreq_Grid" taborder="3" left="0" top="36" height="120" right="0" binddataset="ds_tcmdfreq_list" autofittype="col">
+              <Grid id="tcmdfreq_Grid" taborder="3" left="0" top="36" height="120" right="0" binddataset="ds_tcmdfreq_list" autofittype="col" oncelldblclick="teacher_modify_request_grid_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -1333,8 +1333,14 @@ this.list_teacher_modifyRequest = function(){
 	this.gfn_transaction(tranObj);
 }
 this.teacher_modify_request_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo){
-	this.ds_atch_file.setColumn(0, "atchFileId", this.ds_tcmdfreq_list.getColumn(0, 'atchFileId'))
-	this.gfn_fileDown(this.ds_atch_file, this.FileDownTransfer00);
+
+	if(e.cell == 3){
+		this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
+		this.ds_atch_file.copyRow(0, this.ds_tcmdfreq_list, e.row);
+		this.ds_atch_file.addColumn("chk", "STRING");
+		this.ds_atch_file.setColumn(0, "chk", "Y");
+		this.gfn_fileDown(this.ds_atch_file, this.FileDownTransfer00);
+	}
 }
 /**************************************************************************
  * 원천징수영수증 / 취소 / 저장
@@ -2106,6 +2112,9 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="reqCont" type="STRING" size="256"/>
           <Column id="atchFileId" type="STRING" size="256"/>
+          <Column id="phyPat" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="prcsStatCd" type="STRING" size="256"/>
         </ColumnInfo>
