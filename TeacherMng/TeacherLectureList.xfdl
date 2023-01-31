@@ -81,7 +81,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20"   right="10" maxlength="13" inputfilter="dot,comma" inputtype="number"/>
+                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20" right="10" maxlength="13" inputfilter="dot,comma" inputtype="number"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -132,7 +132,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21"   left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -201,7 +201,7 @@
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
                 <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')" tooltiptype="hover" tooltiptext="bind:tcNm"/>
                 <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
-                <Cell col="5" expr="comp.parent.com_setMasking(hpNo, 'tel')" tooltiptype="hover" tooltiptext="bind:hpNo" />
+                <Cell col="5" expr="comp.parent.com_setMasking(hpNo, 'tel')" tooltiptype="hover" tooltiptext="bind:hpNo"/>
                 <Cell col="6" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="7" text="bind:yy"/>
                 <Cell col="8" text="bind:lectSmsterCd" displaytype="combotext" combodataset="ds_semester_list" combodatacol="cdNm" combocodecol="cd"/>
@@ -440,7 +440,10 @@ this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 };
 this.selectCertificate_lect_hist = function(index){
 	var param = "";
-	param += "tcCdNo=" + this.ds_tclect_list.getColumn(index, "tcCdNo");
+	param += "&brchCd=" + this.ds_tclect_list.getColumn(index, "brchCd");
+	param += "&yy=" + this.ds_tclect_list.getColumn(index, "yy");
+	param += "&lectSmsterCd=" + this.ds_tclect_list.getColumn(index, "lectSmsterCd");
+	param += "&lectCd=" + this.ds_tclect_list.getColumn(index, "lectCd");
 	
 	var url = this.domain + "/admin/teacherMng/certificate/lect_hist.do?" + param;
 	
