@@ -411,19 +411,21 @@ this.fn_set_spot = function()
 	
 	for(var i=0; i < list.getRowCount(); i++) 
 	{
-		var id = "chkSpot" + i;
-		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 9, 133, 20);
-		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		objComp.set_text(list.getColumn(i, "cdNm"));		
-		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
-		objComp.set_readonly(true);
-		objComp.show();	
-		content.push(id);
-		
-		this.Div00.form.Div00.form.Div00.form.resetScroll();
+		if(list.getColumn(i, "cd") != "0000")
+		{
+			var id = "chkSpot" + i;
+			var objComp = new CheckBox();
+			objComp.init(id, content[i] + ":10", 9, 133, 20);
+			this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
+			objComp.set_text(list.getColumn(i, "cdNm"));		
+			objComp.set_truevalue(list.getColumn(i, "cd"));
+			objComp.set_falsevalue("N");
+			objComp.set_readonly(true);
+			objComp.show();	
+			content.push(id);	
+		}
 	}
+	this.Div00.form.Div00.form.Div00.form.resetScroll();
 }
 
 /* 상세화면 세팅 */
