@@ -253,8 +253,8 @@
                                   <Cell col="12"/>
                                 </Band>
                                 <Band id="body">
-                                  <Cell text="bind:brchNm"/>
-                                  <Cell col="1" text="bind:lectCd"/>
+                                  <Cell displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd "/>
+                                  <Cell col="1" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd"/>
                                   <Cell col="2" text="bind:lectTpNm"/>
                                   <Cell col="3" text="bind:lectStatNm"/>
                                   <Cell col="4" text="bind:lectNm"/>
@@ -530,10 +530,12 @@
       <Dataset id="ds_appl_lect">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
           <Column id="lectTpNm" type="STRING" size="256"/>
@@ -737,19 +739,21 @@ this.fn_set_spot = function()
 	
 	for(var i=0; i < list.getRowCount(); i++) 
 	{
-		var id = "chkSpot" + i;
-		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 9, 133, 20);
-		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		objComp.set_text(list.getColumn(i, "cdNm"));
-		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
-		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
-		objComp.show();	
-		content.push(id);
-		
-		this.Div00.form.Div00.form.Div00.form.resetScroll()
+		if(list.getColumn(i, "cd") != "0000")
+		{
+			var id = "chkSpot" + i;
+			var objComp = new CheckBox();
+			objComp.init(id, content[i] + ":10", 9, 133, 20);
+			this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
+			objComp.set_text(list.getColumn(i, "cdNm"));
+			objComp.set_truevalue(list.getColumn(i, "cd"));
+			objComp.set_falsevalue("N");
+			objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
+			objComp.show();	
+			content.push(id);
+		}
 	}
+	this.Div00.form.Div00.form.Div00.form.resetScroll()
 }
 
 /* '전체' 체크박스 이벤트 */
@@ -1241,9 +1245,10 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 		var arrArguments = {
 			type : 1,
 			brchCd : spotStr,
+			pblOn : "on",
 			dataset : this.ds_appl_lect
 		}
-		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 700, true, true, null);
+		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, null, null, true, true, null);
 		
 	}
 };
