@@ -112,9 +112,9 @@
                                         <Cell col="5"/>
                                       </Band>
                                       <Band id="body">
-                                        <Cell font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="bind:brchCd"/>
+                                        <Cell font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd"/>
                                         <Cell col="1" color="#666666" expr="(lrclsCtegryNm + &quot; &gt; &quot; + mdclsCtegryNm) + (smclsCtegryNm ? &quot; &gt; &quot; + smclsCtegryNm : '')"/>
-                                        <Cell col="2" text="bind:lectCd"/>
+                                        <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd"/>
                                         <Cell col="3" text="bind:lectTpNm"/>
                                         <Cell col="4" text="bind:lectNm"/>
                                         <Cell col="5" displaytype="buttoncontrol" edittype="button" text="삭제" cssclass="gridBtn_High"/>
@@ -262,9 +262,11 @@
       <Dataset id="ds_appl_lect">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
           <Column id="lectTpNm" type="STRING" size="256"/>
@@ -595,10 +597,11 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 		var arrArguments = {
 			type : 1,
 			brchCd : brchCd,
+			pblOn : "on",
 			menuSeq : this.menuId,
 			dataset : this.ds_appl_lect
 		}
-		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1200, 700, true, true, null);
+		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, null, null, true, true, null);
 	}	
 };
 
