@@ -5,17 +5,17 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridNoticeList_oncellclick">
+        <Grid id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." cellmovingtype="col" oncellclick="GridNoticeList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="50"/>
+                <Column size="40"/>
                 <Column size="88"/>
                 <Column size="100"/>
-                <Column size="250"/>
-                <Column size="202"/>
+                <Column size="350"/>
+                <Column size="140"/>
                 <Column size="150"/>
-                <Column size="170"/>
+                <Column size="140"/>
                 <Column size="81"/>
                 <Column size="94"/>
                 <Column size="80"/>
@@ -251,6 +251,15 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.gfnSetCheckBoxNoDataset(this.noticeDs, this.GridNoticeList, 0);
+	
+	
+	
+	/*//지점초기화
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.spotCdList.copyData(this.application.gdsSpotCdList);
+	this.spotCdList.deleteRow(0);
+	this.fn_classBrch_set();*/
+	
 	
 	this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
@@ -546,6 +555,22 @@ this.fn_delete = function ()
 	this.gfn_transaction(tranObj);	
 };
 
+//지점 세팅
+this.fn_classBrch_set = function()
+{	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.spotCdList.insertRow(0);
+		this.spotCdList.setColumn(0, "cd", "");
+		this.spotCdList.setColumn(0, "cdNm", "전체");
+	}
+	else
+	{
+		this.alert("여기타야지");
+		this.spotCdList.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+	}
+}
+
 // 구분조건 단일 체크박스 클릭이벤트
 this.fn_chkClCd_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
@@ -617,9 +642,9 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			
 			for(var i=0;i<this.categoryDs.getRowCount();i++){
 				if(i > 0){
-					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm["chkClCdStatus" + this.categoryDs.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.chkClCdAll.getOffsetTop(), 105, 20, null, null);
+					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm["chkClCdStatus" + this.categoryDs.getColumn(i-1, "cd")].getOffsetRight() +6, chkboxFrm.chkClCdAll.getOffsetTop(), 105, 20, null, null);
 				}else{
-					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm.chkClCdAll.getOffsetRight(), chkboxFrm.chkClCdAll.getOffsetTop(), 105, 20, null, null);
+					objCheckbox = new CheckBox("chkClCdStatus" + this.categoryDs.getColumn(i, "cd"), chkboxFrm.chkClCdAll.getOffsetRight() +6, chkboxFrm.chkClCdAll.getOffsetTop(), 105, 20, null, null);
 				}
 				
 				objCheckbox.set_fittocontents("width");

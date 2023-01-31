@@ -101,7 +101,7 @@
                     </Combo>
                     <Button id="btnInit" taborder="4" text="초기화" top="5" height="20" cssclass="btn_WF_Weak" right="10" width="100" onclick="Div00_Div06_btnInit_onclick"/>
                     <Button id="btnSearch" taborder="3" text="검색" top="5" width="100" height="20" cssclass="btn_WF_Medium" right="btnInit:10" onclick="fn_btnSearch_onclick"/>
-                    <Edit id="searchQuery" taborder="2" left="searchField:10" top="5" height="20" right="btnSearch:10" onkeydown="Div00_Div06_searchQuery_onkeydown" text="aaaa"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:10" top="5" height="20" right="btnSearch:10" onkeydown="Div00_Div06_searchQuery_onkeydown" text="aaaa" onkeyup="Div00_Div06_searchQuery_onkeyup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -202,7 +202,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		// 지점선택
 		this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 		this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-		this.ds_gdsSpotCd_list.deleteRow(0);
+		if(nexacro.getPrivateProfile("brchCd") == "0000"){
+			this.ds_gdsSpotCd_list.deleteRow(0);
+		}
 		this.fn_classBrch_set();
 		this.ds_search.setColumn(0, "brchCd", this.brchCd);
 		
@@ -475,6 +477,9 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	if(nexacro.getPrivateProfile("brchCd") == "0000"){
+		this.ds_gdsSpotCd_list.deleteRow(0);
+	}
 	this.fn_classBrch_set();
 	
 	var chkboxFrm;
@@ -582,7 +587,31 @@ this.fn_classBrch_set = function()
 	{
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
-}]]></Script>
+}
+
+// 엔터
+this.Div00_Div06_searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode ==13)
+	{
+		if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+		
+		var mbrNm = this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm"), "");
+		var hpStNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpStNo"), "");
+		var hpMidNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpMidNo"), "");
+		var hpLastNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpLastNo"), "");
+		
+		if((mbrNm == "" && (hpStNo != "" || hpMidNo != "" || hpLastNo != ""))
+			|| (mbrNm != "" && (hpStNo == "" && hpMidNo == "" && hpLastNo == ""))){
+			alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+			return;
+		}
+		
+		this.fn_searchValueInit();
+		parentFrm.fn_list();
+	}
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_stlm_chnl_list">
         <ColumnInfo>

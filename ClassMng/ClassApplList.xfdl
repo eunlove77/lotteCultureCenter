@@ -12,17 +12,19 @@
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="132" height="31" cssclass="sta_WF_TableLabel" border="0px none" textAlign="center" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
                     <Static id="Static00_00" taborder="1" text="연도/학기" left="132" top="0" width="182" height="31" cssclass="sta_WF_TableLabel" border="0px none" textAlign="center" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
                     <Static id="Static00_00_00" taborder="2" text="강좌코드" left="314" top="0" width="132" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
-                    <Static id="Static00_00_00_00" taborder="3" text="강좌명" left="446" top="0" width="282" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
-                    <Static id="Static00_00_00_00_00" taborder="4" text="강의기간" left="728" top="0" width="292" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static00_00_00_00" taborder="3" text="강좌명" left="446" top="0" width="192" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static00_00_00_00_00" taborder="4" text="강의기간" left="818" top="0" width="202" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static00_00_00_00_00_00" taborder="5" text="수강/정원" left="1020" top="0" height="31" cssclass="sta_WF_TableLabel" border="0px none" width="130" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static00_00_00_00_00_00_00" taborder="6" text="대기자" left="1150" top="0" height="31" cssclass="sta_WF_TableLabel" border="0px none" right="0" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
                     <Static id="Static08" taborder="7" left="0" top="30" width="132" height="31" border="0px none" textAlign="center"/>
                     <Static id="Static09" taborder="8" left="132" top="30" width="182" height="31" border="0px none" textAlign="center"/>
                     <Static id="Static10" taborder="9" left="314" top="30" width="132" height="31" border="0px none" textAlign="center"/>
-                    <Static id="Static11" taborder="10" left="446" top="30" width="282" height="31" border="0px none" textAlign="center"/>
-                    <Static id="Static12" taborder="11" left="728" top="30" width="292" height="31" border="0px none" textAlign="center"/>
+                    <Static id="Static11" taborder="10" left="446" top="30" width="192" height="31" border="0px none" textAlign="center"/>
+                    <Static id="Static12" taborder="11" left="818" top="30" width="202" height="31" border="0px none" textAlign="center"/>
                     <Static id="Static13" taborder="12" left="1020" top="30" height="31" border="0px none" width="130" textAlign="center"/>
                     <Static id="Static14" taborder="13" left="1150" top="30" height="31" border="0px none" right="0" textAlign="center"/>
+                    <Static id="Static00_00_00_00_01" taborder="14" text="강좌옵션" left="638" top="0" width="180" height="31" cssclass="sta_WF_TableLabel" border="0px none" font="bold 12px/normal &quot;Noto Sans KR&quot;" textAlign="center"/>
+                    <Static id="Static15" taborder="15" left="638" top="30" width="180" height="31" border="0px none" textAlign="center"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -196,6 +198,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div00.form.Div00.form.Static12.set_text(lectStDtm + " ~ " + lectEndDtm);
 			this.Div00.form.Div00.form.Static13.set_text(this.ds_cnt.getColumn(0, "atlctCnt") + "/" + this.ds_class_dtl.getColumn(0, "gsCapaCnt"));
 			this.Div00.form.Div00.form.Static14.set_text(this.ds_cnt.getColumn(0, "waitCnt"));
+			this.Div00.form.Div00.form.Static15.set_text(this.ds_class_dtl.getColumn(0, "lectAddOptnNm"));
 			
 			this.Div00.form.Static01.set_text("("+ this.totCnt +"개)");
 			
@@ -227,7 +230,10 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	this.ds_classUpdate_list.clearData();
 	
 	var rowIndex = this.ds_classUpdate_list.addRow();
+	trace(this.ds_class_dtl.getColumn(rowIndex, "gsCapaCnt"));
 	this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_dtl, 0);
+	this.ds_classUpdate_list.setColumn(rowIndex, "appCnt", this.ds_cnt.getColumn(0, "atlctCnt"));
+	//this.ds_classUpdate_list.setColumn(rowIndex, "gsCapaCnt", this.ds_cnt.getColumn(0, "gsCapaCnt"));
 	
 	this.popCnt++;
 	var arrArguments = {
@@ -395,6 +401,7 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
           <Column id="lectClosedRsnNm" type="STRING" size="256"/>
           <Column id="lectClosedRfndCndtNm" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_cnt">
@@ -456,8 +463,6 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
           <Column id="gsCapaCnt" type="STRING" size="256"/>
-          <Column id="Column0" type="STRING" size="256"/>
-          <Column id="Column1" type="STRING" size="256"/>
           <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="stringStDaywNm" type="STRING" size="256"/>
           <Column id="lectNbcnt" type="STRING" size="256"/>
@@ -473,8 +478,6 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
           <Column id="lectSmsterNm" type="STRING" size="256"/>
           <Column id="lectStDtm" type="STRING" size="256"/>
           <Column id="lectEndDtm" type="STRING" size="256"/>
-          <Column id="Column2" type="STRING" size="256"/>
-          <Column id="Column3" type="STRING" size="256"/>
           <Column id="lectClCd" type="STRING" size="256"/>
           <Column id="lectClNm" type="STRING" size="256"/>
           <Column id="lectRmCd" type="STRING" size="256"/>
@@ -491,6 +494,8 @@ this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
           <Column id="modDtm" type="STRING" size="256"/>
           <Column id="lectRpsntImgFileId" type="STRING" size="256"/>
           <Column id="schdCnt" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_rcv_obj">

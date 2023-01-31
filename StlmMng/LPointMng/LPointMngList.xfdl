@@ -37,7 +37,7 @@
                 <Cell col="3" text="bind:apvlDtm"/>
                 <Cell col="4" text="bind:brchNm"/>
                 <Cell col="5" text="bind:mbrNo"/>
-                <Cell col="6" text="bind:mbrNm"/>
+                <Cell col="6" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover"/>
               </Band>
             </Format>
           </Formats>
@@ -133,23 +133,9 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 	switch(svcID)
 	{    
 		case "list":			
-			console.log(this.objPageingDs.getColumn(0, "totCnt"));
-			this.txtTotal.set_text("( " + this.objPageingDs.getColumn(0, "totCnt")  + "개 )");					
-			
-			if(this.ds_list.rowcount < 1){
+			this.txtTotal.set_text("( " + this.ds_list.getRowCount()  + "개 )");					
+			if(this.ds_list.getRowCount() < 1){
 				this.Grid00.set_nodatatext("검색 결과 없습니다.")
-			}else{
-			  
-				var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
-				var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
-				var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
-				
-				this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
-				this.pageingDiv.form.setPage(pageIndex);
-				
-				for(var i = 0 ; i < this.ds_list.rowcount ; i++){
-					this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
-				}	
 			}
 			
 		break; 		
@@ -167,6 +153,8 @@ this.fn_searchValueInit = function(){
 	
  	if(this.search_form.Div00.form.Div02.form.chkAcum.value == true) arrAcumUse.push("10");
  	if(this.search_form.Div00.form.Div02.form.chkUse.value == true) arrAcumUse.push("20");
+	if(this.search_form.Div00.form.Div02.form.chkAcumCncl.value == true) arrAcumUse.push("30");
+ 	if(this.search_form.Div00.form.Div02.form.chkUseCncl.value == true) arrAcumUse.push("40");
 	
 	this.ds_search.setColumn(0, "chkAcumUse", arrAcumUse.join(","));
 	this.ds_search.setColumn(0, "brchCd", this.search_form.Div00.form.Div01.form.brchCd.value);

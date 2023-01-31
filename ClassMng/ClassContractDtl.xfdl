@@ -241,10 +241,6 @@
           <Column id="signFileId" type="STRING" size="256"/>
           <Column id="samplCndocFileId" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
-          <Column id="cntrRrno" type="STRING" size="256"/>
-          <Column id="cntrBrchCd" type="STRING" size="256"/>
-          <Column id="cntrBrchNm" type="STRING" size="256"/>
-          <Column id="mbrFnm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <FileDownTransfer id="FileDownTransfer00"/>
@@ -284,19 +280,19 @@ this.ClassContractDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.Div00.form.Div00.form.Div00_00.form.Calendar01.calendaredit.set_readonly(true); 
 	this.Div00.form.Div00.form.Div00_00.form.Calendar01.set_value(this.ds_class_dtl.getColumn(0, "cntrDt"));
 
-	this.Div00.form.Div00.form.Div00_01.form.Edit00.set_value(this.ds_class_dtl.getColumn(0, "mbrFnm"));
+	this.Div00.form.Div00.form.Div00_01.form.Edit00.set_value(this.ds_class_list.getColumn(0, "tcNm"));
 	
 	if(this.ds_class_dtl.getColumn(0, "tcTpCd") == 1)
 	{
-		this.Div00.form.Div00.form.Div00_00_00.form.MaskEdit00.set_value(this.ds_class_dtl.getColumn(0, "cntrRrno"));
-		this.Div00.form.Div00.form.Div00_00_00.form.MaskEdit00.set_tooltiptext(this.ds_class_dtl.getColumn(0, "cntrRrno"));
+		this.Div00.form.Div00.form.Div00_00_00.form.MaskEdit00.set_value(this.ds_class_dtl.getColumn(0, "rrno"));
+		this.Div00.form.Div00.form.Div00_00_00.form.MaskEdit00.set_tooltiptext(this.ds_class_dtl.getColumn(0, "rrno"));
 	}
 	else
 	{
-		this.Div00.form.Div00.form.Div00_00_01.form.Edit00.set_value(this.ds_class_dtl.getColumn(0, "cntrRrno"));
+		this.Div00.form.Div00.form.Div00_00_01.form.Edit00.set_value(this.ds_class_dtl.getColumn(0, "rrno"));
 	}
 	
-	this.Div00.form.Div00.form.Div00_02.form.Edit00.set_value(this.ds_class_dtl.getColumn(0, "cntrBrchNm"));
+	this.Div00.form.Div00.form.Div00_02.form.Edit00.set_value(nexacro.getPrivateProfile("brchNm"));
 };
 
 /**************************************************************************

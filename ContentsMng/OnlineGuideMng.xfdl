@@ -1,31 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="OnlineGuideMng" width="1280" height="1000" titletext="New Form" onload="OnlineGuideMng_onload">
+  <Form id="OnlineGuideMng" width="1280" height="750" titletext="New Form" onload="OnlineGuideMng_onload">
     <Layouts>
-      <Layout height="1000" mobileorientation="landscape" width="1280">
-        <Div id="Div00" taborder="0" text="Div00" left="10" top="90" height="690" right="10">
+      <Layout height="750" mobileorientation="landscape" width="1280">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="90" height="400" right="10">
           <Layouts>
             <Layout>
-              <Div id="Div01" taborder="0" text="Div01" left="0" top="3" height="330" cssclass="div_WF_CompWrap" right="70" formscrolltype="none">
+              <Div id="Div01" taborder="0" text="Div01" left="0" top="3" height="390" cssclass="div_WF_CompWrap" right="70" formscrolltype="none">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="내용 (웹) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" right="12"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div02" taborder="1" text="Div01" left="0" top="332" height="330" cssclass="div_WF_CompWrap" right="70" formscrolltype="none">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="내용 (모바일) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" onusernotify="row04_form_WebBrowser00_onusernotify" right="12"/>
+                    <Static id="Static00" taborder="0" text="내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="390" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
+                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="370" right="12"/>
                   </Layout>
                 </Layouts>
               </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="1" text="Div03" left="45" top="Div00:43" height="55" right="45">
+        <Div id="Div03" taborder="1" text="Div03" left="45" top="Div00:13" height="55" right="45">
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="21" cssclass="btn_WF_Weak" fittocontents="width" onclick="Div03_btnCnl_onclick"/>
@@ -81,8 +73,7 @@ this.OnlineGuideMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.editorArr = [];
 	
 	var editorObj = {
-		editorPcObj : this.Div00.form.Div01.form.WebBrowser00 ,
-		editorMbilObj : this.Div00.form.Div02.form.WebBrowser00
+		editorPcObj : this.Div00.form.Div01.form.WebBrowser00
 	}
 	
 	this.editorArr.push(editorObj);
@@ -95,16 +86,8 @@ this.OnlineGuideMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 this.Div03_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
 	
-	var pcObj = this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00);
-	var mobObj = this.fn_get_edit_body(this.Div00.form.Div02.form.WebBrowser00);
-	
-	var len1 = pcObj.len;
-	var len2 = mobObj.len;
-	
-	this.onlineGuideDs.setColumn(0, "webCont", pcObj.cntn);
-	this.onlineGuideDs.setColumn(0, "mbilCont", mobObj.cntn);
-	
-	this.fn_checkValidation(len1 , len2);
+	//var pcObj = this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00);
+	this.fn_checkValidation();
 };
 
 //취소버튼
@@ -171,8 +154,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.editorArr[0].editorMbilObj.reload();
 		}
 		
-		
-		
 		break;
 		
     case "save":
@@ -204,13 +185,11 @@ this.fn_get_edit_body = function(wbObj){
 	
 	var len = _win.callMethod("getTextValueLen");
 	var bodyValue = _win.callMethod("getData");
-	var valueObj = { 
-		len : len , 
-		cntn : bodyValue
-	}
 	
-	trace("editor body length : " + len);
-	console.log("editor body length : " + len);
+	if(len == 0)
+	{
+		return false;
+	}
 	
 	if(_win)
     {
@@ -218,7 +197,7 @@ this.fn_get_edit_body = function(wbObj){
         _win = null;
     }    
 	
-	return valueObj;
+	return bodyValue;
 }
 
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
@@ -249,21 +228,18 @@ this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyE
 };
 
 //유효성 체크
-this.fn_checkValidation = function(len1 , len2){
-	if(len1 == 0)
+this.fn_checkValidation = function(){
+	if(!this.Div00.form.Div01.form.WebBrowser00)
 	{
-		this.alert("웹 에디터 내용을 입력하세요");
+		this.alert("에디터 내용을 입력하세요");
 		this.Div00.form.Div01.form.WebBrowser00.setFocus();
 		return;
 	}
-	else if(len2 == 0)
-	{
-		this.alert("모바일 에디터 내용을 입력하세요");
-		this.Div00.form.Div02.form.WebBrowser00.setFocus();
-		return;
-	}
 	else
-	{								
+	{	
+		this.onlineGuideDs.setColumn(0, "webCont", this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00));
+		this.onlineGuideDs.setColumn(0, "mbilCont", this.fn_get_edit_body(this.Div00.form.Div01.form.WebBrowser00));
+	
 		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
 		{
 			this.fn_save();

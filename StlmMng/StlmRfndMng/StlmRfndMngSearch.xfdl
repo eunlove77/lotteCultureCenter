@@ -203,7 +203,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		// 지점선택
 		this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 		this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-		this.ds_gdsSpotCd_list.deleteRow(0);
+		if(nexacro.getPrivateProfile("brchCd") == "0000"){
+			this.ds_gdsSpotCd_list.deleteRow(0);
+		}
 		this.fn_classBrch_set();
 		this.ds_search.setColumn(0, "brchCd", this.brchCd);
 		
@@ -513,6 +515,9 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	
 	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	if(nexacro.getPrivateProfile("brchCd") == "0000"){
+		this.ds_gdsSpotCd_list.deleteRow(0);
+	}
 	this.fn_classBrch_set();
 	this.ds_search.setColumn(0, "brchCd", this.brchCd);
 	this.fn_sesterInfo();

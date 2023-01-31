@@ -41,7 +41,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" maxlength="50"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -111,7 +111,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div06_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div06_btnInit_onclick"/>
                   </Layout>
@@ -168,11 +168,11 @@
                             <Col id="datacolumn">전체</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">1</Col>
+                            <Col id="codecolumn">Y</Col>
                             <Col id="datacolumn">Y</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">2</Col>
+                            <Col id="codecolumn">N</Col>
                             <Col id="datacolumn">N</Col>
                           </Row>
                         </Rows>
@@ -187,7 +187,7 @@
         <Div id="Div02" taborder="3" text="Div02" left="10" top="Div01:10" right="10" minwidth="680" maxwidth="" bottom="10">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="0" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="0" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" cellsizingtype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -343,7 +343,7 @@
             <Col id="smsRcvAgrYn"/>
             <Col id="dateTypeCd">1</Col>
             <Col id="mbrGrdeCd"/>
-            <Col id="korNm"></Col>
+            <Col id="korNm"/>
           </Row>
         </Rows>
       </Dataset>
@@ -658,7 +658,7 @@ this.Div02_Div00_btnMerge_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		{
 			alert("1건의 멤버스 번호가 존재해야 통합 가능합니다. \n멤버스 번호를 확인하세요.");
 		}
-		else if(this.confirm("멤버스번호 기준으로 통합되며, \n가족회원은 통합되지 않습니다. \n회원통합을 진행하시겠습니까?"))
+		else if(this.confirm("멤버스번호 기준으로 통합되며, \n동반 수강자는 통합되지 않습니다. \n회원통합을 진행하시겠습니까?"))
 		{
 			this.fn_combine(list.getColumn(chkRow1, "mbrNo"), list.getColumn(chkRow2, "mbrNo"));
 		}

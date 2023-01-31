@@ -70,7 +70,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div06_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div00_Div04_btnInit_onclick"/>
                   </Layout>
@@ -119,7 +119,7 @@
         <Div id="Div01" taborder="2" text="Div02" left="10" top="235" right="10" minwidth="680" maxwidth="" bottom="10">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_promotion_list" autofittype="col" right="0" bottom="0" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" oncellclick="Div01_Grid00_oncellclick">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_promotion_list" autofittype="col" right="0" bottom="0" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" oncellclick="Div01_Grid00_oncellclick" cellsizingtype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -285,12 +285,23 @@ this.PromotionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 this.fn_set_spotCd = function()
 {
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
 	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	this.ds_gdsSpotCd_list.filter("cd=='"+nexacro.getPrivateProfile("brchCd")+"'");
-	this.ds_search.setColumn(0, "brchCd", nexacro.getPrivateProfile("brchCd"))
-// 	this.ds_gdsSpotCd_list.insertRow(0);
-// 	this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
-// 	this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	this.Div00.form.Div01.form.ComboSpot.set_index(0);
+	this.Div00.form.Div01.form.ComboSpot.updateToDataset();
 }
 
 //체크박스 세팅

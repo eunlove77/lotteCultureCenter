@@ -144,9 +144,9 @@
                 <Column size="120"/>
                 <Column size="120"/>
                 <Column size="120"/>
+                <Column size="150"/>
                 <Column size="120"/>
-                <Column size="120"/>
-                <Column size="200"/>
+                <Column size="100"/>
               </Columns>
               <Rows>
                 <Row size="30" band="head"/>
@@ -182,12 +182,12 @@
                 <Cell col="6" expr="comp.parent.com_setMasking(email, 'email')" tooltiptype="hover" tooltiptext="expr:email"/>
                 <Cell col="7" text="bind:frstHopeBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="8" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" text="bind:secHopeBrchCd"/>
-                <Cell col="9" text="bind:frstLrclsCtegryCd" displaytype="combotext" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd"/>
-                <Cell col="10" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:frstMdclsCtegryCd"/>
-                <Cell col="11" displaytype="combotext" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:frstSmclsCtegryCd"/>
-                <Cell col="12" displaytype="combotext" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd" text="bind:secLrclsCtegryCd"/>
-                <Cell col="13" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:frstMdclsCtegryCd"/>
-                <Cell col="14" displaytype="combotext" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:frstSmclsCtegryCd"/>
+                <Cell col="9" text="bind:frstLrclsCtegryCd" displaytype="expr:frstLrclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd"/>
+                <Cell col="10" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="expr:frstMdclsCtegryCd ? 'combotext' : 'none'" text="bind:frstMdclsCtegryCd"/>
+                <Cell col="11" displaytype="expr:frstSmclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:frstSmclsCtegryCd"/>
+                <Cell col="12" displaytype="expr:secLrclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd" text="bind:secLrclsCtegryCd"/>
+                <Cell col="13" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="expr:secMdclsCtegryCd ? 'combotext' : 'none'" text="bind:secMdclsCtegryCd"/>
+                <Cell col="14" displaytype="expr:secSmclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:secSmclsCtegryCd"/>
                 <Cell col="15" text="bind:hopeDaywVal"/>
                 <Cell col="16" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
                 <Cell col="17" text="bind:appDt" displaytype="date" calendardateformat="yyyy-MM-dd"/>
@@ -248,7 +248,7 @@ this.set_dataset = function(){
 	var ds_codes_list = [
 		{ds : this.ds_day_cdList,		cd: "'008'"},	//요일
 		{ds : this.ds_tcTp_list,		cd: "'127'"},	//강사유형
-		{ds : this.ds_emailAddr_cdList,cd: "'CODE_80'"},	//이메일주소
+		{ds : this.ds_emailAddr_cdList, cd: "'003'"},	//이메일주소
 	];
 	//코드 데이터셋 설정
 	this.com_set_code_dataset(ds_codes_list);
@@ -381,25 +381,19 @@ this.reset_search_form = function(){
 this.process_teacher_list = function(){
 
 	for(var i = 0; i < this.ds_teacher_list.rowcount; i++){
-		//이메일
-		var email = this.ds_teacher_list.getColumn(i, 'email');
-		var emailAddrCd = this.ds_teacher_list.getColumn(i, 'emailAddrCd');
-    email += '@' + emailAddr;
-    this.ds_teacher_list.setColumn(i, 'email', email);
-		
-		//희망요일
-		var hopeDaywVal = this.ds_teacher_list.getColumn(i, 'hopeDaywVal');
-		if(hopeDaywVal){
-			var rtnStr = "", comma = "";
-			var arr = hopeDaywVal.split(",");
+		//hopeDaywVal 파싱
+		var str = this.ds_teacher_list.getColumn(i, "hopeDaywVal");
+		if(str){
+			var arr = str.split(",");
+			var resStr = "", comma = "";
 			for(var item of arr){
-				var row = this.ds_day_cdList.findRow('cd', item);
-				var dayNm = this.ds_day_cdList.getColumn(row, 'cdNm');
-				rtnStr += comma + dayNm;
+				row = this.ds_day_cdList.findRow("cd", item);
+				var dayNm = this.ds_day_cdList.getColumn(row, "cdNm");
+				resStr += comma + dayNm;
 				comma = ",";
 			}
+			this.ds_teacher_list.setColumn(i, "hopeDaywVal", resStr);
 		}
-		this.ds_teacher_list.setColumn(i, 'hopeDaywVal', rtnStr);
 	}
 	
 }

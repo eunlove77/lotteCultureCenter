@@ -45,21 +45,7 @@ this.fn_init = function(talkObj)
 
 this.Div00_btnTalk01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
-	
-	
-	
-	if(this[dsId].rowcount > 0){
-		var oArg = {			
-			alrtClCd : "03"	
-		,	menuSeq : this.talkObj.menuId
-		,	ds_rcv_obj : this[dsId]
-		};
-		
-		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, 600, 800, true, true, null);
-	}else{
-		this.alert("수신 대상자를 선택해주세요.");
-	}
+	this.fn_talk_popup("AlrtMng::AlrtSendPopAT.xfdl", "03");
 };
 
 /**************************************************************************
@@ -68,18 +54,7 @@ this.Div00_btnTalk01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 
 this.Div00_btnTalk02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
-	
-	if(this[dsId].rowcount > 0){
-		var oArg = {			
-			menuSeq : this.talkObj.menuId
-		,	ds_rcv_obj : this[dsId]
-		};
-		
-		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopFT.xfdl", this, 600, 800, true, true, null);
-	}else{
-		this.alert("수신 대상자를 선택해주세요.");
-	}
+	this.fn_talk_popup("AlrtMng::AlrtSendPopFT.xfdl");
 };
 
 /**************************************************************************
@@ -88,18 +63,7 @@ this.Div00_btnTalk02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 
 this.Div00_btnTalk03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
-	
-	if(this[dsId].rowcount > 0){
-		var oArg = {			
-			menuSeq : this.talkObj.menuId
-		,	ds_rcv_obj : this[dsId]
-		};
-		
-		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
-	}else{
-		this.alert("수신 대상자를 선택해주세요.");
-	}
+	this.fn_talk_popup("AlrtMng::AlrtSendPopMMS.xfdl");
 };
 
 /**************************************************************************
@@ -108,20 +72,42 @@ this.Div00_btnTalk03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 
 this.Div00_btnTalk04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.fn_talk_popup("AlrtMng::AlrtSendPopMMS.xfdl");
+};
+
+/**************************************************************************
+ * 발송 팝업 
+ **************************************************************************/
+
+this.fn_talk_popup = function(pageUrl, alrtClCd)
+{
 	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
 
 	if(this[dsId].rowcount > 0){
-		var oArg = {			
-			menuSeq : this.talkObj.menuId
-		,	ds_rcv_obj : this[dsId]
-		};
+		var agrNCnt = 0;
+
+		for(var i=0; i<this[dsId].rowcount; i++)
+		{
+			if(this[dsId].getColumn(i, "smsRcvAgrYn") != "Y")
+			{
+				agrNCnt++;
+			}
+		}
 		
-		this.gfn_openPopup("talkPop", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
-	}else{
+		if(agrNCnt > 0 && this.confirm(agrNCnt +"명이 SMS 수신거부입니다. \n그래도 진행하시겠습니까?") || agrNCnt == 0)
+		{
+			var oArg = {			
+				alrtClCd : alrtClCd
+			,	menuSeq : this.talkObj.menuId
+			,	ds_rcv_obj : this[dsId]
+			};
+			this.gfn_openPopup("talkPop", oArg, pageUrl, this, 600, 800, true, true, null);
+		}
+	}
+	else
+	{
 		this.alert("수신 대상자를 선택해주세요.");
 	}
-};
-
-]]></Script>
+}]]></Script>
   </Form>
 </FDL>
