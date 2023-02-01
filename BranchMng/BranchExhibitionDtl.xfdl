@@ -321,7 +321,7 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 			fileExtn : "jpg,jpeg,gif,png",
 			fileMaxCnt : 1,
 			fileMaxSize : 10,
-			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 5개만 등록 가능합니다.)",
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 			callbackFunc : this.fn_save
 		}
 		
@@ -357,7 +357,10 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_list();
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.fn_list();
+	}
 };
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -518,7 +521,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			fileExtn : "jpg,jpeg,gif,png",
 			fileMaxCnt : 1,
 			fileMaxSize : 10,
-			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 5개만 등록 가능합니다.)",
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 			callbackFunc : this.fn_save
 		}
 		
