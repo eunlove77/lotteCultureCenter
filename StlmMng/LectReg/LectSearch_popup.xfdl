@@ -391,7 +391,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	optnAmt = this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
 	
 	// 기존 수강내역과 비교
-	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;	
+	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;
 	for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
 		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
 			if(this.ds_atlct_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
@@ -480,7 +480,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	// 인원 수 체크
 	if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < actlAtlctCnt + Number(this.ds_stlm_list.getRowCount())){
-		alert("강좌명 : " + lectNm + "\n접수 불가 강좌가 있어 결제 하실 수 없습니다.");
+		alert("강좌명 : " + lectNm + "\n정원이 마감된 강좌가 있어 결제 하실 수 없습니다.");
 		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
 				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
@@ -648,7 +648,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 				&& yy == this.opener.divWork.form.ds_class_list.getColumn(i, "yy")
 				&& lectSmsterCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")
 				&& (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
-				&& optnSeqno != this.opener.divWork.form.ds_class_list.getColumn(i, "optnSeqno")){
+				&& (new String(optnSeqno).valueOf() == "undefined" ? "0" : optnSeqno) != this.opener.divWork.form.ds_class_list.getColumn(i, "optnSeqno")){
 				alert("강좌명: " + lectNm + "\n강좌 목록에 선택된 재료비/대여료 옵션과 동일해야 결제 하실 수 있습니다.");
 				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
