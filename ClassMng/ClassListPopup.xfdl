@@ -337,6 +337,7 @@ this.lectSmsterCd = "";
 this.apvlStatCd = "";
 this.only = "";
 this.pblOn = "";
+this.maxCnt = 0;
 this.type = 1;
 
  /**************************************************************************
@@ -374,6 +375,11 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.gfn_nvl(this.parent.pblOn) != "") 
 	{
 		this.pblOn = this.parent.pblOn;
+	}
+	
+	if(this.gfn_nvl(this.parent.maxCnt) != "")
+	{
+		this.maxCnt = this.parent.maxCnt;
 	}
 	
 	if(this.gfn_nvl(this.parent.type) != "") 
@@ -753,11 +759,13 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var flag = false;
+	var chkCnt = 0;
 	for(var i=0; i < this.ds_class_list.getRowCount(); i++)
 	{
 		if(this.ds_class_list.checkarray[i] == 1)
 		{
 			flag = true;
+			chkCnt++;
 		}
 	}
 	
@@ -766,6 +774,11 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		if(this.type == 2)
 		{
 			this.parent.dataset.clearData();
+		}
+		if(this.maxCnt > 0 && this.parent.dataset.getRowCount() + chkCnt > this.maxCnt)
+		{
+			alert("강좌는 최대 "+ this.maxCnt +"개까지 선택 가능합니다.");
+			return false;
 		}
 		
 		for(var i=0; i < this.ds_class_list.getRowCount(); i++)
