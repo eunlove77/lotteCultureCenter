@@ -66,7 +66,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="수강료 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <MaskEdit id="MaskEdit00" taborder="1" left="Static00:6" top="5" width="130" height="20" limitbymask="both" format="!##,###,###,##0"/>
+                                <MaskEdit id="MaskEdit00" taborder="1" left="Static00:6" top="5" width="130" height="20" limitbymask="both" format="!##,###,###,##0" oninput="Div00_Div00_Div00_Div01_00_MaskEdit00_oninput"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -1189,8 +1189,8 @@ this.init = function()
 	{
 		lectExplLen = lectExpl.length;
 	}
-	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(" + lectNmLen + "/100)");
-	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(" + lectExplLen + "/100)");
+	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(" + lectNmLen + "/50)");
+	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(" + lectExplLen + "/50)");
 	
 	//페이지 사이즈 조절
 	this.Div00.form.Div00.set_height(569);
@@ -3059,6 +3059,19 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oninput = function(obj:nexacro.G
 			obj.setEditingValue(obj.getEditingValue().substr(0, 50));
 		}
 	}
+	
+	if(obj.currentcol == 2)
+	{
+		if(obj.getEditingValue() != "" && obj.getEditingValue() != undefined)
+		{		
+			var num = obj.getEditingValue();
+			if(num.length > 0){
+				num = (parseInt(num / 100) + (num % 100)) * 100;
+			}
+			
+			obj.setEditingValue(num);
+		}
+	}
 };
 
 this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -3602,6 +3615,17 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
 	{	
 		this.ds_option_list.setColumn(i, "partRfndClCd", partRfndClCd);
 	}
+};
+
+this.Div00_Div00_Div00_Div01_00_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
+{
+	var num = obj.value;
+	if(num.length > 0){
+		num = (parseInt(num / 100) + (num % 100)) * 100;
+	}
+	
+	obj.set_value(num);
+	obj.setCaretPos(obj.value.length-2);
 };
 ]]></Script>
     <Objects>
