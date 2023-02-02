@@ -161,7 +161,7 @@ this.PromotionReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//캘린더세팅
 	this.Div00.form.Div00.form.Div00.form.strtDtm.calendaredit.set_readonly(true);
-	this.Div00.form.Div00.form.Div00.form.endDtm.calendaredit.set_readonly(true);+
+	this.Div00.form.Div00.form.Div00.form.endDtm.calendaredit.set_readonly(true);
 	
 	//에디터세팅
 	this.Div00.form.Div02.form.webCont.set_url(this.application.Namo);
@@ -237,15 +237,18 @@ this.fn_get_edit_body = function(wbObj){
 //에디터SET
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = this.ds_detail.getColumn(0, obj.id);
-	var _win = obj.getProperty("window");	 
-		_win.callMethod("setData", content);
-	
-	if(_win)
+	if(e.userdata == "LC")
 	{
-		_win.destroy();
-		_win = null;
-	}  
+		var content = this.ds_detail.getColumn(0, obj.id);
+		var _win = obj.getProperty("window");	
+			_win.callMethod("setData", content);
+		
+		if(_win)
+		{
+			_win.destroy();
+			_win = null;
+		}   
+	} 		
 };
 
 /**************************************************************************
@@ -445,11 +448,7 @@ this.fn_list = function()
 this.fn_close = function()
 {
 	this.close();
-}
-
-
-
-]]></Script>
+}]]></Script>
     <Objects>
       <Dataset id="ds_detail">
         <ColumnInfo>

@@ -241,9 +241,6 @@ this.OnlineDiscountList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.init();	
 	
 	//지점초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
-	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
-	this.ds_gdsSpotCd_list.deleteRow(0);
 	this.fn_classBrch_set();
 	
 	this.Div00.form.Div06.form.Calendar00.calendaredit.set_readonly(true);	//캘린더 키인 막기
@@ -382,6 +379,10 @@ this.fn_classCtgyMiddle_chg = function(obj)
 //지점 세팅
 this.fn_classBrch_set = function()
 {	
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
 	if(nexacro.getPrivateProfile("brchCd") == "0000")
 	{
 		this.ds_gdsSpotCd_list.insertRow(0);
@@ -390,7 +391,8 @@ this.fn_classBrch_set = function()
 	}
 	else
 	{
-		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+		this.ds_gdsSpotCd_list.filter("cd=='" + this.brchCd + "'");
+		this.ds_search.setColumn(0, "brchCd", this.brchCd);
 	}
 }
 
@@ -883,7 +885,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="brchCd">0000</Col>
+            <Col id="brchCd"></Col>
             <Col id="yy"/>
             <Col id="lectSmsterCd"/>
             <Col id="lrclsCtegryCd"/>
