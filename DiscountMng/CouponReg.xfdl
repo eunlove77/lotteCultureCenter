@@ -298,7 +298,7 @@
                         </Rows>
                       </Dataset>
                     </Radio>
-                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,###" limitbymask="both"/>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,###" limitbymask="both" oninput="Div01_Div04_MaskEdit00_oninput"/>
                     <Static id="Static01" taborder="2" text="원" left="MaskEdit00:10" top="32" width="120" height="21"/>
                   </Layout>
                 </Layouts>
@@ -1246,6 +1246,7 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 			type : 1,
 			brchCd : spotStr,
 			pblOn : "on",
+			maxCnt : 10,
 			dataset : this.ds_appl_lect
 		}
 		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, null, null, true, true, null);
@@ -1494,7 +1495,29 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 
-};]]></Script>
+};
+
+this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
+{
+	if(this.Div01.form.Div04.form.radioDiscount.value == '02')
+	{
+		var num = obj.value;
+		// 단위 : 무조건 백의자리
+		if(num.length > 0)
+		{
+			num = (parseInt(num / 100) + (num % 100)) * 100;
+		}
+		
+		obj.set_value(num);
+		obj.setCaretPos(obj.value.length-2);
+		
+		if(obj.value.toString() == "0")
+		{
+			obj.set_value("");
+		}
+	}
+};
+]]></Script>
     <Bind>
       <BindItem id="cpnNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="cpnNm"/>
       <BindItem id="cpnExpl" compid="Div00.form.Div02.form.TextArea00" propid="value" datasetid="ds_detail" columnid="cpnExpl"/>
