@@ -135,7 +135,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="사은품 정보" left="2" top="10" width="100" height="20" cssclass="sta_WF_TitGray"/>
-                    <Grid id="Grid00" taborder="1" left="0" top="40" autofittype="col" right="0" useselcolor="true" height="300" binddataset="ds_gift_list" cellclickbound="control" autoenter="select">
+                    <Grid id="Grid00" taborder="1" left="0" top="40" autofittype="col" right="0" useselcolor="true" height="300" binddataset="ds_gift_list" cellclickbound="control" autoenter="select" oncellclick="Div00_Div02_Grid00_oncellclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -397,6 +397,11 @@ this.fn_set_detail = function()
 	itmChngInf.postvalue = this.prmtnMst.ds_detail.getColumn(0, "prmtnClCd");
 	this.Div00_Div01_Div03_radioTrgtCd_onitemchanged(this.Div00.form.Div01.form.Div03.form.radioTrgtCd, itmChngInf);
 }
+
+this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	obj.dropdownCombo();
+};
 
 /**************************************************************************
  * 적용강좌 라디오 이벤트
@@ -731,6 +736,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_set_detail();
 			break;
 	}
-};]]></Script>
+};
+
+]]></Script>
   </Form>
 </FDL>
