@@ -190,11 +190,16 @@ this.com_fn_checkbox = function(pObj)
  * 검색조건 초기화
  **************************************************************************/
 this.com_reset_search_form = function(pObj){
+	pObj.ds_list.deleteAll();
+	this.com_reset_search_form2(pObj);
+
+}
+this.com_reset_search_form2 = function(pObj){
 	var arrObj = pObj.components;
 	for(var i=0; i<arrObj.length; i++)
 	{	
 		if(arrObj[i] == "[object Div]"){
-			this.com_reset_search_form(arrObj[i].form);
+			this.com_reset_search_form2(arrObj[i].form);
 		}
 		else if(arrObj[i] == "[object Edit]"){
 			arrObj[i].set_value("");
@@ -210,7 +215,7 @@ this.com_reset_search_form = function(pObj){
 			arrObj[i].set_value("");
 			arrObj[i].calendaredit.set_readonly(true); 
 		}
-	}
+	}	
 }
 /**************************************************************************
  * 카테고리

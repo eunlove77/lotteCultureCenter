@@ -161,7 +161,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -278,7 +278,7 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid00, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
 	//지점 콤보박스 세팅
 	this.com_set_branch_list();
@@ -403,7 +403,7 @@ this.select_teacher_list = function(){
 	tranObj.strSvcId	= "select_teacher";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
 	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_teacher_list=output1";
+	tranObj.outData     = "ds_list=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -414,23 +414,23 @@ this.select_teacher_list = function(){
 }
 this.process_teacher_list = function(){
 	//강사 목록 데이터 가공
-	this.ds_teacher_list.addColumn("tcTpCdNm", "STRING");
+	this.ds_list.addColumn("tcTpCdNm", "STRING");
 	
-	for(var i = 0; i < this.ds_teacher_list.rowcount; i++){
+	for(var i = 0; i < this.ds_list.rowcount; i++){
 		var row;
 		//강사유형
-		var tpCd = this.ds_teacher_list.getColumn(i, "tcTpCd");
-		var txfrBizprYn = this.ds_teacher_list.getColumn(i, "txfrBizprYn");
+		var tpCd = this.ds_list.getColumn(i, "tcTpCd");
+		var txfrBizprYn = this.ds_list.getColumn(i, "txfrBizprYn");
 		row = this.ds_tcTp_list.findRow("cd", tpCd);
 		var tpCdNm = this.ds_tcTp_list.getColumn(row, "cdNm");
 		
 		if(txfrBizprYn == "Y"){
 			tpCdNm += "(면세)";
 		}
-		this.ds_teacher_list.setColumn(i, "tcTpCdNm", tpCdNm);
+		this.ds_list.setColumn(i, "tcTpCdNm", tpCdNm);
 		
 		//hopeDaywVal 파싱
-		var str = this.ds_teacher_list.getColumn(i, "hopeDaywVal");
+		var str = this.ds_list.getColumn(i, "hopeDaywVal");
 		if(str){
 			var arr = str.split(",");
 			var resStr = "", comma = "";
@@ -440,7 +440,7 @@ this.process_teacher_list = function(){
 				resStr += comma + dayNm;
 				comma = ",";
 			}
-			this.ds_teacher_list.setColumn(i, "hopeDaywVal", resStr);
+			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
 	}
 }
@@ -452,7 +452,7 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 	}
 	
 	if(svcId == "select_teacher"){
-		this.txtTotal.set_text("강사목록 (" + this.ds_teacher_list.rowcount + ")개");
+		this.txtTotal.set_text("강사목록 (" + this.ds_list.rowcount + ")개");
 		this.process_teacher_list();
 	}
 	
@@ -502,7 +502,7 @@ this.reset_search_form = function(){
 };
 this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_teacher_list);
+	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_list);
 	if(checkedArr.length == 0){
 		alert("발송대상을 선택하세요.");
 		return false;
@@ -610,7 +610,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_teacher_list">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>

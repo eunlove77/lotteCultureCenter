@@ -77,7 +77,7 @@
         </Div>
         <Button id="btnCancel" taborder="6" text="취소" height="21" cssclass="btn_WF_Weak" width="75" left="40.82%" bottom="19" onclick="btnCancel_onclick"/>
         <Button id="btnSelect" taborder="5" text="선택" height="21" wordWrap="char" cssclass="btn_WF_Medium" width="75" left="btnCancel:15.029999999999973" bottom="19" onclick="btnSelect_onclick"/>
-        <Grid id="Grid" taborder="2" left="10" top="230" binddataset="ds_teacher_list" autofittype="col" right="10" bottom="60" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음">
+        <Grid id="Grid" taborder="2" left="10" top="230" binddataset="ds_list" autofittype="col" right="10" bottom="60" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음">
           <Formats>
             <Format id="default">
               <Columns>
@@ -184,12 +184,12 @@ this.TeacherList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 	if(this.type == 1)
 	{
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
-	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid, 0);
 	}
 	else
 	{
 		//그리드의 라디오버튼을 Dataset 없이 사용하는 함수 실행
-		this.gfnSetRadioNoDataset(this.ds_teacher_list, this.Grid, 0);
+		this.gfnSetRadioNoDataset(this.ds_list, this.Grid, 0);
 	}
 	this.Grid.type = this.type;
 	this.Grid.redrawExprCell(); 
@@ -266,7 +266,7 @@ this.select_teacher_list = function(){
 	tranObj.strSvcId	= "select_teacher";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/popup_list.do";
 	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_teacher_list=output1";
+	tranObj.outData     = "ds_list=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "select_teacher_list_callback";
 	tranObj.isAsync     = true;
@@ -278,7 +278,7 @@ this.select_teacher_list = function(){
 }
 this.select_teacher_list_callback = function(svcID, errorCode, errorMsg){
 
-	this.txtTotal.set_text("강사목록 (" + this.ds_teacher_list.rowcount + ") 개");
+	this.txtTotal.set_text("강사목록 (" + this.ds_list.rowcount + ") 개");
 	
 	if(errorCode != 0){
 		// 에러 시 화면 처리 내역
@@ -296,7 +296,7 @@ this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 };
 this.btnSelect_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_teacher_list);
+	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_list);
 	
 	if(checkedArr.length == 0){
 		alert("강사를 선택하세요.");
@@ -311,14 +311,14 @@ this.btnSelect_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.parent.dataset.deleteAll();
 	}
 	for(i of checkedArr){
-		var findRow = this.parent.dataset.extractRows("tcCdNo == '" + this.ds_teacher_list.getColumn(i, "tcCdNo") + "'");
+		var findRow = this.parent.dataset.extractRows("tcCdNo == '" + this.ds_list.getColumn(i, "tcCdNo") + "'");
 	
 		findRow = (findRow.length == undefined) ? [] : findRow;
 			
 		if(findRow.length < 1)
 		{
 			var rowIndex = this.parent.dataset.addRow();
-			this.parent.dataset.copyRow(rowIndex, this.ds_teacher_list, i);
+			this.parent.dataset.copyRow(rowIndex, this.ds_list, i);
 		}
 	}
 	
@@ -356,7 +356,7 @@ this.validate_checkbox = function(){
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_teacher_list">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>

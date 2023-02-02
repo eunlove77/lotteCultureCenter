@@ -136,7 +136,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_tclect_list">
+        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -258,7 +258,7 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.domain = this.application.Domain;
 	
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_tclect_list, this.Grid00, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
 	//지점초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd");
@@ -397,7 +397,7 @@ this.get_teacher_lecture_list = function()
 		strSvcId : "teacher_lecture_list",
 		strSvcUrl : this.application.Admin_svc + "::teacherMng/tclect/list.do",
 		inData : "search=ds_search",
-		outData : "ds_tclect_list=output1",
+		outData : "ds_list=output1",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
@@ -416,7 +416,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	
 	if(svcId == "teacher_lecture_list"){
-		var rowcount = this.ds_tclect_list.rowcount;
+		var rowcount = this.ds_list.rowcount;
 		this.txtTotal.set_text("("+ rowcount +"개)");
 	}
 };
@@ -426,7 +426,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
  **************************************************************************/
 this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_tclect_list);
+	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_list);
 	
 	if(checkedArr.length == 0){
 		alert("대상을 선택하세요.");
@@ -440,10 +440,10 @@ this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 };
 this.selectCertificate_lect_hist = function(index){
 	var param = "";
-	param += "&brchCd=" + this.ds_tclect_list.getColumn(index, "brchCd");
-	param += "&yy=" + this.ds_tclect_list.getColumn(index, "yy");
-	param += "&lectSmsterCd=" + this.ds_tclect_list.getColumn(index, "lectSmsterCd");
-	param += "&lectCd=" + this.ds_tclect_list.getColumn(index, "lectCd");
+	param += "&brchCd=" + this.ds_list.getColumn(index, "brchCd");
+	param += "&yy=" + this.ds_list.getColumn(index, "yy");
+	param += "&lectSmsterCd=" + this.ds_list.getColumn(index, "lectSmsterCd");
+	param += "&lectCd=" + this.ds_list.getColumn(index, "lectCd");
 	
 	var url = this.domain + "/admin/teacherMng/certificate/lect_hist.do?" + param;
 	
@@ -531,7 +531,7 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_tclect_list">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
