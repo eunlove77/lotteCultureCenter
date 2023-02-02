@@ -1733,9 +1733,28 @@ this.ds_sign_dtl_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.D
 {
 	this.Div01.form.Div07.form.signViewer.set_image(this.ds_sign_dtl.getColumn(0, "webPath"));
 };
+
+//이메일 정규식 적용
+this.ds_teacher_info_onvaluechanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if(e.columnid == "email"){	
+		var value = e.newvalue;
+		var regResult = value.match(/^[_a-zA-Z0-9-\\.\\_]+$/g);
+		if(value && !regResult){
+			obj.setColumn(0, 'email', e.oldvalue);
+		}
+	}
+	else if(e.columnid == "emailAddrCd"){
+		var value = e.newvalue;
+		var regResult = value.match(/^[\\.a-zA-Z0-9-]+$/g);
+		if(value && !regResult){
+			obj.setColumn(0, 'emailAddrCd', e.oldvalue);
+		}
+	}
+};
 ]]></Script>
     <Objects>
-      <Dataset id="ds_teacher_info">
+      <Dataset id="ds_teacher_info" onvaluechanged="ds_teacher_info_onvaluechanged">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
