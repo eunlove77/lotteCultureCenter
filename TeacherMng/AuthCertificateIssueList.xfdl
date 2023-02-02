@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="5" text="Div01" left="10" top="90" right="10" height="33">
+        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="700">
@@ -26,7 +26,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div02" taborder="6" text="Div01" left="10" top="Div01:0" height="33" right="10">
+        <Div id="Div02" taborder="5" text="Div01" left="10" top="Div01:0" height="33" right="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="1" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="700">
@@ -136,9 +136,8 @@
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="8" text="증명서발급 신청 목록" left="16" top="210" width="130" height="21" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
-        <Static id="txtTotal" taborder="4" left="Static00:10" top="210" height="21" text="(0개)" width="42"/>
-        <Button id="btnConfirm" taborder="7" text="증명서발급(승인)" top="210" height="21" width="125" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
+        <Button id="btnConfirm" taborder="6" text="증명서발급(승인)" top="210" height="21" width="125" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
+        <Div id="Div06" taborder="7" left="10" top="208" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -368,7 +367,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		return;
 	}
 	if(svcId == "select_list"){
-		this.txtTotal.set_text("(" + this.ds_list.rowcount + ")개");
 		this.process_teacher_list();
 	}
 	else if(svcId == "update_list"){

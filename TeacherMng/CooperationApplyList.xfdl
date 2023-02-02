@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33">
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="90" right="10" height="33">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33.33%">
@@ -75,10 +75,8 @@
           </Layouts>
         </Div>
         <Div id="Div00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="5" text="목록" left="20" top="185" width="70" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
-        <Static id="txtTotal" taborder="3" left="Static00:5" top="190" height="21" text="(0개)" width="52"/>
-        <Button id="btnDelete" taborder="6" text="삭제" top="190" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnDelete_onclick"/>
-        <Grid id="Grid00" taborder="7" left="10" top="230" autofittype="col" right="10" bottom="210" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list">
+        <Button id="btnDelete" taborder="4" text="삭제" top="190" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnDelete_onclick"/>
+        <Grid id="Grid00" taborder="5" left="10" top="230" autofittype="col" right="10" bottom="210" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -124,6 +122,7 @@
             </Format>
           </Formats>
         </Grid>
+        <Div id="Div06" taborder="6" left="10" top="198" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -283,7 +282,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	
 	if(svcId == "select_cooperation_apply_list"){
-		this.txtTotal.set_text("(" + this.ds_list.rowcount + ")개");
+		
 	}
 	else if(svcId == "delete_cooperation_apply"){
 		alert("삭제되었습니다.");

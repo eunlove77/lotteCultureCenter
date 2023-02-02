@@ -75,8 +75,8 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="btnCancel" taborder="6" text="취소" height="21" cssclass="btn_WF_Weak" width="75" left="40.82%" bottom="19" onclick="btnCancel_onclick"/>
-        <Button id="btnSelect" taborder="5" text="선택" height="21" wordWrap="char" cssclass="btn_WF_Medium" width="75" left="btnCancel:15.029999999999973" bottom="19" onclick="btnSelect_onclick"/>
+        <Button id="btnCancel" taborder="5" text="취소" height="21" cssclass="btn_WF_Weak" width="75" left="40.82%" bottom="19" onclick="btnCancel_onclick"/>
+        <Button id="btnSelect" taborder="4" text="선택" height="21" wordWrap="char" cssclass="btn_WF_Medium" width="75" left="btnCancel:15.029999999999973" bottom="19" onclick="btnSelect_onclick"/>
         <Grid id="Grid" taborder="2" left="10" top="230" binddataset="ds_list" autofittype="col" right="10" bottom="60" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음">
           <Formats>
             <Format id="default">
@@ -123,8 +123,7 @@
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtTotal" taborder="3" left="8" top="190" height="21" text="강사목록 (0)개" width="82"/>
-        <Div id="Div01" taborder="4" text="Div01" left="10" top="80" height="33" right="10">
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="80" height="33" right="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="50%">
@@ -146,7 +145,8 @@
             </Layout>
           </Layouts>
         </Div>
-        <Static id="txtMenuNm" taborder="7" text="강사조회" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Static id="txtMenuNm" taborder="6" text="강사조회" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div06" taborder="7" left="10" top="198" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -277,8 +277,6 @@ this.select_teacher_list = function(){
 	this.gfn_transaction(tranObj);
 }
 this.select_teacher_list_callback = function(svcID, errorCode, errorMsg){
-
-	this.txtTotal.set_text("강사목록 (" + this.ds_list.rowcount + ") 개");
 	
 	if(errorCode != 0){
 		// 에러 시 화면 처리 내역

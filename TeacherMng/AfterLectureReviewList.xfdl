@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33" minwidth="700" maxwidth="">
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="90" right="10" height="33" minwidth="700" maxwidth="">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33%" minwidth="255" maxwidth="">
@@ -109,10 +109,8 @@
           </Layouts>
         </Div>
         <Div id="Div00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21" maxwidth=""/>
-        <Static id="Static00" taborder="5" text="수강후기 목록" left="10" top="200" width="80" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
-        <Static id="txtTotal" taborder="3" left="Static00:10" top="200" height="25" text="(0개)" width="52" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-        <Button id="btnSave" taborder="6" text="저장" top="200" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="10" onclick="btnLcthistConf_onclick"/>
-        <Grid id="Grid00" taborder="7" left="10" top="230" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list" oncloseup="Grid00_oncloseup">
+        <Button id="btnSave" taborder="4" text="저장" top="200" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="10" onclick="btnLcthistConf_onclick"/>
+        <Grid id="Grid00" taborder="5" left="10" top="230" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list" oncloseup="Grid00_oncloseup">
           <Formats>
             <Format id="default">
               <Columns>
@@ -170,6 +168,7 @@
             </Format>
           </Formats>
         </Grid>
+        <Div id="Div06" taborder="6" left="10" top="198" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -294,9 +293,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 		return;
 	}
 	if(svcId == "after_lecture_review_list"){
-		var rowcount = this.ds_list.rowcount;
-		this.txtTotal.set_text("(" + rowcount + "개)");
-		
 		this.process_list_data();
 		this.set_duplication();
 		
