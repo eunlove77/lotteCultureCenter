@@ -1510,11 +1510,13 @@ this.validate_teacher_basic = function(){
 	]
 	
 	for(var vali of vali_arr){
-		var value = ds.getColumn(0, vali[0]);
-		if(this.gfn_nvl(value) == "" || nexacro.trim(value) == "" || (vali[0] == 'prinfClctAgrYn' && value == 'N')){
-			alert(vali[1] + " 입력하세요.");
-			return false;
-		}
+    if(vali){
+      var value = ds.getColumn(0, vali[0]);
+      if(this.gfn_nvl(value) == "" || nexacro.trim(value) == "" || (vali[0] == 'prinfClctAgrYn' && value == 'N')){
+        alert(vali[1] + " 입력하세요.");
+        return false;
+      }
+    }
 	}
 
 	//전화번호 - 하나입력하면 체크
