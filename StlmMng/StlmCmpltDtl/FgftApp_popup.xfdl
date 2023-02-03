@@ -12,7 +12,6 @@
                 <Formats>
                   <Format id="default">
                     <Columns>
-                      <Column size="48" band="left"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
@@ -25,22 +24,20 @@
                       <Row size="24"/>
                     </Rows>
                     <Band id="head">
-                      <Cell/>
-                      <Cell col="1" text="실수강자"/>
-                      <Cell col="2" text="지점명"/>
-                      <Cell col="3" text="강좌유형"/>
-                      <Cell col="4" text="강좌코드"/>
-                      <Cell col="5" text="강좌명"/>
-                      <Cell col="6" text="강사명"/>
+                      <Cell text="실수강자"/>
+                      <Cell col="1" text="지점명"/>
+                      <Cell col="2" text="강좌유형"/>
+                      <Cell col="3" text="강좌코드"/>
+                      <Cell col="4" text="강좌명"/>
+                      <Cell col="5" text="강사명"/>
                     </Band>
                     <Band id="body">
-                      <Cell displaytype="checkboxcontrol" text="expr:dataset.checkarray[currow]"/>
-                      <Cell col="1" text="bind:actlAtlctNpleNm"/>
-                      <Cell col="2" text="bind:brchCdNm"/>
-                      <Cell col="3" text="bind:lectTpCdNm"/>
-                      <Cell col="4" text="bind:lectCd"/>
-                      <Cell col="5" text="bind:lectNm"/>
-                      <Cell col="6" text="bind:tcNm"/>
+                      <Cell text="bind:actlAtlctNpleNm"/>
+                      <Cell col="1" text="bind:brchCdNm"/>
+                      <Cell col="2" text="bind:lectTpCdNm"/>
+                      <Cell col="3" text="bind:lectCd"/>
+                      <Cell col="4" text="bind:lectNm"/>
+                      <Cell col="5" text="bind:tcNm"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -102,7 +99,7 @@ this.FgftApp_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.fn_data_list();
 	
-	this.gfnSetCheckBoxNoDataset(this.ds_atlct_list, this.Div00.form.Grid00, 0);
+	//this.gfnSetCheckBoxNoDataset(this.ds_atlct_list, this.Div00.form.Grid00, 0);
 };
 
 this.fn_data_list = function()
@@ -185,27 +182,9 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	}
 
 	if(confirm("사은품을 신청하시겠습니까?")){
-		this.removeChild("ds_fgft_insert");
-		var dsFgftInsert = new Dataset();
-		dsFgftInsert.name = "ds_fgft_insert";
-		this.addChild("ds_fgft_insert", dsFgftInsert);
-		dsFgftInsert.set_enableevent(false);
-		dsFgftInsert.clear();
-		dsFgftInsert.copyData(this.ds_atlct_list, false);
-		dsFgftInsert.clearData();
-		var dsFgftInsertIndex = 0;
-		for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
-			if(this.ds_atlct_list.checkarray[i]){
-				dsFgftInsert.addRow();
-				dsFgftInsert.copyRow(dsFgftInsertIndex, this.ds_atlct_list, i);
-				dsFgftInsertIndex++;
-			}
-		}
-		dsFgftInsert.set_enableevent(true);
-		
 		var strSvcId    = "insert";
 		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/insertFgftAppData.do";
-		var inData      = "fgftList=this.ds_fgft_insert";
+		var inData      = "fgftList=this.ds_atlct_list";
 		var outData     = "this.ds_rtn_list=output1";
 		var strArg      = "prmtnSeqno=" + this.ds_fgft_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "prmtnSeqno");
 		strArg			+= " fgftSeqno=" + this.ds_fgft_list.getColumn(this.Div00.form.Div00.form.Combo00.index, "fgftSeqno");
