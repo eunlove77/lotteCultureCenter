@@ -237,11 +237,12 @@ this.OnlineDiscountList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/online/";
-	// 코드 데이터
-	this.init();	
 	
 	//지점초기화
 	this.fn_classBrch_set();
+	
+	// 코드 데이터
+	this.init();	
 	
 	this.Div00.form.Div06.form.Calendar00.calendaredit.set_readonly(true);	//캘린더 키인 막기
 	this.Div00.form.Div06.form.Calendar01.calendaredit.set_readonly(true);	//캘린더 키인 막기
@@ -257,9 +258,10 @@ this.init = function()
 {	
 	this.ds_search.clearData();
 	this.ds_search.addRow();
-	this.ds_search.setColumn(0, "brchCd", this.brchCd);
 	this.ds_search.setColumn(0, "f", "");
 	this.ds_search.setColumn(0, "q", "");
+	
+	this.Div00.form.Div00.form.Combo00.set_index(0);
 	
 	// 코드 데이터
 	this.fn_code_list();
@@ -669,8 +671,6 @@ this.Div00_Div09_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 	this.fn_sesterInfo();
 	this.fn_year_add();
 	this.fn_semester_set();
-	
-	this.fn_list();
 };
 
 //필터 초기화
@@ -885,7 +885,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="brchCd"></Col>
+            <Col id="brchCd"/>
             <Col id="yy"/>
             <Col id="lectSmsterCd"/>
             <Col id="lrclsCtegryCd"/>
