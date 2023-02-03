@@ -330,7 +330,10 @@ this.excelDownBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.endBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_end_coupon();
+	if(this.confirm("발급종료 하시겠습니까?"))
+	{
+		this.fn_end_coupon();
+	}
 };
 
 this.fn_end_coupon = function()
@@ -406,7 +409,7 @@ this.copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	{
 		alert("1개만 선택하세요.");
 	}
-	else
+	else if(this.confirm("선택하신 쿠폰을 복사하시겠습니까?"))
 	{
 		this.popCnt ++;
 		var oArg = {
@@ -447,6 +450,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		var oArg = { 
 				cpnSeqno : obj.getBindDataset().getColumn(e.row, "cpnSeqno") 
 			,	tabIndex : e.cell == 7 ? 1 : 0	//사용자수/발급자수 클릭 시 현황탭으로 이동
+			,	menuId : this.getOwnerFrame().param.MENU_ID
 		};
 	
 		if(obj.getBindDataset().getColumn(e.row, "issueStatCd") == "00")

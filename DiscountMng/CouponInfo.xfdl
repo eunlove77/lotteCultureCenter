@@ -12,8 +12,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Static id="Static01" taborder="1" left="Static00:10" top="5" width="55" usedecorate="false" height="21" fittocontents="none" expr="comp.text == &quot;10&quot; ? &quot;발급중&quot; : &quot;발급종료&quot;"/>
-                    <Button id="btnEnd" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80" visible="false"/>
+                    <Static id="Static01" taborder="1" left="Static00:10" top="5" width="55" usedecorate="false" height="21" fittocontents="none" expr="comp.text == &quot;10&quot; ? &quot;발급중&quot; : comp.text == &quot;30&quot; ? &quot;발급종료&quot; : &quot;기간만료&quot;"/>
+                    <Button id="btnEnd" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80" visible="false" onclick="Div00_Div10_btnEnd_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -437,7 +437,7 @@ this.fn_set_detail = function()
 	this.fn_sync_checkBox();
 	this.fn_sync_mbrGrde();
 	
-	if(this.ds_detail.getColumn(0, "issueStatCd") == "10")
+	if(this.ds_detail.getColumn(0, "issueStatCd") != "30")
 	{
 		this.Div00.form.Div10.form.btnEnd.set_visible(true);		
 	}
@@ -608,9 +608,34 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_set_detail();
 
 			break;
+		case "end":
+			this.alert("발급종료 되었습니다.");
+			this.parent.parent.parent.parent.opener.components[0].form.fn_list();
+			this.parent.parent.parent.close();
+			break;
 	}
 };
 
+
+this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("발급종료 하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "end",
+			strSvcUrl : this.baseSvrUrl + "end.do",
+			inData : "",
+			outData : "",
+			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isAsync : true
+		}
+		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+		this.gfn_transaction(tranObj);	
+	}
+};
 ]]></Script>
   </Form>
 </FDL>
