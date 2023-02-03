@@ -187,9 +187,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					if(optnAmt != ""){
 						optnAmt = Number(nexacro.replaceAll(optnAmt.substring(0, optnAmt.length-1), ",", ""));
 						this.opener.divWork.form.ds_class_list.set_enableevent(false);
-						for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
-							this.opener.divWork.form.ds_class_list.setColumn(i, "optnAmt", optnAmt);
-						}
+						this.opener.divWork.form.ds_class_list.setColumn(this.opener.divWork.form.ds_class_list.getRowCount() - 1, "optnAmt", optnAmt);
 						this.opener.divWork.form.ds_class_list.set_enableevent(true);
 					}
 				}
@@ -455,7 +453,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getMemberDtl.do";
 	var inData      = "";
 	var outData     = "this.ds_member_dtl=output1 this.ds_stlm_list=output2 this.ds_wit_list=output3";
-	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd);
+	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd);
 	var callBackFnc = function(svcID, errorCode, errorMsg){};
 	var isAsync     = false;
 	var tranObj = {
@@ -609,7 +607,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		
 		// 강좌검색 윈도우 팝업에서 저장 후 강좌검색 목록에 등록된 지점 외 다른 지점 저장 시
 		for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
-			if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
+			if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
 				alert("같은 지점의 강좌만 선택 가능합니다.");
 				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
@@ -638,10 +636,10 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			}
 			
 			// 동일한 강좌의 서로 다른 옵션으로 수강등록하는 경우
-			if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
+			if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
 				&& yy == this.opener.divWork.form.ds_class_list.getColumn(i, "yy")
 				&& lectSmsterCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")
-				&& (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
+				&& (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
 				&& (new String(optnSeqno).valueOf() == "undefined" ? "0" : optnSeqno) != this.opener.divWork.form.ds_class_list.getColumn(i, "optnSeqno")){
 				alert("강좌명: " + lectNm + "\n강좌 목록에 선택된 재료비/대여료 옵션과 동일해야 결제 하실 수 있습니다.");
 				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
@@ -658,10 +656,10 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			
 			// 동일한 강좌의 동일한 실수강자가 있을때
 			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
-				if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
+				if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
 					&& yy == this.opener.divWork.form.ds_class_list.getColumn(i, "yy")
 					&& lectSmsterCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")
-					&& (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") == this.itrstBrchCd ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
+					&& (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
 					&& arrActlAtlctNpleNm[j] == this.opener.divWork.form.ds_class_list.getColumn(i, "actlAtlctNpleNm")){
 					alert("강좌명: " + lectNm + "\n같은 강좌에 중복된 실수강자가 있어 결제 하실 수 없습니다.");
 					for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
