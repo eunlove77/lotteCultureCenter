@@ -219,10 +219,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			var dsOflnAmtClCdList = this.dcMthdFrm.ds_ofln_amt_cl_cd_list;
 			var dsDcDtl = this.dcMthdFrm.ds_dc_dtl;
 			
-			this.dcMthdFrm.oflnDcAmt = dsDcDtl.getColumn(0, "oflnDcAmt");
-			this.dcMthdFrm.grdeDcAmt = dsDcDtl.getColumn(0, "grdeDcAmt");
-			this.dcMthdFrm.cpnDcAmt = dsDcDtl.getColumn(0, "cpnDcAmt");
-			this.dcMthdFrm.addDcAmt = dsDcDtl.getColumn(0, "addDcAmt");
+			this.dcMthdFrm.oflnDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "oflnDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "oflnDcAmt");
+			this.dcMthdFrm.grdeDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "grdeDcAmt");
+			this.dcMthdFrm.cpnDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "cpnDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "cpnDcAmt");
+			this.dcMthdFrm.addDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "addDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "addDcAmt");
 			
 			this.Div00.form.Div00.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "stlmDtm"));
 			this.Div00.form.Div01.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "actlAtlctNpleNm"));
@@ -302,6 +302,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
 			}else{
 				var cpnDcAmt = dsDcDtl.getColumn(0, "cpnDcAmt");
+				trace(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
+				trace(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.saveXML());
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_value(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
@@ -432,6 +434,10 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var otgiftStlmAmt = this.gfn_nvl(this.Div01.form.Div04.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div04.form.Edit00.value, ",", ""));
 	var etcStlmAmt = this.gfn_nvl(this.Div01.form.Div05.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div05.form.Edit00.value, ",", ""));
 	var chngAmt = this.gfn_nvl(this.Div01.form.Div06.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Edit00.value, ",", ""));
+	var chngMthdCd = this.gfn_nvl(this.Div01.form.Div06.form.Combo00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Combo00.value, ",", ""));
+	trace(chngAmt);
+	trace(chngMthdCd);
+	
 	
 	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
 		if(chngAmt == 0){
@@ -517,6 +523,8 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		dsUpdate.addColumn("addDcNm", "string", 256);
 		dsUpdate.addColumn("addDcAmtClCd", "string", 256);
 		dsUpdate.addColumn("addDcAmt", "int", 256);
+		dsUpdate.addColumn("chngAmt", "string", 256);
+		dsUpdate.addColumn("chngMthdCd", "string", 256);
 		
 		this.addChild("ds_update_info", dsUpdate);
 		
@@ -534,6 +542,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_update_info.setColumn(0, "otgiftStlmAmt", otgiftStlmAmt);
 		this.ds_update_info.setColumn(0, "etcStlmAmt", etcStlmAmt);
 		this.ds_update_info.setColumn(0, "chngAmt", chngAmt);
+		this.ds_update_info.setColumn(0, "chngMthdCd", chngMthdCd);
 		
 		var lectAmt = Number(this.ds_order_modify_info.getColumn(0, "lectAmt"));
 		var lectAddAmt = Number(this.ds_order_modify_info.getColumn(0, "lectAddAmt"));
