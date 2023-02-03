@@ -5,15 +5,12 @@
       <Layout height="720" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Static id="Static00" taborder="1" text="FAQ TOP5 설정" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17" onclick="Static00_onclick"/>
-        <Grid id="GridFaqSortList" taborder="2" left="30" top="112" height="172" right="30" binddataset="faqSortDs" autofittype="col" oncellclick="GridFaqSortList_oncellclick">
+        <Grid id="GridFaqSortList" taborder="2" left="30" top="112" height="172" right="30" binddataset="faqSortDs" autofittype="col" ondrag="GridFaqSortList_ondrag" ondrop="GridFaqSortList_ondrop" oncellclick="GridFaqSortList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
                 <Column size="92" band="left"/>
                 <Column size="1034"/>
-                <Column size="30"/>
-                <Column size="30"/>
-                <Column size="30"/>
               </Columns>
               <Rows>
                 <Row size="34"/>
@@ -21,21 +18,10 @@
               <Band id="body">
                 <Cell background="#f7f7f7" color="#000000" font="normal 700 12px/normal &quot;Noto Sans KR&quot;" text="expr:sortNo ? 'TOP'  + rn: ''"/>
                 <Cell col="1" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="2" text="▲" displaytype="buttoncontrol" edittype="button" cssclass="gridBtn_High"/>
-                <Cell col="3" text="bind:rn" displaytype="editcontrol" edittype="text" editinputfilter="alpha,comma,dot,sign,space,symbol" editmaxlength="expr:1"/>
-                <Cell col="4" text="▼" displaytype="buttoncontrol" edittype="button" cssclass="gridBtn_High"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div01" taborder="3" text="Div03" left="45" top="GridFaqSortList:54" height="55" right="45" minwidth="400" maxwidth="">
-          <Layouts>
-            <Layout>
-              <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
-              <Button id="btnSave" taborder="0" text="등록" top="12" width="84" height="30" cssclass="btn_WF_Medium" left="btnCnl:16.036000000000058" onclick="Div01_btnSave_onclick"/>
-            </Layout>
-          </Layouts>
-        </Div>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -118,10 +104,6 @@ this.fn_save = function()
 //그리드 상세 페이지 이동
 this.GridFaqSortList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var	faqSeqno 	= obj.getBindDataset().getColumn(e.row, "faqSeqno");
-	//var sortNo	 	= obj.getBindDataset().getColumn(e.row, "rn");
-	//var top5SlctYn 	= obj.getBindDataset().getColumn(e.row, "top5SlctYn");
-		
 	if(e.cell == 1)
 	{
 		this.popCnt ++;
@@ -132,25 +114,6 @@ this.GridFaqSortList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 		this.gfn_openPopup("faqDtlPop"+this.popCnt, oArg, "CustomerMng::FaqDtl.xfdl", this, null, null, true, true, null);	
 	}
 	
-	if(e.cell ==2)
-	{
-		var trgtObj={
-			faqSeqno 	: faqSeqno ,
-		//	sortNo	 	: sortNo,
-		//	top5SlctYn	: top5SlctYn,
-			rowIdx		: e.row -1
-		}
-		//this.alert("trgtObjSeq[" + trgtObj.faqSeqno + "] 타겟rowIdx[" + trgtObj.rowIdx + "]");
-		
-		var prevObj={
-			faqSeqno 	: "" ,
-		//	sortNo	 	: "",
-		//	top5SlctYn	: "",
-			rowIdx		: e.row
-		}
-		
-		//this.alert("prevObj" + prevObj.faqSeqno + "] 기존rowIdx[" + prevObj.rowIdx + "]");
-	}
 };
 
 /**************************************************************************
@@ -195,9 +158,82 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 			this.fn_list();
 		break;
 	}
-}]]></Script>
+}
+this.GridFaqSortList_ondrag = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.GridFaqSortList.set_cursor("move");
+	if(e.row >= 0) {
+		e.userdata = e.row;
+		return true;
+	}
+};
+
+this.GridFaqSortList_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	//if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	this.GridFaqSortList.set_cursor("default");
+	if((this.faqSortDs.getColumn(e.userdata, "faqSeqno") != this.faqSortDs.getColumn(e.row, "faqSeqno")))
+		{
+		
+		if(confirm("이동하시겠습니까?")) 
+		{
+			
+			var prevFaqSeqno = this.faqSortDs.getColumn(e.userdata, "faqSeqno");
+			var prevSortNo = this.faqSortDs.getColumn(e.userdata, "sortNo");
+			var prevRn = this.faqSortDs.getColumn(e.userdata, "rn");
+			var prevTitNm = this.faqSortDs.getColumn(e.userdata, "titNm");
+			
+	
+			var nextFaqSeqno = this.faqSortDs.getColumn(e.row, "faqSeqno");
+			var nextSortNo = this.faqSortDs.getColumn(e.row, "sortNo");
+			var nextRn = this.faqSortDs.getColumn(e.row, "rn");
+			var nextTitNm = this.faqSortDs.getColumn(e.row, "titNm");
+			
+			this.faqSortDs.setColumn(e.row, "faqSeqno", prevFaqSeqno); 
+			this.faqSortDs.setColumn(e.row, "sortNo", nextSortNo); 
+			this.faqSortDs.setColumn(e.row, "rn", nextRn); 
+			this.faqSortDs.setColumn(e.row, "titNm", nextTitNm); 
+		
+			this.faqSortDs.setColumn(e.userdata, "faqSeqno", nextFaqSeqno);
+			this.faqSortDs.setColumn(e.userdata, "sortNo", prevSortNo);
+			this.faqSortDs.setColumn(e.userdata, "rn", prevRn);
+			this.faqSortDs.setColumn(e.userdata, "titNm", prevTitNm);
+			
+			this.faqSortDs_update.clearData();
+			this.faqSortDs_update.copyRow(this.faqSortDs_update.addRow(), this.faqSortDs, e.row);
+			this.faqSortDs_update.copyRow(this.faqSortDs_update.addRow(), this.faqSortDs, e.userdata);
+			
+			var tranObj = {
+				strSvcId : "updateSortList",
+				strSvcUrl : this.application.Admin_svc + "::/customer/sort/updateFaqSort.do",
+																		
+				inData : "sortList=faqSortDs_update",
+				outData : "faqSortDs=sortList",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			}
+			this.gfn_transaction(tranObj);
+			
+			this.faqSortDs.set_rowposition(e.row);
+		}
+	}
+};
+]]></Script>
     <Objects>
       <Dataset id="faqSortDs">
+        <ColumnInfo>
+          <Column id="rn" type="INT" size="256"/>
+          <Column id="faqSeqno" type="INT" size="256"/>
+          <Column id="clCd" type="STRING" size="256"/>
+          <Column id="clNm" type="STRING" size="256"/>
+          <Column id="titNm" type="STRING" size="256"/>
+          <Column id="sortNo" type="INT" size="256"/>
+          <Column id="top5SlctYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="faqSortDs_update">
         <ColumnInfo>
           <Column id="rn" type="INT" size="256"/>
           <Column id="faqSeqno" type="INT" size="256"/>
