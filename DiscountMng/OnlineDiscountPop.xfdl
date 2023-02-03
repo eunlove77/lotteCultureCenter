@@ -97,7 +97,16 @@ this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
 {
 	var curRow = obj.getSelectedDatasetRows();
   
-	if(obj.getCellPos() == 2)
+	if(e.cell == 1)
+	{
+		console.log(e.cell);
+		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
+		{
+			obj.setEditValue("");
+			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
+		}
+	}
+	else if(obj.getCellPos() == 2)
 	{  
 		var oriValue = this.ds_discount_list.getColumn(curRow, "applStDt");
 		
