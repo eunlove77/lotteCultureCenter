@@ -13,7 +13,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
                     <Static id="Static01" taborder="1" text="발급 대기" left="Static00:10" top="5" width="55" usedecorate="false" height="21" fittocontents="width"/>
-                    <Button id="btnSearch" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80"/>
+                    <Button id="btnEnd" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80" onclick="Div00_Div10_btnEnd_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -1312,7 +1312,10 @@ this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 
 this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.close();
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.close();
+	}
 };
 
 /**************************************************************************
@@ -1493,6 +1496,12 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.opener.components[0].form.fn_list();
 			this.close();
 			break;
+		case "end":
+			this.alert("발급종료 되었습니다.");
+			console.log(this.opener);
+			this.opener.components[0].form.fn_list();
+			this.close();
+			break;
 	}
 
 };
@@ -1505,16 +1514,36 @@ this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.In
 		// 단위 : 무조건 백의자리
 		if(num.length > 0)
 		{
-			num = (parseInt(num / 100) + (num % 100)) * 100;
+			num = (parseInt(num / 10) + (num % 10)) * 10;
 		}
 		
 		obj.set_value(num);
-		obj.setCaretPos(obj.value.length-2);
+		obj.setCaretPos(obj.value.length-1);
 		
 		if(obj.value.toString() == "0")
 		{
 			obj.set_value("");
 		}
+	}
+};
+
+this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("발급종료 하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "end",
+			strSvcUrl : this.baseSvrUrl + "end.do",
+			inData : "",
+			outData : "",
+			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isAsync : true
+		}
+		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+		this.gfn_transaction(tranObj);	
 	}
 };
 ]]></Script>
