@@ -12,7 +12,7 @@
               <Columns>
                 <Column size="40" band="left"/>
                 <Column size="50"/>
-                <Column size="561"/>
+                <Column size="470"/>
                 <Column size="214"/>
                 <Column size="150"/>
               </Columns>
@@ -55,6 +55,7 @@
           <Column id="seqno" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
           <Column id="webImgFleNo" type="STRING" size="256"/>
+          <Column id="tempFleNo" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
@@ -98,6 +99,7 @@
           <Column id="chk" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <FileUpTransfer id="FileUpTransfer00" onsuccess="FileUpTransfer00_onsuccess"/>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -121,9 +123,9 @@ this.DualBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.dualBannerDs, this.Grid00, 0);
 	
-	this.ds_use_yn_cd.insertRow(0);
-	this.ds_use_yn_cd.setColumn(0, "cd", "");
-	this.ds_use_yn_cd.setColumn(0, "cdNm", "선택");
+	//this.ds_use_yn_cd.insertRow(0);
+	//this.ds_use_yn_cd.setColumn(0, "cd", "");
+	//this.ds_use_yn_cd.setColumn(0, "cdNm", "선택");
 	
 	this.fn_list();
 };
@@ -135,7 +137,7 @@ this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.alert("배너는 10개까지만 설정 가능합니다");
 	}else{	
 		var n_row = this.dualBannerDs.addRow();
-		this.dualBannerDs.setColumn(n_row, "expsrYn", "");
+		this.dualBannerDs.setColumn(n_row, "expsrYn", "N");
 	}
 };
 
@@ -166,11 +168,8 @@ this.btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 //저장 버튼
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	//this.fn_checkValidation();
-	if(!confirm("저장하시겠습니까?")){
-		return false;
-	}
-	this.fn_update_dualBanner("dualBannerDs");
+	this.fn_checkValidation();
+
 };
 //취소 버튼
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -193,12 +192,14 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		seqno = "";
 	}
 	var webImgFleNo = this.dualBannerDs.getColumn(e.row, "webImgFleNo");
+	var tempFleNo = this.dualBannerDs.getColumn(e.row, "tempFleNo");
 	var expsrYn = this.dualBannerDs.getColumn(e.row, "expsrYn");
 	
 	if(headTitle == "이미지" && e.clickitem == "control"){
 		var oArg = {
 			seqno : seqno,
 			rowIdx : e.row,
+			tempFleNo : tempFleNo,
 			dataset : this.dualBannerDs,
 			menuSeq : this.getOwnerFrame().param.MENU_ID
 		};
@@ -226,9 +227,33 @@ this.fn_list = function(){
 }
 
 //유효성 체크
-/*this.fn_checkValidation = function(){
-
-};*/
+this.fn_checkValidation = function()
+{
+	if(this.dualBannerDs.findRowExpr("tit == null || tit == ''") > -1)
+	{
+		alert("제목을 입력하세요");
+		return;
+	}
+	else if(this.dualBannerDs.findRowExpr("tempFleNo == null || tempFleNo == ''") > -1)
+	{
+		alert("이미지를 등록하세요.");
+		return;
+	}
+	else
+	{
+		if(this.confirm("저장하시겠습니까?"))
+		{
+			for(var k=0; k<this.dualBannerDs.rowcount; k++)
+			{
+				if(this.dualBannerDs.getColumn(k , "tempFleNo") !="")
+				{
+					this.dualBannerDs.setColumn(k , "webImgFleNo" , this.dualBannerDs.getColumn(k, "tempFleNo"));
+				}
+			}
+			this.fn_update_dualBanner("dualBannerDs");
+		}
+	}
+}
 
 //그리드 수정
 this.fn_update_dualBanner = function(datasetName){
@@ -257,17 +282,28 @@ this.fnCallback = function(svcID, errorCode, errorMsg, rtnCode)
 	{
 		switch(svcID)
 		{
-		case "list":
-			if(this.dualBannerDs.rowcount < 1)
-			{
-				this.dualBannerDs.copyData(this.dualBannerDs_format);
-			}
-		break;
-		
-		case "update":
-			this.alert("저장 완료");
-			this.reload();
-		break;
+			case "list":
+				if(this.dualBannerDs.rowcount < 1)
+				{
+					this.dualBannerDs.copyData(this.dualBannerDs_format);
+				}
+				else
+				{
+					for(var j=0; j<this.dualBannerDs.rowcount; j++)
+					{
+						if(this.dualBannerDs.getColumn(j , "webImgFleNo") !="")
+						{
+							this.dualBannerDs.setColumn(j, "tempFleNo" , this.dualBannerDs.getColumn(j , "webImgFleNo"));
+						}
+					}
+				}
+				
+			break;
+			
+			case "update":
+				this.alert("저장 완료");
+				this.reload();
+			break;
 		}
 	}
 };]]></Script>
