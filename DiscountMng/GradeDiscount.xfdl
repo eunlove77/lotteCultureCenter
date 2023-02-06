@@ -19,7 +19,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static03" taborder="0" text="회" left="185" top="5" width="25" height="21"/>
-                    <MaskEdit id="MaskEdit00" taborder="1" left="100" top="0" width="80" height="30" format="99" type="number" limitbymask="integer" maskchar=" " displaynulltext="0 ~ 10" onkeyup="Div00_Div01_MaskEdit00_onkeyup"/>
+                    <Edit id="Edit00" taborder="1" left="100" top="0" width="80" height="30" displaynulltext="0 ~ 10" maxlength="2" oninput="Div00_Div01_Edit00_oninput" textAlign="right" inputtype="digit" inputfilter="none"/>
                     <Static id="Static02" taborder="2" text="• 전체 사용 횟수" left="0" top="5" width="100" height="21"/>
                   </Layout>
                 </Layouts>
@@ -143,9 +143,11 @@ this.GradeDiscount_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.fn_list();
 };
 
-Div01_MaskEdit00_onkeyup = function(obj:nexacro.MaskEdit,e:nexacro.KeyEventInfo)
+this.Div00_Div01_Edit00_oninput = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 {
-	if(obj.value > 10)
+	var objVal = obj.value;
+	
+	if(objVal > 10)
 	{
 		obj.set_value("");
 		alert("전체 사용횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
@@ -276,7 +278,7 @@ this.fn_save = function()
 }
 ]]></Script>
     <Bind>
-      <BindItem id="allUseNbcnt" compid="Div00.form.Div01.form.MaskEdit00" propid="value" datasetid="ds_discount_mst" columnid="allUseNbcnt"/>
+      <BindItem id="allUseNbcnt" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_discount_mst" columnid="allUseNbcnt"/>
     </Bind>
   </Form>
 </FDL>
