@@ -50,7 +50,7 @@
                                     </Rows>
                                   </Dataset>
                                 </Radio>
-                                <Combo id="Combo00" taborder="1" text="Combo00" left="10" top="30" width="200" height="20" innerdataset="ds_grde_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div01_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="1" text="Combo00" left="10" top="30" width="200" height="20" innerdataset="ds_select_grde_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div01_Combo00_onitemchanged"/>
                                 <Static id="Static00" taborder="2" left="Combo00:0" top="30" width="120" height="21" cssclass="sta_WF_CompText"/>
                                 <Static id="Static01" taborder="3" left="0" width="120" height="20" cssclass="sta_WF_CompText" bottom="3"/>
                                 <Combo id="Combo01" taborder="4" text="Combo01" left="Combo00:0" top="30" width="120" height="20" readonly="false" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" visible="false" onitemchanged="Div00_Div04_Div01_Combo01_onitemchanged">
@@ -305,6 +305,29 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					}
 				}
 			}
+			
+			this.ds_select_grde_list.copyData(this.ds_grde_list);
+			
+			for(var i=this.ds_grde_list.getRowCount()-1;i>=0;i--){
+				for(var j=0;j<this.opener.divWork.form.ds_class_list.getRowCount();j++){
+					if(this.row != j && this.opener.divWork.form.ds_class_list.getColumn(j, "grdeDcSubtrYn") != "Y" && this.ds_grde_list.getColumn(i, "cd") != "" && this.opener.divWork.form.ds_class_list.getColumn(j, "grdeDcCd") == this.ds_grde_list.getColumn(i, "cd")){
+						this.ds_grde_list.setColumn(i, "allGrdeUseCnt", this.ds_grde_list.getColumn(i, "allGrdeUseCnt") + 1);
+						this.ds_grde_list.setColumn(i, "allUseCnt", this.ds_grde_list.getColumn(i, "allUseCnt") + 1);
+						
+						// 바닥 리스트에 잔여 전체 할인 횟수만큼 사용했으면 쿠폰, 등급등급할인 데이터셋 제거
+						if(Number(this.ds_grde_list.getColumn(i, "allUseCnt")) >= Number(this.ds_grde_list.getColumn(i, "allDcCnt"))){
+							this.ds_select_grde_list.deleteRow(i);
+							break;
+						}
+						
+						// 바닥 리스트에 등급할인이 이미 있으면 등급할인 쿠폰 데이터셋에서 제거
+						if(Number(this.ds_grde_list.getColumn(i, "allGrdeUseCnt")) >= Number(this.ds_grde_list.getColumn(i, "dcNbcnt"))){
+							this.ds_select_grde_list.deleteRow(i);
+							break;
+						}
+					}
+				}
+			}
 		
 			// 주문금액 세팅(강좌료 + 옵션비)
 			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>" + this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) + "원</fc></b>");
@@ -429,7 +452,7 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(true);
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
 		
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_list);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -445,9 +468,9 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 	
 	if(e.preindex != e.postindex){
 		//this.lectAmt = this.lectAmt + this.grdeDcAmt + this.cpnDcAmt;
-		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 		this.grdeDcAmt = 0;
 		this.cpnDcAmt = 0;
+		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 	}
 };
 
@@ -489,7 +512,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 		
 		// 등급할인, 쿠폰할인 선택 값 초기화
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_list);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -530,7 +553,7 @@ this.fn_common_confirm = function()
 		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(true);
 		
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_list);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -595,7 +618,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		if(obj.id == "editOfln"){
 			// 등급할인, 쿠폰할인 초기화
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_list);
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -690,11 +713,11 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				var dcRt = 0;
 				var grdeUseYn, allUseYn;
 				var skipGrdeUseYn = false, skipAllUseYn = false;
-				for(var i=0;i<this.ds_grde_list.getRowCount();i++){
-					if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
-						dcRt = this.ds_grde_list.getColumn(i, "dcRt");
-						grdeUseYn = this.ds_grde_list.getColumn(i, "grdeUseYn");
-						allUseYn = this.ds_grde_list.getColumn(i, "allUseYn");
+				for(var i=0;i<this.ds_select_grde_list.getRowCount();i++){
+					if(obj.value == this.ds_select_grde_list.getColumn(i, "cd")){
+						dcRt = this.ds_select_grde_list.getColumn(i, "dcRt");
+						grdeUseYn = this.ds_select_grde_list.getColumn(i, "grdeUseYn");
+						allUseYn = this.ds_select_grde_list.getColumn(i, "allUseYn");
 					}
 				}
 				
@@ -750,14 +773,30 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				
 				var grdeUseYn, allUseYn, memberUseYn, applBrchRngCdNm;
 				var skipGrdeUseYn = false, skipAllUseYn = false, skipMemberUseYn = false;
-				for(var i=0;i<this.ds_adm_grde_list.getRowCount();i++){
-					if(obj.value == this.ds_adm_grde_list.getColumn(i, "cd")){
-						grdeUseYn = this.ds_adm_grde_list.getColumn(i, "grdeUseYn");
-						allUseYn = this.ds_adm_grde_list.getColumn(i, "allUseYn");
-						memberUseYn = this.ds_adm_grde_list.getColumn(i, "memberUseYn");
-						applBrchRngCdNm = this.ds_adm_grde_list.getColumn(i, "applBrchRngCdNm");
+				
+				memberUseYn = "N"
+				for(var i=0;i<this.ds_grde_list.getRowCount();i++){
+					if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
+						memberUseYn = "Y";
+						grdeUseYn = "Y";
+						allUseYn = "Y";
+						if(this.ds_grde_list.getColumn(i, "allGrdeUseCnt") >= this.ds_grde_list.getColumn(i, "dcNbcnt")){
+							grdeUseYn = "N";
+						}
+						if(this.ds_grde_list.getColumn(i, "allUseCnt") >= this.ds_grde_list.getColumn(i, "allDcCnt")){
+							allUseYn = "N";
+						}
 					}
 				}
+				
+// 				for(var i=0;i<this.ds_adm_grde_list.getRowCount();i++){
+//  					if(obj.value == this.ds_adm_grde_list.getColumn(i, "cd")){
+//  						grdeUseYn = this.ds_adm_grde_list.getColumn(i, "grdeUseYn");
+//  						allUseYn = this.ds_adm_grde_list.getColumn(i, "allUseYn");
+//  						memberUseYn = this.ds_adm_grde_list.getColumn(i, "memberUseYn");
+//  						applBrchRngCdNm = this.ds_adm_grde_list.getColumn(i, "applBrchRngCdNm");
+//  					}
+// 				}
 
 				if(this.lectAmt - this.oflnDcAmt == 0){
 					alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
@@ -930,6 +969,10 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcCd", this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcNm", this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.text);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcAmt", this.oflnDcAmt);
+		}else{
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcCd", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcNm", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcAmt", "");
 		}
 		
 		// 등급 할인 적용
@@ -940,9 +983,9 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 				this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcCd", this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.value);
 				this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcNm", this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.text);
 				this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcAmt", this.grdeDcAmt);
-				for(var i=0;i<this.ds_grde_list.getRowCount();i++){
-					if(this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.value == this.ds_grde_list.getColumn(i, "cd")){
-						this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcRt", this.ds_grde_list.getColumn(i, "dcRt"));
+				for(var i=0;i<this.ds_select_grde_list.getRowCount();i++){
+					if(this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.value == this.ds_select_grde_list.getColumn(i, "cd")){
+						this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcRt", this.ds_select_grde_list.getColumn(i, "dcRt"));
 					}
 				}
 			}else{
@@ -953,6 +996,12 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 				this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcAmt", this.grdeDcAmt);
 				this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcRt", this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.value);
 			}
+		}else{
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcSubtrYn", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcCd", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcNm", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcAmt", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "grdeDcRt", "");
 		}
 		
 		// 쿠폰 할인 적용
@@ -969,6 +1018,13 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 					}
 				}
 			}
+		}else{
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcCd", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcNm", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcAmt", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnNo", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcAmtClCd", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcRt", "");
 		}
 		
 		// 옵션 할인 적용
@@ -976,6 +1032,10 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "optnDcCd", this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "optnDcNm", this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.text);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "optnDcAmt", this.addDcAmt);
+		}else{
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "optnDcCd", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "optnDcNm", "");
+			this.opener.divWork.form.ds_class_list.setColumn(this.row, "optnDcAmt", "");
 		}
 		
 		// 결제예상금액
@@ -1011,7 +1071,7 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
 
 	var applBrchRngCdNm = this.ds_adm_grde_list.getColumn(e.postindex + 1, "applBrchRngCdNm");
 	
-	this.grdeDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt) * (obj.value / 100), -2);
+	this.grdeDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt) * (obj.value / 100), -1);
 	this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
 	//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text(applBrchRngCdNm + "/" + obj.value + "%");
 	
@@ -1033,7 +1093,6 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
           <Column id="dcNbcnt" type="STRING" size="256"/>
           <Column id="dcRt" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
-          <Column id="grdeUseCnt" type="STRING" size="256"/>
           <Column id="allGrdeUseCnt" type="STRING" size="256"/>
           <Column id="allUseCnt" type="STRING" size="256"/>
           <Column id="allDcCnt" type="STRING" size="256"/>
@@ -1060,6 +1119,22 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
           <Column id="dcAmtClCd" type="STRING" size="256"/>
           <Column id="dcAmt" type="INT" size="256"/>
           <Column id="cpnNo" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_select_grde_list">
+        <ColumnInfo>
+          <Column id="applBrchRngCdNm" type="STRING" size="256"/>
+          <Column id="grdeUseYn" type="STRING" size="256"/>
+          <Column id="allUseYn" type="STRING" size="256"/>
+          <Column id="dcNbcnt" type="STRING" size="256"/>
+          <Column id="dcRt" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="allGrdeUseCnt" type="STRING" size="256"/>
+          <Column id="allUseCnt" type="STRING" size="256"/>
+          <Column id="allDcCnt" type="STRING" size="256"/>
+          <Column id="applBrchRngCd" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
