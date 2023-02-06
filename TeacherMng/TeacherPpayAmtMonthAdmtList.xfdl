@@ -13,7 +13,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" index="-1"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1" canitemchange="row01_Div00_brchCd_canitemchange"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -21,7 +21,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지급월" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="yy" taborder="1" text="년도" left="116" top="5" width="100" height="20" value="" index="-1"/>
+                    <Combo id="yy" taborder="1" text="년도" left="116" top="5" width="100" height="20" value="" index="-1" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
                     <Combo id="mm" taborder="2" text="월" left="yy:5" top="5" width="100" height="20" value="" index="-1"/>
                   </Layout>
                 </Layouts>
@@ -232,6 +232,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.excelImportExport = "";
 this.brchCd = "";
+this.yy = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -250,17 +251,18 @@ this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.ds_gdsSpotCd_list.deleteRow(0);
 	this.fn_classBrch_set();
 	
-	var comboYyObj = this.row01.form.Div01.form.yy;
+	// 년도초기화
+	this.fn_year_add();
+	
 	var comboMmObj = this.row01.form.Div01.form.mm;
+	var month = new nexacro.Date().getMonth() + 1;
+	month = month.toString().length < 2 ? "0" + month : month;
 	
-	var data = new Date();
-	var strtYy = data.getFullYear() + 1;
-	var endYy = 2017
-	
-	this.gfn_set_year(this, comboYyObj, endYy, strtYy, "선택", 1);	
 	this.gfn_set_month(this, comboMmObj);
+	comboMmObj.set_value(month);
 	
-	this.fn_set_checkbox_value(1);
+	// 지점별 년도/학기 초기화
+	this.fn_sesterInfo(this.brchCd);
 };
 
 
@@ -438,9 +440,22 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				for(var i = 0 ; i < this.ds_list.rowcount ; i++){
 					this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 				}	
+			}			
+		break; 		
+		case "getSesterYearList":
+			var year = new nexacro.Date().getFullYear();
+			
+			if(this.ds_year_list.getRowCount() == 0) {
+				this.ds_year_list.addRow();
+				this.ds_year_list.setColumn(0, "cd", year);
+				this.ds_year_list.setColumn(0, "cdNm", year + "년");
 			}
 			
-		break; 		
+			this.row01.form.Div01.form.yy.set_value(year);
+		break;
+		case "sesterInfo":
+			this.row01.form.Div01.form.yy.set_value(this.yy);
+		break;
 	}
 }
 
@@ -509,6 +524,50 @@ this.fn_set_checkbox_value = function(value){
 }
 
 
+//학기 연도 추가
+this.fn_year_add = function() 
+{
+	this.ds_year_list.clearData();
+	
+	var tranObj = {
+		strSvcId : "getSesterYearList",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterYearList.do",
+		inData : "",
+		outData : "ds_year_list=yearList",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+		
+	}
+	this.gfn_transaction(tranObj);	
+}
+
+
+//학기 조회
+this.fn_sesterInfo = function(_brchCd)
+{	
+	this.ds_search.setColumn(0, "brchCd", _brchCd);
+	
+	var tranObj = {
+		strSvcId : "sesterInfo",
+		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
+		inData : "search=ds_search",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	}
+
+	this.gfn_transaction(tranObj);
+};
+
+
+this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.fn_sesterInfo(e.postvalue);
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_list">
@@ -559,6 +618,12 @@ this.fn_set_checkbox_value = function(value){
       </Dataset>
       <ExcelExportObject id="ExcelExportObj"/>
       <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_year_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
