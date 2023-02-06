@@ -146,7 +146,7 @@
                     <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
                     <Static id="Static01" taborder="1" text="개" left="290" top="5" width="120" height="21"/>
                     <MaskEdit id="MaskEdit00" taborder="2" left="120" top="5" width="160" height="21" format="#,###" limitbymask="decimal"/>
-                    <Button id="btnEnd" taborder="3" text="난수번호 다운로드" left="364" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="130" visible="true" onclick="Div01_Div02_btnEnd_onclick"/>
+                    <Button id="btnDown" taborder="3" text="난수번호 다운로드" left="364" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="130" visible="false" onclick="Div01_Div02_btnDown_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -389,6 +389,7 @@
             <Layout>
               <Button id="cnclBtn" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_Weak" onclick="Div03_cnclBtn_onclick"/>
               <Button id="insBtn" taborder="0" text="등록" top="12" width="84" height="30" cssclass="btn_WF_Medium" left="cnclBtn:16.036000000000058" onclick="Div03_insBtn_onclick"/>
+              <Button id="copyBtn" taborder="2" text="쿠폰 복사" left="34.62%" top="12" height="30" cssclass="btn_WF_Medium" right="cnclBtn:16" onclick="Div03_copyBtn_onclick" visible="false"/>
             </Layout>
           </Layouts>
         </Div>
@@ -633,7 +634,6 @@ this.CouponReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//발급대기 상태인 경우
 	if(this.parent.cpnSeqno != ""){	
 		this.ds_detail.setColumn(0, "cpnSeqno", this.parent.cpnSeqno);
-		this.txtMenuNm.set_text("쿠폰 상세");
 		this.fn_detail();
 		this.Div04.set_height(95);
 		this.resetScroll();
@@ -720,12 +720,15 @@ this.fn_set_detail = function()
 	
 	if(this.parent.type == "copy")
 	{
+		this.txtMenuNm.set_text("쿠폰 복사");
 		this.Div01.form.Div05.form.Div00.form.strtDtm.set_value("");
 		this.Div01.form.Div05.form.Div00.form.endDtm.set_value("");
 		this.ds_detail.setColumn(0, "cpnSeqno", "");
 	}
 	else
 	{
+		this.txtMenuNm.set_text("쿠폰 상세");
+		this.Div03.form.copyBtn.set_visible(true);
 		this.Div00.form.Div10.set_height(33);
 		this.Div00.form.resetScroll();
 	}
@@ -876,6 +879,30 @@ this.fn_sync_mbrGrde = function()
 }
 
 /**************************************************************************
+ * 발급종료 버튼
+ **************************************************************************/
+
+this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("발급종료 하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "end",
+			strSvcUrl : this.baseSvrUrl + "end.do",
+			inData : "",
+			outData : "",
+			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isAsync : true
+		}
+		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+		this.gfn_transaction(tranObj);	
+	}
+};
+
+/**************************************************************************
  * 발급방식 라디오 버튼 이벤트
  **************************************************************************/
 
@@ -900,6 +927,11 @@ this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 		this.Div01.form.Div05.form.Div01.form.Static00.set_text("발급일로부터");
 		this.Div01.form.Div05.form.radioPeriod.set_value("PERIOD");
 		this.Div01.form.Div05.form.radioPeriod.set_readonly(true);
+		
+		if(this.ds_detail.getColumn(0, "issueStatCd") == "00" && this.parent.type != "copy")
+		{
+			this.Div01.form.Div02.form.btnDown.set_visible(true);
+		}
 	}
 	else
 	{
@@ -924,7 +956,7 @@ this.Div01_Div00_radioIssuCd_onitemchanged = function(obj:nexacro.Radio,e:nexacr
  * 난수번호 다운로드 버튼
  **************************************************************************/
 
-this.Div01_Div02_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div01_Div02_btnDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.exportObj = new ExcelExportObject("Export01", this);
 	
@@ -1285,6 +1317,27 @@ this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexa
 	}
 };
 
+this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
+{
+	if(this.Div01.form.Div04.form.radioDiscount.value == '02')
+	{
+		var num = obj.value;
+		// 단위 : 무조건 백의자리
+		if(num.length > 0)
+		{
+			num = (parseInt(num / 10) + (num % 10)) * 10;
+		}
+		
+		obj.set_value(num);
+		obj.setCaretPos(obj.value.length-1);
+		
+		if(obj.value.toString() == "0")
+		{
+			obj.set_value("");
+		}
+	}
+};
+
 /**************************************************************************
  * 사용기간 라디오 버튼 이벤트
  **************************************************************************/
@@ -1304,6 +1357,22 @@ this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 		this.Div01.form.Div05.form.Div01.set_visible(false);
 		this.Div01.form.Div05.form.Div01.form.Edit00.set_text();
 	}
+};
+
+/**************************************************************************
+ * 복사버튼
+ **************************************************************************/
+
+this.Div03_copyBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.popCnt++;
+	var oArg = {
+			cpnSeqno : this.ds_detail.getColumn(0, "cpnSeqno")
+		,	type : "copy"
+		,	menuId : this.menuId
+	};
+
+	this.gfn_openPopup("couponCopyPop"+this.popCnt, oArg, "DiscountMng::CouponReg.xfdl", this, null, null, true, true, null);
 };
 
 /**************************************************************************
@@ -1504,47 +1573,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 
-};
-
-this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
-{
-	if(this.Div01.form.Div04.form.radioDiscount.value == '02')
-	{
-		var num = obj.value;
-		// 단위 : 무조건 백의자리
-		if(num.length > 0)
-		{
-			num = (parseInt(num / 10) + (num % 10)) * 10;
-		}
-		
-		obj.set_value(num);
-		obj.setCaretPos(obj.value.length-1);
-		
-		if(obj.value.toString() == "0")
-		{
-			obj.set_value("");
-		}
-	}
-};
-
-this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.confirm("발급종료 하시겠습니까?"))
-	{
-		var tranObj = {
-			strSvcId : "end",
-			strSvcUrl : this.baseSvrUrl + "end.do",
-			inData : "",
-			outData : "",
-			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
-			callBackFnc : "fnCallback",
-			menuSeq : this.menuId,
-			isAsync : true
-		}
-		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
-
-		this.gfn_transaction(tranObj);	
-	}
 };
 ]]></Script>
     <Bind>
