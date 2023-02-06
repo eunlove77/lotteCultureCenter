@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="5" text="Div01" left="10" top="90" right="10" height="33">
+        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33%">
@@ -35,7 +35,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div02" taborder="7" text="Div01" left="10" top="Div01:-1" height="33" right="10">
+        <Div id="Div02" taborder="6" text="Div01" left="10" top="Div01:-1" height="33" right="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="450" formscrolltype="none">
@@ -59,7 +59,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="6" text="Div01" left="10" top="Div02:-1" height="33" right="10">
+        <Div id="Div03" taborder="5" text="Div01" left="10" top="Div02:-1" height="33" right="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="450">
@@ -81,7 +81,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20"   right="10" maxlength="13" inputfilter="dot,comma" inputtype="number"/>
+                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20" right="10" maxlength="13" inputfilter="dot,comma" inputtype="number"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -124,11 +124,11 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21"   left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_tceval_list">
+        <Grid id="Grid00" taborder="2" left="10" top="300" autofittype="col" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list">
           <Formats>
             <Format id="default">
               <Columns>
@@ -190,8 +190,7 @@
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="8" text="강사평가 목록" left="20" top="265" width="100" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-        <Static id="txtTotal" taborder="4" left="Static00:5" top="270" height="21" text="(0개)" width="52"/>
+        <Div id="Div06" taborder="7" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -221,7 +220,7 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
   this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
-	//this.gfnSetCheckBoxNoDataset(this.ds_tceval_list, this.Grid00, 0);
+	//this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
 	//지점초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd");
@@ -364,7 +363,7 @@ this.get_teacher_evaluation_list = function()
 		strSvcId : "teacher_evaluation_list",
 		strSvcUrl : this.application.Admin_svc + "::teacherMng/tceval/list.do",
 		inData : "search=ds_search",
-		outData : "ds_tceval_list=output1",
+		outData : "ds_list=output1",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
@@ -383,10 +382,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	
 	if(svcId == "teacher_evaluation_list"){
-		this.ds_tceval_list.filter("tcCdNo != '총점'");
-		var rowcount = this.ds_tceval_list.rowcount;
-		this.txtTotal.set_text("("+ rowcount +"개)");
-		this.ds_tceval_list.filter("");
+		this.ds_list.filter("tcCdNo != '총점'");
+		this.ds_list.filter("");
 	}
 };
 /**************************************************************************
@@ -478,7 +475,7 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_tceval_list">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>

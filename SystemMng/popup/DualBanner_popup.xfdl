@@ -45,6 +45,7 @@ this.fileMaxCnt = 1;  	//최대 파일개수
 this.fileMaxSize= 10; 	//최대 파일크기 10MB
 this.atchFileId = "";
 this.updateType = "";
+this.tempFileId = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -52,7 +53,8 @@ this.updateType = "";
 this.DualBanner_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.domain = this.application.getVariable("domain");
+	//this.domain = this.application.getVariable("domain");
+	this.domain = this.application.Domain;
 	
 	this.seqno = this.parent.seqno;
 	this.rowIdx = this.parent.rowIdx;
@@ -63,8 +65,11 @@ this.DualBanner_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	
 	if(this.parent.seqno != "")
 	{	
+		if(this.parent.tempFleNo !="")
+		{	
+			this.tempFileId = this.parent.tempFleNo;
+		}
 		this.fn_list();
-		console.log(this.atchFileId);
 	}
 }
 
@@ -127,7 +132,10 @@ this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}else{
 		if(confirm("선택한 이미지를 삭제하시겠습니까?")){			
 			this.updateType = "delete";
-			this.FileUpTransfer00.upload(this.domain + '/admin/file/fileupload.do?atchFileId=' + this.atchFileId);			
+			this.parent.dataset.setColumn(this.rowIdx, "tempFleNo", null);
+			this.alert("삭제되었습니다.");
+			//this.reload();
+			this.close();
 		}
 	}
 	
@@ -137,21 +145,33 @@ this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.
 {		
 	this.atchFileId = e.datasets[0].getColumn(0,"atchFileId");
 	
-	this.parent.dataset.setColumn(this.rowIdx , "webImgFleNo", this.atchFileId);
-	this.close();
+	if(this.updateType == "save"){
+		//여기에서는 임시 파일에 저장
+		this.parent.dataset.setColumn(this.rowIdx, "tempFleNo", this.atchFileId);
+		//this.parent.dataset.setColumn(this.rowIdx, "webImgFleNo", this.atchFileId);
+		this.alert("저장되었습니다.");
+		this.close();
+	}else if(this.updateType == "delete"){
+		//this.parent.dataset.setColumn(this.rowIdx, "webImgFleNo", null);
+		this.parent.dataset.setColumn(this.rowIdx, "tempFleNo", null);
+		this.alert("삭제되었습니다.");
+	}
+	this.FileUpTransfer00.removePostData("delFileSeq");
+	this.FileUpTransfer00.clearFileList();
+	//this.close();
+	
 };
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
 this.fn_list = function(){
-
 	var tranObj = {
 		strSvcId : "list",
-		strSvcUrl : this.application.Admin_svc + "::main/dualBannerImgList.do",
+		strSvcUrl : this.application.Admin_svc + "::main/dualBannerMngImgList.do",
 		inData : "",
 		outData : "ds_atchFileList=output1" , 
-		strArg : "seqno=" + this.seqno,
+		strArg : "atchFleNo=" + this.tempFileId,//"seqno=" + this.seqno,
 		callBackFnc : "fn_callback",
 		isAsync : true,
 		menuSeq : this.getOwnerFrame().menuSeq
@@ -193,12 +213,15 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				this.ds_atchFileList.addColumn("fileSize", "STRING", 256);
 				this.ds_atchFileList.addColumn("webPath", "STRING", 256);
 			}
+
 		break; 		
 		case "save":
 		case "delete":
 			if(svcID == "save"){
+				//this.parent.dataset.set_column(0, "webImgFleNo", this.atchFileId);
 				this.alert("저장되었습니다.");
 			}else if(svcID == "delete"){
+				//this.parent.dataset.set_column(0, "webImgFleNo", this.atchFileId);
 				this.alert("삭제되었습니다.");
 			}
 			this.FileUpTransfer00.removePostData("delFileSeq");
@@ -213,7 +236,12 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 
 this.addFileList = function(filelist)
 {
-	if(this.fileMaxCnt < filelist.length)
+	//this.alert("추가 개수[" + filelist.length+"] 기존파일개수" + this.ds_atchFileList.rowcount); 
+	if(filelist.length + this.ds_atchFileList.rowcount > this.fileMaxCnt)
+	{
+		alert("파일은 최대 "+this.fileMaxCnt+"개 등록 가능합니다.");
+	}
+	else if(filelist.length < this.fileMaxCnt)
 	{
 		alert("파일은 최대 "+this.fileMaxCnt+"개 등록 가능합니다.");
 	}

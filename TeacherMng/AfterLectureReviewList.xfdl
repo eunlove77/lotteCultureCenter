@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33" minwidth="700" maxwidth="">
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="90" right="10" height="33" minwidth="700" maxwidth="">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33%" minwidth="255" maxwidth="">
@@ -109,10 +109,8 @@
           </Layouts>
         </Div>
         <Div id="Div00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21" maxwidth=""/>
-        <Static id="Static00" taborder="5" text="수강후기 목록" left="10" top="200" width="80" height="25" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
-        <Static id="txtTotal" taborder="3" left="Static00:10" top="200" height="25" text="(0개)" width="52" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-        <Button id="btnSave" taborder="6" text="저장" top="200" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="10" onclick="btnLcthistConf_onclick"/>
-        <Grid id="Grid00" taborder="7" left="10" top="230" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_atlctrvw_list" oncloseup="Grid00_oncloseup">
+        <Button id="btnSave" taborder="4" text="저장" top="200" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" right="10" onclick="btnLcthistConf_onclick"/>
+        <Grid id="Grid00" taborder="5" left="10" top="230" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick" binddataset="ds_list" oncloseup="Grid00_oncloseup">
           <Formats>
             <Format id="default">
               <Columns>
@@ -170,6 +168,7 @@
             </Format>
           </Formats>
         </Grid>
+        <Div id="Div06" taborder="6" left="10" top="198" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -203,7 +202,7 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_atlctrvw_list, this.Grid00, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
 	//지점초기화
 	this.brchCd = nexacro.getPrivateProfile("brchCd");
@@ -275,7 +274,7 @@ this.get_afterLectureReview_list = function()
 		strSvcId : "after_lecture_review_list",
 		strSvcUrl : this.application.Admin_svc + "::teacherMng/atlectrvw/list.do",
 		inData : "search=ds_search",
-		outData : "ds_atlctrvw_list=output1 ds_dupBest_list=output2",
+		outData : "ds_list=output1 ds_dupBest_list=output2",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
@@ -294,9 +293,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 		return;
 	}
 	if(svcId == "after_lecture_review_list"){
-		var rowcount = this.ds_atlctrvw_list.rowcount;
-		this.txtTotal.set_text("(" + rowcount + "개)");
-		
 		this.process_list_data();
 		this.set_duplication();
 		
@@ -304,6 +300,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	else if(svcId == "after_lecture_review_list_update"){
 		alert("저장 되었습니다.");
+		this.get_afterLectureReview_list();
 		return;
 	}
 };
@@ -311,7 +308,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
  * 목록 출력 내용 가공
  **************************************************************************/
 this.process_list_data = function(){
-	var ds = this.ds_atlctrvw_list;
+	var ds = this.ds_list;
 	var rowcount = ds.rowcount;
 	
 	var rgprDtm = ""
@@ -340,7 +337,7 @@ this.process_list_data = function(){
  **************************************************************************/
 this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_atlctrvw_list);
+	var checkedArr = this.com_get_checkedArr_in_grid(this.ds_list);
 	if(checkedArr.length == 0){
 		alert("대상을 선택하세요.");
 		return false;
@@ -349,7 +346,7 @@ this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var tranObj = {
 		strSvcId : "after_lecture_review_list_update",
 		strSvcUrl : this.application.Admin_svc + "::teacherMng/atlectrvw/list/update.do",
-		inData : "atlctrvwList=ds_atlctrvw_list:U",
+		inData : "atlctrvwList=ds_list:U",
 		outData : "",
 		strArg : "",
 		callBackFnc : "fnCallback",
@@ -404,15 +401,15 @@ this.Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 			alert('BEST후기는 중복등록이 불가합니다.');
 			
 			//그리드 내부 변경값 롤백
-			var oriValue = this.ds_atlctrvw_list.getColumn(e.row, "bestRvwCd");
+			var oriValue = this.ds_list.getColumn(e.row, "bestRvwCd");
 			obj.updateToDataset();
-			this.ds_atlctrvw_list.setColumn(e.row, "bestRvwCd", oriValue);
+			this.ds_list.setColumn(e.row, "bestRvwCd", oriValue);
 			
 			return;
 		}
 		
 		//그리드 체크박스 체크
-		this.ds_atlctrvw_list.checkarray[e.row] = 1;
+		this.ds_list.checkarray[e.row] = 1;
 		this.Grid00.redrawExprCell();
 		
 	}
@@ -440,11 +437,11 @@ this.set_duplication = function(){
 this.validate_duplication = function(row, value){
 	var bestRvwCd = Number(value);
 
-  var rvwSeqno = this.ds_atlctrvw_list.getColumn(row, 'yy');
-  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'lectSmsterCd');
-  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'lectCd');
-  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'tcCdNo');
-  rvwSeqno += this.ds_atlctrvw_list.getColumn(row, 'mbrNo');
+  var rvwSeqno = this.ds_list.getColumn(row, 'yy');
+  rvwSeqno += this.ds_list.getColumn(row, 'lectSmsterCd');
+  rvwSeqno += this.ds_list.getColumn(row, 'lectCd');
+  rvwSeqno += this.ds_list.getColumn(row, 'tcCdNo');
+  rvwSeqno += this.ds_list.getColumn(row, 'mbrNo');
 	
 	if(bestRvwCd){
 		var preSeq = this.dupObj[bestRvwCd];
@@ -500,7 +497,7 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_atlctrvw_list">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>

@@ -85,11 +85,11 @@
                           </Band>
                           <Band id="body">
                             <Cell text="expr:dataset.checkarray[currow]" edittype="checkbox" displaytype="expr:rfndDtm  == null ? 'checkboxcontrol' : 'none'" color="#666666"/>
-                            <Cell col="1" text="expr:dataset.getRowCount() - currow" edittype="none"/>
-                            <Cell col="2" text="bind:brchCd" edittype="none" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="1" text="expr:currow + 1" edittype="none"/>
+                            <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" edittype="none" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="3" text="bind:yy" edittype="none"/>
                             <Cell col="4" text="bind:lectSmsterNm"/>
-                            <Cell col="5" text="bind:lectCd" textDecoration="underline"/>
+                            <Cell col="5" text="expr:pblPmprcustLectCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
                             <Cell col="6" text="bind:lectNm"/>
                             <Cell col="7" text="bind:lectAddOptnNm"/>
                             <Cell col="8" text="bind:mbrNo" textDecoration="underline"/>
@@ -163,12 +163,13 @@ this.ClassAttendanceList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 **************************************************************************/
 this.init = function() 
 {
+	var brchYn = nexacro.getPrivateProfile("brchCd") == "0000" ? 'Y' : 'N';
 	var tranObj = {
 		strSvcId : "selectClassAttendanceList",
 		strSvcUrl : this.application.Admin_svc + "::class/selectClassAttendanceList.do",
 		inData : "classList=ds_class_list",
 		outData : "ds_attendance_list=attendanceList",
-		strArg : "",
+		strArg : "brchYn=" + brchYn,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.parent.menuSeq,
@@ -471,6 +472,8 @@ this.Div00.form.Div00.setMasking = function(sValue, startIndex, maskLen, flag)
           <Column id="rfndDtm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_attendanceUpdate_list">

@@ -29,8 +29,10 @@
         <Div id="Div01" taborder="3" text="Div01" left="20" top="578" height="72" right="20">
           <Layouts>
             <Layout>
-              <Button id="btnCnl" taborder="0" text="취소" top="17" height="30" width="50" left="10" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
-              <Button id="btnSave" taborder="1" top="17" height="30" width="50" right="10" cssclass="btn_WF_Medium" onclick="Div01_btnSave_onclick" text="등록"/>
+              <Button id="btnCnl" taborder="0" text="취소" top="17" height="30" width="79" left="0.73%" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
+              <Button id="btnSave" taborder="1" top="17" height="30" width="79" right="10" cssclass="btn_WF_Medium" onclick="Div01_btnSave_onclick" text="등록"/>
+              <Button id="btnList" taborder="2" text="목록" left="0.73%" width="79" cssclass="btn_WF_Weak" fittocontents="none" height="30" top="17" onclick="Div01_btnList_onclick"/>
+              <Button id="btnDel" taborder="3" text="삭제" left="109" width="79" cssclass="btn_WF_High" fittocontents="none" height="30" top="17" onclick="Div01_btnDel_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -175,20 +177,47 @@ this.FaqReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.parent.faqSeqno != ""){	
 		this.ds_detail.setColumn(0, "faqSeqno", this.parent.faqSeqno);
 		this.Static00.set_text("FAQ 상세/수정");
+		this.Div01.form.btnList.set_visible(true);
+		this.Div01.form.btnDel.set_visible(true);
+		this.Div01.form.btnCnl.set_visible(false);
 		this.Div01.form.btnSave.set_text("수정");
 		this.fn_detail();
 	}
+	else
+	{
+		this.Div01.form.btnList.set_visible(false);
+		this.Div01.form.btnDel.set_visible(false);
+	}
 };
 
+//취소 버튼
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.close();
 };
 
+//저장 버튼
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.fn_checkValidation();
 };
+
+//목록 버튼
+this.Div01_btnList_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+//삭제 버튼
+this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("삭제하시겠습니까?"))
+	{
+		this.fn_delete();
+	}
+};
+
+
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
@@ -239,6 +268,24 @@ this.fn_save = function ()
 	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.gfn_transaction(tranObj);	
 };
+
+//삭제
+this.fn_delete = function()
+{
+	var tranObj = {};
+	tranObj.strSvcId	= "delete";
+	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/deleteFaq.do";
+	tranObj.inData      = "";
+	tranObj.outData     = "";
+	tranObj.strArg      = "delStr="+this.ds_detail.getColumn(0, "faqSeqno");
+	tranObj.callBackFnc = "fnCallback";
+	tranObj.menuSeq 	= this.menuId;
+	tranObj.isAsync     = true;
+	
+	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
+	
+	this.gfn_transaction(tranObj);
+}
 
 this.fn_checkValidation = function(){
 	
@@ -303,8 +350,15 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		}
 		this.alert(gb + " 완료되었습니다.");
 		this.fn_list();
-		break;
+	break;
+	
+	case "delete":
+		this.alert("삭제 완료되었습니다");
+		this.close();
+		this.fn_list();
+	break;
   }
-};]]></Script>
+};
+]]></Script>
   </Form>
 </FDL>

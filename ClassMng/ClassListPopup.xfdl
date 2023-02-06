@@ -116,7 +116,7 @@
                         <Format id="default">
                           <Columns>
                             <Column size="48"/>
-                            <Column size="48"/>
+                            <Column size="70"/>
                             <Column size="140"/>
                             <Column size="92"/>
                             <Column size="102"/>
@@ -242,6 +242,7 @@
           <Column id="q" type="STRING" size="256"/>
           <Column id="apvlStatCd" type="STRING" size="256"/>
           <Column id="only" type="STRING" size="256"/>
+          <Column id="repOn" type="STRING" size="256"/>
           <Column id="pblOn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
@@ -315,8 +316,8 @@
           <Column id="oflnCapaCnt" type="STRING" size="256"/>
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
-          <Column id="pblGthpStrCd" type="STRING" size="256"/>
-          <Column id="pblGthpLectCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -336,7 +337,9 @@ this.yy = "";
 this.lectSmsterCd = "";
 this.apvlStatCd = "";
 this.only = "";
+this.repOn = "";
 this.pblOn = "";
+this.maxCnt = 0;
 this.type = 1;
 
  /**************************************************************************
@@ -370,10 +373,19 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.only = this.parent.only;
 	}
 	
+	if(this.gfn_nvl(this.parent.repOn) != "") 
+	{
+		this.repOn = this.parent.repOn;
+	}
 	
 	if(this.gfn_nvl(this.parent.pblOn) != "") 
 	{
 		this.pblOn = this.parent.pblOn;
+	}
+	
+	if(this.gfn_nvl(this.parent.maxCnt) != "")
+	{
+		this.maxCnt = this.parent.maxCnt;
 	}
 	
 	if(this.gfn_nvl(this.parent.type) != "") 
@@ -458,12 +470,16 @@ this.init = function()
 	this.ds_search.setColumn(0, "q", "");
 	this.ds_search.setColumn(0, "apvlStatCd", this.apvlStatCd);
 	this.ds_search.setColumn(0, "only", this.only);
+	this.ds_search.setColumn(0, "repOn", this.repOn);
 	this.ds_search.setColumn(0, "pblOn", this.pblOn);
 
 	//강의 학기정보 조회
 	this.fn_sesterInfo();
 	this.fn_year_add();
 	this.fn_semester_set();
+	
+	this.Div00.form.Div01.form.Grid00.setCellProperty("head", 0, "text", 0);
+	this.ds_class_list.clearData();
 }
 
 /**************************************************************************
@@ -532,7 +548,6 @@ this.fn_search = function()
 		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
-
 	this.gfn_transaction(tranObj);
 	this.Div00.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
 }
@@ -751,11 +766,13 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var flag = false;
+	var chkCnt = 0;
 	for(var i=0; i < this.ds_class_list.getRowCount(); i++)
 	{
 		if(this.ds_class_list.checkarray[i] == 1)
 		{
 			flag = true;
+			chkCnt++;
 		}
 	}
 	
@@ -764,6 +781,11 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		if(this.type == 2)
 		{
 			this.parent.dataset.clearData();
+		}
+		if(this.maxCnt > 0 && this.parent.dataset.getRowCount() + chkCnt > this.maxCnt)
+		{
+			alert("강좌는 최대 "+ this.maxCnt +"개까지 선택 가능합니다.");
+			return false;
 		}
 		
 		for(var i=0; i < this.ds_class_list.getRowCount(); i++)

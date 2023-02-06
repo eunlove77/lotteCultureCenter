@@ -439,6 +439,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				}else if(this.ds_err_info.getColumn(0, "errCd") == "LECT_STAT_CD"){
 					alert("강좌명 : " + this.ds_err_info.getColumn(0, "errLectNm") + "\n접수 불가 강좌가 있어 결제 하실 수 없습니다.");
 					return;
+				}else if(this.ds_err_info.getColumn(0, "errCd") == "CPN_USE_FAILED"){
+					alert(this.ds_err_info.getColumn(0, "errMsg"));
+					return;
 				}
 			}
 		
@@ -642,6 +645,7 @@ this.Div00_Div02_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 			, lectSmsterCd : lectSmsterCd
 			, mbrNo : this.ds_member_info.getColumn(0, "mbrNo")
 			, mbrGrdeCd : this.ds_member_info.getColumn(0, "mbrGrdeCd")
+			, itrstBrchCd : this.ds_member_info.getColumn(0, "itrstBrchCd")
 		};
 		this.cnt++;
 		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::LectReg/LectSearch_popup.xfdl", this, 1280, 700, true, true, null);
@@ -778,7 +782,6 @@ this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		alert("재료비 또는 대여료 옵션이 포함된 동일 강좌의 실수강자 모두를 선택 후 옵션을 변경 할 수 있습니다.");
 		return;
 	}
-	
 	
 	var lectCnt = 0;
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++){
@@ -1042,8 +1045,8 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		this.ds_payment_param.setColumn(0, "chngAmt", chngAmt);
 		this.ds_payment_param.setColumn(0, "posRcptNo", posRcptNo);
 		this.ds_payment_param.set_enableevent(true);
-	
 		this.ds_err_info.clearData();
+		
 		var strSvcId    = "payment";
 		var strSvcUrl   = this.application.Admin_svc + "::lectReg/payment.do";
 		var inData      = "classList=this.ds_class_list paymentParam=this.ds_payment_param mbrParam=this.ds_member_info";
@@ -1154,8 +1157,7 @@ this.fn_year_add = function()
 	}
 
 	this.ds_search.setColumn(0, "yy", year);
-}
-]]></Script>
+}]]></Script>
     <Objects>
       <Dataset id="ds_smster_list">
         <ColumnInfo>
@@ -1167,18 +1169,18 @@ this.fn_year_add = function()
       </Dataset>
       <Dataset id="ds_class_list">
         <ColumnInfo>
-          <Column id="fmlySeqno" type="INT" size="256"/>
+          <Column id="fmlySeqno" type="STRING" size="256"/>
           <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
           <Column id="sexCd" type="STRING" size="256"/>
           <Column id="fmlyRelCd" type="STRING" size="256"/>
           <Column id="fmlyRelCdNm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
-          <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectStatNm" type="STRING" size="256"/>
-          <Column id="lectAmt" type="INT" size="256"/>
+          <Column id="lectAmt" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
           <Column id="lectClCd" type="STRING" size="256"/>
@@ -1190,35 +1192,35 @@ this.fn_year_add = function()
           <Column id="lectStMiCd" type="STRING" size="256"/>
           <Column id="lectEndHhCd" type="STRING" size="256"/>
           <Column id="lectEndMiCd" type="STRING" size="256"/>
-          <Column id="lectNbcnt" type="INT" size="256"/>
-          <Column id="optnSeqno" type="INT" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="optnSeqno" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
-          <Column id="optnAmt" type="INT" size="256"/>
+          <Column id="optnAmt" type="STRING" size="256"/>
           <Column id="fmlyCd" type="STRING" size="256"/>
           <Column id="exMbrYn" type="STRING" size="256"/>
           <Column id="lrclsCtegryCd" type="STRING" size="256"/>
           <Column id="mdclsCtegryCd" type="STRING" size="256"/>
           <Column id="smclsCtegryCd" type="STRING" size="256"/>
           <Column id="oflnDcNm" type="STRING" size="256"/>
-          <Column id="oflnDcAmt" type="INT" size="256"/>
+          <Column id="oflnDcAmt" type="STRING" size="256"/>
           <Column id="grdeDcNm" type="STRING" size="256"/>
-          <Column id="grdeDcRt" type="INT" size="256"/>
-          <Column id="grdeDcAmt" type="INT" size="256"/>
+          <Column id="grdeDcRt" type="STRING" size="256"/>
+          <Column id="grdeDcAmt" type="STRING" size="256"/>
           <Column id="cpnDcNm" type="STRING" size="256"/>
-          <Column id="cpnDcRt" type="INT" size="256"/>
-          <Column id="cpnDcAmt" type="INT" size="256"/>
+          <Column id="cpnDcRt" type="STRING" size="256"/>
+          <Column id="cpnDcAmt" type="STRING" size="256"/>
           <Column id="optnDcNm" type="STRING" size="256"/>
-          <Column id="optnDcAmt" type="INT" size="256"/>
+          <Column id="optnDcAmt" type="STRING" size="256"/>
           <Column id="oflnDcCd" type="STRING" size="256"/>
           <Column id="grdeDcCd" type="STRING" size="256"/>
           <Column id="cpnDcCd" type="STRING" size="256"/>
           <Column id="optnDcCd" type="STRING" size="256"/>
-          <Column id="lectStlmAmt" type="INT" size="256"/>
+          <Column id="lectStlmAmt" type="STRING" size="256"/>
           <Column id="grdeDcSubtrYn" type="STRING" size="256"/>
           <Column id="cpnDcAmtClCd" type="STRING" size="256"/>
           <Column id="optnUseYn" type="STRING" size="256"/>
           <Column id="optnTypNm" type="STRING" size="256"/>
-          <Column id="gsCapaCnt" type="INT" size="256"/>
+          <Column id="gsCapaCnt" type="STRING" size="256"/>
           <Column id="bday" type="STRING" size="256"/>
           <Column id="optnTypCd" type="STRING" size="256"/>
           <Column id="lscCd" type="STRING" size="256"/>
@@ -1226,6 +1228,8 @@ this.fn_year_add = function()
           <Column id="cpnNo" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_tot_grde_list"/>
@@ -1292,6 +1296,7 @@ this.fn_year_add = function()
           <Column id="errCd" type="STRING" size="256"/>
           <Column id="errLectNm" type="STRING" size="256"/>
           <Column id="errActlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="errMsg" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_member_info">

@@ -219,6 +219,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			var dsOflnAmtClCdList = this.dcMthdFrm.ds_ofln_amt_cl_cd_list;
 			var dsDcDtl = this.dcMthdFrm.ds_dc_dtl;
 			
+			this.dcMthdFrm.oflnDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "oflnDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "oflnDcAmt");
+			this.dcMthdFrm.grdeDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "grdeDcAmt");
+			this.dcMthdFrm.cpnDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "cpnDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "cpnDcAmt");
+			this.dcMthdFrm.addDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "addDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "addDcAmt");
+			
 			this.Div00.form.Div00.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "stlmDtm"));
 			this.Div00.form.Div01.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "actlAtlctNpleNm"));
 			this.Div00.form.Div02.form.Static04.set_text(this.ds_order_modify_info.getColumn(0, "stDaywCdNm"));
@@ -235,11 +240,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.set_value(dsDcDtl.getColumn(0, "oflnDcAmtClCd"));
 				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
 				var oflnDcAmt = dsDcDtl.getColumn(0, "oflnDcAmt");
-				if(this.lectAmt < oflnDcAmt){
-					this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(this.lectAmt));
-				}else{
-					this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(oflnDcAmt));
-				}
+				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(oflnDcAmt));
 				this.lectAmt = this.lectAmt - oflnDcAmt;
 				if(this.lectAmt < 0){
 					this.lectAmt = 0;
@@ -272,6 +273,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Radio00.set_value(dsDcDtl.getColumn(0, "grdeDcSubtrYn"));
 					var grdeDcAmt = dsDcDtl.getColumn(0, "grdeDcAmt");
 					if(dsDcDtl.getColumn(0, "grdeDcSubtrYn") == "N"){
+						// 관리자 수기
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.dcMthdFrm.ds_adm_grde_amt_cl_cd_list);
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
@@ -281,6 +283,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo01.set_value(dsDcDtl.getColumn(0, "grdeDcRt"));
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(grdeDcAmt) + "원");
 					}else{
+						// 고객보유
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.set_value(dsDcDtl.getColumn(0, "grdeDcAmtClCd"));
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static00.set_text(this.gfn_setComma(dsDcDtl.getColumn(0, "grdeDcRt")) + "%");
 						this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(grdeDcAmt) + "원");
@@ -299,13 +302,24 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
 			}else{
 				var cpnDcAmt = dsDcDtl.getColumn(0, "cpnDcAmt");
+				trace(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
+				trace(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.saveXML());
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_value(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
+				
 				if(this.lectAmt < cpnDcAmt){
 					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(this.lectAmt) + "원");
 				}else{
 					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(cpnDcAmt) + "원");
+				}
+				
+				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static01.set_visible(true);
+				
+				if(dsDcDtl.getColumn(0, "cpnDcRt") != 0){
+					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static01.set_text(dsDcDtl.getColumn(0, "cpnDcRt") + "%");
+				}else{
+					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static01.set_text(this.gfn_setComma(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.index, "dcAmt")) + "원");
 				}
 				
 				this.lectAmt = this.lectAmt - cpnDcAmt;
@@ -322,7 +336,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div05.set_visible(false);
 				this.dcMthdFrm.Div00.form.Div06.set_top(179);
 			}else{
-				
 				this.Div00.form.optnDiv.form.Static02.set_text(this.ds_order_modify_info.getColumn(0, "optnNm"));
 				this.Div00.form.optnDiv.form.Static03.set_text(this.gfn_setComma(this.ds_order_modify_info.getColumn(0, "optnAmt")) + "원");
 			}
@@ -337,7 +350,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.Div00.form.Div05.form.Static04.set_top(25);
 				
 				this.dcMthdFrm.Div00.form.Div05.form.Static02.set_text(dsDcDtl.getColumn(0, "oflnDcNm"));
-				
 				if(this.gfn_nvl(dsDcDtl.getColumn(0, "addDcAmtClCd")) == ""){
 					// 기존에 추가금액 할인을 먹이지 않았을 경우
 					this.dcMthdFrm.Div00.form.Div05.form.Radio00.set_value("N");
@@ -422,6 +434,10 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var otgiftStlmAmt = this.gfn_nvl(this.Div01.form.Div04.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div04.form.Edit00.value, ",", ""));
 	var etcStlmAmt = this.gfn_nvl(this.Div01.form.Div05.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div05.form.Edit00.value, ",", ""));
 	var chngAmt = this.gfn_nvl(this.Div01.form.Div06.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Edit00.value, ",", ""));
+	var chngMthdCd = this.gfn_nvl(this.Div01.form.Div06.form.Combo00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Combo00.value, ",", ""));
+	trace(chngAmt);
+	trace(chngMthdCd);
+	
 	
 	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
 		if(chngAmt == 0){
@@ -498,6 +514,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		dsUpdate.addColumn("grdeDcNm", "string", 256);
 		dsUpdate.addColumn("grdeDcAmtClCd", "string", 256);
 		dsUpdate.addColumn("grdeDcRt", "int", 256);
+		dsUpdate.addColumn("grdeDcAmt", "int", 256);
 		dsUpdate.addColumn("grdeDcSubtrYn", "string", 256);
 		dsUpdate.addColumn("cpnDcNm", "string", 256);
 		dsUpdate.addColumn("cpnDcAmtClCd", "string", 256);
@@ -506,6 +523,8 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		dsUpdate.addColumn("addDcNm", "string", 256);
 		dsUpdate.addColumn("addDcAmtClCd", "string", 256);
 		dsUpdate.addColumn("addDcAmt", "int", 256);
+		dsUpdate.addColumn("chngAmt", "string", 256);
+		dsUpdate.addColumn("chngMthdCd", "string", 256);
 		
 		this.addChild("ds_update_info", dsUpdate);
 		
@@ -523,6 +542,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_update_info.setColumn(0, "otgiftStlmAmt", otgiftStlmAmt);
 		this.ds_update_info.setColumn(0, "etcStlmAmt", etcStlmAmt);
 		this.ds_update_info.setColumn(0, "chngAmt", chngAmt);
+		this.ds_update_info.setColumn(0, "chngMthdCd", chngMthdCd);
 		
 		var lectAmt = Number(this.ds_order_modify_info.getColumn(0, "lectAmt"));
 		var lectAddAmt = Number(this.ds_order_modify_info.getColumn(0, "lectAddAmt"));
@@ -542,14 +562,18 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		// 등급 할인
 		if(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.value != ""){
 			this.ds_update_info.setColumn(0, "grdeDcSubtrYn", this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Radio00.value);
+			var grdeDcRt;
 			if(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Radio00.value == "Y"){
 				// 고객 보유
-				this.ds_update_info.setColumn(0, "grdeDcRt", Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static00.text.substring(0, this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static00.text.length - 1)));
+				grdeDcRt = Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static00.text.substring(0, this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Static00.text.length - 1));
 			}else{
 				// 관리자 수기
-				this.ds_update_info.setColumn(0, "grdeDcRt", Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo01.value));
+				grdeDcRt = Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo01.value);
 			}
-			lectAmt -= lectAmt * (Number(this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo01.value) / 100);
+			
+			this.ds_update_info.setColumn(0, "grdeDcRt", grdeDcRt);
+			this.ds_update_info.setColumn(0, "grdeDcAmt", (nexacro.round(lectAmt * (grdeDcRt / 100), -1)));
+			lectAmt = lectAmt - (nexacro.round(lectAmt * (grdeDcRt / 100), -1));
 			this.ds_update_info.setColumn(0, "grdeDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.text);
 			this.ds_update_info.setColumn(0, "grdeDcAmtClCd", this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.value);
 		}
@@ -566,9 +590,11 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 						}else{
 							this.ds_update_info.setColumn(0, "cpnDcAmt", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
 						}
+						lectAmt = (lectAmt < Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"))) ? 0 : lectAmt - Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
 					}else if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmtClCd") == "01"){
 						this.ds_update_info.setColumn(0, "cpnDcRt", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
-						lectAmt -= lectAmt * (Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt")) / 100);
+						this.ds_update_info.setColumn(0, "cpnDcAmt", nexacro.round(lectAmt * (Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt")) / 100), -1));
+						lectAmt = lectAmt - nexacro.round(lectAmt * (Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt")) / 100), -1);
 					}
 				}
 			}

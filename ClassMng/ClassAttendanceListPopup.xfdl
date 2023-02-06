@@ -29,6 +29,7 @@ this.ClassAttendanceListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadE
 	var yy = "";
 	var lectSmsterCd = "";
 	var lectCd = "";
+	var brchYn = nexacro.getPrivateProfile("brchCd") == "0000" ? 'Y' : 'N';
 	for(var i=0; i<this.parent.dataset.getRowCount(); i++) {
 		brchCd += brchCd == "" ? this.parent.dataset.getColumn(i, "brchCd") : "," + this.parent.dataset.getColumn(i, "brchCd");
 		yy += yy == "" ? this.parent.dataset.getColumn(i, "yy") : "," + this.parent.dataset.getColumn(i, "yy");
@@ -36,7 +37,7 @@ this.ClassAttendanceListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadE
 		lectCd += lectCd == "" ? this.parent.dataset.getColumn(i, "lectCd") : "," + this.parent.dataset.getColumn(i, "lectCd");
 	}
 	
-	this.WebBrowser00.set_url(this.domain + "/admin/class/selectClassAttendanceListPopup.do?brchCd=" + brchCd + "&yy=" + yy + "&lectSmsterCd=" + lectSmsterCd + "&lectCd=" + lectCd);
+	this.WebBrowser00.set_url(this.domain + "/admin/class/selectClassAttendanceListPopup.do?brchYn=" + brchYn + "&brchCd=" + brchCd + "&yy=" + yy + "&lectSmsterCd=" + lectSmsterCd + "&lectCd=" + lectCd);
 };
 ]]></Script>
   </Form>

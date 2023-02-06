@@ -91,7 +91,7 @@
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div00_00_01" taborder="9" text="Div00" left="0" top="Div00_01:-1" width="60%" height="33" cssclass="div_WF_CompWrap">
+                          <Div id="Div00_00_01" taborder="9" text="Div00" left="0" top="Div00_01:-1" width="30.00%" height="33" cssclass="div_WF_CompWrap">
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강의기간" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
@@ -101,7 +101,15 @@
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div01_00_00" taborder="10" text="Div01" left="Div00_00_01:0" top="Div02_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                          <Div id="Div04" taborder="16" text="Div04" left="Div00_00_01:0" top="Div01_01:-1" width="30%" height="33" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="전시아이콘" left="0" top="0" width="109" cssclass="sta_WF_TableLabel" bottom="0"/>
+                                <CheckBox id="chkIconAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
+                          <Div id="Div01_00_00" taborder="10" text="Div01" left="Div04:-1" top="Div02_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강의시작일" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
@@ -274,6 +282,7 @@
                             <Column size="146"/>
                             <Column size="80"/>
                             <Column size="119"/>
+                            <Column size="100"/>
                             <Column size="130"/>
                             <Column size="130"/>
                             <Column size="130"/>
@@ -313,10 +322,11 @@
                             <Cell col="26" text="옵션사용"/>
                             <Cell col="27" text="그룹여부"/>
                             <Cell col="28" text="강사수정요청"/>
-                            <Cell col="29" text="등록자"/>
-                            <Cell col="30" text="등록일시"/>
-                            <Cell col="31" text="수정자"/>
-                            <Cell col="32" text="수정일시"/>
+                            <Cell col="29" text="전시아이콘"/>
+                            <Cell col="30" text="등록자"/>
+                            <Cell col="31" text="등록일시"/>
+                            <Cell col="32" text="수정자"/>
+                            <Cell col="33" text="수정일시"/>
                           </Band>
                           <Band id="body">
                             <Cell displaytype="expr:pblPmprcustBrchCd == '' ? 'checkboxcontrol' : 'none'" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
@@ -324,7 +334,7 @@
                             <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="3" text="bind:lectTpNm"/>
                             <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
-                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="100" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
+                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="50" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
                             <Cell col="6" text="bind:lectAddOptnNm"/>
                             <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" displaytype="normal" maskeditlimitbymask="decimal"/>
                             <Cell col="8" text="bind:gsCapaCnt"/>
@@ -348,10 +358,11 @@
                             <Cell col="26" text="bind:optnTypNm"/>
                             <Cell col="27" text="bind:groupYn"/>
                             <Cell col="28" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
-                            <Cell col="29" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" tooltiptext="expr:regId + '(' + regNm + ')'" tooltiptype="hover"/>
-                            <Cell col="30" text="bind:regDtm"/>
-                            <Cell col="31" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" tooltiptext="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'" tooltiptype="hover"/>
-                            <Cell col="32" text="bind:modDtm"/>
+                            <Cell col="29" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm"/>
+                            <Cell col="30" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" tooltiptext="expr:regId + '(' + regNm + ')'" tooltiptype="hover"/>
+                            <Cell col="31" text="bind:regDtm"/>
+                            <Cell col="32" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" tooltiptext="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'" tooltiptype="hover"/>
+                            <Cell col="33" text="bind:modDtm"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -404,6 +415,7 @@
                 <Column size="156"/>
                 <Column size="80"/>
                 <Column size="119"/>
+                <Column size="108"/>
                 <Column size="130"/>
                 <Column size="130"/>
                 <Column size="130"/>
@@ -442,10 +454,11 @@
                 <Cell col="25" text="옵션사용"/>
                 <Cell col="26" text="그룹여부"/>
                 <Cell col="27" text="강사수정요청"/>
-                <Cell col="28" text="등록자"/>
-                <Cell col="29" text="등록일시"/>
-                <Cell col="30" text="수정자"/>
-                <Cell col="31" text="수정일시"/>
+                <Cell col="28" text="전시아이콘"/>
+                <Cell col="29" text="등록자"/>
+                <Cell col="30" text="등록일시"/>
+                <Cell col="31" text="수정자"/>
+                <Cell col="32" text="수정일시"/>
               </Band>
               <Band id="body">
                 <Cell text="expr:currow + 1"/>
@@ -476,10 +489,11 @@
                 <Cell col="25" text="bind:optnTypNm"/>
                 <Cell col="26" text="bind:groupYn"/>
                 <Cell col="27" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
-                <Cell col="28" text="expr:regId + '(' + regNm + ')'"/>
-                <Cell col="29" text="bind:regDtm"/>
-                <Cell col="30" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
-                <Cell col="31" text="bind:modDtm"/>
+                <Cell col="28" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="29" text="expr:regId + '(' + regNm + ')'"/>
+                <Cell col="30" text="bind:regDtm"/>
+                <Cell col="31" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
+                <Cell col="32" text="bind:modDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -542,6 +556,7 @@
           <Column id="optnUseYn" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="optnTypCd" type="STRING" size="256"/>
+          <Column id="dsplyIconCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -741,6 +756,7 @@
           <Column id="optnUseYn" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="optnTypCd" type="STRING" size="256"/>
+          <Column id="dsplyIconCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
@@ -749,6 +765,12 @@
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classDispIcon_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -801,6 +823,7 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.fn_classGb_add();
 	this.fn_classAprvState_add();
 	this.fn_classType_add();
+	this.fn_classDispIcon_add();
 	this.fn_click_add(this);
 };
 
@@ -828,6 +851,10 @@ this.init = function()
 	this.fn_sesterInfo();
 	this.fn_year_add();
 	this.fn_semester_set();
+	
+	this.searchFlag = 0;
+	this.Div02.form.Div01.form.Grid00.setCellProperty("head", 0, "text", 0);
+	this.ds_class_list.clearData();
 }
 
 /**************************************************************************
@@ -847,6 +874,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		case "codeList":
 			this.fn_classCtgy_set();
 			this.fn_classRoom_set();
+			this.fn_classDispIcon_set();
 		break;
 		
 		case "classUpdateList":
@@ -873,7 +901,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 this.fn_code_list = function()
 {	
 	var outData = "ds_classType_list=classTypeList ds_classState_list=classStateList ";
-		outData += "ds_classGb_list=classGbList ds_classAprvState_list=classAprvStateList ds_classRoom_list=classRoomList ";
+		outData += "ds_classGb_list=classGbList ds_classAprvState_list=classAprvStateList ds_classRoom_list=classRoomList ds_classDispIcon_list=classDispIconList ";
 		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList";
 	
 	var tranObj = {
@@ -881,7 +909,7 @@ this.fn_code_list = function()
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
 		outData : outData,
-		strArg : "cdId=114||115||116||117||118||ctgy||room brchCd=" + this.brchCd,
+		strArg : "cdId=114||115||116||117||118||120||ctgy||room brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
@@ -931,6 +959,39 @@ this.fn_classBrch_set = function()
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
 }
+
+//강좌 전시아이콘 추가
+this.fn_classDispIcon_add = function()
+{
+	var content = ["chkIconAll"];
+	var list = this.ds_classDispIcon_list;
+	
+	for(var i=0; i < list.getRowCount(); i++) 
+	{
+		var id = "chkIcon" + i;
+		var objComp = new CheckBox();
+		objComp.init(id, content[i] + ":6", 5, 90, 20);
+		this.Div02.form.Div00.form.Div00.form.Div04.form.addChild(id, objComp);
+		objComp.set_text(list.getColumn(i, "cdNm"));		
+		objComp.set_truevalue(list.getColumn(i, "cd"));
+		objComp.set_falsevalue("");
+		objComp.set_fittocontents("width");
+		objComp.show();	
+		content.push(id);
+		
+		this.ds_search.set_enableevent(false);
+		this.ds_search.addColumn(id, "STRING", 256);
+		this.ds_search.setColumn(0, id, "");	
+		this.ds_search.set_enableevent(true);
+		
+		var objBindItem = new BindItem();
+		objBindItem.init(id, "Div02.form.Div00.form.Div00.form.Div04.form." + id, "value", "ds_search", id);
+		this.addChild(id, objBindItem);
+		objBindItem.bind();	
+	}
+
+}
+
 
 //강좌 유형 추가
 this.fn_classType_add = function()
@@ -1237,6 +1298,13 @@ this.fn_classRoom_set = function()
 	this.ds_classRoom_list.setColumn(0, "cd", "");
 	this.ds_classRoom_list.setColumn(0, "cdNm", "전체");
 	this.Div02.form.Div00.form.Div00.form.Div02.form.Combo00.set_index(0);
+}
+
+this.fn_classDispIcon_set = function()
+{
+	this.ds_classDispIcon_list.insertRow(0);
+	this.ds_classDispIcon_list.setColumn(0, "cd", "N");
+	this.ds_classDispIcon_list.setColumn(0, "cdNm", "사용안함");
 }
 
 //체크박스 클릭이벤트

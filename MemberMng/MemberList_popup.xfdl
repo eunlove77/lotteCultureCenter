@@ -169,11 +169,11 @@
                             <Col id="datacolumn">전체</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">1</Col>
+                            <Col id="codecolumn">Y</Col>
                             <Col id="datacolumn">Y</Col>
                           </Row>
                           <Row>
-                            <Col id="codecolumn">2</Col>
+                            <Col id="codecolumn">N</Col>
                             <Col id="datacolumn">N</Col>
                           </Row>
                         </Rows>
@@ -471,6 +471,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "list":
 			this.Div02.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_member_list.getCount()) + "개)")
+			if(this.parent.excptMbrNo)
+			{
+				this.ds_member_list.filter("mbrNo !='"+ this.parent.excptMbrNo +"'")
+				
+			}
 			break;
 	}
 };]]></Script>

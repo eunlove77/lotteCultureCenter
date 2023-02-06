@@ -42,7 +42,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="수강료 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <MaskEdit id="MaskEdit00" taborder="1" left="Static00:6" top="5" width="130" height="20" limitbymask="both" format="!##,###,###,##0"/>
+                                <MaskEdit id="MaskEdit00" taborder="1" left="Static00:6" top="5" width="130" height="20" limitbymask="both" format="!##,###,###,##0" oninput="Div00_Div00_Div00_Div01_00_MaskEdit00_oninput"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -81,8 +81,8 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌명 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="150" maxlength="100" onkeyup="Div00_Div00_Div00_Div00_03_Edit00_onkeyup"/>
-                                <Static id="Static01" taborder="2" text="(0/100)" left="Edit00:6" top="5" width="120" height="20"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="150" maxlength="50" onkeyup="Div00_Div00_Div00_Div00_03_Edit00_onkeyup"/>
+                                <Static id="Static01" taborder="2" text="(0/50)" left="Edit00:6" top="5" width="120" height="20"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -90,8 +90,8 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="한줄소개" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
-                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" maxlength="100" right="150" onkeyup="Div00_Div00_Div00_Div00_04_Edit00_onkeyup"/>
-                                <Static id="Static01" taborder="2" text="(0/100)" left="Edit00:6" top="5" width="120" height="20"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" maxlength="50" right="150" onkeyup="Div00_Div00_Div00_Div00_04_Edit00_onkeyup"/>
+                                <Static id="Static01" taborder="2" text="(0/50)" left="Edit00:6" top="5" width="120" height="20"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -841,7 +841,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="메모" left="0" top="0" height="98" width="110" cssclass="sta_WF_TableLabel"/>
-                                <TextArea id="TextArea00" taborder="1" left="Static00:6" top="6" bottom="6" right="6" maxlength="2000"/>
+                                <TextArea id="TextArea00" taborder="1" left="Static00:6" top="6" bottom="6" right="6" maxlength="250"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -986,8 +986,8 @@ this.init = function()
 	this.ds_unusl_list.addRow();
 	
 	//페이지 사이즈 조절
-	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(0/100)");
-	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(0/100)");
+	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(0/50)");
+	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(0/50)");
 	
 	this.Div00.form.Div00.set_height(536);
 	this.Div00.form.Div00.form.Div00.form.Div02.set_bottom(0);
@@ -2212,7 +2212,7 @@ this.Div00_Div00_Div00_Div00_03_Edit00_onkeyup = function(obj:nexacro.Edit,e:nex
 	{
 		len = obj.value.length;
 	}
-	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(" + len + "/100)");
+	this.Div00.form.Div00.form.Div00.form.Div00_03.form.Static01.set_text("(" + len + "/50)");
 };
 
 this.Div00_Div00_Div00_Div00_04_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
@@ -2222,7 +2222,7 @@ this.Div00_Div00_Div00_Div00_04_Edit00_onkeyup = function(obj:nexacro.Edit,e:nex
 	{
 		len = obj.value.length;
 	}
-	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(" + len + "/100)");
+	this.Div00.form.Div00.form.Div00.form.Div00_04.form.Static01.set_text("(" + len + "/50)");
 };
 
 this.Div00_Div00_Div00_Div00_05_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
@@ -2402,6 +2402,19 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oninput = function(obj:nexacro.G
 		if(obj.getEditingValue() != "" && obj.getEditingValue() != undefined)
 		{		
 			obj.setEditingValue(obj.getEditingValue().substr(0, 50));
+		}
+	}
+	
+	if(obj.currentcol == 2)
+	{
+		if(obj.getEditingValue() != "" && obj.getEditingValue() != undefined)
+		{		
+			var num = obj.getEditingValue();
+			if(num.length > 0){
+				num = (parseInt(num / 10) + (num % 10)) * 10;
+			}
+			
+			obj.setEditingValue(num);
 		}
 	}
 };
@@ -2860,6 +2873,16 @@ this.Div00_Div00_00_00_00_01_Div00_Div01_Radio00_onitemchanged = function(obj:ne
 		this.ds_option_list.setColumn(i, "partRfndClCd", partRfndClCd);
 	}
 	
+};
+
+this.Div00_Div00_Div00_Div01_00_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
+{
+	var num = obj.value;
+	if(num.length > 0){
+		num = (parseInt(num / 10) + (num % 10)) * 10;
+	}
+	
+	obj.set_value(num);
 };
 ]]></Script>
     <Objects>

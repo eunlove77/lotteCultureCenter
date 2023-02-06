@@ -190,11 +190,16 @@ this.com_fn_checkbox = function(pObj)
  * 검색조건 초기화
  **************************************************************************/
 this.com_reset_search_form = function(pObj){
+	pObj.ds_list.deleteAll();
+	this.com_reset_search_form2(pObj);
+
+}
+this.com_reset_search_form2 = function(pObj){
 	var arrObj = pObj.components;
 	for(var i=0; i<arrObj.length; i++)
 	{	
 		if(arrObj[i] == "[object Div]"){
-			this.com_reset_search_form(arrObj[i].form);
+			this.com_reset_search_form2(arrObj[i].form);
 		}
 		else if(arrObj[i] == "[object Edit]"){
 			arrObj[i].set_value("");
@@ -204,13 +209,13 @@ this.com_reset_search_form = function(pObj){
 		}
 		else if(arrObj[i] == "[object CheckBox]"){
 			var fv = arrObj[i].falsevalue;
-			arrObj[i].set_value(fv ? fv : false);
+			arrObj[i].set_value(fv !== undefined ? fv : false);
 		}
 		else if(arrObj[i] == "[object Calendar]"){
 			arrObj[i].set_value("");
 			arrObj[i].calendaredit.set_readonly(true); 
 		}
-	}
+	}	
 }
 /**************************************************************************
  * 카테고리
@@ -558,7 +563,6 @@ this.chk_Saup_No = function(saupno)
 
 	if (saupno.length != 10 )
 	{
-		alert("사용 불가한 사업자번호입니다.");
 		return false;
 	}
 	var sum = 0;
@@ -590,7 +594,6 @@ this.chk_Saup_No = function(saupno)
 	//alert('마지막에  sidchk != getlist[9] sidchk ==>  ['+sidchk+']  getlist[9]  ==> ['+getlist[9]+']    sidchk ==>['+sidchk+']');  
 	if (sidchk != getlist[9])
 	{
-		alert("사용 불가한 사업자번호입니다.");
 		return false;
 	}
 	return true;

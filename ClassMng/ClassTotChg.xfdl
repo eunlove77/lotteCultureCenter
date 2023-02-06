@@ -27,8 +27,8 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌명" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="150" maxlength="100" onkeyup="Div00_Div00_Div00_Div01_Edit00_onkeyup"/>
-                                <Static id="Static01" taborder="2" text="(0/100)" left="Edit00:6" top="5" width="120" height="20"/>
+                                <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="21" right="150" maxlength="50" onkeyup="Div00_Div00_Div00_Div01_Edit00_onkeyup"/>
+                                <Static id="Static01" taborder="2" text="(0/50)" left="Edit00:6" top="5" width="120" height="20"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -81,7 +81,7 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="수강료" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <MaskEdit id="MaskEdit00" taborder="1" left="Static00:6" top="5" width="130" height="20" limitbymask="both" format="!##,###,###,##9"/>
+                                <MaskEdit id="MaskEdit00" taborder="1" left="Static00:6" top="5" width="130" height="20" limitbymask="both" format="!##,###,###,##9" oninput="Div00_Div00_Div00_Div02_01_MaskEdit00_oninput"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -1445,7 +1445,17 @@ this.Div00_Div00_Div00_Div01_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacr
 	{
 		len = obj.value.length;
 	}
-	this.Div00.form.Div00.form.Div00.form.Div01.form.Static01.set_text("(" + len + "/100)");
+	this.Div00.form.Div00.form.Div00.form.Div01.form.Static01.set_text("(" + len + "/50)");
+};
+
+this.Div00_Div00_Div00_Div02_01_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
+{
+	var num = obj.value;
+	if(num.length > 0){
+		num = (parseInt(num / 10) + (num % 10)) * 10;
+	}
+	
+	obj.set_value(num);
 };
 ]]></Script>
   </Form>

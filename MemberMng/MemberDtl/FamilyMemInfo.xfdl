@@ -7,7 +7,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" left="0" top="5" height="21" text="동반 수강자 목록" width="200"/>
-              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_fmly_list" autofittype="col" right="0" bottom="0" oncellclick="Div00_Grid00_oncellclick">
+              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_fmly_list" autofittype="col" right="0" bottom="0" oncellclick="Div00_Grid00_oncellclick" nodatatext="데이터가 없습니다.">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -69,7 +69,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="생년월일 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Calendar id="Calendar00" taborder="1" left="Static00:10" top="5" width="150" height="20" oneditclick="Div01_Div02_Calendar00_oneditclick" dateformat="yyyy-MM-dd"/>
+                    <Calendar id="Calendar00" taborder="1" left="Static00:10" top="5" width="150" height="20" oneditclick="Div01_Div02_Calendar00_oneditclick" dateformat="yyyy-MM-dd" oncloseup="Div01_Div02_Calendar00_oncloseup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -129,6 +129,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::popup.xjs";
+include "Base::lib_date.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -171,6 +172,16 @@ this.FamilyMemInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 this.Div01_Div02_Calendar00_oneditclick = function(obj:nexacro.Calendar,e:nexacro.EditClickEventInfo)
 {
 	this.Div01.form.Div02.form.Calendar00.dropdown();
+};
+
+/* 현재 날짜 이후 선택 시 */
+this.Div01_Div02_Calendar00_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(e.postvalue > this.gfnGetToDay())
+	{
+		alert("현재날짜 이후 날짜는 선택불가합니다.");
+		obj.set_value(e.prevalue);
+	}
 };
 
 this.Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
@@ -254,6 +265,7 @@ this.Div00_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 				 type : 2,
 				 maxCnt : 1,
 				 menuId : this.menuId,
+				 excptMbrNo : this.mbrNo,
 				 callBackFnc : this.fnCallback_pop
 			   };
 				

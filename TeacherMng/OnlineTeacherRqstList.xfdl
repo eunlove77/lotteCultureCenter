@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="5" text="Div01" left="10" top="90" right="10" height="33">
+        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33%">
@@ -34,7 +34,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div02" taborder="7" text="Div01" left="10" top="Div01:-1" height="33" right="10">
+        <Div id="Div02" taborder="6" text="Div01" left="10" top="Div01:-1" height="33" right="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="450">
@@ -60,7 +60,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="6" text="Div01" left="10" top="Div02:-1" height="33" right="10">
+        <Div id="Div03" taborder="5" text="Div01" left="10" top="Div02:-1" height="33" right="10">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="1" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="450">
@@ -125,7 +125,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_teacher_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncelldblclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -196,9 +196,8 @@
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Static id="Static00" taborder="9" text="강사지원 목록" left="16" top="270" width="80" height="21" font="bold 12px/normal &quot;Noto Sans KR&quot;" fittocontents="width"/>
-        <Static id="txtTotal" taborder="4" top="270" height="21" text="(0개)" width="42" left="Static00:10"/>
-        <Button id="btnConfirm" taborder="8" text="강사승인" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
+        <Button id="btnConfirm" taborder="7" text="강사승인" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
+        <Div id="Div06" taborder="8" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -227,7 +226,7 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
-	this.gfnSetCheckBoxNoDataset(this.ds_teacher_list, this.Grid00, 0);
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
   //지점 콤보박스 세팅
 	this.com_set_branch_list();
@@ -341,7 +340,7 @@ this.select_teacher_list = function(){
 	tranObj.strSvcId	= "select_teacher";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
 	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_teacher_list=output1";
+	tranObj.outData     = "ds_list=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -380,9 +379,9 @@ this.reset_search_form = function(){
 //강사 리스트 데이터 가공
 this.process_teacher_list = function(){
 
-	for(var i = 0; i < this.ds_teacher_list.rowcount; i++){
+	for(var i = 0; i < this.ds_list.rowcount; i++){
 		//hopeDaywVal 파싱
-		var str = this.ds_teacher_list.getColumn(i, "hopeDaywVal");
+		var str = this.ds_list.getColumn(i, "hopeDaywVal");
 		if(str){
 			var arr = str.split(",");
 			var resStr = "", comma = "";
@@ -392,7 +391,7 @@ this.process_teacher_list = function(){
 				resStr += comma + dayNm;
 				comma = ",";
 			}
-			this.ds_teacher_list.setColumn(i, "hopeDaywVal", resStr);
+			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
 	}
 	
@@ -402,7 +401,7 @@ this.process_teacher_list = function(){
  **************************************************************************/
 this.btnConfirm_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var check_array = this.ds_teacher_list.checkarray;
+	var check_array = this.ds_list.checkarray;
 	var checked_array = new Array();
 	for(var i = 0; i < check_array.length; i++){
 		if(check_array[i] > 0) checked_array.push(i);
@@ -418,11 +417,11 @@ this.btnConfirm_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_apvl_list.clearData();
 		for(i of checked_array){
 			var row = this.ds_apvl_list.addRow();
-			var tcCdNo = this.ds_teacher_list.getColumn(i, "tcCdNo");
+			var tcCdNo = this.ds_list.getColumn(i, "tcCdNo");
 			this.ds_apvl_list.setColumn(row, "tcCdNo", tcCdNo);
 		}
 		
-		this.ds_teacher_list.deleteMultiRows(checked_array);
+		this.ds_list.deleteMultiRows(checked_array);
 		for(i of checked_array){
 			check_array[i] = 0;
 		}
@@ -470,7 +469,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		return;
 	}
 	if(svcId == "select_teacher"){
-		this.txtTotal.set_text("(" + this.ds_teacher_list.rowcount + ")개");
 		this.process_teacher_list();
 	}
 	else if(svcId == "confirm_teacher"){
@@ -530,7 +528,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_teacher_list">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>

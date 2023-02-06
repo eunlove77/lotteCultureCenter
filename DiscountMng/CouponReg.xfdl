@@ -13,7 +13,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 상태 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
                     <Static id="Static01" taborder="1" text="발급 대기" left="Static00:10" top="5" width="55" usedecorate="false" height="21" fittocontents="width"/>
-                    <Button id="btnSearch" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80"/>
+                    <Button id="btnEnd" taborder="2" text="발급 종료" left="184" top="6" height="21" cssclass="btn_WF_High" fittocontents="width" width="80" onclick="Div00_Div10_btnEnd_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -253,8 +253,8 @@
                                   <Cell col="12"/>
                                 </Band>
                                 <Band id="body">
-                                  <Cell text="bind:brchNm"/>
-                                  <Cell col="1" text="bind:lectCd"/>
+                                  <Cell displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd "/>
+                                  <Cell col="1" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd"/>
                                   <Cell col="2" text="bind:lectTpNm"/>
                                   <Cell col="3" text="bind:lectStatNm"/>
                                   <Cell col="4" text="bind:lectNm"/>
@@ -298,7 +298,7 @@
                         </Rows>
                       </Dataset>
                     </Radio>
-                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,###" limitbymask="both"/>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,###" limitbymask="both" oninput="Div01_Div04_MaskEdit00_oninput"/>
                     <Static id="Static01" taborder="2" text="원" left="MaskEdit00:10" top="32" width="120" height="21"/>
                   </Layout>
                 </Layouts>
@@ -530,10 +530,12 @@
       <Dataset id="ds_appl_lect">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectTpCd" type="STRING" size="256"/>
           <Column id="lectTpNm" type="STRING" size="256"/>
@@ -737,19 +739,21 @@ this.fn_set_spot = function()
 	
 	for(var i=0; i < list.getRowCount(); i++) 
 	{
-		var id = "chkSpot" + i;
-		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 9, 133, 20);
-		this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
-		objComp.set_text(list.getColumn(i, "cdNm"));
-		objComp.set_truevalue(list.getColumn(i, "cd"));
-		objComp.set_falsevalue("N");
-		objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
-		objComp.show();	
-		content.push(id);
-		
-		this.Div00.form.Div00.form.Div00.form.resetScroll()
+		if(list.getColumn(i, "cd") != "0000")
+		{
+			var id = "chkSpot" + i;
+			var objComp = new CheckBox();
+			objComp.init(id, content[i] + ":10", 9, 133, 20);
+			this.Div00.form.Div00.form.Div00.form.addChild(id, objComp);
+			objComp.set_text(list.getColumn(i, "cdNm"));
+			objComp.set_truevalue(list.getColumn(i, "cd"));
+			objComp.set_falsevalue("N");
+			objComp.insertEventHandler("onclick", 0, this.fn_checkbox, this);
+			objComp.show();	
+			content.push(id);
+		}
 	}
+	this.Div00.form.Div00.form.Div00.form.resetScroll()
 }
 
 /* '전체' 체크박스 이벤트 */
@@ -1241,9 +1245,11 @@ this.Div01_Div03_Div01_searchBtn_onclick = function(obj:nexacro.Button,e:nexacro
 		var arrArguments = {
 			type : 1,
 			brchCd : spotStr,
+			pblOn : "on",
+			maxCnt : 10,
 			dataset : this.ds_appl_lect
 		}
-		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, 1000, 700, true, true, null);
+		this.gfn_openPopup("ClassListPopup" + this.popCnt, arrArguments, "ClassMng::ClassListPopup.xfdl", this, null, null, true, true, null);
 		
 	}
 };
@@ -1306,7 +1312,10 @@ this.Div01_Div05_radioPeriod_onitemchanged = function(obj:nexacro.Radio,e:nexacr
 
 this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.close();
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.close();
+	}
 };
 
 /**************************************************************************
@@ -1487,9 +1496,57 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.opener.components[0].form.fn_list();
 			this.close();
 			break;
+		case "end":
+			this.alert("발급종료 되었습니다.");
+			console.log(this.opener);
+			this.opener.components[0].form.fn_list();
+			this.close();
+			break;
 	}
 
-};]]></Script>
+};
+
+this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
+{
+	if(this.Div01.form.Div04.form.radioDiscount.value == '02')
+	{
+		var num = obj.value;
+		// 단위 : 무조건 백의자리
+		if(num.length > 0)
+		{
+			num = (parseInt(num / 10) + (num % 10)) * 10;
+		}
+		
+		obj.set_value(num);
+		obj.setCaretPos(obj.value.length-1);
+		
+		if(obj.value.toString() == "0")
+		{
+			obj.set_value("");
+		}
+	}
+};
+
+this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("발급종료 하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "end",
+			strSvcUrl : this.baseSvrUrl + "end.do",
+			inData : "",
+			outData : "",
+			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isAsync : true
+		}
+		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+		this.gfn_transaction(tranObj);	
+	}
+};
+]]></Script>
     <Bind>
       <BindItem id="cpnNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="cpnNm"/>
       <BindItem id="cpnExpl" compid="Div00.form.Div02.form.TextArea00" propid="value" datasetid="ds_detail" columnid="cpnExpl"/>

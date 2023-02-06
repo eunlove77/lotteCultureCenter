@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridFaqList" taborder="2" left="10" top="270" binddataset="faqDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridFaqList_oncellclick">
+        <Grid id="GridFaqList" taborder="2" left="10" top="270" binddataset="faqDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridFaqList_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -31,7 +31,7 @@
                 <Cell col="6" text="노출여부"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:faqSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:clNm"/>
                 <Cell col="2" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="3" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
@@ -262,26 +262,42 @@ this.Div01_BtnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 //삭제버튼
 this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var check_array = this.faqDs.checkarray;
-	var checked_array = new Array();
-	for(var i = 0; i < check_array.length; i++){
-		if(check_array[i] > 0) checked_array.push(i);
+	var list = this.faqDs;
+	var fixCnt = 0;
+	var chkStr = "";
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			chkStr += list.getColumn(i, "faqSeqno")+",";
+			if(list.getColumn(i, "top5SlctYn") == 'Y')
+			{
+				fixCnt++;
+				break;
+			}
+		}
 	}
 	
-	if(checked_array.length == 0){
+	if(chkStr == "")
+	{
 		alert("삭제할 게시글을 선택하세요.");
-		return false;
 	}
-	if(!confirm("선택한 게시물을 삭제하시겠습니까?")){
-		return false;
+	else if(fixCnt > 0)
+	{
+		if(this.confirm("Top으로 선정되어진 게시글이 포함됐습니다\n삭제하시겠습니까?"))
+		{
+			this.fn_delete(chkStr);
+		}
+		//return false;
 	}
-	
-	this.faqDs.deleteMultiRows(checked_array);
-	for(i of checked_array){
-		check_array[i] = 0;
+	else 
+	{
+		if(this.confirm("선택한 게시글을 삭제하시겠습니까?"))
+		{
+			this.fn_delete(chkStr);
+		}
 	}
-	this.fn_delete();
-	
 };
 
 //검색버튼
@@ -565,17 +581,17 @@ this.fn_topN_onlick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 };
 
 //삭제
-this.fn_delete = function ()
+this.fn_delete = function (delStr)
 {	
 	var tranObj = {};
 	tranObj.strSvcId	= "delete";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/deleteFaq.do";
-	tranObj.inData      = "faqList=faqDs:U";
-	tranObj.outData     = "faqDs=output1";
-	tranObj.strArg      = "";
+	tranObj.inData      = "";
+	tranObj.outData     = "";
+	tranObj.strArg      = "delStr="+delStr;
 	tranObj.callBackFnc = "fnCallback";
-	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	tranObj.isAsync     = true;
 	
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
 	

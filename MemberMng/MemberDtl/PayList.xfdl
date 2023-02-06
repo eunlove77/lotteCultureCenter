@@ -12,12 +12,14 @@
                   <Format id="default">
                     <Columns>
                       <Column size="48" band="left"/>
+                      <Column size="80"/>
                       <Column size="100"/>
                       <Column size="120"/>
                       <Column size="80"/>
                       <Column size="100"/>
                       <Column size="80"/>
                       <Column size="150"/>
+                      <Column size="100"/>
                       <Column size="80"/>
                       <Column size="100"/>
                       <Column size="80"/>
@@ -46,78 +48,82 @@
                       <Column size="120"/>
                     </Columns>
                     <Rows>
-                      <Row size="24" band="head"/>
+                      <Row size="40" band="head"/>
                       <Row size="26"/>
                     </Rows>
                     <Band id="head">
                       <Cell text="번호"/>
-                      <Cell col="1" text="실수강자"/>
-                      <Cell col="2" text="지점명"/>
-                      <Cell col="3" text="강좌유형"/>
-                      <Cell col="4" text="학기"/>
-                      <Cell col="5" text="강좌코드"/>
-                      <Cell col="6" text="강좌명"/>
-                      <Cell col="7" text="강사명"/>
-                      <Cell col="8" text="옵션명"/>
-                      <Cell col="9" text="강좌료"/>
-                      <Cell col="10" text="추가금액"/>
-                      <Cell col="11" text="오프라인 할인"/>
-                      <Cell col="12" text="오프라인 할인금액"/>
-                      <Cell col="13" text="등급할인명"/>
-                      <Cell col="14" text="등급할인금액"/>
-                      <Cell col="15" text="쿠폰명"/>
-                      <Cell col="16" text="쿠폰 할인금액"/>
-                      <Cell col="17" text="추가 금액 할인"/>
-                      <Cell col="18" text="주문금액"/>
-                      <Cell col="19" text="총 결제금액"/>
-                      <Cell col="20" text="결제수단"/>
-                      <Cell col="21" text="결제일시"/>
-                      <Cell col="22" text="결제채널"/>
-                      <Cell col="23" text="결제상태"/>
-                      <Cell col="24" text="강좌구분"/>
-                      <Cell col="25" text="강좌요일"/>
-                      <Cell col="26" text="강의기간"/>
-                      <Cell col="27" text="강의시간"/>
-                      <Cell col="28" text="강의횟수"/>
-                      <Cell col="29" text="강좌상태"/>
-                      <Cell col="30" text="환불규정 확인서명"/>
-                      <Cell col="31" text="사은품 신청여부"/>
-                      <Cell col="32" text="사은품 신청번호"/>
+                      <Cell col="1" text="주문번호"/>
+                      <Cell col="2" text="실수강자"/>
+                      <Cell col="3" text="지점명"/>
+                      <Cell col="4" text="강좌유형"/>
+                      <Cell col="5" text="학기"/>
+                      <Cell col="6" text="강좌코드"/>
+                      <Cell col="7" text="강좌명"/>
+                      <Cell col="8" text="강좌옵션"/>
+                      <Cell col="9" text="강사명"/>
+                      <Cell col="10" text="재료비/대여료&#13;&#10;옵션"/>
+                      <Cell col="11" text="강좌료"/>
+                      <Cell col="12" text="재료비/대여료"/>
+                      <Cell col="13" text="할인"/>
+                      <Cell col="14" text="할인금액"/>
+                      <Cell col="15" text="에누리"/>
+                      <Cell col="16" text="에누리 금액"/>
+                      <Cell col="17" text="쿠폰명"/>
+                      <Cell col="18" text="쿠폰 할인금액"/>
+                      <Cell col="19" text="재료비/대여료&#13;&#10;할인"/>
+                      <Cell col="20" text="주문금액"/>
+                      <Cell col="21" text="총 결제금액"/>
+                      <Cell col="22" text="결제수단"/>
+                      <Cell col="23" text="결제일시"/>
+                      <Cell col="24" text="결제채널"/>
+                      <Cell col="25" text="결제상태"/>
+                      <Cell col="26" text="강좌구분"/>
+                      <Cell col="27" text="강좌요일"/>
+                      <Cell col="28" text="강의기간"/>
+                      <Cell col="29" text="강의시간"/>
+                      <Cell col="30" text="강의횟수"/>
+                      <Cell col="31" text="강좌상태"/>
+                      <Cell col="32" text="환불규정 확인서명"/>
+                      <Cell col="33" text="사은품 신청여부"/>
+                      <Cell col="34" text="사은품 신청번호"/>
                     </Band>
                     <Band id="body">
                       <Cell text="bind:rnum"/>
-                      <Cell col="1" text="expr:actlAtlctNpleNm + '(' +fmlyRelNm+ ')'" edittype="none" displaytype="normal"/>
-                      <Cell col="2" text="bind:brchCd" suppress="0" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
-                      <Cell col="3" text="bind:lectTpCdNm"/>
-                      <Cell col="4" expr="yy + ' ' + lectSmsterCdNm"/>
-                      <Cell col="5" text="bind:lectCd"/>
-                      <Cell col="6" text="bind:lectNm"/>
-                      <Cell col="7" text="bind:tcNm"/>
-                      <Cell col="8" text="expr:optnNm ? optnNm : '-'"/>
-                      <Cell col="9" text="bind:lectAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                      <Cell col="10" text="expr:lectAddAmt == 0 ? '-' : lectAddAmt" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:lectAddAmt == 0 ? 'normal' : 'mask'"/>
-                      <Cell col="11" text="expr:oflnDcNm ? oflnDcNm : '-' "/>
-                      <Cell col="12" text="expr:oflnDcAmt ? oflnDcAmt : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:oflnDcAmt ? 'mask' : 'normal'"/>
-                      <Cell col="13" text="expr:grdeDcNm ? grdeDcNm : '-'"/>
-                      <Cell col="14" text="expr:grdeDcAmt  ? grdeDcAmt  : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:grdeDcAmt ? 'mask' : 'normal'"/>
-                      <Cell col="15" text="expr:cpnDcNm ? cpnDcNm : '-'"/>
-                      <Cell col="16" text="expr:cpnDcAmt? cpnDcAmt : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:cpnDcAmt? 'mask' : 'normal'"/>
-                      <Cell col="17" text="expr:oflnAddDcAmt ? oflnAddDcAmt : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:oflnAddDcAmt ? 'mask' : 'normal'"/>
-                      <Cell col="18" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                      <Cell col="19" text="expr:gsStlmAmt ? gsStlmAmt : '-'" suppress="0" suppressalign="middle" verticalAlign="middle" displaytype="expr:gsStlmAmt ? 'mask' : 'normal'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                      <Cell col="20" text="bind:stlmMthdCdNm" suppress="0" suppressalign="middle"/>
-                      <Cell col="21" text="bind:stlmDtm" suppress="0" suppressalign="middle" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardataset="ds_stlm_cmplt_list" calendardatecol="stlmDtm" calendardisplayinvalidtype="none" calendardisplaynulltype="none"/>
-                      <Cell col="22" text="bind:stlmChnlCdNm" suppress="0" suppressalign="middle"/>
-                      <Cell col="23" text="bind:stlmStatCdNm" suppress="0" suppressalign="middle"/>
-                      <Cell col="24" text="bind:lectClCdNm"/>
-                      <Cell col="25" text="bind:lectStDtmNm"/>
-                      <Cell col="26" text="bind:lectPeriod"/>
-                      <Cell col="27" text="bind:lectTimePeriod"/>
-                      <Cell col="28" text="bind:lectNbcnt"/>
-                      <Cell col="29" text="bind:lectStatNm"/>
-                      <Cell col="30" text="expr:rfndRuleCfmSignYn == 'Y' ? '완료' : '-'" suppress="0" suppressalign="middle"/>
-                      <Cell col="31" text="expr:fgftRecpYn == 'N' ? '-' : fgftRecpYn"/>
-                      <Cell col="32" text="expr:fgftRecpYn == 'Y' ? fgftAppNo : '-'"/>
+                      <Cell col="1" text="bind:atlctRsvNo"/>
+                      <Cell col="2" text="expr:actlAtlctNpleNm + '(' +fmlyRelNm+ ')'" edittype="none" displaytype="normal"/>
+                      <Cell col="3" text="bind:brchCd" suppress="0" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                      <Cell col="4" text="bind:lectTpCdNm"/>
+                      <Cell col="5" expr="yy + ' ' + lectSmsterCdNm"/>
+                      <Cell col="6" text="bind:lectCd"/>
+                      <Cell col="7" text="bind:lectNm"/>
+                      <Cell col="8" text="bind:lectAddOptnNm"/>
+                      <Cell col="9" text="bind:tcNm"/>
+                      <Cell col="10" text="expr:optnNm ? optnNm : '-'"/>
+                      <Cell col="11" text="bind:lectAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="12" text="expr:lectAddAmt == 0 ? '-' : lectAddAmt" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:lectAddAmt == 0 ? 'normal' : 'mask'"/>
+                      <Cell col="13" text="expr:oflnDcNm ? oflnDcNm : '-' "/>
+                      <Cell col="14" text="expr:oflnDcAmt ? oflnDcAmt : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:oflnDcAmt ? 'mask' : 'normal'"/>
+                      <Cell col="15" text="expr:grdeDcNm ? grdeDcNm : '-'"/>
+                      <Cell col="16" text="expr:grdeDcAmt  ? grdeDcAmt  : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:grdeDcAmt ? 'mask' : 'normal'"/>
+                      <Cell col="17" text="expr:cpnDcNm ? cpnDcNm : '-'"/>
+                      <Cell col="18" text="expr:cpnDcAmt? cpnDcAmt : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:cpnDcAmt? 'mask' : 'normal'"/>
+                      <Cell col="19" text="expr:oflnAddDcAmt ? oflnAddDcAmt : '-'" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:oflnAddDcAmt ? 'mask' : 'normal'"/>
+                      <Cell col="20" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="21" text="expr:gsStlmAmt ? gsStlmAmt : '-'" suppress="0" suppressalign="middle" verticalAlign="middle" displaytype="expr:gsStlmAmt ? 'mask' : 'normal'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                      <Cell col="22" text="bind:stlmMthdCdNm" suppress="0" suppressalign="middle"/>
+                      <Cell col="23" text="bind:stlmDtm" suppress="0" suppressalign="middle" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardataset="ds_stlm_cmplt_list" calendardatecol="stlmDtm" calendardisplayinvalidtype="none" calendardisplaynulltype="none"/>
+                      <Cell col="24" text="bind:stlmChnlCdNm" suppress="0" suppressalign="middle"/>
+                      <Cell col="25" text="bind:stlmStatCdNm" suppress="0" suppressalign="middle"/>
+                      <Cell col="26" text="bind:lectClCdNm"/>
+                      <Cell col="27" text="bind:lectStDtmNm"/>
+                      <Cell col="28" text="bind:lectPeriod"/>
+                      <Cell col="29" text="bind:lectTimePeriod"/>
+                      <Cell col="30" text="bind:lectNbcnt"/>
+                      <Cell col="31" text="bind:lectStatNm"/>
+                      <Cell col="32" text="expr:rfndRuleCfmSignYn == 'Y' ? '완료' : '-'" suppress="0" suppressalign="middle"/>
+                      <Cell col="33" text="expr:fgftRecpYn == 'N' ? '-' : fgftRecpYn"/>
+                      <Cell col="34" text="expr:fgftRecpYn == 'Y' ? fgftAppNo : '-'"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -163,6 +169,7 @@
           <Column id="lectNbcnt" type="INT" size="256"/>
           <Column id="lectStatCd" type="STRING" size="256"/>
           <Column id="lectStatCdNm" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="rfndRuleCfmSignYn" type="STRING" size="256"/>
           <Column id="fgftRecpYn" type="STRING" size="256"/>
           <Column id="fgftAppNo" type="STRING" size="256"/>
