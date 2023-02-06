@@ -231,6 +231,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.excelImportExport = "";
+this.brchCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -238,25 +239,27 @@ this.excelImportExport = "";
 this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 { 
 	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
 	this.objPageingDs = this.application.gdsPageing;	
 	
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-		
-	this.row01.form.Div00.form.brchCd.set_index(0);
+	//지점초기화	
+	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	this.fn_classBrch_set();
 	
 	var comboYyObj = this.row01.form.Div01.form.yy;
 	var comboMmObj = this.row01.form.Div01.form.mm;
 	
 	var data = new Date();
-	var strtYy = data.getFullYear();
+	var strtYy = data.getFullYear() + 1;
 	var endYy = 2017
 	
-	this.gfn_set_year(this, comboYyObj, 2017, strtYy);
+	this.gfn_set_year(this, comboYyObj, endYy, strtYy, "선택", 1);	
 	this.gfn_set_month(this, comboMmObj);
-		
-		
+	
 	this.fn_set_checkbox_value(1);
 };
 
@@ -374,6 +377,21 @@ this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
+
+//지점 세팅
+this.fn_classBrch_set = function()
+{	
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='" + this.brchCd + "'");
+	}
+	
+	this.row01.form.Div00.form.brchCd.set_index(0);
+}
+
 this.fn_list = function(page){
 	
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
@@ -436,9 +454,9 @@ this.fn_searchValueInit = function(){
 	var arrPpayInfoCd = new Array();	
 	var arrSapAdmtCd = new Array();	
 	
-	if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("01");
-	if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("02");
-	if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("03");
+	if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("1");
+	if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("2");
+	if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("3");
 	
 	if(this.Div01.form.Div00.form.chkTcTp1.value == true) arrTcTpCd.push("1");
 	if(this.Div01.form.Div00.form.chkTcTp2.value == true) arrTcTpCd.push("2");
@@ -540,6 +558,12 @@ this.fn_set_checkbox_value = function(value){
         </Rows>
       </Dataset>
       <ExcelExportObject id="ExcelExportObj"/>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
   </Form>
 </FDL>
