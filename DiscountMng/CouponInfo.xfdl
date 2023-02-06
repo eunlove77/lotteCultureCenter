@@ -97,7 +97,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="발급 수량 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
                     <Static id="Static01" taborder="1" text="개" left="Static00:10" top="5" width="120" height="21"/>
-                    <Button id="btnEnd" taborder="2" text="난수번호 다운로드" left="364" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="130" visible="false" onclick="Div01_Div02_btnEnd_onclick"/>
+                    <Button id="btnDown" taborder="2" text="난수번호 다운로드" left="364" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="130" visible="false" onclick="Div01_Div02_btnDown_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -453,6 +453,7 @@ this.fn_set_detail = function()
 	{
 		this.Div01.form.Div01.set_height(0);
 		this.Div01.form.Div02.set_height(33);
+		this.Div01.form.Div02.form.btnDown.set_visible(true);
 		this.Div01.form.Div02.form.Static01.set_text(this.ds_detail.getColumn(0, "issueCqty") + " 개");
 	}
 	else
@@ -536,6 +537,30 @@ this.fn_sync_mbrGrde = function()
 }
 
 /**************************************************************************
+ * 발급종료 버튼
+ **************************************************************************/
+
+this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("발급종료 하시겠습니까?"))
+	{
+		var tranObj = {
+			strSvcId : "end",
+			strSvcUrl : this.baseSvrUrl + "end.do",
+			inData : "",
+			outData : "",
+			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
+			callBackFnc : "fnCallback",
+			menuSeq : this.menuId,
+			isAsync : true
+		}
+		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
+		this.gfn_transaction(tranObj);	
+	}
+};
+
+/**************************************************************************
  * 엑셀업로드 회원리스트 다운로드 버튼
  **************************************************************************/
 
@@ -554,7 +579,7 @@ this.Div01_Div01_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickE
  * 난수번호 다운로드 버튼
  **************************************************************************/
 
-this.Div01_Div02_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div01_Div02_btnDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.exportObj = new ExcelExportObject("Export01", this);
 	
@@ -614,28 +639,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.parent.parent.parent.close();
 			break;
 	}
-};
-
-
-this.Div00_Div10_btnEnd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.confirm("발급종료 하시겠습니까?"))
-	{
-		var tranObj = {
-			strSvcId : "end",
-			strSvcUrl : this.baseSvrUrl + "end.do",
-			inData : "",
-			outData : "",
-			strArg : "endStr="+this.ds_detail.getColumn(0, "cpnSeqno"),
-			callBackFnc : "fnCallback",
-			menuSeq : this.menuId,
-			isAsync : true
-		}
-		if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
-
-		this.gfn_transaction(tranObj);	
-	}
-};
-]]></Script>
+};]]></Script>
   </Form>
 </FDL>
