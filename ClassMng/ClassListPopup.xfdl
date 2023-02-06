@@ -242,6 +242,7 @@
           <Column id="q" type="STRING" size="256"/>
           <Column id="apvlStatCd" type="STRING" size="256"/>
           <Column id="only" type="STRING" size="256"/>
+          <Column id="repOn" type="STRING" size="256"/>
           <Column id="pblOn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
@@ -336,6 +337,7 @@ this.yy = "";
 this.lectSmsterCd = "";
 this.apvlStatCd = "";
 this.only = "";
+this.repOn = "";
 this.pblOn = "";
 this.maxCnt = 0;
 this.type = 1;
@@ -371,6 +373,10 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.only = this.parent.only;
 	}
 	
+	if(this.gfn_nvl(this.parent.repOn) != "") 
+	{
+		this.repOn = this.parent.repOn;
+	}
 	
 	if(this.gfn_nvl(this.parent.pblOn) != "") 
 	{
@@ -464,6 +470,7 @@ this.init = function()
 	this.ds_search.setColumn(0, "q", "");
 	this.ds_search.setColumn(0, "apvlStatCd", this.apvlStatCd);
 	this.ds_search.setColumn(0, "only", this.only);
+	this.ds_search.setColumn(0, "repOn", this.repOn);
 	this.ds_search.setColumn(0, "pblOn", this.pblOn);
 
 	//강의 학기정보 조회
