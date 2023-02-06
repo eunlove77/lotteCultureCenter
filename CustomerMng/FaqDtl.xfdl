@@ -320,15 +320,18 @@ this.fn_detail = function ()
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	var menuSeq 	= this.menuId;
-
-	this.transaction(strSvcId ,   // transaction을 구분하기 위한 svc id값
-            strSvcUrl ,       // trabsaction을 요청할 주소
-            inData ,         // 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
-            outData ,         // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
-            strArg,         // 입력값으로 보낼 arguments, a=b
-            callBackFnc,       // transaction의 결과를 받을 Function 이름
-            isAsync,		  // 비동기통신 여부 [생략가능]
-			menuSeq);         
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		menuSeq : menuSeq
+	}
+	this.gfn_transaction(tranObj);
 };
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
