@@ -129,6 +129,8 @@
           <Column id="rgprId" type="DATETIME" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="answrCont" type="STRING" size="256"/>
+          <Column id="answrAdmId" type="STRING" size="256"/>
+          <Column id="answrAdmNm" type="STRING" size="256"/>
           <Column id="chrgprNm" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
@@ -147,7 +149,6 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.menuId = this.parent.parent.param.MENU_ID;
-
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -157,11 +158,6 @@ this.InquiryDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	var objOwnerFrame = this.getOwnerFrame();
 	
 	this.ds_detail.setColumn(0, "onlnQuesSeqno", this.parent.onlnQuesSeqno);
-	
-	var adminName = nexacro.getPrivateProfile("name");
-	var adminId = nexacro.getPrivateProfile("id");
-	
-	this.row010.form.Static01.set_text(adminName+"("+adminId+")");
 	
 	this.fn_detail();
 	
@@ -242,7 +238,18 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			var mbrName = this.ds_detail.getColumn(0, "mbrNm");
 			var mbrId = this.ds_detail.getColumn(0,"mbrId");
 			this.row04.form.Static01.set_text(mbrName+"("+mbrId+")");
-	
+			
+			var admNm = "";
+			var admId = "";
+			if(this.ds_detail.getColumn(0, "answrAdmId")  != ""){
+				admNm = this.ds_detail.getColumn(0, "answrAdmNm")
+				admId = this.ds_detail.getColumn(0, "answrAdmId")
+			}else{
+				admNm = nexacro.getPrivateProfile("name");
+				admId = nexacro.getPrivateProfile("id");
+			}
+			this.row010.form.Static01.set_text(admNm+"("+admId+")");	
+			
 			if(!this.gfn_isNull(this.row11.form.TextArea00.value))
 			{
 				this.row11.form.TextArea00.set_readonly(true);
