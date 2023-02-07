@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="프로모션 등록" left="10" top="20" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div00" taborder="1" text="Div00" left="45" top="70" height="1292" right="45" minwidth="720" maxwidth="">
+        <Div id="Div00" taborder="1" text="Div00" left="45" top="70" height="800" right="45" minwidth="720" maxwidth="">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="프로모션 등록" left="0" top="1" width="100" cssclass="sta_WF_TitGray" height="17"/>
@@ -37,20 +37,12 @@
               <Div id="Div02" taborder="4" text="Div01" left="0" top="Div01:-1" height="500" cssclass="div_WF_CompWrap" right="0" minwidth="710" maxwidth="">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="상세내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;&#13;&#10;    (웹)" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
+                    <Static id="Static00" taborder="0" text="상세내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
                     <WebBrowser id="webCont" taborder="1" left="Static00:0" top="0" right="0" bottom="0" onusernotify="fn_set_edit_body"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="5" text="Div01" left="0" top="Div02:-1" height="500" cssclass="div_WF_CompWrap" right="0" minwidth="710" maxwidth="">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="상세내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;&#13;&#10;(모바일)" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <WebBrowser id="mbilCont" taborder="1" left="Static00:0" top="0" right="0" bottom="0" onusernotify="fn_set_edit_body"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div04" taborder="6" text="Div01" left="0" top="Div03:-1" height="170" cssclass="div_WF_CompWrap" right="0" minwidth="710" maxwidth="">
+              <Div id="Div04" taborder="5" text="Div01" left="0" top="Div02:-1" height="170" cssclass="div_WF_CompWrap" right="0" minwidth="710" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="대표이미지 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
@@ -58,7 +50,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div05" taborder="7" text="Div01" left="0" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
+              <Div id="Div05" taborder="6" text="Div01" left="0" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="0" minwidth="660" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="노출여부 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
@@ -165,7 +157,6 @@ this.PromotionReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//에디터세팅
 	this.Div00.form.Div02.form.webCont.set_url(this.application.Namo);
-	this.Div00.form.Div03.form.mbilCont.set_url(this.application.Namo);
 };
 
 this.fn_detail = function ()
@@ -332,15 +323,8 @@ this.fn_checkValidation = function()
 		this.Div00.form.Div02.form.webCont.setFocus();
 		return;
 	}
-	if(!this.fn_get_edit_body(this.Div00.form.Div03.form.mbilCont))
-	{
-		alert("내용을 입력하세요.");
-		this.Div00.form.Div03.form.mbilCont.setFocus();
-		return;
-	}
 	
 	this.ds_detail.setColumn(0, "webCont", this.fn_get_edit_body(this.Div00.form.Div02.form.webCont));
-	this.ds_detail.setColumn(0, "mbilCont", this.fn_get_edit_body(this.Div00.form.Div03.form.mbilCont));
 
 	if(this.atchFileUpload.fn_validation() == 0)
 	{
