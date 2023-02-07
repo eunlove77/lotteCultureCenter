@@ -6,17 +6,35 @@
         <Div id="Div00" taborder="0" text="Div01" left="10" top="22" height="119" right="10" minwidth="680" maxwidth="">
           <Layouts>
             <Layout>
-              <Div id="Div01" taborder="3" text="Div01" left="-1" top="54" height="33" cssclass="div_WF_CompWrap" right="1" formscrolltype="none" minwidth="700" maxwidth="">
+              <Div id="Div04_00" taborder="4" text="Div01" left="0" top="54" height="33" cssclass="div_WF_CompWrap" right="81.03%" formscrolltype="none" minwidth="250" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" maxlength="50"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04_01" taborder="5" text="Div01" left="Div04_00:-1.0209999999999866" top="54" height="33" cssclass="div_WF_CompWrap" right="57.22%" formscrolltype="none" minwidth="300" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="3" text="Div01" left="Div04_01:-1" top="54" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="340" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="주문구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <CheckBox id="chkDisAll" taborder="3" text="전체" left="Static00:10" top="5" width="60" height="20"/>
                     <CheckBox id="chkDis0" taborder="1" text="온라인" left="chkDisAll:10" top="5" width="60" height="20" truevalue="ON" falsevalue="false"/>
-                    <CheckBox id="chkDis1" taborder="2" text="오프라인" left="chkDis0:10" top="5" width="60" height="20" truevalue="OFF" minwidth="350" maxwidth="" falsevalue="false"/>
+                    <CheckBox id="chkDis1" taborder="2" text="오프라인" left="chkDis0:10" top="5" width="72" height="20" truevalue="OFF" minwidth="350" maxwidth="" falsevalue="false"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div04" taborder="0" text="Div01" left="-1" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="1" formscrolltype="none" maxwidth="" minwidth="700">
+              <Div id="Div04" taborder="0" text="Div01" left="0" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" maxwidth="" minwidth="700">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -48,7 +66,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00" taborder="1" text="Div01" left="-1" top="22" height="33" cssclass="div_WF_CompWrap" right="1" formscrolltype="none" minwidth="700" maxwidth="">
+              <Div id="Div00" taborder="1" text="Div01" left="0" top="22" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="700" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="기간설정" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -234,7 +252,17 @@ this.fn_init = function(obj)
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_detail();
+	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpStNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+	
+	if(isKorNm != isHpNo)
+	{
+		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+	}
+	else
+	{
+		this.fn_detail();
+	}
 };
 
 /**************************************************************************
@@ -434,7 +462,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
           <Column id="strtDt" type="STRING" size="256"/>
           <Column id="endDt" type="STRING" size="256"/>
           <Column id="appChnlCd" type="STRING" size="256"/>
-          <Column id="appMbrNm" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
@@ -482,6 +510,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="item2" compid="Div00.form.Div00.form.Div00.form.endDtm" propid="value" datasetid="ds_search" columnid="endDt"/>
       <BindItem id="item3" compid="Div00.form.Div04.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item4" compid="Div00.form.Div04.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item5" compid="Div00.form.Div04_00.form.Edit00" propid="value" datasetid="ds_search" columnid="korNm"/>
+      <BindItem id="item6" compid="Div00.form.Div04_01.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item7" compid="Div00.form.Div04_01.form.Edit01" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item8" compid="Div00.form.Div04_01.form.Edit01_00" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
     </Bind>
   </Form>
 </FDL>
