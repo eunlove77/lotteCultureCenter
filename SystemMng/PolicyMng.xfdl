@@ -202,15 +202,17 @@ this.fn_get_edit_body = function(wbObj){
 //에디터SET
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = this.ds_detail.getColumn(0, obj.id);
-	var _win = obj.getProperty("window");	 
-		_win.callMethod("setData", content);
-	
-	if(_win)
+	if(e.userdata == "LC")
 	{
-		_win.destroy();
-		_win = null;
-	}  
+		var content = this.ds_detail.getColumn(0, obj.id);
+		var _win = obj.getProperty("window");	 
+			_win.callMethod("setData", content);
+		if(_win)
+		{
+			_win.destroy();
+			_win = null;
+		}
+	}
 };
 
 //유효성 체크
