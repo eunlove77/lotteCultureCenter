@@ -9,8 +9,7 @@
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="40" band="left"/>
-                <Column size="300"/>
+                <Column size="300" band="left"/>
                 <Column size="130"/>
                 <Column size="90"/>
                 <Column size="130"/>
@@ -26,30 +25,28 @@
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" text="질문"/>
-                <Cell col="2" text="유형"/>
-                <Cell col="3" text="지점"/>
-                <Cell col="4" text="작성자"/>
-                <Cell col="5" text="이메일"/>
-                <Cell col="6" text="연락처"/>
-                <Cell col="7" text="등록일"/>
-                <Cell col="8" text="답변자"/>
-                <Cell col="9" text="답변여부"/>
-                <Cell col="10" text="답변일"/>
+                <Cell col="0" text="질문"/>
+                <Cell col="1" text="유형"/>
+                <Cell col="2" text="지점"/>
+                <Cell col="3" text="작성자"/>
+                <Cell col="4" text="이메일"/>
+                <Cell col="5" text="연락처"/>
+                <Cell col="6" text="등록일"/>
+                <Cell col="7" text="답변자"/>
+                <Cell col="8" text="답변여부"/>
+                <Cell col="9" text="답변일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:faqSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="2" text="expr:clCd? clNm : ''"/>
-                <Cell col="3" text="bind:brchNm"/>
-                <Cell col="4" expr="comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" tooltiptype="hover" tooltiptext="expr:mbrNm + &quot;(&quot; + mbrId + &quot;)&quot;"/>
-                <Cell col="5" expr="comp.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd" tooltiptype="hover"/>
-                <Cell col="6" expr="comp.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
-                <Cell col="7" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="8" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
-                <Cell col="9" text="expr:dataset.getColumn(currow, &quot;ansYn&quot;) == &quot;Y&quot; ? &quot;답변완료&quot; : &quot;미답변&quot;"/>
-                <Cell col="10" text="bind:ansDtm" displaytype="expr:admId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="0" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="1" text="expr:clCd? clNm : ''"/>
+                <Cell col="2" text="bind:brchNm"/>
+                <Cell col="3" expr="comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" tooltiptype="hover" tooltiptext="expr:mbrNm + &quot;(&quot; + mbrId + &quot;)&quot;"/>
+                <Cell col="4" expr="comp.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd" tooltiptype="hover"/>
+                <Cell col="5" expr="comp.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
+                <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="7" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
+                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;ansYn&quot;) == &quot;Y&quot; ? &quot;답변완료&quot; : &quot;미답변&quot;"/>
+                <Cell col="9" text="bind:ansDtm" displaytype="expr:admId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
             </Format>
           </Formats>
@@ -297,7 +294,7 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 1)
+	if(e.cell == 0)
 	{
 		this.popCnt ++;
 		

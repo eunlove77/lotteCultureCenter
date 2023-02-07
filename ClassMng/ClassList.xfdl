@@ -249,7 +249,7 @@
               <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:10" right="0" bottom="0">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncelldblclick="Div02_Div01_Grid00_oncelldblclick" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select">
+                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -333,13 +333,13 @@
                             <Cell col="1" text="expr:currow + 1"/>
                             <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="3" text="bind:lectTpNm"/>
-                            <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
+                            <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline" color="blue" cursor="pointer"/>
                             <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="50" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'"/>
                             <Cell col="6" text="bind:lectAddOptnNm"/>
-                            <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" displaytype="normal" maskeditlimitbymask="decimal"/>
+                            <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" displaytype="normal" maskeditlimitbymask="decimal" color="blue" cursor="pointer"/>
                             <Cell col="8" text="bind:gsCapaCnt"/>
                             <Cell col="9" text="bind:appCnt"/>
-                            <Cell col="10" text="bind:stayCnt" textDecoration="underline"/>
+                            <Cell col="10" text="bind:stayCnt" textDecoration="underline" color="blue" cursor="pointer"/>
                             <Cell col="11" text="bind:lectAmt" displaytype="normal"/>
                             <Cell col="12" text="bind:stringStDaywNm"/>
                             <Cell col="13" text="bind:lectNbcnt"/>
@@ -1603,7 +1603,7 @@ this.Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup = function(obj:nexacro.Edit
 	}
 };
 
-this.Div02_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	if(e.col == 4)
 	{
@@ -1646,10 +1646,7 @@ this.Div02_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.Gri
 		};
 		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
-};
-
-this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
+	
 	if(e.col == 23)
 	{
 		this.ds_classRoom.copyData(this.ds_classRoomTemp);

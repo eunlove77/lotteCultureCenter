@@ -90,7 +90,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌계약 목록 (0개)" top="16" width="150" height="20" left="0"/>
                     <Button id="Button00" taborder="1" text="계약서 생성" top="0" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div01_Button00_onclick"/>
-                    <Grid id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick" oncelldblclick="Div00_Div01_Grid00_oncelldblclick">
+                    <Grid id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -150,9 +150,9 @@
                             <Cell col="3" text="bind:cntrNo" color="blue" cursor="pointer" textDecoration="underline"/>
                             <Cell col="4" text="expr:cntrStatCd == '01' ? '계약완료' : '미계약'"/>
                             <Cell col="5" text="bind:tcCdNo"/>
-                            <Cell col="6" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover"/>
-                            <Cell col="7" text="bind:lectCd" textDecoration="underline"/>
-                            <Cell col="8" text="bind:lectNm"/>
+                            <Cell col="6" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" color="blue" cursor="pointer"/>
+                            <Cell col="7" text="bind:lectCd" textDecoration="underline" color="blue" cursor="pointer"/>
+                            <Cell col="8" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
                             <Cell col="9" text="bind:lectAddOptnNm"/>
                             <Cell col="10" text="bind:lectTpNm"/>
                             <Cell col="11" text="bind:lectClNm"/>
@@ -741,6 +741,32 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div00_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
+	if(e.col == 7 || e.col == 8)
+	{
+		var arrArguments = {
+			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_class_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+			menuSeq : this.getOwnerFrame().param.MENU_ID,
+			searchButton : this.Div00.form.Div00.form.Div00.form.Div03.form.Button00
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+	
+	if(e.col == 6)
+	{
+		this.popCnt++;
+		var oArg = {
+				type : "detail",
+				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+		};
+		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+	}
+	
 	if(this.gfn_nvl(this.ds_class_list.getColumn(e.row, "cntrNo")) != "" && e.col == 3)
 	{
 		this.ds_classInsert_list.clearData();
@@ -766,31 +792,7 @@ this.Div00_Div00_Div00_Div03_Edit00_onkeyup = function(obj:nexacro.Edit,e:nexacr
 
 this.Div00_Div01_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 7)
-	{
-		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_class_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.getOwnerFrame().param.MENU_ID,
-			searchButton : this.Div00.form.Div00.form.Div00.form.Div03.form.Button00
-		}
-		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
 	
-	if(e.col == 6)
-	{
-		this.popCnt++;
-		var oArg = {
-				type : "detail",
-				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
-				menuSeq : this.getOwnerFrame().param.MENU_ID
-		};
-		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
-	}
 };
 
 this.Div00.form.Div01.setMasking = function(sValue, startIndex, maskLen, flag)

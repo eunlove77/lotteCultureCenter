@@ -14,7 +14,7 @@
                     <Button id="Button00_00" taborder="1" text="문자발송" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00:15" onclick="Div00_Div00_Button00_00_onclick"/>
                     <Button id="Button00_00_00" taborder="2" text="Print" top="0" width="70" height="30" cssclass="btn_WF_Medium" right="Button00_00:15" onclick="Div00_Div00_Button00_00_00_onclick"/>
                     <Static id="Static00" taborder="3" text="출석부 목록 (0명)" left="0" top="15" width="120" height="21"/>
-                    <Grid id="Grid00" taborder="4" left="0" top="Button00_00_00:15" right="0" bottom="0" binddataset="ds_attendance_list" oncelldblclick="Div00_Div00_Grid00_oncelldblclick" nodatatext="검색결과 없음">
+                    <Grid id="Grid00" taborder="4" left="0" top="Button00_00_00:15" right="0" bottom="0" binddataset="ds_attendance_list" nodatatext="검색결과 없음" oncellclick="Div00_Div00_Grid00_oncellclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -89,10 +89,10 @@
                             <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" edittype="none" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                             <Cell col="3" text="bind:yy" edittype="none"/>
                             <Cell col="4" text="bind:lectSmsterNm"/>
-                            <Cell col="5" text="expr:pblPmprcustLectCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline"/>
-                            <Cell col="6" text="bind:lectNm"/>
+                            <Cell col="5" text="expr:pblPmprcustLectCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline" color="blue" cursor="pointer"/>
+                            <Cell col="6" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
                             <Cell col="7" text="bind:lectAddOptnNm"/>
-                            <Cell col="8" text="bind:mbrNo" textDecoration="underline"/>
+                            <Cell col="8" text="bind:mbrNo" textDecoration="underline" color="blue" cursor="pointer"/>
                             <Cell col="9" text="bind:mbrGrdeNm"/>
                             <Cell col="10" text="bind:reAtlctYn"/>
                             <Cell col="11" text="expr:comp.parent.parent.setMasking(mbrFnm,1,1, '1')" tooltiptext="bind:mbrFnm" tooltiptype="hover"/>
@@ -320,35 +320,6 @@ this.Div00_Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	}
 };
 
-this.Div00_Div00_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-	if(e.col == 5)
-	{
-		var arrArguments = {
-			brchCd : this.ds_attendance_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_attendance_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_attendance_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_attendance_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.parent.menuSeq,
-			searchButton : this.Button00
-		}
-		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
-	
-	if(e.cell == 8)
-	{	
-		var oArg = {
-				mbrNo : this.ds_attendance_list.getColumn(e.row, "mbrNo"),
-				menuId : this.parent.menuSeq
-		};
-		
-		this.popCnt ++;
-		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");		
-	}
-};
-
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.init();
@@ -426,6 +397,35 @@ this.Div00.form.Div00.setMasking = function(sValue, startIndex, maskLen, flag)
 	
 	return sMask;
 }
+
+this.Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.col == 5 || e.col == 6)
+	{
+		var arrArguments = {
+			brchCd : this.ds_attendance_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_attendance_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_attendance_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_attendance_list.getColumn(e.row, "lectCd"),
+			menuSeq : this.parent.menuSeq,
+			searchButton : this.Button00
+		}
+		
+		this.popCnt++;
+		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
+	}
+	
+	if(e.cell == 8)
+	{	
+		var oArg = {
+				mbrNo : this.ds_attendance_list.getColumn(e.row, "mbrNo"),
+				menuId : this.parent.menuSeq
+		};
+		
+		this.popCnt ++;
+		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");		
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_class_list">
