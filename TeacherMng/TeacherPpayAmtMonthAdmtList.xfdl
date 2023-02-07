@@ -150,47 +150,57 @@
                 <Column size="50" band="left"/>
                 <Column size="80" band="left"/>
                 <Column size="70" band="left"/>
-                <Column size="100"/>
+                <Column size="90"/>
                 <Column size="60"/>
                 <Column size="60"/>
                 <Column size="60"/>
+                <Column size="60"/>
+                <Column size="150"/>
                 <Column size="60"/>
                 <Column size="350"/>
                 <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="90"/>
-                <Column size="90"/>
-                <Column size="90"/>
-                <Column size="70"/>
                 <Column size="80"/>
-                <Column size="100"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="80"/>
+                <Column size="60"/>
+                <Column size="90"/>
+                <Column size="90"/>
+                <Column size="90"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="90"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
+                <Row size="40" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="번호"/>
-                <Cell col="1" text="강사코드"/>
-                <Cell col="2" text="강사명"/>
-                <Cell col="3" text="강사유형"/>
-                <Cell col="4" text="계약상태"/>
-                <Cell col="5" text="지급정보"/>
-                <Cell col="6" text="SAP 정산"/>
-                <Cell col="7" text="강좌코드"/>
-                <Cell col="8" text="강좌명"/>
-                <Cell col="9" text="수강료"/>
-                <Cell col="10" text="수강건수"/>
-                <Cell col="11" text="강좌횟수"/>
-                <Cell col="12" text="진행횟수"/>
-                <Cell col="13" text="지급월 강사료"/>
-                <Cell col="14" text="재료비(구매형)"/>
-                <Cell col="15" text="재료비(1/N형)"/>
-                <Cell col="16" text="소득세(3%)"/>
-                <Cell col="17" text="주민세(0.3%)"/>
-                <Cell col="18" text="지급금액"/>
+                <Cell rowspan="2" text="번호"/>
+                <Cell col="1" rowspan="2" text="강사코드"/>
+                <Cell col="2" rowspan="2" text="강사명"/>
+                <Cell col="3" rowspan="2" text="강사유형"/>
+                <Cell col="4" rowspan="2" text="계약상태"/>
+                <Cell col="5" rowspan="2" text="지급정보"/>
+                <Cell col="6" rowspan="2" text="SAP&#13;&#10;정산"/>
+                <Cell col="7" rowspan="2" text="지점명"/>
+                <Cell col="8" rowspan="2" text="학기"/>
+                <Cell col="9" rowspan="2" text="강좌코드"/>
+                <Cell col="10" rowspan="2" text="강좌명"/>
+                <Cell col="11" rowspan="2" text="수강료"/>
+                <Cell col="12" rowspan="2" text="지급율/액"/>
+                <Cell col="13" rowspan="2" text="신청건수"/>
+                <Cell col="14" rowspan="2" text="강의횟수"/>
+                <Cell col="15" rowspan="2" text="총 강사료"/>
+                <Cell col="16" rowspan="2" text="진행횟수"/>
+                <Cell col="17" colspan="6" text="지급월 비용"/>
+                <Cell row="1" col="17" text="강사료"/>
+                <Cell row="1" col="18" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell row="1" col="19" text="재료비/대여료&#13;&#10;(1/N형)"/>
+                <Cell row="1" col="20" text="소득세&#13;&#10;(3%)"/>
+                <Cell row="1" col="21" text="주민세&#13;&#10;(0.3%)"/>
+                <Cell row="1" col="22" text="지급금액"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
@@ -200,18 +210,22 @@
                 <Cell col="4" text="bind:cntrStat"/>
                 <Cell col="5" text="bind:ppayInfo"/>
                 <Cell col="6" text="bind:sapAdmtPrcsStat"/>
-                <Cell col="7" text="bind:lectCd"/>
-                <Cell col="8" text="bind:lectNm"/>
-                <Cell col="9" text="bind:lfeeAmt" textAlign="right"/>
-                <Cell col="10" text="bind:atlctNpleCnt"/>
-                <Cell col="11" text="bind:lectNbcnt"/>
-                <Cell col="12" text="bind:prgrsNbcnt"/>
-                <Cell col="13" text="bind:admtYmPpayAmt" textAlign="right"/>
-                <Cell col="14" text="bind:pchOptnStlmAmt" textAlign="right"/>
-                <Cell col="15" text="bind:npchOptnStlmAmt" textAlign="right"/>
-                <Cell col="16" text="bind:incmtax" textAlign="right"/>
-                <Cell col="17" text="bind:rsdttax" textAlign="right"/>
-                <Cell col="18" text="bind:actlPpayAmt" textAlign="right"/>
+                <Cell col="7" text="bind:brchNm"/>
+                <Cell col="8" text="bind:yySmster"/>
+                <Cell col="9" text="bind:lectCd"/>
+                <Cell col="10" text="bind:lectNm"/>
+                <Cell col="11" text="bind:lfeeAmt" textAlign="right"/>
+                <Cell col="12" text="bind:ppayAmt"/>
+                <Cell col="13" text="bind:atlctNpleCnt"/>
+                <Cell col="14" text="bind:lectNbcnt"/>
+                <Cell col="15" text="bind:tcPpayAmt"/>
+                <Cell col="16" text="bind:prgrsNbcnt"/>
+                <Cell col="17" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="18" text="bind:pchOptnStlmAmt" textAlign="right"/>
+                <Cell col="19" text="bind:npchOptnStlmAmt" textAlign="right"/>
+                <Cell col="20" text="bind:incmtax" textAlign="right"/>
+                <Cell col="21" text="bind:rsdttax" textAlign="right"/>
+                <Cell col="22" text="bind:actlPpayAmt" textAlign="right"/>
               </Band>
             </Format>
           </Formats>
@@ -225,6 +239,7 @@
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::popup.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -575,8 +590,10 @@ this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.Ite
           <Column id="rnum" type="STRING" size="256"/>
           <Column id="admtYm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="yySmster" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
@@ -589,6 +606,7 @@ this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.Ite
           <Column id="atlctNpleCnt" type="STRING" size="256"/>
           <Column id="ppayStdCd" type="STRING" size="256"/>
           <Column id="ppayAmt" type="STRING" size="256"/>
+          <Column id="tcPpayAmt" type="STRING" size="256"/>
           <Column id="smsterTcPpayAmt" type="STRING" size="256"/>
           <Column id="lectNbcnt" type="STRING" size="256"/>
           <Column id="prgrsNbcnt" type="STRING" size="256"/>

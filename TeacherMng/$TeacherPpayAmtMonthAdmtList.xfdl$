@@ -9,7 +9,7 @@
         <Div id="row01" taborder="3" text="row01" left="10" top="100" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="1000" minwidth="360" maxwidth="">
+              <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" minwidth="360" maxwidth="" right="1000">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -20,34 +20,9 @@
               <Div id="Div01" taborder="1" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" text="" width="340">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Static id="Static00" taborder="0" text="지급월" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <Combo id="yy" taborder="1" text="년도" left="116" top="5" width="100" height="20" value="" index="-1" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="mm" taborder="2" text="봄학기" left="yy:5" top="5" width="100" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="1">
-                      <Dataset id="innerdataset">
-                        <ColumnInfo>
-                          <Column id="codecolumn" size="256"/>
-                          <Column id="datacolumn" size="256"/>
-                        </ColumnInfo>
-                        <Rows>
-                          <Row>
-                            <Col id="codecolumn">1</Col>
-                            <Col id="datacolumn">봄학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">2</Col>
-                            <Col id="datacolumn">여름학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">3</Col>
-                            <Col id="datacolumn">가을학기</Col>
-                          </Row>
-                          <Row>
-                            <Col id="codecolumn">4</Col>
-                            <Col id="datacolumn">겨울학기</Col>
-                          </Row>
-                        </Rows>
-                      </Dataset>
-                    </Combo>
+                    <Combo id="mm" taborder="2" text="월" left="yy:5" top="5" width="100" height="20" value="" index="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -56,9 +31,9 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <CheckBox id="chkLectClAll" taborder="1" text="전체" left="116" top="5" width="60" height="20" onclick="row01_Div02_chkLectClAll_onclick"/>
-                    <CheckBox id="chkLectCl01" taborder="2" text="정기" left="chkLectClAll:0" top="5" width="60" height="20" onclick="fn_checkbox_click"/>
-                    <CheckBox id="chkLectCl02" taborder="3" text="단기" left="chkLectCl01:0" top="5" width="60" height="20" onclick="fn_checkbox_click"/>
-                    <CheckBox id="chkLectCl03" taborder="4" text="특강" left="chkLectCl02:0" top="5" width="60" height="20" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkLectCl01" taborder="2" text="정기" left="chkLectClAll:0" top="5" width="60" height="20"/>
+                    <CheckBox id="chkLectCl02" taborder="3" text="단기" left="chkLectCl01:0" top="5" width="60" height="20"/>
+                    <CheckBox id="chkLectCl03" taborder="4" text="특강" left="chkLectCl02:0" top="5" width="60" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -68,26 +43,60 @@
         <Div id="row02" taborder="4" text="Div01" left="10" top="row01:-1" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="0">
+              <Div id="Div00" taborder="1" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="1000" minwidth="360" maxwidth="" formscrolltype="none">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="강좌상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkStatAll" taborder="1" text="전체" left="116" top="5" width="50" height="20" onclick="row02_Div00_chkStatAll_onclick"/>
-                    <CheckBox id="chkStat01" taborder="2" text="접수예정" left="chkStatAll:0" top="5" width="70" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat02" taborder="3" text="기존회원접수" left="chkStat01:0" top="5" width="100" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat03" taborder="4" text="접수중" left="chkStat02:0" top="5" width="60" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat04" taborder="5" text="지점문의" left="chkStat03:0" top="5" width="70" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat05" taborder="6" text="대기접수" left="chkStat04:0" top="5" width="70" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat07" taborder="7" text="강의종료" left="chkStat05:0" top="5" width="70" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat08" taborder="8" text="접수불가" left="chkStat07:10" top="5" width="70" height="20" onclick="fn_checkbox_click2"/>
-                    <CheckBox id="chkStat09" taborder="9" text="폐강" left="chkStat08:0" top="5" width="70" height="20" onclick="fn_checkbox_click2"/>
+                    <Static id="Static00" taborder="0" text="계약상태" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkCntrAll" taborder="1" text="전체" left="116" top="5" width="60" height="20" onclick="row02_Div00_chkCntrAll_onclick"/>
+                    <CheckBox id="chkCntrY" taborder="2" text="Y" left="176" top="5" width="40" height="20"/>
+                    <CheckBox id="chkCntrN" taborder="3" text="N" left="236" top="5" width="40" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" left="Div00:-1" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" width="340">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="지급정보" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkPpayInfoAll" taborder="1" text="전체" left="116" top="5" width="60" height="20" onclick="row02_Div01_chkPpayInfoAll_onclick"/>
+                    <CheckBox id="chkPpayInfoY" taborder="2" text="Y" left="chkPpayInfoAll:0" top="5" width="60" height="20"/>
+                    <CheckBox id="chkPpayInfoN" taborder="3" text="N" left="chkPpayInfoY:0" top="5" width="60" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div02" left="Div01:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="SAP정산" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkSapAdmtAll" taborder="1" text="전체" left="116" top="5" width="60" height="20" onclick="row02_Div02_chkSapAdmtAll_onclick"/>
+                    <CheckBox id="chkSapAdmtY" taborder="2" text="Y" left="176" top="5" width="60" height="20"/>
+                    <CheckBox id="chkSapAdmtN" taborder="3" text="N" left="236" top="5" width="60" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="row03" taborder="5" text="row02" left="10" top="164" height="33" right="10" formscrolltype="none">
+        <Div id="Div01" taborder="10" text="Div01" left="10" top="164" height="33" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="강사유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkTcTpAll" taborder="1" text="전체" left="116" top="5" width="60" height="20" onclick="Div01_Div00_chkTcTpAll_onclick"/>
+                    <CheckBox id="chkTcTp1" taborder="2" text="개인" left="chkTcTpAll:0" top="5" width="60" height="20"/>
+                    <CheckBox id="chkTcTp2" taborder="3" text="개인사업자" left="chkTcTp1:0" top="5" width="90" height="20"/>
+                    <CheckBox id="chkTcTp3" taborder="4" text="법인사업자" left="chkTcTp2:0" top="5" width="90" height="20"/>
+                    <Static id="Static01" taborder="6" text="(" left="chkTcTp3:-10" top="5" width="5" height="21"/>
+                    <CheckBox id="chkTcTp4" taborder="5" text="면세사업자만" left="Static01:1" top="5" width="90" height="20"/>
+                    <Static id="Static01_00" taborder="7" text=")" left="chkTcTp4:1" top="5" width="5" height="21"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="row03" taborder="5" text="row02" left="10" top="196" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
               <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" formscrolltype="none">
@@ -134,129 +143,89 @@
         </Div>
         <Static id="Static00_00" taborder="6" text="▶ 강사료정산 목록" left="10" top="239" width="110" height="21" cssclass="sta_WF_TitGray"/>
         <Static id="txtTotal" taborder="7" left="Static00_00:0" height="21" text="( 0개 )" width="50" top="239" cssclass="sta_WF_TitGray"/>
-        <Grid id="Grid00" taborder="8" left="10" top="260" bottom="10" autofittype="none" binddataset="ds_list" right="10">
+        <Grid id="Grid00" taborder="8" left="10" top="260" bottom="10" autofittype="col" binddataset="ds_list" right="10">
           <Formats>
             <Format id="default">
               <Columns>
                 <Column size="50" band="left"/>
                 <Column size="80" band="left"/>
                 <Column size="70" band="left"/>
-                <Column size="100" band="left"/>
-                <Column size="80"/>
+                <Column size="90"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="150"/>
+                <Column size="60"/>
                 <Column size="350"/>
-                <Column size="80"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="60"/>
-                <Column size="80"/>
-                <Column size="60"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="60"/>
-                <Column size="60"/>
                 <Column size="60"/>
                 <Column size="80"/>
                 <Column size="60"/>
                 <Column size="60"/>
+                <Column size="80"/>
+                <Column size="60"/>
+                <Column size="90"/>
+                <Column size="90"/>
+                <Column size="90"/>
                 <Column size="60"/>
                 <Column size="60"/>
-                <Column size="70"/>
-                <Column size="80"/>
-                <Column size="80"/>
+                <Column size="90"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
-                <Row size="24" band="head"/>
+                <Row size="40" band="head"/>
                 <Row size="24"/>
               </Rows>
               <Band id="head">
                 <Cell rowspan="2" text="번호"/>
                 <Cell col="1" rowspan="2" text="강사코드"/>
                 <Cell col="2" rowspan="2" text="강사명"/>
-                <Cell col="3" rowspan="2" text="학기"/>
-                <Cell col="4" rowspan="2" text="강좌코드"/>
-                <Cell col="5" rowspan="2" text="강좌명"/>
-                <Cell col="6" rowspan="2" text="강좌상태"/>
-                <Cell col="7" rowspan="2" text="수강료"/>
-                <Cell col="8" rowspan="2" text="수강인원"/>
-                <Cell col="9" colspan="5" text="결제금액"/>
-                <Cell col="14" colspan="5" text="전액 환불금액"/>
-                <Cell col="19" colspan="2" text="부분 환불금액"/>
-                <Cell col="21" colspan="7" text="최종 결제금액"/>
-                <Cell col="28" colspan="7" text="정산금액"/>
-                <Cell row="1" col="9" text="결제금액"/>
-                <Cell row="1" col="10" text="총 수강료"/>
-                <Cell row="1" col="11" text="등급할인"/>
-                <Cell row="1" col="12" text="쿠폰할인"/>
-                <Cell row="1" col="13" text="오프라인할인"/>
-                <Cell row="1" col="14" text="환불건수"/>
-                <Cell row="1" col="15" text="환불금액"/>
-                <Cell row="1" col="16" text="등급할인"/>
-                <Cell row="1" col="17" text="쿠폰할인"/>
-                <Cell row="1" col="18" text="오프라인할인"/>
-                <Cell row="1" col="19" text="환불건수"/>
-                <Cell row="1" col="20" text="환불금액"/>
-                <Cell row="1" col="21" text="총 환불건수"/>
-                <Cell row="1" col="22" text="총 환불금액"/>
-                <Cell row="1" col="23" text="실 수강인원"/>
-                <Cell row="1" col="24" text="실 수입"/>
-                <Cell row="1" col="25" text="등급할인"/>
-                <Cell row="1" col="26" text="쿠폰할인"/>
-                <Cell row="1" col="27" text="오프라인 할인"/>
-                <Cell row="1" col="28" text="매출액"/>
-                <Cell row="1" col="29" text="비율"/>
-                <Cell row="1" col="30" text="강사료"/>
-                <Cell row="1" col="31" text="소득세"/>
-                <Cell row="1" col="32" text="주민세"/>
-                <Cell row="1" col="33" text="실 지급액"/>
-                <Cell row="1" col="34" text="본사수입"/>
+                <Cell col="3" rowspan="2" text="강사유형"/>
+                <Cell col="4" rowspan="2" text="계약상태"/>
+                <Cell col="5" rowspan="2" text="지급정보"/>
+                <Cell col="6" rowspan="2" text="SAP&#13;&#10;정산"/>
+                <Cell col="7" rowspan="2" text="지점명"/>
+                <Cell col="8" rowspan="2" text="학기"/>
+                <Cell col="9" rowspan="2" text="강좌코드"/>
+                <Cell col="10" rowspan="2" text="강좌명"/>
+                <Cell col="11" rowspan="2" text="수강료"/>
+                <Cell col="12" rowspan="2" text="지급율/액"/>
+                <Cell col="13" rowspan="2" text="신청건수"/>
+                <Cell col="14" rowspan="2" text="강의횟수"/>
+                <Cell col="15" rowspan="2" text="총 강사료"/>
+                <Cell col="16" rowspan="2" text="진행횟수"/>
+                <Cell col="17" colspan="6" text="지급월 비용"/>
+                <Cell row="1" col="17" text="강사료"/>
+                <Cell row="1" col="18" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell row="1" col="19" text="재료비/대여료&#13;&#10;(1/N형)"/>
+                <Cell row="1" col="20" text="소득세&#13;&#10;(3%)"/>
+                <Cell row="1" col="21" text="주민세&#13;&#10;(0.3%)"/>
+                <Cell row="1" col="22" text="지급금액"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
                 <Cell col="1" text="bind:tcCdNo" suppress="1"/>
                 <Cell col="2" suppress="2" expr="comp.parent.com_setMasking(tcNm, 'name')" tooltiptype="hover" tooltiptext="bind:tcNm"/>
-                <Cell col="3" text="bind:yySmster" suppress="3"/>
-                <Cell col="4" text="bind:lectCd"/>
-                <Cell col="5" text="bind:lectNm"/>
-                <Cell col="6" text="bind:lectStatNm" textAlign="center"/>
-                <Cell col="7" text="bind:lectAmt" textAlign="right"/>
-                <Cell col="8" text="bind:gsCnt"/>
-                <Cell col="9" text="bind:gsStlmAmt" textAlign="right"/>
-                <Cell col="10" text="bind:gsLfee" textAlign="right"/>
-                <Cell col="11" text="bind:grdeDcAmt" textAlign="right"/>
-                <Cell col="12" text="bind:cpnDcAmt" textAlign="right"/>
-                <Cell col="13" text="bind:oflnDcAmt" textAlign="right"/>
-                <Cell col="14" text="bind:allRfndCnt"/>
-                <Cell col="15" text="bind:allRfndAmt" textAlign="right"/>
-                <Cell col="16" text="bind:grdeDcAmt" textAlign="right"/>
-                <Cell col="17" text="bind:cpnDcAmt" textAlign="right"/>
-                <Cell col="18" text="bind:oflnDcAmt" textAlign="right"/>
-                <Cell col="19" text="bind:partnRfndCnt" textAlign="center"/>
-                <Cell col="20" text="bind:partnRfndAmt" textAlign="right"/>
-                <Cell col="21" text="bind:gsRfndCnt" textAlign="center"/>
-                <Cell col="22" text="bind:gsRfndAmt" textAlign="right"/>
-                <Cell col="23" text="bind:actlCnt"/>
-                <Cell col="24" text="bind:actlImpoAmt" textAlign="right"/>
-                <Cell col="25" text="bind:fnlGrdeDcAmt" textAlign="right"/>
-                <Cell col="26" text="bind:fnlCpnDcAmt" textAlign="right"/>
-                <Cell col="27" text="bind:fnlOflnDcAmt" textAlign="right"/>
-                <Cell col="28" text="bind:slngAmt" textAlign="right"/>
-                <Cell col="29" text="bind:rto"/>
-                <Cell col="30" text="bind:tcPpayAmt" textAlign="right"/>
-                <Cell col="31" text="bind:incmtax" textAlign="right"/>
-                <Cell col="32" text="bind:rsdttax" textAlign="right"/>
-                <Cell col="33" text="bind:actlPpayAmt" textAlign="right"/>
-                <Cell col="34" textAlign="right" text="bind:hqProf"/>
+                <Cell col="3" text="bind:tcTpNm" suppress="3"/>
+                <Cell col="4" text="bind:cntrStat"/>
+                <Cell col="5" text="bind:ppayInfo"/>
+                <Cell col="6" text="bind:sapAdmtPrcsStat"/>
+                <Cell col="7" text="bind:brchNm"/>
+                <Cell col="8" text="bind:yySmster"/>
+                <Cell col="9" text="bind:lectCd"/>
+                <Cell col="10" text="bind:lectNm"/>
+                <Cell col="11" text="bind:lfeeAmt" textAlign="right"/>
+                <Cell col="12" text="bind:ppayAmt"/>
+                <Cell col="13" text="bind:atlctNpleCnt"/>
+                <Cell col="14" text="bind:lectNbcnt"/>
+                <Cell col="15" text="bind:tcPpayAmt"/>
+                <Cell col="16" text="bind:prgrsNbcnt"/>
+                <Cell col="17" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="18" text="bind:pchOptnStlmAmt" textAlign="right"/>
+                <Cell col="19" text="bind:npchOptnStlmAmt" textAlign="right"/>
+                <Cell col="20" text="bind:incmtax" textAlign="right"/>
+                <Cell col="21" text="bind:rsdttax" textAlign="right"/>
+                <Cell col="22" text="bind:actlPpayAmt" textAlign="right"/>
               </Band>
             </Format>
           </Formats>
@@ -270,6 +239,7 @@
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::popup.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -278,13 +248,12 @@ this.application = null;
 this.excelImportExport = "";
 this.brchCd = "";
 this.yy = "";
-this.lectSmsterCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
-{
+{ 
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	this.excelImportExport = this.application.getVariable("excelImportExport");
@@ -300,6 +269,13 @@ this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	// 년도초기화
 	this.fn_year_add();
 	
+	var comboMmObj = this.row01.form.Div01.form.mm;
+	var month = new nexacro.Date().getMonth() + 1;
+	month = month.toString().length < 2 ? "0" + month : month;
+	
+	this.gfn_set_month(this, comboMmObj);
+	comboMmObj.set_value(month);
+	
 	// 지점별 년도/학기 초기화
 	this.fn_sesterInfo(this.brchCd);
 };
@@ -313,7 +289,6 @@ this.row02.form.Div00.form.btnSearch_onclick = function(obj:nexacro.Button,e:nex
 };
 
 
-
 this.row03_Div00_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
 	if(e.keycode == 13){
@@ -322,6 +297,22 @@ this.row03_Div00_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.Key
 		this.fn_list(1);
 	}
 };
+
+this.row02.form.Div00.form.btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.row01.form.Div00.form.brchCd.set_index(0);
+	this.row01.form.Div01.form.yy.set_index(0);	
+	this.row01.form.Div01.form.mm.set_index(0);
+	
+	this.fn_set_checkbox_value(1);
+	
+	this.row03.form.Div00.form.searchField.set_index(0);
+	this.row03.form.Div00.form.searchQuery.set_value('');
+	
+	this.ds_list.clearData();
+	this.txtTotal.set_text("( 0개 )");	
+};
+
 
 this.row01_Div02_chkLectClAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
@@ -336,58 +327,52 @@ this.row01_Div02_chkLectClAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.
 	}
 };
 
-
-this.row02_Div00_chkStatAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+this.row02_Div00_chkCntrAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked()){
-		obj.parent.chkStat01.set_value(1);
-		obj.parent.chkStat02.set_value(1);
-		obj.parent.chkStat03.set_value(1);		
-		obj.parent.chkStat04.set_value(1);		
-		obj.parent.chkStat05.set_value(1);		
-		obj.parent.chkStat07.set_value(1);		
-		obj.parent.chkStat08.set_value(1);		
-		obj.parent.chkStat09.set_value(1);		
+		obj.parent.chkCntrY.set_value(1);
+		obj.parent.chkCntrN.set_value(1);		
 	}else{
-		obj.parent.chkStat01.set_value(0);
-		obj.parent.chkStat02.set_value(0);
-		obj.parent.chkStat03.set_value(0);		
-		obj.parent.chkStat04.set_value(0);		
-		obj.parent.chkStat05.set_value(0);		
-		obj.parent.chkStat07.set_value(0);		
-		obj.parent.chkStat08.set_value(0);		
-		obj.parent.chkStat09.set_value(0);		
+		obj.parent.chkCntrY.set_value(0);
+		obj.parent.chkCntrN.set_value(0);		
 	}
 };
 
-this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.row01.form.Div02.form.chkLectClAll.set_value(0);
-	}
-}
-
-
-this.fn_checkbox_click2 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.row02.form.Div00.form.chkStatAll.set_value(0);
-	}
-}
-
-
-this.row02.form.Div00.form.btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.row02_Div01_chkPpayInfoAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
-	this.row01.form.Div00.form.brchCd.set_index(0);
-	this.row01.form.Div01.form.yy.set_index(0);
-	this.row01.form.Div01.form.mm.set_index(0);
-	
-	this.fn_set_checkbox_value(1);
-	
-	this.row03.form.Div00.form.searchField.set_index(0);
-	this.row03.form.Div00.form.searchQuery.set_value('');
-	
-	this.ds_list.clearData();
-	this.txtTotal.set_text("( 0개 )");	
+	if(obj.isChecked()){
+		obj.parent.chkPpayInfoY.set_value(1);
+		obj.parent.chkPpayInfoN.set_value(1);		
+	}else{
+		obj.parent.chkPpayInfoY.set_value(0);
+		obj.parent.chkPpayInfoN.set_value(0);		
+	}
 };
+
+this.row02_Div02_chkSapAdmtAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.chkSapAdmtY.set_value(1);
+		obj.parent.chkSapAdmtN.set_value(1);		
+	}else{
+		obj.parent.chkSapAdmtY.set_value(0);
+		obj.parent.chkSapAdmtN.set_value(0);		
+	}
+};
+
+this.Div01_Div00_chkTcTpAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.chkTcTp1.set_value(1);
+		obj.parent.chkTcTp2.set_value(1);		
+		obj.parent.chkTcTp3.set_value(1);		
+	}else{
+		obj.parent.chkTcTp1.set_value(0);
+		obj.parent.chkTcTp2.set_value(0);		
+		obj.parent.chkTcTp3.set_value(0);		
+	}
+};
+
 
 this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -397,7 +382,7 @@ this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	{		
 		this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
 		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid00, "Sheet1!A1");  	
-		this.ExcelExportObj.set_exportfilename("강사료 실시간정산(학기)");
+		this.ExcelExportObj.set_exportfilename("강사료 정산(지급월)");
 		this.ExcelExportObj.exportData(); 
 	}
 	else
@@ -406,11 +391,10 @@ this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	}
 };
 
-
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
- 
+
 //지점 세팅
 this.fn_classBrch_set = function()
 {	
@@ -424,7 +408,7 @@ this.fn_classBrch_set = function()
 	
 	this.row01.form.Div00.form.brchCd.set_index(0);
 }
- 
+
 this.fn_list = function(page){
 	
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
@@ -432,7 +416,7 @@ this.fn_list = function(page){
 	
 	var tranObj = {
 		strSvcId : "list",
-		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getSmsterAdmtList.do",
+		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getMonthAdmtList.do",
 		inData : "search=ds_search pageing=gdsPageing",
 		outData : "ds_list=output1 gdsPageing=output2",
 		strArg : "",
@@ -471,7 +455,7 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				for(var i = 0 ; i < this.ds_list.rowcount ; i++){
 					this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 				}	
-			}		
+			}			
 		break; 		
 		case "getSesterYearList":
 			var year = new nexacro.Date().getFullYear();
@@ -485,41 +469,49 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			this.row01.form.Div01.form.yy.set_value(year);
 		break;
 		case "sesterInfo":
-			this.ds_search.setColumn(0, "yy", this.yy);
-			this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
 			this.row01.form.Div01.form.yy.set_value(this.yy);
-			this.row01.form.Div01.form.mm.set_value(this.lectSmsterCd);
 		break;
 	}
 }
 
 
+
 this.fn_searchValueInit = function(){
 	
-	var arrLectClCd = new Array();
-	var arrLectStatCd = new Array();
+	var arrLectClCd = new Array();	
+	var arrTcTpCd = new Array();	
+	var arrCntrStatCd = new Array();	
+	var arrPpayInfoCd = new Array();	
+	var arrSapAdmtCd = new Array();	
 	
-	if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("01");
-	if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("02");
-	if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("03");
+	if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("1");
+	if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("2");
+	if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("3");
+	
+	if(this.Div01.form.Div00.form.chkTcTp1.value == true) arrTcTpCd.push("1");
+	if(this.Div01.form.Div00.form.chkTcTp2.value == true) arrTcTpCd.push("2");
+	if(this.Div01.form.Div00.form.chkTcTp3.value == true) arrTcTpCd.push("3");
+	if(this.Div01.form.Div00.form.chkTcTp4.value == true) arrTcTpCd.push("4");
+	
+	if(this.row02.form.Div00.form.chkCntrY.value == true) arrCntrStatCd.push("Y");
+	if(this.row02.form.Div00.form.chkCntrN.value == true) arrCntrStatCd.push("N");
 		
-	if(this.row02.form.Div00.form.chkStat01.value == true) arrLectStatCd.push("01");
-	if(this.row02.form.Div00.form.chkStat02.value == true) arrLectStatCd.push("02");
-	if(this.row02.form.Div00.form.chkStat03.value == true) arrLectStatCd.push("03");
-	if(this.row02.form.Div00.form.chkStat04.value == true) arrLectStatCd.push("04");
-	if(this.row02.form.Div00.form.chkStat05.value == true) arrLectStatCd.push("05");	
-	if(this.row02.form.Div00.form.chkStat07.value == true) arrLectStatCd.push("07");
-	if(this.row02.form.Div00.form.chkStat08.value == true) arrLectStatCd.push("08");
-	if(this.row02.form.Div00.form.chkStat09.value == true) arrLectStatCd.push("09");
+	if(this.row02.form.Div01.form.chkPpayInfoY.value == true) arrPpayInfoCd.push("Y");		
+	if(this.row02.form.Div01.form.chkPpayInfoN.value == true) arrPpayInfoCd.push("N");		
 	
+	if(this.row02.form.Div02.form.chkSapAdmtY.value == true) arrSapAdmtCd.push("Y");		
+	if(this.row02.form.Div02.form.chkSapAdmtN.value == true) arrSapAdmtCd.push("N");		
+		
  	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
- 	this.ds_search.setColumn(0, "yy", this.row01.form.Div01.form.yy.value);
- 	this.ds_search.setColumn(0, "lectSmsterCd", this.row01.form.Div01.form.mm.value);
- 	this.ds_search.setColumn(0, "chkLectCl", arrLectClCd.join(","));
- 	this.ds_search.setColumn(0, "chkLectStat", arrLectStatCd.join(","));
- 	
+ 	this.ds_search.setColumn(0, "admtYm", this.row01.form.Div01.form.yy.value + this.row01.form.Div01.form.mm.value); 	
+ 	this.ds_search.setColumn(0, "chkLectCl", arrLectClCd.join(",")); 	
+	this.ds_search.setColumn(0, "chkTcTp", arrTcTpCd.join(",")); 	
+ 	this.ds_search.setColumn(0, "chkCntrStat", arrCntrStatCd.join(",")); 	
+	this.ds_search.setColumn(0, "chkPpayInfo", arrPpayInfoCd.join(",")); 	
+	this.ds_search.setColumn(0, "chkSapAdmt", arrSapAdmtCd.join(",")); 	
+	
  	this.ds_search.setColumn(0, "f", this.row03.form.Div00.form.searchField.value);
- 	this.ds_search.setColumn(0, "q", this.row03.form.Div00.form.searchQuery.value);
+ 	this.ds_search.setColumn(0, "q", this.row03.form.Div00.form.searchQuery.value);	
 }
 
 this.fn_set_checkbox_value = function(value){
@@ -528,15 +520,22 @@ this.fn_set_checkbox_value = function(value){
 	this.row01.form.Div02.form.chkLectCl02.set_value(value);
 	this.row01.form.Div02.form.chkLectCl03.set_value(value);
 	
-	this.row02.form.Div00.form.chkStatAll.set_value(value);
-	this.row02.form.Div00.form.chkStat01.set_value(value);
-	this.row02.form.Div00.form.chkStat02.set_value(value);
-	this.row02.form.Div00.form.chkStat03.set_value(value);
-	this.row02.form.Div00.form.chkStat04.set_value(value);
-	this.row02.form.Div00.form.chkStat05.set_value(value);
-	this.row02.form.Div00.form.chkStat07.set_value(value);
-	this.row02.form.Div00.form.chkStat08.set_value(value);
-	this.row02.form.Div00.form.chkStat09.set_value(value);
+	this.row02.form.Div00.form.chkCntrAll.set_value(value);
+	this.row02.form.Div00.form.chkCntrY.set_value(value);
+	this.row02.form.Div00.form.chkCntrN.set_value(value);
+	
+	this.row02.form.Div01.form.chkPpayInfoAll.set_value(value);
+	this.row02.form.Div01.form.chkPpayInfoY.set_value(value);
+	this.row02.form.Div01.form.chkPpayInfoN.set_value(value);
+	
+	this.row02.form.Div02.form.chkSapAdmtAll.set_value(value);
+	this.row02.form.Div02.form.chkSapAdmtY.set_value(value);
+	this.row02.form.Div02.form.chkSapAdmtN.set_value(value);
+	
+	this.Div01.form.Div00.form.chkTcTpAll.set_value(value);
+	this.Div01.form.Div00.form.chkTcTp1.set_value(value);
+	this.Div01.form.Div00.form.chkTcTp2.set_value(value);
+	this.Div01.form.Div00.form.chkTcTp3.set_value(value);
 }
 
 
@@ -589,65 +588,45 @@ this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.Ite
       <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="rnum" type="STRING" size="256"/>
+          <Column id="admtYm" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="yySmster" type="STRING" size="256"/>
-          <Column id="tcCdNo" type="STRING" size="256"/>
-          <Column id="seqNo" type="STRING" size="256"/>
-          <Column id="tcNm" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
-          <Column id="lectStatCd" type="STRING" size="256"/>
-          <Column id="lectStatNm" type="STRING" size="256"/>
-          <Column id="dsplStatCd" type="STRING" size="256"/>
-          <Column id="sleStatCd" type="STRING" size="256"/>
-          <Column id="gsCapaCnt" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="tcTpNm" type="STRING" size="256"/>
+          <Column id="cntrStat" type="STRING" size="256"/>
+          <Column id="ppayInfo" type="STRING" size="256"/>
+          <Column id="sapAdmtPrcsStat" type="STRING" size="256"/>
+          <Column id="lfeeAmt" type="STRING" size="256"/>
+          <Column id="atlctNpleCnt" type="STRING" size="256"/>
           <Column id="ppayStdCd" type="STRING" size="256"/>
           <Column id="ppayAmt" type="STRING" size="256"/>
-          <Column id="ppayAmtExpl" type="STRING" size="256"/>
-          <Column id="whdtxClCd" type="STRING" size="256"/>
-          <Column id="incmClCd" type="STRING" size="256"/>
-          <Column id="lectAmt" type="STRING" size="256"/>
-          <Column id="gsStlmAmt" type="STRING" size="256"/>
-          <Column id="gsCnt" type="STRING" size="256"/>
-          <Column id="gsLfee" type="STRING" size="256"/>
-          <Column id="gsRfndCnt" type="STRING" size="256"/>
-          <Column id="gsRfndAmt" type="STRING" size="256"/>
-          <Column id="allRfndCnt" type="STRING" size="256"/>
-          <Column id="allRfndAmt" type="STRING" size="256"/>
-          <Column id="allRfndLectAmt" type="STRING" size="256"/>
-          <Column id="allRfndAddAmt" type="STRING" size="256"/>
-          <Column id="partnRfndCnt" type="STRING" size="256"/>
-          <Column id="partnRfndAmt" type="STRING" size="256"/>
-          <Column id="partnRfndLectAmt" type="STRING" size="256"/>
-          <Column id="partnRfndAddAmt" type="STRING" size="256"/>
-          <Column id="partnRfndLectAmtFee" type="STRING" size="256"/>
-          <Column id="partnRfndAddAmtFee" type="STRING" size="256"/>
-          <Column id="grdeDcAmt" type="STRING" size="256"/>
-          <Column id="cpnDcAmt" type="STRING" size="256"/>
-          <Column id="oflnDcAmt" type="STRING" size="256"/>
-          <Column id="actlCnt" type="STRING" size="256"/>
-          <Column id="actlImpoAmt" type="STRING" size="256"/>
-          <Column id="fnlGrdeDcAmt" type="STRING" size="256"/>
-          <Column id="fnlCpnDcAmt" type="STRING" size="256"/>
-          <Column id="fnlOflnDcAmt" type="STRING" size="256"/>
-          <Column id="slngAmt" type="STRING" size="256"/>
-          <Column id="rto" type="STRING" size="256"/>
           <Column id="tcPpayAmt" type="STRING" size="256"/>
+          <Column id="smsterTcPpayAmt" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="STRING" size="256"/>
+          <Column id="prgrsNbcnt" type="STRING" size="256"/>
+          <Column id="admtYmPpayAmt" type="STRING" size="256"/>
+          <Column id="pchOptnStlmAmt" type="STRING" size="256"/>
+          <Column id="npchOptnStlmAmt" type="STRING" size="256"/>
           <Column id="incmtax" type="STRING" size="256"/>
           <Column id="rsdttax" type="STRING" size="256"/>
           <Column id="actlPpayAmt" type="STRING" size="256"/>
-          <Column id="hqProf" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
         <ColumnInfo>
           <Column id="brchCd" type="STRING" size="256"/>
-          <Column id="yy" type="STRING" size="256"/>
-          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="admtYm" type="STRING" size="256"/>
           <Column id="chkLectCl" type="STRING" size="256"/>
-          <Column id="chkLectStat" type="STRING" size="256"/>
+          <Column id="chkTcTp" type="STRING" size="256"/>
+          <Column id="chkCntrStat" type="STRING" size="256"/>
+          <Column id="chkPpayInfo" type="STRING" size="256"/>
+          <Column id="chkSapAdmt" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
