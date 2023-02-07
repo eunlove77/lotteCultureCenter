@@ -409,31 +409,31 @@ this.fn_fgftRecpAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEvent
 // 검색 버튼 클릭이벤트
 this.fn_btnSearch_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
-	
-	var mbrNm = this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm"), "");
-	var hpStNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpStNo"), "");
-	var hpMidNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpMidNo"), "");
-	var hpLastNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpLastNo"), "");
-	
-	if((mbrNm == "" && (hpStNo != "" || hpMidNo != "" || hpLastNo != ""))
-		|| (mbrNm != "" && (hpStNo == "" && hpMidNo == "" && hpLastNo == ""))){
-		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
-		return;
-	}
-	
-	this.fn_searchValueInit();
-	parentFrm.fn_list();
+ 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+ 	
+ 	var mbrNm = this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm"), "");
+ 	var hpStNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpStNo"), "");
+ 	var hpMidNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpMidNo"), "");
+ 	var hpLastNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpLastNo"), "");
+ 	
+ 	if((mbrNm == "" && (hpStNo != "" || hpMidNo != "" || hpLastNo != ""))
+ 		|| (mbrNm != "" && (hpStNo == "" && hpMidNo == "" && hpLastNo == ""))){
+ 		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+ 		return;
+ 	}
+ 	
+ 	this.fn_searchValueInit();
+ 	parentFrm.fn_list();
 };
 
 // 검색어 입력필드 키 다운이벤트
 this.fn_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
-	if(e.keycode ==13)
-	{
-		this.fn_searchValueInit();
-		parentFrm.fn_list();
-	}
+ 	if(e.keycode ==13)
+ 	{
+ 		this.fn_searchValueInit();
+ 		parentFrm.fn_list();
+ 	}
 };
 
 // 검색 데이터 세팅
