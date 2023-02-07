@@ -270,6 +270,19 @@ this.Div01_Div10_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.Click
 this.ds_teacher_pop_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
 {
 	this.ds_detail.setColumn(0, "tcCdNo", obj.getColumn(0, "tcCdNo"));
+	
+	var tranObj = {
+		strSvcId : "tchCheck",
+		strSvcUrl : this.baseSvrUrl + "tch-check.do",
+		inData : "detail=ds_detail",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.menuId,
+		isPopup : true
+	}
+
+	this.gfn_transaction(tranObj);
 };
 
 /**************************************************************************
@@ -314,7 +327,16 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
+		if(svcID == "tchCheck")
+		{
+			alert("이미 등록된 강사입니다.");
+			this.ds_detail.setColumn(0, "tcCdNo", null);
+		}
+		else
+		{
+			this.alert(errorCode+"\n"+errorMsg);
+		}
+		return;
 	}
 	
 	switch(svcID)
