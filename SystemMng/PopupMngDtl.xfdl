@@ -861,29 +861,32 @@ this.fn_get_edit_body = function(wbObj){
 
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = "";	
-	
-	for(var i=0; i < this.editorArr.length; i++)
+	if(e.userdata == "LC")
 	{
-		if(this.editorArr[i].editorPcObj == obj) 
+		var content = "";	
+		
+		for(var i=0; i < this.editorArr.length; i++)
 		{
-			content = this.ds_detail.getColumn(i, "webCnts");
-		}
-		if(this.editorArr[i].editorMbilObj == obj) 
-		{
-			content = this.ds_detail.getColumn(i, "mbilCnts");
-		}
-	} 		
-	
-	var _win = obj.getProperty("window");	 
+			if(this.editorArr[i].editorPcObj == obj) 
+			{
+				content = this.ds_detail.getColumn(i, "webCnts");
+			}
+			if(this.editorArr[i].editorMbilObj == obj) 
+			{
+				content = this.ds_detail.getColumn(i, "mbilCnts");
+			}
+		} 		
+		
+		var _win = obj.getProperty("window");	 
 
-	_win.callMethod("setData", content);
-	
-	if(_win)
-	{
-		_win.destroy();
-		_win = null;
-	}  
+		_win.callMethod("setData", content);
+		
+		if(_win)
+		{
+			_win.destroy();
+			_win = null;
+		} 
+	}
 };
 
 this.Div00_Div00_CheckBox01_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)

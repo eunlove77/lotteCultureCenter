@@ -36,7 +36,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="소개 내용 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="450" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <WebBrowser id="intrdnCont" taborder="1" left="117" top="7" height="430" right="12" onusernotify="fn_set_edit_body" ondevicebuttonup="fn_set_edit_body"/>
+              <WebBrowser id="intrdnCont" taborder="1" left="117" top="7" height="430" right="12" onusernotify="fn_set_edit_body"/>
             </Layout>
           </Layouts>
         </Div>
@@ -411,17 +411,20 @@ this.fn_get_edit_body = function(wbObj){
 
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = this.ds_detail.getColumn(0, obj.id);
-	
-	var _win = obj.getProperty("window");	 
-	
-	_win.callMethod("setData", content);
-	
-	if(_win)
+	if(e.userdata == "LC")
 	{
-		_win.destroy();
-		_win = null;
-	} 
+		var content = this.ds_detail.getColumn(0, obj.id);
+		
+		var _win = obj.getProperty("window");	 
+		
+		_win.callMethod("setData", content);
+		
+		if(_win)
+		{
+			_win.destroy();
+			_win = null;
+		} 
+	}
 };
 
 this.fnCallback = function(svcID,errorCode,errorMsg)

@@ -10,7 +10,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="내용 (웹) &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" height="350" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" width="109"/>
-                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" right="12"/>
+                    <WebBrowser id="WebBrowser00" taborder="1" left="Static00:8" top="7" height="310" right="12" onusernotify="fn_set_edit_body"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -223,29 +223,32 @@ this.fn_get_edit_body = function(wbObj){
 
 this.fn_set_edit_body = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
 {	
-	var content = "";	
-	
-	for(var i=0; i < this.editorArr.length; i++)
+	if(e.userdata == "LC")
 	{
-		if(this.editorArr[i].editorPcObj == obj) 
+		var content = "";	
+		
+		for(var i=0; i < this.editorArr.length; i++)
 		{
-			content = this.lectInfoDs.getColumn(i, "webCont");
-		}
-		if(this.editorArr[i].editorMbilObj == obj) 
+			if(this.editorArr[i].editorPcObj == obj) 
+			{
+				content = this.lectInfoDs.getColumn(i, "webCont");
+			}
+			if(this.editorArr[i].editorMbilObj == obj) 
+			{
+				content = this.lectInfoDs.getColumn(i, "mbilCont");
+			}
+		} 		
+		
+		var _win = obj.getProperty("window");	 
+		
+		_win.callMethod("setData", content);
+		
+		if(_win)
 		{
-			content = this.lectInfoDs.getColumn(i, "mbilCont");
+			_win.destroy();
+			_win = null;
 		}
-	} 		
-	
-	var _win = obj.getProperty("window");	 
-	
-	_win.callMethod("setData", content);
-	
-	if(_win)
-	{
-		_win.destroy();
-		_win = null;
-	}  
+	}
 };
 
 //유효성 체크
