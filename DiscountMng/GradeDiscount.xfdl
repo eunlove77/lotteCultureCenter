@@ -1,6 +1,173 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
   <Form id="GradeDiscount" width="1280" height="720" titletext="New Form" onload="GradeDiscount_onload">
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.GradeDiscount_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.baseSvrUrl = this.application.Admin_svc + "::discount/grade/";
+	
+	this.fn_list();
+};
+
+this.Div00_Div01_Edit00_oninput = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
+{
+	var objVal = obj.value;
+	
+	if(objVal > 10)
+	{
+		obj.set_value("");
+		obj.updateToDataset();
+		this.ds_discount_mst.setColumn(0, "allUseNbcnt");
+		alert("전체 사용횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
+	}
+};
+
+this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
+{
+	if(e.cell == 2)
+	{
+		if(obj.getEditingValue() > 10)
+		{
+			obj.setEditValue("");
+			alert("할인횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
+		}
+	}
+	else if(e.cell == 3)
+	{
+		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
+		{
+			obj.setEditValue("");
+			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
+		}
+	}
+};
+
+this.Div00_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.confirm("취소하시겠습니까?"))
+	{
+		this.fn_list()
+	}
+};
+
+this.Div00_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_checkValidation();
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_list = function ()
+{	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.baseSvrUrl + "list.do",
+		inData : "",
+		outData : "ds_discount_list=discountList",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
+
+	
+	this.gfn_transaction(tranObj);	
+};
+
+this.fn_checkValidation = function()
+{
+	if(this.gfn_isNull(this.Div00.form.Div01.form.Edit00.value))
+	{
+		alert("전체 사용 횟수를 입력하세요.");
+		this.Div00.form.Div01.form.Edit00.setFocus();
+		return;
+	}
+	else if(this.ds_discount_list.findRowExpr("dcNbcnt == null || dcNbcnt == ''") > -1)
+	{
+		alert("할인횟수를 입력하세요");
+		return;
+	}
+	else if(this.ds_discount_list.findRowExpr("dcRt == null || dcRt == ''") > -1)
+	{
+		alert("할인율을 입력하세요.");
+		return;
+	}
+	else
+	{
+		if(this.confirm("저장하시겠습니까?"))
+		{
+			this.fn_save()
+		}
+	}
+}
+
+this.fn_save = function()
+{
+	var tranObj = {
+		strSvcId : "save",
+		strSvcUrl : this.baseSvrUrl + "insert.do",
+		inData : "infoMst=ds_discount_mst infoDtl=ds_discount_list",
+		outData : "",
+		strArg : "",
+		callBackFnc : "fnCallback",
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		isAsync : true
+	}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+	
+	this.gfn_transaction(tranObj);	
+}
+
+/**************************************************************************
+ * 콜백
+ **************************************************************************/
+ 
+this.fnCallback = function(svcID, errorCode, errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		this.alert(errorCode+"\n"+errorMsg);
+	}
+	
+	switch(svcID)
+	{
+		case "list":
+			this.ds_discount_mst.setColumn(0, "allUseNbcnt", this.ds_discount_list.getColumn(0, "allUseNbcnt"));
+			this.Div00.form.Grid00.set_height(this.Div00.form.Grid00.getRealRowFullSize()+5);
+			this.Div00.set_height(Number(this.Div00.form.Grid00.height)+300);
+			this.resetScroll();
+			break;
+		case "save":
+			this.alert("저장되었습니다.");
+			break;
+	}
+
+};
+]]></Script>
     <Layouts>
       <Layout height="720" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -116,167 +283,6 @@
         </Rows>
       </Dataset>
     </Objects>
-    <Script type="xscript5.1"><![CDATA[/**************************************************************************
- * include 영역 
- **************************************************************************/
-include "Base::libCommon.xjs";
-
-/**************************************************************************
- * FORM 변수 선언 영역
- **************************************************************************/
-this.application = null;
-this.baseSvrUrl = "";
-
-/**************************************************************************
- * FORM EVENT 영역(onload)
- **************************************************************************/
-/**
- * @description 화면 onload시 처리내역(필수)
-*/
-
-this.GradeDiscount_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
-{
-	this.application = nexacro.getApplication();
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
-	this.baseSvrUrl = this.application.Admin_svc + "::discount/grade/";
-	
-	this.fn_list();
-};
-
-this.Div00_Div01_Edit00_oninput = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
-{
-	var objVal = obj.value;
-	
-	if(objVal > 10)
-	{
-		obj.set_value("");
-		alert("전체 사용횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
-	}
-};
-
-this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
-{
-	if(e.cell == 2)
-	{
-		if(obj.getEditingValue() > 10)
-		{
-			obj.setEditValue("");
-			alert("할인횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
-		}
-	}
-	else if(e.cell == 3)
-	{
-		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
-		{
-			obj.setEditValue("");
-			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
-		}
-	}
-};
-
-this.Div00_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.confirm("취소하시겠습니까?"))
-	{
-		this.fn_list()
-	}
-};
-
-this.Div00_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.fn_checkValidation();
-};
-
-
-/**************************************************************************
- * 사용자 FUNCTION 영역
- **************************************************************************/
-
-this.fn_list = function ()
-{	
-	var tranObj = {
-		strSvcId : "list",
-		strSvcUrl : this.baseSvrUrl + "list.do",
-		inData : "",
-		outData : "ds_discount_list=discountList",
-		strArg : "",
-		callBackFnc : "fnCallback",
-		menuSeq : this.getOwnerFrame().param.MENU_ID,
-		isAsync : true
-	}
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
-
-	
-	this.gfn_transaction(tranObj);	
-};
-
-this.fnCallback = function(svcID, errorCode, errorMsg)
-{
-	// 에러 시 화면 처리 내역
-	if(errorCode != 0)
-	{
-		this.alert(errorCode+"\n"+errorMsg);
-	}
-	
-	switch(svcID)
-	{
-		case "list":
-			this.ds_discount_mst.setColumn(0, "allUseNbcnt", this.ds_discount_list.getColumn(0, "allUseNbcnt"));
-			this.Div00.form.Grid00.set_height(this.Div00.form.Grid00.getRealRowFullSize()+5);
-			this.Div00.set_height(Number(this.Div00.form.Grid00.height)+300);
-			this.resetScroll();
-			break;
-		case "save":
-			this.alert("저장되었습니다.");
-			break;
-	}
-
-};
-
-this.fn_checkValidation = function()
-{
-	if(this.gfn_isNull(this.Div00.form.Div01.form.MaskEdit00.value))
-	{
-		alert("전체 사용 횟수를 입력하세요.");
-		this.Div00.form.Div01.form.MaskEdit00.setFocus();
-		return;
-	}
-	else if(this.ds_discount_list.findRowExpr("dcNbcnt == null || dcNbcnt == ''") > -1)
-	{
-		alert("할인횟수를 입력하세요");
-		return;
-	}
-	else if(this.ds_discount_list.findRowExpr("dcRt == null || dcRt == ''") > -1)
-	{
-		alert("할인율을 입력하세요.");
-		return;
-	}
-	else
-	{
-		if(this.confirm("저장하시겠습니까?"))
-		{
-			this.fn_save()
-		}
-	}
-}
-
-this.fn_save = function()
-{
-	var tranObj = {
-		strSvcId : "save",
-		strSvcUrl : this.baseSvrUrl + "insert.do",
-		inData : "infoMst=ds_discount_mst infoDtl=ds_discount_list",
-		outData : "",
-		strArg : "",
-		callBackFnc : "fnCallback",
-		menuSeq : this.getOwnerFrame().param.MENU_ID,
-		isAsync : true
-	}
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
-	
-	this.gfn_transaction(tranObj);	
-}
-]]></Script>
     <Bind>
       <BindItem id="allUseNbcnt" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_discount_mst" columnid="allUseNbcnt"/>
     </Bind>
