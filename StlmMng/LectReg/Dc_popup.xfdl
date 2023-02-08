@@ -309,8 +309,19 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.ds_select_grde_list.copyData(this.ds_grde_list);
 			
 			for(var i=this.ds_grde_list.getRowCount()-1;i>=0;i--){
+				// 등급할인 사용 횟수 초과해서 사용못하는 등급할인 제거
+				if(this.ds_grde_list.getColumn(i, "grdeUseYn") == "N"){
+					this.ds_select_grde_list.deleteRow(i);
+					break;
+				}
+				
+				// 전체할인 사용 횟수 초과해서 사용못하는 등급할인 제거
+				if(this.ds_grde_list.getColumn(i, "allUseYn") == "N"){
+					this.ds_select_grde_list.deleteRow(i);
+					break;
+				}
 				for(var j=0;j<this.opener.divWork.form.ds_class_list.getRowCount();j++){
-					if(this.row != j && this.opener.divWork.form.ds_class_list.getColumn(j, "grdeDcSubtrYn") != "Y" && this.ds_grde_list.getColumn(i, "cd") != "" && this.opener.divWork.form.ds_class_list.getColumn(j, "grdeDcCd") == this.ds_grde_list.getColumn(i, "cd")){
+					if(this.row != j && this.ds_grde_list.getColumn(i, "cd") != "" && this.opener.divWork.form.ds_class_list.getColumn(j, "grdeDcCd") == this.ds_grde_list.getColumn(i, "cd")){
 						this.ds_grde_list.setColumn(i, "allGrdeUseCnt", this.ds_grde_list.getColumn(i, "allGrdeUseCnt") + 1);
 						this.ds_grde_list.setColumn(i, "allUseCnt", this.ds_grde_list.getColumn(i, "allUseCnt") + 1);
 						
@@ -774,7 +785,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				var grdeUseYn, allUseYn, memberUseYn, applBrchRngCdNm;
 				var skipGrdeUseYn = false, skipAllUseYn = false, skipMemberUseYn = false;
 				
-				memberUseYn = "N"
+				memberUseYn = "N";
 				for(var i=0;i<this.ds_grde_list.getRowCount();i++){
 					if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
 						memberUseYn = "Y";

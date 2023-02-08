@@ -454,7 +454,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var strSvcId    = "memberDtl";
 	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getMemberDtl.do";
 	var inData      = "";
-	var outData     = "this.ds_member_dtl=output1 this.ds_stlm_list=output2 this.ds_wit_list=output3";
+	var outData     = "this.ds_member_dtl=output1 this.ds_stlm_list=output2 this.ds_wit_list=output3 this.ds_tot_stlm_list=output4";
 	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd);
 	var callBackFnc = function(svcID, errorCode, errorMsg){};
 	var isAsync     = false;
@@ -473,7 +473,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	this.gfn_transaction(tranObj);
 	
 	// 인원 수 체크
-	if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < actlAtlctCnt + Number(this.ds_stlm_list.getRowCount())){
+	if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < actlAtlctCnt + Number(this.ds_tot_stlm_list.getRowCount())){
 		alert("강좌명 : " + lectNm + "\n정원이 마감된 강좌가 있어 결제 하실 수 없습니다.");
 		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
@@ -502,7 +502,18 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	}
 	
 	// 대기신청 강좌의 최초 대기신청자로 등록하는경우
-	if(lectStatCd == "05" && this.initWaitMemberYn == "Y"){
+	// 온라인=마감, 오프라인=미달 인 경우 수강내역과 대기자 내역이 없는 수강자인 경우 결제가 가능하도록 개선 
+	var oflnAtlctCnt = 0;
+	for(var i=0;i<this.ds_tot_stlm_list.getRowCount();i++){
+		if(this.ds_tot_stlm_list.getColumn(i, "stlmChnlCd") == "D"){
+			oflnAtlctCnt++;
+		}
+	}
+	
+	trace(oflnAtlctCnt);
+	trace(actlAtlctCnt);
+	trace(Number(this.ds_class_dtl.getColumn(0, "oflnCapaCnt")));
+	if(lectStatCd == "05" && this.initWaitMemberYn == "Y" && (oflnAtlctCnt + actlAtlctCnt) > Number(this.ds_class_dtl.getColumn(0, "oflnCapaCnt"))){
 		if(confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
 			var strSvcId    = "saveWait";
 			var strSvcUrl   = this.application.Admin_svc + "::lectReg/insertWaitList.do";
@@ -848,6 +859,15 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
           <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_tot_stlm_list">
+        <ColumnInfo>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
