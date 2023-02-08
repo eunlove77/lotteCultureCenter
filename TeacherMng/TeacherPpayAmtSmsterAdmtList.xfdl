@@ -380,10 +380,12 @@ this.fn_checkbox_click2 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo
 this.row02.form.Div00.form.btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.row01.form.Div00.form.brchCd.set_index(0);
-	this.row01.form.Div01.form.yy.set_index(0);
-	this.row01.form.Div01.form.mm.set_index(0);
+		
+	// 지점별 년도/학기 초기화
+	this.fn_sesterInfo(this.brchCd);
 	
-	this.fn_set_checkbox_value(1);
+	
+	this.fn_set_checkbox_value(0);
 	
 	this.row03.form.Div00.form.searchField.set_index(0);
 	this.row03.form.Div00.form.searchQuery.set_value('');
@@ -502,19 +504,48 @@ this.fn_searchValueInit = function(){
 	var arrLectClCd = new Array();
 	var arrLectStatCd = new Array();
 	
-	if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("01");
-	if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("02");
-	if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("03");
-		
-	if(this.row02.form.Div00.form.chkStat01.value == true) arrLectStatCd.push("01");
-	if(this.row02.form.Div00.form.chkStat02.value == true) arrLectStatCd.push("02");
-	if(this.row02.form.Div00.form.chkStat03.value == true) arrLectStatCd.push("03");
-	if(this.row02.form.Div00.form.chkStat04.value == true) arrLectStatCd.push("04");
-	if(this.row02.form.Div00.form.chkStat05.value == true) arrLectStatCd.push("05");	
-	if(this.row02.form.Div00.form.chkStat06.value == true) arrLectStatCd.push("06");	
-	if(this.row02.form.Div00.form.chkStat07.value == true) arrLectStatCd.push("07");
-	if(this.row02.form.Div00.form.chkStat08.value == true) arrLectStatCd.push("08");
-	if(this.row02.form.Div00.form.chkStat09.value == true) arrLectStatCd.push("09");
+	if(this.row01.form.Div02.form.chkLectCl01.value == false 
+	&& this.row01.form.Div02.form.chkLectCl02.value == false
+	&& this.row01.form.Div02.form.chkLectCl03.value == false){
+		arrLectClCd.push("01");
+		arrLectClCd.push("02");
+		arrLectClCd.push("03");
+	}else{
+		if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("01");
+		if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("02");
+		if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("03");
+	}
+	
+	if(this.row02.form.Div00.form.chkStat01.value == false
+	&& this.row02.form.Div00.form.chkStat02.value == false
+	&& this.row02.form.Div00.form.chkStat03.value == false
+	&& this.row02.form.Div00.form.chkStat04.value == false
+	&& this.row02.form.Div00.form.chkStat05.value == false
+	&& this.row02.form.Div00.form.chkStat06.value == false
+	&& this.row02.form.Div00.form.chkStat07.value == false
+	&& this.row02.form.Div00.form.chkStat08.value == false
+	&& this.row02.form.Div00.form.chkStat09.value == false	
+	){
+		arrLectStatCd.push("01");
+		arrLectStatCd.push("02");
+		arrLectStatCd.push("03");
+		arrLectStatCd.push("04");
+		arrLectStatCd.push("05");
+		arrLectStatCd.push("06");
+		arrLectStatCd.push("07");
+		arrLectStatCd.push("08");
+		arrLectStatCd.push("09");		
+	}else{		
+		if(this.row02.form.Div00.form.chkStat01.value == true) arrLectStatCd.push("01");
+		if(this.row02.form.Div00.form.chkStat02.value == true) arrLectStatCd.push("02");
+		if(this.row02.form.Div00.form.chkStat03.value == true) arrLectStatCd.push("03");
+		if(this.row02.form.Div00.form.chkStat04.value == true) arrLectStatCd.push("04");
+		if(this.row02.form.Div00.form.chkStat05.value == true) arrLectStatCd.push("05");	
+		if(this.row02.form.Div00.form.chkStat06.value == true) arrLectStatCd.push("06");	
+		if(this.row02.form.Div00.form.chkStat07.value == true) arrLectStatCd.push("07");
+		if(this.row02.form.Div00.form.chkStat08.value == true) arrLectStatCd.push("08");
+		if(this.row02.form.Div00.form.chkStat09.value == true) arrLectStatCd.push("09");
+	}
 	
  	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
  	this.ds_search.setColumn(0, "yy", this.row01.form.Div01.form.yy.value);

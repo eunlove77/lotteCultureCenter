@@ -126,7 +126,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.brchCd = "";
 this.yy = "";
-
+this.month = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -146,11 +146,14 @@ this.TeacherPpayAmtSapList_onload = function(obj:nexacro.Form,e:nexacro.LoadEven
 	this.fn_year_add();
 	
 	var comboMmObj = this.row01.form.Div01.form.mm;
-	var month = new nexacro.Date().getMonth() + 1;
-	month = month.toString().length < 2 ? "0" + month : month;
+	this.month = new nexacro.Date().getMonth() + 1;
+	this.month = this.month.toString().length < 2 ? "0" + this.month : this.month;
 	
 	this.gfn_set_month(this, comboMmObj);
-	comboMmObj.set_value(month);
+	comboMmObj.set_value(this.month);
+	
+	// 지점별 년도/학기 초기화
+	this.fn_sesterInfo(this.brchCd);
 };
 
 
@@ -165,10 +168,13 @@ this.Div01_Div00_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.Click
 this.Div01_Div00_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.row01.form.Div00.form.brchCd.set_index(0);
-	this.row01.form.Div01.form.yy.set_index(0);
-	this.row01.form.Div01.form.mm.set_index(0);
 	
-	this.fn_set_checkbox_value(1);
+	// 지점별 년도/학기 초기화
+	this.fn_sesterInfo(this.brchCd);
+	
+	this.row01.form.Div01.form.mm.set_value(this.month);
+	
+	this.fn_set_checkbox_value(0);
 	
 	this.ds_list.clearData();
 	this.txtTotal.set_text("( 0개 )");	
@@ -359,8 +365,16 @@ this.fn_searchValueInit = function(){
 
 	var arrAdmtPrcsStatCd = new Array();
 
-	if(this.Div01.form.Div00.form.chkAdmtPrcsStat0.value == true) arrAdmtPrcsStatCd.push("0");
-	if(this.Div01.form.Div00.form.chkAdmtPrcsStat1.value == true) arrAdmtPrcsStatCd.push("1");
+	if(this.Div01.form.Div00.form.chkAdmtPrcsStat0.value == false
+	&& this.Div01.form.Div00.form.chkAdmtPrcsStat1.value == false
+	){
+		arrAdmtPrcsStatCd.push("0");
+		arrAdmtPrcsStatCd.push("1");
+	}else{
+		if(this.Div01.form.Div00.form.chkAdmtPrcsStat0.value == true) arrAdmtPrcsStatCd.push("0");
+		if(this.Div01.form.Div00.form.chkAdmtPrcsStat1.value == true) arrAdmtPrcsStatCd.push("1");
+	}
+	
 
  	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
  	this.ds_search.setColumn(0, "admtYm", this.row01.form.Div01.form.yy.value + this.row01.form.Div01.form.mm.value); 		
