@@ -32,7 +32,7 @@
                 <Cell text="expr:currow + 1"/>
                 <Cell col="1" expr="expr: dataset.getRowType(currow) == 1 ? '' : ( dataset.getRowType(currow) == 2 ? '추가' : ( dataset.getRowType(currow) == 4 ? '변경' : '' ) )"/>
                 <Cell col="2" text="bind:cd" edittype="expr:dataset.getRowType(currow)==2?'text':'none'" editmaxlength="6"/>
-                <Cell col="3" text="bind:grpCdNm" textAlign="left" edittype="expr:dataset.getRowType(currow)==2?'text':'none'"/>
+                <Cell col="3" text="bind:grpCdNm" textAlign="left" edittype="text" displaytype="normal"/>
                 <Cell col="4" textAlign="left" edittype="text" text="bind:memo"/>
                 <Cell col="5" text="bind:useYn" displaytype="combotext" edittype="combo" combocodecol="useYn" combodatacol="useYn" combodataset="ds_yn"/>
                 <Cell col="6" text="bind:modDtm"/>
@@ -47,7 +47,7 @@
         <Button id="btnDeleteDtl" taborder="5" text="삭제" top="489" height="21" onclick="btnDeleteDtl_onclick" cssclass="btn_WF_High" right="10" width="84"/>
         <Edit id="searchQuery" taborder="6" left="100" top="82" width="500" height="30" onkeydown="searchQuery_onkeydown"/>
         <Static id="Static00" taborder="7" text="그룹코드/명" left="10" top="82" width="80" height="30"/>
-        <Grid id="GridCodeDtlList" taborder="8" left="10" top="520" height="264" autofittype="col" right="10" binddataset="ds_code_dtl">
+        <Grid id="GridCodeDtlList" taborder="8" left="10" top="520" height="264" autofittype="col" right="10" binddataset="ds_code_dtl" ondrop="GridCodeDtlList_ondrop" ondrag="GridCodeDtlList_ondrag">
           <Formats>
             <Format id="default">
               <Columns>
@@ -177,9 +177,13 @@ this.btnCreateChild_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	objDs.setColumn(nRow, "cd", cd + "_" + tmpCdOrd);
 	objDs.setColumn(nRow, "grpCdNm", grpCdNm);
 	objDs.setColumn(nRow, "cdNm", "임시상세코드명");
-	objDs.setColumn(nRow, "cdOrd", tmpCdOrd);
 	objDs.setColumn(nRow, "dpth", 1);
 	objDs.setColumn(nRow, "useYn", "Y");
+	
+	for(var i = 0 ; i < this.GridCodeDtlList.rowcount ; i++){
+		objDs.setColumn(i, "cdOrd", i + 1);
+	}	
+	
 };
 
 this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -216,14 +220,18 @@ this.btnDeleteDtl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 {
 	var objGridCode = this.GridCodeDtlList;		
 	var objDs = objGridCode.getBindDataset();
-	
+	console.log(this.GridCodeDtlList.rowcount);
 	objDs.deleteRow(objDs.rowposition);
+	
+	for(var i = 0 ; i < this.GridCodeDtlList.rowcount ; i++){
+		objDs.setColumn(i, "cdOrd", i + 1);
+	}	
 };
 
 
 this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("입력하신 코드를 추가하시겠습니까?")){
+	if(this.confirm("변경된 내용을 적용하시겠습니까?")){
 		var strSvcId    = "code_save";
 		var strSvcUrl   = this.application.Admin_svc + "::code/updateCode.do";
 		var inData      = "codeMstList=ds_code_mst:U codeDtlList=ds_code_dtl:U";
@@ -381,6 +389,28 @@ this.fn_search = function(){
 	}
 }
 
+
+this.GridCodeDtlList_ondrag = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.GridCodeDtlList.set_cursor("move");
+	if(e.row >= 0) {
+		e.userdata = e.row;
+		return true;
+	}
+	
+};
+
+this.GridCodeDtlList_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{	
+	this.GridCodeDtlList.set_cursor("default");
+	if(e.row >= 0 ) {
+		this.ds_code_dtl.moveRow(e.userdata, e.row);
+		
+		for(var i = 0 ; i < this.GridCodeDtlList.rowcount ; i++){
+			this.ds_code_dtl.setColumn(i, "cdOrd", i + 1);
+		}			
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_code_mst">
