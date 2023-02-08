@@ -44,8 +44,8 @@
                 <Cell col="4" text="expr:expsrStDt  ? expsrStDt + ' ~ ' + expsrEndDt : '상시'"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="6" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="7" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' : rgprNm + '('  + rgprId + ')'"/>
-                <Cell col="8" text="expr:mdfDtm ? mdfDtm : rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="7" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' :  ''" calendardisplaynulltype="none"/>
+                <Cell col="8" text="expr:mdfDtm ? mdfDtm : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none"/>
                 <Cell col="9" text="expr:dataset.getColumn(currow, 'expsrYn') == 'Y' ? '노출' : '미노출'"/>
               </Band>
             </Format>
@@ -228,11 +228,6 @@ this.PopupMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //등록 버튼
 this.Div01_btnAdd_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	/*this.parent.param = {
-		seqno : ""
-	}
-	this.parent.set_url("SystemMng::PopupMngDtl.xfdl");*/
-	
 	this.popCnt ++;
 	var oArg = {seqno : ""};
 	this.gfn_openPopup("popupMngPop"+this.popCnt, oArg, "SystemMng::PopupMngDtl.xfdl", this, null, null, true, true, null);
@@ -319,15 +314,6 @@ this.GridPopupList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 		this.popCnt ++;
 		var oArg = {seqno : obj.getBindDataset().getColumn(e.row, "seqno") ,cntsCl: obj.getBindDataset().getColumn(e.row, "cntsCl")};
 		this.gfn_openPopup("popupMngPop"+this.popCnt, oArg, "SystemMng::PopupMngDtl.xfdl", this, null, null, true, true, null);
-		/*var	seqno = obj.getBindDataset().getColumn(e.row, "seqno");
-		var cntsCl = obj.getBindDataset().getColumn(e.row, "cntsCl");
-		
-		this.parent.param = {
-			seqno : seqno ,
-			cntsCl: cntsCl
-		};
-		
-		this.parent.set_url("SystemMng::PopupMngDtl.xfdl");*/
 	}
 };
 /**************************************************************************
@@ -348,6 +334,9 @@ this.fn_list = function ()
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	//검색 권한 처리
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
 	
 	this.gfn_transaction(tranObj);		
 };
@@ -386,6 +375,8 @@ this.fn_delete = function ()
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
 	
 	this.gfn_transaction(tranObj);	
 	
@@ -432,6 +423,8 @@ this.fn_chgExpsr = function(gb, expsrYn){
 				isAsync : true,
 				menuSeq : this.getOwnerFrame().param.MENU_ID
 			};
+			
+			if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
 			
 			this.gfn_transaction(tranObj);
 			
