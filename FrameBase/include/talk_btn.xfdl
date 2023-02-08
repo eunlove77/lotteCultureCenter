@@ -45,7 +45,6 @@ this.fn_init = function(talkObj)
 
 this.Div00_btnTalk01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-obj.text
 	this.fn_talk_popup(obj.text, "AlrtMng::AlrtSendPopAT.xfdl", "03");
 };
 
@@ -82,6 +81,11 @@ this.Div00_btnTalk04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 
 this.fn_talk_popup = function(btnNm, pageUrl, alrtClCd)
 {
+	if(this.talkObj._this != undefined)
+	{
+		this.talkObj._this.fn_talk_check();
+	}
+
 	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.talkObj.trgtDs, this.talkObj.columnObj);
 
 	if(this[dsId].rowcount > 0){
@@ -102,13 +106,15 @@ this.fn_talk_popup = function(btnNm, pageUrl, alrtClCd)
 			,	menuSeq : this.talkObj.menuId
 			,	ds_rcv_obj : this[dsId]
 			};
-			this.gfn_openPopup("talkPop", oArg, pageUrl, this, 600, 800, true, true, null);
+			this.popCnt++;
+			this.gfn_openPopup("talkPop"+ this.popCnt, oArg, pageUrl, this, 600, 800, true, true, null);
 		}
 	}
 	else
 	{
 		this.alert(btnNm + " 발송할 회원을 선택해주세요");
 	}
-}]]></Script>
+}
+]]></Script>
   </Form>
 </FDL>
