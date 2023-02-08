@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="LectReg" width="1280" height="870" titletext="New Form" onload="LectReg_onload">
+  <Form id="LectReg" width="1280" height="870" titletext="New Form" onload="LectReg_onload" onsetfocus="LectReg_onsetfocus">
     <Layouts>
       <Layout height="870" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -316,10 +316,6 @@ this.LectReg_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.fn_data_list();
-	// 대기자 현황 -> 수강등록으로 넘어오는 회원정보 세팅
-	if(this.getOwnerFrame().param.hasOwnProperty('mbrNo')){
-		this.fn_set_waitMember();
-	}
 };
 
 this.fn_data_list = function()
@@ -389,6 +385,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			//년도
 			this.fn_year_add();
 			
+			// 대기자 현황 -> 수강등록으로 넘어오는 회원정보 세팅
+			if(new String(this.application.LECT_REG).valueOf() != "undefined"){
+				this.fn_set_waitMember();
+			}
+	
 			break;
 		case "setMember":
 			this.ds_tot_grde_list.clear();
@@ -422,6 +423,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div00.form.Div03.form.Button00.set_bottom(0);
 			this.Div00.form.Div03.form.Button01.set_top();
 			this.Div00.form.Div03.form.Button01.set_bottom(0);
+			
+			// 대기자 현황 -> 수강등록으로 넘어오는 수강정보 세팅
+			if(new String(this.application.LECT_REG).valueOf() != "undefined"){
+				this.fn_set_waitAtlct();
+			}
 			
 			break;
 		case "payment":
@@ -484,6 +490,35 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div00.form.Div03.form.Static00.set_text("▶ 에누리 전체 사용횟수: " + this.ds_all_dc_dtl.getColumn(0, "allUseCnt") + "/" + this.ds_all_dc_dtl.getColumn(0, "allDcCnt"));
 			
 			this.resetScroll();
+			
+			break;
+		case "setWaitAtlct":
+			this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div00.form.Div02.form.Grid00, 0);
+			this.Div00.form.Div04.set_visible(true);
+			this.Div00.form.Div04.set_height(210);
+			this.Div00.set_height(780);
+			this.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
+			this.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
+			
+			for(var i=0;i<this.ds_class_list.getRowCount();i++){
+				for(var j=0;j<this.ds_class_list.getColCount();j++){
+					this.ds_class_list.setColumn(i, this.ds_class_list.getColumnInfo(j).name, this.gfn_nvl(this.ds_class_list.getColumn(i, this.ds_class_list.getColumnInfo(j).name)));
+				}
+			}
+			
+			var lectStlmAmt = 0;
+			for(var i=0;i<this.ds_class_list.getRowCount();i++){
+				lectStlmAmt += this.ds_class_list.getColumn(i, "lectAmt") == "" ? 0 : Number(this.ds_class_list.getColumn(i, "lectAmt"));
+				lectStlmAmt += this.ds_class_list.getColumn(i, "optnAmt") == "" ? 0 : Number(this.ds_class_list.getColumn(i, "optnAmt"));
+				lectStlmAmt -= this.ds_class_list.getColumn(i, "oflnDcAmt") == "" ? 0 : Number(this.ds_class_list.getColumn(i, "oflnDcAmt"));
+				lectStlmAmt -= this.ds_class_list.getColumn(i, "grdeDcAmt") == "" ? 0 : Number(this.ds_class_list.getColumn(i, "grdeDcAmt"));
+				lectStlmAmt -= this.ds_class_list.getColumn(i, "cpnDcAmt") == "" ? 0 : Number(this.ds_class_list.getColumn(i, "cpnDcAmt"));
+				lectStlmAmt -= this.ds_class_list.getColumn(i, "optnDcAmt") == "" ? 0 : Number(this.ds_class_list.getColumn(i, "optnDcAmt"));
+			}
+			this.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
+			this.resetScroll();
+			
+			delete this.application.LECT_REG;
 			
 			break;
 	  }
@@ -646,6 +681,7 @@ this.Div00_Div02_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 			, mbrNo : this.ds_member_info.getColumn(0, "mbrNo")
 			, mbrGrdeCd : this.ds_member_info.getColumn(0, "mbrGrdeCd")
 			, itrstBrchCd : this.ds_member_info.getColumn(0, "itrstBrchCd")
+			, mvgBlstrCd : this.ds_member_info.getColumn(0, "mvgBlstrCd")
 		};
 		this.cnt++;
 		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::LectReg/LectSearch_popup.xfdl", this, 1280, 700, true, true, null);
@@ -1077,7 +1113,34 @@ this.fn_set_waitMember = function(){
 	var strSvcUrl   = this.application.Admin_svc + "::lectReg/setMember.do";
 	var inData      = "";
 	var outData     = "this.ds_grde_list=output1 this.ds_ex_grde_list=output2 this.ds_all_dc_dtl=output3 this.ds_member_info=output4";
-	var strArg      = "mbrNo=" + this.getOwnerFrame().param.mbrNo + " yy=" + this.getOwnerFrame().param.yy + " lectSmsterCd=" + this.getOwnerFrame().param.lectSmsterCd + " mbrGrdeCd=" + this.getOwnerFrame().param.mbrGrdeCd;
+	var strArg      = "mbrNo=" + this.application.LECT_REG.mbrNo + " yy=" + this.application.LECT_REG.yy + " lectSmsterCd=" + this.application.LECT_REG.lectSmsterCd + " mbrGrdeCd=" + this.application.LECT_REG.mbrGrdeCd;
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.getOwnerFrame().param.MENU_ID
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+// 대기자 현황 -> 수강등록으로 넘어오는 수강정보 세팅
+this.fn_set_waitAtlct = function(){
+	var strSvcId    = "setWaitAtlct";
+	var strSvcUrl   = this.application.Admin_svc + "::lectReg/setWaitAtlct.do";
+	var inData      = "";
+	var outData     = "this.ds_class_list=output1 this.ds_crdco_list=output2 this.ds_chngmthd_list=output3 this.ds_fmly_list=output4 this.ds_atlct_list=output5";
+	var strArg      = "atlctRsvNo=" + this.application.LECT_REG.atlctRsvNo + " actlAtlctNpleSeqno=" + this.application.LECT_REG.actlAtlctNpleSeqno;
+	strArg			+= " mbrNo=" + this.application.LECT_REG.mbrNo + " brchCd=" + this.application.LECT_REG.brchCd + " yy=" + this.application.LECT_REG.yy;
+	strArg			+= " lectSmsterCd=" + this.application.LECT_REG.lectSmsterCd + " lectCd=" + this.application.LECT_REG.lectCd;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	
@@ -1157,7 +1220,38 @@ this.fn_year_add = function()
 	}
 
 	this.ds_search.setColumn(0, "yy", year);
-}]]></Script>
+}
+
+this.LectReg_onsetfocus = function(obj:nexacro.Form,e:nexacro.SetFocusEventInfo)
+{
+	if(new String(this.application.LECT_REG).valueOf() != "undefined"){
+		// 강좌목록 초기화
+		this.ds_class_list.clearData();
+		
+		// 결제정보 초기화
+		this.Div00.form.Div04.set_visible(false);
+		this.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
+		this.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
+		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
+		this.Div00.form.Div04.form.Static03.set_text("");
+		this.Div00.form.Div04.form.CheckBox00.set_value(0);
+		
+		this.Div00.form.Div04.set_height(80);
+		this.Div00.set_height(670);
+		this.resetScroll();
+		
+		this.fn_data_list();
+	}
+ 
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_smster_list">
         <ColumnInfo>
@@ -1230,6 +1324,8 @@ this.fn_year_add = function()
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
           <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_tot_grde_list"/>
@@ -1308,7 +1404,7 @@ this.fn_year_add = function()
           <Column id="email" type="STRING" size="256"/>
           <Column id="emailAddrCd" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
-          <Column id="mvgBlstrVal" type="STRING" size="256"/>
+          <Column id="mvgBlstrCd" type="STRING" size="256"/>
           <Column id="itrstBrchCd" type="STRING" size="256"/>
           <Column id="smsRcvAgrYn" type="STRING" size="256"/>
           <Column id="joinCorsCd" type="STRING" size="256"/>
