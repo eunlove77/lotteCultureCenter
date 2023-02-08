@@ -36,6 +36,11 @@ this.flexDiv_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 			objBtn.index = i;
 			objBtn.brchCd = this.parent.brchList.getColumn(i, "brchCd");
 			objBtn.insertEventHandler("onclick", 0, this.fn_brch_click, this);
+			
+			if(this.parent.parent.parent.parent.parent.dataset.findRow("brchCd", objBtn.brchCd) > -1) 
+			{
+				this.fn_brch_click(objBtn);
+			}
 		}	
 	}
 };
@@ -52,6 +57,9 @@ this.fn_brch_click = function(obj)
 	}
 	else
 	{
+		var findRow = this.parent.parent.parent.parent.parent.dataset.findRow("brchCd", obj.brchCd);
+		if(findRow > -1) return;
+
 		obj.flag = 0;
 		obj.set_background("#ffffff");
 		for(var i=0; i<this.parent.brchCopyList.getRowCount(); i++)
