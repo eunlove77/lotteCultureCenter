@@ -71,12 +71,13 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="GridMainBannerList" taborder="4" left="10" top="250" binddataset="mainBannerDs" autofittype="col" right="10" bottom="30" nodatatext="검색결과 없음" oncellclick="GridMainBannerList_oncellclick" cssclass="grd_WF_TableType">
+        <Grid id="GridMainBannerList" taborder="4" left="10" top="250" binddataset="mainBannerDs" autofittype="col" right="10" bottom="30" nodatatext="검색결과 없음" oncellclick="GridMainBannerList_oncellclick" cssclass="grd_WF_TableType" ondrag="GridMainBannerList_ondrag" ondrop="GridMainBannerList_ondrop">
           <Formats>
             <Format id="default">
               <Columns>
                 <Column size="40"/>
-                <Column size="150"/>
+                <Column size="40"/>
+                <Column size="220"/>
                 <Column size="120"/>
                 <Column size="80"/>
                 <Column size="80"/>
@@ -90,23 +91,25 @@
               </Rows>
               <Band id="head">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" text="제목"/>
-                <Cell col="2" text="게시기간"/>
-                <Cell col="3" text="최초 등록자"/>
-                <Cell col="4" text="최초 등록일시"/>
-                <Cell col="5" text="최종 수정자"/>
-                <Cell col="6" text="최종 수정일시"/>
-                <Cell col="7" text="노출여부"/>
+                <Cell col="1" text="번호"/>
+                <Cell col="2" text="제목"/>
+                <Cell col="3" text="게시기간"/>
+                <Cell col="4" text="최초 등록자"/>
+                <Cell col="5" text="최초 등록일시"/>
+                <Cell col="6" text="최종 수정자"/>
+                <Cell col="7" text="최종 수정일시"/>
+                <Cell col="8" text="노출여부"/>
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="bind:tit" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="2" suppressalign="middle" text="expr:expsrStDt  ? expsrStDt + ' ~ ' + expsrEndDt : '상시'"/>
-                <Cell col="3" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="4" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="5" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' :rgprNm + '('  + rgprId + ')'"/>
-                <Cell col="6" text="expr:mdfDtm ? mdfDtm : rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="7" text="expr:dataset.getColumn(currow, 'expsrYn') == 'Y' ? '노출' : '미노출'"/>
+                <Cell col="1" text="bind:rnum"/>
+                <Cell col="2" text="bind:tit" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="3" suppressalign="middle" text="expr:expsrStDt  ? expsrStDt + ' ~ ' + expsrEndDt : '상시'"/>
+                <Cell col="4" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="5" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="6" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' :  ''" calendardisplaynulltype="none"/>
+                <Cell col="7" text="expr:mdfDtm ? mdfDtm : ''" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none"/>
+                <Cell col="8" text="expr:dataset.getColumn(currow, 'expsrYn') == 'Y' ? '노출' : '미노출'"/>
               </Band>
             </Format>
           </Formats>
@@ -138,6 +141,8 @@
       <Dataset id="mainBannerDs">
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="sortSeqno" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
           <Column id="expsrStDt" type="STRING" size="256"/>
           <Column id="expsrEndDt" type="STRING" size="256"/>
@@ -173,6 +178,23 @@
       <Dataset id="mainBannerDs_format">
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
+          <Column id="tit" type="STRING" size="256"/>
+          <Column id="expsrStDt" type="STRING" size="256"/>
+          <Column id="expsrEndDt" type="STRING" size="256"/>
+          <Column id="alwsExpsrYn" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
+          <Column id="chk" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="mainBannerDs_update">
+        <ColumnInfo>
+          <Column id="seqno" type="STRING" size="256"/>
+          <Column id="rnum" type="STRING" size="256"/>
+          <Column id="sortSeqno" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
           <Column id="expsrStDt" type="STRING" size="256"/>
           <Column id="expsrEndDt" type="STRING" size="256"/>
@@ -306,6 +328,7 @@ this.Div01_btnPerminN_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 	this.fn_chgExpsr("미노출", "N");
 };
 
+//전체버튼
 this.permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
 	if(obj.isChecked())
@@ -323,12 +346,104 @@ this.permitDiv_permitAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.Click
 //그리드 상세 페이지 이동
 this.GridMainBannerList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 1)
+	if(e.cell == 2)
 	{
 		this.popCnt ++;
 		var oArg = { seqno : obj.getBindDataset().getColumn(e.row, "seqno")};
 		
 		this.gfn_openPopup("mainBannerMngDtlPop"+this.popCnt, oArg, "SystemMng::MainBannerMngDtl.xfdl", this, null, null, true, true, null);
+	}
+};
+
+//정렬순번 드래그
+this.GridMainBannerList_ondrag = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.GridMainBannerList.set_cursor("move");
+	if(e.row >= 0) {
+		e.userdata = e.row;
+		return true;
+	}
+};
+
+//정렬순번 드랍
+this.GridMainBannerList_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.GridMainBannerList.set_cursor("default");
+	if((this.mainBannerDs.getColumn(e.userdata, "seqno") != this.mainBannerDs.getColumn(e.row, "seqno")))
+		{
+		
+		if(confirm("정렬 순서를 변경하시겠습니까?")) 
+		{
+			var prevSeqno = this.mainBannerDs.getColumn(e.userdata, "seqno");
+			var prevSortNo = this.mainBannerDs.getColumn(e.userdata, "sortSeqno");
+			var prevRn = this.mainBannerDs.getColumn(e.userdata, "rnum");
+			var prevTitNm = this.mainBannerDs.getColumn(e.userdata, "tit");
+			var prevExpsrStDT = this.mainBannerDs.getColumn(e.userdata, "expsrStDt");
+			var prevExpsrEndDT = this.mainBannerDs.getColumn(e.userdata, "expsrEndDt");
+			var prevExpsrYn = this.mainBannerDs.getColumn(e.userdata, "expsrYn");
+			var prevRgprId = this.mainBannerDs.getColumn(e.userdata, "rgprId");
+			var prevRgprDtm = this.mainBannerDs.getColumn(e.userdata, "rgprDtm");
+			var prevMdfId = this.mainBannerDs.getColumn(e.userdata, "mdfId");
+			var prevMdfDtm = this.mainBannerDs.getColumn(e.userdata, "mdfDtm");
+	
+			var nextSeqno = this.mainBannerDs.getColumn(e.row, "seqno");
+			var nextSortNo = this.mainBannerDs.getColumn(e.row, "sortSeqno");
+			var nextRn = this.mainBannerDs.getColumn(e.row, "rnum");
+			var nextTitNm = this.mainBannerDs.getColumn(e.row, "tit");
+			var nextExpsrStDT = this.mainBannerDs.getColumn(e.row, "expsrStDt");
+			var nextExpsrEndDT = this.mainBannerDs.getColumn(e.row, "expsrEndDt");
+			var nextExpsrYn = this.mainBannerDs.getColumn(e.row, "expsrYn");
+			var nextRgprId = this.mainBannerDs.getColumn(e.row, "rgprId");
+			var nextRgprDtm = this.mainBannerDs.getColumn(e.row, "rgprDtm");
+			var nextMdfId = this.mainBannerDs.getColumn(e.row, "mdfId");
+			var nextMdfDtm = this.mainBannerDs.getColumn(e.row, "mdfDtm");
+			
+			
+			this.mainBannerDs.setColumn(e.row, "seqno", prevSeqno); 
+			this.mainBannerDs.setColumn(e.row, "sortSeqno", nextSortNo); 
+			this.mainBannerDs.setColumn(e.row, "rnum", nextRn); 
+			this.mainBannerDs.setColumn(e.row, "tit", nextTitNm);
+			this.mainBannerDs.setColumn(e.row, "expsrStDt", nextExpsrStDT); 
+			this.mainBannerDs.setColumn(e.row, "expsrEndDt", nextExpsrEndDT); 
+			this.mainBannerDs.setColumn(e.row, "expsrYn", nextExpsrYn); 
+			this.mainBannerDs.setColumn(e.row, "rgprId", nextRgprId); 
+			this.mainBannerDs.setColumn(e.row, "rgprDtm", nextRgprDtm); 
+			this.mainBannerDs.setColumn(e.row, "mdfId", nextMdfId); 
+			this.mainBannerDs.setColumn(e.row, "mdfDtm", nextMdfDtm); 
+		
+			this.mainBannerDs.setColumn(e.userdata, "seqno", nextSeqno);
+			this.mainBannerDs.setColumn(e.userdata, "sortSeqno", prevSortNo);
+			this.mainBannerDs.setColumn(e.userdata, "rnum", prevRn);
+			this.mainBannerDs.setColumn(e.userdata, "tit", prevTitNm);
+			this.mainBannerDs.setColumn(e.userdata, "expsrStDt", prevExpsrStDT); 
+			this.mainBannerDs.setColumn(e.userdata, "expsrEndDt", prevExpsrEndDT); 
+			this.mainBannerDs.setColumn(e.userdata, "expsrYn", prevExpsrYn); 
+			this.mainBannerDs.setColumn(e.userdata, "rgprId", prevRgprId); 
+			this.mainBannerDs.setColumn(e.userdata, "rgprDtm", prevRgprDtm); 
+			this.mainBannerDs.setColumn(e.userdata, "mdfId", prevMdfId); 
+			this.mainBannerDs.setColumn(e.userdata, "mdfDtm", prevMdfDtm); 
+			
+			this.mainBannerDs_update.clearData();
+			this.mainBannerDs_update.copyRow(this.mainBannerDs_update.addRow(), this.mainBannerDs, e.row);
+			this.mainBannerDs_update.copyRow(this.mainBannerDs_update.addRow(), this.mainBannerDs, e.userdata);
+			
+			var tranObj = {
+				strSvcId : "updateSortList",
+				strSvcUrl : this.application.Admin_svc + "::/main/sort/updateSort.do",
+				inData : "sortList=mainBannerDs_update",
+				outData : "mainBannerDs=sortList",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			}
+			
+			//저장권한 처리
+			if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+			this.gfn_transaction(tranObj);
+			
+			this.mainBannerDs.set_rowposition(e.row);
+		}
 	}
 };
 
@@ -352,6 +467,7 @@ this.fn_list = function (page)
 	tranObj.isAsync     = true;
 	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
 	
+	//검색 권한 처리
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
 	
 	this.gfn_transaction(tranObj);		
@@ -454,7 +570,7 @@ this.fn_chgExpsr = function(gb, expsrYn){
 				isAsync : true,
 				menuSeq : this.getOwnerFrame().param.MENU_ID
 			};
-			
+			if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
 			this.gfn_transaction(tranObj);
 			
 		}
@@ -482,6 +598,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		/*if(this.mainBannerDs.rowcount < 1){
 			this.alert("조회된 결과가 없습니다.");
 		}*/
+		break;
+		
+	case "updateSortList":
+		this.reload();
 		break;
 		
 	case "expsrYn":
@@ -514,7 +634,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	}
 };
 
-this.orderType = "desc";
-]]></Script>
+this.orderType = "desc";]]></Script>
   </Form>
 </FDL>

@@ -3,11 +3,11 @@
   <Form id="PopupMngDtl" width="1280" height="650" titletext="New Form" onload="PopupMngDtl_onload">
     <Layouts>
       <Layout height="650" mobileorientation="landscape" width="1280">
-        <Div id="Div00" taborder="0" text="Div00" left="10" top="20" height="540" right="10">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="30" height="600" right="10">
           <Layouts>
             <Layout>
-              <Static id="Static01" taborder="0" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="1" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
-              <Div id="Div00" taborder="1" text="Div01" left="0" top="57" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Static id="Static01" taborder="0" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="50" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="5" width="200"/>
+              <Div id="Div00" taborder="1" text="Div01" left="0" top="87" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="게시기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
@@ -335,19 +335,19 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" cssclass="div_WF_CompWrap" right="0" height="146">
+              <Div id="Div03" taborder="4" text="Div01" left="0" top="Div02:-1" cssclass="div_WF_CompWrap" right="0" height="170">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="WEB 이미지 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Div id="Div00" taborder="1" text="Div00" left="111" top="3" width="1077" height="141" url="FrameBase::include/file_upload.xfdl" async="true"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="111" top="6" width="1077" url="FrameBase::include/file_upload.xfdl" async="true" height="156"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div04" taborder="5" text="Div01" left="0" top="Div03:-1" height="146" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div04" taborder="5" text="Div01" left="0" top="Div03:-1" height="170" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="Mobile 이미지 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Div id="Div00" taborder="1" text="Div00" left="111" top="3" width="1077" height="141" url="FrameBase::include/file_upload.xfdl" async="true"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="111" top="6" width="1077" url="FrameBase::include/file_upload.xfdl" async="true" height="156"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -418,11 +418,12 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Static id="txtMenuNm" taborder="10" left="10" top="0" height="32" right="10" cssclass="stc_WF_TxtMenu" text="메인팝업 등록" onclick="Div00_txtMenuNm_onclick"/>
+              <Static id="txtMenuNm" taborder="10" left="0" top="0" height="32" right="10" cssclass="stc_WF_TxtMenu" text="메인팝업 관리" onclick="Div00_txtMenuNm_onclick"/>
+              <Static id="Static00" taborder="11" text="▶ 메인팝업 등록" left="0" top="50" width="130" cssclass="sta_WF_TitGray" height="17"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="1" text="Div03" left="45" top="Div00:13" height="55" right="45">
+        <Div id="Div03" taborder="1" text="Div03" left="45" top="Div00:3" height="55" right="45">
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="21" cssclass="btn_WF_Weak" fittocontents="width" onclick="Div03_btnCnl_onclick"/>
@@ -529,6 +530,10 @@ this.PopupMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.parent.seqno != ""){	
 		this.ds_detail.setColumn(0, "seqno", this.parent.seqno);
 		this.ds_detail.setColumn(0, "cntsCl", this.parent.cntsCl);
+		
+		this.Div00.form.Static00.set_text("▶ 메인팝업 상세/수정");
+		this.Div03.form.btnSave.set_text("수정");
+		
 		this.fn_detail();
 		this.fn_set();
 		this.resetScroll
@@ -542,7 +547,7 @@ this.PopupMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 			fileExtn : "jpg,jpeg,gif,png",
 			fileMaxCnt : 1,
 			fileMaxSize : 10,
-			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 5개만 등록 가능합니다.)",
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 			callbackFunc : this.fn_save
 		}
 		
@@ -584,8 +589,6 @@ this.PopupMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	{
 		this.editorArr[0].editorMbilObj.reload();
 	}
-	
-	console.log("-----------ed");
 	
 };
 
@@ -753,7 +756,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			fileExtn : "jpg,jpeg,gif,png",
 			fileMaxCnt : 1,
 			fileMaxSize : 10,
-			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 5개만 등록 가능합니다.)",
+			fileTxt : "※ 500 * 500 사이즈에 맞게 등록해주세요 (jpg, jpeg, gif, png 최대 10MB 1개만 등록 가능합니다.)",
 			callbackFunc : this.fn_save
 		}
 		
@@ -792,8 +795,8 @@ this.Div00_Div08_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.It
 	
 	if(e.postvalue == 'IMAGE')
 	{
-		this.Div00.form.Div03.set_height(146);		//web이미지 등록
-		this.Div00.form.Div04.set_height(146);		//mbil이미지 등록
+		this.Div00.form.Div03.set_height(170);		//web이미지 등록
+		this.Div00.form.Div04.set_height(170);		//mbil이미지 등록
 		
 		this.Div00.form.Div05.set_height(0); //web컨텐츠 등록
 		this.Div00.form.Div06.set_height(0); //mbil컨텐츠 등록
@@ -820,8 +823,8 @@ this.fn_set = function() {
 	
 	if(this.parent.cntsCl == "IMAGE")
 	{
-		this.Div00.form.Div03.set_height(146);		//web이미지 등록
-		this.Div00.form.Div04.set_height(146);		//mbil이미지 등록
+		this.Div00.form.Div03.set_height(170);		//web이미지 등록
+		this.Div00.form.Div04.set_height(170);		//mbil이미지 등록
 		
 		this.Div00.form.Div05.set_height(0); //web컨텐츠 등록
 		this.Div00.form.Div06.set_height(0); //mbil컨텐츠 등록
