@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="AlrtSendPop" width="710" height="920" titletext="알림톡 발송" onload="AlrtSendPop_onload">
+  <Form id="AlrtSendPop" width="710" height="960" titletext="알림톡 발송" onload="AlrtSendPop_onload" scrolltype="both">
     <Layouts>
-      <Layout height="920" width="710">
+      <Layout height="960" width="710">
         <Static id="Static00" taborder="0" text="▶ 발송설정" left="10" top="9" width="70" height="21" cssclass="sta_WF_TitGray"/>
         <Div id="row00" taborder="1" left="10" top="45" height="33" right="10">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0" minwidth="535" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="발송구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -224,9 +224,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="치환코드" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Div id="tempEditListDiv" taborder="1" text="Div00" left="109" top="0" right="0" bottom="0">
+                    <Div id="tempEditListDiv" taborder="1" left="Static00:5" top="5" text="" right="0" bottom="0">
                       <Layouts>
-                        <Layout/>
+                        <Layout type="horizontal" flexwrap="wrap" horizontalgap="5" verticalgap="5" flexcrossaxisalign="start" flexcrossaxiswrapalign="start" flexmainaxisalign="start" spacing=""/>
                       </Layouts>
                     </Div>
                   </Layout>
@@ -284,8 +284,14 @@
           </Formats>
         </Grid>
         <Button id="btnDelete" taborder="11" text="삭제" top="660" height="21" cssclass="btn_WF_High" fittocontents="width" onclick="Div03_btnDelete_onclick" right="10" width="83"/>
-        <Button id="btnSend" taborder="13" text="전송" top="885" height="30" cssclass="btn_WF_Medium" right="10" width="101" onclick="btnSend_onclick"/>
-        <Button id="btnCancel" taborder="12" text="취소" top="885" height="30" cssclass="btn_WF_High" right="btnSend:5" width="100" onclick="btnCancel_onclick"/>
+        <Div id="Div01" taborder="12" text="Div01" top="gridRcvObjList:10" height="65" right="10" width="210">
+          <Layouts>
+            <Layout>
+              <Button id="btnSend" taborder="1" text="전송" height="30" cssclass="btn_WF_Medium" right="3" width="101" top="0" onclick="Div01_btnSend_onclick"/>
+              <Button id="btnCancel" taborder="0" text="취소" height="30" cssclass="btn_WF_High" right="btnSend:5" width="100" top="0" onclick="Div01_btnCancel_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -351,7 +357,7 @@ this.templateRadioObj_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemC
 			var row3Height = 33;
 			var nRow = -1;
 			
-			this.row03.set_height( row3Height );
+			//this.row03.set_height( row3Height );
 						
 			arrReplaceItem.forEach((element) => {
 				if(!arrUnique.includes(element) && !exceptItem.includes(element)){
@@ -366,13 +372,13 @@ this.templateRadioObj_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemC
 				nRow = this.ds_replace_val_list.addRow();
 				this.ds_replace_val_list.setColumn(nRow, "replaceEditCd", arrUnique[j]);
 				
-				if(j > 0 && j % 4 == 0){
-					editLeft = 5;
-					editTop += editHeight + 5;
-					
-					row3Height += editHeight + 5;
-					this.row03.set_height( row3Height );
-				}
+// 				if(j > 0 && j % 4 == 0){
+// 					editLeft = 5;
+// 					editTop += editHeight + 5;
+// 					
+// 					row3Height += editHeight + 5;
+// 					this.row03.set_height( row3Height );
+// 				}
 				
 				objComp = new Edit();
 				objComp.init("", editLeft, editTop, editWidth, editHeight );
@@ -412,7 +418,7 @@ this.Div03_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 	}
 };
 
-this.btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div01_btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var radioRsvSndYn = this.row00.form.Div00.form.radioRsvSndYn.value;
 	var sndDt = this.row00.form.Div00.form.sndDt.value;
@@ -547,8 +553,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	}
 };
 
-
-this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.Div01_btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.close();
 };

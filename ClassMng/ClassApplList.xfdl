@@ -30,11 +30,9 @@
               </Div>
               <Static id="Static00" taborder="1" text="▶ 신청자 목록" left="0" top="83" width="90" height="20" cssclass="sta_WF_TitGray"/>
               <Static id="Static01" taborder="2" text="(0개)" left="85" top="83" width="40" height="20" cssclass="sta_WF_TitGray"/>
-              <Button id="Button05" taborder="3" text="알림톡" top="73" height="30" cssclass="btn_WF_Medium" right="0" width="60" onclick="Div00_Button05_onclick"/>
-              <Button id="Button00_00" taborder="4" text="문자발송" top="73" width="80" height="30" cssclass="btn_WF_Medium" right="Button05:10" onclick="Div00_Button00_00_onclick"/>
-              <Button id="Button04" taborder="5" text="Print" top="73" height="30" width="60" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10" onclick="Div00_Button04_onclick"/>
-              <Button id="Button03" taborder="6" text="강사 출석부" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div00_Button03_onclick"/>
-              <Grid id="Grid00" taborder="7" left="0" top="113" right="0" bottom="0" binddataset="ds_atlct_list" oncelldblclick="Div00_Grid00_oncelldblclick">
+              <Button id="Button04" taborder="3" text="Print" top="73" height="30" width="60" wordWrap="char" cssclass="btn_WF_Medium" right="1" onclick="Div00_Button04_onclick"/>
+              <Button id="Button03" taborder="4" text="강사 출석부" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div00_Button03_onclick"/>
+              <Grid id="Grid00" taborder="5" left="0" top="113" right="0" bottom="0" binddataset="ds_atlct_list" oncelldblclick="Div00_Grid00_oncelldblclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -119,6 +117,7 @@
                   </Format>
                 </Formats>
               </Grid>
+              <Div id="Div03" taborder="6" text="Div03" top="73" width="390" height="40" url="FrameBase::include/talk_btn.xfdl" formscrolltype="none" left="140"/>
             </Layout>
           </Layouts>
         </Div>
@@ -155,6 +154,21 @@ this.ClassApplList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.ds_class_dtl.copyData(this.parent.parent.Tabpage1.form.ds_class_dtl);
 	this.ds_class_dtl.setColumn(0, "yy", this.ds_class_dtl.getColumn(0, "yy").split("||")[0]);
 	this.fn_data();
+	
+	//톡전송 버튼 세팅
+	var talkObj = {
+		columnObj : {
+						mbrNo : "mbrNo"		//trgtDs의 회원번호 컬럼 매칭
+					,	korNm : "korNm"		//trgtDs의 회원명 컬럼 매칭
+					,	hpNo : "hpNo"		//trgtDs의 수신번호 컬럼 매칭
+					,	smsRcvAgrYn : "smsRcvAgrYn"	//trgtDs의 수신여부 컬럼 매칭
+					},
+		trgtDs : this.ds_rcv_obj,	
+		menuId : this.menuSeq,
+		_this : this		//별도의 유효성체크 함수가 있는 경우 선언하고 fn_talk_check 함수 생성
+	}
+	this.Div00.form.Div03.form.fn_init(talkObj);	//톡전송 버튼div의 init 실행
+
 };
 
 // 초기 데이터 세팅
@@ -253,12 +267,13 @@ this.Div00_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	this.gfn_openPopup("ClassAttendanceListPopup" + this.popCnt, arrArguments, "ClassMng::ClassAttendanceListPopup.xfdl", this, 1280, 720, true, true, null);
 };
 
-// 알림톡
-this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+// 톡발송 유효성 함수
+this.fn_talk_check = function()
 {
 	var chkYn = false;
 	var nRow = -1;
 	this.ds_rcv_obj.clearData();
+	this.ds_rcv_obj.checkarray = new Array();
 	for(var i=0; i<this.ds_atlct_list.getRowCount(); i++){
 		if(this.ds_atlct_list.checkarray[i] > 0){
 			chkYn = true;
@@ -277,67 +292,10 @@ this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 				this.ds_rcv_obj.setColumn(nRow, "korNm", this.ds_atlct_list.getColumn(i, "mbrNm"));
 				this.ds_rcv_obj.setColumn(nRow, "hpNo", this.ds_atlct_list.getColumn(i, "hp"));
 				this.ds_rcv_obj.setColumn(nRow, "smsRcvAgrYn", this.ds_atlct_list.getColumn(i, "smsRcvAgrYn"));
+				this.ds_rcv_obj.checkarray[nRow] = 1;
 			}
 		}
 	}
-	
-	if(!chkYn){
-		alert("대상을 선택하세요.");
-	}else{
-		var oArg = {			
-			alrtClCd : "03"	
-		,	menuSeq : this.menuSeq
-		,	ds_rcv_obj : this.ds_rcv_obj
-		};
-		
-		this.gfn_openPopup("talkPop" + this.popCnt, oArg, "AlrtMng::AlrtSendPopAT.xfdl", this, 600, 800, true, true, null);
-	}
-};
-
-// 문자발송
-this.Div00_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var chkYn = false;
-	var smsYn = false;
-	var nRow = -1;
-	this.ds_rcv_obj.clearData();
-	for(var i=0; i<this.ds_atlct_list.getRowCount(); i++){
-		if(this.ds_atlct_list.checkarray[i] > 0){
-			chkYn = true;
-			var duplYn = false;
-			if(nRow > -1){
-				for(var j=0;j<=this.ds_rcv_obj.getRowCount();j++){
-					if(this.ds_rcv_obj.getColumn(j, "mbrNo") == this.ds_atlct_list.getColumn(i, "mbrNo")){
-						duplYn = true;
-					}
-				}
-			}
-			
-			if(this.ds_atlct_list.getColumn(i, "smsRcvAgrYn") == "Y"){
-				smsYn = true;
-			}
-			
-			if(!duplYn && this.ds_atlct_list.getColumn(i, "smsRcvAgrYn") == "Y"){
-				nRow = this.ds_rcv_obj.addRow();
-				this.ds_rcv_obj.setColumn(nRow, "mbrNo", this.ds_atlct_list.getColumn(i, "mbrNo"));
-				this.ds_rcv_obj.setColumn(nRow, "korNm", this.ds_atlct_list.getColumn(i, "mbrNm"));
-				this.ds_rcv_obj.setColumn(nRow, "hpNo", this.ds_atlct_list.getColumn(i, "hp"));
-				this.ds_rcv_obj.setColumn(nRow, "smsRcvAgrYn", this.ds_atlct_list.getColumn(i, "smsRcvAgrYn"));
-			}
-		}
-	}
-	
-	if(!chkYn || !smsYn){
-		alert("대상을 선택하세요.");
-		return;
-	}
-	
-	var oArg = {			
-		menuSeq : this.menuSeq
-	,	ds_rcv_obj : this.ds_rcv_obj
-	};
-	
-	this.gfn_openPopup("talkPop" + this.popCnt, oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
 };
 ]]></Script>
     <Objects>

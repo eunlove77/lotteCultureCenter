@@ -1300,8 +1300,6 @@ this.Div00_Div00_Div00_Div05_Button01_onclick = function(obj:nexacro.Button,e:ne
 		{
 			delChk.push(i);
 		}
-		
-		this.ds_teacher_list.checkarray[i] = 0;
 	}
 	
 	if(delChk.length == 0)
@@ -1310,13 +1308,22 @@ this.Div00_Div00_Div00_Div05_Button01_onclick = function(obj:nexacro.Button,e:ne
 	}
 	else
 	{
-		this.ds_teacher_list.deleteMultiRows(delChk);
-	
-		if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+		if(confirm("삭제하시겠습니까?")) 
 		{
-			this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+			this.ds_teacher_list.deleteMultiRows(delChk);
+		
+			if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+			{
+				this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+			}
+			this.Div00.form.Div00.form.Div00.form.Div05.form.Grid00.setCellProperty("head", 0, "text", 0);
+			
+			for(var i=0; i<this.ds_teacher_list.getRowCount(); i++)
+			{
+				this.ds_teacher_list.checkarray[i] = 0;
+			}
+			this.Div00.form.Div00.form.Div00.form.Div05.form.Grid00.redrawExprCell(); 
 		}
-		this.Div00.form.Div00.form.Div00.form.Div05.form.Grid00.setCellProperty("head", 0, "text", 0);
 	}
 };
 

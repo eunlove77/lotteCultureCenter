@@ -142,6 +142,7 @@ this.gfn_removeLgnInfo = function()
 	nexacro.removePrivateProfile("name");
 	nexacro.removePrivateProfile("id");
 	nexacro.removePrivateProfile("athrCd");
+	nexacro.removePrivateProfile("vdiYn");
 	nexacro.removePrivateProfile("coprMemstrNo");
 	
 	window.location.href=window.location.href;
@@ -677,6 +678,12 @@ this.gfn_btn_auth = function(menuSeq, authType){
 		if(application.gdsMenu.getColumn(i, "menuSeq") == menuSeq){
 			authYn = application.gdsMenu.getColumn(i, authType);
 		}
+	}
+	
+	if(authType == "accXlsDwldYn" && nexacro.getPrivateProfile("vdiYn") != "Y")
+	{
+		this.alert("VDI망에서 다운 가능합니다.");
+		return true;
 	}
 	
 	if(authYn != "Y") { 

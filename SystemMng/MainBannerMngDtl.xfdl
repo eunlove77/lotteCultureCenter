@@ -407,9 +407,9 @@
             </Layout>
           </Layouts>
         </Div>
-        <Static id="txtMenuNm" taborder="2" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu" text="메인배너 등록"/>
-        <Static id="Static00" taborder="3" text="메인배너 등록" left="30" top="81" width="130" cssclass="sta_WF_TitGray" height="17"/>
-        <Static id="Static01" taborder="4" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="81" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="25" width="200"/>
+        <Static id="txtMenuNm" taborder="2" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu" text="메인배너 관리"/>
+        <Static id="Static00" taborder="3" text="▶ 메인배너 등록" left="10" top="81" width="130" cssclass="sta_WF_TitGray" height="17"/>
+        <Static id="Static01" taborder="4" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="81" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="10" width="200"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -472,6 +472,9 @@ this.MainBannerMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	if(this.parent.seqno != "")
 	{	
 		this.ds_detail.setColumn(0, "seqno", this.parent.seqno);
+		this.Static00.set_text("▶ 메인배너 상세/수정");
+		this.Div03.form.btnSave.set_text("수정");
+		
 		this.fn_detail();
 	}
 	else
@@ -509,37 +512,67 @@ this.MainBannerMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	
 };
 
+//저장 버튼
 this.Div03_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.fn_checkValidation();
 };
 
+//취소 버튼
 this.Div03_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.fn_list();
 };
 
+//상시 처리
+this.Div00_Div00_CheckBox01_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)
+{
+	var value = this.Div00.form.Div00.form.CheckBox01.value;
+	if(value == 'N')
+	{
+		this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(true); //캘린더 키인 막기
+		this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(true); //캘린더 키인 막기
+		this.Div00.form.Div00.form.Combo00.set_readonly(false);
+		this.Div00.form.Div00.form.Combo01.set_readonly(false);
+		this.Div00.form.Div00.form.Combo02.set_readonly(false);
+		this.Div00.form.Div00.form.Combo03.set_readonly(false);
+	}
+	else
+	{
+		this.Div00.form.Div00.form.strtDtm.calendaredit.set_value(''); //캘린더 키인 막기
+		this.Div00.form.Div00.form.endDtm.calendaredit.set_value(''); //캘린더 키인 막기
+		this.Div00.form.Div00.form.Combo00.set_index(0);
+		this.Div00.form.Div00.form.Combo01.set_index(0);
+		this.Div00.form.Div00.form.Combo02.set_index(0);
+		this.Div00.form.Div00.form.Combo03.set_index(0);
+		
+		this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(false); //캘린더 키인 막기
+		this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(false); //캘린더 키인 막기
+		this.Div00.form.Div00.form.Combo00.set_readonly(true);
+		this.Div00.form.Div00.form.Combo01.set_readonly(true);
+		this.Div00.form.Div00.form.Combo02.set_readonly(true);
+		this.Div00.form.Div00.form.Combo03.set_readonly(true);
+	}
+};
+
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
-
+//조회
 this.fn_list = function()
 {
 	this.opener.components[0].form.fn_list();
 	this.close();
 }
-
+//저장
 this.fn_save = function (_this)
 {		
-	//_this.thnlFileUpload.isPass
 	if(_this.atchFileUploadArr[0].isPass && _this.atchFileUploadArr[1].isPass)
 	{
 		_this.ds_detail.setColumn(0, "webImgFileId", _this.atchFileUploadArr[0].atchFileId);
-		//this.alert("1번파일 아이디" + _this.atchFileUploadArr[0].atchFileId);
 		_this.ds_detail.setColumn(0, "mbilImgFileId", _this.atchFileUploadArr[1].atchFileId);
-		//this.alert("2번파일 아이디" + _this.atchFileUploadArr[1].atchFileId);
-		
-		var tranObj = {
+	
+	var tranObj = {
 			strSvcId : "save",
 			strSvcUrl : _this.application.Admin_svc + "::main/insertMainBanner.do?svcId=save",
 			inData : "data=ds_detail",
@@ -551,12 +584,12 @@ this.fn_save = function (_this)
 		}
 		
 		//if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
-	
 		_this.gfn_transaction(tranObj);
 	}
 	
 };
 
+//유효성 체크
 this.fn_checkValidation = function(){
 	
 	var stDt = parseInt(this.Div00.form.Div00.form.strtDtm.value);
@@ -611,7 +644,7 @@ this.fn_checkValidation = function(){
 	}
 	else
 	{								
-		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		if(this.confirm("입력하신 내용으로 저장하시겠습니까"))
 		{
 			this.atchFileUploadArr[0].fn_upload(); 
 			this.atchFileUploadArr[1].fn_upload(); 
@@ -619,6 +652,7 @@ this.fn_checkValidation = function(){
 	}
 }
 
+//상세
 this.fn_detail = function ()
 {	
 	var tranObj = {
@@ -636,6 +670,7 @@ this.fn_detail = function ()
 	
 };
 
+//콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
 	// 에러 시 화면 처리 내역
@@ -701,35 +736,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.alert("저장되었습니다.");
 			this.fn_list();
 		break;
-	}
-};
-this.Div00_Div00_CheckBox01_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)
-{
-	var value = this.Div00.form.Div00.form.CheckBox01.value;
-	if(value == 'N')
-	{
-		this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(true); //캘린더 키인 막기
-		this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(true); //캘린더 키인 막기
-		this.Div00.form.Div00.form.Combo00.set_readonly(false);
-		this.Div00.form.Div00.form.Combo01.set_readonly(false);
-		this.Div00.form.Div00.form.Combo02.set_readonly(false);
-		this.Div00.form.Div00.form.Combo03.set_readonly(false);
-	}
-	else
-	{
-		this.Div00.form.Div00.form.strtDtm.calendaredit.set_value(''); //캘린더 키인 막기
-		this.Div00.form.Div00.form.endDtm.calendaredit.set_value(''); //캘린더 키인 막기
-		this.Div00.form.Div00.form.Combo00.set_index(0);
-		this.Div00.form.Div00.form.Combo01.set_index(0);
-		this.Div00.form.Div00.form.Combo02.set_index(0);
-		this.Div00.form.Div00.form.Combo03.set_index(0);
-		
-		this.Div00.form.Div00.form.strtDtm.calendaredit.set_visible(false); //캘린더 키인 막기
-		this.Div00.form.Div00.form.endDtm.calendaredit.set_visible(false); //캘린더 키인 막기
-		this.Div00.form.Div00.form.Combo00.set_readonly(true);
-		this.Div00.form.Div00.form.Combo01.set_readonly(true);
-		this.Div00.form.Div00.form.Combo02.set_readonly(true);
-		this.Div00.form.Div00.form.Combo03.set_readonly(true);
 	}
 };
 ]]></Script>

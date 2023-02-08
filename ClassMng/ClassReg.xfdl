@@ -787,7 +787,7 @@
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강좌키워드" left="0" top="0" width="110" height="98" cssclass="sta_WF_TableLabel"/>
                                 <Edit id="Edit00" taborder="1" left="Static00:6" top="5" height="25" right="6" maxlength="100"/>
-                                <Static id="Static01" taborder="2" text="쉼표(,)를 구분자로 사용하여 최대 N개까지 등록이 가능합니다." left="Static00:0" top="Edit00:10" width="356" height="21" cssclass="sta_WF_CompText"/>
+                                <Static id="Static01" taborder="2" text="쉼표(,)를 구분자로 사용하여 최대 100자까지 등록이 가능합니다." left="Static00:0" top="Edit00:10" width="356" height="21" cssclass="sta_WF_CompText"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -2280,6 +2280,7 @@ this.Div00_Div00_00_00_00_00_Div00_Div03_Grid00_oncellclick = function(obj:nexac
 		else
 		{
 			this.ds_scheduleTemp_list.deleteRow(e.row);
+			this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div03.form.Grid00.scrollBy(0, -1);
 		}
 	}
 };
@@ -2441,6 +2442,7 @@ this.Div00_Div00_00_00_00_01_Div00_Div02_Grid00_oncellclick = function(obj:nexac
 		else
 		{
 			this.ds_option_list.deleteRow(e.row);
+			this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.scrollBy(0, -1);
 		}
 	}
 };
@@ -2470,6 +2472,7 @@ this.Div00_Div00_00_00_00_01_00_Div00_Div02_Grid00_oncellclick = function(obj:ne
 		else
 		{
 			this.ds_unusl_list.deleteRow(e.row);
+			this.Div00.form.Div00_00_00_00_01_00.form.Div00.form.Div02.form.Grid00.scrollBy(0, -1);
 		}
 	}
 };
@@ -2671,6 +2674,7 @@ this.Div00_Div00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Gri
 		if(confirm("삭제하시겠습니까?")) 
 		{
 			this.ds_cct_list.deleteRow(e.row);
+			this.Div00.form.Div00_00_00.form.Div00.form.Div00.form.Grid00.scrollBy(0, -1);
 		}
 	}
 };
@@ -2682,6 +2686,7 @@ this.Div00_Div00_00_00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.
 		if(confirm("삭제하시겠습니까?")) 
 		{
 			this.ds_multtms_list.deleteRow(e.row);
+			this.Div00.form.Div00_00_00_00.form.Div00.form.Div00.form.Grid00.scrollBy(0, -1);
 		}
 	}
 };
@@ -2731,8 +2736,6 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro
 		{
 			delChk.push(i);
 		}
-		
-		this.ds_teacher_list.checkarray[i] = 0;
 	}
 	
 	if(delChk.length == 0)
@@ -2741,13 +2744,22 @@ this.Div00_Div00_00_00_00_00_Div00_Div00_Button01_onclick = function(obj:nexacro
 	}
 	else
 	{
-		this.ds_teacher_list.deleteMultiRows(delChk);
-	
-		if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+		if(confirm("삭제하시겠습니까?")) 
 		{
-			this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+			this.ds_teacher_list.deleteMultiRows(delChk);
+		
+			if(this.ds_teacher_list.getRowCount() > 0 && this.ds_teacher_list.findRow("rpsntYn", "Y") < 0)
+			{
+				this.ds_teacher_list.setColumn(0, "rpsntYn", "Y");
+			}
+			this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
+			
+			for(var i=0; i<this.ds_teacher_list.getRowCount(); i++)
+			{
+				this.ds_teacher_list.checkarray[i] = 0;
+			}
+			this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.redrawExprCell(); 
 		}
-		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setCellProperty("head", 0, "text", 0);
 	}
 };
 
@@ -2841,6 +2853,7 @@ this.Div00_Div00_00_Div00_Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e
 		if(confirm("삭제하시겠습니까?")) 
 		{
 			this.ds_pblpmprcust_list.deleteRow(e.row);
+			this.Div00.form.Div00_00.form.Div00.form.Div00.form.Grid00.scrollBy(0, -1);
 		}
 	}
 };
