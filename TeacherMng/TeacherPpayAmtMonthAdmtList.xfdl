@@ -143,7 +143,7 @@
         </Div>
         <Static id="Static00_00" taborder="6" text="▶ 강사료정산 목록" left="10" top="239" width="110" height="21" cssclass="sta_WF_TitGray"/>
         <Static id="txtTotal" taborder="7" left="Static00_00:0" height="21" text="( 0개 )" width="50" top="239" cssclass="sta_WF_TitGray"/>
-        <Grid id="Grid00" taborder="8" left="10" top="260" bottom="10" autofittype="col" binddataset="ds_list" right="10">
+        <Grid id="Grid00" taborder="8" left="10" top="260" bottom="10" autofittype="none" binddataset="ds_list" right="10">
           <Formats>
             <Format id="default">
               <Columns>
@@ -158,17 +158,18 @@
                 <Column size="150"/>
                 <Column size="60"/>
                 <Column size="350"/>
+                <Column size="100"/>
                 <Column size="60"/>
                 <Column size="80"/>
                 <Column size="60"/>
                 <Column size="60"/>
                 <Column size="80"/>
                 <Column size="60"/>
+                <Column size="80"/>
                 <Column size="90"/>
                 <Column size="90"/>
-                <Column size="90"/>
-                <Column size="60"/>
-                <Column size="60"/>
+                <Column size="70"/>
+                <Column size="70"/>
                 <Column size="90"/>
               </Columns>
               <Rows>
@@ -188,19 +189,20 @@
                 <Cell col="8" rowspan="2" text="학기"/>
                 <Cell col="9" rowspan="2" text="강좌코드"/>
                 <Cell col="10" rowspan="2" text="강좌명"/>
-                <Cell col="11" rowspan="2" text="수강료"/>
-                <Cell col="12" rowspan="2" text="지급율/액"/>
-                <Cell col="13" rowspan="2" text="신청건수"/>
-                <Cell col="14" rowspan="2" text="강의횟수"/>
-                <Cell col="15" rowspan="2" text="총 강사료"/>
-                <Cell col="16" rowspan="2" text="진행횟수"/>
-                <Cell col="17" colspan="6" text="지급월 비용"/>
-                <Cell row="1" col="17" text="강사료"/>
-                <Cell row="1" col="18" text="재료비/대여료&#13;&#10;(구매형)"/>
-                <Cell row="1" col="19" text="재료비/대여료&#13;&#10;(1/N형)"/>
-                <Cell row="1" col="20" text="소득세&#13;&#10;(3%)"/>
-                <Cell row="1" col="21" text="주민세&#13;&#10;(0.3%)"/>
-                <Cell row="1" col="22" text="지급금액"/>
+                <Cell col="11" rowspan="2" text="강좌옵션"/>
+                <Cell col="12" rowspan="2" text="수강료"/>
+                <Cell col="13" rowspan="2" text="지급율/액"/>
+                <Cell col="14" rowspan="2" text="신청건수"/>
+                <Cell col="15" rowspan="2" text="강의횟수"/>
+                <Cell col="16" rowspan="2" text="총 강사료"/>
+                <Cell col="17" rowspan="2" text="진행횟수"/>
+                <Cell col="18" colspan="6" text="지급월 비용"/>
+                <Cell row="1" col="18" text="강사료"/>
+                <Cell row="1" col="19" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell row="1" col="20" text="재료비/대여료&#13;&#10;(1/N형)"/>
+                <Cell row="1" col="21" text="소득세&#13;&#10;(3%)"/>
+                <Cell row="1" col="22" text="주민세&#13;&#10;(0.3%)"/>
+                <Cell row="1" col="23" text="지급금액"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
@@ -214,18 +216,19 @@
                 <Cell col="8" text="bind:yySmster"/>
                 <Cell col="9" text="bind:lectCd"/>
                 <Cell col="10" text="bind:lectNm"/>
-                <Cell col="11" text="bind:lfeeAmt" textAlign="right"/>
-                <Cell col="12" text="bind:ppayAmt"/>
-                <Cell col="13" text="bind:atlctNpleCnt"/>
-                <Cell col="14" text="bind:lectNbcnt"/>
-                <Cell col="15" text="bind:tcPpayAmt"/>
-                <Cell col="16" text="bind:prgrsNbcnt"/>
-                <Cell col="17" text="bind:admtYmPpayAmt" textAlign="right"/>
-                <Cell col="18" text="bind:pchOptnStlmAmt" textAlign="right"/>
-                <Cell col="19" text="bind:npchOptnStlmAmt" textAlign="right"/>
-                <Cell col="20" text="bind:incmtax" textAlign="right"/>
-                <Cell col="21" text="bind:rsdttax" textAlign="right"/>
-                <Cell col="22" text="bind:actlPpayAmt" textAlign="right"/>
+                <Cell col="11" text="bind:lectOptn"/>
+                <Cell col="12" text="bind:lfeeAmt" textAlign="right"/>
+                <Cell col="13" text="bind:ppayAmt"/>
+                <Cell col="14" text="bind:atlctNpleCnt"/>
+                <Cell col="15" text="bind:lectNbcnt"/>
+                <Cell col="16" text="bind:tcPpayAmt"/>
+                <Cell col="17" text="bind:prgrsNbcnt"/>
+                <Cell col="18" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="19" text="bind:pchOptnStlmAmt" textAlign="right"/>
+                <Cell col="20" text="bind:npchOptnStlmAmt" textAlign="right"/>
+                <Cell col="21" text="bind:incmtax" textAlign="right"/>
+                <Cell col="22" text="bind:rsdttax" textAlign="right"/>
+                <Cell col="23" text="bind:actlPpayAmt" textAlign="right"/>
               </Band>
             </Format>
           </Formats>
@@ -596,6 +599,7 @@ this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.Ite
           <Column id="yySmster" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="lectOptn" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcNm" type="STRING" size="256"/>
           <Column id="tcTpNm" type="STRING" size="256"/>
