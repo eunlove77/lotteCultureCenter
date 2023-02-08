@@ -251,7 +251,7 @@ this.application = null;
 this.excelImportExport = "";
 this.brchCd = "";
 this.yy = "";
-
+this.month = "";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -273,11 +273,12 @@ this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.fn_year_add();
 	
 	var comboMmObj = this.row01.form.Div01.form.mm;
-	var month = new nexacro.Date().getMonth() + 1;
-	month = month.toString().length < 2 ? "0" + month : month;
+	
+	this.month = new nexacro.Date().getMonth() + 1;
+	this.month = this.month.toString().length < 2 ? "0" + this.month : this.month;
 	
 	this.gfn_set_month(this, comboMmObj);
-	comboMmObj.set_value(month);
+	comboMmObj.set_value(this.month);
 	
 	// 지점별 년도/학기 초기화
 	this.fn_sesterInfo(this.brchCd);
@@ -304,10 +305,13 @@ this.row03_Div00_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.Key
 this.row02.form.Div00.form.btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.row01.form.Div00.form.brchCd.set_index(0);
-	this.row01.form.Div01.form.yy.set_index(0);	
-	this.row01.form.Div01.form.mm.set_index(0);
 	
-	this.fn_set_checkbox_value(1);
+	// 지점별 년도/학기 초기화
+	this.fn_sesterInfo(this.brchCd);
+	
+	this.row01.form.Div01.form.mm.set_value(this.month);
+	
+	this.fn_set_checkbox_value(0);
 	
 	this.row03.form.Div00.form.searchField.set_index(0);
 	this.row03.form.Div00.form.searchQuery.set_value('');
@@ -487,23 +491,65 @@ this.fn_searchValueInit = function(){
 	var arrPpayInfoCd = new Array();	
 	var arrSapAdmtCd = new Array();	
 	
-	if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("1");
-	if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("2");
-	if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("3");
+	if(this.row01.form.Div02.form.chkLectCl01.value == false
+	&& this.row01.form.Div02.form.chkLectCl02.value == false
+	&& this.row01.form.Div02.form.chkLectCl03.value == false
+	){
+		arrLectClCd.push("1");
+		arrLectClCd.push("2");
+		arrLectClCd.push("3");
+	}else{
+		if(this.row01.form.Div02.form.chkLectCl01.value == true) arrLectClCd.push("1");
+		if(this.row01.form.Div02.form.chkLectCl02.value == true) arrLectClCd.push("2");
+		if(this.row01.form.Div02.form.chkLectCl03.value == true) arrLectClCd.push("3");
+	}
 	
-	if(this.Div01.form.Div00.form.chkTcTp1.value == true) arrTcTpCd.push("1");
-	if(this.Div01.form.Div00.form.chkTcTp2.value == true) arrTcTpCd.push("2");
-	if(this.Div01.form.Div00.form.chkTcTp3.value == true) arrTcTpCd.push("3");
-	if(this.Div01.form.Div00.form.chkTcTp4.value == true) arrTcTpCd.push("4");
+	if(this.Div01.form.Div00.form.chkTcTp1.value == false
+	&& this.Div01.form.Div00.form.chkTcTp2.value == false
+	&& this.Div01.form.Div00.form.chkTcTp3.value == false
+	&& this.Div01.form.Div00.form.chkTcTp4.value == false
+	){
+		arrTcTpCd.push("1");
+		arrTcTpCd.push("2");
+		arrTcTpCd.push("3");
+		arrTcTpCd.push("4");
+	}else{
+		if(this.Div01.form.Div00.form.chkTcTp1.value == true) arrTcTpCd.push("1");
+		if(this.Div01.form.Div00.form.chkTcTp2.value == true) arrTcTpCd.push("2");
+		if(this.Div01.form.Div00.form.chkTcTp3.value == true) arrTcTpCd.push("3");
+		if(this.Div01.form.Div00.form.chkTcTp4.value == true) arrTcTpCd.push("4");
+	}
 	
-	if(this.row02.form.Div00.form.chkCntrY.value == true) arrCntrStatCd.push("Y");
-	if(this.row02.form.Div00.form.chkCntrN.value == true) arrCntrStatCd.push("N");
-		
-	if(this.row02.form.Div01.form.chkPpayInfoY.value == true) arrPpayInfoCd.push("Y");		
-	if(this.row02.form.Div01.form.chkPpayInfoN.value == true) arrPpayInfoCd.push("N");		
+	if(this.row02.form.Div00.form.chkCntrY.value == false
+	&& this.row02.form.Div00.form.chkCntrY.value == false	
+	){
+		arrCntrStatCd.push("Y");
+		arrCntrStatCd.push("N");
+	}else{
+		if(this.row02.form.Div00.form.chkCntrY.value == true) arrCntrStatCd.push("Y");
+		if(this.row02.form.Div00.form.chkCntrN.value == true) arrCntrStatCd.push("N");
+	}
 	
-	if(this.row02.form.Div02.form.chkSapAdmtY.value == true) arrSapAdmtCd.push("Y");		
-	if(this.row02.form.Div02.form.chkSapAdmtN.value == true) arrSapAdmtCd.push("N");		
+	if(this.row02.form.Div01.form.chkPpayInfoY.value == false
+	&& this.row02.form.Div01.form.chkPpayInfoN.value == false
+	){
+		arrPpayInfoCd.push("Y");	
+		arrPpayInfoCd.push("N");		
+	}else{
+		if(this.row02.form.Div01.form.chkPpayInfoY.value == true) arrPpayInfoCd.push("Y");		
+		if(this.row02.form.Div01.form.chkPpayInfoN.value == true) arrPpayInfoCd.push("N");		
+	}
+	
+	if(this.row02.form.Div02.form.chkSapAdmtY.value == false
+	&& this.row02.form.Div02.form.chkSapAdmtN.value == false
+	){
+		arrSapAdmtCd.push("Y");	
+		arrSapAdmtCd.push("N");
+	}else{
+		if(this.row02.form.Div02.form.chkSapAdmtY.value == true) arrSapAdmtCd.push("Y");		
+		if(this.row02.form.Div02.form.chkSapAdmtN.value == true) arrSapAdmtCd.push("N");		
+	}
+	
 		
  	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
  	this.ds_search.setColumn(0, "admtYm", this.row01.form.Div01.form.yy.value + this.row01.form.Div01.form.mm.value); 	
