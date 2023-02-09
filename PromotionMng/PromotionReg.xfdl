@@ -93,7 +93,8 @@
             <Tabpage id="Tabpage2" text="사은품 신청자 현황" url="PromotionMng::GiftStatus.xfdl"/>
           </Tabpages>
         </Tab>
-        <Div id="Div01" taborder="3" text="Div01" left="45" top="Tab00:30" height="60" right="45">
+        <Div id="Div04" taborder="5" text="Div04" left="45" top="Tab00:10" height="100" right="45" url="FrameBase::include/mdf_info.xfdl" visible="true" minwidth="720" maxwidth=""/>
+        <Div id="Div01" taborder="3" text="Div01" left="45" top="Div04:15" height="60" right="45">
           <Layouts>
             <Layout>
               <Button id="cnclBtn" taborder="0" text="취소" left="42.86%" width="79" cssclass="btn_WF_Weak" fittocontents="none" height="30" top="0" onclick="fn_close"/>
@@ -108,6 +109,8 @@
       <BindItem id="endDt" compid="Div00.form.Div00.form.Div00.form.endDtm" propid="value" datasetid="ds_detail" columnid="endDt"/>
       <BindItem id="titNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="titNm"/>
       <BindItem id="expsrYn" compid="Div00.form.Div05.form.Radio00" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
+      <BindItem id="item0" compid="Div04.form.Div01.form.Static01" propid="text" datasetid="ds_detail" columnid="rgprDtm"/>
+      <BindItem id="item1" compid="Div04.form.Div03.form.Static01" propid="text" datasetid="ds_detail" columnid="mdfDtm"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -179,6 +182,16 @@ this.fn_set_detail = function()
 	this.Div02.set_visible(true);	//수정버튼
 	this.Div01.set_visible(false);	//등록버튼
 	this.Tab00.set_top("Div02:20");	//탭 위치조정
+	this.Div04.set_height(95);		//등록정보
+	
+	//등록자, 수정자 정보
+	var rgprNm = this.gfn_isNull(this.ds_detail.getColumn(0, "rgprNm")) ? "" : "(" + this.ds_detail.getColumn(0, "rgprNm") + ")";
+	var rgprInfo = this.ds_detail.getColumn(0, "rgprId") + rgprNm;
+	var mdfNm = this.gfn_isNull(this.ds_detail.getColumn(0, "mdfNm")) ? "" : "(" + this.ds_detail.getColumn(0, "mdfNm") + ")";
+	var mdfInfo = this.gfn_nvl(this.ds_detail.getColumn(0, "mdfId")) + mdfNm;
+	
+	this.Div04.form.Div00.form.Static01.set_text(rgprInfo);
+	this.Div04.form.Div02.form.Static01.set_text(mdfInfo);
 	
 	if(this.ds_detail.getColumn(0, "statCd") != '20')
 	{
@@ -446,6 +459,12 @@ this.fn_close = function()
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="prmtnClCd" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfNm" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row>
