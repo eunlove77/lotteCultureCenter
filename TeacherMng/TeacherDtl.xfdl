@@ -1554,14 +1554,15 @@ this.validate_pay_info = function(){
 		var obj_jumin1 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno1.value;
 		var obj_jumin2 = this.Div_PayInfo.form.Div_p.form.Div00.form.rrno2.value;
 		
-		if(!obj_jumin1 && !obj_jumin2){
+		if(!obj_jumin1 && !obj_jumin2){ //둘다 공백
 			msg = "주민등록번호를 입력하세요.";
 			pass = true;
 		}
-		else if(!obj_jumin1 || !obj_jumin2){
+		else if(!obj_jumin1 || !obj_jumin2){  //한쪽만 공백
 			msg = "주민등록번호를 입력하세요.";
 		}
-		else if(!this.isRrnoDupChk){
+
+		if(!pass && !this.isRrnoDupChk){
 			alert("주민등록번호 중복체크 후 저장하세요.");
 			return false;
 		}
