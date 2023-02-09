@@ -47,8 +47,11 @@
                     <CheckBox id="chkAdmtPrcsStatAll" taborder="1" text="전체" left="116" top="5" width="50" height="20" onclick="Div01_Div00_chkAdmtPrcsStatAll_onclick"/>
                     <CheckBox id="chkAdmtPrcsStat0" taborder="2" text="미전송" left="chkAdmtPrcsStatAll:0" top="5" width="60" height="20" onclick="fn_checkbox_click"/>
                     <CheckBox id="chkAdmtPrcsStat1" taborder="3" text="전송완료" left="chkAdmtPrcsStat0:0" top="5" width="70" height="20" onclick="fn_checkbox_click"/>
-                    <Button id="btnSearch" taborder="4" text="검색" left="chkAdmtPrcsStat1:10" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_btnSearch_onclick"/>
+                    <Button id="btnSearch" taborder="4" text="검색" left="486" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="5" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div00_btnInit_onclick"/>
+                    <CheckBox id="chkAdmtPrcsStat2" taborder="6" text="결재중" left="chkAdmtPrcsStat1:0" top="5" width="60" height="20" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkAdmtPrcsStat3" taborder="7" text="결재완료" left="chkAdmtPrcsStat2:0" top="5" width="70" height="20" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkAdmtPrcsStat4" taborder="8" text="반려" left="chkAdmtPrcsStat3:0" top="5" width="50" height="20" onclick="fn_checkbox_click"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -185,9 +188,15 @@ this.Div01_Div00_chkAdmtPrcsStatAll_onclick = function(obj:nexacro.CheckBox,e:ne
 	if(obj.isChecked()){
 		obj.parent.chkAdmtPrcsStat0.set_value(1);
 		obj.parent.chkAdmtPrcsStat1.set_value(1);		
+		obj.parent.chkAdmtPrcsStat2.set_value(2);		
+		obj.parent.chkAdmtPrcsStat3.set_value(3);		
+		obj.parent.chkAdmtPrcsStat4.set_value(4);		
 	}else{
 		obj.parent.chkAdmtPrcsStat0.set_value(0);
 		obj.parent.chkAdmtPrcsStat1.set_value(0);		
+		obj.parent.chkAdmtPrcsStat2.set_value(0);		
+		obj.parent.chkAdmtPrcsStat3.set_value(0);		
+		obj.parent.chkAdmtPrcsStat4.set_value(0);		
 	}
 };
 
@@ -373,12 +382,21 @@ this.fn_searchValueInit = function(){
 
 	if(this.Div01.form.Div00.form.chkAdmtPrcsStat0.value == false
 	&& this.Div01.form.Div00.form.chkAdmtPrcsStat1.value == false
+	&& this.Div01.form.Div00.form.chkAdmtPrcsStat2.value == false
+	&& this.Div01.form.Div00.form.chkAdmtPrcsStat3.value == false
+	&& this.Div01.form.Div00.form.chkAdmtPrcsStat4.value == false
 	){
 		arrAdmtPrcsStatCd.push("0");
 		arrAdmtPrcsStatCd.push("1");
+		arrAdmtPrcsStatCd.push("2");
+		arrAdmtPrcsStatCd.push("3");
+		arrAdmtPrcsStatCd.push("4");
 	}else{
 		if(this.Div01.form.Div00.form.chkAdmtPrcsStat0.value == true) arrAdmtPrcsStatCd.push("0");
 		if(this.Div01.form.Div00.form.chkAdmtPrcsStat1.value == true) arrAdmtPrcsStatCd.push("1");
+		if(this.Div01.form.Div00.form.chkAdmtPrcsStat2.value == true) arrAdmtPrcsStatCd.push("2");
+		if(this.Div01.form.Div00.form.chkAdmtPrcsStat3.value == true) arrAdmtPrcsStatCd.push("3");
+		if(this.Div01.form.Div00.form.chkAdmtPrcsStat4.value == true) arrAdmtPrcsStatCd.push("4");
 	}
 	
 
