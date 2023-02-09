@@ -13,7 +13,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1" canitemchange="row01_Div00_brchCd_canitemchange"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -148,15 +148,18 @@ this.TeacherPpayAmtSapList_onload = function(obj:nexacro.Form,e:nexacro.LoadEven
 	// 년도초기화
 	this.fn_year_add();
 	
+	var comboYyObj = this.row01.form.Div01.form.yy;
 	var comboMmObj = this.row01.form.Div01.form.mm;
+	
+	this.yy = new nexacro.Date().getYear();
 	this.month = new nexacro.Date().getMonth() + 1;
 	this.month = this.month.toString().length < 2 ? "0" + this.month : this.month;
 	
 	this.gfn_set_month(this, comboMmObj);
+	
+	comboYyObj.set_value(this.yy);
 	comboMmObj.set_value(this.month);
 	
-	// 지점별 년도/학기 초기화
-	this.fn_sesterInfo(this.brchCd);
 };
 
 
@@ -172,9 +175,7 @@ this.Div01_Div00_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 {
 	this.row01.form.Div00.form.brchCd.set_index(0);
 	
-	// 지점별 년도/학기 초기화
-	this.fn_sesterInfo(this.brchCd);
-	
+	this.row01.form.Div01.form.yy.set_value(this.yy);
 	this.row01.form.Div01.form.mm.set_value(this.month);
 	
 	this.fn_set_checkbox_value(0);
@@ -370,9 +371,6 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			
 			this.row01.form.Div01.form.yy.set_value(year);
 		break;
-		case "sesterInfo":
-			this.row01.form.Div01.form.yy.set_value(this.yy);
-		break;
 	}
 }
 
@@ -411,6 +409,9 @@ this.fn_set_checkbox_value = function(value){
 	this.Div01.form.Div00.form.chkAdmtPrcsStatAll.set_value(value);
 	this.Div01.form.Div00.form.chkAdmtPrcsStat0.set_value(value);
 	this.Div01.form.Div00.form.chkAdmtPrcsStat1.set_value(value);	
+	this.Div01.form.Div00.form.chkAdmtPrcsStat2.set_value(value);	
+	this.Div01.form.Div00.form.chkAdmtPrcsStat3.set_value(value);	
+	this.Div01.form.Div00.form.chkAdmtPrcsStat4.set_value(value);	
 }
 
 
@@ -432,34 +433,6 @@ this.fn_year_add = function()
 	}
 	this.gfn_transaction(tranObj);	
 }
-
-
-//학기 조회
-this.fn_sesterInfo = function(_brchCd)
-{	
-	this.ds_search.setColumn(0, "brchCd", _brchCd);
-	
-	var tranObj = {
-		strSvcId : "sesterInfo",
-		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
-		inData : "search=ds_search",
-		outData : "",
-		strArg : "",
-		callBackFnc : "fn_callback",
-		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
-	}
-
-	this.gfn_transaction(tranObj);
-};
-
-
-this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
-{
-	this.fn_sesterInfo(e.postvalue);
-};
-
-
 ]]></Script>
     <Objects>
       <Dataset id="ds_list">
