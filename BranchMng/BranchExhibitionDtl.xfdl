@@ -13,7 +13,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="Static00:8" top="5" width="100" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="Static00:8" top="5" width="100" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -260,6 +260,12 @@
           <Column id="rplcOptnNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -290,11 +296,6 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "선택");
 		
-	/*this.spotAreaCdList.copyData(this.application.gdsSpotAreaCdList);
-	this.spotAreaCdList.insertRow(0);
-	this.spotAreaCdList.setColumn(0, "cd", "");
-	this.spotAreaCdList.setColumn(0, "cdNm", "선택");*/
-	
 	this.row06.form.strtDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
 	this.row06.form.endDtm.calendaredit.set_readonly(true); //캘린더 키인 막기
 	
@@ -302,6 +303,19 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	this.atchFileUploadArr.push(this.row07.form.Div00.form);
 	this.atchFileUploadArr.push(this.row08.form.Div00.form);
 	this.atchFileUploadArr.push(this.row10.form.Div00.form);
+	
+	//본인 지점 세팅
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	this.row02.form.spotDiv.form.ComboSpot.set_index(0);
+	
 	
 	if(this.parent.exhSeqno != ""){	
 		
@@ -312,9 +326,6 @@ this.BranchExhibitionDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 	}
 	else
 	{
-		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
-		//this.row03.form.spotDiv.form.ComboSpotArea.set_index(0);
-		
 		var atchFileId = this.ds_detail.getColumn(0, "webImgFleId");
 		var atchFileObj = {
 			_this : this,

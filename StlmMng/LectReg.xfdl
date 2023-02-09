@@ -493,7 +493,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			break;
 		case "setWaitAtlct":
-			this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div00.form.Div02.form.Grid00, 0);
+			if(!this.Div00.form.Div04.visible){
+				this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div00.form.Div02.form.Grid00, 0);
+			}			
 			this.Div00.form.Div04.set_visible(true);
 			this.Div00.form.Div04.set_height(210);
 			this.Div00.set_height(780);
@@ -1020,7 +1022,7 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	}
 	
 	// 카드, L.Point, 기타 결제금액과 거스름돈만 입력
-	if((crdStlmAmt + lpntUseAmt + etcStlmAmt > 0) && chngAmt > 0 && cshStlmAmt == 0 && ltteGiftStlmAmt == 0 && otgiftStlmAmt == 0){
+	if((crdStlmAmt + lpntUseAmt + etcStlmAmt > 0) && chngAmt > 0){
 		alert("카드, L.Point, 기타 결제금액과 거스름돈을 같이 입력 할 수 없습니다.");
 		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
 		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
@@ -1142,7 +1144,7 @@ this.fn_set_waitAtlct = function(){
 	strArg			+= " mbrNo=" + this.application.LECT_REG.mbrNo + " brchCd=" + this.application.LECT_REG.brchCd + " yy=" + this.application.LECT_REG.yy;
 	strArg			+= " lectSmsterCd=" + this.application.LECT_REG.lectSmsterCd + " lectCd=" + this.application.LECT_REG.lectCd;
 	var callBackFnc = "fnCallback";
-	var isAsync     = true;
+	var isAsync     = false;
 	
 	var tranObj = {
 		strSvcId : strSvcId,

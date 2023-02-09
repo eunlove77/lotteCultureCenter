@@ -382,10 +382,16 @@ this.Div00_Button03_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
 	var checkarray = [];
+	var atlctRsvNo = "";
 	this.ds_waiting_list.set_enableevent(false);
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
 		if(this.ds_waiting_list.checkarray[i] > 0){
 			checkarray.push(i);
+			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+			this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+		}
+		// 동반회원
+		if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
 			this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
 		}
 	}
