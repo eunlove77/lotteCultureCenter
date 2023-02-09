@@ -156,17 +156,17 @@
                       <Cell row="1" col="46" text="재고차감"/>
                     </Band>
                     <Band id="body">
-                      <Cell text="bind:atlctRsvNo" suppress="1" suppressalign="middle" textDecoration="underline"/>
-                      <Cell col="1" text="bind:mbrNo" textDecoration="underline"/>
-                      <Cell col="2" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" textDecoration="underline" tooltiptext="expr:dataset.getColumn(currow, &quot;mbrNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;mbrId&quot;) + &quot;)&quot;" tooltiptype="hover"/>
+                      <Cell text="bind:atlctRsvNo" suppress="1" suppressalign="middle" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="1" text="bind:mbrNo" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="2" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" textDecoration="underline" tooltiptext="expr:dataset.getColumn(currow, &quot;mbrNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;mbrId&quot;) + &quot;)&quot;" tooltiptype="hover" color="blue" cursor="pointer"/>
                       <Cell col="3" text="expr:comp.parent.parent.parent.gfn_setMaskingTel(dataset.getColumn(currow, &quot;hpNo&quot;))" tooltiptext="bind:hpNo" tooltiptype="hover"/>
                       <Cell col="4" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;email&quot;), 3) + &quot;@&quot; + dataset.getColumn(currow, &quot;emailAddrCd&quot;)" tooltiptext="expr:dataset.getColumn(currow, &quot;email&quot;) + &quot;@&quot; + dataset.getColumn(currow, &quot;emailAddrCd&quot;)" tooltiptype="hover"/>
                       <Cell col="5" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;actlAtlctNpleNm&quot;), 1, 1) + &quot;(&quot; + dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) + &quot;)&quot;" tooltiptext="expr:dataset.getColumn(currow, &quot;actlAtlctNpleNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) + &quot;)&quot;" tooltiptype="hover"/>
                       <Cell col="6" text="bind:brchCdNm"/>
                       <Cell col="7" text="bind:lectTpCdNm"/>
                       <Cell col="8" text="expr:dataset.getColumn(currow, &quot;yy&quot;) + &quot; &quot; + dataset.getColumn(currow, &quot;lectSmsterCdNm&quot;)"/>
-                      <Cell col="9" text="bind:lectCd"/>
-                      <Cell col="10" text="bind:lectNm"/>
+                      <Cell col="9" text="bind:lectCd" color="blue" cursor="pointer" textDecoration="underline"/>
+                      <Cell col="10" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
                       <Cell col="11" text="bind:lectAddOptnNm"/>
                       <Cell col="12" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;tcNm&quot;), 1, 1)" tooltiptext="bind:tcNm" tooltiptype="hover"/>
                       <Cell col="13" text="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == 'N' ? '-' : dataset.getColumn(currow, &quot;optnTypCdNm&quot;)"/>
@@ -201,7 +201,7 @@
                       <Cell col="42" text="expr:dataset.getColumn(currow, &quot;lectStHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectStMiCd&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectEndMiCd&quot;)"/>
                       <Cell col="43" text="bind:lectNbcnt"/>
                       <Cell col="44" text="expr:dataset.getColumn(currow, &quot;lectStatCd&quot;) == &quot;09&quot; ? 'Y' : 'N'"/>
-                      <Cell col="45" text="expr:dataset.getColumn(currow, &quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'" textDecoration="underline"/>
+                      <Cell col="45" text="expr:dataset.getColumn(currow, &quot;rfndRuleCfmSignYn&quot;) == 'Y' ? '완료' : '-'" textDecoration="underline" color="blue" cursor="pointer"/>
                       <Cell col="46" text="bind:atlctStlmSubChnlCdNm"/>
                     </Band>
                   </Format>
@@ -602,16 +602,30 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	
 	// 회원번호, 회원명 클릭 시 회원 상세 팝업
 	if(e.row != null && (e.cell == "1" || e.cell == "2")){
-		this.popCnt ++;
+		this.cnt++;
 		var oArg = {
 				mbrNo : this.ds_stlm_rfnd_list.getColumn(e.row, "mbrNo")
 				};
 	
-		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
+		this.gfn_openPopup("mbrDtlPop" + this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
+	}
+	
+	// 강좌코드, 강좌명
+	if(e.row != null && (e.cell == "9" || e.cell == "10")){
+		var arrArguments = {
+			brchCd : this.ds_stlm_rfnd_list.getColumn(e.row, "brchCd"),
+			yy : this.ds_stlm_rfnd_list.getColumn(e.row, "yy"),
+			lectSmsterCd : this.ds_stlm_rfnd_list.getColumn(e.row, "lectSmsterCd"),
+			lectCd : this.ds_stlm_rfnd_list.getColumn(e.row, "lectCd"),
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		}
+		
+		this.cnt++;
+		this.gfn_openPopup("ClassDtl" + this.cnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 	}
 	
 	// 환불규정 확인서명
-	if(e.row != null && e.cell == "43"){
+	if(e.row != null && e.cell == "45"){
 		this.cnt++; 
 		var oArg = {
 			atlctRsvNo : this.ds_stlm_rfnd_list.getColumn(e.row, "atlctRsvNo"),

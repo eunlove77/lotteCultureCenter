@@ -32,7 +32,7 @@
               <Static id="Static01" taborder="2" text="(0개)" left="85" top="83" width="40" height="20" cssclass="sta_WF_TitGray"/>
               <Button id="Button04" taborder="3" text="Print" top="73" height="30" width="60" wordWrap="char" cssclass="btn_WF_Medium" right="1" onclick="Div00_Button04_onclick"/>
               <Button id="Button03" taborder="4" text="강사 출석부" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div00_Button03_onclick"/>
-              <Grid id="Grid00" taborder="5" left="0" top="113" right="0" bottom="0" binddataset="ds_atlct_list" oncelldblclick="Div00_Grid00_oncelldblclick">
+              <Grid id="Grid00" taborder="5" left="0" top="113" right="0" bottom="0" binddataset="ds_atlct_list" oncelldblclick="Div00_Grid00_oncelldblclick" oncellclick="Div00_Grid00_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -93,10 +93,10 @@
                       <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                       <Cell col="1" text="expr:currow + 1"/>
                       <Cell col="2" text="bind:brchCdNm"/>
-                      <Cell col="3" text="bind:mbrNo" textDecoration="underline"/>
+                      <Cell col="3" text="bind:mbrNo" textDecoration="underline" color="blue" cursor="pointer"/>
                       <Cell col="4" text="bind:mbrGrdeCdNm"/>
                       <Cell col="5" text="bind:reAtlctYn"/>
-                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(mbrNm, 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover"/>
+                      <Cell col="6" expr="comp.parent.parent.parent.gfn_setMasking(mbrNm, 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover" color="blue" textDecoration="underline" cursor="pointer"/>
                       <Cell col="7" expr="comp.parent.parent.parent.gfn_setMasking(actlAtlctNpleNm, 1, 1)" tooltiptext="bind:actlAtlctNpleNm" tooltiptype="hover"/>
                       <Cell col="8" text="bind:fmlyRelCdNm"/>
                       <Cell col="9" text="bind:sexCdNm"/>
@@ -223,21 +223,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
   }
 };
 
-// 그리드 셀 더블클릭
-this.Div00_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-	// 회원번호 더블클릭시 회원 상세팝업
-	if(e.col == 3){
-		var oArg = {
-				mbrNo : this.ds_atlct_list.getColumn(e.row, "mbrNo")
-				, menuId : this.menuSeq
-		};
-	
-		this.cnt++;
-		this.gfn_openPopup("mbrDtlPop"+this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
-	}
-};
-
 // 강사 출석부
 this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -295,6 +280,20 @@ this.fn_talk_check = function()
 				this.ds_rcv_obj.checkarray[nRow] = 1;
 			}
 		}
+	}
+};
+
+this.Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	// 회원번호 클릭시 회원 상세팝업
+	if(e.col == 3 || e.col == 6){
+		var oArg = {
+				mbrNo : this.ds_atlct_list.getColumn(e.row, "mbrNo")
+				, menuId : this.menuSeq
+		};
+	
+		this.cnt++;
+		this.gfn_openPopup("mbrDtlPop"+this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
 	}
 };
 ]]></Script>

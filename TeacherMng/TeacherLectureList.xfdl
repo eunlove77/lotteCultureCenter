@@ -233,6 +233,7 @@
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
+include "Base::lib_alrt_talk.xjs";
 include "Base::libCommon.xjs";
 include "Base::popup.xjs";
 include "TeacherMng::include/common.xjs";
@@ -415,10 +416,17 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	
 	if(svcId == "teacher_lecture_list"){
-	
+		this.process_teacher_list();
 	}
 };
-
+this.process_teacher_list = function(){
+	//강사 목록 데이터 가공
+	this.ds_list.addColumn("smsRcvAgrYn", "STRING");
+	
+	for(var i = 0; i < this.ds_list.rowcount; i++){		
+		this.ds_list.setColumn(i, "smsRcvAgrYn", "Y");	//SMS 발송 Y
+	}
+}
 /**************************************************************************
  * 출강이력 확인서, SMS
  **************************************************************************/
@@ -451,7 +459,25 @@ this.selectCertificate_lect_hist = function(index){
 }
 this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	var column_obj = {
+		mbrNo : "tcCdNo"
+	,	korNm : "tcNm"
+	,	hpNo : "hpNo"
+	,	smsRcvAgrYn : "smsRcvAgrYn"
+	};
+
+	var dsId = this.gfn_create_ds_for_rcv_talk(this, this.ds_list, column_obj);
 	
+	if(this[dsId].rowcount > 0){
+		var oArg = {			
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		,	ds_rcv_obj : this[dsId]
+		};
+		
+		this.gfn_openPopup("popup", oArg, "AlrtMng::AlrtSendPopMMS.xfdl", this, 600, 800, true, true, null);
+	}else{
+		this.alert("발송대상을 선택하세요.");
+	}
 };
 /************************************************************************
  * 그리드

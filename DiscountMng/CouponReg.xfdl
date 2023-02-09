@@ -713,7 +713,7 @@ this.fn_set_detail = function()
 	var rgprNm = this.gfn_isNull(this.ds_detail.getColumn(0, "rgprNm")) ? "" : "(" + this.ds_detail.getColumn(0, "rgprNm") + ")";
 	var rgprInfo = this.ds_detail.getColumn(0, "rgprId") + rgprNm;
 	var mdfNm = this.gfn_isNull(this.ds_detail.getColumn(0, "mdfNm")) ? "" : "(" + this.ds_detail.getColumn(0, "mdfNm") + ")";
-	var mdfInfo = this.ds_detail.getColumn(0, "mdfId") + mdfNm;
+	var mdfInfo = this.gfn_nvl(this.ds_detail.getColumn(0, "mdfId")) + mdfNm;
 	
 	this.Div04.form.Div00.form.Static01.set_text(rgprInfo);
 	this.Div04.form.Div02.form.Static01.set_text(mdfInfo);
