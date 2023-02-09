@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridBranchExhibitionList" taborder="2" left="10" top="270" binddataset="branchExbDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridBranchExhibitionList_oncellclick">
+        <Grid id="GridBranchExhibitionList" taborder="2" left="10" top="270" binddataset="branchExbDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridBranchExhibitionList_oncellclick" ondrag="GridBranchExhibitionList_ondrag" ondrop="GridBranchExhibitionList_ondrop">
           <Formats>
             <Format id="default">
               <Columns>
@@ -16,7 +16,7 @@
                 <Column size="154"/>
                 <Column size="179"/>
                 <Column size="65"/>
-                <Column size="80"/>
+                <Column size="130"/>
                 <Column size="100"/>
               </Columns>
               <Rows>
@@ -42,7 +42,7 @@
                 <Cell col="4" text="bind:subTitNm" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="5" text="expr:evntStDt+' ~ ' +evntEndDt"/>
                 <Cell col="6" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
-                <Cell col="7" text="expr:rgprId ? rgprNm : ''"/>
+                <Cell col="7" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="8" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
               </Band>
             </Format>
@@ -99,7 +99,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -126,6 +126,7 @@
         <ColumnInfo>
           <Column id="rnum" type="INT" size="256"/>
           <Column id="exhSeqno" type="STRING" size="256"/>
+          <Column id="sortSeqno" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="brchAreaCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
@@ -165,6 +166,7 @@
         <ColumnInfo>
           <Column id="rnum" type="INT" size="256"/>
           <Column id="exhSeqno" type="STRING" size="256"/>
+          <Column id="sortSeqno" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="brchAreaCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
@@ -187,6 +189,34 @@
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="branchExbDs_update">
+        <ColumnInfo>
+          <Column id="rnum" type="INT" size="256"/>
+          <Column id="exhSeqno" type="STRING" size="256"/>
+          <Column id="sortSeqno" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchAreaCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="bareaNm" type="STRING" size="256"/>
+          <Column id="mainTitNm" type="STRING" size="256"/>
+          <Column id="subTitNm" type="STRING" size="256"/>
+          <Column id="evntStDt" type="STRING" size="256"/>
+          <Column id="evntEndDt" type="STRING" size="256"/>
+          <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprIp" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfIp" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -215,16 +245,17 @@ this.BranchExhibitionList_onload = function(obj:nexacro.Form,e:nexacro.LoadEvent
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.branchExbDs, this.GridBranchExhibitionList, 0);
 	
-	this.spotCdList.copyData(this.application.gdsSpotCdList);
+	//지점코드 세팅
+	this.fn_set_spotCd();
+	/*this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
-	this.spotCdList.setColumn(0, "cdNm", "전체");
+	this.spotCdList.setColumn(0, "cdNm", "전체");*/
 	
-	/*this.spotAreaCdList.copyData(this.application.gdsSpotAreaCdList);
+	/*this.spotAreaCdList.copyData(this.application.gdsSpotAreaCdList); 권역삭제
 	this.spotAreaCdList.insertRow(0);
 	this.spotAreaCdList.setColumn(0, "cd", "");
 	this.spotAreaCdList.setColumn(0, "cdNm", "전체");*/
-	
 	//this.Div00_00.form.conDiv.form.spotAreaDiv.form.ComboSpotArea.set_index(0);
 	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
 	// 목록 조회
@@ -320,6 +351,27 @@ this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
+//지점 코드 세팅
+this.fn_set_spotCd = function()
+{
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.updateToDataset();
+}
 
 //조회
 this.fn_list = function ()
@@ -435,12 +487,106 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			}*/
 		break;
 		
+		case "updateSortList":
+			this.fn_list(1);
+		break;
+		
 		case "delete":
 			this.alert("삭제되었습니다.");
 			this.fn_list(1);
 		break;
 	}
 	
-};]]></Script>
+};
+this.GridBranchExhibitionList_ondrag = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.GridBranchExhibitionList.set_cursor("move");
+	if(e.row >= 0) {
+		e.userdata = e.row;
+		return true;
+	}
+};
+
+this.GridBranchExhibitionList_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	this.GridBranchExhibitionList.set_cursor("default");
+	if((this.branchExbDs.getColumn(e.userdata, "exhSeqno") != this.branchExbDs.getColumn(e.row, "exhSeqno")))
+		{
+		
+		if(confirm("정렬 순서를 변경하시겠습니까?")) 
+		{
+			var prevSeqno = this.branchExbDs.getColumn(e.userdata, "exhSeqno");
+			var prevSortNo = this.branchExbDs.getColumn(e.userdata, "sortSeqno");
+			//var prevRn = this.branchExbDs.getColumn(e.userdata, "rnum");
+			/*var prevTitNm = this.branchExbDs.getColumn(e.userdata, "tit");
+			var prevExpsrStDT = this.branchExbDs.getColumn(e.userdata, "expsrStDt");
+			var prevExpsrEndDT = this.branchExbDs.getColumn(e.userdata, "expsrEndDt");
+			var prevExpsrYn = this.branchExbDs.getColumn(e.userdata, "expsrYn");
+			var prevRgprId = this.branchExbDs.getColumn(e.userdata, "rgprId");
+			var prevRgprDtm = this.branchExbDs.getColumn(e.userdata, "rgprDtm");
+			var prevMdfId = this.branchExbDs.getColumn(e.userdata, "mdfId");
+			var prevMdfDtm = this.branchExbDs.getColumn(e.userdata, "mdfDtm");*/
+	
+			var nextSeqno = this.branchExbDs.getColumn(e.row, "exhSeqno");
+			var nextSortNo = this.branchExbDs.getColumn(e.row, "sortSeqno");
+			//var nextRn = this.branchExbDs.getColumn(e.row, "rnum");
+			/*var nextTitNm = this.branchExbDs.getColumn(e.row, "tit");
+			var nextExpsrStDT = this.branchExbDs.getColumn(e.row, "expsrStDt");
+			var nextExpsrEndDT = this.branchExbDs.getColumn(e.row, "expsrEndDt");
+			var nextExpsrYn = this.branchExbDs.getColumn(e.row, "expsrYn");
+			var nextRgprId = this.branchExbDs.getColumn(e.row, "rgprId");
+			var nextRgprDtm = this.branchExbDs.getColumn(e.row, "rgprDtm");
+			var nextMdfId = this.branchExbDs.getColumn(e.row, "mdfId");
+			var nextMdfDtm = this.branchExbDs.getColumn(e.row, "mdfDtm");*/
+			
+			
+			this.branchExbDs.setColumn(e.row, "exhSeqno", prevSeqno); 
+			this.branchExbDs.setColumn(e.row, "sortSeqno", nextSortNo); 
+			//this.branchExbDs.setColumn(e.row, "rnum", nextRn); 
+			/*this.branchExbDs.setColumn(e.row, "tit", nextTitNm);
+			this.branchExbDs.setColumn(e.row, "expsrStDt", nextExpsrStDT); 
+			this.branchExbDs.setColumn(e.row, "expsrEndDt", nextExpsrEndDT); 
+			this.branchExbDs.setColumn(e.row, "expsrYn", nextExpsrYn); 
+			this.branchExbDs.setColumn(e.row, "rgprId", nextRgprId); 
+			this.branchExbDs.setColumn(e.row, "rgprDtm", nextRgprDtm); 
+			this.branchExbDs.setColumn(e.row, "mdfId", nextMdfId); 
+			this.branchExbDs.setColumn(e.row, "mdfDtm", nextMdfDtm); */
+		
+			this.branchExbDs.setColumn(e.userdata, "exhSeqno", nextSeqno);
+			this.branchExbDs.setColumn(e.userdata, "sortSeqno", prevSortNo);
+			//this.branchExbDs.setColumn(e.userdata, "rnum", prevRn);
+			/*this.branchExbDs.setColumn(e.userdata, "tit", prevTitNm);
+			this.branchExbDs.setColumn(e.userdata, "expsrStDt", prevExpsrStDT); 
+			this.branchExbDs.setColumn(e.userdata, "expsrEndDt", prevExpsrEndDT); 
+			this.branchExbDs.setColumn(e.userdata, "expsrYn", prevExpsrYn); 
+			this.branchExbDs.setColumn(e.userdata, "rgprId", prevRgprId); 
+			this.branchExbDs.setColumn(e.userdata, "rgprDtm", prevRgprDtm); 
+			this.branchExbDs.setColumn(e.userdata, "mdfId", prevMdfId); 
+			this.branchExbDs.setColumn(e.userdata, "mdfDtm", prevMdfDtm); */
+			
+			this.branchExbDs_update.clearData();
+			this.branchExbDs_update.copyRow(this.branchExbDs_update.addRow(), this.branchExbDs, e.row);
+			this.branchExbDs_update.copyRow(this.branchExbDs_update.addRow(), this.branchExbDs, e.userdata);
+			
+			var tranObj = {
+				strSvcId : "updateSortList",
+				strSvcUrl : this.application.Admin_svc + "::/branch/sort/updateSort.do",
+				inData : "search=searchDs sortList=branchExbDs_update",
+				outData : "branchExbDs=sortList",
+				strArg : "",
+				callBackFnc : "fnCallback",
+				isAsync : false,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			}
+			
+			//저장권한 처리
+			if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+			this.gfn_transaction(tranObj);
+			
+			this.branchExbDs.set_rowposition(e.row);
+		}
+	}
+};
+]]></Script>
   </Form>
 </FDL>
