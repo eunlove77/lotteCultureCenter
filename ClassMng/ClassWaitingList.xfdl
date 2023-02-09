@@ -36,7 +36,7 @@
               <Button id="Button05" taborder="4" text="대기취소" top="73" height="30" cssclass="btn_WF_Medium" right="0" width="80" onclick="Div00_Button05_onclick"/>
               <Button id="Button03_00" taborder="5" text="결제요청" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="190" onclick="Div00_Button03_00_onclick"/>
               <Button id="Button03_00_00" taborder="6" text="메모저장" top="73" height="30" width="90" cssclass="btn_WF_Medium" right="290" onclick="Div00_Button03_00_00_onclick"/>
-              <Grid id="Grid00" taborder="7" left="0" top="113" right="0" bottom="0" binddataset="ds_waiting_list">
+              <Grid id="Grid00" taborder="7" left="0" top="113" right="0" bottom="0" binddataset="ds_waiting_list" oncellclick="Div00_Grid00_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -79,8 +79,8 @@
                       <Cell edittype="expr:dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;31&quot; || dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;41&quot; || (currow != 0 &amp;&amp; dataset.getColumn(currow-1, &quot;atlctRsvNo&quot;) == dataset.getColumn(currow, &quot;atlctRsvNo&quot;) &amp;&amp; dataset.getColumn(currow, &quot;fmlyRelCd&quot;) != &quot;00&quot;) ? &quot;none&quot; : &quot;checkbox&quot;" displaytype="expr:dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;31&quot; || dataset.getColumn(currow, &quot;stlmStatCd&quot;) == &quot;41&quot; || (currow != 0 &amp;&amp; dataset.getColumn(currow-1, &quot;atlctRsvNo&quot;) == dataset.getColumn(currow, &quot;atlctRsvNo&quot;) &amp;&amp; dataset.getColumn(currow, &quot;fmlyRelCd&quot;) != &quot;00&quot;) ? &quot;none&quot; : &quot;checkboxcontrol&quot;" text="expr:dataset.checkarray[currow]"/>
                       <Cell col="1" text="expr:currow + 1"/>
                       <Cell col="2" text="bind:brchCdNm"/>
-                      <Cell col="3" text="bind:mbrNo"/>
-                      <Cell col="4" expr="comp.parent.parent.parent.gfn_setMasking(mbrNm, 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover"/>
+                      <Cell col="3" text="bind:mbrNo" color="blue" cursor="pointer" textDecoration="underline"/>
+                      <Cell col="4" expr="comp.parent.parent.parent.gfn_setMasking(mbrNm, 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover" color="blue" cursor="pointer" textDecoration="underline"/>
                       <Cell col="5" expr="comp.parent.parent.parent.gfn_setMasking(actlAtlctNpleNm, 1, 1)" tooltiptext="bind:actlAtlctNpleNm" tooltiptype="hover"/>
                       <Cell col="6" text="bind:waitingNum"/>
                       <Cell col="7" text="bind:waitingStatCdNm"/>
@@ -453,6 +453,20 @@ this.fn_talk_check = function()
 				this.ds_rcv_obj.checkarray[nRow] = 1;
 			}
 		}
+	}
+};
+
+this.Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	// 회원번호 클릭시 회원 상세팝업
+	if(e.col == 3 || e.col == 4){
+		var oArg = {
+				mbrNo : this.ds_waiting_list.getColumn(e.row, "mbrNo")
+				, menuId : this.menuSeq
+		};
+	
+		this.cnt++;
+		this.gfn_openPopup("mbrDtlPop"+this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
 	}
 };
 ]]></Script>
