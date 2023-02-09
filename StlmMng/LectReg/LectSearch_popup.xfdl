@@ -194,7 +194,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					}
 				}
 			
-				this.gfnSetCheckBoxNoDataset(this.opener.divWork.form.ds_class_list, this.opener.divWork.form.Div00.form.Div02.form.Grid00, 0);
+				if(!this.opener.divWork.form.Div00.form.Div04.visible){
+					this.gfnSetCheckBoxNoDataset(this.opener.divWork.form.ds_class_list, this.opener.divWork.form.Div00.form.Div02.form.Grid00, 0);
+				}
 				
 				// 결제정보
 				this.opener.divWork.form.Div00.form.Div04.set_visible(true);
@@ -455,7 +457,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getMemberDtl.do";
 	var inData      = "";
 	var outData     = "this.ds_member_dtl=output1 this.ds_stlm_list=output2 this.ds_wit_list=output3 this.ds_tot_stlm_list=output4";
-	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd);
+	var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.gfn_nvl(this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd")) != "" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.gfn_nvl(this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd")) != "" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd);
 	var callBackFnc = function(svcID, errorCode, errorMsg){};
 	var isAsync     = false;
 	var tranObj = {
@@ -473,6 +475,9 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	this.gfn_transaction(tranObj);
 	
 	// 인원 수 체크
+	trace(this.ds_class_dtl.getColumn(0, "gsCapaCnt"));
+	trace(actlAtlctCnt);
+	trace(Number(this.ds_tot_stlm_list.getRowCount()));
 	if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < actlAtlctCnt + Number(this.ds_tot_stlm_list.getRowCount())){
 		alert("강좌명 : " + lectNm + "\n정원이 마감된 강좌가 있어 결제 하실 수 없습니다.");
 		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
@@ -510,9 +515,6 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		}
 	}
 	
-	trace(oflnAtlctCnt);
-	trace(actlAtlctCnt);
-	trace(Number(this.ds_class_dtl.getColumn(0, "oflnCapaCnt")));
 	if(lectStatCd == "05" && this.initWaitMemberYn == "Y" && (oflnAtlctCnt + actlAtlctCnt) > Number(this.ds_class_dtl.getColumn(0, "oflnCapaCnt"))){
 		if(confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
 			var strSvcId    = "saveWait";
