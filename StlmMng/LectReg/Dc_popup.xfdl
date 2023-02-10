@@ -150,7 +150,7 @@
                           <Div id="Div02" taborder="6" text="Div02" left="Static03:0" top="128" height="50" right="0">
                             <Layouts>
                               <Layout>
-                                <Combo id="Combo00" taborder="0" text="" left="10" top="15" width="200" height="20" innerdataset="ds_cpn_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div02_Combo00_onitemchanged"/>
+                                <Combo id="Combo00" taborder="0" text="" left="10" top="15" width="200" height="20" innerdataset="ds_cpn_list" codecolumn="cpnNo" datacolumn="cdNm" onitemchanged="Div00_Div04_Div02_Combo00_onitemchanged"/>
                                 <Static id="Static00" taborder="1" left="0" width="120" height="20" cssclass="sta_WF_CompText" bottom="3" visible="false"/>
                                 <Static id="Static01" taborder="2" left="220" top="3" width="120" height="21"/>
                               </Layout>
@@ -297,28 +297,34 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "dataList":
 			// 바닥 리스트에 쿠폰이 이미 있으면 쿠폰 데이터셋에서 제거
-			for(var i=this.ds_cpn_list.getRowCount()-1;i>=0;i--){
+			for(var i=this.ds_cpn_list.getRowCount()-1;i>0;i--){
 				for(var j=0;j<this.opener.divWork.form.ds_class_list.getRowCount();j++){
 					if(this.row != j && this.ds_cpn_list.getColumn(i, "cpnNo") == this.opener.divWork.form.ds_class_list.getColumn(j, "cpnNo")){
 						this.ds_cpn_list.deleteRow(i);
-						break;
+						continue;
 					}
+				}
+			}
+			
+			// 사용한 쿠폰은 제거
+			for(var i=this.ds_cpn_list.getRowCount()-1;i>0;i--){
+				if(this.ds_cpn_list.getColumn(i, "cpnUseYn") == "Y"){
+					this.ds_cpn_list.deleteRow(i);
 				}
 			}
 			
 			this.ds_select_grde_list.copyData(this.ds_grde_list);
 			
-			for(var i=this.ds_grde_list.getRowCount()-1;i>=0;i--){
+			for(var i=this.ds_grde_list.getRowCount()-1;i>0;i--){
 				// 등급할인 사용 횟수 초과해서 사용못하는 등급할인 제거
 				if(this.ds_grde_list.getColumn(i, "grdeUseYn") == "N"){
 					this.ds_select_grde_list.deleteRow(i);
-					break;
+					continue;
 				}
-				
 				// 전체할인 사용 횟수 초과해서 사용못하는 등급할인 제거
 				if(this.ds_grde_list.getColumn(i, "allUseYn") == "N"){
 					this.ds_select_grde_list.deleteRow(i);
-					break;
+					continue;
 				}
 				for(var j=0;j<this.opener.divWork.form.ds_class_list.getRowCount();j++){
 					if(this.row != j && this.ds_grde_list.getColumn(i, "cd") != "" && this.opener.divWork.form.ds_class_list.getColumn(j, "grdeDcCd") == this.ds_grde_list.getColumn(i, "cd")){
@@ -328,13 +334,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 						// 바닥 리스트에 잔여 전체 할인 횟수만큼 사용했으면 쿠폰, 등급등급할인 데이터셋 제거
 						if(Number(this.ds_grde_list.getColumn(i, "allUseCnt")) >= Number(this.ds_grde_list.getColumn(i, "allDcCnt"))){
 							this.ds_select_grde_list.deleteRow(i);
-							break;
+							continue;
 						}
 						
 						// 바닥 리스트에 등급할인이 이미 있으면 등급할인 쿠폰 데이터셋에서 제거
 						if(Number(this.ds_grde_list.getColumn(i, "allGrdeUseCnt")) >= Number(this.ds_grde_list.getColumn(i, "dcNbcnt"))){
 							this.ds_select_grde_list.deleteRow(i);
-							break;
+							continue;
 						}
 					}
 				}
@@ -425,12 +431,12 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			if(this.cpnDcAmt > 0){
 				this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
-				this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_value(this.classList.getColumn(0, "cpnDcCd"));
+				this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_value(this.classList.getColumn(0, "cpnNo"));
 				this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
 				this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(true);
 				var dcAmtClCd, dcAmt;
 				for(var i=0;i<this.ds_cpn_list.getRowCount();i++){
-					if(this.classList.getColumn(0, "cpnDcCd") == this.ds_cpn_list.getColumn(i, "cd")){
+					if(this.classList.getColumn(0, "cpnNo") == this.ds_cpn_list.getColumn(i, "cpnNo")){
 						dcAmtClCd = this.ds_cpn_list.getColumn(i, "dcAmtClCd");
 						dcAmt = this.ds_cpn_list.getColumn(i, "dcAmt");
 					}
@@ -891,7 +897,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				var dcAmt = 0;
 				
 				for(var i=0;i<this.ds_cpn_list.getRowCount();i++){
-					if(obj.value == this.ds_cpn_list.getColumn(i, "cd")){
+					if(obj.value == this.ds_cpn_list.getColumn(i, "cpnNo")){
 						dcAmtClCd = this.ds_cpn_list.getColumn(i, "dcAmtClCd");
 						dcAmt = this.ds_cpn_list.getColumn(i, "dcAmt");
 					}
@@ -1017,11 +1023,12 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		
 		// 쿠폰 할인 적용
 		if(this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.value != ''){
-			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcCd", this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.value);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcNm", this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.text);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcAmt", this.cpnDcAmt);
 			for(var i=0;i<this.ds_cpn_list.getRowCount();i++){
-				if(this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.value == this.ds_cpn_list.getColumn(i, "cd")){
+				if(this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.value == this.ds_cpn_list.getColumn(i, "cpnNo")){
+				trace(this.ds_cpn_list.getColumn(i, "cd"));
+					this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcCd", this.ds_cpn_list.getColumn(i, "cd"));
 					this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnNo", this.ds_cpn_list.getColumn(i, "cpnNo"));
 					this.opener.divWork.form.ds_class_list.setColumn(this.row, "cpnDcAmtClCd", this.ds_cpn_list.getColumn(i, "dcAmtClCd"));
 					if(this.ds_cpn_list.getColumn(i, "dcAmtClCd") == "01"){ // 01 정률
@@ -1130,6 +1137,7 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
           <Column id="dcAmtClCd" type="STRING" size="256"/>
           <Column id="dcAmt" type="INT" size="256"/>
           <Column id="cpnNo" type="STRING" size="256"/>
+          <Column id="cpnUseYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_select_grde_list">

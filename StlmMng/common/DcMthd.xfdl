@@ -144,7 +144,7 @@
                     <Div id="Div02" taborder="6" text="Div02" left="Static03:0" top="128" height="50" right="0">
                       <Layouts>
                         <Layout>
-                          <Combo id="Combo00" taborder="0" text="Combo00" left="10" top="15" width="200" height="20" innerdataset="ds_cpn_amt_cl_cd_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div02_Combo00_onitemchanged"/>
+                          <Combo id="Combo00" taborder="0" text="Combo00" left="10" top="15" width="200" height="20" innerdataset="ds_cpn_amt_cl_cd_list" codecolumn="cpnNo" datacolumn="cdNm" onitemchanged="Div00_Div04_Div02_Combo00_onitemchanged"/>
                           <Static id="Static00" taborder="1" left="0" width="120" height="20" cssclass="sta_WF_CompText" bottom="3" visible="false"/>
                           <Static id="Static01" taborder="2" left="220" top="3" width="120" height="21"/>
                         </Layout>
@@ -245,6 +245,8 @@
           <Column id="cdNm" type="STRING" size="256"/>
           <Column id="dcAmtClCd" type="STRING" size="256"/>
           <Column id="dcAmt" type="INT" size="256"/>
+          <Column id="cpnNo" type="STRING" size="256"/>
+          <Column id="cpnUseYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_adm_grde_amt_cl_cd_list">
@@ -589,7 +591,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				var dcAmt = 0;
 				var index = 0;
 				for(var i=0;i<this.ds_cpn_amt_cl_cd_list.getRowCount();i++){
-					if(obj.value == this.ds_cpn_amt_cl_cd_list.getColumn(i, "cd")){
+					if(obj.value == this.ds_cpn_amt_cl_cd_list.getColumn(i, "cpnNo")){
 						index = i;
 						dcAmtClCd = this.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmtClCd");
 						dcAmt = this.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt");
