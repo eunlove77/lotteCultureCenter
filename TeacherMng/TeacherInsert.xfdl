@@ -744,7 +744,7 @@ this.validate_teacher = function(){
 	if(!this.validate_teacher_hist()) return false;
 	if(!this.validate_teacher_awrd()) return false;
 	if(!this.validate_teacher_athctf()) return false;
-	
+
 	return true;
 }
 this.validate_teacher_basic = function(){
@@ -835,11 +835,28 @@ this.validate_teacher_ds_list = function(ds, vali_arr, type){
 				msg = vali[1] + " 입력하세요.";
 			} else {
 				isInput = true;
+
+				if(ds.getColumn(i, vali[0]) > this.gfnGetToDay())
+				{
+					msg = "현재날짜 이후 날짜는 선택불가합니다.";
+					ds.setColumn(i, vali[0], "");
+				} else if(vali[0] == "histEndDt") {
+					if(ds.getColumn(i, "histStDt") > ds.getColumn(i, vali[0]))
+					{
+						msg = "종료일은 시작일 이후로 설정하세요.";
+						ds.setColumn(i, vali[0], "");
+					}
+				}
+			} 
+			
+			if(isInput && msg){
+				//하나라도 입력했다면 검사대상
+				alert(msg);
+				break;
 			}
 		}
+		
 		if(isInput && msg){
-			//하나라도 입력했다면 검사대상
-			alert(msg);
 			return false;
 		}
 	}
