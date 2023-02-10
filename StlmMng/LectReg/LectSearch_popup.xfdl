@@ -490,14 +490,14 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	// 대기신청 강좌의 최초 대기신청자로 등록하는경우
 	// 온라인=마감, 오프라인=미달 인 경우 수강내역과 대기자 내역이 없는 수강자인 경우 결제가 가능하도록 개선 
-	var oflnAtlctCnt = 0;
-	for(var i=0;i<this.ds_tot_stlm_list.getRowCount();i++){
-		if(this.ds_tot_stlm_list.getColumn(i, "stlmChnlCd") == "D"){
-			oflnAtlctCnt++;
-		}
-	}
-	
-	if(lectStatCd == "05" && this.initWaitMemberYn == "Y" && (oflnAtlctCnt + actlAtlctCnt) > Number(this.ds_class_dtl.getColumn(0, "oflnCapaCnt"))){
+// 	var oflnAtlctCnt = 0;
+// 	for(var i=0;i<this.ds_tot_stlm_list.getRowCount();i++){
+// 		if(this.ds_tot_stlm_list.getColumn(i, "stlmChnlCd") == "D" && this.ds_tot_stlm_list.getColumn(i, "atlctStlmSubChnlCd") != "O"){
+// 			oflnAtlctCnt++;
+// 		}
+// 	}
+	trace(this.ds_tot_stlm_list.getRowCount());
+	if(lectStatCd == "05" && this.initWaitMemberYn == "Y" && (this.ds_tot_stlm_list.getRowCount() + actlAtlctCnt) > Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt"))){
 		if(confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
 			var strSvcId    = "saveWait";
 			var strSvcUrl   = this.application.Admin_svc + "::lectReg/insertWaitList.do";
@@ -531,9 +531,6 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		}
 	}else{
 		// 인원 수 체크
-		trace(this.ds_class_dtl.getColumn(0, "gsCapaCnt"));
-		trace(actlAtlctCnt);
-		trace(Number(this.ds_tot_stlm_list.getRowCount()));
 		if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < actlAtlctCnt + Number(this.ds_tot_stlm_list.getRowCount())){
 			alert("강좌명 : " + lectNm + "\n정원이 마감된 강좌가 있어 결제 하실 수 없습니다.");
 			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
@@ -870,6 +867,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="fmlyRelCd" type="STRING" size="256"/>
           <Column id="bday" type="STRING" size="256"/>
           <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="atlctStlmSubChnlCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
