@@ -25,7 +25,7 @@
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell col="0" text="질문"/>
+                <Cell text="질문"/>
                 <Cell col="1" text="유형"/>
                 <Cell col="2" text="지점"/>
                 <Cell col="3" text="작성자"/>
@@ -37,11 +37,11 @@
                 <Cell col="9" text="답변일"/>
               </Band>
               <Band id="body">
-                <Cell col="0" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="1" text="expr:clCd? clNm : ''"/>
                 <Cell col="2" text="bind:brchNm"/>
                 <Cell col="3" expr="comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" tooltiptype="hover" tooltiptext="expr:mbrNm + &quot;(&quot; + mbrId + &quot;)&quot;"/>
-                <Cell col="4" expr="comp.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd" tooltiptype="hover"/>
+                <Cell col="4" expr="email ? comp.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd : ''" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd" tooltiptype="hover"/>
                 <Cell col="5" expr="comp.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
                 <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="7" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
