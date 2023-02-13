@@ -945,16 +945,25 @@ this.gfn_set_year = function(form, targetObj, endYy, strtYy, useEmptyText, index
 /**
 * @description 	   : 콤보박스에 월을 표시 데이터셋 자동 생성 후 바인딩
 */
-this.gfn_set_month = function(form, targetObj){
+this.gfn_set_month = function(form, targetObj, combo_year, combo_month){
 	var ds = new Dataset;
 	var dsId = "ds_month";
+	var year = new nexacro.Date().getFullYear();
 	
 	ds.addColumn("data", "String");
 	ds.addColumn("code", "String");
 	
+	form.removeChild(dsId);
 	form.addChild(dsId, ds);
 	
 	for(var i = 1 ; i <= 12 ; i++){
+		
+		if(year == combo_year){
+			if(i > parseInt(combo_month)){			
+				break;
+			}
+		}
+		
 		var nRow = this[dsId].addRow();
 		this[dsId].setColumn(nRow, "data", i + "월");
 		if(i < 10){
