@@ -124,7 +124,8 @@
           </Layouts>
         </Div>
         <Static id="Static01_00" taborder="10" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="row11:13" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="25" width="200"/>
-        <Div id="Div01" taborder="11" text="Div03" left="45" top="row09_00:38" height="55" right="45" minwidth="400" maxwidth="">
+        <Div id="Div04" taborder="11" text="Div04" left="10" top="row09_00:20" height="0" right="10" url="FrameBase::include/mdf_info.xfdl" visible="true" minwidth="720" maxwidth=""/>
+        <Div id="Div01" taborder="12" text="Div03" left="45" top="Div04:10" height="55" right="45" minwidth="400" maxwidth="">
           <Layouts>
             <Layout>
               <Button id="btnCnl" taborder="1" text="취소" left="42.35%" top="12" width="83" height="30" cssclass="btn_WF_High" onclick="Div01_btnCnl_onclick"/>
@@ -145,6 +146,12 @@
           <Column id="mbilImgFileId" type="STRING" size="256"/>
           <Column id="intrdnCont" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="DATETIME" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfNm" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="DATETIME" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row>
@@ -211,6 +218,8 @@
       <BindItem id="evntStDt" compid="row06.form.strtDtm" propid="value" datasetid="ds_detail" columnid="evntStDt"/>
       <BindItem id="evntEndDt" compid="row06.form.endDtm" propid="value" datasetid="ds_detail" columnid="evntEndDt"/>
       <BindItem id="expsrYn" compid="row11.form.useDiv.form.radioUse" propid="value" datasetid="ds_detail" columnid="expsrYn"/>
+      <BindItem id="item0" compid="Div04.form.Div01.form.Static01" propid="text" datasetid="ds_detail" columnid="rgprDtm"/>
+      <BindItem id="item1" compid="Div04.form.Div03.form.Static01" propid="text" datasetid="ds_detail" columnid="mdfDtm"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -251,6 +260,9 @@ this.WebMagazineDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.txtMenuNm.set_text("웹매거진 상세/수정");
 		this.Div01.form.btnSave.set_text("수정");
 		this.fn_detail();
+		
+		this.Div04.set_height(95);
+		this.resetScroll();
 	}
 	else
 	{
@@ -388,6 +400,18 @@ this.fn_detail = function ()
 	
 };
 
+this.fn_set_detail = function()
+{
+	//등록자, 수정자 정보
+	var rgprNm = this.gfn_isNull(this.ds_detail.getColumn(0, "rgprNm")) ? "" : "(" + this.ds_detail.getColumn(0, "rgprNm") + ")";
+	var rgprInfo = this.ds_detail.getColumn(0, "rgprId") + rgprNm;
+	var mdfNm = this.gfn_isNull(this.ds_detail.getColumn(0, "mdfNm")) ? "" : "(" + this.ds_detail.getColumn(0, "mdfNm") + ")";
+	var mdfInfo = this.gfn_nvl(this.ds_detail.getColumn(0, "mdfId")) + mdfNm;
+	
+	this.Div04.form.Div00.form.Static01.set_text(rgprInfo);
+	this.Div04.form.Div02.form.Static01.set_text(mdfInfo);
+}
+
 this.fn_get_edit_body = function(wbObj){
 	
 	var _win = wbObj.getProperty("window");
@@ -439,6 +463,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   switch(svcID)
   {
 	case "detail":
+		
+		this.fn_set_detail();
 		
 		if(this.ds_appl_lect.rowcount < 1)
 		{
