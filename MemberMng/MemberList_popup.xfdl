@@ -440,7 +440,7 @@ this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 			chkList.deleteRow(i);
 		}
 	}
- 
+
 	if(chkList.getRowCount() > this.maxCnt)
 	{
 		alert("최대 "+this.maxCnt+ "개 선택 가능합니다.");
@@ -474,8 +474,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div02.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_member_list.getCount()) + "개)");
 			if(this.parent.excptMbrNo)
 			{
-				this.ds_member_list.filter("mbrNo !='"+ this.parent.excptMbrNo +"'")
-				
+				var excptRow = this.ds_member_list.findRow("mbrNo", this.parent.excptMbrNo);
+				this.ds_member_list.deleteRow(excptRow);
 			}
 			break;
 	}

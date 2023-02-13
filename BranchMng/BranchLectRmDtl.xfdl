@@ -19,7 +19,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="117" top="5" width="100" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="117" top="5" width="100" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -87,7 +87,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="면적(평)" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28" inputfilter="none" inputtype="number"/>
+              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28" inputfilter="none" inputtype="number" maxlength="5"/>
               <Static id="Static00_00" taborder="2" text="평" left="280" top="0" width="19" height="31" usedecorate="true"/>
             </Layout>
           </Layouts>
@@ -154,6 +154,12 @@
           <Column id="lectRmCd" type="INT" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -181,12 +187,25 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "선택");
+	
+	//본인 지점 세팅
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	this.row02.form.spotDiv.form.ComboSpot.set_index(0);
 		
 	if(this.parent.brchCd != "" && this.parent.lectRmCd != ""){	
 	
 		this.ds_detail.setColumn(0, "brchCd", this.parent.brchCd);
 		this.ds_detail.setColumn(0, "lectRmCd", this.parent.lectRmCd);
 		this.txtMenuNm.set_text("지점별 강의실 상세/수정");
+		this.Div01.form.btnSave.set_text("수정");
 		this.fn_detail();
 	}
 	else

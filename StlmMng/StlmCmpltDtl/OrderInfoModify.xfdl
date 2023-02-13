@@ -301,12 +301,18 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				// 기존에 쿠폰 할인을 먹이지 않았으면 쿠폰 할인 콤보박스 선택으로 세팅
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
 			}else{
+				// 사용한 쿠폰은 데이터셋에서 제거
+				for(var i=this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getRowCount()-1;i>0;i--){
+					if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cpnUseYn") == "Y" && this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cpnNo") != dsDcDtl.getColumn(0, "cpnNo")){
+						this.dcMthdFrm.ds_cpn_amt_cl_cd_list.deleteRow(i);
+						continue;
+					}
+				}
+			
 				var cpnDcAmt = dsDcDtl.getColumn(0, "cpnDcAmt");
-				trace(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
-				trace(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.saveXML());
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
 				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
-				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_value(dsDcDtl.getColumn(0, "cpnDcAmtClCd"));
+				this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.set_value(dsDcDtl.getColumn(0, "cpnNo"));
 				
 				if(this.lectAmt < cpnDcAmt){
 					this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(this.lectAmt) + "원");
@@ -435,8 +441,6 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var etcStlmAmt = this.gfn_nvl(this.Div01.form.Div05.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div05.form.Edit00.value, ",", ""));
 	var chngAmt = this.gfn_nvl(this.Div01.form.Div06.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Edit00.value, ",", ""));
 	var chngMthdCd = this.gfn_nvl(this.Div01.form.Div06.form.Combo00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Combo00.value, ",", ""));
-	trace(chngAmt);
-	trace(chngMthdCd);
 	
 	
 	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
@@ -500,6 +504,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		dsUpdate.addColumn("atlctRsvNo", "string", 256);
 		dsUpdate.addColumn("actlAtlctNpleSeqno", "int", 256);
 		dsUpdate.addColumn("mbrId", "string", 256);
+		dsUpdate.addColumn("mbrNo", "string", 256);
 		dsUpdate.addColumn("gsStlmAmt", "int", 256);
 		dsUpdate.addColumn("crdcoCd", "string", 256);
 		dsUpdate.addColumn("crdStlmAmt", "int", 256);
@@ -520,6 +525,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		dsUpdate.addColumn("cpnDcAmtClCd", "string", 256);
 		dsUpdate.addColumn("cpnDcAmt", "int", 256);
 		dsUpdate.addColumn("cpnDcRt", "int", 256);
+		dsUpdate.addColumn("cpnNo", "string", 256);
 		dsUpdate.addColumn("addDcNm", "string", 256);
 		dsUpdate.addColumn("addDcAmtClCd", "string", 256);
 		dsUpdate.addColumn("addDcAmt", "int", 256);
@@ -533,6 +539,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.ds_update_info.setColumn(0, "atlctRsvNo", this.atlctRsvNo);
 		this.ds_update_info.setColumn(0, "actlAtlctNpleSeqno", this.actlAtlctNpleSeqno);
 		this.ds_update_info.setColumn(0, "mbrId", this.ds_order_modify_info.getColumn(0, "mbrId"));
+		this.ds_update_info.setColumn(0, "mbrNo", this.ds_order_modify_info.getColumn(0, "mbrNo"));
 		this.ds_update_info.setColumn(0, "gsStlmAmt", this.gsStlmAmt);
 		this.ds_update_info.setColumn(0, "crdcoCd", this.Div01.form.Div00.form.Combo00.value);
 		this.ds_update_info.setColumn(0, "crdStlmAmt", crdStlmAmt);
@@ -581,10 +588,13 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		// 쿠폰 할인
 		if(this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value != ""){
 			this.ds_update_info.setColumn(0, "cpnDcNm", this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.text);
-			this.ds_update_info.setColumn(0, "cpnDcAmtClCd", this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value);
 			for(var i=0;i<this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getRowCount();i++){
-				if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cd") == this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value){
+				if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cpnNo") == this.dcMthdFrm.Div00.form.Div04.form.Div02.form.Combo00.value){
+					this.ds_update_info.setColumn(0, "cpnDcAmtClCd", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cd"));
+					this.ds_update_info.setColumn(0, "cpnNo", this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cpnNo"));
 					if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmtClCd") == "02"){
+						trace(lectAmt);
+						trace(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"));
 						if(lectAmt < Number(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "dcAmt"))){
 							this.ds_update_info.setColumn(0, "cpnDcAmt", lectAmt);
 						}else{
@@ -599,6 +609,8 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 				}
 			}
 		}
+		
+		trace(this.ds_update_info.saveXML());
 		
 		// 추가금액 오프라인 할인
 		if(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.dcMthdFrm.Div00.form.Div05.form.Radio00.value == "Y"){

@@ -18,7 +18,7 @@
                 <Column size="80"/>
                 <Column size="265"/>
                 <Column size="75"/>
-                <Column size="80"/>
+                <Column size="120"/>
                 <Column size="100"/>
               </Columns>
               <Rows>
@@ -48,7 +48,7 @@
                 <Cell col="6" text="bind:araSqm"/>
                 <Cell col="7" text="bind:memoCont"/>
                 <Cell col="8" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? '사용' : '미사용'"/>
-                <Cell col="9" text="expr:rgprId ? rgprNm : ''"/>
+                <Cell col="9" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="10" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
               </Band>
             </Format>
@@ -109,7 +109,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -223,6 +223,12 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
 * include 영역 
@@ -248,15 +254,18 @@ this.BranchLectRmList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.branchLectRmDs, this.GridBranchLectRmList, 0);
+	
+	/*
 	//검색영역 DS 초기화
 	this.spotCdList.copyData(this.application.gdsSpotCdList);
 	this.spotCdList.insertRow(0);
 	this.spotCdList.setColumn(0, "cd", "");
 	this.spotCdList.setColumn(0, "cdNm", "전체");
 	
-	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
-	
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);*/
+	this.fn_set_spotCd();
 	// 목록 조회
+	this.fn_searchValueInit();
 	this.fn_list(1);
 };
 
@@ -349,6 +358,27 @@ this.GridBranchLectRmList_oncellclick = function(obj:nexacro.Grid,e:nexacro.Grid
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
+
+this.fn_set_spotCd = function()
+{
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.updateToDataset();
+}
 
 //조회
 this.fn_list = function ()

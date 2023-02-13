@@ -63,9 +63,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강의기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                    <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" locale="ko_KR" oncloseup="Div00_Div06_Calendar00_oncloseup"/>
+                    <Calendar id="Calendar00" taborder="1" left="Static00:6" top="5" width="100" height="20" oncloseup="Div00_Div06_Calendar00_oncloseup" dateformat="yyyy-MM-dd"/>
                     <Static id="Static01" taborder="3" text="~" left="Calendar00:6" top="5" width="9" height="20"/>
-                    <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" locale="ko_KR" oncloseup="Div00_Div06_Calendar01_oncloseup"/>
+                    <Calendar id="Calendar01" taborder="2" left="Static01:6" top="5" width="100" height="20" oncloseup="Div00_Div06_Calendar01_oncloseup" dateformat="yyyy-MM-dd"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -191,7 +191,7 @@
                       <Cell col="4" text="bind:lectClCd" combodataset="ds_classGb_list" combocodecol="cd" combodatacol="cdNm" displaytype="combotext"/>
                       <Cell col="5" text="bind:lectCd" textDecoration="underline" color="blue" cursor="pointer"/>
                       <Cell col="6" text="bind:lectNm" textDecoration="underline" color="blue" cursor="pointer"/>
-                      <Cell col="7" text="bind:tcNm" textDecoration="underline" color="blue" cursor="pointer"/>
+                      <Cell col="7" text="bind:tcNm" textDecoration="underline" color="blue" cursor="pointer" expr="comp.parent.parent.parent.gfn_setMasking(tcNm, 1, 1)"/>
                       <Cell col="8" expr="rceptPrdStDt + &quot; ~ &quot; + rceptPrdEndDt"/>
                       <Cell col="9" displaytype="number" text="bind:gsCapaCnt"/>
                       <Cell col="10" text="bind:appCnt"/>
@@ -652,8 +652,6 @@ this.fn_list = function ()
 		menuSeq : this.getOwnerFrame().param.MENU_ID,
 		isAsync : true
 	}
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
-
 	
 	this.gfn_transaction(tranObj);	
 };
@@ -695,6 +693,25 @@ this.fn_init = function(obj)
 
 this.Div00_Div09_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
+	
+	if(nexacro.trim(new String(this.gfn_nvl(this.ds_search.getColumn(0, "lectStDtm")))) != "" || nexacro.trim(new String(this.gfn_nvl(this.ds_search.getColumn(0, "lectEndDtm")))) != "")
+	{
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_search.getColumn(0, "lectStDtm")))) == "")
+		{
+			alert("강의기간 시작일을 선택하세요.");
+			this.Div00.form.Div06.form.Calendar00.setFocus();
+			return;
+		}
+		
+		if(nexacro.trim(new String(this.gfn_nvl(this.ds_search.getColumn(0, "lectEndDtm")))) == "")
+		{
+			alert("강의기간 종료일을 선택하세요.");
+			this.Div00.form.Div06.form.Calendar01.setFocus();
+			return;
+		}
+	}
+	
 	this.fn_list();
 };
 
