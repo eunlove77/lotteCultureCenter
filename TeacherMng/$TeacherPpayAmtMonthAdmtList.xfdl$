@@ -13,7 +13,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1" canitemchange="row01_Div00_brchCd_canitemchange"/>
+                    <Combo id="brchCd" taborder="1" text="Combo00" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1" canitemchange="row01_Div00_brchCd_canitemchange" onitemchanged="row01_Div00_brchCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -21,8 +21,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지급월" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="yy" taborder="1" text="년도" left="116" top="5" width="100" height="20" value="" index="-1" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="mm" taborder="2" text="월" left="yy:5" top="5" width="100" height="20" value="" index="-1"/>
+                    <Combo id="yy" taborder="1" text="년도" left="116" top="5" width="100" height="20" value="" index="-1" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="row01_Div01_yy_onitemchanged"/>
+                    <Combo id="mm" taborder="2" text="월" left="yy:5" top="5" width="100" height="20" value="" index="-1" onitemchanged="row01_Div01_mm_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -275,15 +275,18 @@ this.TeacherPpayAmtList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	var comboYyObj = this.row01.form.Div01.form.yy;
 	var comboMmObj = this.row01.form.Div01.form.mm;
 	
-	this.yy = new nexacro.Date().getYear();
-	this.month = new nexacro.Date().getMonth() + 1;
+	this.yy = new nexacro.Date().getFullYear();
+	this.month = new nexacro.Date().getMonth();
+
+	if(this.month == 0){
+		this.yy = this.yy - 1;
+		this.month = 12;
+	}
+	
 	this.month = this.month.toString().length < 2 ? "0" + this.month : this.month;
 	
-	this.gfn_set_month(this, comboMmObj);
-	
-	comboYyObj.set_value(this.yy);
+	this.gfn_set_month(this, comboMmObj, this.yy, this.month);	
 	comboMmObj.set_value(this.month);
-
 };
 
 
@@ -465,7 +468,6 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			}			
 		break; 		
 		case "getSesterYearList":
-			var year = new nexacro.Date().getFullYear();
 			
 			if(this.ds_year_list.getRowCount() == 0) {
 				this.ds_year_list.addRow();
@@ -473,7 +475,7 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				this.ds_year_list.setColumn(0, "cdNm", year + "년");
 			}
 			
-			this.row01.form.Div01.form.yy.set_value(year);
+			this.row01.form.Div01.form.yy.set_value(this.yy);
 		break;
 	}
 }
@@ -604,30 +606,22 @@ this.fn_year_add = function()
 	this.gfn_transaction(tranObj);	
 }
 
-
-//학기 조회
-this.fn_sesterInfo = function(_brchCd)
-{	
-	this.ds_search.setColumn(0, "brchCd", _brchCd);
-	
-	var tranObj = {
-		strSvcId : "sesterInfo",
-		strSvcUrl : this.application.Admin_svc + "::class/getSesterInfo.do",
-		inData : "search=ds_search",
-		outData : "",
-		strArg : "",
-		callBackFnc : "fn_callback",
-		isAsync : true,
-		menuSeq : this.getOwnerFrame().param.MENU_ID
-	}
-
-	this.gfn_transaction(tranObj);
+this.row01_Div00_brchCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.ds_list.clearData();
 };
 
-
-this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+this.row01_Div01_yy_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	this.fn_sesterInfo(e.postvalue);
+	var comboMmObj = this.row01.form.Div01.form.mm;
+	
+	this.ds_list.clearData();
+	this.gfn_set_month(this, comboMmObj, obj.value, this.month);
+};
+
+this.row01_Div01_mm_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.ds_list.clearData();
 };
 ]]></Script>
     <Objects>
