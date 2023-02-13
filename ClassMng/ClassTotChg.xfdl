@@ -57,12 +57,12 @@
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="정원" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel"/>
-                                <MaskEdit id="MaskEdit02" taborder="2" left="358" top="5" height="21" width="50" format="!999" limitbymask="both" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup"/>
+                                <MaskEdit id="MaskEdit01" taborder="6" left="Static00:6" top="5" width="60" height="20" limitbymask="both" enable="true" format="!9,999" readonly="true"/>
+                                <Static id="Static01" taborder="5" text="명 (온라인" left="MaskEdit01:6" top="5" width="56" height="20" cssclass="sta_WF_TitGray"/>
+                                <MaskEdit id="MaskEdit00" taborder="2" left="Static01:6" top="5" width="50" height="20" limitbymask="both" format="!999" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit00_onkeyup"/>
+                                <Static id="Static02" taborder="4" text=" / 오프라인" left="MaskEdit00:6" top="5" width="62" height="20"/>
+                                <MaskEdit id="MaskEdit02" taborder="3" left="Static02:6" top="5" height="21" width="50" format="!999" limitbymask="both" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup"/>
                                 <Static id="Static03" taborder="1" text=")" left="MaskEdit02:6" top="5" width="4" height="20"/>
-                                <Static id="Static02" taborder="3" text=" / 오프라인" left="290" top="5" width="62" height="20"/>
-                                <MaskEdit id="MaskEdit00" taborder="4" left="234" top="5" width="50" height="20" limitbymask="both" format="!999" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit00_onkeyup"/>
-                                <Static id="Static01" taborder="5" text="명 (온라인" left="172" top="5" width="56" height="20" cssclass="sta_WF_TitGray"/>
-                                <MaskEdit id="MaskEdit01" taborder="6" left="Static00:6" top="5" width="50" height="20" limitbymask="both" enable="false" format="!9,999"/>
                               </Layout>
                             </Layouts>
                           </Div>
@@ -1106,6 +1106,15 @@ this.fn_save_validation = function()
 		{
 			alert("강의시간 종료분을 선택하세요.");
 			this.Div00.form.Div00.form.Div00.form.Div03_00.form.Combo03.setFocus();
+			return;
+		}
+		
+		if(parseInt(this.ds_class_dtl.getColumn(0, "lectStHhCd") + "" + this.ds_class_dtl.getColumn(0, "lectStMiCd")) > parseInt(this.ds_class_dtl.getColumn(0, "lectEndHhCd") + "" + this.ds_class_dtl.getColumn(0, "lectEndMiCd"))) 
+		{
+			alert("강의시간을 확인하세요.");
+			this.ds_class_dtl.setColumn(0, "lectEndHhCd", "");
+			this.ds_class_dtl.setColumn(0, "lectEndMiCd", "");
+			this.Div00.form.Div00.form.Div00.form.Div03_00.form.Combo02.setFocus();
 			return;
 		}
 	}
