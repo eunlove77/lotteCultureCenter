@@ -506,12 +506,16 @@ this.fn_list = function ()
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
-	var isHpNo = this.gfn_isNull(this.ds_search.getColumn(0, "hpStNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpMidNo")) && this.gfn_isNull(this.ds_search.getColumn(0, "hpLastNo"));
+	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
+	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
+	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
 	
-	if(isKorNm != isHpNo)
-	{
-		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
+	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+	var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
+	
+	if(isKorNm != isHpNo || (nexacro.trim(this.ds_search.getColumn(0, "korNm"))).length < 2 || (this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)
+	{ 
+		alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
 	}
 	else
 	{
