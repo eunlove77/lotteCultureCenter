@@ -8,15 +8,15 @@
             <Format id="default">
               <Columns>
                 <Column size="40" band="left"/>
-                <Column size="50"/>
+                <Column size="120"/>
                 <Column size="80"/>
                 <Column size="100"/>
                 <Column size="150"/>
                 <Column size="100"/>
                 <Column size="110"/>
                 <Column size="130"/>
-                <Column size="100"/>
-                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
                 <Column size="130"/>
               </Columns>
               <Rows>
@@ -25,7 +25,7 @@
               </Rows>
               <Band id="head">
                 <Cell edittype="checkbox" displaytype="checkboxcontrol"/>
-                <Cell col="1" text="번호"/>
+                <Cell col="1" text="쿠폰번호"/>
                 <Cell col="2" text="회원등급"/>
                 <Cell col="3" text="회원번호"/>
                 <Cell col="4" text="회원ID"/>
@@ -38,12 +38,12 @@
               </Band>
               <Band id="body">
                 <Cell expr="dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
-                <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                <Cell col="1" text="bind:cultCpnNo"/>
                 <Cell col="2" text="bind:mbrGrdeCd" combodataset="ds_grade_cd" combocodecol="cd" combodatacol="cdNm" displaytype="combotext"/>
                 <Cell col="3" text="bind:mbrNo"/>
                 <Cell col="4" expr="comp.parent.gfn_setMasking(mbrId, 3)" tooltiptype="hover" tooltiptext="bind:mbrId"/>
                 <Cell col="5" expr="comp.parent.gfn_setMasking(korNm, 1, 1)" tooltiptext="bind:korNm" tooltiptype="hover"/>
-                <Cell col="6" expr="comp.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
+                <Cell col="6" expr="hpNo? comp.parent.gfn_setMaskingTel(hpNo) : ''" tooltiptext="bind:hpNo" tooltiptype="hover"/>
                 <Cell col="7" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" text="bind:rgstDtm"/>
                 <Cell col="8" text="bind:cpnEndDt" displaytype="date" calendardateformat="yyyy-MM-dd" calendardisplayinvalidtype="none" calendardisplaynulltype="none"/>
                 <Cell col="9" combodataset="ds_stat_cd" combocodecol="cd" combodatacol="cdNm" text="bind:useStatCd" displaytype="combotext"/>

@@ -11,21 +11,22 @@
                 <Formats>
                   <Format id="default">
                     <Columns>
-                      <Column size="50"/>
+                      <Column size="120"/>
                       <Column size="120"/>
                       <Column size="300"/>
                       <Column size="0"/>
-                      <Column size="150"/>
-                      <Column size="150"/>
-                      <Column size="100"/>
-                      <Column size="150"/>
+                      <Column size="130"/>
+                      <Column size="120"/>
+                      <Column size="80"/>
+                      <Column size="80"/>
+                      <Column size="120"/>
                     </Columns>
                     <Rows>
                       <Row size="35" band="head"/>
                       <Row size="24"/>
                     </Rows>
                     <Band id="head">
-                      <Cell text="번호"/>
+                      <Cell text="쿠폰번호"/>
                       <Cell col="1" text="발급 방식"/>
                       <Cell col="2" text="쿠폰명"/>
                       <Cell col="3" text="일시"/>
@@ -33,9 +34,10 @@
                       <Cell col="5" text="발급일"/>
                       <Cell col="6" text="만료일"/>
                       <Cell col="7" text="사용 상태"/>
+                      <Cell col="8" text="사용일"/>
                     </Band>
                     <Band id="body">
-                      <Cell expr="dataset.getRowCount() - currow"/>
+                      <Cell text="bind:cultCpnNo"/>
                       <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="none" color="#666666" expr="issueMthdClCd == &quot;AUTO&quot; ? &quot;자동발급&quot; : issueMthdClCd == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
                       <Cell col="2" text="bind:cpnNm"/>
                       <Cell col="3" text="expr:dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;AUTO&quot; ? &quot;자동발급&quot; : dataset.getColumn(currow, &quot;issueMthdClCd&quot;) == &quot;RANDOM&quot; ? &quot;오프라인 난수발급&quot; : &quot;일반(수동)발급&quot;"/>
@@ -43,6 +45,7 @@
                       <Cell col="5" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
                       <Cell col="6" text="bind:useEndDt"/>
                       <Cell col="7" text="bind:useStatNm"/>
+                      <Cell col="8" text="bind:useDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -91,6 +94,7 @@ this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
     <Objects>
       <Dataset id="ds_coupon_list">
         <ColumnInfo>
+          <Column id="cultCpnNo" type="STRING" size="256"/>
           <Column id="issueMthdClCd" type="STRING" size="256"/>
           <Column id="cpnNm" type="STRING" size="256"/>
           <Column id="dcAmtClCd" type="STRING" size="256"/>
@@ -98,6 +102,7 @@ this.CouponList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
           <Column id="rgprDtm" type="STRING" size="256"/>
           <Column id="useEndDt" type="STRING" size="256"/>
           <Column id="useStatNm" type="STRING" size="256"/>
+          <Column id="useDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
