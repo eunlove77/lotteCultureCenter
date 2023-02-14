@@ -33,7 +33,7 @@
                           <Static id="Static00" taborder="0" text="회원번호" left="0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
                           <Static id="Static01" taborder="1" left="Static00:0" top="0" width="252" height="31" cssclass="sta_WF_CompText"/>
                           <Static id="Static02" taborder="2" text="회원명" left="Static01:0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
-                          <Static id="Static03" taborder="3" left="Static02:0" top="0" width="252" height="31" cssclass="sta_WF_CompText" textDecoration="underline" onclick="Div00_Div01_Div00_Static03_onclick"/>
+                          <Static id="Static03" taborder="3" left="Static02:0" top="0" width="252" height="31" cssclass="sta_WF_CompText" textDecoration="underline" onclick="Div00_Div01_Div00_Static03_onclick" color="blue"/>
                           <Static id="Static04" taborder="4" text="회원 아이디" left="Static03:0" top="0" width="168" height="31" cssclass="sta_WF_TableLabel"/>
                           <Static id="Static05" taborder="5" left="Static04:0" top="0" height="31" cssclass="sta_WF_CompText" right="0"/>
                         </Layout>
@@ -602,6 +602,7 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 			}
 		}
 		
+		this.ds_member_info.clearData();
 		this.Div00.form.Div01.form.Div00.form.Static01.set_text("");
 		this.Div00.form.Div01.form.Div00.form.Static03.set_text("");
 		this.Div00.form.Div01.form.Div00.form.Static05.set_text("");
@@ -1164,12 +1165,15 @@ this.fn_set_waitAtlct = function(){
 // 회원명 클릭했을 때 상세팝업
 this.Div00_Div01_Div00_Static03_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
 {
-	this.cnt++;
-	var oArg = {
-		mbrNo : this.ds_member_info.getColumn(0, "mbrNo")
-	};
+	if(this.ds_member_info.getColumn(0, "mbrNo") !== undefined) 
+	{
+		this.cnt++;
+		var oArg = {
+			mbrNo : this.ds_member_info.getColumn(0, "mbrNo")
+		};
 
-	this.gfn_openPopup("mbrDtlPop"+this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
+		this.gfn_openPopup("mbrDtlPop"+this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
+	}
 };
 
 //학기 조회
