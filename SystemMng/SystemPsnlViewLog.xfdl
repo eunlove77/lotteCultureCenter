@@ -3,13 +3,29 @@
   <Form id="SystemPsnlViewLog" width="1280" height="800" titletext="New Form" onload="SystemPsnlViewLog_onload">
     <Layouts>
       <Layout height="800" width="1280">
-        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Div id="Div02" taborder="2" text="Div01" left="10" top="82" height="33" cssclass="div_WF_CompWrap" right="10">
+        <Static id="txtMenuNm" taborder="1" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="Div02" text="Div01" left="10" top="82" height="33" right="9">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="0" text="발생일시" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
+              <Div id="Div03" taborder="0" text="Div01" left="0" cssclass="div_WF_CompWrap" height="33" width="600" bottom="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="발생일시" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div04" taborder="1" text="Div01" height="33" cssclass="div_WF_CompWrap" left="Div03:-1" right="1" top="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="활동타입" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkAll" taborder="1" text="전체" left="116" top="5" width="45" height="20" onclick="Div02_Div04_chkAll_onclick"/>
+                    <CheckBox id="chkSearch" taborder="2" text="조회" left="chkAll:3" top="5" width="45" height="20" onclick="fn_checkbox_click"/>
+                    <CheckBox id="chkExcel" taborder="3" text="엑셀다운로드" left="chkSearch:3" top="5" width="100" height="20" onclick="fn_checkbox_click"/>
+                  </Layout>
+                </Layouts>
+              </Div>
             </Layout>
           </Layouts>
         </Div>
@@ -134,7 +150,8 @@ this.Div05_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventI
 
 this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var objCalendar = this.Div02.form.Div00.form;
+	var objCalendar = this.Div02.form.Div03.form.Div00.form;
+	
 	objCalendar.strtDtm.set_value('');
 	objCalendar.endDtm.set_value('');
 		
@@ -147,6 +164,16 @@ this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	this.pageingDiv.set_visible(false);
 };
 
+this.Div02_Div04_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(obj.isChecked()){
+		obj.parent.chkSearch.set_value(1);
+		obj.parent.chkExcel.set_value(1);
+	}else{
+		obj.parent.chkSearch.set_value(0);
+		obj.parent.chkExcel.set_value(0);
+	}
+};
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -205,10 +232,16 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 }
 
 this.fn_searchValueInit = function(){
-	var objCalendar = this.Div02.form.Div00.form;
+	var objCalendar = this.Div02.form.Div03.form.Div00.form;
+	var arrType = new Array();
 	
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	
+	if(this.Div02.form.Div04.form.chkSearch.value == true) arrType.push("'R'");
+	if(this.Div02.form.Div04.form.chkExcel.value == true) arrType.push("'E'");
+	
+	this.ds_search.setColumn(0, "type", arrType.join(","));
 	this.ds_search.setColumn(0, "f", this.Div05.form.searchField.value);
 	this.ds_search.setColumn(0, "q", this.Div05.form.searchQuery.value);
 }
@@ -226,7 +259,15 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
 	}
 	
-};]]></Script>
+};
+
+this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
+{
+	if(!obj.isChecked()){
+		this.Div02.form.Div04.form.chkAll.set_value(0);
+	}
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_log">
         <ColumnInfo>
@@ -245,6 +286,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
         <ColumnInfo>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>
