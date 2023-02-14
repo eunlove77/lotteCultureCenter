@@ -230,6 +230,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
  		chkboxFrm.rfndChnlAll.setEventHandler("onclick", this.fn_rfndChnlAll_onclick, this);
 		chkboxFrm.rfndChnlAll.set_value(0);
 		
+		// 전체학기 추가
+		this.ds_smster_list.insertRow(0);
+		this.ds_smster_list.setColumn(0, "cd", "");
+		this.ds_smster_list.setColumn(0, "cdNm", "전체");
 		// 학기
 		this.fn_sesterInfo();
 		
@@ -609,6 +613,10 @@ this.fn_year_add = function()
 		this.ds_year_list.setColumn(0, "cd", year);
 		this.ds_year_list.setColumn(0, "cdNm", year + "년");
 	}
+	//전체년도 추가
+	this.ds_year_list.insertRow(0);
+	this.ds_year_list.setColumn(0, "cd", "");
+	this.ds_year_list.setColumn(0, "cdNm", "전체");
 
 	this.ds_search.setColumn(0, "strtYy", year);
 	this.ds_search.setColumn(0, "endYy", year);
