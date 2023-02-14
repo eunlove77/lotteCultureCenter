@@ -175,29 +175,33 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 				totLectAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmtFee")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectAmtFee"));
 				totAddAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "addAmtFee")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "addAmtFee"));
 			}
-			if((totLectStlmAmt + totLectAmtFee + totAddAmtFee) != 0){
+			
+			var totGsRfndScheAmt = 0, totRfndScheLectAmt = 0, totRfndScheAddAmt = 0;
+			var rfndScheLectAmtText = "";
+			var rfndScheAddAmtText = "";
+			for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+				totGsRfndScheAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "gsRfndScheAmt");
+				if(i == 0){
+					rfndScheLectAmtText += (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt")) + "원";
+					if(Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) > 0){
+						rfndScheAddAmtText += (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) + "원";
+					}
+				}else{
+					rfndScheLectAmtText += "\n" + (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt")) + "원";
+					if(Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) > 0){
+						rfndScheAddAmtText += "\n" + (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) + "원";
+					}
+				}
+				//totRfndScheLectAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt");
+				//totRfndScheAddAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt");
+			}
+			if(totGsRfndScheAmt > 0 && (totLectStlmAmt + totLectAmtFee + totAddAmtFee) != 0){
 				stlmInfoDtlFrm.Static01.set_visible(true);
 				stlmInfoDtlFrm.Div01.set_visible(true);
 				
-				var totGsRfndScheAmt = 0, totRfndScheLectAmt = 0, totRfndScheAddAmt = 0;
-				var rfndScheLectAmtText = "";
-				var rfndScheAddAmtText = "";
-				for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
-					totGsRfndScheAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "gsRfndScheAmt");
-					if(i == 0){
-						rfndScheLectAmtText += (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt")) + "원";
-						rfndScheAddAmtText += (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) + "원";
-					}else{
-						rfndScheLectAmtText += "\n" + (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt")) + "원";
-						rfndScheAddAmtText += "\n" + (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) + "원";
-					}
-					//totRfndScheLectAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt");
-					//totRfndScheAddAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt");
-				}
-				
 				stlmInfoDtlFrm.Div01.form.Div00.form.Static01.set_text(this.gfn_setComma(totGsRfndScheAmt) + "원");
 				stlmInfoDtlFrm.Div01.form.Div01.form.Static01.set_text(rfndScheLectAmtText);
-				stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_text(rfndScheAddAmtText);
+				stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_text(rfndScheAddAmtText == "" ? "-" : rfndScheAddAmtText);
 				
 				if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 2){
 					stlmInfoDtlFrm.Div01.form.Div01.set_height(stlmInfoDtlFrm.Div01.form.Div01.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
@@ -241,9 +245,10 @@ this.fn_create_first_atlct_stlm = function()
 		totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectStlmAmt"));
 		totLectAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAmt"));
 		totLectAddAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAddAmt"));
-		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectDcAmt"));
-		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAddDcAmt"));
-		
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
+		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "optnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "optnDcAmt"));
 		totGrdeDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
 		totCpnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
 		totOflnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
@@ -270,7 +275,7 @@ this.fn_create_first_atlct_stlm = function()
 	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div01.form.Static01.set_text(this.gfn_setComma(totLectAmt) + "원");
 	
 	//총 재료비/대여료
-	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(totLectAddAmt) + "원");
+	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.form.Static01.set_text(totLectAddAmt == 0 ? '-' : this.gfn_setComma(totLectAddAmt) + "원");
 	
 	if(totLectDcAmt + totLectAddDcAmt > 0){
 		dcDiv.form.Static01.set_text("<fc v ='#ED5757'>(-)" + this.gfn_setComma(totLectDcAmt + totLectAddDcAmt) + "원" + "</fc>");
@@ -497,8 +502,10 @@ this.fn_create_last_atlct_stlm = function()
 		totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectStlmAmt"));
 		totLectAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAmt"));
 		totLectAddAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAddAmt"));
-		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectDcAmt"));
-		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAddDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
+		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "optnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "optnDcAmt"));
 		
 		totGrdeDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
 		totCpnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
@@ -523,7 +530,7 @@ this.fn_create_last_atlct_stlm = function()
 		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div01.form.Static01.set_text("0원");
 		
 		//총 재료비/대여료
-		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text("0원");
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text("-");
 		
 		for(var i=0;i<dsStlmRfndList.getRowCount();i++){
 			if(dsStlmRfndList.getColumn(i, "lectAmtFee") > 0){
@@ -596,10 +603,10 @@ this.fn_create_last_atlct_stlm = function()
 		var arrFee = [];
 		for(var i=0;i<dsStlmRfndList.getRowCount();i++){
 			if(dsStlmRfndList.getColumn(i, "lectAmtFee") > 0){
-				arrFee.push({feeNm : (Number(dsStlmRfndList.getColumn(i, "lectNbcnt")) - Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd"))) + "회 강좌 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "lectAmtFee")) + "원"});
+				arrFee.push({feeNm : Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd")) + "회 강좌 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "lectAmtFee")) + "원"});
 			}
 			if(dsStlmRfndList.getColumn(i, "addAmtFee") > 0){
-				arrFee.push({feeNm : (Number(dsStlmRfndList.getColumn(i, "lectNbcnt")) - Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd"))) + "회 "+ dsStlmRfndList.getColumn(i, "optnNm") + " 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "addAmtFee")) + "원"});
+				arrFee.push({feeNm : Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd")) + "회 "+ dsStlmRfndList.getColumn(i, "optnNm") + " 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "addAmtFee")) + "원"});
 			}			
 			
 			//취소/환불자의 할인정보는 최초 할인목록에서 뺀다
@@ -617,7 +624,7 @@ this.fn_create_last_atlct_stlm = function()
 		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div01.form.Static01.set_text(this.gfn_setComma(totLectAmt) + "원");
 		
 		//총 재료비/대여료
-		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(totLectAddAmt) + "원");
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text(totLectAddAmt == 0 ? '-' : this.gfn_setComma(totLectAddAmt) + "원");
 		
 		//총 수수료
 		if(totLectAmtFee + totAddAmtFee > 0){
