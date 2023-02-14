@@ -724,6 +724,7 @@ this.fn_set_detail = function()
 		this.Div01.form.Div05.form.Div00.form.strtDtm.set_value("");
 		this.Div01.form.Div05.form.Div00.form.endDtm.set_value("");
 		this.ds_detail.setColumn(0, "cpnSeqno", "");
+		this.ds_mem_excel.deleteAll();
 	}
 	else
 	{
@@ -1394,7 +1395,10 @@ this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
  
 this.Div03_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
-	this.fn_checkValidation();
+	if(this.confirm("저장하시겠습니까?"))
+	{
+		this.fn_checkValidation();
+	}
 };
 
 this.fn_checkValidation = function(){
@@ -1563,7 +1567,14 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 		case "save":
 			this.alert("저장되었습니다.");
-			this.opener.components[0].form.fn_list();
+			if(this.opener.components[0].form.fn_list)
+			{
+				this.opener.components[0].form.fn_list();
+			}
+			else
+			{
+				this.opener.opener.components[0].form.fn_list();
+			}
 			this.close();
 			break;
 		case "end":
