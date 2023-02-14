@@ -494,70 +494,72 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 // 오프라인 할인 콤보박스 선택
 this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	if(this.modifyYn){
-		if(obj.value == ""){
-			this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
-			this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(true);
+	if(obj.value == ""){
+		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
+		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(true);
+		
+		if(this.Div00.form.Div00.form.Div05.visible){
+			this.Div00.form.Div00.form.Div05.form.Static02.set_text("");
+			this.Div00.form.Div00.form.Div05.form.Static02.set_visible(false);
+			this.Div00.form.Div00.form.Div05.form.Radio00.set_visible(false);
+			this.Div00.form.Div00.form.Div05.form.editAdd.set_value("");
+			this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(true);
 			
-			if(this.Div00.form.Div00.form.Div05.visible){
-				this.Div00.form.Div00.form.Div05.form.Static02.set_text("");
-				this.Div00.form.Div00.form.Div05.form.Static02.set_visible(false);
-				this.Div00.form.Div00.form.Div05.form.Radio00.set_visible(false);
-				this.Div00.form.Div00.form.Div05.form.editAdd.set_value("");
-				this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(true);
-				
-				this.Div00.form.Div00.form.Div05.form.Static03.set_top(10);
-				this.Div00.form.Div00.form.Div05.form.editAdd.set_top(12);
-				this.Div00.form.Div00.form.Div05.form.Static04.set_top(12);
-			}
-		}else{
-			this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
-			this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
-			
-			// 추가금액이 있다면 추가금액 할인 세팅
-			if(this.Div00.form.Div00.form.Div05.visible){
-				this.Div00.form.Div00.form.Div05.form.Static02.set_text(obj.text);
-				this.Div00.form.Div00.form.Div05.form.Static02.set_visible(true);
-				this.Div00.form.Div00.form.Div05.form.Radio00.set_visible(true);
-				this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);
-				
-				this.Div00.form.Div00.form.Div05.form.Static03.set_top(24);
-				this.Div00.form.Div00.form.Div05.form.editAdd.set_top(25);
-				this.Div00.form.Div00.form.Div05.form.Static04.set_top(25);
-			}
+			this.Div00.form.Div00.form.Div05.form.Static03.set_top(10);
+			this.Div00.form.Div00.form.Div05.form.editAdd.set_top(12);
+			this.Div00.form.Div00.form.Div05.form.Static04.set_top(12);
 		}
-		
-		// 등급할인, 쿠폰할인 선택 값 초기화
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
-		//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text("");
-		//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
-		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
-		
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
-		this.oflnDcAmt = 0;
-		this.grdeDcAmt = 0;
-		this.cpnDcAmt = 0;
-		this.addDcAmt = 0;
-		
-		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 	}else{
-		var confirmYn = this.fn_common_confirm();
-		if(!confirmYn){
-			obj.set_index(e.preindex);
+		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
+		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
+		
+		// 추가금액이 있다면 추가금액 할인 세팅
+		if(this.Div00.form.Div00.form.Div05.visible){
+			this.Div00.form.Div00.form.Div05.form.Static02.set_text(obj.text);
+			this.Div00.form.Div00.form.Div05.form.Static02.set_visible(true);
+			this.Div00.form.Div00.form.Div05.form.Radio00.set_visible(true);
+			this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);
+			
+			this.Div00.form.Div00.form.Div05.form.Static03.set_top(24);
+			this.Div00.form.Div00.form.Div05.form.editAdd.set_top(25);
+			this.Div00.form.Div00.form.Div05.form.Static04.set_top(25);
 		}
 	}
+	
+	// 등급할인, 쿠폰할인 선택 값 초기화
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
+	//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text("");
+	//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
+	this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
+	
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
+	this.oflnDcAmt = 0;
+	this.grdeDcAmt = 0;
+	this.cpnDcAmt = 0;
+	this.addDcAmt = 0;
+	
+	this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+
+//	if(this.modifyYn){
+		
+// 	}else{
+// 		var confirmYn = this.fn_common_confirm();
+// 		if(!confirmYn){
+// 			obj.set_index(e.preindex);
+// 		}
+// 	}
 };
 
 // 공통 - 결제 당시 할인수단을 변경할 경우 컨펌
@@ -615,82 +617,84 @@ this.fn_common_confirm = function()
 // 금액필드 입력 포맷
 this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 {
-	if(this.modifyYn){
-		var num = nexacro.replaceAll(obj.value.toString(), ",", "");
-		if(num.startsWith("0") && num.length > 1){
-			num = num.substring(1);
-		}
+// 	if(this.modifyYn){
+// 		
+// 	}else{
+//  		var confirmYn = this.fn_common_confirm();
+//  		if(!confirmYn){
+// 			if(obj.id == "editOfln"){
+// 				//obj.set_value(this.gfn_setComma(this.ds_dc_dtl.getColumn(0, "oflnDcAmt")));
+// 			}else if(obj.id == "editAdd"){
+// 				//obj.set_value(this.gfn_setComma(this.ds_dc_dtl.getColumn(0, "addDcAmt")));
+// 			}
+//  		}
+//	}
+
+	var num = nexacro.replaceAll(obj.value.toString(), ",", "");
+	if(num.startsWith("0") && num.length > 1){
+		num = num.substring(1);
+	}
+	
+	// 무조건 백의자리
+	if(num.length > 0){
+		num = (parseInt(num / 10) + (num % 10)) * 10;
+	}
+	
+	obj.set_value(this.gfn_setComma(num));
+	obj.setCaretPos(obj.value.length-1);
+	if(obj.value.toString() == "0"){
+		obj.set_value("");
+	}
+	
+	if(obj.id == "editOfln"){
+		// 등급할인, 쿠폰할인 초기화
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
+		this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
+		//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text("");
+		//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
 		
-		// 무조건 백의자리
-		if(num.length > 0){
-			num = (parseInt(num / 10) + (num % 10)) * 10;
-		}
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
 		
-		obj.set_value(this.gfn_setComma(num));
-		obj.setCaretPos(obj.value.length-1);
-		if(obj.value.toString() == "0"){
+		this.grdeDcAmt = 0;
+		this.cpnDcAmt = 0;
+		
+		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+	
+		//오프라인 할인 금액 입력의 경우 강좌료와 가격 비교
+		if(Number(num) > this.lectAmt){
+			alert("강좌료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
+			this.oflnDcAmt = 0;
 			obj.set_value("");
-		}
-		
-		if(obj.id == "editOfln"){
-			// 등급할인, 쿠폰할인 초기화
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
-			this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
-			//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text("");
-			//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
-			
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
-			
-			this.grdeDcAmt = 0;
-			this.cpnDcAmt = 0;
-			
+			obj.setFocus();
 			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-		
-			//오프라인 할인 금액 입력의 경우 강좌료와 가격 비교
-			if(Number(num) > this.lectAmt){
-				alert("강좌료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
-				this.oflnDcAmt = 0;
-				obj.set_value("");
-				obj.setFocus();
-				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-			}else{
-				// 십원자리에서 반올림하여 백원단위
-				this.oflnDcAmt = Number(num);
-				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-			}
-		}else if(obj.id == "editAdd"){
-			if(Number(num) > this.optnAmt){
-				alert("재료비/대여료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
-				this.addDcAmt = 0;
-				obj.set_value("");
-				obj.setFocus();
-				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-			}else{
-				this.addDcAmt = Number(num);
-				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-			}
+		}else{
+			// 십원자리에서 반올림하여 백원단위
+			this.oflnDcAmt = Number(num);
+			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 		}
-	}else{
- 		var confirmYn = this.fn_common_confirm();
- 		if(!confirmYn){
-			if(obj.id == "editOfln"){
-				//obj.set_value(this.gfn_setComma(this.ds_dc_dtl.getColumn(0, "oflnDcAmt")));
-			}else if(obj.id == "editAdd"){
-				//obj.set_value(this.gfn_setComma(this.ds_dc_dtl.getColumn(0, "addDcAmt")));
-			}
- 		}
+	}else if(obj.id == "editAdd"){
+		if(Number(num) > this.optnAmt){
+			alert("재료비/대여료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
+			this.addDcAmt = 0;
+			obj.set_value("");
+			obj.setFocus();
+			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+		}else{
+			this.addDcAmt = Number(num);
+			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+		}
 	}
 };
 
@@ -698,114 +702,113 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 // 등급할인 콤보박스 선택
 this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	if(this.modifyYn){
-		// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-		if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
-			alert("할인금액을 입력하세요.");
-			obj.set_value("");
-			return;
-		}
-		
-		// 등급할인 선택 시 쿠폰할인 선택값 초기화
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
-		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
-		
-		this.cpnDcAmt = 0;
+	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
+	if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+		alert("할인금액을 입력하세요.");
+		obj.set_value("");
+		return;
+	}
 	
-		if(this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.value == "Y"){
-			// 고객보유
-			if(obj.value == ""){
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
-				//this.lectAmt = this.lectAmt + this.grdeDcAmt + this.cpnDcAmt;
-				this.grdeDcAmt = 0;
-				this.cpnDcAmt = 0;
-				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-			}else{
-				var dcRt = 0;
-				var grdeUseYn, allUseYn;
-				var skipGrdeUseYn = false, skipAllUseYn = false;
-				for(var i=0;i<this.ds_select_grde_list.getRowCount();i++){
-					if(obj.value == this.ds_select_grde_list.getColumn(i, "cd")){
-						dcRt = this.ds_select_grde_list.getColumn(i, "dcRt");
-						grdeUseYn = this.ds_select_grde_list.getColumn(i, "grdeUseYn");
-						allUseYn = this.ds_select_grde_list.getColumn(i, "allUseYn");
-					}
+	// 등급할인 선택 시 쿠폰할인 선택값 초기화
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
+	this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
+	
+	this.cpnDcAmt = 0;
+
+	if(this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.value == "Y"){
+		// 고객보유
+		if(obj.value == ""){
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text("");
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
+			//this.lectAmt = this.lectAmt + this.grdeDcAmt + this.cpnDcAmt;
+			this.grdeDcAmt = 0;
+			this.cpnDcAmt = 0;
+			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+		}else{
+			var dcRt = 0;
+			var grdeUseYn, allUseYn;
+			var skipGrdeUseYn = false, skipAllUseYn = false;
+			for(var i=0;i<this.ds_select_grde_list.getRowCount();i++){
+				if(obj.value == this.ds_select_grde_list.getColumn(i, "cd")){
+					dcRt = this.ds_select_grde_list.getColumn(i, "dcRt");
+					grdeUseYn = this.ds_select_grde_list.getColumn(i, "grdeUseYn");
+					allUseYn = this.ds_select_grde_list.getColumn(i, "allUseYn");
 				}
-				
-				if(this.lectAmt - this.oflnDcAmt == 0){
-					alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
-					this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
-					return;
-				}else{
-					if(allUseYn == "N"){
-						if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-							skipAllUseYn = true;
-						}
-					}else{
+			}
+			
+			if(this.lectAmt - this.oflnDcAmt == 0){
+				alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
+				this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+				return;
+			}else{
+				if(allUseYn == "N"){
+					if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
 						skipAllUseYn = true;
 					}
-					
-					if(grdeUseYn == "N"){
-						if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-							skipGrdeUseYn = true;
-						}
-					}else{
+				}else{
+					skipAllUseYn = true;
+				}
+				
+				if(grdeUseYn == "N"){
+					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
 						skipGrdeUseYn = true;
 					}
-				
-					if(skipAllUseYn && skipGrdeUseYn){
-						this.grdeDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt) * (dcRt / 100), -1);
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text(dcRt + "%");
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(true);
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(true);
-						
-						this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-					}else{
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
-						return;
+				}else{
+					skipGrdeUseYn = true;
+				}
+			
+				if(skipAllUseYn && skipGrdeUseYn){
+					this.grdeDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt) * (dcRt / 100), -1);
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_text(dcRt + "%");
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Static00.set_visible(true);
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(true);
+					
+					this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+				}else{
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+					return;
+				}
+			}
+		}
+	}else{
+		// 관리자 수기
+		if(obj.value == ""){
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
+			//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text("");
+			//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
+			this.grdeDcAmt = 0;
+			this.cpnDcAmt = 0;
+		}else{
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(true);
+			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
+			var dcRt = this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.value;
+			
+			var grdeUseYn, allUseYn, memberUseYn, applBrchRngCdNm;
+			var skipGrdeUseYn = false, skipAllUseYn = false, skipMemberUseYn = false;
+			
+			memberUseYn = "N";
+			for(var i=0;i<this.ds_grde_list.getRowCount();i++){
+				if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
+					memberUseYn = "Y";
+					grdeUseYn = "Y";
+					allUseYn = "Y";
+					if(this.ds_grde_list.getColumn(i, "allGrdeUseCnt") >= this.ds_grde_list.getColumn(i, "dcNbcnt")){
+						grdeUseYn = "N";
+					}
+					if(this.ds_grde_list.getColumn(i, "allUseCnt") >= this.ds_grde_list.getColumn(i, "allDcCnt")){
+						allUseYn = "N";
 					}
 				}
 			}
-		}else{
-			// 관리자 수기
-			if(obj.value == ""){
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("");
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
-				//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text("");
-				//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
-				this.grdeDcAmt = 0;
-				this.cpnDcAmt = 0;
-			}else{
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(true);
-				this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
-				var dcRt = this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.value;
-				
-				var grdeUseYn, allUseYn, memberUseYn, applBrchRngCdNm;
-				var skipGrdeUseYn = false, skipAllUseYn = false, skipMemberUseYn = false;
-				
-				memberUseYn = "N";
-				for(var i=0;i<this.ds_grde_list.getRowCount();i++){
-					if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
-						memberUseYn = "Y";
-						grdeUseYn = "Y";
-						allUseYn = "Y";
-						if(this.ds_grde_list.getColumn(i, "allGrdeUseCnt") >= this.ds_grde_list.getColumn(i, "dcNbcnt")){
-							grdeUseYn = "N";
-						}
-						if(this.ds_grde_list.getColumn(i, "allUseCnt") >= this.ds_grde_list.getColumn(i, "allDcCnt")){
-							allUseYn = "N";
-						}
-					}
-				}
-				
+			
 // 				for(var i=0;i<this.ds_adm_grde_list.getRowCount();i++){
 //  					if(obj.value == this.ds_adm_grde_list.getColumn(i, "cd")){
 //  						grdeUseYn = this.ds_adm_grde_list.getColumn(i, "grdeUseYn");
@@ -815,127 +818,130 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 //  					}
 // 				}
 
-				if(this.lectAmt - this.oflnDcAmt == 0){
-					alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
-					this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
-					return;
-				}else{
-					if(allUseYn == "N"){
-						if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-							skipAllUseYn = true;
-						}
-					}else{
+			if(this.lectAmt - this.oflnDcAmt == 0){
+				alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
+				this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+				return;
+			}else{
+				if(allUseYn == "N"){
+					if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
 						skipAllUseYn = true;
 					}
-					
-					if(memberUseYn == "N"){
-						if(confirm("고객이 보유하지 않은 등급할인 유형입니다. 그래도 사용하시겠습니까?")){
-							skipMemberUseYn = true;
-						}
-					}else{
+				}else{
+					skipAllUseYn = true;
+				}
+				
+				if(memberUseYn == "N"){
+					if(confirm("고객이 보유하지 않은 등급할인 유형입니다. 그래도 사용하시겠습니까?")){
 						skipMemberUseYn = true;
 					}
-					
-					if(grdeUseYn == "N"){
-						if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-							skipGrdeUseYn = true;
-						}
-					}else{
+				}else{
+					skipMemberUseYn = true;
+				}
+				
+				if(grdeUseYn == "N"){
+					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
 						skipGrdeUseYn = true;
 					}
-				
-					if(skipGrdeUseYn && skipMemberUseYn && skipAllUseYn){
-						this.grdeDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt) * (dcRt / 100), -1);
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(true);
-						//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text(applBrchRngCdNm + "/" + dcRt + "%");
-						//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(true);
-						this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-					}else{
-						this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
-						return;
-					}
+				}else{
+					skipGrdeUseYn = true;
+				}
+			
+				if(skipGrdeUseYn && skipMemberUseYn && skipAllUseYn){
+					this.grdeDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt) * (dcRt / 100), -1);
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Static01.set_visible(true);
+					//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_text(applBrchRngCdNm + "/" + dcRt + "%");
+					//this.Div00.form.Div00.form.Div04.form.Div01.form.Static02.set_visible(true);
+					this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+				}else{
+					this.Div00.form.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+					return;
 				}
 			}
 		}
-		
-		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-	}else{
-		var confirmYn = this.fn_common_confirm();
-		if(!confirmYn){
-			obj.set_index(e.preindex);
-		}
 	}
+	
+	this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+//	if(this.modifyYn){
+		
+// 	}else{
+// 		var confirmYn = this.fn_common_confirm();
+// 		if(!confirmYn){
+// 			obj.set_index(e.preindex);
+// 		}
+// 	}
 };
 
 // 쿠폰할인 선택
 this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	if(this.modifyYn){
-		// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-		if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
-			alert("할인금액을 입력하세요.");
-			obj.set_value("");
+	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
+	if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+		alert("할인금액을 입력하세요.");
+		obj.set_value("");
+		return;
+	}
+	
+	if(obj.value == ""){
+		this.cpnDcAmt = 0;
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_top(15);
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
+		this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
+		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+	}else{
+		if(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt == 0){
+			alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
+			this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
 			return;
-		}
-		
-		if(obj.value == ""){
-			this.cpnDcAmt = 0;
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_top(15);
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("");
-			this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text("");
-			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 		}else{
-			if(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt == 0){
-				alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
-				this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
-				return;
-			}else{
-				var dcAmtClCd = "";
-				var dcAmt = 0;
-				
-				for(var i=0;i<this.ds_cpn_list.getRowCount();i++){
-					if(obj.value == this.ds_cpn_list.getColumn(i, "cpnNo")){
-						dcAmtClCd = this.ds_cpn_list.getColumn(i, "dcAmtClCd");
-						dcAmt = this.ds_cpn_list.getColumn(i, "dcAmt");
-					}
-				}
-				
-				if(dcAmtClCd == "02" && dcAmt > this.lectAmt - this.oflnDcAmt - this.grdeDcAmt){
-					// 할인금액이 주문금액보다 큰 경우 컨펌창 띄우고 0원으로 만듬
-					// as-is confirm("쿠폰 사용금액보다 주문금액이 적어 마이너스 금액이 발생됩니다. 그래도 사용하시겠습니까?")
-					if(!confirm("쿠폰 사용금액이 강좌료 금액을 초과합니다. 그래도 사용하시겠습니까?")){
-						this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
-						return;
-					}
-				}
-				
-				this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
-				this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
-				this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(true);
-				
-				if(dcAmtClCd == "02"){
-					this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(this.gfn_setComma(dcAmt) + "원");
-					this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(dcAmt >= (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) ? (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) : dcAmt) + "원");
-					this.cpnDcAmt = dcAmt >= (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) ? (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) : dcAmt;
-					this.cpnDcAmt = nexacro.round(this.cpnDcAmt, -1);
-					this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
-				}else if(dcAmtClCd == "01"){
-					this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(dcAmt + "%");
-					this.cpnDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) * (dcAmt / 100), -1);
-					this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(this.cpnDcAmt) + "원");
-					this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+			var dcAmtClCd = "";
+			var dcAmt = 0;
+			
+			for(var i=0;i<this.ds_cpn_list.getRowCount();i++){
+				if(obj.value == this.ds_cpn_list.getColumn(i, "cpnNo")){
+					dcAmtClCd = this.ds_cpn_list.getColumn(i, "dcAmtClCd");
+					dcAmt = this.ds_cpn_list.getColumn(i, "dcAmt");
 				}
 			}
-		}
-	}else{
-		var confirmYn = this.fn_common_confirm();
-		if(!confirmYn){
-			obj.set_index(e.preindex);
+			
+			if(dcAmtClCd == "02" && dcAmt > this.lectAmt - this.oflnDcAmt - this.grdeDcAmt){
+				// 할인금액이 주문금액보다 큰 경우 컨펌창 띄우고 0원으로 만듬
+				// as-is confirm("쿠폰 사용금액보다 주문금액이 적어 마이너스 금액이 발생됩니다. 그래도 사용하시겠습니까?")
+				if(!confirm("쿠폰 사용금액이 강좌료 금액을 초과합니다. 그래도 사용하시겠습니까?")){
+					this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
+					return;
+				}
+			}
+			
+			this.Div00.form.Div00.form.Div04.form.Div02.form.Combo00.set_top(3);
+			this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_visible(true);
+			this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(true);
+			
+			if(dcAmtClCd == "02"){
+				this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(this.gfn_setComma(dcAmt) + "원");
+				this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(dcAmt >= (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) ? (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) : dcAmt) + "원");
+				this.cpnDcAmt = dcAmt >= (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) ? (this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) : dcAmt;
+				this.cpnDcAmt = nexacro.round(this.cpnDcAmt, -1);
+				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+			}else if(dcAmtClCd == "01"){
+				this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_text(dcAmt + "%");
+				this.cpnDcAmt = nexacro.round((this.lectAmt - this.oflnDcAmt - this.grdeDcAmt) * (dcAmt / 100), -1);
+				this.Div00.form.Div00.form.Div04.form.Div02.form.Static00.set_text("할인금액 " + this.gfn_setComma(this.cpnDcAmt) + "원");
+				this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
+			}
 		}
 	}
+//	if(this.modifyYn){
+		
+// 	}else{
+// 		var confirmYn = this.fn_common_confirm();
+// 		if(!confirmYn){
+// 			obj.set_index(e.preindex);
+// 		}
+// 	}
 };
 
 // 재료비 할인 사용여부 라디오버튼
