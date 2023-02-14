@@ -441,6 +441,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 				break;
 			case "detail":    
+				//본인코드 삭제
+				var excptRow = this.ds_rel_cd.findRow("cd", "00");
+				this.ds_rel_cd.deleteRow(excptRow);
 				if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
 				{
 					this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)
