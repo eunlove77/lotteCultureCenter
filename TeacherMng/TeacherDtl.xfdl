@@ -243,7 +243,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="4" text="Div00" left="10" top="Div02:40" height="206" right="10" minwidth="930" maxwidth="" border="0px none, 0px none, 1px solid #e6e6e6">
+        <Div id="Div03" taborder="4" text="Div00" left="10" top="Div02:40" right="10" minwidth="930" maxwidth="" border="0px none, 0px none, 1px solid #e6e6e6" height="0" visible="false">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="2" left="0" top="0" width="80" height="21" text="수정요청"/>
@@ -655,8 +655,10 @@ this.set_teacher_info = function(){
 	this.set_teacher_basic_info(tcTpCd);	//기본정보
 	
 	this.set_teacher_pay_info(tcTpCd);	//지급정보
-
-  this.set_career_info();//학력 및 경력정보
+	
+	this.set_modify_request_info();	//수정요청
+	
+	this.set_career_info();//학력 및 경력정보
 
 	this.set_teacher_lecture_info();	//출강정보
 	
@@ -721,6 +723,17 @@ this.set_teacher_basic_info = function(tcTpCd){
 	
 	
 }
+/**************************************************************************
+ * 수정요청
+ **************************************************************************/
+ this.set_modify_request_info = function()
+ {
+	//없을 때 구역 숨김
+	if(this.ds_tcmdfreq_list.rowcount > 0){
+		this.Div03.set_height(260);
+		this.Div03.set_visible(true);
+	}
+ }
 /**************************************************************************
  * 지급정보
  **************************************************************************/
