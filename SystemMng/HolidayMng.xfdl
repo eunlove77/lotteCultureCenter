@@ -122,7 +122,7 @@
                 <Cell col="5" text="담당자"/>
                 <Cell col="6" text="등록일시"/>
                 <Cell col="7" text="최종수정자"/>
-                <Cell col="8" text="수정일"/>
+                <Cell col="8" text="수정일시"/>
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
@@ -131,7 +131,7 @@
                 <Cell col="3" text="bind:hlidyClCd" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
                 <Cell col="4" text="bind:brchCd" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="6" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="7" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' : ''"/>
                 <Cell col="8" text="bind:mdfDtm" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
               </Band>
@@ -148,6 +148,7 @@
               <Button id="btnNew" taborder="3" text="추가" top="10" height="21" cssclass="btn_WF_Weak" onclick="btnNew_onclick" width="75" right="172"/>
               <Button id="btnSave" taborder="5" text="저장" top="10" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" onclick="btnSave_onclick" right="0"/>
               <Button id="btnDel" taborder="4" text="삭제" top="10" height="21" cssclass="btn_WF_High" onclick="btnDel_onclick" width="72" right="85"/>
+			  <Button id="btnSampleDown" taborder="6" text="샘플 다운로드" top="10" height="21" cssclass="btn_WF_Low" width="100" right="365" onclick="Div01_btnSampleDown_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -250,6 +251,9 @@ this.holidayMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.spotCdList_row.insertRow(0);
 	this.spotCdList_row.setColumn(0, "cd", "");
 	this.spotCdList_row.setColumn(0, "cdNm", "선택");
+	
+	//파일 다운로드경로
+	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 	
 	this.fn_list(1);
 };
@@ -371,7 +375,13 @@ this.fnCallback_holiday = function(svcID, errorCode, errorMsg){
 	if(errorCode == 0){
 		alert("저장 완료");
 		this.fn_list(1);
-	} else {
+	} 
+	else if(errorCode == -3){
+		//엑셀 업로드 키중복
+		this.alert("업로드한 엑셀에 문제가 있습니다.\n"+errorMsg);
+		return;
+	}
+	else{
 		// 에러 시 화면 처리 내역
 		this.alert(errorCode+"\n"+errorMsg);
 		return;
@@ -550,6 +560,8 @@ this.excel_import_validation_check = function(){
 	var tf = true;
 	var msg = "";
 	
+	this.excelupdateDs.clearData();
+	
 	var rowcount = this.excelImportDs.rowcount;
 	var comma = "";
 	var gdsSpotCdList = this.application.gdsSpotCdList;
@@ -592,7 +604,14 @@ this.excel_import_validation_check = function(){
 	result.msg = msg;
 	
 	return result;
-}]]></Script>
+}
+this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.FileDownTransfer00.setPostData("fileInfo", this.ds_sampleDownList.saveXML());
+	this.FileDownTransfer00.set_downloadfilename(this.ds_sampleDownList.getColumn(0, "realFileNm"));
+	this.FileDownTransfer00.download();	
+};
+]]></Script>
     <Objects>
       <Dataset id="holidayDs">
         <ColumnInfo>
@@ -684,7 +703,7 @@ this.excel_import_validation_check = function(){
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="excelImportDs">
+      <Dataset id="excelImportDs"></Dataset>
         <ColumnInfo>
           <Column id="휴일날짜" type="STRING" size="256"/>
           <Column id="휴일명" type="STRING" size="256"/>
@@ -699,6 +718,22 @@ this.excel_import_validation_check = function(){
           <Column id="hlidyNm" type="STRING" size="256"/>
           <Column id="hlidyClCd" type="STRING" size="256"/>
         </ColumnInfo>
+      </Dataset>
+      <FileDownTransfer id="FileDownTransfer00"/>
+      <Dataset id="ds_sampleDownList">
+        <ColumnInfo>
+          <Column id="phyPath" type="STRING" size="256"/>
+          <Column id="saveFileNm" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
+          <Column id="webPath" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="realFileNm">휴일_관리_샘플양식.xlsx</Col>
+            <Col id="saveFileNm">holiday_mng_sample.xlsx</Col>
+            <Col id="phyPath">/file_sample/</Col>
+          </Row>
+        </Rows>
       </Dataset>
     </Objects>
     <Bind>
