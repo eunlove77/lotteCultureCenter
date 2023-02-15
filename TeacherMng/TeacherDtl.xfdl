@@ -243,12 +243,12 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="4" text="Div00" left="10" top="Div02:40" right="10" minwidth="930" maxwidth="" border="0px none, 0px none, 1px solid #e6e6e6" height="0" visible="false">
+        <Div id="Div03" taborder="4" text="Div00" left="10" top="Div02:0" right="10" minwidth="930" maxwidth="" border="0px none, 0px none, 1px solid #e6e6e6" height="140" visible="false">
           <Layouts>
             <Layout>
-              <Static id="Static00" taborder="2" left="0" top="0" width="80" height="21" text="수정요청"/>
-              <Button id="btnDel" taborder="0" text="반려" left="209" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div03_btnDel_onclick"/>
-              <Grid id="tcmdfreq_Grid" taborder="3" left="0" top="36" right="0" binddataset="ds_tcmdfreq_list" autofittype="col" oncelldblclick="teacher_modify_request_grid_oncellclick" autosizingtype="row" bottom="39" extendsizetype="row">
+              <Static id="Static00" taborder="2" left="0" top="40" width="80" height="21" text="수정요청"/>
+              <Button id="btnDel" taborder="0" text="반려" left="209" top="40" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div03_btnDel_onclick"/>
+              <Grid id="tcmdfreq_Grid" taborder="3" left="0" top="76" right="0" binddataset="ds_tcmdfreq_list" autofittype="col" oncelldblclick="teacher_modify_request_grid_oncellclick" autosizingtype="row" extendsizetype="row" bottom="39">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -270,16 +270,16 @@
                       <Cell col="4" text="처리상태"/>
                     </Band>
                     <Band id="body">
-                      <Cell text="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
-                      <Cell col="1" text="bind:reqCont"/>
+                      <Cell displaytype="expr:prcsStatCd == '01' ? 'checkboxcontrol' : 'none'" text="expr:dataset.checkarray[currow]" edittype="checkbox"/>
+                      <Cell col="1" text="bind:reqCont" displaytype="textareacontrol" edittype="readonly"/>
                       <Cell col="2" text="bind:rgprDtm"/>
-                      <Cell col="3" displaytype="expr:atchFileId ? 'buttoncontrol' : 'none'" text="expr:atchFileId ? '다운로드' : ''"/>
+                      <Cell col="3" displaytype="expr:atchFileId ? 'buttoncontrol' : 'none'" text="expr:atchFileId ? '다운로드' : ''" edittype="expr:atchFileId != null ? 'button' : 'none'" padding="20px 0px"/>
                       <Cell col="4" text="bind:prcsStatCd" displaytype="combotext" combodataset="ds_mdfStat_cdList" combodatacol="cdNm" combocodecol="cd"/>
                     </Band>
                   </Format>
                 </Formats>
               </Grid>
-              <Button id="btnCompl" taborder="1" text="완료" left="94" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div03_btnCompl_onclick"/>
+              <Button id="btnCompl" taborder="1" text="완료" left="94" top="40" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div03_btnCompl_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -732,6 +732,10 @@ this.set_teacher_basic_info = function(tcTpCd){
 	if(this.ds_tcmdfreq_list.rowcount > 0){
 		this.Div03.set_height(300);
 		this.Div03.set_visible(true);
+	}
+	else{
+		this.Div03.set_height(0);
+		this.Div03.set_visible(false);
 	}
  }
 /**************************************************************************
@@ -1306,7 +1310,7 @@ this.update_teacher_modifyRequest = function(prcsNm, prcsStatCd){
 	var check_array = this.ds_tcmdfreq_list.checkarray;
 	var checked_array = new Array();
 	for(var i = 0; i < check_array.length; i++){
-		if(check_array[i] > 0) checked_array.push(i);
+		if(check_array[i] > 0 && this.ds_tcmdfreq_list.getColumn(i, "prcsStatCd") == "01") checked_array.push(i);
 	}
 	
 	if(checked_array.length == 0){
