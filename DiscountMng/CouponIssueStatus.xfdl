@@ -39,7 +39,7 @@
               <Band id="body">
                 <Cell expr="dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" text="bind:cultCpnNo"/>
-                <Cell col="2" text="bind:mbrGrdeCd" combodataset="ds_grade_cd" combocodecol="cd" combodatacol="cdNm" displaytype="combotext"/>
+                <Cell col="2" text="bind:mbrGrdeCdNm"/>
                 <Cell col="3" text="bind:mbrNo"/>
                 <Cell col="4" expr="comp.parent.gfn_setMasking(mbrId, 3)" tooltiptype="hover" tooltiptext="bind:mbrId"/>
                 <Cell col="5" expr="comp.parent.gfn_setMasking(korNm, 1, 1)" tooltiptext="bind:korNm" tooltiptype="hover"/>
@@ -138,6 +138,7 @@
           <Column id="cpnSeqno" type="STRING" size="256"/>
           <Column id="useStatCd" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeCdNm" type="STRING" size="256"/>
           <Column id="korNm" type="STRING" size="256"/>
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
@@ -150,9 +151,10 @@
         <Rows>
           <Row>
             <Col id="useStatCd"/>
-            <Col id="mbrGrdeCd"/>
+            <Col id="mbrGrdeCdNm"/>
             <Col id="f">1</Col>
             <Col id="korNm"/>
+            <Col id="mbrGrdeCd"></Col>
           </Row>
         </Rows>
       </Dataset>
@@ -214,7 +216,6 @@ this.CouponIssueStatus_onload = function(obj,e)
 		this.fn_list();
 	}
 
-	console.log(this.ds_search)
 
 	this.gfnSetCheckBoxNoDataset(this.ds_issue_list, this.Grid00, 0);
 };
