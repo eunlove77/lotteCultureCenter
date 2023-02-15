@@ -143,12 +143,12 @@
           <Layouts>
             <Layout>
               <Static id="txtTotal" taborder="0" left="9" top="10" height="21" text="목록 (0)개" width="82"/>
-              <Button id="btnExcelUp" taborder="1" text="엑셀 업로드" top="10" height="21" cssclass="btn_WF_Low" fittocontents="width" onclick="btnExcelUp_onclick" width="98" right="365"/>
-              <Button id="btnExcelDown" taborder="2" text="엑셀 다운로드" top="10" height="21" cssclass="btn_WF_Weak" width="98" right="257" onclick="Div01_btnExcelDown_onclick"/>
-              <Button id="btnNew" taborder="3" text="추가" top="10" height="21" cssclass="btn_WF_Weak" onclick="btnNew_onclick" width="75" right="172"/>
+              <Button id="btnExcelUp" taborder="1" text="엑셀 업로드" top="10" height="21" cssclass="btn_WF_Low" onclick="btnExcelUp_onclick" width="100" right="475"/>
+              <Button id="btnExcelDown" taborder="2" text="엑셀 다운로드" top="10" height="21" cssclass="btn_WF_Weak" width="100" right="255" onclick="Div01_btnExcelDown_onclick"/>
+              <Button id="btnNew" taborder="3" text="추가" top="10" height="21" cssclass="btn_WF_Weak" onclick="btnNew_onclick" width="75" right="170"/>
               <Button id="btnSave" taborder="5" text="저장" top="10" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" onclick="btnSave_onclick" right="0"/>
-              <Button id="btnDel" taborder="4" text="삭제" top="10" height="21" cssclass="btn_WF_High" onclick="btnDel_onclick" width="72" right="85"/>
-			  <Button id="btnSampleDown" taborder="6" text="샘플 다운로드" top="10" height="21" cssclass="btn_WF_Low" width="100" right="365" onclick="Div01_btnSampleDown_onclick"/>
+              <Button id="btnDel" taborder="4" text="삭제" top="10" height="21" cssclass="btn_WF_High" onclick="btnDel_onclick" width="75" right="85"/>
+              <Button id="btnSampleDown" taborder="6" text="샘플 다운로드" top="10" height="21" cssclass="btn_WF_Low" width="100" right="365" onclick="Div01_btnSampleDown_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -217,6 +217,7 @@ include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
 include "Base::lib_date.xjs";
 include "Base::popup.xjs";
+include "TeacherMng::include/common.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -233,9 +234,9 @@ this.holidayMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
-  this.domain = this.application.Domain;
+	this.domain = this.application.Domain;
 	
-	this.excelImportExport = this.applicat ion.getVariable("excelImportExport");
+	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.holidayDs, this.Grid00, 0);
@@ -378,7 +379,7 @@ this.fnCallback_holiday = function(svcID, errorCode, errorMsg){
 		this.fn_list(1);
 	} 
 	else if(errorCode == -3){
-		//엑셀 업로드 키중복
+		//키중복
 		this.alert("업로드한 엑셀에 문제가 있습니다.\n"+errorMsg);
 		return;
 	}
@@ -572,33 +573,37 @@ this.excel_import_validation_check = function(){
 		var brchCdNm = this.excelImportDs.getColumn(i, "지점");
 		var hlidyTypeNm = this.excelImportDs.getColumn(i, "휴일구분");
 		
-		hlidyDt = hlidyDt.replace(/-/g, '');
-		//지점 검사
-		var brchCd_row = gdsSpotCdList.findRow("cdNm", brchCdNm);
-		var brchCd = brchCd_row > -1 ? gdsSpotCdList.getColumn(brchCd_row, "cd") : false;
-		
-		//키 중복 검사
-		var key_dup = this.holidayDs.findRow("hlidyDt", hlidyDt);
-		tf = key_dup > -1 ? this.holidayDs.getColumn(key_dup, "brchCd") != brchCd : true;
-		
-		//휴일 코드 검사
-		var hlidyType_row = this.holidayType.findRow("cdNm", hlidyTypeNm);
-		var hlidyClCd = hlidyType_row > -1 ? this.holidayType.getColumn(hlidyType_row, "cd") : false;
-		
-		tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
-		tf = !tf ? tf : !!brchCd;
-		tf = !tf ? tf : !!hlidyClCd;
-		
-		if(!tf){
-			msg += comma + j + "행";
-			comma = ", "
-		}
-		
-		var n_row = this.excelupdateDs.addRow();
-		this.excelupdateDs.setColumn(n_row, "hlidyDt", hlidyDt);
-		this.excelupdateDs.setColumn(n_row, "brchCd", brchCd);
-		this.excelupdateDs.setColumn(n_row, "hlidyNm", hlidyNm);
-		this.excelupdateDs.setColumn(n_row, "hlidyClCd", hlidyClCd);
+    if(hlidyDt && hlidyNm && brchCdNm && hlidyTypeNm){
+      //날짜 검사
+      hlidyDt = hlidyDt.replace(/-/g, '');
+
+      //지점 검사
+      var brchCd_row = gdsSpotCdList.findRow("cdNm", brchCdNm);
+      var brchCd = brchCd_row > -1 ? gdsSpotCdList.getColumn(brchCd_row, "cd") : false;
+      
+      //휴일 코드 검사
+      var hlidyType_row = this.holidayType.findRow("cdNm", hlidyTypeNm);
+      var hlidyClCd = hlidyType_row > -1 ? this.holidayType.getColumn(hlidyType_row, "cd") : false;
+      
+      tf = !tf ? tf : this.com_vali_date_format(hlidyDt);
+      tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
+      tf = !tf ? tf : !!brchCd;
+      tf = !tf ? tf : !!hlidyClCd;
+      
+      if(!tf){
+        msg += comma + j + "행";
+        comma = ", "
+      }
+      
+      var n_row = this.excelupdateDs.addRow();
+      this.excelupdateDs.setColumn(n_row, "hlidyDt", hlidyDt);
+      this.excelupdateDs.setColumn(n_row, "brchCd", brchCd);
+      this.excelupdateDs.setColumn(n_row, "hlidyNm", hlidyNm);
+      this.excelupdateDs.setColumn(n_row, "hlidyClCd", hlidyClCd);
+    }
+    else{
+      break;
+    }
 	}
 	
 	result.tf = msg.length > 0 ? false : true;;
