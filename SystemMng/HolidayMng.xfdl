@@ -477,13 +477,25 @@ this.classified_holiday_checkbox_onclick = function(obj:nexacro.CheckBox,e:nexac
 {
 	var clHlidyCdList = '';
 	var comma = '';
+	var chkCnt = 0;
 	
 	for(var i = 1; i <= 3; i++){
 		var item = obj.parent['chkClCd' + i];
 		if(item.isChecked()){
 			clHlidyCdList += comma + "'" + item.value + "'";
 			comma = ',';
+			chkCnt++;
 		}
+	}
+	
+	//전체 체크 
+	if(chkCnt == 3)
+	{
+		this.row02.form.Div03.form.chkAll.set_value("Y");
+	}
+	else
+	{
+		this.row02.form.Div03.form.chkAll.set_value(false);
 	}
 	
 	this.searchDs.setColumn(0, "clHlidyCdList", clHlidyCdList);
