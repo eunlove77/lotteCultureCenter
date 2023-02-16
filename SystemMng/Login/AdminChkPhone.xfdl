@@ -14,6 +14,7 @@
               <Edit id="authNum" taborder="5" left="350" top="179" width="221" height="40" text="123123" displaynulltext="인증번호를 입력하세요." onkeydown="chkPhoneDiv_authNum_onkeydown"/>
               <Static id="Static03" taborder="6" left="592" top="186" width="80" height="25" color="red" textAlign="left"/>
               <Static id="Static04" taborder="7" left="352" top="221" width="220" height="19"/>
+              <Button id="cnclBtn" taborder="8" text="취소" left="45.35%" width="80" cssclass="btn_WF_Weak" fittocontents="none" bottom="90" height="30" onclick="chkPhoneDiv_cnclBtn_onclick"/>
             </Layout>
           </Layouts>
         </Div>
@@ -182,7 +183,17 @@ this.fn_makeAuthNo = function(){
 	this.authNo = authNo;
 	
 	this.transaction("sendAuthNum", this.application.Admin_svc + "::alertMng/sendAuthNumber.do", "", "", "authNum="+authNo, "fnCallback");
-}]]></Script>
+}
+
+/**************************************************************************
+ * 취소버튼
+ **************************************************************************/
+
+this.chkPhoneDiv_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.set_formurl("FrameBase::Form_Login.xfdl");
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_phone">
         <ColumnInfo>
