@@ -152,7 +152,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="false">
+        <Grid id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs_excel" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -444,12 +444,38 @@ this.row02_Div04_ComboSpot_onitemchanged = function(obj:nexacro.Combo,e:nexacro.
 //엑셀 다운로드 버튼
 this.Div01_btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	//description Modal
-	var oArg = {
-			//objArguments : this.TextArea00,
+	//if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
+
+	var list = this.holidayDs;
+	var excelList = this.holidayDs_excel;
+	var chkCnt = 0;
+	
+	excelList.deleteAll();
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			//체크행 엑셀데이터로 복사
+			excelList.addRow();
+			excelList.copyRow(chkCnt, list, i);
+			chkCnt++;
+		}
+	}
+	
+	if(chkCnt == 0)
+	{
+		alert("항목을 선택하세요.");
+	}
+	else
+	{
+		var oArg = {
+			logId : this.logId,
 			title : "엑셀 다운로드 사유"
 			};
-	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
+	  this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
+	}
+	
 };
 
 //엑셀 업로드 성공
@@ -740,6 +766,20 @@ this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
             <Col id="phyPath">/file_sample/</Col>
           </Row>
         </Rows>
+      </Dataset>
+      <Dataset id="holidayDs_excel">
+        <ColumnInfo>
+          <Column id="hlidyDt" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="hlidyNm" type="STRING" size="256"/>
+          <Column id="hlidyClCd" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="DATETIME" size="256"/>
+          <Column id="mdfId" type="STRING" size="256"/>
+          <Column id="mdfNm" type="STRING" size="256"/>
+          <Column id="mdfDtm" type="DATETIME" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Bind>
