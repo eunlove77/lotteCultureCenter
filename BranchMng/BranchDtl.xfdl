@@ -11,7 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="특강" left="117" top="5" width="100" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                    <Combo id="ComboSpot" taborder="1" text="특강" left="117" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -297,6 +297,8 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		
 		//첨부파일 초기화
 		this.atchFileUpload.fn_init(atchFileObj);
+		
+		this.fn_checkDupe();
 	}
 };
 
@@ -310,7 +312,7 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-		this.fn_checkValidation();
+	this.fn_checkValidation();
 };
 /**************************************************************************
 * 사용자 FUNCTION 영역
@@ -337,7 +339,7 @@ this.fn_save = function (_this)
 		menuSeq : this.menuId
 	}
 	
-	//if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	
 	_this.gfn_transaction(tranObj);
 	
@@ -345,9 +347,83 @@ this.fn_save = function (_this)
 
 this.fn_checkValidation = function(){
 
-	//수정페이지에서는 듀프카운트 걸러내기
+	if(this.parent.brchCd == ""){
+		if(!this.parent.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
+		{
+			this.alert("해당 지점은 이미 등록되었습니다.");
+			this.row02.form.spotDiv.form.ComboSpot.setFocus();
+			return false;
+		}
+	}
+	
+	if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
+	{
+		this.alert("지점을 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row03.form.spotDiv.form.ComboSpotArea.value))
+	{
+		this.alert("지점권역코드를 선택해주세요");
+		this.row02.form.spotDiv.form.ComboSpot.setFocus();
+		return false;
+	}
+	else if(this.atchFileUpload.fn_validation() < 1)
+	{
+		this.alert("지점이미지를 1개이상 등록해주세요");
+		return false;
+	}
+	else if(this.gfn_isNull(this.row06.form.Edit00.value))
+	{
+		this.alert("기본주소를 입력해주세요");
+		this.row06.form.Edit00.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row08.form.Edit00.value))
+	{
+		this.alert("위도를 입력해주세요");
+		this.row08.form.Edit00.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.row09.form.Edit00.value))
+	{
+		this.alert("경도를 입력해주세요");
+		this.row09.form.Edit00.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.Div02.form.row12.form.Edit00.value))
+	{
+		this.alert("사업자명을 입력해주세요");
+		this.Div02.form.row12.form.Edit00.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.Div02.form.row13.form.MaskEdit00.value))
+	{
+		this.alert("사업자 번호를 입력해주세요");
+		this.Div02.form.row13.form.MaskEdit00.setFocus();
+		return false;
+	}
+	else if(this.gfn_isNull(this.Div02.form.row14.form.Edit00.value))
+	{
+		this.alert("대표자명을 입력해주세요");
+		this.Div02.form.row14.form.Edit00.setFocus();
+		return false;
+	}
+	else
+	{								
+		if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
+		{
+			this.atchFileUpload.fn_upload(); 
+		}
+	}
+
+	
+}
+
+this.fn_checkDupe = function(){
+
 	var tranObj = {
-		strSvcId : "chkValidation",
+		strSvcId : "chkDupe",
 		strSvcUrl : this.application.Admin_svc + "::/branch/getDupeCnt.do",
 		inData : "data=ds_detail",
 		outData : "ds_dupeCnt=dupeCode",
@@ -412,74 +488,7 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		
 		break;
 	
-	case "chkValidation":
-	
-		if(this.gfn_isNull(this.row02.form.spotDiv.form.ComboSpot.value))
-		{
-			this.alert("지점을 선택해주세요");
-			this.row02.form.spotDiv.form.ComboSpot.setFocus();
-			return false;
-		}
-		else if(!this.parent.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
-		{
-			this.alert("해당 지점은 이미 등록되었습니다.");
-			this.row02.form.spotDiv.form.ComboSpot.setFocus();
-			return false;
-		}
-		else if(this.gfn_isNull(this.row03.form.spotDiv.form.ComboSpotArea.value))
-		{
-			this.alert("지점권역코드를 선택해주세요");
-			this.row02.form.spotDiv.form.ComboSpot.setFocus();
-			return false;
-		}
-		else if(this.atchFileUpload.fn_validation() < 1)
-		{
-			this.alert("지점이미지를 1개이상 등록해주세요");
-			return false;
-		}
-		else if(this.gfn_isNull(this.row06.form.Edit00.value))
-		{
-			this.alert("기본주소를 입력해주세요");
-			this.row06.form.Edit00.setFocus();
-			return false;
-		}
-		else if(this.gfn_isNull(this.row08.form.Edit00.value))
-		{
-			this.alert("위도를 입력해주세요");
-			this.row08.form.Edit00.setFocus();
-			return false;
-		}
-		else if(this.gfn_isNull(this.row09.form.Edit00.value))
-		{
-			this.alert("경도를 입력해주세요");
-			this.row09.form.Edit00.setFocus();
-			return false;
-		}
-		else if(this.gfn_isNull(this.Div02.form.row12.form.Edit00.value))
-		{
-			this.alert("사업자명을 입력해주세요");
-			this.Div02.form.row12.form.Edit00.setFocus();
-			return false;
-		}
-		else if(this.gfn_isNull(this.Div02.form.row13.form.MaskEdit00.value))
-		{
-			this.alert("사업자 번호를 입력해주세요");
-			this.Div02.form.row13.form.MaskEdit00.setFocus();
-			return false;
-		}
-		else if(this.gfn_isNull(this.Div02.form.row14.form.Edit00.value))
-		{
-			this.alert("대표자명을 입력해주세요");
-			this.Div02.form.row14.form.Edit00.setFocus();
-			return false;
-		}
-		else
-		{								
-			if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
-			{
-				this.atchFileUpload.fn_upload(); 
-			}
-		}
+	case "chkDupe":
 		
 	break;
 	
