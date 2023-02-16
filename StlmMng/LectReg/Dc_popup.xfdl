@@ -310,6 +310,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			for(var i=this.ds_cpn_list.getRowCount()-1;i>0;i--){
 				if(this.ds_cpn_list.getColumn(i, "cpnUseYn") == "Y"){
 					this.ds_cpn_list.deleteRow(i);
+					continue;
+				}
+				if(this.ds_cpn_list.getColumn(i, "cultCpnUseStatCd") != "00"){
+					this.ds_cpn_list.deleteRow(i);
+					continue;
 				}
 			}
 			
@@ -1144,6 +1149,7 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
           <Column id="dcAmt" type="INT" size="256"/>
           <Column id="cpnNo" type="STRING" size="256"/>
           <Column id="cpnUseYn" type="STRING" size="256"/>
+          <Column id="cultCpnUseStatCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_select_grde_list">
