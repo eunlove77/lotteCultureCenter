@@ -3,9 +3,9 @@
   <Form id="Form_Date" width="534" height="21" titletext="New Form" onload="date_type03_onload">
     <Layouts>
       <Layout height="21" width="534">
-        <Calendar id="strtDtm" taborder="0" left="0" top="0" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
+        <Calendar id="strtDtm" taborder="0" left="0" top="0" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oncloseup="strtDtm_oncloseup"/>
         <Static id="Static01" taborder="1" text="~" left="strtDtm:2" top="0" width="9" height="20"/>
-        <Calendar id="endDtm" taborder="2" left="Static01:2" top="0" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251"/>
+        <Calendar id="endDtm" taborder="2" left="Static01:2" top="0" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oncloseup="endDtm_oncloseup"/>
         <Button id="btnAll" taborder="3" text="전체" left="218" top="0" width="45" height="21" cssclass="btn_WF_Select" fittocontents="width" onclick="btnAll_onclick"/>
         <Button id="btnToday" taborder="4" text="오늘" left="btnAll:4" top="0" width="45" height="21" cssclass="btn_WF_Select" fittocontents="width" onclick="btnToday_onclick"/>
         <Button id="btnDay1" taborder="5" text="3일" left="btnToday:4" top="0" width="47" height="21" cssclass="btn_WF_Select" fittocontents="width" onclick="btnDay1_onclick"/>
@@ -74,9 +74,21 @@ this.btnDay5_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.endDtm.set_value(this.gfnGetToDay());
 };
 
+this.strtDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	var endValue = this.endDtm.value;
+	if(endValue && obj.value > endValue){
+		this.endDtm.set_value('');
+	}
+};
 
-
-
+this.endDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	var strValue = this.strtDtm.value;
+	if(strValue && strValue > obj.value){
+		this.strtDtm.set_value('');
+	}
+};
 ]]></Script>
   </Form>
 </FDL>
