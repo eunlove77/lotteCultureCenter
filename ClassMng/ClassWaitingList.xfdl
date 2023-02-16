@@ -188,7 +188,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			alert("신청불가한 강좌입니다.");
 		}else if(errorCode == -3){
 			// 수강인원
-			alert("정원이 부족합니다.");
+			alert("해당 강좌는 온라인 재고가 없습니다. 강좌 재고여부 확인 후 재신청 하시기 바랍니다.");
 		}
 		this.fn_init();
 	}else{
@@ -269,15 +269,25 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 // 대기취소
 this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.ds_waiting_param.clearData();
 	var chkYn = false;
-	this.ds_waiting_list.set_enableevent(false);
+	var atlctRsvNo = "";
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
 		if(this.ds_waiting_list.checkarray[i] > 0){
 			chkYn = true;
-			this.ds_waiting_list.setColumn(i, "stlmStatCd", "41")
+			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+			this.ds_waiting_param.addRow();
+			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "41");
+			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "41")
+		}else{
+			if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
+				this.ds_waiting_param.addRow();
+				this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+				this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "41");
+			}
 		}
 	}
-	this.ds_waiting_list.set_enableevent(true);
 	
 	if(!chkYn){
 		alert("대상을 선택하세요.");
@@ -295,7 +305,7 @@ this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			var tranObj = {
 				strSvcId : "cancel",
 				strSvcUrl : this.application.Admin_svc + "::class/cancelWaitingList.do",
-				inData : "classDtl=ds_class_dtl waitingList=ds_waiting_list:U",
+				inData : "classDtl=this.ds_class_dtl waitingList=this.ds_waiting_param",
 				outData : "ds_waiting_list=waitingList totCnt=totCnt",
 				strArg : "",
 				callBackFnc : "fnCallback",
@@ -332,20 +342,30 @@ this.Div00_Button03_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 // 결제 요청
 this.Div00_Button03_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	this.ds_waiting_param.clearData();
 	var checkarray = [];
 	var atlctLimitYn = true;
-	this.ds_waiting_list.set_enableevent(false);
+	var atlctRsvNo = "";
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
 		if(this.ds_waiting_list.checkarray[i] > 0){
-			checkarray.push(i);
-			if(this.ds_waiting_list.getColumn(i, "waitingStatCd") == "30"){
-				// 시간초과 시
-				atlctLimitYn = false;
+ 			checkarray.push(i);
+			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+ 			if(this.ds_waiting_list.getColumn(i, "waitingStatCd") == "30"){
+ 				// 시간초과 시
+ 				atlctLimitYn = false;
+ 			}
+ 			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "70");
+			this.ds_waiting_param.addRow();
+			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "70");
+		}else{
+			if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
+				this.ds_waiting_param.addRow();
+				this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+				this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "70");
 			}
-			this.ds_waiting_list.setColumn(i, "stlmStatCd", "70");
 		}
 	}
-	this.ds_waiting_list.set_enableevent(true);
 	
 	if(!atlctLimitYn){
 		alert("결제 기한이 만료된 대기자에게 결제요청 할 수 없습니다.");
@@ -364,7 +384,7 @@ this.Div00_Button03_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 			var tranObj = {
 				strSvcId : "requestPayment",
 				strSvcUrl : this.application.Admin_svc + "::class/requestPayment.do",
-				inData : "classDtl=ds_class_dtl waitingList=ds_waiting_list:U",
+				inData : "classDtl=this.ds_class_dtl waitingList=this.ds_waiting_param",
 				outData : "ds_waiting_list=waitingList totCnt=totCnt",
 				strArg : "",
 				callBackFnc : "fnCallback",
@@ -381,21 +401,26 @@ this.Div00_Button03_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 // 수강등록
 this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
+	this.ds_waiting_param.clearData();
 	var checkarray = [];
 	var atlctRsvNo = "";
-	this.ds_waiting_list.set_enableevent(false);
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
 		if(this.ds_waiting_list.checkarray[i] > 0){
 			checkarray.push(i);
 			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
-			this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+			this.ds_waiting_param.addRow();
+			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
 		}
 		// 동반회원
 		if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
-			this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+			this.ds_waiting_param.addRow();
+			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
 		}
 	}
-	this.ds_waiting_list.set_enableevent(true);
 
 	if(checkarray.length == 0){
 		alert("대상을 선택하세요.");
@@ -407,7 +432,7 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		var tranObj = {
 			strSvcId : "lectReg",
 			strSvcUrl : this.application.Admin_svc + "::class/validateLectReg.do",
-			inData : "classDtl=ds_class_dtl waitingList=ds_waiting_list:U",
+			inData : "classDtl=this.ds_class_dtl waitingList=this.ds_waiting_param",
 			outData : "",
 			strArg : "",
 			callBackFnc : "fnCallback",
@@ -666,6 +691,55 @@ this.Div00_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
           <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_waiting_param">
+        <ColumnInfo>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeCdNm" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="appCmplDtm" type="STRING" size="256"/>
+          <Column id="reAtlctYn" type="STRING" size="256"/>
+          <Column id="smsRcvAgrYn" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="stlmChnlCdNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="atlctStatCd" type="STRING" size="256"/>
+          <Column id="atlctStatCdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchCdNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="age" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="sexCdNm" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="rfndStatCd" type="STRING" size="256"/>
+          <Column id="rfndStatCdNm" type="STRING" size="256"/>
+          <Column id="rfndDtm" type="STRING" size="256"/>
+          <Column id="hp" type="STRING" size="256"/>
+          <Column id="witRceptDtm" type="STRING" size="256"/>
+          <Column id="atlctReqDtm" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+          <Column id="waitingNum" type="STRING" size="256"/>
+          <Column id="stlmStatCd" type="STRING" size="256"/>
+          <Column id="waitingStatCd" type="STRING" size="256"/>
+          <Column id="waitingStatCdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
