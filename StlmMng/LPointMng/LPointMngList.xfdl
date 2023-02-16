@@ -5,7 +5,7 @@
       <Layout height="390" width="1280">
         <Static id="Static00_00" taborder="0" text="▶ 목록" left="0" top="0" width="110" height="21" cssclass="sta_WF_TitGray"/>
         <Static id="txtTotal" taborder="1" left="52" height="21" text="( 0개 )" width="50" top="0" cssclass="sta_WF_TitGray"/>
-        <Grid id="Grid00" taborder="2" left="0" top="25" right="0" bottom="0" binddataset="ds_list" autofittype="col" nodatatext="데이터가 없습니다.">
+        <Grid id="Grid00" taborder="2" left="0" top="25" right="0" bottom="0" binddataset="ds_list" autofittype="col" nodatatext="데이터가 없습니다." oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -16,6 +16,7 @@
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="80"/>
+                <Column size="100"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -29,6 +30,7 @@
                 <Cell col="4" text="지점명"/>
                 <Cell col="5" text="회원번호"/>
                 <Cell col="6" text="회원명"/>
+                <Cell col="7" text="포인트 금액"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
@@ -36,8 +38,9 @@
                 <Cell col="2" text="bind:apvlNo"/>
                 <Cell col="3" text="bind:apvlDtm"/>
                 <Cell col="4" text="bind:brchNm"/>
-                <Cell col="5" text="bind:mbrNo"/>
-                <Cell col="6" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover"/>
+                <Cell col="5" text="bind:mbrNo" color="blue" cursor="pointer" textDecoration="underline"/>
+                <Cell col="6" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" tooltiptext="bind:mbrNm" tooltiptype="hover" color="blue" cursor="pointer" textDecoration="underline"/>
+                <Cell col="7" expr="comp.parent.fn_set_point(acumUseClCd+trnsClCd, lpntAmt )"/>
               </Band>
             </Format>
           </Formats>
@@ -89,6 +92,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.search_form = this.parent.parent.Div00.form;
+this.popCnt = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -160,6 +164,32 @@ this.fn_searchValueInit = function(){
 	this.ds_search.setColumn(0, "brchCd", this.search_form.Div00.form.Div01.form.brchCd.value);
 	this.ds_search.setColumn(0, "searchField", this.search_form.Div00.form.Div03.form.searchField.value);
 	this.ds_search.setColumn(0, "searchQuery", this.search_form.Div00.form.Div03.form.searchQuery.value);
+}
+
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.cell == 5 || e.cell == 6){	
+		this.popCnt ++;
+		var oArg = {
+				mbrNo : obj.getBindDataset().getColumn(e.row, "mbrNo"),
+				menuId : this.getOwnerFrame().param.MENU_ID
+				};
+	
+		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");		
+	}
+};
+
+this.fn_set_point = function(cd, point)
+{
+	if(cd == '1001' || cd == '2002') //적립 / 사용취소
+	{
+		return "+" +this.gfn_setComma(point)+ " P";
+	}
+	else 
+	{
+		return "-" +this.gfn_setComma(point)+ " P";
+	}
 }
 ]]></Script>
   </Form>
