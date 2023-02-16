@@ -307,6 +307,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 						this.dcMthdFrm.ds_cpn_amt_cl_cd_list.deleteRow(i);
 						continue;
 					}
+					if(this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cultCpnUseStatCd") != "00" && this.dcMthdFrm.ds_cpn_amt_cl_cd_list.getColumn(i, "cpnNo") != dsDcDtl.getColumn(0, "cpnNo")){
+						this.dcMthdFrm.ds_cpn_amt_cl_cd_list.deleteRow(i);
+						continue;
+					}
 				}
 			
 				var cpnDcAmt = dsDcDtl.getColumn(0, "cpnDcAmt");
