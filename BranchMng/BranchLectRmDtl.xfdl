@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="BranchLectRmDtl" width="1280" height="700" titletext="New Form" onload="BranchLectRmDtl_onload">
+  <Form id="BranchLectRmDtl" width="1280" height="700" titletext="지점별 강의실 등록" onload="BranchLectRmDtl_onload">
     <Layouts>
       <Layout height="700" width="1280">
         <Static id="txtMenuNm" taborder="0" text="지점별 강의실 등록" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
@@ -87,7 +87,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="면적(평)" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28" inputfilter="none" inputtype="number" maxlength="5"/>
+              <Edit id="Edit00" taborder="1" left="117" top="1" width="151" height="28" inputfilter="alpha,comma,space,symbol,sign" inputtype="number,dot" maxlength="5"/>
               <Static id="Static00_00" taborder="2" text="평" left="280" top="0" width="19" height="31" usedecorate="true"/>
             </Layout>
           </Layouts>
@@ -172,6 +172,7 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.menuId = this.parent.parent.param.MENU_ID;
+this.gb = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -204,8 +205,10 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 		this.ds_detail.setColumn(0, "brchCd", this.parent.brchCd);
 		this.ds_detail.setColumn(0, "lectRmCd", this.parent.lectRmCd);
+		this.set_titletext("지점별 강의실 상세/수정");
 		this.txtMenuNm.set_text("지점별 강의실 상세/수정");
 		this.Div01.form.btnSave.set_text("수정");
+		this.gb = "수정";
 		this.fn_detail();
 	}
 	else
@@ -213,6 +216,7 @@ this.BranchLectRmDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.fn_rmCdList();
 		this.row05.form.useDiv.form.radioUse.set_value("N");
 		this.row02.form.spotDiv.form.ComboSpot.set_index(0);
+		this.gb = "등록";
 	}
 	
 };
@@ -227,11 +231,7 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 
 this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("입력하신 내용으로 등록하시겠습니까"))
-	{
-		this.fn_checkValidation();
-		//this.fn_rmCdList();
-	}
+	this.fn_checkValidation();
 };
 
 /**************************************************************************
@@ -276,8 +276,11 @@ this.fn_checkValidation = function(){
 		return false;
 	}
 	else
-	{								
-		this.fn_save();
+	{	
+		if(this.confirm("해당 내용으로 " +this.gb+ " 하시겠습니까?"))
+		{
+			this.fn_save();
+		}
 	}	
 }
 
@@ -331,6 +334,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			break;
 			
     case "save":
+	
+		
 		this.alert("저장되었습니다.");
 		this.fn_list();
 		break;
