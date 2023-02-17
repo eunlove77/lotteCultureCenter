@@ -240,6 +240,11 @@
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
+          <Column id="tchNm" type="STRING" size="256"/>
+          <Column id="hpStNo" type="STRING" size="256"/>
+          <Column id="hpMidNo" type="STRING" size="256"/>
+          <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_semester_list">
@@ -330,6 +335,10 @@
       <BindItem id="item2" compid="Div00.form.Div00.form.Div00.form.Div01.form.Combo01" propid="value" datasetid="ds_search" columnid="lectSmsterCd"/>
       <BindItem id="item3" compid="Div00.form.Div00.form.Div00.form.Div03.form.Combo00" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item4" compid="Div00.form.Div00.form.Div00.form.Div03.form.Edit00" propid="value" datasetid="ds_search" columnid="q"/>
+      <BindItem id="item5" compid="Div00.form.Div00.form.Div00.form.Div04.form.Edit00" propid="value" datasetid="ds_search" columnid="tchNm"/>
+      <BindItem id="item6" compid="Div00.form.Div00.form.Div00.form.Div05.form.Edit00" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item7" compid="Div00.form.Div00.form.Div00.form.Div05.form.Edit00_00" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item8" compid="Div00.form.Div00.form.Div00.form.Div05.form.Edit00_01" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
     </Bind>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -391,6 +400,12 @@ this.init = function()
 	this.ds_search.setColumn(0, "brchCd", this.brchCd);
 	this.ds_search.setColumn(0, "f", "");
 	this.ds_search.setColumn(0, "q", "");
+	
+	this.ds_search.setColumn(0, "tchNm", "");
+	this.ds_search.setColumn(0, "hpStNo", "");
+	this.ds_search.setColumn(0, "hpMidNo", "");
+	this.ds_search.setColumn(0, "hpLastNo", "");
+	this.ds_search.setColumn(0, "hpNo", "");
 	
 	this.Div00.form.Div01.form.Static00.set_text("강좌계약 목록(0개)");
 	
@@ -700,7 +715,24 @@ this.Div00_Div00_Div00_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,
 this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
-	this.fn_search();
+	
+	var tchNm = this.ds_search.getColumn(0, "tchNm");
+	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
+	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
+	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
+	
+	var isTchNm = this.gfn_isNull(nexacro.trim(tchNm));
+	var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
+	
+	if((!isTchNm || !isHpNo) && (((nexacro.trim(tchNm)).length < 2) || ((this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)))
+	{
+		alert("개인정보 검색은 강사명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+	}
+	else
+	{
+		this.ds_search.setColumn(0, "hpNo", hpStNo + hpMidNo + hpLastNo);
+		this.fn_search();
+	}
 };
 
 this.Div00_Div00_Div00_Div03_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
