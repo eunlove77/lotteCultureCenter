@@ -179,7 +179,7 @@ include "Base::lib_date.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = "";
+this.menuId = this.parent.parent.parent.menuId;
 this.mbrNo = "";
 
 /**************************************************************************
@@ -190,13 +190,6 @@ this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::member/info/";
-	
-	
-	if(this.gfn_nvl(this.parent.menuId) != ""){
-		this.menuId = this.parent.menuId;
-	}else{
-		this.menuId = this.parent.parent.parent.parent.menuId;
-	}
 	
 	if(this.gfn_nvl(this.parent.mbrNo) != ""){
 		this.mbrNo = this.parent.mbrNo;
