@@ -148,12 +148,12 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.ds_gdsSpotCd_list.deleteRow(0);
 		}
 		this.fn_classBrch_set();
-		this.ds_search.setColumn(0, "brchCd", this.brchCd);
+		//this.ds_search.setColumn(0, "brchCd", this.brchCd);
 		
 		// 학기
 		this.fn_sesterInfo();
 		
-		this.ds_search.setColumn(0, "brchCd", "");
+		//this.ds_search.setColumn(0, "brchCd", "");
 		
 		// 강좌 구분
 		this.ds_lectClCd_list.insertRow(0);
@@ -164,19 +164,19 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		// 대분류
 		this.ds_lrclsCtegryCd_list.insertRow(0);
 		this.ds_lrclsCtegryCd_list.setColumn(0, "cd", "");
-		this.ds_lrclsCtegryCd_list.setColumn(0, "cdNm", "1Depth");
+		this.ds_lrclsCtegryCd_list.setColumn(0, "cdNm", "대분류");
 		this.ds_search.setColumn(0, "lrclsCtegryCd", "");
 		
 		// 중분류
 		this.ds_mdclsCtegryCd_list.insertRow(0);
 		this.ds_mdclsCtegryCd_list.setColumn(0, "cd", "");
-		this.ds_mdclsCtegryCd_list.setColumn(0, "cdNm", "2Depth");
+		this.ds_mdclsCtegryCd_list.setColumn(0, "cdNm", "중분류");
 		this.ds_search.setColumn(0, "mdclsCtegryCd", "");
 		
 		// 소분류
 		this.ds_smclsCtegryCd_list.insertRow(0);
 		this.ds_smclsCtegryCd_list.setColumn(0, "cd", "");
-		this.ds_smclsCtegryCd_list.setColumn(0, "cdNm", "3Depth");
+		this.ds_smclsCtegryCd_list.setColumn(0, "cdNm", "소분류");
 		this.ds_search.setColumn(0, "smclsCtegryCd", "");
 		
 		break;
@@ -322,7 +322,7 @@ this.Div00_Div00_00_00_00_btnInit_onclick = function(obj:nexacro.Button,e:nexacr
 	
 	this.fn_sesterInfo();
 	
-	this.ds_search.setColumn(0, "brchCd", "");
+	//this.ds_search.setColumn(0, "brchCd", "");
 	this.ds_search.setColumn(0, "lectClCd", "");
 	this.ds_search.setColumn(0, "lrclsCtegryCd", "");
 	this.ds_search.setColumn(0, "mdclsCtegryCd", "");
@@ -348,6 +348,8 @@ this.fn_classBrch_set = function()
 	{
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
+	this.Div00.form.Div00.form.brchCd.set_index(0);
+	this.Div00.form.Div00.form.brchCd.updateToDataset();
 }
 ]]></Script>
     <Objects>
