@@ -26,39 +26,41 @@ this.GradeDiscount_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.baseSvrUrl = this.application.Admin_svc + "::discount/grade/";
 	
 	this.fn_list();
+	
+	alert("테스트기간동안 할인횟수 3자리 입력 가능");
 };
 
 this.Div00_Div01_Edit00_oninput = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 {
 	var objVal = obj.value;
 	
-	if(objVal > 10)
-	{
-		obj.set_value("");
-		obj.updateToDataset();
-		this.ds_discount_mst.setColumn(0, "allUseNbcnt");
-		alert("전체 사용횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
-	}
+// 	if(objVal > 10)
+// 	{
+// 		obj.set_value("");
+// 		obj.updateToDataset();
+// 		this.ds_discount_mst.setColumn(0, "allUseNbcnt");
+// 		alert("전체 사용횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
+// 	}
 };
 
 this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
 {
-	if(e.cell == 2)
-	{
-		if(obj.getEditingValue() > 10)
-		{
-			obj.setEditValue("");
-			alert("할인횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
-		}
-	}
-	else if(e.cell == 3)
-	{
-		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
-		{
-			obj.setEditValue("");
-			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
-		}
-	}
+// 	if(e.cell == 2)
+// 	{
+// 		if(obj.getEditingValue() > 10)
+// 		{
+// 			obj.setEditValue("");
+// 			alert("할인횟수는 최소 0 ~ 최대 10까지 입력할 수 있습니다.");
+// 		}
+// 	}
+// 	else if(e.cell == 3)
+// 	{
+// 		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
+// 		{
+// 			obj.setEditValue("");
+// 			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
+// 		}
+// 	}
 };
 
 this.Div00_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -186,7 +188,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
                 <Layouts>
                   <Layout>
                     <Static id="Static03" taborder="0" text="회" left="185" top="5" width="25" height="21"/>
-                    <Edit id="Edit00" taborder="1" left="100" top="0" width="80" height="30" displaynulltext="0 ~ 10" maxlength="2" oninput="Div00_Div01_Edit00_oninput" textAlign="right" inputtype="digit" inputfilter="none"/>
+                    <Edit id="Edit00" taborder="1" left="100" top="0" width="80" height="30" displaynulltext="0 ~ 10" maxlength="3" oninput="Div00_Div01_Edit00_oninput" textAlign="right" inputtype="digit" inputfilter="none" onchanged="Div00_Div01_Edit00_onchanged"/>
                     <Static id="Static02" taborder="2" text="• 전체 사용 횟수" left="0" top="5" width="100" height="21"/>
                   </Layout>
                 </Layouts>
@@ -215,7 +217,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
                     <Band id="body">
                       <Cell suppress="0" text="bind:cdNm" expr="cdNm + &quot; 할인&quot;"/>
                       <Cell col="1" text="bind:applBrchRngCd" displaytype="expr:(cd == &quot;91&quot; || cd == &quot;92&quot;) ? &quot;combotext&quot; : &quot;combocontrol&quot;" edittype="expr:(cd == &quot;91&quot; || cd == &quot;92&quot;) ? &quot;none&quot; : &quot;combo&quot;" combodataset="ds_appl_brch_cd" combocodecol="cd" combodatacol="cdNm" combodisplaynulltype="none"/>
-                      <Cell col="2" expandshow="hide" expandsize="16" maskeditpostfixtext="회" displaytype="maskeditcontrol" edittype="mask" maskeditformat="99" editinputtype="normal" editinputfilter="none" maskedittrimtype="none" text="bind:dcNbcnt" expr="dcNbcnt  ? dcNbcnt : ' '" tooltiptype="default,mouseleave" maskedittype="number" maskeditlimitbymask="integer" tooltiptext="범위 : 0 ~ 10 "/>
+                      <Cell col="2" expandshow="hide" expandsize="16" maskeditpostfixtext="회" displaytype="maskeditcontrol" edittype="mask" maskeditformat="999" editinputtype="normal" editinputfilter="none" maskedittrimtype="none" text="bind:dcNbcnt" expr="dcNbcnt  ? dcNbcnt : ' '" tooltiptype="default,mouseleave" maskedittype="number" maskeditlimitbymask="integer" tooltiptext="범위 : 0 ~ 10 "/>
                       <Cell col="3" suppress="0" maskeditpostfixtext="%" displaytype="maskeditcontrol" edittype="mask" text="bind:dcRt" maskeditformat="999" maskeditlimitbymask="integer" expr="dcRt  ? dcRt : ' '"/>
                       <Cell col="4" suppress="0" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_use_yn_cd" combodatacol="cdNm" combocodecol="cd"/>
                     </Band>
