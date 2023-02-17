@@ -668,17 +668,29 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 	if(num.startsWith("0") && num.length > 1){
 		num = num.substring(1);
 	}
+			
+// 	// 무조건 백의자리
+// 	if(num.length > 0){
+// 		num = (parseInt(num / 10) + (num % 10)) * 10;
+// 	}
+// 	
+// 	obj.set_value(this.gfn_setComma(num));
+// 	obj.setCaretPos(obj.value.length-1);
+// 	if(obj.value.toString() == "0"){
+// 		obj.set_value("");
+// 	}
 	
-	// 무조건 백의자리
-	if(num.length > 0){
-		num = (parseInt(num / 10) + (num % 10)) * 10;
+	// 단위 : 무조건 십의자리
+	if(this.gfn_isNull(num))
+	{
+		num = 0
+	}
+	else if(num % 10 != 0)
+	{
+		num *= 10
 	}
 	
 	obj.set_value(this.gfn_setComma(num));
-	obj.setCaretPos(obj.value.length-1);
-	if(obj.value.toString() == "0"){
-		obj.set_value("");
-	}
 	
 	var lectAmt = Number(nexacro.replaceAll(this.parent.parent.parent.form.Div02.form.Static06.text.substring(0, this.parent.parent.parent.form.Div02.form.Static06.text.length - 1), ",", ""));
 	var lectAddAmt = this.gfn_nvl(this.parent.parent.parent.form.optnDiv.form.Static03.text) == "" ? 0 : Number(nexacro.replaceAll(this.parent.parent.parent.form.optnDiv.form.Static03.text.substring(0, this.parent.parent.parent.form.optnDiv.form.Static03.text.length - 1), ",", ""));

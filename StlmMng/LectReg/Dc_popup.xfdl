@@ -640,16 +640,28 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		num = num.substring(1);
 	}
 	
-	// 무조건 백의자리
-	if(num.length > 0){
-		num = (parseInt(num / 10) + (num % 10)) * 10;
+// 	// 무조건 백의자리
+// 	if(num.length > 0){
+// 		num = (parseInt(num / 10) + (num % 10)) * 10;
+// 	}
+// 	
+// 	obj.set_value(this.gfn_setComma(num));
+// 	obj.setCaretPos(obj.value.length-1);
+// 	if(obj.value.toString() == "0"){
+// 		obj.set_value("");
+// 	}
+
+	// 단위 : 무조건 십의자리
+	if(this.gfn_isNull(num))
+	{
+		num = 0
+	}
+	else if(num % 10 != 0)
+	{
+		num *= 10
 	}
 	
 	obj.set_value(this.gfn_setComma(num));
-	obj.setCaretPos(obj.value.length-1);
-	if(obj.value.toString() == "0"){
-		obj.set_value("");
-	}
 	
 	if(obj.id == "editOfln"){
 		// 등급할인, 쿠폰할인 초기화
