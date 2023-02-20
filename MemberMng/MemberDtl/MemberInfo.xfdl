@@ -179,7 +179,7 @@ include "Base::lib_date.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = this.parent.parent.parent.menuId;
+this.menuId = "";
 this.mbrNo = "";
 
 /**************************************************************************
@@ -196,6 +196,8 @@ this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}else{
 		this.mbrNo = this.parent.parent.parent.parent.mbrNo;
 	}
+	
+	this.menuId = this.parent.parent.parent.parent.menuId;
 	
 	if(this.mbrNo != ""){
 		this.ds_info.setColumn(0, "mbrNo", this.mbrNo);
@@ -274,6 +276,7 @@ this.fn_set_detail = function()
 }
 
 this.fn_save = function(){
+	
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.baseSvrUrl + "update.do",
@@ -285,8 +288,6 @@ this.fn_save = function(){
 		isAsync : true,
 		isPopup : true
 	}
-	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
-
 	this.gfn_transaction(tranObj);
 }
 
@@ -308,6 +309,8 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 
 this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
 	if(this.gfn_isNull(this.ds_info.getColumn(0, "hpStNo")) || this.gfn_isNull(this.ds_info.getColumn(0, "hpMidNo")) || this.gfn_isNull(this.ds_info.getColumn(0, "hpLastNo")))
 	{
 		alert("휴대전화를 입력하세요.");
@@ -338,7 +341,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "save":
 			this.alert("저장되었습니다.");
-			this.parent.parent.parent.close();
+			this.parent.parent.parent.fn_detail();
 			break;
 		case "detail":    
 			this.fn_set_detail();
