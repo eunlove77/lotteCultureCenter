@@ -51,9 +51,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망시간" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hopeSt" taborder="1" left="Static00:10" top="5" width="100" height="20" maxlength="4" inputtype="number" inputfilter="comma,dot,sign"/>
+                    <Edit id="hopeSt" taborder="1" left="Static00:10" top="5" width="100" height="20" maxlength="4" inputtype="number" inputfilter="comma,dot,sign" onchanged="Div02_Div01_hopeSt_onchanged"/>
                     <Static id="Static01" taborder="3" text="~" left="hopeSt:5" top="4" width="20" height="21" textAlign="center"/>
-                    <Edit id="hopeEnd" taborder="2" left="Static01:5" top="5" width="108" height="20" maxlength="4" inputtype="number" inputfilter="comma,sign,dot"/>
+                    <Edit id="hopeEnd" taborder="2" left="Static01:5" top="5" width="108" height="20" maxlength="4" inputtype="number" inputfilter="comma,sign,dot" onchanged="Div02_Div01_hopeEnd_onchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -577,6 +577,31 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 				menuSeq : this.menuSeq
 				};
 		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+	}
+};
+
+//희망시간 유효성검사
+this.Div02_Div01_hopeSt_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+{
+	if(obj.value > 2400){
+		obj.set_value("");
+		return;
+	}
+	var hopeEnd = this.Div02.form.Div01.form.hopeEnd.value;
+	if(hopeEnd && Number(hopeEnd) < Number(obj.value)){
+		this.Div02.form.Div01.form.hopeEnd.set_value("");
+	}
+};
+
+this.Div02_Div01_hopeEnd_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+{
+	if(obj.value > 2400){
+		obj.set_value("");
+		return;
+	}
+	var hopeSt = this.Div02.form.Div01.form.hopeSt.value;
+	if(hopeSt && Number(hopeSt) > Number(obj.value)){
+		this.Div02.form.Div01.form.hopeSt.set_value("");
 	}
 };
 ]]></Script>
