@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="cotnLecStat" width="1280" height="720" titletext="New Form" onload="cotnLecStat_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="Div00" taborder="0" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21" text=""/>
+        <Static id="txtMenuNm" taborder="1" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Static id="Static00" taborder="2" text="▶ 검색" left="10" top="79" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Div id="Div01" taborder="3" text="Div01" left="10" top="103" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="100" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="4" text="Div01" left="10" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="학기 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Combo id="yy" taborder="1" text="Combo00" left="116" top="5" width="100" height="20"/>
+              <Combo id="Combo00" taborder="2" text="학기" left="221" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div03" taborder="5" text="Div01" left="10" top="Div02:-1" right="10" height="33" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Div id="Div00" taborder="0" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="포함여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="CheckBox00" taborder="1" text="재료비/대여비(강사지급) 제외" left="116" top="5" width="170" height="20"/>
+                    <CheckBox id="CheckBox00_00" taborder="2" text="재료비/대여비(강사미지급) 제외" left="CheckBox00:10" top="5" width="180" height="20"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="btnSearch" taborder="6" text="검색" top="Div03:5" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div02_btnSearch_onclick" width="81" right="10"/>
+        <Static id="Static00_00" taborder="7" text="▶ 전체" left="10" top="236" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Grid id="grid_total" taborder="8" left="10" top="264" height="97" right="10" binddataset="ds_total" scrolltype="none" scrollbartype="none" cssclass="grd_WF_TableType">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="60" band="left"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="총 합"/>
+                <Cell col="1" text="매출금액"/>
+                <Cell col="2" text="회원 수"/>
+                <Cell col="3" text="수강 고객수"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:cotnLect"/>
+                <Cell col="1" text="bind:slngAmt"/>
+                <Cell col="2" text="bind:memCnt"/>
+                <Cell col="3" text="bind:atlctCnt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="Static00_00_00" taborder="9" text="▶ 목록" left="10" top="406" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Grid id="grid_list" taborder="10" left="10" top="435" right="10" bottom="10" binddataset="ds_list" cssclass="grd_WF_TableType">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="110"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="지점명"/>
+                <Cell col="1" text="연속학기"/>
+                <Cell col="2" text="매출금액"/>
+                <Cell col="3" text="회원 수"/>
+                <Cell col="4" text="수강 고객수"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:strNm" suppress="1"/>
+                <Cell col="1" text="bind:cotnLect"/>
+                <Cell col="2" text="bind:slngAmt"/>
+                <Cell col="3" text="bind:memCnt"/>
+                <Cell col="4" text="bind:atlctCnt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_brch_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_smster_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cdNm">학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">1</Col>
+            <Col id="cdNm">봄학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">2</Col>
+            <Col id="cdNm">여름학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">3</Col>
+            <Col id="cdNm">가을학기</Col>
+          </Row>
+          <Row>
+            <Col id="cd">4</Col>
+            <Col id="cdNm">겨울학기</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_total">
+        <ColumnInfo>
+          <Column id="cotnLect" type="STRING" size="256"/>
+          <Column id="slngAmt" type="STRING" size="256"/>
+          <Column id="memCnt" type="STRING" size="256"/>
+          <Column id="atlctCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="cotnLect">2개학기</Col>
+            <Col id="slngAmt">10000</Col>
+            <Col id="memCnt">10</Col>
+            <Col id="atlctCnt">30</Col>
+          </Row>
+          <Row>
+            <Col id="cotnLect">3개학기</Col>
+            <Col id="slngAmt">6000</Col>
+            <Col id="memCnt">20</Col>
+            <Col id="atlctCnt">40</Col>
+          </Row>
+          <Row>
+            <Col id="cotnLect">4개학기</Col>
+            <Col id="slngAmt">120000</Col>
+            <Col id="memCnt">30</Col>
+            <Col id="atlctCnt">50</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="strNm" type="STRING" size="256"/>
+          <Column id="cotnLect" type="STRING" size="256"/>
+          <Column id="slngAmt" type="STRING" size="256"/>
+          <Column id="memCnt" type="STRING" size="256"/>
+          <Column id="atlctCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="strNm">본점</Col>
+            <Col id="cotnLect">2개학기</Col>
+            <Col id="slngAmt">1000</Col>
+            <Col id="memCnt">10</Col>
+            <Col id="atlctCnt">5</Col>
+          </Row>
+          <Row>
+            <Col id="strNm">본점</Col>
+            <Col id="cotnLect">3개학기</Col>
+            <Col id="slngAmt">2000</Col>
+            <Col id="memCnt">20</Col>
+            <Col id="atlctCnt">10</Col>
+          </Row>
+          <Row>
+            <Col id="strNm">본점</Col>
+            <Col id="cotnLect">4개학기</Col>
+            <Col id="slngAmt">3000</Col>
+            <Col id="memCnt">25</Col>
+            <Col id="atlctCnt">15</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::lib_alrt_talk.xjs";
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+this.cotnLecStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.baseSvrUrl = this.application.Admin_svc + "::stat/";
+		
+	this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
+	this.ds_brch_cd.insertRow(0);
+	this.ds_brch_cd.setColumn(0, "cd", "");
+	this.ds_brch_cd.setColumn(0, "cdNm", "전체");
+	
+	this.Div01.form.ComboSpot.set_index(0);
+		
+	var data = new Date();
+	var strtYy = data.getFullYear();
+	var endYy = 2017
+	
+	var comboYyObj = this.Div02.form.yy;
+	
+	this.gfn_set_year(this, comboYyObj, endYy, strtYy, "년도", 1);	
+};
+]]></Script>
+  </Form>
+</FDL>

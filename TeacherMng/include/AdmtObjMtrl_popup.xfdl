@@ -175,7 +175,7 @@
                       <Column size="100"/>
                     </Columns>
                     <Rows>
-                      <Row size="24" band="head"/>
+                      <Row size="40" band="head"/>
                       <Row size="24"/>
                       <Row size="24" band="summ"/>
                     </Rows>
@@ -185,8 +185,8 @@
                       <Cell col="2" text="강사명"/>
                       <Cell col="3" text="지급액"/>
                       <Cell col="4" text="소득금액"/>
-                      <Cell col="5" text="재료비(구매형)"/>
-                      <Cell col="6" text="재료비(1/N형)"/>
+                      <Cell col="5" text="재료비/대여료&#13;&#10;(구매형)"/>
+                      <Cell col="6" text="재료비/대여료&#13;&#10;(1/N형)"/>
                       <Cell col="7" text="소득세(3%)"/>
                       <Cell col="8" text="주민세(0.3%)"/>
                       <Cell col="9" text="세금합계"/>
@@ -472,7 +472,7 @@ this.fn_admt_list = function(){
 		strSvcId : "admt_list",
 		strSvcUrl : this.application.Admin_svc + "::teacherPpayMng/getAdmtMtrlList.do",
 		inData : "",
-		outData : "ds_mtrl_list=output1",
+		outData : "ds_mtrl_list=output1 ds_acntcd_list=output2",
 		strArg : "brchCd=" + this.brchCd + " admtYm=" + (this.ppayYear + this.ppayMonth) + " admtNo=" + this.admtNo,
 		callBackFnc : "fn_callback",
 		isAsync : true,
@@ -584,22 +584,6 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 		case "admt_list":
 			
 			this.Div02.form.txtTotal.set_text("( " + this.ds_mtrl_list.rowcount  + "개 )");
-			
-			if(saveYn == "N"){
-
-				if(this.ds_mtrl_list.rowcount > 0){					
-					//Summary일 경우 -2를 입력. 
-					this.acntGsamt_5331157921 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 3).replace(/,/g,"")); 
-					this.acntGsamt_2133030301 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 7).replace(/,/g,"")); 
-					this.acntGsamt_2133050301 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 8).replace(/,/g,"")); 
-					this.acntGsamt_5331157923 = nexacro.toNumber(this.Div02.form.Grid01.getCellText(-2, 6).replace(/,/g,"")); 
-					
-					this.ds_acntcd_list.setColumn(this.ds_acntcd_list.findRowExpr("acntCd == '5331157921'"), "acntGsamt", this.acntGsamt_5331157921);
-					this.ds_acntcd_list.setColumn(this.ds_acntcd_list.findRowExpr("acntCd == '2133030301'"), "acntGsamt", this.acntGsamt_2133030301);
-					this.ds_acntcd_list.setColumn(this.ds_acntcd_list.findRowExpr("acntCd == '2133050301'"), "acntGsamt", this.acntGsamt_2133050301);
-					this.ds_acntcd_list.setColumn(this.ds_acntcd_list.findRowExpr("acntCd == '5331157923'"), "acntGsamt", this.acntGsamt_5331157923);
-				}			
-			}
 			
 			this.alert("강사료정산 목록이 갱신되었습니다.");
 			

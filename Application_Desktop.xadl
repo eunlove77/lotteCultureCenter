@@ -78,7 +78,13 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 	this.BottomFrame = this.mainframe.VFrameSet00.BottomFrame;
 	this.MainFrame	= this.mainframe.VFrameSet00.HFrameSet00.VFrameSet01.MainFrame;
 	
-	if(this.resources_type == "dev"){
+	if(this.resources_type == "release"){
+		this.Loing_svc = "Login_svc_release";
+		this.Session_svc = "Session_svc_release";
+		this.Menu_svc = "Menu_svc_release";
+		this.Admin_svc = "Admin_svc_release";
+		this.Domain = this.getVariable("domain_release");		
+	}else if(this.resources_type == "dev"){
 		this.Loing_svc = "Login_svc_dev";
 		this.Session_svc = "Session_svc_dev";
 		this.Menu_svc = "Menu_svc_dev";
@@ -145,7 +151,7 @@ this.gfn_setFrameSize = function(){
 	this.VFSet00.set_separatesize("46,30,*,30");
 	this.HFSet00.set_separatesize("150,*");
 	this.VFSet01.set_separatesize("0,*,0,0");
-	
+
 	this.gfn_set_frame()
 
 }

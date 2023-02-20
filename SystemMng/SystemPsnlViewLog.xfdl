@@ -3,29 +3,13 @@
   <Form id="SystemPsnlViewLog" width="1280" height="800" titletext="New Form" onload="SystemPsnlViewLog_onload">
     <Layouts>
       <Layout height="800" width="1280">
-        <Static id="txtMenuNm" taborder="1" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Div id="Div02" text="Div01" left="10" top="82" height="33" right="9">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="Div02" taborder="2" text="Div01" left="10" top="82" height="33" cssclass="div_WF_CompWrap" right="10">
           <Layouts>
             <Layout>
-              <Div id="Div03" taborder="0" text="Div01" left="0" cssclass="div_WF_CompWrap" height="33" width="600" bottom="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="발생일시" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div04" taborder="1" text="Div01" height="33" cssclass="div_WF_CompWrap" left="Div03:-1" right="1" top="0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="활동타입" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkAll" taborder="1" text="전체" left="116" top="5" width="45" height="20" onclick="Div02_Div04_chkAll_onclick"/>
-                    <CheckBox id="chkSearch" taborder="2" text="조회" left="chkAll:3" top="5" width="45" height="20" onclick="fn_checkbox_click"/>
-                    <CheckBox id="chkExcel" taborder="3" text="엑셀다운로드" left="chkSearch:3" top="5" width="100" height="20" onclick="fn_checkbox_click"/>
-                  </Layout>
-                </Layouts>
-              </Div>
+              <Static id="Static00" taborder="0" text="발생일시" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
             </Layout>
           </Layouts>
         </Div>
@@ -62,7 +46,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="4" left="10" top="220" binddataset="ds_log" autofittype="col" right="10" bottom="60" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="4" left="10" top="230" binddataset="ds_log" autofittype="col" right="10" bottom="50" oncellclick="Grid00_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -96,14 +80,14 @@
                 <Cell col="3" text="bind:ipAddr"/>
                 <Cell col="4" text="bind:inqMenuNm"/>
                 <Cell col="5" text="상세보기" color="#000dcc" cursor="pointer" textDecoration="underline"/>
-                <Cell col="6" text="bind:procsNm"/>
+                <Cell col="6" text="bind:procsNm" color="#000dcc" textDecoration="underline"/>
                 <Cell col="7" text="bind:rgprDtm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Static id="txtTotal" taborder="5" left="10" top="196" width="80" height="21" text="총 0개"/>
-        <Div id="pageingDiv" taborder="6" text="Div00" left="10" top="Grid00:11" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl"/>
+        <Static id="txtTotal" taborder="5" left="10" top="206" width="80" height="21" text="총 0개"/>
+        <Div id="pageingDiv" taborder="6" text="Div00" left="10" top="Grid00:10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -150,17 +134,12 @@ this.Div05_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventI
 
 this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var objCalendar = this.Div02.form.Div03.form.Div00.form;
-	
+	var objCalendar = this.Div02.form.Div00.form;
 	objCalendar.strtDtm.set_value('');
 	objCalendar.endDtm.set_value('');
 		
 	this.Div05.form.searchField.set_value('');
 	this.Div05.form.searchQuery.set_value('');
-	
-	this.Div02.form.Div04.form.chkAll.set_value(0);
-	this.Div02.form.Div04.form.chkSearch.set_value(0);
-	this.Div02.form.Div04.form.chkExcel.set_value(0);
 	
 	this.ds_log.clearData();
 	this.txtTotal.set_text("총 0개");	
@@ -168,16 +147,6 @@ this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	this.pageingDiv.set_visible(false);
 };
 
-this.Div02_Div04_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked()){
-		obj.parent.chkSearch.set_value(1);
-		obj.parent.chkExcel.set_value(1);
-	}else{
-		obj.parent.chkSearch.set_value(0);
-		obj.parent.chkExcel.set_value(0);
-	}
-};
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -236,16 +205,10 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 }
 
 this.fn_searchValueInit = function(){
-	var objCalendar = this.Div02.form.Div03.form.Div00.form;
-	var arrType = new Array();
+	var objCalendar = this.Div02.form.Div00.form;
 	
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
-	
-	if(this.Div02.form.Div04.form.chkSearch.value == true) arrType.push("'R'");
-	if(this.Div02.form.Div04.form.chkExcel.value == true) arrType.push("'E'");
-	
-	this.ds_search.setColumn(0, "type", arrType.join(","));
 	this.ds_search.setColumn(0, "f", this.Div05.form.searchField.value);
 	this.ds_search.setColumn(0, "q", this.Div05.form.searchQuery.value);
 }
@@ -257,21 +220,15 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	if(headTitle == "조회 쿼리"){
 		var oArg = {			
 			query : this.ds_log.getColumn(e.row, "inqQryCont")
-		};
-				
-				
-		this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
+		};		
+	}else if(headTitle == "활동타입"){
+		var oArg = {			
+			query : this.ds_log.getColumn(e.row, "rsnCont")
+		};		
 	}
 	
-};
-
-this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(!obj.isChecked()){
-		this.Div02.form.Div04.form.chkAll.set_value(0);
-	}
-};
-]]></Script>
+	this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
+};]]></Script>
     <Objects>
       <Dataset id="ds_log">
         <ColumnInfo>
@@ -290,7 +247,6 @@ this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
         <ColumnInfo>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="type" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>

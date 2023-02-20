@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridInquiryList" taborder="2" left="10" top="240" binddataset="inquiryDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridInquiryList_oncellclick">
+        <Grid id="GridInquiryList" taborder="2" left="10" top="240" binddataset="inquiryDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridInquiryList_oncellclick" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -97,7 +97,7 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Div id="periodDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="2">
+                    <Div id="periodDiv" taborder="1" text="Div01" left="0" top="0" height="33" cssclass="div_WF_CompWrap" width="720">
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="기간" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -123,6 +123,14 @@
                         </Layout>
                       </Layouts>
                     </Div>
+                    <Div id="spotDiv" taborder="4" text="Div01" left="periodDiv:-1" top="0" height="33" cssclass="div_WF_CompWrap" right="2">
+                      <Layouts>
+                        <Layout>
+                          <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="107" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
+                          <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="170" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" value="0"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
                   </Layout>
                 </Layouts>
               </Div>
@@ -137,6 +145,7 @@
           <Column id="onlnQuesSeqno" type="INT" size="256"/>
           <Column id="clCd" type="STRING" size="256"/>
           <Column id="clNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="mbrNm" type="STRING" size="256"/>
@@ -157,6 +166,7 @@
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
           <Column id="clCd" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
           <Column id="answerYn" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
@@ -169,12 +179,21 @@
         <ColumnInfo>
           <Column id="onlnQuesSeqno" type="INT" size="256"/>
           <Column id="clCd" type="STRING" size="256"/>
+          <Column id="clNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
+          <Column id="mbrNm" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
+          <Column id="emailAddrCd" type="STRING" size="256"/>
           <Column id="hpNo" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprDtm" type="DATETIME" size="256"/>
+          <Column id="admId" type="STRING" size="256"/>
+          <Column id="admNm" type="STRING" size="256"/>
+          <Column id="ansDtm" type="DATETIME" size="256"/>
+          <Column id="ansYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="categoryDs">
@@ -185,6 +204,12 @@
         <Rows>
           <Row/>
         </Rows>
+      </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -211,9 +236,9 @@ this.InquiryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfnSetCheckBoxNoDataset(this.inquiryDs, this.GridInquiryList, 0);
 	
+	//지점코드 세팅
+	this.fn_set_spotCd();
 	this.fn_data_list();
-	
-	this.fn_list(1);
 };
 
 //삭제버튼
@@ -269,6 +294,9 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 	objCalendar.strtDtm.set_value('');
 	objCalendar.endDtm.set_value('');
 	
+	//지점 필드
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	
 	//검색 필드
 	this.Div00_00.form.conDiv.form.searchDiv.form.searchField.set_index(0);
 	this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.set_value('');
@@ -308,6 +336,31 @@ this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
+
+//지점 세팅
+this.fn_set_spotCd = function()
+{
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.updateToDataset();
+	
+}
+
 // 코드 세팅
 this.fn_data_list = function()
 {
@@ -366,7 +419,7 @@ this.fn_searchValueInit = function()
 	
 	// 구분코드
 	for(var i=0;i<this.categoryDs.getRowCount();i++){
-			
+		
 		if(this.Div00_00.form.conDiv.form.typeDiv.form["chkClCdStatus" + this.categoryDs.getColumn(i, "cd")].value == true)
 		{
 			arrClCd.push("'"+ this.categoryDs.getColumn(i, "cd") +"'");
@@ -376,6 +429,7 @@ this.fn_searchValueInit = function()
 	this.searchDs.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.searchDs.setColumn(0, "endDtm", objCalendar.endDtm.value);
 	this.searchDs.setColumn(0, "clCd", arrClCd.join(","));
+	this.searchDs.setColumn(0, "brchCd", this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.value);
 	this.searchDs.setColumn(0, "answerYn", arrAnswerYn.join(","));
 	this.searchDs.setColumn(0, "f", this.Div00_00.form.conDiv.form.searchDiv.form.searchField.value);
 	this.searchDs.setColumn(0, "q", this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.value);
@@ -464,6 +518,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg){
 			// 온라인문의 구분자 전체 체크박스 클릭이벤트 추가
 			chkboxFrm.chkClCdAll.setEventHandler("onclick", this.fn_chkClCdAll_onclick, this);
 			chkboxFrm.chkClCdAll.set_value(0);
+			this.fn_searchValueInit();
+			this.fn_list();
 		
 		break;
 		

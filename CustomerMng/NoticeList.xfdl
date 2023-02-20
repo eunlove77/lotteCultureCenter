@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" cellmovingtype="col" oncellclick="GridNoticeList_oncellclick">
+        <Grid id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" cellmovingtype="col" oncellclick="GridNoticeList_oncellclick" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -138,7 +138,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="170" height="20" innerdataset="spotCdList" codecolumn="cd" datacolumn="cdNm" index="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" value="0"/>
+                          <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="170" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" value="0"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -188,12 +188,6 @@
           <Row/>
         </Rows>
       </Dataset>
-      <Dataset id="spotCdList">
-        <ColumnInfo>
-          <Column id="cd" type="STRING" size="256"/>
-          <Column id="cdNm" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="noticeDs_format">
         <ColumnInfo>
           <Column id="notcSeqno" type="INT" size="256"/>
@@ -225,6 +219,12 @@
           <Row/>
         </Rows>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
 * include 영역 
@@ -251,22 +251,11 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.gfnSetCheckBoxNoDataset(this.noticeDs, this.GridNoticeList, 0);
-	/*//지점초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
-	this.spotCdList.copyData(this.application.gdsSpotCdList);
-	this.spotCdList.deleteRow(0);
-	this.fn_classBrch_set();*/
 	
-	this.spotCdList.copyData(this.application.gdsSpotCdList);
-	this.spotCdList.insertRow(0);
-	this.spotCdList.setColumn(0, "cd", "");
-	this.spotCdList.setColumn(0, "cdNm", "전체");
-			
+	//지점코드 세팅
+	this.fn_set_spotCd();
 	this.fn_data_list();
 	
-	//this.fn_searchValueInit();
-	
-	this.fn_list();
 };
 
 //등록 버튼
@@ -317,36 +306,7 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 			this.fn_delete(chkStr);
 		}
 	}
-	
-	/*var check_array = this.noticeDs.checkarray;
-	var checked_array = new Array();
-	var fixCnt = 0;
-	for(var i = 0; i < check_array.length; i++){
-		if(check_array[i] > 0) checked_array.push(i);
-	}
-	for(var j =0; j<checked_array.length; j++)
-	{
-		if(this.noticeDs.getColumn(checked_array[j], "fixYn") =="Y") fixCnt ++;
-	}
-	if(checked_array.length == 0){
-		alert("삭제할 게시글을 선택하세요.");
-		return false;
-	}
-	if(fixCnt > 0)
-	{
-		if(!confirm("상단 고정된 공지사항이 포함됐습니다\n삭제하시겠습니까?")) return false;
-	}
-	else
-	{
-		if(!confirm("선택한 게시글을 삭제하시겠습니까?")) return false;
-	}
-	
-	this.noticeDs.deleteMultiRows(checked_array);
-	for(i of checked_array){
-		check_array[i] = 0;
-	}
-	this.fn_delete();*/
-	
+
 };
 
 //검색버튼
@@ -424,6 +384,31 @@ this.GridNoticeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickE
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
+
+
+//지점 세팅
+this.fn_set_spotCd = function()
+{
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.updateToDataset();
+	
+}
 
 // 코드 세팅
 this.fn_data_list = function()
@@ -588,39 +573,6 @@ this.fn_delete = function(delStr)
 	this.gfn_transaction(tranObj);	
 }
 
-/*this.fn_delete = function ()
-{	
-	var tranObj = {};
-	tranObj.strSvcId	= "delete";
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::/customer/deleteNotice.do";
-	tranObj.inData      = "noticeList=noticeDs:U";
-	tranObj.outData     = "noticeDs=output1";
-	tranObj.strArg      = "";
-	tranObj.callBackFnc = "fnCallback";
-	tranObj.isAsync     = true;
-	tranObj.menuSeq 	= this.getOwnerFrame().param.MENU_ID;
-	
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accDelYn")){return;}
-	
-	this.gfn_transaction(tranObj);	
-};*/
-
-
-//지점 세팅
-this.fn_classBrch_set = function()
-{	
-	if(nexacro.getPrivateProfile("brchCd") == "0000")
-	{
-		this.spotCdList.insertRow(0);
-		this.spotCdList.setColumn(0, "cd", "");
-		this.spotCdList.setColumn(0, "cdNm", "전체");
-	}
-	else
-	{
-		this.spotCdList.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
-	}
-}
-
 // 구분조건 단일 체크박스 클릭이벤트
 this.fn_chkClCd_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 {
@@ -711,6 +663,9 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			chkboxFrm.chkClCdAll.set_value(0);
 			
 			this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+			
+			this.fn_searchValueInit();
+			this.fn_list();
 		
 		break;
 		
