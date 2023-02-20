@@ -238,7 +238,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="1" left="0" top="0" width="80" height="21" text="관리자 메모"/>
-              <Button id="btnMemoLog" text="이력" left="93" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div02_btnMemoLog_onclick" taborder="0"/>
+              <Button id="btnMemoLog" text="이력" left="93" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div02_btnMemoLog_onclick" taborder="0" visible="false"/>
               <TextArea id="memoCont" taborder="2" left="0" top="35" right="0" maxlength="250" bottom="39"/>
             </Layout>
           </Layouts>
@@ -655,6 +655,12 @@ this.set_teacher_info = function(){
 	this.set_teacher_basic_info(tcTpCd);	//기본정보
 	
 	this.set_teacher_pay_info(tcTpCd);	//지급정보
+	
+	//메모 이력버튼 visible
+	var memoCnt = this.ds_teacher_info.getColumn(0, "memoCnt");
+	if(memoCnt > 0){
+		this.Div02.form.btnMemoLog.set_visible(true);
+	}
 	
 	this.set_modify_request_info();	//수정요청
 	
@@ -1876,6 +1882,7 @@ this.Div01_Div05_Div00_Edit00_00_onchanged = function(obj:nexacro.Edit,e:nexacro
           <Column id="rgprNm" type="STRING" size="256"/>
           <Column id="mdfId" type="STRING" size="256"/>
           <Column id="mdfNm" type="STRING" size="256"/>
+          <Column id="memoCnt" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
