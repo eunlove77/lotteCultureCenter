@@ -80,7 +80,7 @@
                 <Cell col="3" text="bind:ipAddr"/>
                 <Cell col="4" text="bind:inqMenuNm"/>
                 <Cell col="5" text="상세보기" color="#000dcc" cursor="pointer" textDecoration="underline"/>
-                <Cell col="6" text="bind:procsNm"/>
+                <Cell col="6" text="bind:procsNm" color="#000dcc" textDecoration="underline"/>
                 <Cell col="7" text="bind:rgprDtm"/>
               </Band>
             </Format>
@@ -220,12 +220,14 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	if(headTitle == "조회 쿼리"){
 		var oArg = {			
 			query : this.ds_log.getColumn(e.row, "inqQryCont")
-		};
-				
-				
-		this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
+		};		
+	}else if(headTitle == "활동타입"){
+		var oArg = {			
+			query : this.ds_log.getColumn(e.row, "rsnCont")
+		};		
 	}
 	
+	this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
 };]]></Script>
     <Objects>
       <Dataset id="ds_log">
