@@ -99,7 +99,7 @@ this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
   
 	if(e.cell == 1)
 	{
-		if(obj.getEditingValue() > 100 || obj.getEditingValue() == 0)
+		if(obj.getEditingValue() != "" && (obj.getEditingValue() > 100 || obj.getEditingValue() == 0))
 		{
 			obj.setEditValue("");
 			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
@@ -127,14 +127,32 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 	
 	if(obj.getCellPos() == 2)
 	{  
-		this.ds_discount_list.setColumn(curRow,"applStDt",e.value);
+		var endDt = this.ds_discount_list.getColumn(curRow,"applEndDt");
+		
+		if(endDt && endDt <= e.value)
+		{
+			alert("적용시작일 < 적용종료일로 설정하세요.");
+			obj.setEditValue("");
+		}
+		else
+		{
+			obj.moveToNextCell();
+		}
 	}
 	else if(obj.getCellPos() == 3)
 	{  
-		this.ds_discount_list.setColumn(curRow,"applEndDt",e.value);
-	}
-	obj.moveToNextCell();
-	
+		var stDt = this.ds_discount_list.getColumn(curRow,"applStDt");
+		
+		if(stDt && stDt >= e.value)
+		{
+			alert("적용시작일 < 적용종료일로 설정하세요.");
+			obj.setEditValue("")
+		}
+		else
+		{
+			obj.moveToNextCell();
+		}
+	}	
 };
 
 /**************************************************************************
@@ -156,16 +174,6 @@ this.fn_checkValidation = function()
 	if(this.ds_discount_list.findRowExpr("dcRt == null || dcRt == ''") > -1)
 	{
 		alert("할인율을 입력하세요.");
-		return;
-	}
- 	else if(this.ds_discount_list.getColumn(this.ds_discount_list.findRowExpr("applStDt == null || applStDt == ''"), "useYn") == "Y")
-	{
-		alert("적용시작일을 입력하세요.");
-		return;
-	}
-	else if(this.ds_discount_list.getColumn(this.ds_discount_list.findRowExpr("applEndDt == null || applEndDt == ''"), "useYn") == "Y")
-	{
-		alert("적용종료일을 입력하세요.");
 		return;
 	}
 	else
