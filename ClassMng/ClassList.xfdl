@@ -109,7 +109,7 @@
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div01_00_00" taborder="10" text="Div01" left="Div04:-1" top="Div02_00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                          <Div id="Div01_00_00" taborder="10" text="Div01" left="Div04:0" top="Div02_00:-1" height="33" cssclass="div_WF_CompWrap" width="18%">
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="강의시작일" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
@@ -240,6 +240,16 @@
                               </Layout>
                             </Layouts>
                           </Div>
+                          <Div id="Div05" taborder="17" text="Div05" left="Div01_00_00:0" top="Div02_00:-1" height="33" right="0" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="그룹여부" left="0" top="0" width="70" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <CheckBox id="chkGrpAll" taborder="1" text="전체" left="Static00:6" top="5" width="41" height="20" onclick="fn_checkboxAll"/>
+                                <CheckBox id="chkGrp0" taborder="2" text="Y" left="chkGrpAll:6" top="5" width="24" height="20" truevalue="Y"/>
+                                <CheckBox id="chkGrp1" taborder="3" text="N" left="chkGrp0:6" top="5" width="27" height="20" truevalue="N"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -249,7 +259,7 @@
               <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:10" right="0" bottom="0">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select">
+                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -642,6 +652,8 @@
           <Column id="q" type="STRING" size="256"/>
           <Column id="chkMdf0" type="STRING" size="256"/>
           <Column id="chkMdf1" type="STRING" size="256"/>
+          <Column id="chkGrp0" type="STRING" size="256"/>
+          <Column id="chkGrp1" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_classCtgyLarge_list">
@@ -843,6 +855,10 @@ this.init = function()
 	this.Div02.form.Div00.form.Div00.form.Div03.form.chkMdf0.set_falsevalue("");
 	this.Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis0.set_falsevalue("");
 	this.Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis1.set_falsevalue("");
+	this.Div02.form.Div00.form.Div00.form.Div05.form.chkGrp0.set_falsevalue("");
+	this.Div02.form.Div00.form.Div00.form.Div05.form.chkGrp1.set_falsevalue("");
+	
+	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (0개)");
 	
 	// 코드 데이터
 	this.fn_code_list();
@@ -2073,6 +2089,8 @@ this.Div02.form.Div01.setMasking = function(sValue, startIndex, maskLen, flag)
       <BindItem id="item18" compid="Div02.form.Div00.form.Div00.form.Div01_01.form.chkDis0" propid="value" datasetid="ds_search" columnid="chkDis0"/>
       <BindItem id="item19" compid="Div02.form.Div00.form.Div00.form.Div03.form.chkMdf0" propid="value" datasetid="ds_search" columnid="chkMdf0"/>
       <BindItem id="item20" compid="Div02.form.Div00.form.Div00.form.Div03.form.chkMdf1" propid="value" datasetid="ds_search" columnid="chkMdf1"/>
+      <BindItem id="item21" compid="Div02.form.Div00.form.Div00.form.Div05.form.chkGrp0" propid="value" datasetid="ds_search" columnid="chkGrp0"/>
+      <BindItem id="item22" compid="Div02.form.Div00.form.Div00.form.Div05.form.chkGrp1" propid="value" datasetid="ds_search" columnid="chkGrp1"/>
     </Bind>
   </Form>
 </FDL>

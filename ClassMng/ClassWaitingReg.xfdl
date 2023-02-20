@@ -7,12 +7,12 @@
         <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" height="80" right="0" binddataset="ds_class_list" autofittype="col" oncelldblclick="Div00_Grid00_oncelldblclick" autoupdatetype="none" oncloseup="Div00_Grid00_oncloseup">
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="80" right="0" binddataset="ds_class_list" autofittype="col" oncelldblclick="Div00_Grid00_oncelldblclick" autoupdatetype="none" oncloseup="Div00_Grid00_oncloseup" autoenter="select" cellsizingtype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
-                      <Column size="116"/>
-                      <Column size="80"/>
+                      <Column size="113"/>
+                      <Column size="118"/>
                       <Column size="80"/>
                       <Column size="243"/>
                       <Column size="120"/>
@@ -104,7 +104,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="▶ 대기자 목록" left="0" top="0" width="90" height="21"/>
-                    <Grid id="Grid00" taborder="1" left="0" top="Static00:15" right="0" bottom="0" autofittype="col" nodatatext="검색결과 없음" binddataset="ds_member_list">
+                    <Grid id="Grid00" taborder="1" left="0" top="Static00:15" right="0" bottom="0" autofittype="col" nodatatext="검색결과 없음" binddataset="ds_member_list" cellsizingtype="col">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -305,6 +305,7 @@ this.Div00_Button01_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 				isPopup : true
 			}
 			this.gfn_transaction(tranObj);
+			this.close();
 		}else{
 			this.ds_waiting_list.clearData();
 		}
@@ -330,7 +331,7 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 		}
 		this.ds_class_list.set_enableevent(true);
 	}
-	obj.moveToNextCell();
+	//obj.moveToNextCell();
 };
 
 this.fnCallback = function(svcID, errorCode, errorMsg)

@@ -5,7 +5,7 @@
       <Layout height="600" mobileorientation="landscape" width="740">
         <GroupBox id="GroupBox03" text="관리자 메모 이력" taborder="0" enableevent="false" left="10" top="10" width="720" height="520"/>
         <Button id="btnCancel" taborder="1" text="취소" left="310" top="550" height="21" cssclass="btn_WF_Weak" fittocontents="none" onclick="btnCancel_onclick" width="100"/>
-        <Grid id="Grid00" taborder="2" left="27" top="80" width="686" height="440" autofittype="col" binddataset="ds_tcmemo_list" oncellclick="Grid00_oncellclick" autosizingtype="row" extendsizetype="row">
+        <Grid id="Grid00" taborder="2" left="27" top="80" width="686" height="440" autofittype="col" binddataset="ds_tcmemo_list" oncellclick="Grid00_oncellclick" autosizingtype="row" extendsizetype="row" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -88,6 +88,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 	}
 	
 	if(svcId == 'delete_memo'){
+		this.Grid00.redrawExprCell();
 		alert('삭제 되었습니다.');
 	}
 	
@@ -142,11 +143,11 @@ this.delete_teacher_memo= function(){
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="tcMemoSeqno"></Col>
-            <Col id="rgprNm"></Col>
-            <Col id="rgprDtm"></Col>
-            <Col id="rgprId"></Col>
-            <Col id="memoCont"></Col>
+            <Col id="tcMemoSeqno"/>
+            <Col id="rgprNm"/>
+            <Col id="rgprDtm"/>
+            <Col id="rgprId"/>
+            <Col id="memoCont"/>
           </Row>
         </Rows>
       </Dataset>

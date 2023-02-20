@@ -14,7 +14,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점선택" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="ComboSpot" taborder="1" text="" left="Static00:10" top="5" width="150" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+                          <Combo id="ComboSpot" taborder="1" text="" left="Static00:10" top="5" width="170" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -160,8 +160,8 @@
                             <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
                             <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combocontrol" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
                             <Cell col="2" color="#666666" displaytype="editcontrol" edittype="text" text="bind:fgftNm" editmaxlength="200"/>
-                            <Cell col="3" displaytype="maskeditcontrol" edittype="mask" maskeditformat="9,999" text="bind:onlnStkCnt" maskeditpostfixtext="개" expr="onlnStkCnt ? onlnStkCnt : ' '"/>
-                            <Cell col="4" displaytype="maskeditcontrol" edittype="mask" maskeditformat="9,999" text="bind:oflnStkCnt" maskeditpostfixtext="개" expr="oflnStkCnt ? oflnStkCnt : ' '"/>
+                            <Cell col="3" displaytype="maskeditcontrol" edittype="mask" maskeditformat="!99,999" text="bind:onlnStkCnt" maskeditpostfixtext="개" expr="onlnStkCnt ? onlnStkCnt : ' '" editinputtype="normal" maskeditlimitbymask="integer"/>
+                            <Cell col="4" displaytype="maskeditcontrol" edittype="mask" maskeditformat="!99,999" text="bind:oflnStkCnt" maskeditpostfixtext="개" expr="oflnStkCnt ? oflnStkCnt : ' '" maskeditlimitbymask="integer"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -389,7 +389,7 @@ this.fn_set_detail = function()
 	
 	//사은품그리드
 	this.Div00.form.Div02.form.Grid00.set_readonly(true);
-	this.Div00.form.Div02.form.Grid00.deleteContentsCol("left",0);	//체크박스 삭제
+	this.Div00.form.Div02.form.Grid00.setRealColSize("left", 0, 0 )	//체크박스 사이즈 0처리(삭제하면 이상하게 동작함)
 	this.Div00.form.Div02.form.btnReg.set_visible(false);			//버튼 숨김
 	this.Div00.form.Div02.form.btnDel.set_visible(false);			//버튼 숨김
 	

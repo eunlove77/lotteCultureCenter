@@ -142,13 +142,18 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	{
 		if(errorCode == 20)
 		{
-			this.parent.set_formurl("SystemMng::Login/AdminChkPhone.xfdl"); // 휴대폰 인증 페이지
+			this.parent.set_formurl("SystemMng::Login/AdminChkPhone.xfdl"); // 휴대폰 인증 페이지(이후 로그인)
 			
 		}
 		else if(errorCode == 40 || errorCode == 50)
 		{
 			this.parent.set_formurl("SystemMng::Login/AdminChngPwd.xfdl"); // 비밀번호 변경 페이지
 			this.parent.lgnCd = errorCode;
+		}
+		else if(errorCode == 60)
+		{
+			this.parent.lgnCd = "f";
+			this.parent.set_formurl("SystemMng::Login/AdminChkPhone.xfdl"); // 휴대폰인증 페이지(이후 비밀번호 변경)
 		}
 		this.alert(errorMsg + "[Code : " + errorCode + "]");
 		
@@ -176,8 +181,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 this.loginSuccess = function(){
 
 	this.fn_setAdminInfo();
-	
-	this.application.gfn_set_frame();
 	
 	//framset 사이즈 변경
 	this.application.gfn_setFrameSize();

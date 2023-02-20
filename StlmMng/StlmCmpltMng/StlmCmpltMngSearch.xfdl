@@ -229,6 +229,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
  		chkboxFrm.stlmChnlAll.setEventHandler("onclick", this.fn_stlmChnlAll_onclick, this);
 		chkboxFrm.stlmChnlAll.set_value(0);
 		
+		// 전체학기 추가
+		this.ds_smster_list.insertRow(0);
+		this.ds_smster_list.setColumn(0, "cd", "");
+		this.ds_smster_list.setColumn(0, "cdNm", "전체");
 		// 학기
 		this.fn_sesterInfo();
 		
@@ -296,8 +300,11 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			}
 		}
 		
-		this.ds_search.setColumn(0, "strtSmsterCd", this.lectSmsterCd);
-		this.ds_search.setColumn(0, "endSmsterCd", this.lectSmsterCd);
+// 		this.ds_search.setColumn(0, "strtSmsterCd", this.lectSmsterCd);
+// 		this.ds_search.setColumn(0, "endSmsterCd", this.lectSmsterCd);
+		//전체 디폴트
+		this.ds_search.setColumn(0, "strtSmsterCd", "");
+ 		this.ds_search.setColumn(0, "endSmsterCd", "");
 		this.fn_year_add();
 	
 		break;
@@ -415,6 +422,18 @@ this.fn_btnSearch_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventIn
  	var hpStNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpStNo"), "");
  	var hpMidNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpMidNo"), "");
  	var hpLastNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpLastNo"), "");
+	
+	if(!this.gfn_isNull(this.ds_search.getColumn(0, "strtSmsterCd")) && this.gfn_isNull(this.ds_search.getColumn(0, "strtYy")))
+	{
+		alert("연도를 선택해주세요.");
+		return;
+	}
+	
+	if(!this.gfn_isNull(this.ds_search.getColumn(0, "endSmsterCd")) && this.gfn_isNull(this.ds_search.getColumn(0, "endYy")))
+	{
+		alert("연도를 선택해주세요.");
+		return;
+	}
  	
  	if((mbrNm == "" && (hpStNo != "" || hpMidNo != "" || hpLastNo != ""))
  		|| (mbrNm != "" && (hpStNo == "" && hpMidNo == "" && hpLastNo == ""))){
@@ -569,9 +588,16 @@ this.fn_year_add = function()
 		this.ds_year_list.setColumn(0, "cd", year);
 		this.ds_year_list.setColumn(0, "cdNm", year + "년");
 	}
+	//전체년도 추가
+	this.ds_year_list.insertRow(0);
+	this.ds_year_list.setColumn(0, "cd", "");
+	this.ds_year_list.setColumn(0, "cdNm", "전체");
+	//전체 디폴트
+	this.ds_search.setColumn(0, "strtYy", "");
+	this.ds_search.setColumn(0, "endYy", "");
 
-	this.ds_search.setColumn(0, "strtYy", year);
-	this.ds_search.setColumn(0, "endYy", year);
+// 	this.ds_search.setColumn(0, "strtYy", year);
+// 	this.ds_search.setColumn(0, "endYy", year);
 }
 
 //지점 세팅

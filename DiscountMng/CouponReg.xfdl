@@ -43,7 +43,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="쿠폰 설명" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="5" right="10" displaynulltext="쿠폰 설명" bottom="5" maxlength="500"/>
+                    <TextArea id="TextArea00" taborder="1" left="Static00:10" top="5" right="10" displaynulltext="쿠폰 설명" bottom="5" maxlength="250"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -298,7 +298,7 @@
                         </Rows>
                       </Dataset>
                     </Radio>
-                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,###" limitbymask="both" oninput="Div01_Div04_MaskEdit00_oninput"/>
+                    <MaskEdit id="MaskEdit00" taborder="3" left="Static00:10" top="33" width="160" height="21" format="!###,###,##9" limitbymask="both" oninput="Div01_Div04_MaskEdit00_oninput"/>
                     <Static id="Static01" taborder="2" text="원" left="MaskEdit00:10" top="32" width="120" height="21"/>
                   </Layout>
                 </Layouts>
@@ -330,7 +330,7 @@
                         <Layout>
                           <Calendar id="strtDtm" taborder="0" left="10" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" enableevent="true" usesoftkeyboard="true" type="normal" editformat="yyyy-MM-dd" autoskip="false" oneditclick="Div01_Div05_Div00_strtDtm_oneditclick" oncloseup="Div01_Div05_Div00_strtDtm_oncloseup"/>
                           <Static id="Static01" taborder="1" text="~" left="strtDtm:4" top="3" width="9" height="20"/>
-                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick" oncloseup="Div01_Div05_Div00_endDtm_oncloseup"/>
+                          <Calendar id="endDtm" taborder="2" left="Static01:4" top="3" width="100" height="21" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" oneditclick="Div01_Div05_Div00_endDtm_oneditclick"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -498,6 +498,7 @@
             <Col id="issueObjClCd">GRADE</Col>
             <Col id="usePrdClCd">PERIOD</Col>
             <Col id="issueAlrtYn">N</Col>
+            <Col id="dcAmt">0</Col>
           </Row>
         </Rows>
       </Dataset>
@@ -724,6 +725,7 @@ this.fn_set_detail = function()
 		this.Div01.form.Div05.form.Div00.form.strtDtm.set_value("");
 		this.Div01.form.Div05.form.Div00.form.endDtm.set_value("");
 		this.ds_detail.setColumn(0, "cpnSeqno", "");
+		this.ds_mem_excel.deleteAll();
 	}
 	else
 	{
@@ -1301,20 +1303,22 @@ this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 
 this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
-	if(e.postindex != null)
-	{
-		this.Div01.form.Div04.form.MaskEdit00.set_value();
-	}
-	
+// 	if(e.postindex != null)
+// 	{
+// 		this.Div01.form.Div04.form.MaskEdit00.set_value();
+// 	}
+// 	
 	if(e.postvalue == '01')
 	{
 		this.Div01.form.Div04.form.MaskEdit00.set_format("!##");	//2자리 입력 제한
 		this.Div01.form.Div04.form.Static01.set_text("%");
+		this.Div01.form.Div04.form.MaskEdit00.set_value();
 	}
 	else
 	{
-		this.Div01.form.Div04.form.MaskEdit00.set_format("!###,###,###");	//9자리 입력 제한
+		this.Div01.form.Div04.form.MaskEdit00.set_format("!###,###,##9");	//9자리 입력 제한
 		this.Div01.form.Div04.form.Static01.set_text("원");
+		this.Div01.form.Div04.form.MaskEdit00.set_value(0);
 	}
 };
 
@@ -1323,19 +1327,20 @@ this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.In
 	if(this.Div01.form.Div04.form.radioDiscount.value == '02')
 	{
 		var num = obj.value;
-		// 단위 : 무조건 백의자리
-		if(num.length > 0)
+		
+		// 단위 : 무조건 십의자리
+		if(this.gfn_isNull(num))
 		{
-			num = (parseInt(num / 10) + (num % 10)) * 10;
+			num = 0
+		}
+		else if(num % 10 != 0)
+		{
+			num *= 10
 		}
 		
 		obj.set_value(num);
-		obj.setCaretPos(obj.value.length-1);
-		
-		if(obj.value.toString() == "0")
-		{
-			obj.set_value("");
-		}
+		obj.updateToDataset();
+		this.ds_detail.setColumn(0, "dcAmt", num);
 	}
 };
 
@@ -1394,7 +1399,10 @@ this.Div03_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
  
 this.Div03_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
-	this.fn_checkValidation();
+	if(this.confirm("저장하시겠습니까?"))
+	{
+		this.fn_checkValidation();
+	}
 };
 
 this.fn_checkValidation = function(){
@@ -1563,7 +1571,14 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 		case "save":
 			this.alert("저장되었습니다.");
-			this.opener.components[0].form.fn_list();
+			if(this.opener.components[0].form.fn_list)
+			{
+				this.opener.components[0].form.fn_list();
+			}
+			else
+			{
+				this.opener.opener.components[0].form.fn_list();
+			}
 			this.close();
 			break;
 		case "end":
@@ -1575,6 +1590,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	}
 
 };
+
 ]]></Script>
     <Bind>
       <BindItem id="cpnNm" compid="Div00.form.Div01.form.Edit00" propid="value" datasetid="ds_detail" columnid="cpnNm"/>

@@ -137,6 +137,8 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 
  			// 최초 주문정보
 			var partRfndYn = false;
+			var gsRfndScheAmt = 0;
+			
  			this.fn_create_first_atlct_stlm();
 			
 			if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0){
@@ -144,10 +146,14 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 				this.fn_create_last_atlct_stlm();
 				stlmInfoDtlFrm.Tab00.set_tabindex(1);
 				
-				if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() > 0){
-					// 부분 취소면 환불금액 영역 보여주기
-					partRfndYn = true;
+				for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+					gsRfndScheAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "gsRfndScheAmt"));
 				}
+				
+// 				if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() > 0){
+// 					// 부분 취소면 환불금액 영역 보여주기
+// 					partRfndYn = true;
+// 				}
 				
 			}else{
 				// 최종 주문정보 탭 삭제
@@ -157,20 +163,61 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 			stlmInfoDtlFrm.Tab00.setEventHandler("onchanged", this.fn_tab_onchanged, this);
 			
 			// 부분취소일때 환불금액 데이터 세팅
-			if(partRfndYn){
+			var dsStlmCmpltList = this.Div00.form.Div02.form.ds_stlm_cmplt_list;
+			var dsStlmRfndList = this.Div00.form.Div03.form.ds_stlm_rfnd_list;
+			var totLectStlmAmt = 0, totLectAmtFee = 0, totAddAmtFee = 0;
+
+			for(var i=0;i<dsStlmCmpltList.getRowCount();i++){
+				totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectStlmAmt"));
+			}
+
+			for(var i=0;i<dsStlmRfndList.getRowCount();i++){
+				totLectAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmtFee")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectAmtFee"));
+				totAddAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "addAmtFee")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "addAmtFee"));
+			}
+			
+			var totGsRfndScheAmt = 0, totRfndScheLectAmt = 0, totRfndScheAddAmt = 0;
+			var rfndScheLectAmtText = "";
+			var rfndScheAddAmtText = "";
+			for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+				totGsRfndScheAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "gsRfndScheAmt");
+				if(i == 0){
+					rfndScheLectAmtText += (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt")) + "원";
+					if(Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) > 0){
+						rfndScheAddAmtText += (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) + "원";
+					}
+				}else{
+					rfndScheLectAmtText += "\n" + (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt")) + "원";
+					if(Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) > 0){
+						rfndScheAddAmtText += "\n" + (Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectNbcnt")) - Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndLectTmsCd"))) + "회 환불금액 " + this.gfn_setComma(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt")) + "원";
+					}
+				}
+				//totRfndScheLectAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt");
+				//totRfndScheAddAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt");
+			}
+			if(totGsRfndScheAmt > 0 && (totLectStlmAmt + totLectAmtFee + totAddAmtFee) != 0){
 				stlmInfoDtlFrm.Static01.set_visible(true);
 				stlmInfoDtlFrm.Div01.set_visible(true);
 				
-				var totGsRfndScheAmt = 0, totRfndScheLectAmt = 0, totRfndScheAddAmt = 0;
-				for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
-					totGsRfndScheAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "gsRfndScheAmt");
-					totRfndScheLectAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheLectAmt");
-					totRfndScheAddAmt += this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "rfndScheAddAmt");
-				}
-				
 				stlmInfoDtlFrm.Div01.form.Div00.form.Static01.set_text(this.gfn_setComma(totGsRfndScheAmt) + "원");
-				stlmInfoDtlFrm.Div01.form.Div01.form.Static01.set_text(this.gfn_setComma(totRfndScheLectAmt) + "원");
-				stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_text(this.gfn_setComma(totRfndScheAddAmt) + "원");
+				stlmInfoDtlFrm.Div01.form.Div01.form.Static01.set_text(rfndScheLectAmtText);
+				stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_text(rfndScheAddAmtText == "" ? "-" : rfndScheAddAmtText);
+				
+				if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 2){
+					stlmInfoDtlFrm.Div01.form.Div01.set_height(stlmInfoDtlFrm.Div01.form.Div01.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					stlmInfoDtlFrm.Div01.form.Div02.set_top(stlmInfoDtlFrm.Div01.form.Div02.getPixelTop() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					stlmInfoDtlFrm.Div01.form.Div02.set_height(stlmInfoDtlFrm.Div01.form.Div02.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					stlmInfoDtlFrm.Div00.set_top(stlmInfoDtlFrm.Div00.getPixelTop() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					
+					stlmInfoDtlFrm.Div01.form.Div01.form.Static00.set_height(stlmInfoDtlFrm.Div01.form.Div01.form.Static00.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					stlmInfoDtlFrm.Div01.form.Div01.form.Static01.set_height(stlmInfoDtlFrm.Div01.form.Div01.form.Static01.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					stlmInfoDtlFrm.Div01.form.Div02.form.Static00.set_height(stlmInfoDtlFrm.Div01.form.Div02.form.Static00.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_height(stlmInfoDtlFrm.Div01.form.Div02.form.Static01.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+					
+					stlmInfoDtlFrm.Div01.set_height(stlmInfoDtlFrm.Div01.getPixelHeight() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 20));
+					stlmInfoDtlFrm.Static00.set_top(stlmInfoDtlFrm.Static00.getPixelTop() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 20));
+					stlmInfoDtlFrm.Div00.set_top(stlmInfoDtlFrm.Div00.getPixelTop() + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 10));
+				}
 			}else{
 				stlmInfoDtlFrm.Static01.set_visible(false);
 				stlmInfoDtlFrm.Div01.set_visible(false);
@@ -195,29 +242,30 @@ this.fn_create_first_atlct_stlm = function()
 	, totGrdeDcAmt = 0, totCpnDcAmt = 0, totOflnDcAmt = 0, totAddDcAmt = 0;
 	
 	for(var i=0;i<dsStlmCmpltList.getRowCount();i++){
-		totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectStlmAmt");
-		totLectAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectAmt");
-		totLectAddAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectAddAmt");
-		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectDcAmt");
-		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectAddDcAmt");
-		
-		totGrdeDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "grdeDcAmt");
-		totCpnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "cpnDcAmt");
-		totOflnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "oflnDcAmt");
-		totAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnAddDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "oflnAddDcAmt");
+		totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectStlmAmt"));
+		totLectAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAmt"));
+		totLectAddAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAddAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
+		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "optnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "optnDcAmt"));
+		totGrdeDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
+		totCpnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
+		totOflnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
+		totAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnAddDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnAddDcAmt"));
 	}
 	
 	for(var i=0;i<dsStlmRfndList.getRowCount();i++){
-		totLectStlmAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectStlmAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectStlmAmt");
-		totLectAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectAmt");
-		totLectAddAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAddAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectAddAmt");
-		totLectDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectDcAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectDcAmt");
-		totLectAddDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAddDcAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectAddDcAmt");
+		totLectStlmAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectStlmAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectStlmAmt"));
+		totLectAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectAmt"));
+		totLectAddAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAddAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectAddAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectDcAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectDcAmt"));
+		totLectAddDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAddDcAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectAddDcAmt"));
 		
-		totGrdeDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "grdeDcAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "grdeDcAmt");
-		totCpnDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "cpnDcAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "cpnDcAmt");
-		totOflnDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "oflnDcAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "oflnDcAmt");
-		totAddDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "oflnAddDcAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "oflnAddDcAmt");
+		totGrdeDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "grdeDcAmt"));
+		totCpnDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "cpnDcAmt"));
+		totOflnDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "oflnDcAmt"));
+		totAddDcAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "oflnAddDcAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "oflnAddDcAmt"));
 	}
 	
 	//총 결제금액
@@ -227,7 +275,7 @@ this.fn_create_first_atlct_stlm = function()
 	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div01.form.Static01.set_text(this.gfn_setComma(totLectAmt) + "원");
 	
 	//총 재료비/대여료
-	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(totLectAddAmt) + "원");
+	stlmInfoDtlFrm.Tab00.Tabpage1.form.Div00.form.Div02.form.Static01.set_text(totLectAddAmt == 0 ? '-' : this.gfn_setComma(totLectAddAmt) + "원");
 	
 	if(totLectDcAmt + totLectAddDcAmt > 0){
 		dcDiv.form.Static01.set_text("<fc v ='#ED5757'>(-)" + this.gfn_setComma(totLectDcAmt + totLectAddDcAmt) + "원" + "</fc>");
@@ -451,27 +499,29 @@ this.fn_create_last_atlct_stlm = function()
 	var arrFee = [];
 	
 	for(var i=0;i<dsStlmCmpltList.getRowCount();i++){
-		totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectStlmAmt");
-		totLectAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectAmt");
-		totLectAddAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectAddAmt");
-		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectDcAmt");
-		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "lectAddDcAmt");
+		totLectStlmAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectStlmAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectStlmAmt"));
+		totLectAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAmt"));
+		totLectAddAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "lectAddAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "lectAddAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
+		totLectDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
+		totLectAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "optnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "optnDcAmt"));
 		
-		totGrdeDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "grdeDcAmt");
-		totCpnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "cpnDcAmt");
-		totOflnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "oflnDcAmt");
-		totAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnAddDcAmt")) == "" ? 0 : dsStlmCmpltList.getColumn(i, "oflnAddDcAmt");
+		totGrdeDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "grdeDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "grdeDcAmt"));
+		totCpnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "cpnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "cpnDcAmt"));
+		totOflnDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnDcAmt"));
+		totAddDcAmt += this.gfn_nvl(dsStlmCmpltList.getColumn(i, "oflnAddDcAmt")) == "" ? 0 : Number(dsStlmCmpltList.getColumn(i, "oflnAddDcAmt"));
 	}
 	
 	totDcAmt = totGrdeDcAmt + totCpnDcAmt + totOflnDcAmt + totAddDcAmt;
 	
 	for(var i=0;i<dsStlmRfndList.getRowCount();i++){
-		totGsRfndScheAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "gsRfndScheAmt")) == "" ? 0 : dsStlmRfndList.getColumn(i, "gsRfndScheAmt");
-		totLectAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmtFee")) == "" ? 0 : dsStlmRfndList.getColumn(i, "lectAmtFee");
-		totAddAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "addAmtFee")) == "" ? 0 : dsStlmRfndList.getColumn(i, "addAmtFee");
+		totGsRfndScheAmt += this.gfn_nvl(dsStlmRfndList.getColumn(i, "gsRfndScheAmt")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "gsRfndScheAmt"));
+		totLectAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "lectAmtFee")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "lectAmtFee"));
+		totAddAmtFee += this.gfn_nvl(dsStlmRfndList.getColumn(i, "addAmtFee")) == "" ? 0 : Number(dsStlmRfndList.getColumn(i, "addAmtFee"));
 	}
 
-	if(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount() == 0){
+	if((totLectStlmAmt + totLectAmtFee + totAddAmtFee) == 0){
 		// 전체 취소
 		//총 결제금액
 		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div00.form.Static01.set_text("0원");
@@ -480,14 +530,14 @@ this.fn_create_last_atlct_stlm = function()
 		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div01.form.Static01.set_text("0원");
 		
 		//총 재료비/대여료
-		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text("0원");
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text("-");
 		
 		for(var i=0;i<dsStlmRfndList.getRowCount();i++){
 			if(dsStlmRfndList.getColumn(i, "lectAmtFee") > 0){
-				arrFee.push({feeNm : (Number(dsStlmRfndList.getColumn(i, "lectNbcnt")) - Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd"))) + "회 강좌 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "lectAmtFee")) + "원"});
+				arrFee.push({feeNm : Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd")) + "회 강좌 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "lectAmtFee")) + "원"});
 			}
 			if(dsStlmRfndList.getColumn(i, "addAmtFee") > 0){
-				arrFee.push({feeNm : (Number(dsStlmRfndList.getColumn(i, "lectNbcnt")) - Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd"))) + "회 "+ dsStlmRfndList.getColumn(i, "optnNm") + " 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "addAmtFee")) + "원"});
+				arrFee.push({feeNm : Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd")) + "회 "+ dsStlmRfndList.getColumn(i, "optnNm") + " 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "addAmtFee")) + "원"});
 			}
 		}
 		
@@ -553,10 +603,10 @@ this.fn_create_last_atlct_stlm = function()
 		var arrFee = [];
 		for(var i=0;i<dsStlmRfndList.getRowCount();i++){
 			if(dsStlmRfndList.getColumn(i, "lectAmtFee") > 0){
-				arrFee.push({feeNm : (Number(dsStlmRfndList.getColumn(i, "lectNbcnt")) - Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd"))) + "회 강좌 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "lectAmtFee")) + "원"});
+				arrFee.push({feeNm : Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd")) + "회 강좌 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "lectAmtFee")) + "원"});
 			}
 			if(dsStlmRfndList.getColumn(i, "addAmtFee") > 0){
-				arrFee.push({feeNm : (Number(dsStlmRfndList.getColumn(i, "lectNbcnt")) - Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd"))) + "회 "+ dsStlmRfndList.getColumn(i, "optnNm") + " 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "addAmtFee")) + "원"});
+				arrFee.push({feeNm : Number(dsStlmRfndList.getColumn(i, "rfndLectTmsCd")) + "회 "+ dsStlmRfndList.getColumn(i, "optnNm") + " 환불차감금액", feeAmt : this.gfn_setComma(dsStlmRfndList.getColumn(i, "addAmtFee")) + "원"});
 			}			
 			
 			//취소/환불자의 할인정보는 최초 할인목록에서 뺀다
@@ -568,13 +618,13 @@ this.fn_create_last_atlct_stlm = function()
 		}
 		
 		//총 결제금액
-		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(totLectStlmAmt) + "원");
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div00.form.Static01.set_text(this.gfn_setComma(totLectStlmAmt + totLectAmtFee + totAddAmtFee) + "원");
 		
 		//총 강좌료
 		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div01.form.Static01.set_text(this.gfn_setComma(totLectAmt) + "원");
 		
 		//총 재료비/대여료
-		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text(this.gfn_setComma(totLectAddAmt) + "원");
+		stlmInfoDtlFrm.Tab00.Tabpage2.form.Div00.form.Div02.form.Static01.set_text(totLectAddAmt == 0 ? '-' : this.gfn_setComma(totLectAddAmt) + "원");
 		
 		//총 수수료
 		if(totLectAmtFee + totAddAmtFee > 0){
@@ -881,6 +931,16 @@ this.fn_stlm_mthd_info = function()
 {
 	var arrStlmMthd = [];
 	
+	var crdRfndAmt = 0, lpntRfndAmt = 0, cshRfndAmt = 0, ltteGiftRfndAmt = 0, etcRfndAmt = 0;
+	for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+		crdRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "crdRfndAmt"));
+		lpntRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lpntRfndAmt"));
+		cshRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "cshRfndAmt"));
+		ltteGiftRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "ltteGiftRfndAmt"));
+		etcRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "etcRfndAmt"));
+	}
+	
+	
 	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt") > 0){
 		var crdStlmAmtDiv = new Div("div_crd_stlm_amt");
 		crdStlmAmtDiv.set_left(200);
@@ -911,7 +971,7 @@ this.fn_stlm_mthd_info = function()
 		crdStlmAmtStatic.set_bottom(0);
 		crdStlmAmtStatic.set_right(0);
 		crdStlmAmtStatic.set_textAlign("right");
-		crdStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) + "원");
+		crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) - crdRfndAmt) + "원");
 		crdStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		crdStlmAmtDiv.addChild("static_crd_stlm_amt", crdStlmAmtStatic);
 
@@ -941,7 +1001,7 @@ this.fn_stlm_mthd_info = function()
 		lpntUseAmtStatic.set_bottom(0);
 		lpntUseAmtStatic.set_right(0);
 		lpntUseAmtStatic.set_textAlign("right");
-		lpntUseAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) + "원");
+		lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) - lpntRfndAmt) + "원");
 		lpntUseAmtStatic.set_cssclass("sta_WF_CompText");
 		lpntUseAmtDiv.addChild("static_lpnt_use_amt", lpntUseAmtStatic);
 
@@ -971,7 +1031,7 @@ this.fn_stlm_mthd_info = function()
 		cshStlmAmtStatic.set_bottom(0);
 		cshStlmAmtStatic.set_right(0);
 		cshStlmAmtStatic.set_textAlign("right");
-		cshStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) + "원");
+		cshStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt) + "원");
 		cshStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		cshStlmAmtDiv.addChild("static_csh_stlm_amt", cshStlmAmtStatic);
 
@@ -995,13 +1055,21 @@ this.fn_stlm_mthd_info = function()
 		lttegiftStlmMthdStatic.set_cssclass("sta_WF_CompText");
 		lttegiftStlmAmtDiv.addChild("static_lttegift_stlm_mthd", lttegiftStlmMthdStatic);
 		
+		var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
+		if(ltteGiftRfndAmt > ltteGiftStlmAmt){
+			ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
+			ltteGiftStlmAmt = 0;
+		}else{
+			ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
+		}
+		
 		var lttegiftStlmAmtStatic = new Static("static_lttegift_stlm_amt");
 		lttegiftStlmAmtStatic.set_width(100);
 		lttegiftStlmAmtStatic.set_top(0);
 		lttegiftStlmAmtStatic.set_bottom(0);
 		lttegiftStlmAmtStatic.set_right(0);
 		lttegiftStlmAmtStatic.set_textAlign("right");
-		lttegiftStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt")) + "원");
+		lttegiftStlmAmtStatic.set_text(this.gfn_setComma(ltteGiftStlmAmt) + "원");
 		lttegiftStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		lttegiftStlmAmtDiv.addChild("static_lttegift_stlm_amt", lttegiftStlmAmtStatic);
 
@@ -1025,13 +1093,16 @@ this.fn_stlm_mthd_info = function()
 		otgiftStlmMthdStatic.set_cssclass("sta_WF_CompText");
 		otgiftStlmAmtDiv.addChild("static_otgift_stlm_mthd", otgiftStlmMthdStatic);
 		
+		var otgiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt"));
+		otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
+		
 		var otgiftStlmAmtStatic = new Static("static_otgift_stlm_amt");
 		otgiftStlmAmtStatic.set_width(100);
 		otgiftStlmAmtStatic.set_top(0);
 		otgiftStlmAmtStatic.set_bottom(0);
 		otgiftStlmAmtStatic.set_right(0);
 		otgiftStlmAmtStatic.set_textAlign("right");
-		otgiftStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt")) + "원");
+		otgiftStlmAmtStatic.set_text(this.gfn_setComma(otgiftStlmAmt) + "원");
 		otgiftStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		otgiftStlmAmtDiv.addChild("static_otgift_stlm_amt", otgiftStlmAmtStatic);
 
@@ -1061,7 +1132,7 @@ this.fn_stlm_mthd_info = function()
 		etcStlmAmtStatic.set_bottom(0);
 		etcStlmAmtStatic.set_right(0);
 		etcStlmAmtStatic.set_textAlign("right");
-		etcStlmAmtStatic.set_text(this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) + "원");
+		etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) - etcRfndAmt) + "원");
 		etcStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		etcStlmAmtDiv.addChild("static_etc_stlm_amt", etcStlmAmtStatic);
 

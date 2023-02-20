@@ -54,6 +54,7 @@
                       <Column size="120"/>
                       <Column size="150"/>
                       <Column size="100"/>
+                      <Column size="120"/>
                     </Columns>
                     <Rows>
                       <Row size="24" band="head"/>
@@ -102,6 +103,7 @@
                       <Cell col="39" text="환불규정 확인서명"/>
                       <Cell col="40" text="사은품 신청번호"/>
                       <Cell col="41" text="재고차감"/>
+                      <Cell col="42" text="상태"/>
                     </Band>
                     <Band id="body">
                       <Cell text="bind:rnum"/>
@@ -146,6 +148,7 @@
                       <Cell col="39" text="완료"/>
                       <Cell col="40" text="expr:dataset.getColumn(currow, &quot;fgftAppNo&quot;) == null ? '-' : dataset.getColumn(currow, &quot;fgftAppNo&quot;)"/>
                       <Cell col="41" text="bind:atlctStlmSubChnlCdNm"/>
+                      <Cell col="42" text="bind:atlctStatCdNm"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -521,6 +524,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 // 엑셀 다운로드
 this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuSeq, "accXlsDwldYn")) return;
+	
 	var oArg = {
 			title : "엑셀 다운로드 사유"
 			};
@@ -707,6 +712,8 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="atlctStlmSubChnlCd" type="STRING" size="256"/>
           <Column id="atlctStlmSubChnlCdNm" type="STRING" size="256"/>
+          <Column id="atlctStatCd" type="STRING" size="256"/>
+          <Column id="atlctStatCdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

@@ -31,7 +31,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" left="0" top="5" height="21" text="LPoint 내역" width="200"/>
-              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_lpoint_list" autofittype="col" right="0" bottom="0" cellsizingtype="col">
+              <Grid id="Grid00" taborder="1" left="0" top="Static00:10" binddataset="ds_lpoint_list" autofittype="col" right="0" bottom="0" cellsizingtype="col" nodatatext="데이터가 없습니다.">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -81,7 +81,7 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+this.menuId = this.parent.parent.parent.menuId;
 this.mbrMst = this.parent.parent.parent;
 this.mbrNo = "";
 this.mbrPoint = "";
@@ -159,11 +159,11 @@ this.fn_set_point = function(cd, point)
 {
 	if(cd == '1001' || cd == '2002') //적립 / 사용취소
 	{
-		return "+" +point+ " P";
+		return "+" +this.gfn_setComma(point)+ " P";
 	}
 	else 
 	{
-		return "-" +point+ " P";
+		return "-" +this.gfn_setComma(point)+ " P";
 	}
 }
 

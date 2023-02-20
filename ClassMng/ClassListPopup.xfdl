@@ -111,7 +111,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌목록 (0개)" left="0" top="0" width="120" height="20"/>
-                    <Grid id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" autofittype="col">
+                    <Grid id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" autofittype="col" cellsizingtype="col">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -430,6 +430,8 @@ this.init = function()
 	this.ds_search.clearData();
 	this.ds_search.addRow();
 	
+	this.Div00.form.Div01.form.Static00.set_text("강좌목록 (0개)");
+	
 	// 코드 데이터
 	this.fn_code_list();
 	
@@ -555,6 +557,7 @@ this.fn_search = function()
 //강좌상태 설정
 this.fn_classState_set = function()
 {
+	this.ds_classState_list.filter("cd != '09'");
 	this.ds_classState_list.insertRow(0);
 	this.ds_classState_list.setColumn(0, "cd", "");
 	this.ds_classState_list.setColumn(0, "cdNm", "전체");
@@ -792,7 +795,7 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		{
 			if(this.ds_class_list.checkarray[i] == 1)
 			{
-				var findRow = this.parent.dataset.extractRows("lectCd== '" + this.ds_class_list.getColumn(i, "lectCd") + "'")
+				var findRow = this.parent.dataset.extractRows("brchCd== '" + this.ds_class_list.getColumn(i, "brchCd") + "'&&yy=='" + this.ds_class_list.getColumn(i, "yy") + "'&&lectSmsterCd=='" + this.ds_class_list.getColumn(i, "lectSmsterCd") + "'&&lectCd== '" + this.ds_class_list.getColumn(i, "lectCd") + "'");
 				findRow = (findRow.length == undefined) ? [] : findRow;
 				
 				if(findRow.length < 1)

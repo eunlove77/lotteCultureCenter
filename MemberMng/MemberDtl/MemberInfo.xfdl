@@ -74,7 +74,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="관심 지점" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpotType" taborder="1" left="Static00:10" top="5" width="100" height="20" codecolumn="cd" datacolumn="cdNm" index="0" value="1" innerdataset="gdsSpotCdList" displaynulltext="관심지점"/>
+                    <Combo id="ComboSpotType" taborder="1" left="Static00:10" top="5" width="170" height="20" codecolumn="cd" datacolumn="cdNm" index="0" value="1" innerdataset="gdsSpotCdList" displaynulltext="관심지점"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -191,18 +191,13 @@ this.MemberInfo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::member/info/";
 	
-	
-	if(this.gfn_nvl(this.parent.menuId) != ""){
-		this.menuId = this.parent.menuId;
-	}else{
-		this.menuId = this.parent.parent.parent.parent.menuId;
-	}
-	
 	if(this.gfn_nvl(this.parent.mbrNo) != ""){
 		this.mbrNo = this.parent.mbrNo;
 	}else{
 		this.mbrNo = this.parent.parent.parent.parent.mbrNo;
 	}
+	
+	this.menuId = this.parent.parent.parent.parent.menuId;
 	
 	if(this.mbrNo != ""){
 		this.ds_info.setColumn(0, "mbrNo", this.mbrNo);
@@ -281,6 +276,7 @@ this.fn_set_detail = function()
 }
 
 this.fn_save = function(){
+	
 	var tranObj = {
 		strSvcId : "save",
 		strSvcUrl : this.baseSvrUrl + "update.do",
@@ -292,8 +288,6 @@ this.fn_save = function(){
 		isAsync : true,
 		isPopup : true
 	}
-	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
-
 	this.gfn_transaction(tranObj);
 }
 
@@ -315,6 +309,8 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 
 this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
+
 	if(this.gfn_isNull(this.ds_info.getColumn(0, "hpStNo")) || this.gfn_isNull(this.ds_info.getColumn(0, "hpMidNo")) || this.gfn_isNull(this.ds_info.getColumn(0, "hpLastNo")))
 	{
 		alert("휴대전화를 입력하세요.");
@@ -345,7 +341,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		case "save":
 			this.alert("저장되었습니다.");
-			this.parent.parent.parent.close();
+			this.parent.parent.parent.fn_detail();
 			break;
 		case "detail":    
 			this.fn_set_detail();

@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridBranchLectRmList" taborder="2" left="10" top="270" binddataset="branchLectRmDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridBranchLectRmList_oncellclick">
+        <Grid id="GridBranchLectRmList" taborder="2" left="10" top="270" binddataset="branchLectRmDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridBranchLectRmList_oncellclick" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -41,13 +41,13 @@
               <Band id="body">
                 <Cell text="bind:brchCd" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:rnum"/>
-                <Cell col="2" text="expr:brchCd ? brchNm : ''" textAlign="center" textDecoration="underline" color="blue" cursor="pointer"/>
+                <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textAlign="center" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="3" text="bind:lectRmCd"/>
                 <Cell col="4" text="bind:lectRmNm"/>
                 <Cell col="5" text="expr:dataset.getColumn(currow, &quot;inoutClCd&quot;) == &quot;I&quot; ? &quot;내부&quot; : &quot;외부&quot;" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="6" text="bind:araSqm"/>
                 <Cell col="7" text="bind:memoCont"/>
-                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? '사용' : '미사용'"/>
+                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? '노출' : '미노출'"/>
                 <Cell col="9" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="10" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
               </Band>
@@ -109,7 +109,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="100" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
+                          <Combo id="ComboSpot" taborder="1" text="특강" left="116" top="5" width="170" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -489,9 +489,6 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	switch(svcID)
 	{
 	case "list":
-		if(this.branchLectRmDs.rowcount < 1){
-			this.alert("조회된 결과가 없습니다.");
-		}
 	break;
 		
 	case "delete":

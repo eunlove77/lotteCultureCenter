@@ -136,7 +136,7 @@ include "Base::lib_date.xjs";
  **************************************************************************/
 this.application = null;
 this.baseSvrUrl = "";
-this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
+this.menuId = this.parent.parent.parent.menuId;
 this.mbrNo = "";
 
 /**************************************************************************
@@ -319,6 +319,7 @@ this.Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 
 this.Div01_delBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
 	if(this.gfn_isNull(this.ds_fmly_info.getColumn(0, "fmlySeqno")))
 	{
 		alert("항목을 선택해주세요.");
@@ -341,7 +342,6 @@ this.fn_delete = function(){
 		isAsync : true,
 		isPopup : true
 	}
-	if(this.gfn_btn_auth(this.menuId, "accDelYn")){return;}
 	
 	this.gfn_transaction(tranObj);
 }
@@ -352,12 +352,13 @@ this.fn_delete = function(){
 
 this.Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 	this.fn_checkValidation();
 };
 
 this.fn_checkValidation = function(){
 
-	if(this.gfn_isNull(this.Div01.form.Div00.form.Edit00.value))
+	if(this.gfn_isNull(this.Div01.form.Div00.form.Edit00.value) || nexacro.trim(this.Div01.form.Div00.form.Edit00.value) == "")
 	{
 		this.alert("이름을 입력하세요.");
 		this.Div01.form.Div00.form.Edit00.setFocus();
@@ -406,7 +407,6 @@ this.fn_save = function(){
 		isAsync : true,
 		isPopup : true
 	}
-	if(this.gfn_btn_auth(this.menuId, "accSaveYn")){return;}
 
 	this.gfn_transaction(tranObj);
 }
@@ -441,6 +441,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 				break;
 			case "detail":    
+				//본인코드 삭제
+				var excptRow = this.ds_rel_cd.findRow("cd", "00");
+				this.ds_rel_cd.deleteRow(excptRow);
 				if(this.gfn_nvl(this.ds_fmly_info.getColumn(0, "fmlyMbrNo")) == "")
 				{
 					this.ds_fmly_info.setColumn(0,"fmlyMbrNo",null)

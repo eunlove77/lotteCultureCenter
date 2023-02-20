@@ -682,4 +682,25 @@ this.masking_email = function(str){
 
 	return id + (strArr[1] ? ('@' + strArr[1]) : '');
 }
+
+// 날짜 체크
+this.com_vali_date_format = function(str){
+	try {
+		if(str.length != 8) throw new Error();
+
+		var year = str.slice(0, 4);
+		var month = str.slice(4, 6);
+		var day = str.slice(6, 8);
+		var date = new Date(year+"-"+month+"-"+day);
+		
+		if(date == "Invalid Date") throw new Error();
+		//윤달체크
+		if(date.getMonth() + 1 != month) throw new Error();
+
+	} catch(err) {
+		return false;
+	}
+
+	return true;
+}
 ]]></Script>

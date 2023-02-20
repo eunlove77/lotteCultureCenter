@@ -7,7 +7,7 @@
         <Div id="Div00" taborder="1" text="Div00" left="10" top="77" right="10" bottom="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" height="80" right="0" binddataset="ds_class_list" autofittype="col">
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="80" right="0" binddataset="ds_class_list" autofittype="col" cellsizingtype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -102,7 +102,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사 출석부 목록 (0명)" left="0" top="0" width="120" height="21"/>
-                    <Grid id="Grid00" taborder="1" left="0" top="Static00:15" right="0" bottom="0" binddataset="ds_attendance_list" autofittype="col" nodatatext="검색결과 없음">
+                    <Grid id="Grid00" taborder="1" left="0" top="Static00:15" right="0" bottom="0" binddataset="ds_attendance_list" autofittype="col" nodatatext="검색결과 없음" cellsizingtype="col">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -128,7 +128,7 @@
                             <Cell col="6" text="출석체크일"/>
                           </Band>
                           <Band id="body">
-                            <Cell text="expr:dataset.getRowCount() - currow"/>
+                            <Cell text="expr:currow + 1"/>
                             <Cell col="1" text="expr:sortSeqno + '회차'"/>
                             <Cell col="2" text="expr:comp.parent.parent.setMasking(actlAtlctNpleNm,1,1, '1')" tooltiptext="bind:actlAtlctNpleNm" tooltiptype="hover"/>
                             <Cell col="3" text="expr:age + '세'"/>
@@ -186,6 +186,8 @@ this.init = function()
 	this.ds_search.setColumn(0, "lectCd", this.ds_class_list.getColumn(0, "lectCd"));
 	this.ds_search.setColumn(0, "q", "");
 	this.ds_search.setColumn(0, "sortSeqno", "");
+	
+	this.Div00.form.Div01.form.Static00.set_text("강사 출석부 목록 (0명)");
 
 	this.Div00.form.Div00.form.Div00.form.Div00_00.form.checkYn0.set_falsevalue("");
 	this.Div00.form.Div00.form.Div00.form.Div00_00.form.checkYn1.set_falsevalue("");

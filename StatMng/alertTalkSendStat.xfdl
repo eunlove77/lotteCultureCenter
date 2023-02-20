@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="alertTalkSendStat" width="1280" height="720" titletext="New Form" onload="alertTalkSendStat_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
+        <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21" text=""/>
+        <Div id="Div01" taborder="2" text="Div01" left="10" top="102" cssclass="div_WF_CompWrap" right="10" height="33">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Div id="Div00" taborder="1" text="Div00" left="115" top="5" height="24" right="0" url="FrameBase::include/date_type02.xfdl" formscrolltype="none"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div02" taborder="3" text="Div01" left="10" top="Div01:-1" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+              <Combo id="ComboSpot" taborder="2" left="116" top="5" width="100" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
+              <Button id="btnSearch" taborder="1" text="검색" left="ComboSpot:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div02_btnSearch_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="Static00" taborder="4" text="▶ 검색" left="10" top="79" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="Static00_00" taborder="5" text="▶ 전체" left="10" top="189" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="Static00_00_00" taborder="6" text="▶ 지점별" left="10" top="349" width="50" height="21" cssclass="sta_WF_TitGray"/>
+        <Grid id="Grid00" taborder="7" left="10" top="214" right="10" binddataset="ds_all_stat" height="121" cssclass="grd_WF_TableType" scrollbartype="none" scrolltype="none">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+                <Row size="24" band="summ"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="발송타입"/>
+                <Cell col="1" text="전송건수"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:sendType"/>
+                <Cell col="1" text="bind:sendCnt"/>
+              </Band>
+              <Band id="summary">
+                <Cell text="소계"/>
+                <Cell col="1" expr="dataset.getSum('parseInt(sendCnt)')"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Grid id="Grid01" taborder="8" left="10" top="378" right="10" bottom="10" binddataset="ds_brch_stat" autosizingtype="none" autofittype="none" cssclass="grd_WF_TableType">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="160"/>
+                <Column size="120"/>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="지점명"/>
+                <Cell col="1" text="발송타입"/>
+                <Cell col="2" text="전송건수"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:brchNm"/>
+                <Cell col="1" text="bind:sendType"/>
+                <Cell col="2" text="bind:sendCnt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::lib_alrt_talk.xjs";
+include "Base::libCommon.xjs";
+include "Base::popup.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.baseSvrUrl = "";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+this.alertTalkSendStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.baseSvrUrl = this.application.Admin_svc + "::stat/";
+		
+	this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
+	this.ds_brch_cd.insertRow(0);
+	this.ds_brch_cd.setColumn(0, "cd", "");
+	this.ds_brch_cd.setColumn(0, "cdNm", "전체");
+	
+	this.Div02.form.ComboSpot.set_index(0);
+};
+
+this.Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_searchValueInit();
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+this.fn_searchValueInit = function(){
+	
+	var objCalendar = this.Div01.form.Div00.form;
+	
+	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
+	
+	
+}
+]]></Script>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="strtDtm" type="STRING" size="256"/>
+          <Column id="endDtm" type="STRING" size="256"/>
+          <Column id="spotCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_brch_cd">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_all_stat">
+        <ColumnInfo>
+          <Column id="sendType" type="STRING" size="256"/>
+          <Column id="sendCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="sendType">알림톡</Col>
+            <Col id="sendCnt">10</Col>
+          </Row>
+          <Row>
+            <Col id="sendType">LMS</Col>
+            <Col id="sendCnt">20</Col>
+          </Row>
+          <Row>
+            <Col id="sendType">친구톡</Col>
+            <Col id="sendCnt">30</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_brch_stat">
+        <ColumnInfo>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="sendType" type="STRING" size="256"/>
+          <Column id="sendCnt" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
