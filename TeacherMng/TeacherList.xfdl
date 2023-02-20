@@ -4,18 +4,26 @@
     <Layouts>
       <Layout height="1000" mobileorientation="landscape" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33">
+        <Div id="Div01" taborder="4" text="Div01" left="10" top="90" right="10" height="33" minwidth="1040" maxwidth="">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33.333%">
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" minwidth="291" maxwidth="" right="70%">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망지점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="100" height="20" innerdataset="ds_spot_list_hope" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
+                    <Combo id="hopeBrchCd" taborder="1" text="" left="116" top="5" width="170" height="20" innerdataset="ds_spot_list_hope" index="0" value="-1" datacolumn="cdNm" codecolumn="cd"/>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="2" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33.333%" right="0">
+              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" left="Div00:0" minwidth="225" maxwidth="" width="22%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="등록일자" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Calendar id="rgprDtm" taborder="1" left="116" top="5" width="100" height="20" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" onchanged="Div01_Div01_rgprDtm_onchanged"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="2" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" left="Div01:-1" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망요일" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -23,21 +31,23 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="Div02:0" left="Div00:0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="등록일자" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Calendar id="rgprDtm" taborder="1" left="116" top="5" width="129" height="20" dateformat="yyyy-MM-dd" buttonsize="16 16" daysize="24 24" headheight="34" popupsize="240 251" onchanged="Div01_Div01_rgprDtm_onchanged"/>
-                  </Layout>
-                </Layouts>
-              </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div02" taborder="6" text="Div01" left="10" top="Div01:-1" height="33" right="10">
+        <Div id="Div02" taborder="6" text="Div01" left="10" top="Div01:-1" height="33" right="10" minwidth="1040" maxwidth="">
           <Layouts>
             <Layout>
-              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100.00%" right="0" width="33.333%">
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" minwidth="516" maxwidth="" width="52%">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="희망분야" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="Combo00" taborder="1" text="" left="116" top="5" width="120" height="20" index="-1" value="-1" usesoftkeyboard="false" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div02_Div00_Combo00_onitemchanged" innerdataset="ds_classCtgyLarge_list"/>
+                    <Combo id="Combo01" taborder="2" text="" left="Combo00:6" top="5" width="120" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="Div02_Div00_Combo01_onitemchanged"/>
+                    <Combo id="Combo02" taborder="3" text="" left="Combo01:6" top="5" width="120" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100.00%" left="Div00:-1" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="희망시간" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -47,31 +57,13 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="Div01:0">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="희망분야" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="Combo00" taborder="1" text="" left="116" top="5" width="100" height="20" index="-1" value="-1" usesoftkeyboard="false" datacolumn="cdNm" codecolumn="cd" onitemchanged="Div02_Div00_Combo00_onitemchanged" innerdataset="ds_classCtgyLarge_list"/>
-                    <Combo id="Combo01" taborder="2" text="" left="226" top="5" width="100" height="20" innerdataset="ds_classCtgyMiddle_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1" onitemchanged="Div02_Div00_Combo01_onitemchanged"/>
-                    <Combo id="Combo02" taborder="3" text="" left="336" top="5" width="100" height="20" innerdataset="ds_classCtgySmall_list" codecolumn="cd" datacolumn="cdNm" index="-1" value="-1"/>
-                  </Layout>
-                </Layouts>
-              </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div03" taborder="5" text="Div01" left="10" top="Div02:-1" height="33" right="10">
+        <Div id="Div03" taborder="5" text="Div01" left="10" top="Div02:-1" height="33" right="10" minwidth="1040" maxwidth="">
           <Layouts>
             <Layout>
-              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100%" right="0" width="33.33%">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="섭외점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="pbrltnBrchCd" taborder="1" text="" left="Static00:10" top="5" width="100" height="20" innerdataset="ds_spot_list" codecolumn="cd" datacolumn="cdNm" index="0" value="-1"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div00" taborder="1" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" right="Div01:0">
+              <Div id="Div00" taborder="1" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" minwidth="516" maxwidth="" width="52%">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사유형" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -79,7 +71,7 @@
                     <Div id="Div00" taborder="2" text="Div00" left="109" top="0" width="255" bottom="0">
                       <Layouts>
                         <Layout>
-                          <CheckBox id="chkAll" taborder="0" text="전체" left="9" top="4" width="45" height="20" value="false" onclick="com_fn_checkboxAll"/>
+                          <CheckBox id="chkAll" taborder="0" text="전체" left="7" top="4" width="45" height="20" value="false" onclick="com_fn_checkboxAll"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -88,13 +80,21 @@
                   </Layout>
                 </Layouts>
               </Div>
+              <Div id="Div01" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100.00%" left="Div00:-1" right="0">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="섭외점" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Combo id="pbrltnBrchCd" taborder="1" text="" left="Static00:10" top="5" width="170" height="20" innerdataset="ds_spot_list" codecolumn="cd" datacolumn="cdNm" index="0" value="-1"/>
+                  </Layout>
+                </Layouts>
+              </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div04" taborder="7" text="Div01" left="10" top="Div03:-1" height="33" right="10">
+        <Div id="Div04" taborder="7" text="Div01" left="10" top="Div03:-1" height="33" right="10" maxwidth="" minwidth="1040">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" width="33.33%">
+              <Div id="Div00" taborder="0" text="Div01" left="0" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" minwidth="291" maxwidth="" right="70%">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="수정요청" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -104,33 +104,42 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div02" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100%" right="0" width="33.33%">
-                <Layouts>
-                  <Layout>
-                    <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hpNo" taborder="1" left="Static00:10" top="5" height="20" right="10" maxlength="13" inputtype="number" inputfilter="dot,comma"/>
-                  </Layout>
-                </Layouts>
-              </Div>
-              <Div id="Div01" taborder="2" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" height="100.00%" left="Div00:0" onchanged="Div04_Div01_onchanged" right="Div02:0">
+              <Div id="Div01" taborder="2" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" left="Div00:0" onchanged="Div04_Div01_onchanged" minwidth="225" maxwidth="" width="22%" bottom="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연령" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="age" taborder="1" left="115" top="5" width="108" height="20" maxlength="3" inputtype="number" inputfilter="none,comma,dot,sign"/>
+                    <Edit id="age" taborder="1" left="115" top="5" width="100" height="20" maxlength="3" inputtype="number" inputfilter="none,comma,dot,sign"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01_00" taborder="3" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" onchanged="Div04_Div01_onchanged" bottom="0" left="Div01:-1" maxwidth="" right="30%" minwidth="225">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="강사명" left="0" top="0" width="109" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="tcNm" taborder="1" left="Static00:10" top="5" height="20" maxlength="50" right="10"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div02" taborder="1" text="Div01" top="0" cssclass="div_WF_CompWrap" formscrolltype="none" bottom="0" left="Div01_00:-1" right="0" minwidth="0" maxwidth="">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="90" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <Edit id="hpStNo" taborder="1" left="Static00:10" top="5" height="20" maxlength="4" inputtype="number" inputfilter="dot,comma" width="17%" maxwidth=""/>
+                    <Edit id="hpMidNo" taborder="2" left="hpStNo:7" top="5" height="20" maxlength="4" inputtype="number" inputfilter="dot,comma" width="25%"/>
+                    <Edit id="hpLastNo" taborder="3" top="5" height="20" maxlength="4" inputtype="number" inputfilter="dot,comma" width="25%" left="hpMidNo:7"/>
                   </Layout>
                 </Layouts>
               </Div>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="Div05" taborder="1" text="Div01" left="10" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none">
+        <Div id="Div05" taborder="1" text="Div01" left="10" top="Div04:-1" height="33" cssclass="div_WF_CompWrap" right="10" formscrolltype="none" minwidth="1040" maxwidth="">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
               <Button id="btnReset" taborder="4" text="초기화" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="79" onclick="reset_search_form"/>
               <Button id="btnSearch" taborder="3" text="검색" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" onclick="Div05_btnSearch_onclick" right="btnReset:5" width="80"/>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" left="221" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
-              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" width="100">
+              <Combo id="searchField" taborder="1" text="전체" left="116" top="5" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" value="-1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" width="120">
                 <Dataset id="innerdataset">
                   <ColumnInfo>
                     <Column id="codecolumn" size="256"/>
@@ -146,10 +155,6 @@
                       <Col id="datacolumn">강사코드</Col>
                     </Row>
                     <Row>
-                      <Col id="codecolumn">2</Col>
-                      <Col id="datacolumn">강사명</Col>
-                    </Row>
-                    <Row>
                       <Col id="datacolumn">예명</Col>
                       <Col id="codecolumn">3</Col>
                     </Row>
@@ -160,10 +165,11 @@
                   </Rows>
                 </Dataset>
               </Combo>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick">
+        <Grid id="Grid00" taborder="2" left="10" top="300" binddataset="ds_list" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -361,17 +367,20 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
+this.fn_search = function(){
+  if(!this.com_check_private_search(this.ds_search.getColumn(0, "tcNm"))) return;
+  this.set_search_info();
+  this.select_teacher_list();
+}
 this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
 	if(e.keycode == 13){
-    this.set_search_info();
-	  this.select_teacher_list();
+    this.fn_search();
   }
 };
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.set_search_info();
-	this.select_teacher_list();
+	this.fn_search();
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -390,10 +399,6 @@ this.set_search_info = function(){
 		this.ds_search.setColumn(0, 'hopeEndHh', hopeEnd.slice(0, 2));
 		this.ds_search.setColumn(0, 'hopeEndMi', hopeEnd.slice(2, 4));
 	}
-	
-	//검색조건 - 휴대전화
-	var hpNo = this.Div04.form.Div02.form.hpNo.value;
-	this.com_set_hpNo_to_stmidlastNo(hpNo);
 	
 	//검색조건 - 체크박스 세팅 - 강사유형
 	var tcTpCdList = this.com_set_checkbox_to_string(this.Div03.form.Div00.form.Div00);
@@ -474,11 +479,6 @@ this.reset_search_form = function(){
 	this.ds_search.setColumn(0, 'hopeStMi', "");
 	this.ds_search.setColumn(0, 'hopeEndHh', "");
 	this.ds_search.setColumn(0, 'hopeEndMi', "");
-	
-	//휴대전화
-	this.ds_search.setColumn(0, "hpStNo", "");
-	this.ds_search.setColumn(0, "hpMidNo", "");
-	this.ds_search.setColumn(0, "hpLastNo", "");
 	
 	//카테고리
 	var lgObj = this.Div02.form.Div00.form.Combo00;
@@ -599,6 +599,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
           <Column id="pbrltnBrchCd" type="STRING" size="256"/>
           <Column id="tcmdfreqYn" type="STRING" size="256"/>
           <Column id="age" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
@@ -815,6 +816,10 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
       <BindItem id="item9" compid="Div01.form.Div00.form.hopeBrchCd" propid="value" datasetid="ds_search" columnid="hopeBrchCd"/>
       <BindItem id="item2" compid="Div02.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="lrclsCtegryCd"/>
       <BindItem id="item10" compid="Div03.form.Div00.form.txfrBizprYn" propid="value" datasetid="ds_search" columnid="txfrBizprYn"/>
+      <BindItem id="item11" compid="Div04.form.Div01_00.form.tcNm" propid="value" datasetid="ds_search" columnid="tcNm"/>
+      <BindItem id="item12" compid="Div04.form.Div02.form.hpStNo" propid="value" datasetid="ds_search" columnid="hpStNo"/>
+      <BindItem id="item13" compid="Div04.form.Div02.form.hpMidNo" propid="value" datasetid="ds_search" columnid="hpMidNo"/>
+      <BindItem id="item14" compid="Div04.form.Div02.form.hpLastNo" propid="value" datasetid="ds_search" columnid="hpLastNo"/>
     </Bind>
   </Form>
 </FDL>
