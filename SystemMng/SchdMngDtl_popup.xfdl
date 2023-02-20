@@ -61,7 +61,7 @@
                     <Band id="body">
                       <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                       <Cell col="1" text="expr:currow + 1"/>
-                      <Cell col="2" edittype="date" text="bind:schdDt" displaytype="date" calendardateformat="yyyy-MM-dd"/>
+                      <Cell col="2" edittype="expr:schdSortNo ? 'none' : 'date'" text="bind:schdDt" displaytype="date" calendardateformat="yyyy-MM-dd"/>
                       <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:schdTitNm"/>
                       <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:schdCont" textAlign="left"/>
                     </Band>
@@ -284,6 +284,8 @@ this.validation_check = function(){
     <Bind>
       <BindItem id="item0" compid="Div00.form.title_div.form.Div00.form.schdTitNm" propid="value" datasetid="ds_schd_list" columnid="schdTitNm"/>
       <BindItem id="item1" compid="Div00.form.content_div.form.Div00.form.schdCont" propid="value" datasetid="ds_schd_list" columnid="schdCont"/>
+      <BindItem id="item2" compid="Div00.form.title_div.form.Div00.form.schdTitNm" propid="readonly" datasetid="ds_schd_list" columnid="schdSortNo"/>
+      <BindItem id="item3" compid="Div00.form.content_div.form.Div00.form.schdCont" propid="readonly" datasetid="ds_schd_list" columnid="schdSortNo"/>
     </Bind>
   </Form>
 </FDL>
