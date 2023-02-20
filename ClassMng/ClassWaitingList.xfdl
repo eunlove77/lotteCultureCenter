@@ -220,7 +220,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.gfnSetCheckBoxNoDataset(this.ds_waiting_list, this.Div00.form.Grid00, 0);
 		break;
 		case "cancel":
-			this.Div00.form.Div00.form.Static14.set_text(this.ds_cnt.getColumn(0, "atlctCnt") + "/" + this.ds_class_dtl.getColumn(0, "lectNbcnt"));
+			this.Div00.form.Div00.form.Static14.set_text(this.ds_cnt.getColumn(0, "atlctCnt") + "/" + this.ds_class_dtl.getColumn(0, "gsCapaCnt"));
 			this.Div00.form.Div00.form.Static15.set_text(this.ds_cnt.getColumn(0, "waitCnt"));
 			this.Div00.form.Static01.set_text("("+ this.totCnt +"개)");
 			alert("정상 처리되었습니다.");
@@ -412,13 +412,14 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			this.ds_waiting_param.addRow();
 			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
 			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
-		}
-		// 동반회원
-		if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
-			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
-			this.ds_waiting_param.addRow();
-			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
-			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
+		}else{
+			// 동반회원
+			if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
+				//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+				this.ds_waiting_param.addRow();
+				this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+				this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
+			}
 		}
 	}
 
