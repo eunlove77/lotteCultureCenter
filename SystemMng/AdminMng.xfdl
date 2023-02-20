@@ -48,7 +48,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="spotCd" taborder="1" text="" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" index="0" value="" onitemchanged="row02_spotDiv_spotCd_onitemchanged"/>
+                    <Combo id="spotCd" taborder="1" text="" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
                     <Combo id="deptList" taborder="0" text="" left="9" top="71" width="150" height="30" innerdataset="ds_dept_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="deptList_onitemchanged" index="0" value=""/>
                   </Layout>
                 </Layouts>
@@ -88,7 +88,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="720">
+        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="720" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -639,15 +639,29 @@ this.fn_searchValueInit = function() {
 }
 
 this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){		
-		this.row02.form.statusDiv.form.chkAcntStatAll.set_value(0);
+	
+	if(obj.parent["chkAcntStatY"].isChecked() && obj.parent["chkAcntStatN"].isChecked()){
+		obj.parent.chkAcntStatAll.set_value(1);
 	}
+	else{
+		obj.parent.chkAcntStatAll.set_value(0);
+	}
+	/*if(!obj.isChecked()){		
+		this.row02.form.statusDiv.form.chkAcntStatAll.set_value(0);
+	}*/
 }
 
 this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.row03.form.permitDiv.form.chkApvlStatAll.set_value(0);
+	
+	if(obj.parent["chkApvlStatY"].isChecked() && obj.parent["chkApvlStatN"].isChecked()){
+		obj.parent.chkApvlStatAll.set_value(1);
 	}
+	else{
+		obj.parent.chkApvlStatAll.set_value(0);
+	}
+	/*if(!obj.isChecked()){
+		this.row03.form.permitDiv.form.chkApvlStatAll.set_value(0);
+	}*/
 }
 
 this.fnCallback = function(svcID,errorCode,errorMsg)
