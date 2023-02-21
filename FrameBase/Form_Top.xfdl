@@ -69,6 +69,22 @@ this.fn_set_loginInfo = function()
 
 this.Static00_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
 {
+	//탭 전체 삭제
+	var Tabpage = this.application.MdiFrame.form.tabMdi;
+	var sWinId = "";
+	var _form;
+	while(Tabpage.tabpages.length > 0){
+		sWinId = Tabpage.tabpages[0].name;
+		_form = this.application.WorkFrame[sWinId].form;
+		// 탭이 포함되고 탭에 url 속성에서 다른 폼을 불러왔을 경우 부모폼에서 close 함수 호출시 오류 발생
+		// 부모에 포함된 탭객체 삭제
+		delete _form.divWork.form.Tab00;
+		_form.close();
+		
+		this.application.LeftFrame.form.fn_delOpenMenu(sWinId);
+		Tabpage.removeTabpage(0);
+	}
+	
 	this.fn_openMain();
 };
 
