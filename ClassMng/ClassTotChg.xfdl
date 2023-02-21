@@ -59,9 +59,9 @@
                                 <Static id="Static00" taborder="0" text="정원" left="0" top="0" width="110" bottom="0" cssclass="sta_WF_TableLabel"/>
                                 <MaskEdit id="MaskEdit01" taborder="6" left="Static00:6" top="5" width="60" height="20" limitbymask="both" enable="true" format="!9,999" readonly="true"/>
                                 <Static id="Static01" taborder="5" text="명 (온라인" left="MaskEdit01:6" top="5" width="56" height="20" cssclass="sta_WF_TitGray"/>
-                                <MaskEdit id="MaskEdit00" taborder="2" left="Static01:6" top="5" width="50" height="20" limitbymask="both" format="!999" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit00_onkeyup"/>
+                                <MaskEdit id="MaskEdit00" taborder="2" left="Static01:6" top="5" width="50" height="20" limitbymask="both" format="!999" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit00_onkeyup" onkillfocus="Div00_Div00_Div00_Div02_00_MaskEdit00_onkillfocus"/>
                                 <Static id="Static02" taborder="4" text=" / 오프라인" left="MaskEdit00:6" top="5" width="62" height="20"/>
-                                <MaskEdit id="MaskEdit02" taborder="3" left="Static02:6" top="5" height="21" width="50" format="!999" limitbymask="both" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup"/>
+                                <MaskEdit id="MaskEdit02" taborder="3" left="Static02:6" top="5" height="21" width="50" format="!999" limitbymask="both" onkeyup="Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup" onkillfocus="Div00_Div00_Div00_Div02_00_MaskEdit02_onkillfocus"/>
                                 <Static id="Static03" taborder="1" text=")" left="MaskEdit02:6" top="5" width="4" height="20"/>
                               </Layout>
                             </Layouts>
@@ -1435,11 +1435,14 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 
 this.Div00_Div00_Div00_Div02_00_MaskEdit00_onkeyup = function(obj:nexacro.MaskEdit,e:nexacro.KeyEventInfo)
 {
-	if(obj.value == "" && this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit02.value == "")
+	if(new String(this.gfn_nvl(obj.value)) == "" && new String(this.gfn_nvl(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit02.value)) == "")
 	{
 		this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.set_value("");
+		this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.updateToDataset();
+		this.ds_class_dtl.setColumn(0, "gsCapaCnt", "");
 		return;
 	}
+	
 
 	var gsCapaCnt = nexacro.toNumber(obj.value, 0) + nexacro.toNumber(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit02.value, 0);
 	this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.set_value(gsCapaCnt);
@@ -1449,9 +1452,11 @@ this.Div00_Div00_Div00_Div02_00_MaskEdit00_onkeyup = function(obj:nexacro.MaskEd
 
 this.Div00_Div00_Div00_Div02_00_MaskEdit02_onkeyup = function(obj:nexacro.MaskEdit,e:nexacro.KeyEventInfo)
 {
-	if(obj.value == "" && this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit00.value == "")
+	if(new String(this.gfn_nvl(obj.value)) == "" && new String(this.gfn_nvl(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit00.value)) == "")
 	{
 		this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.set_value("");
+		this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit01.updateToDataset();
+		this.ds_class_dtl.setColumn(0, "gsCapaCnt", "");
 		return;
 	}
 	
@@ -1487,6 +1492,30 @@ this.Div00_Div00_Div00_Div02_01_MaskEdit00_oninput = function(obj:nexacro.MaskEd
 	obj.set_value(num);
 	obj.updateToDataset();
 	this.ds_class_dtl.setColumn(0, "lectAmt", num);
+};
+
+this.Div00_Div00_Div00_Div02_00_MaskEdit00_onkillfocus = function(obj:nexacro.MaskEdit,e:nexacro.KillFocusEventInfo)
+{
+	if(new String(this.gfn_nvl(obj.value)) == "" && new String(this.gfn_nvl(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit02.value)) == "")
+	{
+		this.ds_class_dtl.setColumn(0, "gsCapaCnt", "");	
+		return;
+	}
+	
+	var gsCapaCnt = nexacro.toNumber(this.ds_class_dtl.getColumn(0, "onlnCapaCnt"), 0) + nexacro.toNumber(this.ds_class_dtl.getColumn(0, "oflnCapaCnt"), 0)
+	this.ds_class_dtl.setColumn(0, "gsCapaCnt", gsCapaCnt);	
+};
+
+this.Div00_Div00_Div00_Div02_00_MaskEdit02_onkillfocus = function(obj:nexacro.MaskEdit,e:nexacro.KillFocusEventInfo)
+{
+	if(new String(this.gfn_nvl(obj.value)) == "" && new String(this.gfn_nvl(this.Div00.form.Div00.form.Div00.form.Div02_00.form.MaskEdit00.value)) == "")
+	{
+		this.ds_class_dtl.setColumn(0, "gsCapaCnt", "");
+		return;
+	}
+	
+	var gsCapaCnt = nexacro.toNumber(this.ds_class_dtl.getColumn(0, "onlnCapaCnt"), 0) + nexacro.toNumber(this.ds_class_dtl.getColumn(0, "oflnCapaCnt"), 0)
+	this.ds_class_dtl.setColumn(0, "gsCapaCnt", gsCapaCnt);	
 };
 ]]></Script>
   </Form>
