@@ -583,10 +583,18 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 //희망시간 유효성검사
 this.Div02_Div01_hopeSt_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
 {
-	if(obj.value > 2400){
+	if(obj.value.length != 4){
 		obj.set_value("");
 		return;
 	}
+	
+	var hh = obj.value.substring(0, 2);
+	var mm = obj.value.substring(2);
+	if(hh > 23 || mm > 59){
+		obj.set_value("");
+		return;
+	}
+
 	var hopeEnd = this.Div02.form.Div01.form.hopeEnd.value;
 	if(hopeEnd && Number(hopeEnd) < Number(obj.value)){
 		this.Div02.form.Div01.form.hopeEnd.set_value("");
@@ -595,10 +603,18 @@ this.Div02_Div01_hopeSt_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEv
 
 this.Div02_Div01_hopeEnd_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
 {
-	if(obj.value > 2400){
+	if(obj.value.length != 4){
 		obj.set_value("");
 		return;
 	}
+	
+	var hh = obj.value.substring(0, 2);
+	var mm = obj.value.substring(2);
+	if(hh > 23 || mm > 59){
+		obj.set_value("");
+		return;
+	}
+	
 	var hopeSt = this.Div02.form.Div01.form.hopeSt.value;
 	if(hopeSt && Number(hopeSt) > Number(obj.value)){
 		this.Div02.form.Div01.form.hopeSt.set_value("");
