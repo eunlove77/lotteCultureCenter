@@ -117,7 +117,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="거스름돈" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="true"/>
                     <Combo id="Combo00" taborder="1" text="Combo00" left="210" top="5" width="120" height="20" innerdataset="ds_chngmthd_list" datacolumn="cdNm" codecolumn="cd"/>
-                    <Edit id="Edit00" taborder="2" left="340" top="5" height="20" right="30" maxlength="10" textAlign="right" inputtype="digit"/>
+                    <Edit id="Edit00" taborder="2" left="340" top="5" height="20" right="30" maxlength="10" textAlign="right" inputtype="digit" oninput="fn_num_format"/>
                     <Static id="Static01" taborder="3" text="원" top="5" width="30" height="20" cssclass="sta_WF_CompText" right="0"/>
                   </Layout>
                 </Layouts>
@@ -224,14 +224,19 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.dcMthdFrm.cpnDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "cpnDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "cpnDcAmt");
 			this.dcMthdFrm.addDcAmt = this.gfn_nvl(dsDcDtl.getColumn(0, "addDcAmt")) == "" ? 0 : dsDcDtl.getColumn(0, "addDcAmt");
 			
+			// 할인 없는 총 결제금액, 주문금액 저장
+			this.lectStlmAmt = this.lectStlmAmt + this.dcMthdFrm.oflnDcAmt + this.dcMthdFrm.grdeDcAmt + this.dcMthdFrm.cpnDcAmt + this.dcMthdFrm.addDcAmt;
+			this.gsStlmAmt = this.gsStlmAmt + this.dcMthdFrm.oflnDcAmt + this.dcMthdFrm.grdeDcAmt + this.dcMthdFrm.cpnDcAmt + this.dcMthdFrm.addDcAmt;
+			this.ds_order_modify_info.setColumn(0, "gsStlmAmt", this.gsStlmAmt);
+			
 			this.Div00.form.Div00.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "stlmDtm"));
 			this.Div00.form.Div01.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "actlAtlctNpleNm"));
 			this.Div00.form.Div02.form.Static04.set_text(this.ds_order_modify_info.getColumn(0, "stDaywCdNm"));
 			this.Div00.form.Div02.form.Static05.set_text(this.ds_order_modify_info.getColumn(0, "lectPeriod"));
 			this.Div00.form.Div02.form.Static06.set_text(this.gfn_setComma(this.ds_order_modify_info.getColumn(0, "lectAmt")) + "원");
 			
-			this.dcMthdFrm.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectStlmAmt) +"원</fc></b>");
-			this.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(this.gsStlmAmt) +"</fc>원</b>");
+			this.dcMthdFrm.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt) +"원</fc></b>");
+			this.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(this.gsStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt) +"</fc>원</b>");
 			
 			if(this.gfn_nvl(dsDcDtl.getColumn(0, "oflnDcAmtClCd")) == ""){
 				// 기존에 오프라인 할인을 먹이지 않았으면 오프라인 할인 콤보박스 선택으로 세팅
@@ -266,6 +271,20 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					this.dcMthdFrm.Div00.form.Div06.set_top(179 - 80);
 				}
 			}else{
+				this.dcMthdFrm.ds_select_grde_list.copyData(this.dcMthdFrm.ds_grde_amt_cl_cd_list);
+				for(var i=this.dcMthdFrm.ds_grde_amt_cl_cd_list.getRowCount()-1;i>0;i--){
+					// 등급할인 사용 횟수 초과해서 사용못하는 등급할인 제거
+					if(this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "grdeUseYn") == "N" && (this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == "" || this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "cd") != dsDcDtl.getColumn(0, "grdeDcAmtClCd"))){
+						this.dcMthdFrm.ds_select_grde_list.deleteRow(i);
+						continue;
+					}
+					// 전체할인 사용 횟수 초과해서 사용못하는 등급할인 제거
+					if(this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "allUseYn") == "N" && (this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == "" || this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "cd") != dsDcDtl.getColumn(0, "grdeDcAmtClCd"))){
+						this.dcMthdFrm.ds_select_grde_list.deleteRow(i);
+						continue;
+					}
+				}
+				
 				if(this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == ""){
 					// 기존에 등급 할인을 먹이지 않았으면 등급 할인 콤보박스 선택으로 세팅
 					this.dcMthdFrm.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -411,15 +430,17 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 // 취소버튼 클릭
 this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() - 560);
-	this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() - 560);
-	this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() - 560);
-	
- 	this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() - 560); // div
-  	this.parent.parent.parent.parent.resetScroll(); // form
+{	
+	if(confirm("취소하시겠습니까? 입력된 내용은 초기화됩니다.")){
+		this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() - 560);
+		this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() - 560);
+		this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() - 560);
+		
+		this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() - 560); // div
+		this.parent.parent.parent.parent.resetScroll(); // form
 
-	this.parent.parent.parent.form.removeChild("orderInfoModifyDiv");
+		this.parent.parent.parent.form.removeChild("orderInfoModifyDiv");
+	}
 };
 
 // 금액필드 입력 포맷
@@ -430,8 +451,22 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		num = num.substring(1);
 	}
 	
-	if(this.gsStlmAmt < Number(num)) num = this.gsStlmAmt.toString();
+	// 단위 : 무조건 십의자리
+	if(this.gfn_isNull(num))
+	{
+		num = 0
+	}
+	else if(num % 10 != 0)
+	{
+		num *= 10
+	}
+	
 	obj.set_value(this.gfn_setComma(num));
+	obj.setCaretPos(obj.value.length-1);
+	
+	// 2023.02.21 - 총 결제금액 제한 품
+	//if(this.gsStlmAmt < Number(num)) num = this.gsStlmAmt.toString();
+	//obj.set_value(this.gfn_setComma(num));
 };
 
 // 저장버튼 클릭
@@ -473,14 +508,14 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	// 카드, L.Point, 기타 결제금액과 거스름돈만 입력
 	// 2023.02.21 제한 풀었음
-// 	if((crdStlmAmt + lpntUseAmt + etcStlmAmt > 0) && chngAmt > 0 && cshStlmAmt == 0 && ltteGiftStlmAmt == 0 && otgiftStlmAmt == 0){
-// 		alert("카드, L.Point, 기타 결제금액과 거스름돈을 같이 입력 할 수 없습니다.");
-// 		this.Div01.form.Div00.form.Edit00.set_value("");
-// 		this.Div01.form.Div01.form.Edit00.set_value("");
-// 		this.Div01.form.Div05.form.Edit00.set_value("");
-// 		this.Div01.form.Div06.form.Edit00.set_value("");
-// 		return;
-// 	}
+ 	if(chngAmt > 0 && cshStlmAmt == 0 && ltteGiftStlmAmt == 0 && otgiftStlmAmt == 0){
+ 		alert("카드, L.Point, 기타 결제금액과 거스름돈을 같이 입력 할 수 없습니다.");
+ 		this.Div01.form.Div00.form.Edit00.set_value("");
+ 		this.Div01.form.Div01.form.Edit00.set_value("");
+ 		this.Div01.form.Div05.form.Edit00.set_value("");
+ 		this.Div01.form.Div06.form.Edit00.set_value("");
+ 		return;
+ 	}
 	
 	// 거스름돈 지급방식 미선택
 	if(this.Div01.form.Div06.form.Combo00.value == "" && chngAmt > 0){

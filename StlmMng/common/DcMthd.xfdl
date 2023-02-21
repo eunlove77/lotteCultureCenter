@@ -44,7 +44,7 @@
                               </Rows>
                             </Dataset>
                           </Radio>
-                          <Combo id="Combo00" taborder="1" text="Combo00" left="10" top="30" width="200" height="20" innerdataset="ds_grde_amt_cl_cd_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div01_Combo00_onitemchanged"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="10" top="30" width="200" height="20" innerdataset="ds_select_grde_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div01_Combo00_onitemchanged"/>
                           <Static id="Static00" taborder="2" left="Combo00:0" top="30" width="120" height="21" cssclass="sta_WF_CompText"/>
                           <Static id="Static01" taborder="3" left="0" width="120" height="20" cssclass="sta_WF_CompText" bottom="3"/>
                           <Combo id="Combo01" taborder="4" text="Combo01" left="Combo00:0" top="30" width="120" height="20" readonly="false" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" visible="false" onitemchanged="Div00_Div04_Div01_Combo01_onitemchanged">
@@ -230,15 +230,6 @@
           <Column id="grdeDcSubtrYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_grde_amt_cl_cd_list">
-        <ColumnInfo>
-          <Column id="cd" type="STRING" size="256"/>
-          <Column id="cdNm" type="STRING" size="256"/>
-          <Column id="dcRt" type="INT" size="256"/>
-          <Column id="dcNbcntYn" type="STRING" size="256"/>
-          <Column id="allUseNbcntYn" type="STRING" size="256"/>
-        </ColumnInfo>
-      </Dataset>
       <Dataset id="ds_cpn_amt_cl_cd_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
@@ -258,6 +249,38 @@
           <Column id="dmcmUseYn" type="STRING" size="256"/>
           <Column id="grdeUseYn" type="STRING" size="256"/>
           <Column id="ltlmUseYn" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grde_amt_cl_cd_list">
+        <ColumnInfo>
+          <Column id="applBrchRngCdNm" type="STRING" size="256"/>
+          <Column id="grdeUseYn" type="STRING" size="256"/>
+          <Column id="allUseYn" type="STRING" size="256"/>
+          <Column id="dcNbcnt" type="STRING" size="256"/>
+          <Column id="dcRt" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="allGrdeUseCnt" type="STRING" size="256"/>
+          <Column id="allUseCnt" type="STRING" size="256"/>
+          <Column id="allDcCnt" type="STRING" size="256"/>
+          <Column id="applBrchRngCd" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_select_grde_list">
+        <ColumnInfo>
+          <Column id="applBrchRngCdNm" type="STRING" size="256"/>
+          <Column id="grdeUseYn" type="STRING" size="256"/>
+          <Column id="allUseYn" type="STRING" size="256"/>
+          <Column id="dcNbcnt" type="STRING" size="256"/>
+          <Column id="dcRt" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="allGrdeUseCnt" type="STRING" size="256"/>
+          <Column id="allUseCnt" type="STRING" size="256"/>
+          <Column id="allDcCnt" type="STRING" size="256"/>
+          <Column id="applBrchRngCd" type="STRING" size="256"/>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -339,7 +362,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	
 	// 등급할인, 쿠폰할인 선택 값 초기화
 	this.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-	this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_amt_cl_cd_list);
+	this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 	this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 	this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 	this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -414,14 +437,30 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
 			this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 		}else{
+// 			var dcRt = 0;
+// 			var dcNbcntYn, allUseNbcntYn;
+// 			var skipDcNbcntLimitYn = false, skipAllUseNbcntLimitYn = false;
+// 			for(var i=0;i<this.ds_select_grde_list.getRowCount();i++){
+// 				if(obj.value == this.ds_select_grde_list.getColumn(i, "cd")){
+// 					dcRt = this.ds_select_grde_list.getColumn(i, "dcRt");
+// 					dcNbcntYn = this.ds_select_grde_list.getColumn(i, "dcNbcntYn");
+// 					allUseNbcntYn = this.ds_select_grde_list.getColumn(i, "allUseNbcntYn");
+// 				}
+// 			}
 			var dcRt = 0;
-			var dcNbcntYn, allUseNbcntYn;
-			var skipDcNbcntLimitYn = false, skipAllUseNbcntLimitYn = false;
-			for(var i=0;i<this.ds_grde_amt_cl_cd_list.getRowCount();i++){
-				if(obj.value == this.ds_grde_amt_cl_cd_list.getColumn(i, "cd")){
-					dcRt = this.ds_grde_amt_cl_cd_list.getColumn(i, "dcRt");
-					dcNbcntYn = this.ds_grde_amt_cl_cd_list.getColumn(i, "dcNbcntYn");
-					allUseNbcntYn = this.ds_grde_amt_cl_cd_list.getColumn(i, "allUseNbcntYn");
+			var grdeUseYn, allUseYn;
+			var skipGrdeUseYn = false, skipAllUseYn = false;
+			for(var i=0;i<this.ds_select_grde_list.getRowCount();i++){
+				if(obj.value == this.ds_select_grde_list.getColumn(i, "cd")){
+					dcRt = this.ds_select_grde_list.getColumn(i, "dcRt");
+					grdeUseYn = this.ds_select_grde_list.getColumn(i, "grdeUseYn");
+					if(grdeUseYn == "N" && (obj.value == this.ds_dc_dtl.getColumn(0, "grdeDcAmtClCd"))){
+						grdeUseYn = "Y";
+					}
+					allUseYn = this.ds_select_grde_list.getColumn(i, "allUseYn");
+					if(allUseYn == "N" && (obj.value == this.ds_dc_dtl.getColumn(0, "grdeDcAmtClCd"))){
+						allUseYn = "Y";
+					}
 				}
 			}
 
@@ -432,23 +471,38 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 				return;
 			}else{
-				if(allUseNbcntYn == "N"){
+// 				if(allUseNbcntYn == "N"){
+// 					if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
+// 						skipAllUseNbcntLimitYn = true;
+// 					}
+// 				}else{
+// 					skipAllUseNbcntLimitYn = true;
+// 				}
+// 				
+// 				if(dcNbcntYn == "N"){
+// 					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
+// 						skipDcNbcntLimitYn = true;
+// 					}
+// 				}else{
+// 					skipDcNbcntLimitYn = true;
+// 				}
+				if(allUseYn == "N"){
 					if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-						skipAllUseNbcntLimitYn = true;
+						skipAllUseYn = true;
 					}
 				}else{
-					skipAllUseNbcntLimitYn = true;
+					skipAllUseYn = true;
 				}
 				
-				if(dcNbcntYn == "N"){
+				if(grdeUseYn == "N"){
 					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-						skipDcNbcntLimitYn = true;
+						skipGrdeUseYn = true;
 					}
 				}else{
-					skipDcNbcntLimitYn = true;
+					skipGrdeUseYn = true;
 				}
 			
-				if(skipAllUseNbcntLimitYn && skipDcNbcntLimitYn){
+				if(skipAllUseYn && skipGrdeUseYn){
 					this.grdeDcAmt = nexacro.round((lectAmt - this.oflnDcAmt) * (dcRt / 100), -1);
 					this.Div00.form.Div04.form.Div01.form.Static00.set_text(dcRt + "%");
 					this.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
@@ -463,6 +517,10 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 				}else{
 					this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+					this.Div00.form.Div04.form.Div01.form.Static01.set_text("");
+					this.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
+					this.Div00.form.Div04.form.Div01.form.Static02.set_text("");
+					this.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
 					return;
 				}
 			}
@@ -487,14 +545,31 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			var dcRt = this.Div00.form.Div04.form.Div01.form.Combo01.value;
 			
 			
-			var dmcmUseYn, grdeUseYn, ltlmUseYn, applBrchRngCd;
-			var skipDmcmUseYn = false, skipGrdeUseYn = false, skipLtlmUseYn = false;
-			for(var i=0;i<this.ds_adm_grde_amt_cl_cd_list.getRowCount();i++){
-				if(obj.value == this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "cd")){
-					dmcmUseYn = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "dmcmUseYn");
-					grdeUseYn = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "grdeUseYn");
-					ltlmUseYn = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "ltlmUseYn");
-					applBrchRngCd = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "applBrchRngCd");
+// 			var dmcmUseYn, grdeUseYn, ltlmUseYn, applBrchRngCd;
+// 			var skipDmcmUseYn = false, skipGrdeUseYn = false, skipLtlmUseYn = false;
+// 			for(var i=0;i<this.ds_adm_grde_amt_cl_cd_list.getRowCount();i++){
+// 				if(obj.value == this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "cd")){
+// 					dmcmUseYn = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "dmcmUseYn");
+// 					grdeUseYn = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "grdeUseYn");
+// 					ltlmUseYn = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "ltlmUseYn");
+// 					applBrchRngCd = this.ds_adm_grde_amt_cl_cd_list.getColumn(i, "applBrchRngCd");
+// 				}
+// 			}
+			var grdeUseYn, allUseYn, memberUseYn, applBrchRngCdNm;
+			var skipGrdeUseYn = false, skipAllUseYn = false, skipMemberUseYn = false;
+			
+			memberUseYn = "N";
+			for(var i=0;i<this.ds_grde_amt_cl_cd_list.getRowCount();i++){
+				if(obj.value == this.ds_grde_amt_cl_cd_list.getColumn(i, "cd")){
+					memberUseYn = "Y";
+					grdeUseYn = "Y";
+					allUseYn = "Y";
+					if(this.ds_grde_amt_cl_cd_list.getColumn(i, "allGrdeUseCnt") >= this.ds_grde_amt_cl_cd_list.getColumn(i, "dcNbcnt") && (obj.value != this.ds_dc_dtl.getColumn(0, "grdeDcAmtClCd"))){
+						grdeUseYn = "N";
+					}
+					if(this.ds_grde_amt_cl_cd_list.getColumn(i, "allUseCnt") >= this.ds_grde_amt_cl_cd_list.getColumn(i, "allDcCnt") && (obj.value != this.ds_dc_dtl.getColumn(0, "grdeDcAmtClCd"))){
+						allUseYn = "N";
+					}
 				}
 			}
 
@@ -505,33 +580,56 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 				this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 				return;
 			}else{
-				if(dmcmUseYn == "N"){
+// 				if(dmcmUseYn == "N"){
+// 					if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
+// 						skipDmcmUseYn = true;
+// 					}
+// 				}else{
+// 					skipDmcmUseYn = true;
+// 				}
+// 				
+// 				if(grdeUseYn == "N"){
+// 					if(confirm("고객이 보유하지 않은 등급할인 유형입니다. 그래도 사용하시겠습니까?")){
+// 						skipGrdeUseYn = true;
+// 					}
+// 				}else{
+// 					skipGrdeUseYn = true;
+// 				}
+// 				
+// 				if(ltlmUseYn == "N"){
+// 					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
+// 						skipLtlmUseYn = true;
+// 					}
+// 				}else{
+// 					skipLtlmUseYn = true;
+// 				}
+				if(allUseYn == "N"){
 					if(confirm("전체 사용횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-						skipDmcmUseYn = true;
+						skipAllUseYn = true;
 					}
 				}else{
-					skipDmcmUseYn = true;
+					skipAllUseYn = true;
+				}
+				
+				if(memberUseYn == "N"){
+					if(confirm("고객이 보유하지 않은 등급할인 유형입니다. 그래도 사용하시겠습니까?")){
+						skipMemberUseYn = true;
+					}
+				}else{
+					skipMemberUseYn = true;
 				}
 				
 				if(grdeUseYn == "N"){
-					if(confirm("고객이 보유하지 않은 등급할인 유형입니다. 그래도 사용하시겠습니까?")){
+					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
 						skipGrdeUseYn = true;
 					}
 				}else{
 					skipGrdeUseYn = true;
 				}
-				
-				if(ltlmUseYn == "N"){
-					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
-						skipLtlmUseYn = true;
-					}
-				}else{
-					skipLtlmUseYn = true;
-				}
 			
-				if(skipDmcmUseYn && skipGrdeUseYn && skipLtlmUseYn){
+				if(skipGrdeUseYn && skipMemberUseYn && skipAllUseYn){
 					this.grdeDcAmt = nexacro.round((lectAmt - this.oflnDcAmt) * (dcRt / 100), -1);
-					var applBrchRngCdNm = applBrchRngCd == "01" ? "전점" : "관리점";
+					//var applBrchRngCdNm = applBrchRngCd == "01" ? "전점" : "관리점";
 					this.Div00.form.Div04.form.Div01.form.Static01.set_text("할인금액 " + this.gfn_setComma(this.grdeDcAmt) + "원");
 					this.Div00.form.Div04.form.Div01.form.Static01.set_visible(true);
 					//this.Div00.form.Div04.form.Div01.form.Static02.set_text(applBrchRngCdNm + "/" + dcRt + "%");
@@ -546,6 +644,10 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 				}else{
 					this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+					this.Div00.form.Div04.form.Div01.form.Static01.set_text("");
+					this.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
+					this.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
+					this.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
 					return;
 				}
 			}
@@ -700,7 +802,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 	if(obj.id == "editOfln"){
 		// 등급할인, 쿠폰할인 선택 값 초기화
 		this.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_amt_cl_cd_list);
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -771,7 +873,7 @@ this.fn_common_confirm = function()
 		this.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(true);
 		
 		this.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_amt_cl_cd_list);
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -850,6 +952,10 @@ this.Div00_Div05_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.It
 // 등급할인 고객 보유/관리자 수기 선택 이벤트
 this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
+	var lectAmt = Number(nexacro.replaceAll(this.parent.parent.parent.form.Div02.form.Static06.text.substring(0, this.parent.parent.parent.form.Div02.form.Static06.text.length - 1), ",", ""));
+	var lectAddAmt = this.gfn_nvl(this.parent.parent.parent.form.optnDiv.form.Static03.text) == "" ? 0 : Number(nexacro.replaceAll(this.parent.parent.parent.form.optnDiv.form.Static03.text.substring(0, this.parent.parent.parent.form.optnDiv.form.Static03.text.length - 1), ",", ""));
+	var gsStlmAmt = this.parent.parent.parent.parent.ds_order_modify_info.getColumn(0, "gsStlmAmt");
+	
 	this.Div00.form.Div04.form.Div01.form.Static01.set_text("");
 	this.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
 	//this.Div00.form.Div04.form.Div01.form.Static02.set_text("");
@@ -861,8 +967,7 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 		this.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
 		this.Div00.form.Div04.form.Div01.form.Static00.set_visible(true);
 		this.Div00.form.Div04.form.Div01.form.Static00.set_text("");
-		
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_grde_amt_cl_cd_list);
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
@@ -874,6 +979,21 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
+	}
+	
+	if(e.preindex != e.postindex){
+		this.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
+		this.Div00.form.Div04.form.Div02.form.Static00.set_text("");
+		this.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
+		this.Div00.form.Div04.form.Div02.form.Static01.set_text("");
+		this.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
+		this.grdeDcAmt = 0;
+		this.cpnDcAmt = 0;
+		
+		this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
+		this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
+		this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt
+		this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 	}
 };
 
@@ -906,6 +1026,7 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
 	this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
 	this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
-};]]></Script>
+};
+]]></Script>
   </Form>
 </FDL>

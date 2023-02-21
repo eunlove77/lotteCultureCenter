@@ -1019,15 +1019,15 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	}
 	
 	// 카드, L.Point, 기타 결제금액과 거스름돈만 입력
-	// 2023.02.21 제한 풀었음
-// 	if((crdStlmAmt + lpntUseAmt + etcStlmAmt > 0) && chngAmt > 0){
-// 		alert("카드, L.Point, 기타 결제금액과 거스름돈을 같이 입력 할 수 없습니다.");
-// 		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
-// 		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
-// 		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
-// 		this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
-// 		return;
-// 	}
+	// 2023.02.21 조건 변경
+ 	if(chngAmt > 0 && cshStlmAmt == 0 && ltteGiftStlmAmt == 0 && otgiftStlmAmt == 0){
+ 		alert("카드, L.Point, 기타 결제금액과 거스름돈을 같이 입력 할 수 없습니다.");
+ 		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+ 		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+ 		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+ 		this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+ 		return;
+ 	}
 	
 	// 카드사 미선택
 	if(crdcoCd == "" && crdStlmAmt > 0){
