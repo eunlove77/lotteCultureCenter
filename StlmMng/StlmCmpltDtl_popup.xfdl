@@ -940,6 +940,58 @@ this.fn_stlm_mthd_info = function()
 		etcRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "etcRfndAmt"));
 	}
 	
+	// 거스름돈
+	var cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt;
+	var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
+	var otgiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt"));
+	
+	if(ltteGiftRfndAmt > ltteGiftStlmAmt){
+		ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
+		ltteGiftStlmAmt = 0;
+	}else{
+		ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
+		ltteGiftRfndAmt = 0;
+	}
+	if(ltteGiftRfndAmt != 0){
+		otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
+	}
+	
+	var chngAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt"));
+	var chngMthdCd = stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngMthdCd");
+	
+	if(chngAmt > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0){
+		if(chngMthdCd == "10" && chngAmt < cshStlmAmt){
+			cshStlmAmt = cshStlmAmt - chngAmt;
+			chngAmt = 0;
+		}else if(chngMthdCd == "20" && chngAmt < ltteGiftStlmAmt){
+			ltteGiftStlmAmt = ltteGiftStlmAmt - chngAmt;
+			chngAmt = 0;
+		}else if(chngMthdCd == "20" && chngAmt < otgiftStlmAmt){
+			otgiftStlmAmt = otgiftStlmAmt - chngAmt;
+			chngAmt = 0;
+		}else{
+			if(cshStlmAmt > 0 && chngAmt < cshStlmAmt){
+				cshStlmAmt = cshStlmAmt - chngAmt;
+				chngAmt = 0;
+			}else{
+				chngAmt = chngAmt - cshStlmAmt;
+				cshStlmAmt = 0;
+			}
+			
+			if(ltteGiftStlmAmt > 0 && chngAmt < ltteGiftStlmAmt){
+				ltteGiftStlmAmt = ltteGiftStlmAmt - chngAmt;
+				chngAmt = 0;
+			}else{
+				chngAmt = chngAmt - ltteGiftStlmAmt;
+				ltteGiftStlmAmt = 0;
+			}
+			
+			if(otgiftStlmAmt > 0 && chngAmt < otgiftStlmAmt) {
+				otgiftStlmAmt = otgiftStlmAmt - chngAmt;
+				chngAmt = 0;
+			}
+		}
+	}
 	
 	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt") > 0){
 		var crdStlmAmtDiv = new Div("div_crd_stlm_amt");
@@ -1031,7 +1083,9 @@ this.fn_stlm_mthd_info = function()
 		cshStlmAmtStatic.set_bottom(0);
 		cshStlmAmtStatic.set_right(0);
 		cshStlmAmtStatic.set_textAlign("right");
-		cshStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt) + "원");
+		
+		cshStlmAmtStatic.set_text(this.gfn_setComma(cshStlmAmt) + "원");
+		
 		cshStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		cshStlmAmtDiv.addChild("static_csh_stlm_amt", cshStlmAmtStatic);
 
@@ -1055,13 +1109,8 @@ this.fn_stlm_mthd_info = function()
 		lttegiftStlmMthdStatic.set_cssclass("sta_WF_CompText");
 		lttegiftStlmAmtDiv.addChild("static_lttegift_stlm_mthd", lttegiftStlmMthdStatic);
 		
-		var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
-		if(ltteGiftRfndAmt > ltteGiftStlmAmt){
-			ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
-			ltteGiftStlmAmt = 0;
-		}else{
-			ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
-		}
+		//var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
+		
 		
 		var lttegiftStlmAmtStatic = new Static("static_lttegift_stlm_amt");
 		lttegiftStlmAmtStatic.set_width(100);
@@ -1093,8 +1142,7 @@ this.fn_stlm_mthd_info = function()
 		otgiftStlmMthdStatic.set_cssclass("sta_WF_CompText");
 		otgiftStlmAmtDiv.addChild("static_otgift_stlm_mthd", otgiftStlmMthdStatic);
 		
-		var otgiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt"));
-		otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
+		//var otgiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt"));
 		
 		var otgiftStlmAmtStatic = new Static("static_otgift_stlm_amt");
 		otgiftStlmAmtStatic.set_width(100);
@@ -1139,7 +1187,7 @@ this.fn_stlm_mthd_info = function()
 		arrStlmMthd.push({div : etcStlmAmtDiv});
 	}
 	
-	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt") > 0){
+	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt") > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() == 0){
 		var chngAmtDiv = new Div("div_chng_amt");
 		chngAmtDiv.set_left(200);
 		chngAmtDiv.set_right(0);
@@ -1152,7 +1200,7 @@ this.fn_stlm_mthd_info = function()
 		chngMthdStatic.set_top(0);
 		chngMthdStatic.set_left(0);
 		chngMthdStatic.set_bottom(0);
-		chngMthdStatic.set_text("거스름돈\r\nㄴ 상품권");
+		chngMthdStatic.set_text("거스름돈\r\nㄴ " + stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngMthdCdNm"));
 		chngMthdStatic.set_cssclass("sta_WF_CompText");
 		chngAmtDiv.addChild("static_chng_mthd", chngMthdStatic);
 		
@@ -1162,7 +1210,7 @@ this.fn_stlm_mthd_info = function()
 		chngAmtStatic.set_bottom(0);
 		chngAmtStatic.set_right(0);
 		chngAmtStatic.set_textAlign("right");
-		chngAmtStatic.set_text("(-)" + this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt")) + "원");
+		chngAmtStatic.set_text("(-)" + this.gfn_setComma(chngAmt) + "원");
 		chngAmtStatic.set_cssclass("sta_WF_CompText");
 		chngAmtDiv.addChild("static_chng_amt", chngAmtStatic);
 
