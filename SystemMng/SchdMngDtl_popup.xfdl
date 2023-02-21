@@ -42,10 +42,11 @@
                   <Format id="default">
                     <Columns>
                       <Column size="40" band="left"/>
-                      <Column size="50"/>
-                      <Column size="130"/>
-                      <Column size="200"/>
-                      <Column size="500"/>
+                      <Column size="40"/>
+                      <Column size="100"/>
+                      <Column size="180"/>
+                      <Column size="460"/>
+                      <Column size="150"/>
                     </Columns>
                     <Rows>
                       <Row size="30" band="head"/>
@@ -57,6 +58,7 @@
                       <Cell col="2" text="일자"/>
                       <Cell col="3" text="제목"/>
                       <Cell col="4" text="내용"/>
+                      <Cell col="5" text="작성자"/>
                     </Band>
                     <Band id="body">
                       <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
@@ -64,6 +66,7 @@
                       <Cell col="2" edittype="expr:schdSortNo ? 'none' : 'date'" text="bind:schdDt" displaytype="date" calendardateformat="yyyy-MM-dd"/>
                       <Cell col="3" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" text="bind:schdTitNm"/>
                       <Cell col="4" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:schdCont" textAlign="left"/>
+                      <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -260,6 +263,8 @@ this.validation_check = function(){
           <Column id="schdTitNm" type="STRING" size="256"/>
           <Column id="schdCont" type="STRING" size="256"/>
           <Column id="schdSortNo" type="STRING" size="256"/>
+          <Column id="rgprId" type="STRING" size="256"/>
+          <Column id="rgprNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_search">
