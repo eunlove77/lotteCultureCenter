@@ -4,7 +4,7 @@
     <Layouts>
       <Layout height="4000" width="1280">
         <Static id="txtMenuNm" taborder="0" text="강좌상세" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
-        <Tab id="Tab00" taborder="1" tabindex="0" tabbuttonwidth="100" left="10" top="77" right="0" bottom="0">
+        <Tab id="Tab00" taborder="1" tabindex="0" tabbuttonwidth="100" left="10" top="77" right="0" bottom="0" canchange="Tab00_canchange">
           <Tabpages>
             <Tabpage id="Tabpage1" text="강좌상세정보" tabbuttonwidth="100" url="ClassMng::ClassWrite.xfdl"/>
             <Tabpage id="Tabpage2" text="신청자 현황" tabbuttonwidth="100" url="ClassMng::ClassApplList.xfdl"/>
@@ -43,6 +43,14 @@ this.ClassDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 };
 
 
+
+this.Tab00_canchange = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInfo)
+{
+	if(e.postindex == 0)
+	{
+		this.Tab00.Tabpage1.reload();
+	}
+};
 ]]></Script>
     <Objects/>
   </Form>
