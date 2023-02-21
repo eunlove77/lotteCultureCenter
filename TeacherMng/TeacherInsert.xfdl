@@ -10,7 +10,7 @@
               <Div id="Div00" taborder="4" left="0" top="32" width="270" height="260">
                 <Layouts>
                   <Layout>
-                    <ImageViewer id="ImageViewer00" taborder="0" text="jpg, jpeg, gif, png 파일만 가능합니다.&#13;&#10;용량 제한은 200kb 이하입니다." left="18" top="0" width="215" stretch="fixaspectratio" bottom="0" cssclass="img_WF_LibThu"/>
+                    <ImageViewer id="ImageViewer00" taborder="0" text="jpg, jpeg, gif, png 파일만 가능합니다.&#13;&#10;용량 제한은 10mb 이하입니다." left="18" top="0" width="215" stretch="fixaspectratio" bottom="0" cssclass="img_WF_LibThu"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -326,7 +326,7 @@ this.application = null;
 this.domain = "";
 this.rowcount = 0;
 this.fileExtn = "jpg,jpeg,gif,png"; //확장자
-this.fileMaxSize= 200; 	//최대 파일크기 200Kb
+this.fileMaxSize= 10; 	//최대 파일크기 10Mb
 this.age = 0;
 this.menuSeq = 0;
 /**************************************************************************
@@ -466,8 +466,8 @@ this.atch_file_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFi
 			obj.getFileSize();
 			break;
 		case 9:
-			if(this.fileMaxSize * 1024 < e.filesize){
-				alert("첨부파일은 최대 " + this.fileMaxSize + "Kb까지 등록 가능합니다.");
+			if(this.fileMaxSize * 1024 * 1024 < e.filesize){
+				alert("첨부파일은 최대 " + this.fileMaxSize + "Mb까지 등록 가능합니다.");
 			} else {
 				this.ds_atch_file.setColumn(0, "atchFileId", "");
 				this.ds_atch_file.setColumn(0, "realFileNm", obj.filename);			
