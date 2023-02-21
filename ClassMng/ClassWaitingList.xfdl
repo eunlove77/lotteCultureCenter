@@ -130,6 +130,8 @@ this.lectCd = "";
 
 this.arrAtlctRsvNo = "";
 
+this.searchButton = null;
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -138,6 +140,7 @@ this.ClassWaitingList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.application = nexacro.getApplication();
 	this.domain = this.application.Domain;
 	this.menuSeq = this.parent.parent.parent.parent.menuSeq;
+	this.searchButton = this.parent.parent.parent.parent.searchButton;
 	
 	this.ds_class_dtl.copyData(this.parent.parent.Tabpage1.form.ds_class_dtl);
 	this.ds_class_dtl.setColumn(0, "yy", this.ds_class_dtl.getColumn(0, "yy").split("||")[0]);
@@ -315,6 +318,7 @@ this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			}
 
 			this.gfn_transaction(tranObj);
+			if(this.searchButton !== undefined) this.searchButton.click();
 		}
 	}
 	
