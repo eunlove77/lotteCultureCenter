@@ -1,12 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="SignWindow" width="880" height="340" titletext="New Form" onload="SignWindow_onload">
+  <Form id="SignWindow" width="880" height="340" titletext="서명 윈도우" onload="SignWindow_onload">
     <Layouts>
       <Layout height="340" mobileorientation="landscape" width="880">
-        <Graphics id="Graphics00" taborder="0" left="0" top="0" height="300" border="1px solid #e6e6e6" right="0" onlbuttondown="Graphics00_onlbuttondown" onlbuttonup="Graphics00_onlbuttonup" onmousemove="Graphics00_onmousemove" background="#ffffff"/>
-        <Button id="Button01" taborder="2" text="재입력" left="500" width="100" cssclass="btn_WF_Weak" height="20" bottom="10" onclick="Button01_onclick"/>
-        <Button id="Button00" taborder="1" text="확인" height="20" cssclass="btn_WF_Medium" bottom="10" onclick="Button00_onclick" right="Button01:10" width="100"/>
-        <Button id="Button02" taborder="3" text="취소" width="100" cssclass="btn_WF_Weak" right="Button00:10" height="20" bottom="10" onclick="Button02_onclick"/>
+        <Graphics id="Graphics00" taborder="0" left="0" top="0" border="1px solid #e6e6e6" right="0" onlbuttondown="Graphics00_onlbuttondown" onlbuttonup="Graphics00_onlbuttonup" onmousemove="Graphics00_onmousemove" background="#ffffff" bottom="40" onsize="Graphics00_onsize"/>
+        <Div id="Div00" taborder="1" text="Div00" left="0" right="0" bottom="10" minwidth="740" maxwidth="" height="20">
+          <Layouts>
+            <Layout>
+              <Button id="Button02" taborder="0" text="취소" width="100" cssclass="btn_WF_Weak" right="56.02%" height="20" bottom="0" onclick="Button02_onclick"/>
+              <Button id="Button00" taborder="1" text="확인" height="20" cssclass="btn_WF_Medium" bottom="0" onclick="Button00_onclick" width="100" left="Button02:10"/>
+              <Button id="Button01" taborder="2" text="재입력" left="Button00:10" width="100" cssclass="btn_WF_Weak" height="20" bottom="0" onclick="Button01_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -21,6 +27,7 @@ this.application = null;
 this.atchFileId = "";
 this.menuSeq = 0;
 this.domain = "";
+this.delayId = null;
 
 this.SignWindow_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
@@ -158,7 +165,17 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.close();
 };
-]]></Script>
+this.Graphics00_onsize = function(obj:nexacro.Graphics,e:nexacro.SizeEventInfo)
+{
+	if(this.delayId){
+		clearTimeout(this.delayId);
+	}
+	this.delayId = setTimeout(this.resize_func, 300, obj);
+};
+this.resize_func = function(obj){
+	obj.clear();
+	obj.redraw();
+}]]></Script>
     <Objects>
       <Dataset id="ds_sign_image">
         <ColumnInfo>
