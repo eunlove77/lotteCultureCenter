@@ -605,33 +605,34 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		this.Div00.form.Div01.form.Div01.form.Static01.set_text("");
 		this.Div00.form.Div01.form.Div01.form.Static03.set_text("");
 		
-		for(var i=0;i<this.ds_smster_list.getRowCount();i++){
-			if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
-				this.Div00.form.Div00.form.Div00.form.Combo01.set_index(i);
-				
-				//년도
-				this.removeChild("ds_yy_list");
-				var dsYyList = new Dataset();
-				dsYyList.name = "ds_yy_list";
-				dsYyList.addColumn("cd", "string", 256);
-				dsYyList.addColumn("cdNm", "string", 256);
-				
-				this.addChild("ds_yy_list", dsYyList);
-				
-				var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
-				this.ds_yy_list.set_enableevent(false);
-				for(var i=0;i<16;i++){
-					this.ds_yy_list.insertRow(i);
-					this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
-					this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
-				}
-				this.ds_yy_list.set_enableevent(true);
-				this.Div00.form.Div00.form.Div00.form.Combo00.setInnerDataset(this.ds_yy_list);
-				this.Div00.form.Div00.form.Div00.form.Combo00.set_codecolumn("cd");
-				this.Div00.form.Div00.form.Div00.form.Combo00.set_datacolumn("cdNm");
-				this.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
-			}
-		}
+		this.fn_data_list();
+// 		for(var i=0;i<this.ds_smster_list.getRowCount();i++){
+// 			if(this.ds_smster_list.getColumn(i, "currSmsterCdYn") == "Y"){
+// 				this.Div00.form.Div00.form.Div00.form.Combo01.set_index(i);
+// 				
+// 				//년도
+// 				this.removeChild("ds_yy_list");
+// 				var dsYyList = new Dataset();
+// 				dsYyList.name = "ds_yy_list";
+// 				dsYyList.addColumn("cd", "string", 256);
+// 				dsYyList.addColumn("cdNm", "string", 256);
+// 				
+// 				this.addChild("ds_yy_list", dsYyList);
+// 				
+// 				var currYear = Number(this.ds_smster_list.getColumn(i, "yy"));
+// 				this.ds_yy_list.set_enableevent(false);
+// 				for(var i=0;i<16;i++){
+// 					this.ds_yy_list.insertRow(i);
+// 					this.ds_yy_list.setColumn(i, "cd", (currYear - i).toString());
+// 					this.ds_yy_list.setColumn(i, "cdNm", (currYear - i) + "년");
+// 				}
+// 				this.ds_yy_list.set_enableevent(true);
+// 				this.Div00.form.Div00.form.Div00.form.Combo00.setInnerDataset(this.ds_yy_list);
+// 				this.Div00.form.Div00.form.Div00.form.Combo00.set_codecolumn("cd");
+// 				this.Div00.form.Div00.form.Div00.form.Combo00.set_datacolumn("cdNm");
+// 				this.Div00.form.Div00.form.Div00.form.Combo00.set_index(0);
+// 			}
+// 		}
 		
 		// 등급할인목록 초기화
 		this.Div00.form.Div03.form.Grid00.set_visible(false);
@@ -710,7 +711,7 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 			this.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
 			alert("삭제되었습니다.");
 		}
-	}else if(e.col == 9){
+	}else if(e.col == 8){
 		this.removeChild("ds_class_info");
 		var dsClassInfo = new Dataset();
 		dsClassInfo.name = "ds_class_info";
@@ -868,6 +869,11 @@ this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 // 입력 확인 버튼 클릭
 this.Div00_Div02_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.ds_class_list.getRowCount() == 0){
+		alert("등록된 강좌가 없습니다.\n(회원검색 및 강좌검색 후 이용 가능합니다.)");
+		return;
+	}
+
 	var oArg = {
 		classList : this.ds_class_list
 	};
