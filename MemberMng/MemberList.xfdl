@@ -41,7 +41,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" maxlength="50"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" maxlength="50" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -49,9 +49,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%"/>
-                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit01_00" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -111,7 +111,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50" onkeydown="fn_searchEnter"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div06_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div06_btnInit_onclick"/>
                   </Layout>
@@ -783,7 +783,16 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_list();
 			break;
 	}
-};]]></Script>
+};
+
+this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		this.fn_list()
+	}
+};
+]]></Script>
     <Bind>
       <BindItem id="brchTypeCd" compid="Div01.form.Div00.form.ComboSpotType" propid="value" datasetid="ds_search" columnid="brchTypeCd"/>
       <BindItem id="brchCd" compid="Div01.form.Div00.form.ComboSpot" propid="value" datasetid="ds_search" columnid="brchCd"/>

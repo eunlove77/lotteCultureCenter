@@ -82,7 +82,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="차량번호" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" width="160" height="23" maxlength="12" oninput="Div01_Div06_Edit00_oninput"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" width="160" height="23" maxlength="10" oninput="Div01_Div06_Edit00_oninput"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -222,6 +222,9 @@ this.Div01_Div06_Edit00_oninput = function(obj:nexacro.Edit,e:nexacro.InputEvent
 {
 	if(obj.value != "")
 	{
+		obj.set_value(nexacro.trim(obj.value));
+		obj.updateToDataset();
+ 		this.ds_info.setColumn(0, "carNoVal", nexacro.trim(obj.value));
 		this.ds_info.setColumn(0, "carNoClctAgrYn", "Y");
 	}
 };

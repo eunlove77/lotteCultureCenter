@@ -10,7 +10,7 @@
               <Div id="Div00" taborder="4" left="0" top="32" width="270" height="260">
                 <Layouts>
                   <Layout>
-                    <ImageViewer id="ImageViewer00" taborder="0" text="jpg, jpeg, gif, png 파일만 가능합니다.&#13;&#10;용량 제한은 200kb 이하입니다." left="18" top="0" width="215" stretch="fixaspectratio" bottom="0" cssclass="img_WF_LibThu"/>
+                    <ImageViewer id="ImageViewer00" taborder="0" text="jpg, jpeg, gif, png 파일만 가능합니다.&#13;&#10;용량 제한은 10mb 이하입니다." left="18" top="0" width="215" stretch="fixaspectratio" bottom="0" cssclass="img_WF_LibThu"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -191,7 +191,7 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div_b" taborder="0" text="Div01" left="0" top="Div_p:0" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="" height="30">
+              <Div id="Div_b" taborder="0" text="Div01" left="0" top="Div_p:0" cssclass="div_WF_CompWrap" right="0" formscrolltype="none" minwidth="330" maxwidth="" height="0">
                 <Layouts>
                   <Layout>
                     <Div id="Div00" taborder="0" text="Div01" left="0" top="0" right="0" bottom="0">
@@ -213,7 +213,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="계좌정보" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                          <Edit id="dpstNm" taborder="1" left="260" top="5" maxlength="10" displaynulltext="예금주" bottom="5" inputfilter="none,symbol,sign,space,dot,comma" width="150"/>
+                          <Edit id="dpstNm" taborder="1" left="260" top="5" maxlength="50" displaynulltext="예금주" bottom="5" inputfilter="none,symbol,sign,space,dot,comma" width="150"/>
                           <Edit id="accNo" taborder="3" left="dpstNm:10" top="5" inputtype="digit" maxlength="14" displaynulltext="계좌번호 ('-'없이 입력하세요)" right="32.51%" bottom="5" minwidth="390" maxwidth=""/>
                         </Layout>
                       </Layouts>
@@ -238,7 +238,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="1" left="0" top="0" width="80" height="21" text="관리자 메모"/>
-              <Button id="btnMemoLog" text="이력" left="93" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div02_btnMemoLog_onclick" taborder="0"/>
+              <Button id="btnMemoLog" text="이력" left="93" top="-3" width="100" height="27" cssclass="btn_WF_Medium" onclick="Div02_btnMemoLog_onclick" taborder="0" visible="false"/>
               <TextArea id="memoCont" taborder="2" left="0" top="35" right="0" maxlength="250" bottom="39"/>
             </Layout>
           </Layouts>
@@ -266,7 +266,7 @@
                       <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
                       <Cell col="1" text="요청사항"/>
                       <Cell col="2" text="요청일시"/>
-                      <Cell col="3" text="첨부파일"/>
+                      <Cell col="3" text="대표이미지"/>
                       <Cell col="4" text="처리상태"/>
                     </Band>
                     <Band id="body">
@@ -588,7 +588,7 @@ this.application = null;
 this.domain = "";
 this.rowcount = 0;
 this.fileExtn = "jpg,jpeg,gif,png"; //확장자
-this.fileMaxSize= 200; 	//최대 파일크기 200Kb
+this.fileMaxSize= 10; 	//최대 파일크기 10Mb
 this.age = 0;
 this.menuSeq = 0;
 
@@ -655,6 +655,12 @@ this.set_teacher_info = function(){
 	this.set_teacher_basic_info(tcTpCd);	//기본정보
 	
 	this.set_teacher_pay_info(tcTpCd);	//지급정보
+	
+	//메모 이력버튼 visible
+	var memoCnt = this.ds_teacher_info.getColumn(0, "memoCnt");
+	if(memoCnt > 0){
+		this.Div02.form.btnMemoLog.set_visible(true);
+	}
 	
 	this.set_modify_request_info();	//수정요청
 	
@@ -1126,8 +1132,8 @@ this.atch_file_onsuccess = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFi
 			obj.getFileSize();
 			break;
 		case 9:
-			if(this.fileMaxSize * 1024 < e.filesize){
-				alert("첨부파일은 최대 " + this.fileMaxSize + "Kb까지 등록 가능합니다.");
+			if(this.fileMaxSize * 1024 * 1024 < e.filesize){
+				alert("첨부파일은 최대 " + this.fileMaxSize + "Mb까지 등록 가능합니다.");
 			} else {
 				var imageViewer = this.Div01.form.Div00.form.ImageViewer00;
 				var reader = new FileReader();
@@ -1412,33 +1418,17 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(confirm("강사정보를 저장 하시겠습니까?")){
 		this.submit_teacher_info();
 	}
-  else{
-    //저장 취소시 입력값 전혀 없을 경우 삭제된 로우 복구
-    var dsArr = [this.ds_tcedu_list ,this.ds_tchist_list ,this.ds_tcawrd_list ,this.ds_tcathctf_list];
-    for(var ds of dsArr){
-      if(ds.rowcount == 0){
-        this.restore_grid_row(ds);
-      }
-    }
-  }
 };
-this.restore_grid_row = function(ds){
-  ds.addRow();
-  ds.setColumn(0, 'tcCdNo', this.ds_teacher_info.getColumn(0, "tcCdNo"));
-  if(ds.name == "ds_tcedu_list"){
-    this.add_grid_edu_row(0);
-  }
-}
 
 this.submit_teacher_info = function(){
 
 	var inData = "";
 	inData += "teacherDtl=ds_teacher_info";
 	inData += " memoDtl=ds_memo";
-	inData += " tceduList=ds_tcedu_list";
-	inData += " tchistList=ds_tchist_list";
-	inData += " tcawrdList=ds_tcawrd_list";
-	inData += " tcathctfList=ds_tcathctf_list";
+	inData += " tceduList=ds_trans_edu";
+	inData += " tchistList=ds_trans_hist";
+	inData += " tcawrdList=ds_trans_awrd";
+	inData += " tcathctfList=ds_trans_athctf";
 	
 	var tranObj = {};
 	tranObj.strSvcId	= "update_teacher";
@@ -1632,28 +1622,28 @@ this.validate_pay_info = function(){
 //학력
 this.validate_teacher_edu = function(type){
 	var vali_arr= [['schlClCd', '학교구분을'], ['grdtClCd', '졸업구분을'], ['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
-	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tcedu_list", this.ds_trans_edu, vali_arr, type);
 }
 //경력
 this.validate_teacher_hist = function(type){
 	var vali_arr= [['histStDt', '기간을'], ['histEndDt', '기간을'], ['histPlcNm', '기관명을']]
-	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tchist_list", this.ds_trans_hist, vali_arr, type);
 }
 //수상
 this.validate_teacher_awrd = function(type){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '수상내역을']]
-	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tcawrd_list", this.ds_trans_awrd, vali_arr, type);
 }
 //자격
 this.validate_teacher_athctf = function(type){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '자격증명을']];
-	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tcathctf_list", this.ds_trans_athctf, vali_arr, type);
 }
 
-this.validate_teacher_ds_list = function(ds, vali_arr, type){
+this.validate_teacher_ds_list = function(dsNm, transDs, vali_arr, type){
 	var isInput = false;
 	var msg = "";
-	var ds = this[ds];
+	var ds = this[dsNm];
 	for(var i = 0; i < ds.rowcount; i++){
 		for(var vali of vali_arr){
 			if(vali && (this.gfn_nvl(ds.getColumn(i, vali[0])) == "" || nexacro.trim(ds.getColumn(i, vali[0])) == "")){
@@ -1690,9 +1680,17 @@ this.validate_teacher_ds_list = function(ds, vali_arr, type){
 		//항목 추가시 입력값 없다면
 		alert(vali_arr[0][1] + " 입력하세요.");
 		return false;
-	} else if(ds.rowcount == 1 && !isInput) {
+	} else if(type == "addRow"){
+		return true;
+	}
+	
+	//학력 및 경력정보 깜빡임 수정
+	transDs.clearData();
+	transDs.copyData(ds);
+	
+	if(ds.rowcount == 1 && !isInput) {
 		//저장시 입력값 전혀 없을 경우 로우 삭제
-		ds.deleteRow(0);
+		transDs.deleteRow(0);
 	}
 	
 	return true;
@@ -1876,6 +1874,7 @@ this.Div01_Div05_Div00_Edit00_00_onchanged = function(obj:nexacro.Edit,e:nexacro
           <Column id="rgprNm" type="STRING" size="256"/>
           <Column id="mdfId" type="STRING" size="256"/>
           <Column id="mdfNm" type="STRING" size="256"/>
+          <Column id="memoCnt" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -2245,6 +2244,10 @@ this.Div01_Div05_Div00_Edit00_00_onchanged = function(obj:nexacro.Edit,e:nexacro
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_trans_edu"/>
+      <Dataset id="ds_trans_hist"/>
+      <Dataset id="ds_trans_awrd"/>
+      <Dataset id="ds_trans_athctf"/>
     </Objects>
     <Bind>
       <BindItem id="item2" compid="Div01.form.Div02.form.Div00.form.tcNm" propid="value" datasetid="ds_teacher_info" columnid="tcNm"/>

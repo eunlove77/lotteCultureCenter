@@ -94,7 +94,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" onchanged="Div01_Div06_searchQuery_onchanged"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" onkeydown="fn_searchEnter"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div06_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div06_btnInit_onclick"/>
                   </Layout>
@@ -139,7 +139,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -147,9 +147,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="49.99%"/>
-                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.17%" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit01_00" taborder="3" left="Edit01:5" top="5" height="21" right="2.70%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="49.99%" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.17%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5" top="5" height="21" right="2.70%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -188,7 +188,7 @@
         <Div id="Div02" taborder="4" text="Div02" left="10" top="235" right="10" minwidth="680" maxwidth="" bottom="50">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="10" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="10" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과 없음">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -486,9 +486,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 };
-this.Div01_Div06_searchQuery_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+
+this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
-	
+	if(e.keycode == 13)
+	{
+		this.fn_list()
+	}
 };
 ]]></Script>
     <Objects>
