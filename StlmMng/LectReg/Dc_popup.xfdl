@@ -401,7 +401,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				if(this.addDcAmt > 0){
 					this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);				
 					this.Div00.form.Div00.form.Div05.form.Radio00.set_value("Y");
-					this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);
 					this.Div00.form.Div00.form.Div05.form.editAdd.set_value(this.gfn_setComma(this.classList.getColumn(0, "optnDcAmt")));
 				}else{
 					this.Div00.form.Div00.form.Div05.form.Radio00.set_value("N");
@@ -521,7 +520,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.Div00.form.Div00.form.Div05.form.Static04.set_top(12);
 		}
 	}else{
-		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
+		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value(0);
 		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
 		
 		// 추가금액이 있다면 추가금액 할인 세팅
@@ -530,6 +529,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.Div00.form.Div00.form.Div05.form.Static02.set_visible(true);
 			this.Div00.form.Div00.form.Div05.form.Radio00.set_visible(true);
 			this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);
+			this.Div00.form.Div00.form.Div05.form.editAdd.set_value(0);
 			
 			this.Div00.form.Div00.form.Div05.form.Static03.set_top(24);
 			this.Div00.form.Div00.form.Div05.form.editAdd.set_top(25);
@@ -700,7 +700,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		if(Number(num) > this.lectAmt){
 			alert("강좌료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
 			this.oflnDcAmt = 0;
-			obj.set_value("");
+			obj.set_value(0);
 			obj.setFocus();
 			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 		}else{
@@ -712,7 +712,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		if(Number(num) > this.optnAmt){
 			alert("재료비/대여료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
 			this.addDcAmt = 0;
-			obj.set_value("");
+			obj.set_value(0);
 			obj.setFocus();
 			this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 		}else{
@@ -727,7 +727,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-	if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+	if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == 0){
 		alert("할인금액을 입력하세요.");
 		obj.set_value("");
 		return;
@@ -901,7 +901,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-	if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+	if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != "" && this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value == 0){
 		alert("할인금액을 입력하세요.");
 		obj.set_value("");
 		return;
@@ -974,6 +974,7 @@ this.Div00_Div05_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.It
 	
 	if(obj.value == "Y"){
 		this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);
+		this.Div00.form.Div00.form.Div05.form.editAdd.set_value(0);
 		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 	}else if(obj.value == "N"){
 		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
@@ -996,13 +997,13 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 // 선택 버튼
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(!this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.readonly && this.gfn_nvl(this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value) == ""){
+	if(!this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.readonly && this.gfn_nvl(this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value) == "0"){
 		alert("할인금액을 입력하세요.");
 		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.setFocus();
 		return;
 	}
 	
-	if(!this.Div00.form.Div00.form.Div05.form.editAdd.readonly && this.gfn_nvl(this.Div00.form.Div00.form.Div05.form.editAdd.value) == ""){
+	if(!this.Div00.form.Div00.form.Div05.form.editAdd.readonly && this.gfn_nvl(this.Div00.form.Div00.form.Div05.form.editAdd.value) == "0"){
 		alert("할인금액을 입력하세요.");
 		this.Div00.form.Div00.form.Div05.form.editAdd.setFocus();
 		return;

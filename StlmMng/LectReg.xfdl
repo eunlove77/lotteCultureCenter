@@ -912,13 +912,24 @@ this.Div00_Div04_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 // 금액필드 입력 포맷
 this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 {
+	obj.value = this.gfn_nvl(obj.value);
 	var num = nexacro.replaceAll(obj.value.toString(), ",", "");
 	if(num.startsWith("0") && num.length > 1){
 		num = num.substring(1);
 	}
 	
-	if(this.gsStlmAmt < Number(num)) num = this.gsStlmAmt.toString();
+	// 단위 : 무조건 십의자리
+	if(this.gfn_isNull(num))
+	{
+		num = 0
+	}
+	else if(num % 10 != 0)
+	{
+		num *= 10
+	}
+	
 	obj.set_value(this.gfn_setComma(num));
+	obj.setCaretPos(obj.value.length-1);
 };
 
 // 결제 버튼 클릭

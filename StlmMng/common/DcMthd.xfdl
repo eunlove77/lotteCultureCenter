@@ -344,7 +344,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.Div00.form.Div05.form.Static04.set_top(12);
 		}
 	}else{
-		this.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
+		this.Div00.form.Div04.form.Div00.form.editOfln.set_value(0);
 		this.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
 		
 		// 추가금액이 있다면 추가금액 할인 세팅
@@ -353,6 +353,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.Div00.form.Div05.form.Static02.set_visible(true);
 			this.Div00.form.Div05.form.Radio00.set_visible(true);
 			this.Div00.form.Div05.form.editAdd.set_readonly(false);
+			this.Div00.form.Div05.form.editAdd.set_value(0);
 			
 			this.Div00.form.Div05.form.Static03.set_top(24);
 			this.Div00.form.Div05.form.editAdd.set_top(25);
@@ -403,7 +404,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 		}
 // 	}
 	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == "0"){
 		alert("할인금액을 입력하세요.");
 		obj.set_value("");
 		return;
@@ -667,7 +668,7 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 		}
 // 	}
 	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == "0"){
 		alert("할인금액을 입력하세요.");
 		obj.set_value("");
 		return;
@@ -936,6 +937,7 @@ this.Div00_Div05_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.It
 	//lectAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt;
 	//gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt;
 	if(obj.value == "Y"){
+		this.Div00.form.Div05.form.editAdd.set_value(0);
 		this.Div00.form.Div05.form.editAdd.set_readonly(false);
 	}else if(obj.value == "N"){
 		this.Div00.form.Div05.form.editAdd.set_value("");
