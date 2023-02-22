@@ -42,12 +42,12 @@
                 <Cell col="1" text="전송건수"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:sendType"/>
-                <Cell col="1" text="bind:sendCnt"/>
+                <Cell text="bind:msgTpNm"/>
+                <Cell col="1" text="bind:cnt"/>
               </Band>
               <Band id="summary">
                 <Cell text="소계"/>
-                <Cell col="1" expr="dataset.getSum('parseInt(sendCnt)')"/>
+                <Cell col="1" expr="dataset.getSum('parseInt(cnt)')"/>
               </Band>
             </Format>
           </Formats>
@@ -70,9 +70,9 @@
                 <Cell col="2" text="전송건수"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:brchNm"/>
-                <Cell col="1" text="bind:sendType"/>
-                <Cell col="2" text="bind:sendCnt"/>
+                <Cell text="bind:strNm" suppress="1"/>
+                <Cell col="1" text="bind:msgTpNm"/>
+                <Cell col="2" text="bind:cnt"/>
               </Band>
             </Format>
           </Formats>
@@ -112,21 +112,53 @@ this.alertTalkSendStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 
 this.Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_searchValueInit();
-};
-
-/**************************************************************************
- * 사용자 FUNCTION 영역
- **************************************************************************/
-
-this.fn_searchValueInit = function(){
-	
 	var objCalendar = this.Div01.form.Div00.form;
 	
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
 	
+	this.ds_search.setColumn(0, "strCd", this.Div02.form.ComboSpot.value);
 	
+	if(this.gfn_isNull(objCalendar.strtDtm.value) || this.gfn_isNull(objCalendar.endDtm.value)){
+		this.alert("기간을 입력해주세요.");
+	}else{
+		this.fn_list();	
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+this.fn_list = function(){
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stat/alertTalkSendStat.do",
+		inData : "search=ds_search",
+		outData : "ds_brch_stat=output1 ds_all_stat=output2",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true		
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":	
+			
+		break; 		
+	}
 }
 ]]></Script>
     <Objects>
@@ -134,8 +166,11 @@ this.fn_searchValueInit = function(){
         <ColumnInfo>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="strCd" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
       <Dataset id="ds_brch_cd">
         <ColumnInfo>
@@ -145,29 +180,14 @@ this.fn_searchValueInit = function(){
       </Dataset>
       <Dataset id="ds_all_stat">
         <ColumnInfo>
-          <Column id="sendType" type="STRING" size="256"/>
-          <Column id="sendCnt" type="STRING" size="256"/>
+          <Column id="msgTpNm" type="STRING" size="256"/>
+          <Column id="cnt" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="sendType">알림톡</Col>
-            <Col id="sendCnt">10</Col>
-          </Row>
-          <Row>
-            <Col id="sendType">LMS</Col>
-            <Col id="sendCnt">20</Col>
-          </Row>
-          <Row>
-            <Col id="sendType">친구톡</Col>
-            <Col id="sendCnt">30</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_brch_stat">
         <ColumnInfo>
-          <Column id="brchNm" type="STRING" size="256"/>
-          <Column id="sendType" type="STRING" size="256"/>
-          <Column id="sendCnt" type="STRING" size="256"/>
+          <Column id="msgTpNm" type="STRING" size="256"/>
+          <Column id="cnt" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
