@@ -413,11 +413,15 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	
 	// 강좌코드, 강좌명
 	if(e.row != null && (e.cell == "9" || e.cell == "10")){
+		
+		var pblPmprcustParntBrchCd = new String(this.gfn_nvl(this.ds_stlm_cmplt_list.getColumn(e.row, "pblPmprcustParntBrchCd"))); 
+		var pblPmprcustParntLectCd = new String(this.gfn_nvl(this.ds_stlm_cmplt_list.getColumn(e.row, "pblPmprcustParntLectCd"))); 
+		
 		var arrArguments = {
-			brchCd : this.ds_stlm_cmplt_list.getColumn(e.row, "brchCd"),
+			brchCd : pblPmprcustParntBrchCd == "" ? this.ds_stlm_cmplt_list.getColumn(e.row, "brchCd") : pblPmprcustParntBrchCd,
 			yy : this.ds_stlm_cmplt_list.getColumn(e.row, "yy"),
 			lectSmsterCd : this.ds_stlm_cmplt_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_stlm_cmplt_list.getColumn(e.row, "lectCd"),
+			lectCd : pblPmprcustParntLectCd == "" ? this.ds_stlm_cmplt_list.getColumn(e.row, "lectCd") : pblPmprcustParntLectCd,
 			menuSeq : this.getOwnerFrame().param.MENU_ID
 		}
 		
@@ -519,6 +523,8 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="atlctStlmSubChnlCdNm" type="STRING" size="256"/>
           <Column id="atlctStatCd" type="STRING" size="256"/>
           <Column id="atlctStatCdNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
