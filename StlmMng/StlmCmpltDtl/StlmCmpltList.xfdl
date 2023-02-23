@@ -444,7 +444,7 @@ this.popupCallBack = function(sFormId, sArg)
 // 그리드 실수강자, 결제일자 수정이벤트
 this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 {
-	if(e.cell == "2"){
+	if(e.cell == "3"){
 		// 실수강자 변경
 		this.targetColumn = "fmlyCd";
 		this.oldValue = this.ds_stlm_cmplt_list.getColumn(e.row, this.targetColumn);
@@ -467,7 +467,7 @@ this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			this.ds_stlm_cmplt_list.set_enableevent(true);
 			return;
 		}
-	}else if(e.cell == "29"){
+	}else if(e.cell == "31"){
 		// 결제일시 변경
 		this.targetColumn = "stlmDtm";
 		this.oldValue = this.ds_stlm_cmplt_list.getColumn(e.row, this.targetColumn);
@@ -513,7 +513,14 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
+		if(svcID == "updateStlmCmpltList"){
+			if(errorCode != -1){
+				this.alert(errorMsg);
+			}
+		}else{
+			this.alert(errorCode+"\n"+errorMsg);
+		}
+		
 		this.ds_stlm_cmplt_list.set_enableevent(false);
 		this.ds_stlm_cmplt_list.setColumn(this.ds_stlm_cmplt_list.rowposition, this.targetColumn, this.oldValue);
 		this.ds_stlm_cmplt_list.set_enableevent(true);
@@ -722,6 +729,7 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
           <Column id="atlctStlmSubChnlCdNm" type="STRING" size="256"/>
           <Column id="atlctStatCd" type="STRING" size="256"/>
           <Column id="atlctStatCdNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
