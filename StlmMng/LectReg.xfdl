@@ -303,6 +303,9 @@ this.brchCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
 
+// 중복클릭방지
+this.submitFlag = false;
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -935,6 +938,11 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 // 결제 버튼 클릭
 this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.submitFlag){
+		return;
+	}
+	this.submitFlag = true;
+	
 	if(this.Div00.form.Div04.form.CheckBox00.value == 0){
 		alert("환불 규정확인을 받아야 결제가 가능합니다. 환불규정 확인 후 서명을 해주세요.");
 		return;
