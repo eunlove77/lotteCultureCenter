@@ -143,14 +143,14 @@
                     <Band id="body">
                       <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox" suppress="2" suppressalign="middle"/>
                       <Cell col="1" color="blue" cursor="pointer" textDecoration="underline" suppress="1" text="bind:fgftAppNo" suppressalign="middle"/>
-                      <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="bind:fgftNm" suppressalign="middle" suppress="2"/>
+                      <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" text="bind:fgftNm" suppressalign="middle" suppress="2"/>
                       <Cell col="3" text="bind:appChnlNm" suppressalign="middle" suppress="2"/>
                       <Cell col="4" color="#666666" text="bind:appDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" displaytype="date" suppressalign="middle" suppress="2"/>
-                      <Cell col="5" color="#666666" displaytype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'none' : 'buttoncontrol'" cssclass="gridBtn_Medium" expr="wdwYn == 'Y' ? '-' : (recpYn == 'Y' ? 'O' : '지급하기')" suppress="2" suppressalign="middle"/>
+                      <Cell col="5" color="#666666" displaytype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'none' : 'buttoncontrol'" cssclass="gridBtn_Medium" expr="recpYn == 'Y' ? 'O' : (wdwYn == 'Y' ? '-' : '지급하기')" suppress="2" suppressalign="middle"/>
                       <Cell col="6" expr="ppayChrgprId ? ppayChrgprNm + '(' +ppayChrgprId+ ')' : ''" suppress="2" suppressalign="middle"/>
                       <Cell col="7" text="bind:recpDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none" suppressalign="middle" suppress="2"/>
                       <Cell col="8" color="blue" cursor="pointer" textDecoration="underline" expr="appMbrNm + '(' +appMbrId+ ')'" suppress="2" suppressalign="middle"/>
-                      <Cell col="9" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" displaytype="normal" text="bind:hpNo" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover" suppressalign="middle" suppress="2"/>
+                      <Cell col="9" displaytype="normal" text="bind:hpNo" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover" suppressalign="middle" suppress="2"/>
                       <Cell col="10" text="bind:atlctRsvNo" color="blue" cursor="pointer" textDecoration="underline"/>
                       <Cell col="11" text="bind:lectCd"/>
                       <Cell col="12" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
@@ -166,7 +166,7 @@
               <Div id="Div00" taborder="2" text="Div00" top="0" height="30" right="10" width="375">
                 <Layouts>
                   <Layout>
-                    <Button id="btnDel" taborder="1" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" width="100" right="0"/>
+                    <Button id="btnDel" taborder="1" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" width="100" right="0" onclick="Div01_Div00_btnDel_onclick"/>
                     <Button id="btnCancel" taborder="0" text="사은품 취소/회수" top="0" height="30" cssclass="btn_WF_Medium" right="btnDel:10" width="120" onclick="fn_cancel_btn"/>
                   </Layout>
                 </Layouts>
@@ -174,6 +174,70 @@
             </Layout>
           </Layouts>
         </Div>
+        <Grid id="Grid_Excel" taborder="2" left="10" top="730" binddataset="ds_app_excel" autofittype="none" useselcolor="true" cellsizingtype="col" visible="false" right="10" height="50">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="70"/>
+                <Column size="130"/>
+                <Column size="100"/>
+                <Column size="150"/>
+                <Column size="130"/>
+                <Column size="150"/>
+                <Column size="120"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="150"/>
+                <Column size="90"/>
+                <Column size="120"/>
+                <Column size="130"/>
+              </Columns>
+              <Rows>
+                <Row size="40" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="사은품 신청번호"/>
+                <Cell col="1" text="신청 사은품"/>
+                <Cell col="2" text="신청채널"/>
+                <Cell col="3" text="사은품 신청일"/>
+                <Cell col="4" text="사은품 수령여부"/>
+                <Cell col="5" text="사은품 지급담당자"/>
+                <Cell col="6" text="사은품 수령일"/>
+                <Cell col="7" text="신청자 이름(ID)"/>
+                <Cell col="8" text="휴대번호"/>
+                <Cell col="9" text="주문번호"/>
+                <Cell col="10" text="강좌코드"/>
+                <Cell col="11" text="지점명"/>
+                <Cell col="12" text="강좌명"/>
+                <Cell col="13" text="취소/회수여부"/>
+                <Cell col="14" text="취소/회수 담당자"/>
+                <Cell col="15" text="취소/회수일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:fgftAppNo"/>
+                <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" text="bind:fgftNm"/>
+                <Cell col="2" text="bind:appChnlNm"/>
+                <Cell col="3" color="#666666" text="bind:appDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" displaytype="date"/>
+                <Cell col="4" color="#666666" displaytype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'none' : 'buttoncontrol'" cssclass="gridBtn_Medium" expr="recpYn == 'Y' ? 'O' : (wdwYn == 'Y' ? '-' : 'N')"/>
+                <Cell col="5" expr="ppayChrgprId ? ppayChrgprNm + '(' +ppayChrgprId+ ')' : ''"/>
+                <Cell col="6" text="bind:recpDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
+                <Cell col="7" expr="appMbrNm + '(' +appMbrId+ ')'"/>
+                <Cell col="8" displaytype="normal" text="bind:hpNo" tooltiptext="bind:hpNo"/>
+                <Cell col="9" text="bind:atlctRsvNo"/>
+                <Cell col="10" text="bind:lectCd"/>
+                <Cell col="11" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="12" text="bind:lectNm"/>
+                <Cell col="13" text="expr:wdwYn == 'Y' ? 'O' : 'N'" displaytype="expr:wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:wdwYn == 'Y' ? 'none' : 'button'" cssclass="gridBtn_Weak"/>
+                <Cell col="14" expr="wdwYn == 'Y' &amp;&amp; wdwChrgprId  ? wdwChrgprNm +'(' +wdwChrgprId + ')' : ''"/>
+                <Cell col="15" text="bind:wdwDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -191,6 +255,9 @@ this.menuId = this.parent.parent.parent.parent.parent.param.MENU_ID;
 this.prmtnMst = this.parent.parent.parent;
 this.prmtnSeqno = "";
 this.popCnt = 0;
+this.logId = "";
+this.excelImportExport = "";
+this.excelFileName = "프로모션_신청목록_";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -200,6 +267,7 @@ this.GiftStatus_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::promotion/";
+	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
 	if(this.parent.parent.parent.parent.prmtnSeqno != ""){
 		this.prmtnSeqno = this.parent.parent.parent.parent.prmtnSeqno;
@@ -471,6 +539,37 @@ this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 		this.fn_detail("Y");
 	}
 };
+
+this.Div01_Div00_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//if(this.gfn_btn_auth(this.menuId, "accXlsDwldYn")) return;
+
+	var list = this.ds_app_list;
+	var excelList = this.ds_app_excel;
+	var chkCnt = 0;
+	
+	excelList.deleteAll();
+	
+	for(var i=0; i<list.getRowCount(); i++)
+	{
+		if(list.checkarray[i] == 1)
+		{
+			//체크행 엑셀데이터로 복사
+			excelList.addRow();
+			excelList.copyRow(chkCnt, list, i);
+			chkCnt++;
+		}
+	}
+	
+	if(chkCnt == 0)
+	{
+		alert("항목을 선택하세요.");
+	}
+	else
+	{
+		this.gfn_showModal("popupModal", { logId : this.logId }, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_search">
@@ -492,7 +591,7 @@ this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
             <Col id="dateTypeCd">1</Col>
             <Col id="appChnlCd"/>
             <Col id="f"/>
-            <Col id="korNm"></Col>
+            <Col id="korNm"/>
           </Row>
         </Rows>
       </Dataset>
@@ -522,6 +621,31 @@ this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_chnl_cd"/>
+      <Dataset id="ds_app_excel">
+        <ColumnInfo>
+          <Column id="fgftAppNo" type="STRING" size="256"/>
+          <Column id="fgftSeqno" type="STRING" size="256"/>
+          <Column id="appChnlCd" type="STRING" size="256"/>
+          <Column id="appChnlNm" type="STRING" size="256"/>
+          <Column id="fgftNm" type="STRING" size="256"/>
+          <Column id="appMbrId" type="STRING" size="256"/>
+          <Column id="appMbrNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="appDtm" type="STRING" size="256"/>
+          <Column id="recpYn" type="STRING" size="256"/>
+          <Column id="ppayChrgprId" type="STRING" size="256"/>
+          <Column id="ppayChrgprNm" type="STRING" size="256"/>
+          <Column id="recpDtm" type="STRING" size="256"/>
+          <Column id="atlctRsvNo" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="wdwYn" type="STRING" size="256"/>
+          <Column id="wdwChrgprId" type="STRING" size="256"/>
+          <Column id="wdwChrgprNm" type="STRING" size="256"/>
+          <Column id="wdwDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.ComboDateType" propid="value" datasetid="ds_search" columnid="dateTypeCd"/>

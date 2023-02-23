@@ -1027,6 +1027,25 @@ this.extngMbrRceptPrdEndDt = "";
 
 this.updateCode = "";
 
+
+this.initDtl = function()
+{
+	this.ds_class_dtl.clearData();
+	this.ds_class_dtl.addRow();
+	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
+	this.ds_class_dtl.setColumn(0, "yy", this.yy);
+	this.ds_class_dtl.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
+	this.ds_class_dtl.setColumn(0, "lectCd", this.lectCd);
+	
+	this.fn_class_dtl();		
+
+	//화면초기화
+	this.init();
+	// 코드 데이터
+	this.fn_code_list();
+	this.Div00.form.Div00.form.Static00.setFocus();
+}
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -1059,12 +1078,6 @@ this.ClassWrite_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.init();
 	// 코드 데이터
 	this.fn_code_list();
-	
-	//공동모객일시 유형 잠금
-	if(this.ds_class_dtl.getColumn(0, "lectTpCd") == "04")
-	{
-		this.Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00.set_readonly(true);
-	}
 };
 
 /**************************************************************************
@@ -1355,7 +1368,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "updateClass":
-			
 			if(this.updateCode == "01") 
 			{
 				this.alert("저장 되었습니다.");		
@@ -1379,20 +1391,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			else
 			{
 				this.alert("다시 시도해주세요.");
-				
-				this.ds_class_dtl.clearData();
-				this.ds_class_dtl.addRow();
-				this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
-				this.ds_class_dtl.setColumn(0, "yy", this.yy);
-				this.ds_class_dtl.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
-				this.ds_class_dtl.setColumn(0, "lectCd", this.lectCd);
-				
-				this.fn_class_dtl();			
-				//화면초기화
-				this.init();
-				// 코드 데이터
-				this.fn_code_list();
-				this.Div00.form.Div00.form.Static00.setFocus();
+				this.initDtl();
 			}
 		break;
 		
@@ -1467,6 +1466,12 @@ this.fn_class_dtl = function()
 
 	this.gfn_transaction(tranObj);
 	this.ds_class_list.setColumn(0, "lectRpsntImgFileId", this.ds_class_dtl.getColumn(0, "lectRpsntImgFileId"));
+	
+	//공동모객일시 유형 잠금
+	if(this.ds_class_dtl.getColumn(0, "lectTpCd") == "04")
+	{
+		this.Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00.set_readonly(true);
+	}
 	
 	if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
 	{
@@ -2802,20 +2807,7 @@ this.updateClassApvlStat = function(stat)
 		alert("반려 되었습니다.");
 	}
 	
-	this.ds_class_dtl.clearData();
-	this.ds_class_dtl.addRow();
-	this.ds_class_dtl.setColumn(0, "brchCd", this.brchCd);
-	this.ds_class_dtl.setColumn(0, "yy", this.yy);
-	this.ds_class_dtl.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
-	this.ds_class_dtl.setColumn(0, "lectCd", this.lectCd);
-	
-	this.fn_class_dtl();		
-
-	//화면초기화
-	this.init();
-	// 코드 데이터
-	this.fn_code_list();
-	this.Div00.form.Div00.form.Static00.setFocus();
+	this.initDtl();
 	this.parent.parent.parent.opener.components[0].form.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
 }
 
