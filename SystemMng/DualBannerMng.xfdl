@@ -15,8 +15,8 @@
                 <Column size="470"/>
                 <Column size="214"/>
                 <Column size="124"/>
-                <Column size="0"/>
-                <Column size="0"/>
+                <Column size="100"/>
+                <Column size="100"/>
               </Columns>
               <Rows>
                 <Row size="35" band="head"/>
@@ -190,7 +190,8 @@ this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	var headTitle = obj.getCellProperty("Head", e.col, "text");
-	var seqno = null
+	var seqno = null;
+	var tit = this.dualBannerDs.getColumn(e.row , "tit");
 	var rowIdx;
 	if(this.dualBannerDs.getColumn(e.row, "seqno")){
 		seqno = this.dualBannerDs.getColumn(e.row , "seqno");
@@ -204,6 +205,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	if(headTitle == "이미지" && e.clickitem == "control"){
 		var oArg = {
 			seqno : seqno,
+			tit   : tit,
 			rowIdx : e.row,
 			tempFleNo : tempFleNo,
 			dataset : this.dualBannerDs,

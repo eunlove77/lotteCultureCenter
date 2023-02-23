@@ -10,7 +10,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="100" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
+              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="160" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
             </Layout>
           </Layouts>
         </Div>
@@ -19,7 +19,7 @@
             <Layout>
               <Static id="Static00" taborder="0" text="학기 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
               <Combo id="yy" taborder="1" text="Combo00" left="116" top="5" width="100" height="20"/>
-              <Combo id="Combo00" taborder="2" text="학기" left="221" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+              <Combo id="smsterCd" taborder="2" text="학기" left="221" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
             </Layout>
           </Layouts>
         </Div>
@@ -70,9 +70,9 @@
                 <Cell col="3" text="수강 고객수"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:newMemType"/>
+                <Cell text="bind:newMemType" expr="newMemType == 'GB1'  ?  '첫회원' : '신규회원'"/>
                 <Cell col="1" text="bind:slngAmt"/>
-                <Cell col="2" text="bind:memCnt"/>
+                <Cell col="2" text="bind:mbrCnt"/>
                 <Cell col="3" text="bind:atlctCnt"/>
               </Band>
             </Format>
@@ -102,9 +102,9 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:strNm" suppress="1"/>
-                <Cell col="1" text="bind:newMemType"/>
+                <Cell col="1" text="bind:newMemType" expr="newMemType == 'GB1' ? '첫회원' : '신규회원'"/>
                 <Cell col="2" text="bind:slngAmt"/>
-                <Cell col="3" text="bind:memCnt"/>
+                <Cell col="3" text="bind:mbrCnt"/>
                 <Cell col="4" text="bind:atlctCnt"/>
               </Band>
             </Format>
@@ -115,10 +115,15 @@
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
+          <Column id="year" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="strCd" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
       <Dataset id="ds_brch_cd">
         <ColumnInfo>
@@ -157,48 +162,19 @@
         <ColumnInfo>
           <Column id="newMemType" type="STRING" size="256"/>
           <Column id="slngAmt" type="STRING" size="256"/>
-          <Column id="memCnt" type="STRING" size="256"/>
+          <Column id="mbrCnt" type="STRING" size="256"/>
           <Column id="atlctCnt" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="newMemType">첫회원 수강</Col>
-            <Col id="slngAmt">10000</Col>
-            <Col id="memCnt">10</Col>
-            <Col id="atlctCnt">30</Col>
-          </Row>
-          <Row>
-            <Col id="newMemType">신규회원</Col>
-            <Col id="slngAmt">6000</Col>
-            <Col id="memCnt">20</Col>
-            <Col id="atlctCnt">40</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
+          <Column id="strCd" type="STRING" size="256"/>
           <Column id="strNm" type="STRING" size="256"/>
           <Column id="newMemType" type="STRING" size="256"/>
           <Column id="slngAmt" type="STRING" size="256"/>
-          <Column id="memCnt" type="STRING" size="256"/>
+          <Column id="mbrCnt" type="STRING" size="256"/>
           <Column id="atlctCnt" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="strNm">본점</Col>
-            <Col id="newMemType">첫회원 수강</Col>
-            <Col id="slngAmt">1000</Col>
-            <Col id="memCnt">10</Col>
-            <Col id="atlctCnt">5</Col>
-          </Row>
-          <Row>
-            <Col id="strNm">본점</Col>
-            <Col id="newMemType">신규회원</Col>
-            <Col id="slngAmt">2000</Col>
-            <Col id="memCnt">20</Col>
-            <Col id="atlctCnt">10</Col>
-          </Row>
-        </Rows>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -235,6 +211,67 @@ this.newMemStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfn_set_year(this, comboYyObj, endYy, strtYy, "년도", 1);	
 };
+
+this.Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var yy = this.Div02.form.yy.value;
+	var smsterCd = this.Div02.form.smsterCd.value;
+
+	this.ds_search.setColumn(0, "year", yy);
+	this.ds_search.setColumn(0, "lectSmsterCd", smsterCd);
+	this.ds_search.setColumn(0, "strtDtm", this.Div03.form.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", this.Div03.form.endDtm.value);
+	this.ds_search.setColumn(0, "strCd", this.Div01.form.ComboSpot.value);
+	
+	if(this.gfn_isNull(yy)){
+		this.alert("년도를 선택해주세요.");
+	}
+	else if(this.gfn_isNull(smsterCd)){
+		this.alert("학기를 선택해주세요.");
+	}
+	else if(this.gfn_isNull(this.Div03.form.strtDtm.value) || this.gfn_isNull(this.Div03.form.endDtm.value)){
+		this.alert("기간을 입력해주세요.");
+	}else{
+		this.fn_list();	
+	}
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+this.fn_list = function(){
+	
+	var tranObj = {
+		strSvcId : "list",
+		strSvcUrl : this.application.Admin_svc + "::stat/newMemStat.do",
+		inData : "search=ds_search",
+		outData : "ds_list=output1 ds_total=output2",
+		strArg : "",
+		callBackFnc : "fn_callback",
+		isAsync : true		
+	};
+	
+	this.gfn_transaction(tranObj);
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":	
+			
+		break; 		
+	}
+}
+
 ]]></Script>
   </Form>
 </FDL>

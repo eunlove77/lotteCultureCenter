@@ -188,7 +188,7 @@
         <Div id="Div02" taborder="4" text="Div02" left="10" top="235" right="10" minwidth="680" maxwidth="" bottom="50">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="10" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과 없음">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_member_list" autofittype="col" right="0" bottom="10" oncellclick="Div02_Grid00_oncellclick" useselcolor="true" nodatatext="검색결과 없음" oncelldblclick="Div02_Grid00_oncelldblclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -307,7 +307,7 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.Div02.form.Grid00.type = this.type;
 	this.Div02.form.Grid00.redrawExprCell(); 
 	
-	this.fn_init_code();
+	this.fn_init_code();	
 };
 
 /**************************************************************************
@@ -342,8 +342,25 @@ this.fn_init_code = function ()
 	this.ds_join_cd.setColumn(0, "cdNm", "전체");
 }
 
-this.fn_list = function ()
+this.fn_list = function (srchYn)
 {	
+	if(srchYn == "Y")
+	{
+		var korNm = this.ds_search.getColumn(0, "korNm");
+		var hpStNo = this.ds_search.getColumn(0, "hpStNo");
+		var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
+		var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
+		
+		var isKorNm = this.gfn_isNull(korNm);
+		var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
+		
+		if((!isKorNm || !isHpNo) && (((nexacro.trim(korNm)).length < 2) || ((this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)))
+		{
+			alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+			return false;
+		}
+	}	
+
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.baseSvrUrl + "list.do",
@@ -365,22 +382,7 @@ this.fn_list = function ()
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var korNm = this.ds_search.getColumn(0, "korNm");
-	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
-	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
-	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
-	
-	var isKorNm = this.gfn_isNull(korNm);
-	var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
-	
-	if((!isKorNm || !isHpNo) && (((nexacro.trim(korNm)).length < 2) || ((this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)))
-	{
-		alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
-	}
-	else
-	{
-		this.fn_list();
-	}
+	this.fn_list("Y");
 };
 
 /**************************************************************************
@@ -491,8 +493,18 @@ this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
 	if(e.keycode == 13)
 	{
-		this.fn_list()
+		obj.updateToDataset();
+		this.fn_list("Y");
 	}
+};
+
+this.Div02_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{	
+	this.ds_member_chk.addRow();
+	this.ds_member_chk.copyRow(0, this.ds_member_list, e.row);
+	
+	this.callBackFnc(this._this, this.ds_member_chk);
+ 	this.close();
 };
 ]]></Script>
     <Objects>

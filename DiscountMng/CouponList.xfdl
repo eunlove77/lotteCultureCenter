@@ -93,7 +93,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50" onkeydown="fn_searchEnter"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_04_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div00_04_btnInit_onclick"/>
                   </Layout>
@@ -492,6 +492,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 
+};
+
+this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		obj.updateToDataset();
+		this.fn_list();
+	}
 };
 ]]></Script>
     <Objects>

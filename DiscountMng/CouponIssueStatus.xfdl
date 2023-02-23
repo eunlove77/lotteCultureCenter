@@ -61,7 +61,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -69,9 +69,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%"/>
-                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit02" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit02" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -105,7 +105,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" onkeydown="fn_searchEnter"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div00_04_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div01_Div00_04_btnInit_onclick"/>
                   </Layout>
@@ -154,7 +154,7 @@
             <Col id="mbrGrdeCdNm"/>
             <Col id="f">1</Col>
             <Col id="korNm"/>
-            <Col id="mbrGrdeCd"></Col>
+            <Col id="mbrGrdeCd"/>
           </Row>
         </Rows>
       </Dataset>
@@ -250,8 +250,28 @@ this.fn_init_code = function (page)
 	this.gfn_transaction(tranObj);
 };
 
-this.fn_list = function ()
+this.fn_list = function (srchYn)
 {
+	if(this.gfn_btn_auth(this.menuId, "accSrchYn")){return;}
+	if(srchYn == "Y")
+	{
+		var hpStNo = this.ds_search.getColumn(0, "hpStNo");
+		var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
+		var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
+		
+		var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+		var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
+		
+		if(isKorNm != isHpNo)
+		{
+			if((nexacro.trim(this.ds_search.getColumn(0, "korNm"))).length < 2 || (this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)
+			{
+				alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+				return false;
+			}
+		}
+	}
+	
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.baseSvrUrl + "issueList.do",
@@ -262,7 +282,6 @@ this.fn_list = function ()
 		menuSeq : this.menuId,
 		isAsync : true
 	}
-	if(this.gfn_btn_auth(this.menuId, "accSrchYn")){return;}
 
 	this.gfn_transaction(tranObj);
 };
@@ -273,24 +292,7 @@ this.fn_list = function ()
 
 this.Div01_Div00_04_btnSearch_onclick = function(obj,e)
 {
-	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
-	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
-	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
-	
-	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
-	var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
-	
-	if(isKorNm != isHpNo)
-	{
-		if((nexacro.trim(this.ds_search.getColumn(0, "korNm"))).length < 2 || (this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)
-		{
-			alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
-		}
-	}
-	else
-	{
-		this.fn_list();
-	}
+	this.fn_list("Y");
 };
 
 /**************************************************************************
@@ -390,6 +392,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 
+};
+
+this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		obj.updateToDataset();
+		this.fn_list("Y");
+	}
 };]]></Script>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.ComboStat" propid="value" datasetid="ds_search" columnid="useStatCd"/>

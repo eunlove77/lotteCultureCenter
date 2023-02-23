@@ -136,6 +136,8 @@
           <Column id="lectCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="rsltCdNm" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -229,14 +231,17 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	
 		this.gfn_openPopup("mbrDtlPop" + this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");
 	}
-	
+		
 	// 강좌코드, 강좌명
 	if(e.row != null && (e.cell == "9" || e.cell == "10")){
+		var pblPmprcustParntBrchCd = new String(this.gfn_nvl(this.ds_stlm_fail_list.getColumn(e.row, "pblPmprcustParntBrchCd"))); 
+		var pblPmprcustParntLectCd = new String(this.gfn_nvl(this.ds_stlm_fail_list.getColumn(e.row, "pblPmprcustParntLectCd"))); 
+	
 		var arrArguments = {
-			brchCd : this.ds_stlm_fail_list.getColumn(e.row, "brchCd"),
+			brchCd : pblPmprcustParntBrchCd == "" ? this.ds_stlm_fail_list.getColumn(e.row, "brchCd") : pblPmprcustParntBrchCd,
 			yy : this.ds_stlm_fail_list.getColumn(e.row, "yy"),
 			lectSmsterCd : this.ds_stlm_fail_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_stlm_fail_list.getColumn(e.row, "lectCd"),
+			lectCd : pblPmprcustParntLectCd == "" ? this.ds_stlm_fail_list.getColumn(e.row, "lectCd") : pblPmprcustParntLectCd,
 			menuSeq : this.getOwnerFrame().param.MENU_ID
 		}
 		
