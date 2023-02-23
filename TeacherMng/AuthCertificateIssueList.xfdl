@@ -82,7 +82,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" left="searchField:10" right="btnSearch:5" maxlength="20" bottom="5" onkeyup="searchQuery_onkeyup"/>
+              <Edit id="searchQuery" taborder="2" top="5" left="searchField:10" right="btnSearch:5" maxlength="20" bottom="5" onkeyup="com_searchEdit_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -213,17 +213,13 @@ this.set_dynamic_checkbox = function()
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
-{
-	if(e.keycode == 13){
-    this.set_search_info();
-	  this.select_list();
-  }
-};
+this.fn_search = function(){
+  this.set_search_info();
+  this.select_list();
+}
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.set_search_info();
-	this.select_list();
+	this.fn_search();
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
