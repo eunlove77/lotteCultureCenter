@@ -1078,12 +1078,6 @@ this.ClassWrite_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.init();
 	// 코드 데이터
 	this.fn_code_list();
-	
-	//공동모객일시 유형 잠금
-	if(this.ds_class_dtl.getColumn(0, "lectTpCd") == "04")
-	{
-		this.Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00.set_readonly(true);
-	}
 };
 
 /**************************************************************************
@@ -1486,6 +1480,12 @@ this.fn_class_dtl = function()
 
 	this.gfn_transaction(tranObj);
 	this.ds_class_list.setColumn(0, "lectRpsntImgFileId", this.ds_class_dtl.getColumn(0, "lectRpsntImgFileId"));
+	
+	//공동모객일시 유형 잠금
+	if(this.ds_class_dtl.getColumn(0, "lectTpCd") == "04")
+	{
+		this.Div00.form.Div00.form.Div00.form.Div00_01.form.Radio00.set_readonly(true);
+	}
 	
 	if(this.ds_class_dtl.getColumn(0, "optnTypCd") == "01")
 	{
