@@ -31,7 +31,7 @@
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div00_01" taborder="2" text="Div00" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" right="0">
+                          <Div id="Div00_01" taborder="2" text="Div00" left="0" top="Div00:-1" height="33" cssclass="div_WF_CompWrap" width="50%">
                             <Layouts>
                               <Layout>
                                 <Static id="Static00" taborder="0" text="카테고리" left="0" top="0" width="120" cssclass="sta_WF_TableLabel" height="31"/>
@@ -101,6 +101,14 @@
                               </Layout>
                             </Layouts>
                           </Div>
+                          <Div id="Div01" taborder="6" text="Div01" left="Div00_01:0" top="Div00_00:-1" height="33" right="0" cssclass="div_WF_CompWrap">
+                            <Layouts>
+                              <Layout>
+                                <Static id="Static00" taborder="0" text="강좌구분" left="0" top="0" width="120" bottom="0" cssclass="sta_WF_TableLabel"/>
+                                <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:6" top="5" width="100" height="20" innerdataset="ds_classGb_list" codecolumn="cd" datacolumn="cdNm"/>
+                              </Layout>
+                            </Layouts>
+                          </Div>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -119,6 +127,7 @@
                             <Column size="70"/>
                             <Column size="140"/>
                             <Column size="92"/>
+                            <Column size="102"/>
                             <Column size="102"/>
                             <Column size="115"/>
                             <Column size="225"/>
@@ -141,16 +150,17 @@
                             <Cell col="2" text="지점명"/>
                             <Cell col="3" text="강좌코드"/>
                             <Cell col="4" text="강좌유형"/>
-                            <Cell col="5" text="강좌상태"/>
-                            <Cell col="6" text="강좌명"/>
-                            <Cell col="7" text="강좌옵션"/>
-                            <Cell col="8" text="강사명"/>
-                            <Cell col="9" text="강좌요일"/>
-                            <Cell col="10" text="강의횟수"/>
-                            <Cell col="11" text="강좌시간"/>
-                            <Cell col="12" text="강의시작일"/>
-                            <Cell col="13" text="강의종료일"/>
-                            <Cell col="14" text="그룹여부"/>
+                            <Cell col="5" text="강좌구분"/>
+                            <Cell col="6" text="강좌상태"/>
+                            <Cell col="7" text="강좌명"/>
+                            <Cell col="8" text="강좌옵션"/>
+                            <Cell col="9" text="강사명"/>
+                            <Cell col="10" text="강좌요일"/>
+                            <Cell col="11" text="강의횟수"/>
+                            <Cell col="12" text="강좌시간"/>
+                            <Cell col="13" text="강의시작일"/>
+                            <Cell col="14" text="강의종료일"/>
+                            <Cell col="15" text="그룹여부"/>
                           </Band>
                           <Band id="body">
                             <Cell displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemcontrol' " edittype="expr:comp.type == 1 ? 'checkbox' : 'radioitem' " radioitemcodevalue="1" text="expr:dataset.checkarray[currow]"/>
@@ -158,16 +168,17 @@
                             <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" displaytype="combotext"/>
                             <Cell col="3" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd"/>
                             <Cell col="4" text="bind:lectTpNm"/>
-                            <Cell col="5" text="bind:lectStatNm"/>
-                            <Cell col="6" text="bind:lectNm"/>
-                            <Cell col="7" text="bind:lectAddOptnNm"/>
-                            <Cell col="8" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" tooltiptext="bind:tcNm" tooltiptype="hover"/>
-                            <Cell col="9" text="bind:stringStDaywNm"/>
-                            <Cell col="10" text="bind:lectNbcnt"/>
-                            <Cell col="11" text="expr:lectSt == '' ? '' : lectSt + ' ~ ' + lectEnd"/>
-                            <Cell col="12" text="bind:lectStDtm"/>
-                            <Cell col="13" text="bind:lectEndDtm"/>
-                            <Cell col="14" text="bind:groupYn"/>
+                            <Cell col="5" text="bind:lectClNm"/>
+                            <Cell col="6" text="bind:lectStatNm"/>
+                            <Cell col="7" text="bind:lectNm"/>
+                            <Cell col="8" text="bind:lectAddOptnNm"/>
+                            <Cell col="9" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" tooltiptext="bind:tcNm" tooltiptype="hover"/>
+                            <Cell col="10" text="bind:stringStDaywNm"/>
+                            <Cell col="11" text="bind:lectNbcnt"/>
+                            <Cell col="12" text="expr:lectSt == '' ? '' : lectSt + ' ~ ' + lectEnd"/>
+                            <Cell col="13" text="bind:lectStDtm"/>
+                            <Cell col="14" text="bind:lectEndDtm"/>
+                            <Cell col="15" text="bind:groupYn"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -193,6 +204,7 @@
       <BindItem id="item7" compid="Div00.form.Div00.form.Div00.form.Div00_01.form.Combo00_00" propid="value" datasetid="ds_search" columnid="mdclsCtegryCd"/>
       <BindItem id="item8" compid="Div00.form.Div00.form.Div00.form.Div00_01.form.Combo00" propid="value" datasetid="ds_search" columnid="lrclsCtegryCd"/>
       <BindItem id="item9" compid="Div00.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
+      <BindItem id="item10" compid="Div00.form.Div00.form.Div00.form.Div01.form.Combo00" propid="value" datasetid="ds_search" columnid="lectClCd"/>
     </Bind>
     <Objects>
       <Dataset id="ds_classType_list">
@@ -244,6 +256,7 @@
           <Column id="only" type="STRING" size="256"/>
           <Column id="repOn" type="STRING" size="256"/>
           <Column id="pblOn" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_year_list">
@@ -318,6 +331,13 @@
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
           <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_classGb_list" onload="ds_classGb_list_onload">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="20"/>
+          <Column id="cdNm" type="STRING" size="100"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -502,6 +522,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_classCtgy_set();
 			this.fn_classType_set();
 			this.fn_classState_set();
+			this.fn_classGb_set();
 		break;
 	  }
   }
@@ -513,7 +534,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 this.fn_code_list = function()
 {	
-	var outData = "ds_classType_list=classTypeList ds_classState_list=classStateList ";
+	var outData = "ds_classType_list=classTypeList ds_classState_list=classStateList ds_classGb_list=classGbList ";
 		outData += "ds_classCtgyLarge_list=classCategoryLargeList ds_classCtgyMiddle_list=classCategoryMiddleList ds_classCtgySmall_list=classCategorySmallList";
 		
 	var tranObj = {
@@ -521,7 +542,7 @@ this.fn_code_list = function()
 		strSvcUrl : this.application.Admin_svc + "::class/getCodeList.do",
 		inData : "",
 		outData : outData,
-		strArg : "cdId=114||115||ctgy brchCd=" + this.brchCd,
+		strArg : "cdId=114||115||116||ctgy brchCd=" + this.brchCd,
 		callBackFnc : "fnCallback",
 		isAsync : false,
 		menuSeq : this.parent.menuSeq,
@@ -553,6 +574,17 @@ this.fn_search = function()
 	this.gfn_transaction(tranObj);
 	this.Div00.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
 }
+
+
+//강좌구분 설정
+this.fn_classGb_set = function()
+{
+	this.ds_classGb_list.insertRow(0);
+	this.ds_classGb_list.setColumn(0, "cd", "");
+	this.ds_classGb_list.setColumn(0, "cdNm", "전체");
+	this.Div00.form.Div00.form.Div00.form.Div01.form.Combo00.set_index(0);
+}
+
 
 //강좌상태 설정
 this.fn_classState_set = function()

@@ -18,7 +18,7 @@
                         <Layout>
                           <Combo id="Combo00" taborder="0" text="" left="10" top="3" width="200" height="20" innerdataset="ds_ofln_amt_cl_cd_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div00_Combo00_onitemchanged"/>
                           <Static id="Static00" taborder="1" text="할인금액" left="0" width="65" height="21" cssclass="sta_WF_CompText" bottom="3"/>
-                          <Edit id="editOfln" taborder="2" left="Static00:0" width="145" height="20" bottom="3" text="20,000" textAlign="right" readonly="true" oninput="fn_num_format" inputtype="digit"/>
+                          <Edit id="editOfln" taborder="2" left="Static00:0" width="145" height="20" bottom="3" text="20,000" textAlign="right" readonly="true" inputtype="digit" onkeyup="fn_num_format"/>
                           <Static id="Static01" taborder="3" text="원" left="editOfln:0" width="120" height="20" cssclass="sta_WF_CompText" bottom="3"/>
                         </Layout>
                       </Layouts>
@@ -160,7 +160,7 @@
                     <Static id="Static01" taborder="1" text="할인" left="Static00:0" top="0" width="130" height="48" cssclass="sta_WF_TableLabel"/>
                     <Static id="Static02" taborder="2" left="Static01:0" top="3" width="65" height="20" cssclass="sta_WF_CompText" visible="false"/>
                     <Static id="Static03" taborder="3" text="할인금액" left="Static01:0" width="65" height="21" cssclass="sta_WF_CompText" visible="true" top="10"/>
-                    <Edit id="editAdd" taborder="4" left="Static03:0" width="145" height="20" text="20,000" textAlign="right" top="12" readonly="true" oninput="fn_num_format" inputtype="digit"/>
+                    <Edit id="editAdd" taborder="4" left="Static03:0" width="145" height="20" text="20,000" textAlign="right" top="12" readonly="true" inputtype="digit" onkeyup="fn_num_format"/>
                     <Static id="Static04" taborder="5" text="원" left="editAdd:0" width="120" height="20" cssclass="sta_WF_CompText" top="12"/>
                     <Radio id="Radio00" taborder="6" left="Static02:10" top="3" width="150" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical" value="Y" text="사용" index="0" visible="false" onitemchanged="Div00_Div05_Radio00_onitemchanged">
                       <Dataset id="innerdataset">
@@ -344,20 +344,21 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.Div00.form.Div05.form.Static04.set_top(12);
 		}
 	}else{
-		this.Div00.form.Div04.form.Div00.form.editOfln.set_value("");
+		this.Div00.form.Div04.form.Div00.form.editOfln.set_value(0);
 		this.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
 		
 		// 추가금액이 있다면 추가금액 할인 세팅
-		if(this.Div00.form.Div05.visible){
-			this.Div00.form.Div05.form.Static02.set_text(obj.text);
-			this.Div00.form.Div05.form.Static02.set_visible(true);
-			this.Div00.form.Div05.form.Radio00.set_visible(true);
-			this.Div00.form.Div05.form.editAdd.set_readonly(false);
-			
-			this.Div00.form.Div05.form.Static03.set_top(24);
-			this.Div00.form.Div05.form.editAdd.set_top(25);
-			this.Div00.form.Div05.form.Static04.set_top(25);
-		}
+ 		if(this.Div00.form.Div05.visible){
+ 			this.Div00.form.Div05.form.Static02.set_text(obj.text);
+ 			this.Div00.form.Div05.form.Static02.set_visible(true);
+ 			this.Div00.form.Div05.form.Radio00.set_visible(true);
+ 			this.Div00.form.Div05.form.editAdd.set_readonly(false);
+ 			this.Div00.form.Div05.form.editAdd.set_value(0);
+ 			
+ 			this.Div00.form.Div05.form.Static03.set_top(24);
+ 			this.Div00.form.Div05.form.editAdd.set_top(25);
+ 			this.Div00.form.Div05.form.Static04.set_top(25);
+ 		}
 	}
 	
 	// 등급할인, 쿠폰할인 선택 값 초기화
@@ -384,6 +385,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	this.oflnDcAmt = 0;
 	this.grdeDcAmt = 0;
 	this.cpnDcAmt = 0;
+	this.addDcAmt = 0;
 	
 	this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
 	this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
@@ -403,9 +405,10 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 		}
 // 	}
 	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == "0"){
 		alert("할인금액을 입력하세요.");
 		obj.set_value("");
+		this.Div00.form.Div04.form.Div00.form.editOfln.setFocus();
 		return;
 	}
 	
@@ -432,10 +435,10 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 				lectAmt = lectAmt - this.oflnDcAmt;
 // 				gsStlmAmt = gsStlmAmt - this.oflnDcAmt;
 			this.grdeDcAmt = 0;
-			this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
-			this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
-			this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
-			this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
+// 			this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
+// 			this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
+// 			this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
+// 			this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 		}else{
 // 			var dcRt = 0;
 // 			var dcNbcntYn, allUseNbcntYn;
@@ -511,11 +514,12 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 						lectAmt = lectAmt - this.grdeDcAmt;
 // 						gsStlmAmt = gsStlmAmt - this.grdeDcAmt;
 					
-					this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
-					this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
-					this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
-					this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
+// 					this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
+// 					this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
+// 					this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
+// 					this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 				}else{
+					this.grdeDcAmt = 0;
 					this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 					this.Div00.form.Div04.form.Div01.form.Static01.set_text("");
 					this.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
@@ -535,10 +539,10 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			//this.Div00.form.Div04.form.Div01.form.Static02.set_text("");
 			//this.Div00.form.Div04.form.Div01.form.Static02.set_visible(false);
 			this.grdeDcAmt = 0;
-			this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
-			this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
-			this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
-			this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
+// 			this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
+// 			this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
+// 			this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
+// 			this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 		}else{
 			this.Div00.form.Div04.form.Div01.form.Combo01.set_visible(true);
 			this.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
@@ -637,22 +641,23 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					
 // 						lectAmt = lectAmt - this.grdeDcAmt;
 // 						gsStlmAmt = gsStlmAmt - this.grdeDcAmt;
-					
-					this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
-					this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
-					this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
-					this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 				}else{
+					this.grdeDcAmt = 0;
 					this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 					this.Div00.form.Div04.form.Div01.form.Static01.set_text("");
 					this.Div00.form.Div04.form.Div01.form.Static01.set_visible(false);
 					this.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
 					this.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
-					return;
+					//return;
 				}
 			}
 		}
 	}
+	
+	this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
+	this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
+	this.parent.parent.parent.parent.lectStlmAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt;
+	this.parent.parent.parent.parent.gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt;
 };
 
 // 쿠폰할인 콤보박스 선택
@@ -667,9 +672,10 @@ this.Div00_Div04_Div02_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 // 		}
 // 	}
 	// 할인이 중간수강, 컴플레인 중 선택되있고 금액 입력 필드가 공백일때
-	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == ""){
+	if(this.Div00.form.Div04.form.Div00.form.Combo00.value != '' && this.Div00.form.Div04.form.Div00.form.editOfln.value == "0"){
 		alert("할인금액을 입력하세요.");
 		obj.set_value("");
+		this.Div00.form.Div04.form.Div00.form.editOfln.setFocus();
 		return;
 	}
 	
@@ -826,7 +832,8 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		//오프라인 할인 금액 입력의 경우 강좌료와 가격 비교
 		if(Number(num) > lectAmt){
 			alert("강좌료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
-			obj.set_value("");
+			this.oflnDcAmt = 0;
+			obj.set_value(0);
 			obj.setFocus();
 			this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
 			this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
@@ -845,7 +852,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		if(Number(num) > lectAddAmt){
 			alert("재료비/대여료에서 할인 받을 수 있는 금액을 초과하여 입력 할 수 없습니다.");
 			this.addDcAmt = 0;
-			obj.set_value("");
+			obj.set_value(0);
 			obj.setFocus();
 			this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
 			this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");
@@ -936,6 +943,7 @@ this.Div00_Div05_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.It
 	//lectAmt = lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt;
 	//gsStlmAmt = gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt;
 	if(obj.value == "Y"){
+		this.Div00.form.Div05.form.editAdd.set_value(0);
 		this.Div00.form.Div05.form.editAdd.set_readonly(false);
 	}else if(obj.value == "N"){
 		this.Div00.form.Div05.form.editAdd.set_value("");
@@ -1021,6 +1029,14 @@ this.Div00_Div04_Div01_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	//this.Div00.form.Div04.form.Div01.form.Static02.set_text(applBrchRngCdNm + "/" + obj.value + "%");
 	//lectAmt = lectAmt - this.grdeDcAmt;
 	//gsStlmAmt = gsStlmAmt - this.grdeDcAmt;
+	
+	// 쿠폰 초기화
+	this.Div00.form.Div04.form.Div02.form.Combo00.set_index(0);
+	this.Div00.form.Div04.form.Div02.form.Static00.set_text("");
+	this.Div00.form.Div04.form.Div02.form.Static00.set_visible(false);
+	this.Div00.form.Div04.form.Div02.form.Static01.set_text("");
+	this.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
+	this.cpnDcAmt = 0;
 	
 	this.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + lectAddAmt - this.addDcAmt) +"원</fc></b>");
 	this.parent.parent.parent.parent.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(gsStlmAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt - this.addDcAmt) +"</fc>원</b>");

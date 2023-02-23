@@ -11,9 +11,10 @@
               <Columns>
                 <Column size="50"/>
                 <Column size="56"/>
-                <Column size="143"/>
-                <Column size="105"/>
-                <Column size="133"/>
+                <Column size="120"/>
+                <Column size="70"/>
+                <Column size="170"/>
+                <Column size="170"/>
                 <Column size="74"/>
                 <Column size="80"/>
                 <Column size="265"/>
@@ -31,12 +32,13 @@
                 <Cell col="2" text="지점"/>
                 <Cell col="3" text="강의실 코드"/>
                 <Cell col="4" text="강의실명"/>
-                <Cell col="5" text="내외구분"/>
-                <Cell col="6" text="면적(평)"/>
-                <Cell col="7" text="비고"/>
-                <Cell col="8" text="노출여부"/>
-                <Cell col="9" text="등록자"/>
-                <Cell col="10" text="등록일"/>
+                <Cell col="5" text="강의실 형태"/>
+                <Cell col="6" text="내외구분"/>
+                <Cell col="7" text="면적(평)"/>
+                <Cell col="8" text="비고"/>
+                <Cell col="9" text="노출여부"/>
+                <Cell col="10" text="등록자"/>
+                <Cell col="11" text="등록일"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:brchCd" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
@@ -44,12 +46,13 @@
                 <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textAlign="center" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="3" text="bind:lectRmCd"/>
                 <Cell col="4" text="bind:lectRmNm"/>
-                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;inoutClCd&quot;) == &quot;I&quot; ? &quot;내부&quot; : &quot;외부&quot;" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="6" text="bind:araSqm"/>
-                <Cell col="7" text="bind:memoCont"/>
-                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? '노출' : '미노출'"/>
-                <Cell col="9" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="10" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
+                <Cell col="5" text="bind:ltrmShpNm"/>
+                <Cell col="6" text="expr:dataset.getColumn(currow, &quot;inoutClCd&quot;) == &quot;I&quot; ? &quot;내부&quot; : &quot;외부&quot;" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="7" text="bind:araSqm"/>
+                <Cell col="8" text="bind:memoCont"/>
+                <Cell col="9" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? '노출' : '미노출'"/>
+                <Cell col="10" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="11" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
               </Band>
             </Format>
           </Formats>
@@ -90,16 +93,20 @@
                                 </Row>
                                 <Row>
                                   <Col id="codecolumn">2</Col>
-                                  <Col id="datacolumn">강의실</Col>
+                                  <Col id="datacolumn">강의실명</Col>
                                 </Row>
                                 <Row>
                                   <Col id="codecolumn">3</Col>
+                                  <Col id="datacolumn">강의실 형태</Col>
+                                </Row>
+                                <Row>
+                                  <Col id="codecolumn">4</Col>
                                   <Col id="datacolumn">등록자</Col>
                                 </Row>
                               </Rows>
                             </Dataset>
                           </Combo>
-                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21"/>
+                          <Edit id="searchQuery" taborder="2" left="searchField:6" top="5" width="500" height="21" onkeydown="Div00_00_conDiv_searchDiv_searchQuery_onkeydown"/>
                           <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_00_conDiv_searchDiv_btnSearch_onclick"/>
                           <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_00_conDiv_searchDiv_btnInit_onclick"/>
                         </Layout>
@@ -169,6 +176,7 @@
           <Column id="lectRmNm" type="STRING" size="256"/>
           <Column id="inoutClCd" type="STRING" size="256"/>
           <Column id="araSqm" type="STRING" size="256"/>
+          <Column id="ltrmShpNm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
@@ -206,6 +214,7 @@
           <Column id="lectRmNm" type="STRING" size="256"/>
           <Column id="inoutClCd" type="STRING" size="256"/>
           <Column id="araSqm" type="STRING" size="256"/>
+          <Column id="ltrmShpNm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>

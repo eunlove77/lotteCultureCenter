@@ -52,7 +52,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="100" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" onitemchanged="row02_Div04_ComboSpot_onitemchanged" innerdataset="spotCdList" datacolumn="cdNm" codecolumn="cd"/>
+                    <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="170" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" onitemchanged="row02_Div04_ComboSpot_onitemchanged" innerdataset="spotCdList" datacolumn="cdNm" codecolumn="cd"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -302,6 +302,7 @@ this.fnCallback_holiday_list = function(svcID, errorCode, errorMsg){
 //엑셀 업로드 버튼
 this.btnExcelUp_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+  this.excelImportDs.clearData();
 	this.excel_import();
 };
 //엑셀 업로드
@@ -357,14 +358,14 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return false;
 	}
 	
-	this.update_holiday("holidayDs");
+	this.update_holiday(this.holidayDs);
 };
 
-this.update_holiday = function(datasetName){
+this.update_holiday = function(ds){
 	var tranObj = {};
 	tranObj.strSvcId	= "update_holiday";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::holiday/update.do";
-	tranObj.inData      = "holidayList="+ datasetName +":U";
+	tranObj.inData      = "holidayList="+ ds.name +":U";
 	tranObj.outData     = "holidayDs=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_holiday";
@@ -392,7 +393,6 @@ this.fnCallback_holiday = function(svcID, errorCode, errorMsg){
 
 this.validation_check = function(){
 	var result ={};
-	var tf = true;
 	var msg = "";
 	
 	var rowcount = this.holidayDs.rowcount;
@@ -405,18 +405,16 @@ this.validation_check = function(){
 			var brchCd = this.holidayDs.getColumn(i, "brchCd");
 			var hlidyClCd = this.holidayDs.getColumn(i, "hlidyClCd");
 			
-			//키 중복 검사
-			this.holidayDs.filter("hlidyDt == '" + hlidyDt + "'");
-			tf = this.holidayDs.rowcount > 1 ? false : true;
-			
-			tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
-			tf = !tf ? tf : !!brchCd;
-			tf = !tf ? tf : !!hlidyClCd;
-			
-			if(!tf){
-				msg += comma + j + "행";
-				comma = ", "
-			}
+			hlidyNm = hlidyNm ? hlidyNm.replace(/\s/g, '') : '';					
+      if(!hlidyNm){
+        msg = j + "행의 휴일명을 입력하세요.\n";
+      }
+      if(!brchCdNm){
+        msg = j + "행의 지점을 입력하세요.\n";
+      }
+      if(!hlidyTypeNm){
+        msg = j + "행의 휴일구분을 입력하세요.\n";
+      }
 		}
 	}
 	
@@ -486,24 +484,17 @@ this.ExcelImportObject00_onsuccess = function(obj:nexacro.ExcelImportObject,e:ne
 	
 	//유효성 검사
 	res = this.excel_import_validation_check();
-	var arr = [];
-	var rc = this.excelImportDs.rowcount;
 	
-	if(!res.tf){
+  if(!res.tf){
 		var msg = "업로드한 엑셀에 문제가 있습니다.\n";
-		msg += res.msg;
-		
+		msg += res.msg;	
 		alert(msg);
-		
-		while(rc--) arr.push(rc);
-		this.excelImportDs.deleteMultiRows(arr);
+	
 		return false;
 	}
 	
-	this.update_holiday('excelupdateDs');
-	
-	while(rc--) arr.push(rc);
-	this.excelImportDs.deleteMultiRows(arr);
+	this.update_holiday(this.excelupdateDs);
+
 };
 
 this.ExcelImportObject00_onerror = function(obj:nexacro.ExcelImportObject,e:nexacro.ExcelImportErrorEventInfo)
@@ -585,54 +576,66 @@ this.row02_Div03_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickE
 /* 엑셀 업로드 유효성 검사 */
 this.excel_import_validation_check = function(){
 	var result = {};
-	var tf = true;
 	var msg = "";
 	
 	this.excelupdateDs.clearData();
 	
 	var rowcount = this.excelImportDs.rowcount;
-	var comma = "";
 	var gdsSpotCdList = this.application.gdsSpotCdList;
-	for(var i = 0, j = 1; i < rowcount; i++, j++){
+	for(var i = 0, j = 2; i < rowcount; i++, j++){
 		var hlidyDt = this.excelImportDs.getColumn(i, "휴일날짜");
 		var hlidyNm = this.excelImportDs.getColumn(i, "휴일명");
 		var brchCdNm = this.excelImportDs.getColumn(i, "지점");
 		var hlidyTypeNm = this.excelImportDs.getColumn(i, "휴일구분");
 		
-    if(hlidyDt && hlidyNm && brchCdNm && hlidyTypeNm){
-      //날짜 검사
-      hlidyDt = hlidyDt.replace(/-/g, '');
-
-      //지점 검사
-      var brchCd_row = gdsSpotCdList.findRow("cdNm", brchCdNm);
-      var brchCd = brchCd_row > -1 ? gdsSpotCdList.getColumn(brchCd_row, "cd") : false;
-      
-      //휴일 코드 검사
-      var hlidyType_row = this.holidayType.findRow("cdNm", hlidyTypeNm);
-      var hlidyClCd = hlidyType_row > -1 ? this.holidayType.getColumn(hlidyType_row, "cd") : false;
-      
-      tf = !tf ? tf : this.com_vali_date_format(hlidyDt);
-      tf = !tf ? tf : hlidyNm ? !!hlidyNm.replace(/\s/g, '') : false;
-      tf = !tf ? tf : !!brchCd;
-      tf = !tf ? tf : !!hlidyClCd;
-      
-      if(!tf){
-        msg += comma + j + "행";
-        comma = ", "
-      }
-      
-      var n_row = this.excelupdateDs.addRow();
-      this.excelupdateDs.setColumn(n_row, "hlidyDt", hlidyDt);
-      this.excelupdateDs.setColumn(n_row, "brchCd", brchCd);
-      this.excelupdateDs.setColumn(n_row, "hlidyNm", hlidyNm);
-      this.excelupdateDs.setColumn(n_row, "hlidyClCd", hlidyClCd);
-    }
-    else{
+    //마지막줄 체크
+    if(!hlidyDt){
       break;
     }
+		//공백검사
+		if(!hlidyDt){
+		  msg = j + "행의 휴일날짜를 입력하세요.\n";
+		}
+    hlidyNm = hlidyNm ? hlidyNm.replace(/\s/g, '') : '';					
+		if(!hlidyNm){
+		  msg = j + "행의 휴일명을 입력하세요.\n";
+		}
+		if(!brchCdNm){
+		  msg = j + "행의 지점을 입력하세요.\n";
+		}
+		if(!hlidyTypeNm){
+		  msg = j + "행의 휴일구분을 입력하세요.\n";
+		}
+
+		//유효성검사
+		hlidyDt = hlidyDt ? hlidyDt.replace(/-/g, '') : '';
+		if(!this.com_vali_date_format(hlidyDt)){
+		  msg += j + "행의 날짜가 올바르지 않습니다.\n";
+		}
+
+		var brchCd_row = gdsSpotCdList.findRow("cdNm", brchCdNm);
+		var brchCd = brchCd_row > -1 ? gdsSpotCdList.getColumn(brchCd_row, "cd") : false;
+		if(!brchCd){
+		  msg += j + "행의 지점정보가 올바르지 않습니다.\n";
+		}
+		
+		var hlidyType_row = this.holidayType.findRow("cdNm", hlidyTypeNm);
+		var hlidyClCd = hlidyType_row > -1 ? this.holidayType.getColumn(hlidyType_row, "cd") : false;
+		if(!hlidyClCd){
+		  msg += j + "행의 휴일구분이 올바르지 않습니다.\n";
+		}
+		
+		if(msg.length == 0){
+		  var n_row = this.excelupdateDs.addRow();
+		  this.excelupdateDs.setColumn(n_row, "hlidyDt", hlidyDt);
+		  this.excelupdateDs.setColumn(n_row, "brchCd", brchCd);
+		  this.excelupdateDs.setColumn(n_row, "hlidyNm", hlidyNm);
+		  this.excelupdateDs.setColumn(n_row, "hlidyClCd", hlidyClCd);
+		}
+    
 	}
 	
-	result.tf = msg.length > 0 ? false : true;;
+	result.tf = msg.length > 0 ? false : true;
 	result.msg = msg;
 	
 	return result;
