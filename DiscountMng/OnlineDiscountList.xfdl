@@ -123,7 +123,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="Edit00" taborder="2" left="Combo00:6" top="5" width="500" height="21" maxlength="50"/>
+                    <Edit id="Edit00" taborder="2" left="Combo00:6" top="5" width="500" height="21" maxlength="50" onkeydown="fn_searchEnter"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="Edit00:6" top="5" width="80" height="21" cssclass="btn_WF_Medium" onclick="Div00_Div09_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:6" top="5" width="80" height="21" cssclass="btn_WF_Low" onclick="Div00_Div09_btnInit_onclick"/>
                   </Layout>
@@ -598,6 +598,8 @@ this.fn_checkbox = function(pObj)
  **************************************************************************/
 this.fn_list = function ()
 {	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")){return;}
+	
 	//체크된 코드 처리
 	var typeObj = this.Div00.form.Div02.form.components;
 	var clObj = this.Div00.form.Div04.form.components;
@@ -743,10 +745,10 @@ this.Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 	if(e.col == 5 || e.col == 6)
 	{
 		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+			brchCd : this.ds_class_list.getColumn(e.row, "mstBrchCd"),
 			yy : this.ds_class_list.getColumn(e.row, "yy"),
 			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+			lectCd : this.ds_class_list.getColumn(e.row, "mstLectCd"),
 			menuSeq : this.getOwnerFrame().param.MENU_ID,
 			searchButton : this.Div00.form.Div09.form.btnSearch
 		}
@@ -835,6 +837,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	break;
 
   }
+};
+
+this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		obj.updateToDataset();
+		this.fn_list();
+	}
 };
 ]]></Script>
     <Objects>

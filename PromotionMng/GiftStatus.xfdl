@@ -10,7 +10,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" maxlength="50"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="4" height="21" right="10" maxlength="50" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -18,9 +18,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="-1" top="0" width="90" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%"/>
-                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit01_00" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="21" inputtype="digit" maxlength="3" right="50%" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="21" right="26.18%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
+                    <Edit id="Edit01_00" taborder="3" left="Edit01:5.0120000000000005" top="5" height="21" right="3.02%" inputtype="digit" maxlength="4" onkeydown="fn_searchEnter"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -60,7 +60,7 @@
                         </Rows>
                       </Dataset>
                     </Combo>
-                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50"/>
+                    <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123" maxlength="50" onkeydown="fn_searchEnter"/>
                     <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div01_Div06_btnSearch_onclick"/>
                     <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div00_Div04_btnInit_onclick"/>
                   </Layout>
@@ -141,23 +141,23 @@
                       <Cell col="16" text="취소/회수일"/>
                     </Band>
                     <Band id="body">
-                      <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
-                      <Cell col="1" color="blue" cursor="pointer" textDecoration="underline" suppress="1" text="bind:fgftAppNo"/>
-                      <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="bind:fgftNm"/>
-                      <Cell col="3" text="bind:appChnlNm"/>
-                      <Cell col="4" color="#666666" text="bind:appDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" displaytype="date"/>
-                      <Cell col="5" color="#666666" text="expr:recpYn == 'Y' ? 'O' : '지급하기'" displaytype="expr:recpYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:recpYn == 'Y' ? 'none' : 'buttoncontrol'" cssclass="gridBtn_Medium"/>
-                      <Cell col="6" expr="ppayChrgprId ? ppayChrgprNm + '(' +ppayChrgprId+ ')' : ''"/>
-                      <Cell col="7" text="bind:recpDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
-                      <Cell col="8" color="blue" cursor="pointer" textDecoration="underline" expr="appMbrNm + '(' +appMbrId+ ')'"/>
-                      <Cell col="9" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" displaytype="normal" text="bind:hpNo" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
+                      <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox" suppress="2" suppressalign="middle"/>
+                      <Cell col="1" color="blue" cursor="pointer" textDecoration="underline" suppress="1" text="bind:fgftAppNo" suppressalign="middle"/>
+                      <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" text="bind:fgftNm" suppressalign="middle" suppress="2"/>
+                      <Cell col="3" text="bind:appChnlNm" suppressalign="middle" suppress="2"/>
+                      <Cell col="4" color="#666666" text="bind:appDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" displaytype="date" suppressalign="middle" suppress="2"/>
+                      <Cell col="5" color="#666666" displaytype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'none' : 'buttoncontrol'" cssclass="gridBtn_Medium" expr="wdwYn == 'Y' ? '-' : (recpYn == 'Y' ? 'O' : '지급하기')" suppress="2" suppressalign="middle"/>
+                      <Cell col="6" expr="ppayChrgprId ? ppayChrgprNm + '(' +ppayChrgprId+ ')' : ''" suppress="2" suppressalign="middle"/>
+                      <Cell col="7" text="bind:recpDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none" suppressalign="middle" suppress="2"/>
+                      <Cell col="8" color="blue" cursor="pointer" textDecoration="underline" expr="appMbrNm + '(' +appMbrId+ ')'" suppress="2" suppressalign="middle"/>
+                      <Cell col="9" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" displaytype="normal" text="bind:hpNo" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover" suppressalign="middle" suppress="2"/>
                       <Cell col="10" text="bind:atlctRsvNo" color="blue" cursor="pointer" textDecoration="underline"/>
                       <Cell col="11" text="bind:lectCd"/>
                       <Cell col="12" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
                       <Cell col="13" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
-                      <Cell col="14" text="expr:wdwYn == 'Y' ? 'O' : recpYn == 'Y' ? '회수' : '취소'" displaytype="expr:wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:wdwYn == 'Y' ? 'none' : 'button'" cssclass="gridBtn_Weak"/>
-                      <Cell col="15" expr="wdwYn == 'Y' &amp;&amp; wdwChrgprId  ? wdwChrgprNm +'(' +wdwChrgprId + ')' : ''"/>
-                      <Cell col="16" text="bind:wdwDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
+                      <Cell col="14" text="expr:wdwYn == 'Y' ? 'O' : recpYn == 'Y' ? '회수' : '취소'" displaytype="expr:wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:wdwYn == 'Y' ? 'none' : 'button'" cssclass="gridBtn_Weak" suppress="2" suppressalign="middle"/>
+                      <Cell col="15" expr="wdwYn == 'Y' &amp;&amp; wdwChrgprId  ? wdwChrgprNm +'(' +wdwChrgprId + ')' : ''" suppressalign="middle" suppress="2"/>
+                      <Cell col="16" text="bind:wdwDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none" suppressalign="middle" suppress="2"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -252,24 +252,7 @@ this.fn_init = function(obj)
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
-	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
-	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
-	
-	var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
-	var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
-	
-	if(isKorNm != isHpNo)
-	{
-		if((nexacro.trim(this.ds_search.getColumn(0, "korNm"))).length < 2 || (this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)
-		{
-			alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
-		}
-	}
-	else
-	{
-		this.fn_detail();
-	}
+	this.fn_detail("Y");
 };
 
 /**************************************************************************
@@ -390,8 +373,27 @@ this.fn_cancel_btn = function()
  * 사용자 function
  **************************************************************************/
 
-this.fn_detail = function ()
+this.fn_detail = function (srchYn)
 {	
+	if(srchYn == "Y")
+	{
+		var hpStNo = this.ds_search.getColumn(0, "hpStNo");
+		var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
+		var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
+		
+		var isKorNm = this.gfn_isNull(nexacro.trim(this.ds_search.getColumn(0, "korNm")));
+		var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
+		
+		if(isKorNm != isHpNo)
+		{
+			if((nexacro.trim(this.ds_search.getColumn(0, "korNm"))).length < 2 || (this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)
+			{
+				alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+				return false;
+			}
+		}
+	}
+	
 	var chnlObj = this.Div00.form.Div01.form.components;
 	var chnlStr = "";
 	
@@ -460,6 +462,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 	}
 };
+
+this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	if(e.keycode == 13)
+	{
+		obj.updateToDataset();
+		this.fn_detail("Y");
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_search">
@@ -481,6 +492,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
             <Col id="dateTypeCd">1</Col>
             <Col id="appChnlCd"/>
             <Col id="f"/>
+            <Col id="korNm"></Col>
           </Row>
         </Rows>
       </Dataset>
