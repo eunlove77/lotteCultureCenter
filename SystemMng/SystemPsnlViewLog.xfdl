@@ -197,6 +197,8 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				
 				for(var i = 0 ; i < this.ds_log.rowcount ; i++){
 					this.ds_log.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+					
+					
 				}	
 			}
 			
@@ -216,18 +218,23 @@ this.fn_searchValueInit = function(){
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	var headTitle = obj.getCellProperty("Head", e.col, "text");
+	var cellText = obj.getCellText(e.row, e.cell);
 	
 	if(headTitle == "조회 쿼리"){
 		var oArg = {			
 			query : this.ds_log.getColumn(e.row, "inqQryCont")
 		};		
-	}else if(headTitle == "활동타입"){
+		
+		this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
+	}else if(headTitle == "활동타입" && (cellText == "엑셀 다운로드")){
 		var oArg = {			
 			query : this.ds_log.getColumn(e.row, "rsnCont")
 		};		
+		
+		this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
 	}
 	
-	this.gfn_openPopup("popup", oArg, "SystemMng::PsnlViewLog/popup.xfdl", this, 0, 0, true, true, null);
+	
 };]]></Script>
     <Objects>
       <Dataset id="ds_log">
