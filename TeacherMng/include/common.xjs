@@ -427,7 +427,7 @@ this.com_set_hpNo_to_stmidlastNo = function(str){
 /**************************************************************************
  * 개인정보 검색 제한
  **************************************************************************/
-this.com_check_private_search = function(name){
+this.com_check_private_search = function(name, msg){
 	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
 	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
 	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
@@ -437,7 +437,7 @@ this.com_check_private_search = function(name){
 	
 	if((!isName || !isHpNo) && (((nexacro.trim(name)).length < 2) || ((this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)))
 	{
-		alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+		alert(msg ? msg : "개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
 		return false;
 	}
 	else
