@@ -150,15 +150,13 @@ this.atlctRsvNo = this.parent.parent.parent.parent.parent.atlctRsvNo;
 this.actlAtlctNpleSeqno = this.parent.parent.parent.parent.actlAtlctNpleSeqno;
 this.dcMthdFrm = this.Div00.form.Div04.form;
 
-// 수정 후 강좌료
 this.lectAmt = 0;
-// 수정 후 추가금액
 this.lectAddAmt = 0;
-// 수정 후 최종 주문금액
 this.lectStlmAmt = 0;
-// 수정 후 최종 총 결제금액
 this.gsStlmAmt = 0;
 
+// 초기 총 결제금액
+this.initGsStlmAmt = 0;
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -227,6 +225,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			// 할인 없는 총 결제금액, 주문금액 저장
 			this.lectStlmAmt = this.lectStlmAmt + this.dcMthdFrm.oflnDcAmt + this.dcMthdFrm.grdeDcAmt + this.dcMthdFrm.cpnDcAmt + this.dcMthdFrm.addDcAmt;
 			this.gsStlmAmt = this.gsStlmAmt + this.dcMthdFrm.oflnDcAmt + this.dcMthdFrm.grdeDcAmt + this.dcMthdFrm.cpnDcAmt + this.dcMthdFrm.addDcAmt;
+			this.initGsStlmAmt = this.gsStlmAmt;
 			this.ds_order_modify_info.setColumn(0, "gsStlmAmt", this.gsStlmAmt);
 			
 			this.Div00.form.Div00.form.Static01.set_text(this.ds_order_modify_info.getColumn(0, "stlmDtm"));
@@ -482,7 +481,10 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var chngAmt = this.gfn_nvl(this.Div01.form.Div06.form.Edit00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Edit00.value, ",", ""));
 	var chngMthdCd = this.gfn_nvl(this.Div01.form.Div06.form.Combo00.value) == "" ? 0 : Number(nexacro.replaceAll(this.Div01.form.Div06.form.Combo00.value, ",", ""));
 	
-	
+	if(this.initGsStlmAmt == this.gsStlmAmt){
+		this.gsStlmAmt = this.gsStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt;
+	}
+	trace(this.gsStlmAmt);
 	
 	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
 		if(chngAmt == 0){
