@@ -259,7 +259,8 @@
               <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:10" right="0" bottom="0">
                 <Layouts>
                   <Layout>
-                    <Grid id="Grid00" taborder="8" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col">
+                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="0" width="150" height="20" left="0"/>
+                    <Grid id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -377,16 +378,6 @@
                         </Format>
                       </Formats>
                     </Grid>
-                    <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="16" width="150" height="20" left="0"/>
-                    <Button id="Button00" taborder="1" text="엑셀" top="0" width="50" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div02_Div01_Button00_onclick"/>
-                    <Button id="Button05" taborder="9" text="강사 출석부" top="0" height="30" cssclass="btn_WF_Medium" right="Button00:10" width="90" onclick="Div02_Div01_Button05_onclick"/>
-                    <Button id="Button00_00" taborder="2" text="출석부" top="0" width="60" height="30" cssclass="btn_WF_Medium" right="Button05:10" onclick="Div02_Div01_Button00_00_onclick"/>
-                    <Button id="Button04" taborder="3" text="대기자 등록" top="0" height="30" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10" onclick="Div02_Div01_Button04_onclick"/>
-                    <Button id="Button03" taborder="4" text="강좌복사" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button04:10" onclick="Div02_Div01_Button03_onclick"/>
-                    <Button id="Button02" taborder="5" text="신규강좌" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button03:10" onclick="Div02_Div01_Button02_onclick"/>
-                    <Button id="Button01" taborder="6" text="일괄변경" top="0" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10" onclick="Div02_Div01_Button01_onclick"/>
-                    <Button id="Button06" taborder="10" text="일괄승인" top="0" height="30" cssclass="btn_WF_Medium" right="Button01:10" width="70" onclick="Div02_Div01_Button06_onclick"/>
-                    <Button id="Button00_01" taborder="7" text="저장" top="0" height="30" width="50" right="Button06:10" cssclass="btn_WF_Medium" onclick="Div01_Button00_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -509,6 +500,15 @@
           </Formats>
         </Grid>
         <Div id="Div00" taborder="3" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Button id="Button00" taborder="4" text="엑셀 다운로드" top="25" width="100" height="30" cssclass="btn_WF_Medium" right="30" onclick="Button00_onclick"/>
+        <Button id="Button05" taborder="5" text="강사 출석부" top="25" height="30" cssclass="btn_WF_Medium" right="Button00:10" width="90" onclick="Button05_onclick"/>
+        <Button id="Button00_00" taborder="6" text="출석부" top="25" width="60" height="30" cssclass="btn_WF_Medium" right="Button05:10" onclick="Button00_00_onclick"/>
+        <Button id="Button04" taborder="7" text="대기자 등록" top="25" height="30" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="Button00_00:10" onclick="Button04_onclick"/>
+        <Button id="Button03" taborder="8" text="강좌복사" top="25" height="30" width="70" cssclass="btn_WF_Medium" right="Button04:10" onclick="Button03_onclick"/>
+        <Button id="Button02" taborder="9" text="신규강좌" top="25" height="30" width="70" cssclass="btn_WF_Medium" right="Button03:10" onclick="Button02_onclick"/>
+        <Button id="Button01" taborder="10" text="일괄변경" top="25" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10" onclick="Button01_onclick"/>
+        <Button id="Button06" taborder="11" text="일괄승인" top="25" height="30" cssclass="btn_WF_Medium" right="Button01:10" width="70" onclick="Button06_onclick"/>
+        <Button id="Button00_01" taborder="12" text="저장" top="25" height="30" width="50" right="Button06:10" cssclass="btn_WF_Medium" onclick="Button00_01_onclick"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -1538,17 +1538,7 @@ this.Div02_Div00_Div00_Div02_00_00_Edit00_00_onkeyup = function(obj:nexacro.Edit
 	}
 };
 
-this.Div02_Div01_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
-	
-	this.popCnt++;
-	var arrArguments = {
-		menuSeq : this.getOwnerFrame().param.MENU_ID,
-		searchFlag : this.searchFlag
-	}
-	this.gfn_openPopup("ClassReg" + this.popCnt, arrArguments, "ClassMng::ClassReg.xfdl", this, 1280, 720, true, true, null);
-};
+
 
 this.Div02_Div00_Div00_Div00_00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
@@ -1688,281 +1678,6 @@ this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 	}
 };
 
-this.Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{
-		this.fn_update_validation();
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
-this.Div02_Div01_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{
-		if(confirm(this.ds_classUpdate_list.getRowCount() + "개의 강좌를 복사하시겠습니까?"))
-		{
-			this.fn_save_copy();
-		}
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
-this.Div02_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
-	var oArg = {
-			title : "엑셀 다운로드 사유",
-			gridExcel : this.Grid_Excel
-		};
-	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "", this, 400, 250, true, false, null);
-};
-
-this.Div02_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	var brchCd = "";
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			if(this.ds_classUpdate_list.getRowCount() == 0) {
-				brchCd = this.ds_class_list.getColumn(i, "brchCd");
-			}
-			else
-			{
-				if(brchCd != this.ds_class_list.getColumn(i, "brchCd"))
-				{
-					alert("다른 지점의 강좌가 있습니다.");
-					return;
-				}
-			}
-			
-			if(this.ds_class_list.getColumn(i, "schdCnt") > 1) 
-			{
-				alert("강의스케줄이 1개인 대상만 일괄변경이 가능합니다.");
-				return;
-			}
-			
-			if(this.ds_class_list.getColumn(i, "lectStatCd") == "09") 
-			{
-				alert("폐강된 강좌가 있습니다.");
-				return;
-			}
-			
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{
-		this.popCnt++;
-		var arrArguments = {
-			dataset : this.ds_classUpdate_list,
-			brchCd : brchCd,
-			menuSeq : this.getOwnerFrame().param.MENU_ID
-		}
-		this.gfn_openPopup("ClassTotChg" + this.popCnt, arrArguments, "ClassMng::ClassTotChg.xfdl", this, 1280, 750, true, true, null);
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
-this.Div02_Div01_Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{
-		this.popCnt++;
-		var arrArguments = {
-			dataset : this.ds_classUpdate_list,
-			menuSeq : this.getOwnerFrame().param.MENU_ID
-		}
-		this.gfn_openPopup("ClassAttendanceList" + this.popCnt, arrArguments, "ClassMng::ClassAttendanceList.xfdl", this, 1280, 720, true, true, null);
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
-this.Div02_Div01_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{	
-		
-		if(this.ds_classUpdate_list.getRowCount() > 1)
-		{
-			alert("강좌를 1개만 선택하세요.");
-		}
-		else
-		{
-			this.popCnt++;
-			var arrArguments = {
-				dataset : this.ds_classUpdate_list,
-				menuSeq : this.getOwnerFrame().param.MENU_ID
-			}
-			this.gfn_openPopup("ClassTeacherAttendanceList" + this.popCnt, arrArguments, "ClassMng::ClassTeacherAttendanceList.xfdl", this, 1280, 720, true, true, null);
-		}
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
-// 대기자 등록
-this.Div02_Div01_Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			if(this.ds_class_list.getColumn(i, "lectStatCd") != "05"){
-				alert("강좌상태가 대기접수인 강좌만 대기자 등록이 가능합니다.");
-				return;
-			}
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{	
-		if(this.ds_classUpdate_list.getRowCount() > 1){
-			alert("1개의 강좌를 선택하세요.");
-		}else{
-			this.popCnt++;
-			var arrArguments = {
-				dataset : this.ds_classUpdate_list,
-				menuSeq : this.getOwnerFrame().param.MENU_ID,
-				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
-			}
-			this.gfn_openPopup("ClassWaitingReg" + this.popCnt, arrArguments, "ClassMng::ClassWaitingReg.xfdl", this, 1280, 720, true, true, null);
-		}
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
-this.Div02_Div01_Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
-	
-	var flag = false;
-	this.ds_classUpdate_list.clearData();
-	
-	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
-	{
-		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
-		{
-			if(this.ds_class_list.getColumn(i, "apvlStatCd") != "01")
-			{
-				alert("승인대기 상태의 강좌만 선택하세요.");
-				return;
-			}
-			
-			flag = true;
-			var rowIndex = this.ds_classUpdate_list.addRow();
-			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
-		}
-	}
-
-	if(flag)
-	{
-		if(confirm(this.ds_classUpdate_list.getRowCount() + "개의 강좌를 승인하시겠습니까?"))
-		{
-			this.fn_save_apvl();
-		}
-	}
-	else
-	{
-		alert("강좌를 선택하세요.");
-	}
-};
-
 this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
 {
 	this.ds_class_list.checkarray[e.row] = 1;
@@ -2065,7 +1780,291 @@ this.Div02.form.Div01.setMasking = function(sValue, startIndex, maskLen, flag)
 	return sMask;
 }
 
+this.Button00_01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
 
+	if(flag)
+	{
+		this.fn_update_validation();
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			if(this.ds_class_list.getColumn(i, "apvlStatCd") != "01")
+			{
+				alert("승인대기 상태의 강좌만 선택하세요.");
+				return;
+			}
+			
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		if(confirm(this.ds_classUpdate_list.getRowCount() + "개의 강좌를 승인하시겠습니까?"))
+		{
+			this.fn_save_apvl();
+		}
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	var brchCd = "";
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			if(this.ds_classUpdate_list.getRowCount() == 0) {
+				brchCd = this.ds_class_list.getColumn(i, "brchCd");
+			}
+			else
+			{
+				if(brchCd != this.ds_class_list.getColumn(i, "brchCd"))
+				{
+					alert("다른 지점의 강좌가 있습니다.");
+					return;
+				}
+			}
+			
+			if(this.ds_class_list.getColumn(i, "schdCnt") > 1) 
+			{
+				alert("강의스케줄이 1개인 대상만 일괄변경이 가능합니다.");
+				return;
+			}
+			
+			if(this.ds_class_list.getColumn(i, "lectStatCd") == "09") 
+			{
+				alert("폐강된 강좌가 있습니다.");
+				return;
+			}
+			
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		this.popCnt++;
+		var arrArguments = {
+			dataset : this.ds_classUpdate_list,
+			brchCd : brchCd,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		}
+		this.gfn_openPopup("ClassTotChg" + this.popCnt, arrArguments, "ClassMng::ClassTotChg.xfdl", this, 1280, 750, true, true, null);
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	this.popCnt++;
+	var arrArguments = {
+		menuSeq : this.getOwnerFrame().param.MENU_ID,
+		searchFlag : this.searchFlag
+	}
+	this.gfn_openPopup("ClassReg" + this.popCnt, arrArguments, "ClassMng::ClassReg.xfdl", this, 1280, 720, true, true, null);
+};
+
+this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		if(confirm(this.ds_classUpdate_list.getRowCount() + "개의 강좌를 복사하시겠습니까?"))
+		{
+			this.fn_save_copy();
+		}
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			if(this.ds_class_list.getColumn(i, "lectStatCd") != "05"){
+				alert("강좌상태가 대기접수인 강좌만 대기자 등록이 가능합니다.");
+				return;
+			}
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{	
+		if(this.ds_classUpdate_list.getRowCount() > 1){
+			alert("1개의 강좌를 선택하세요.");
+		}else{
+			this.popCnt++;
+			var arrArguments = {
+				dataset : this.ds_classUpdate_list,
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+			}
+			this.gfn_openPopup("ClassWaitingReg" + this.popCnt, arrArguments, "ClassMng::ClassWaitingReg.xfdl", this, 1280, 720, true, true, null);
+		}
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{
+		this.popCnt++;
+		var arrArguments = {
+			dataset : this.ds_classUpdate_list,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		}
+		this.gfn_openPopup("ClassAttendanceList" + this.popCnt, arrArguments, "ClassMng::ClassAttendanceList.xfdl", this, 1280, 720, true, true, null);
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	var flag = false;
+	this.ds_classUpdate_list.clearData();
+	
+	for(var i=0; i<this.ds_class_list.getRowCount(); i++)
+	{
+		if(this.ds_class_list.checkarray[i] == 1 && this.ds_class_list.getColumn(i, "pblPmprcustBrchCd") == "")
+		{
+			flag = true;
+			var rowIndex = this.ds_classUpdate_list.addRow();
+			this.ds_classUpdate_list.copyRow(rowIndex, this.ds_class_list, i);
+		}
+	}
+
+	if(flag)
+	{	
+		
+		if(this.ds_classUpdate_list.getRowCount() > 1)
+		{
+			alert("강좌를 1개만 선택하세요.");
+		}
+		else
+		{
+			this.popCnt++;
+			var arrArguments = {
+				dataset : this.ds_classUpdate_list,
+				menuSeq : this.getOwnerFrame().param.MENU_ID
+			}
+			this.gfn_openPopup("ClassTeacherAttendanceList" + this.popCnt, arrArguments, "ClassMng::ClassTeacherAttendanceList.xfdl", this, 1280, 720, true, true, null);
+		}
+	}
+	else
+	{
+		alert("강좌를 선택하세요.");
+	}
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
+	var oArg = {
+			title : "엑셀 다운로드 사유",
+			gridExcel : this.Grid_Excel
+		};
+	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "", this, 400, 250, true, false, null);
+};
 ]]></Script>
     <Bind>
       <BindItem id="item7" compid="Div02.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
