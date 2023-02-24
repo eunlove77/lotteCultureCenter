@@ -89,7 +89,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="123123"/>
+              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="278" height="21" text="" onkeyup="com_searchEdit_onkeyup"/>
               <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div05_btnSearch_onclick"/>
               <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div05_btnInit_onclick"/>
             </Layout>
@@ -257,18 +257,20 @@ this.holidayMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//파일 다운로드경로
 	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 	
-	this.fn_list(1);
+	this.fn_search();
 };
-
-this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{
-	var strtDt = this.Div02.form.Div00.form.strtDtm.value;
+this.fn_search = function(){
+  var strtDt = this.Div02.form.Div00.form.strtDtm.value;
 	var endDt = this.Div02.form.Div00.form.endDtm.value;
 	
 	this.searchDs.setColumn(0, 'strtDt', strtDt);
 	this.searchDs.setColumn(0, 'endDt', endDt);
 	
 	this.fn_list();
+}
+this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_search();
 };
 
 this.fn_list = function(){
