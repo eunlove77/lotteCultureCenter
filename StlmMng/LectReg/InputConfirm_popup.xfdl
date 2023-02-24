@@ -154,6 +154,16 @@ this.InputConfirm_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 		this.ds_class_list.addRow();
 		this.ds_class_list.copyRow(i, this.parent.classList, i);
 	}
+	
+	// 2023.02.23 실수강자명에 가족관계까지 나오게 처리
+	for(var i=0;i<this.ds_class_list.getRowCount();i++){
+		for(var j=0;j<this.parent.fmlyList.getRowCount();j++){
+			if(this.ds_class_list.getColumn(i, "fmlyCd") == this.parent.fmlyList.getColumn(j, "fmlyCd")){
+				this.ds_class_list.setColumn(i, "actlAtlctNpleNm", this.parent.fmlyList.getColumn(j, "actlAtlctNpleNm"));
+			}
+		}
+	}
+	
 	this.ds_class_list.set_enableevent(true);
 	
 	var lectStlmAmt = 0;
