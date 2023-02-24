@@ -439,16 +439,17 @@ this.insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var list = this.ds_member_list;
 	var chkList = this.ds_member_chk;
 	
-	chkList.copyData(list);
+	chkList.deleteAll();
 	
 	for(var i=list.getRowCount()-1; i >= 0; i--)
 	{
-		if(list.checkarray[i] != 1)
+		if(list.checkarray[i] == 1)
 		{
-			chkList.deleteRow(i);
+			var rowIndex = chkList.addRow();
+			chkList.copyRow(rowIndex, list, i);
 		}
 	}
-
+	
 	if(chkList.getRowCount() > this.maxCnt)
 	{
 		alert("최대 "+this.maxCnt+ "개 선택 가능합니다.");
@@ -500,11 +501,15 @@ this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 
 this.Div02_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {	
-	this.ds_member_chk.addRow();
-	this.ds_member_chk.copyRow(0, this.ds_member_list, e.row);
+	if(this.type != "1")
+	{
+		this.ds_member_chk.addRow();
+		this.ds_member_chk.copyRow(0, this.ds_member_list, e.row);
+		
+		this.callBackFnc(this._this, this.ds_member_chk);
+		this.close();
+	}
 	
-	this.callBackFnc(this._this, this.ds_member_chk);
- 	this.close();
 };
 ]]></Script>
     <Objects>
@@ -531,6 +536,8 @@ this.Div02_Grid00_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClick
           <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="korNm" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
           <Column id="hpNo" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
           <Column id="emailAddrCd" type="STRING" size="256"/>
