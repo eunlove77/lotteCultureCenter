@@ -127,7 +127,7 @@
                       <Cell displaytype="radioitemcontrol" radioitemcodevalue="1" expr="dataset.checkarray[currow]" edittype="radioitem"/>
                       <Cell col="1" text="bind:rnum"/>
                       <Cell col="2" displaytype="normal" text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
-                      <Cell col="3" text="bind:rfndDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" edittype="date" calendareditformat="yyyy-MM-dd HH:mm:ss "/>
+                      <Cell col="3" text="bind:rfndDtm" displaytype="expr:dataset.getColumn(currow, &quot;stlmChnlCd&quot;) == &quot;D&quot; ? 'date' : 'normal'" calendardateformat="yyyy-MM-dd HH:mm:ss" edittype="expr:dataset.getColumn(currow, &quot;stlmChnlCd&quot;) == &quot;D&quot; ? 'date' : 'none'" calendareditformat="yyyy-MM-dd HH:mm:ss "/>
                       <Cell col="4" text="bind:rfndRsnCdNm"/>
                       <Cell col="5" text="bind:fmlyCd" displaytype="combotext" edittype="combo" combodataset="ds_fmly_cd_list" combocodecol="fmlyCd" combodatacol="actlAtlctNpleNm"/>
                       <Cell col="6" text="bind:brchCdNm"/>
@@ -406,6 +406,7 @@
           <Column id="atlctStlmSubChnlCd" type="STRING" size="256"/>
           <Column id="atlctStlmSubChnlCdNm" type="STRING" size="256"/>
           <Column id="gsRfndScheAmt" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -440,8 +441,8 @@ this.PayCnclList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 // 환불(취소)일자, 실수강자 변경
 this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 {
-	if(e.cell == "2"){
-		// 결제일시 변경
+	if(e.cell == "3"){
+		// 취소일시 변경
 		this.targetColumn = "rfndDtm";
 		var rfndDtm = e.value.substr(0,4) + "-" + e.value.substr(4, 2) + "-" + e.value.substr(6, 2) + " " + e.value.substr(8, 2) + ":" + e.value.substr(10, 2) + ":" + e.value.substr(12, 2);
 		this.oldValue = this.ds_stlm_rfnd_list.getColumn(e.row, this.targetColumn);
@@ -458,7 +459,7 @@ this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			this.ds_stlm_rfnd_list.set_enableevent(true);
 			return;
 		}
-	}else if(e.cell == "4"){
+	}else if(e.cell == "5"){
 		// 실수강자 변경
 		this.targetColumn = "fmlyCd";
 		this.oldValue = this.ds_stlm_rfnd_list.getColumn(e.row, "fmlyCd");
