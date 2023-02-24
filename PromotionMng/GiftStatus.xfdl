@@ -95,24 +95,24 @@
         <Div id="Div01" taborder="1" text="Div02" left="10" top="Div00:20" right="10" minwidth="680" maxwidth="" bottom="60">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_app_list" autofittype="none" right="0" bottom="0" useselcolor="true" nodatatext="검색결과가 없습니다. (등록된 데이터가 없습니다.)" oncellclick="Div01_Grid00_oncellclick" cellsizingtype="col">
+              <Grid id="Grid00" taborder="0" left="0" top="40" binddataset="ds_app_list" autofittype="none" right="0" bottom="0" useselcolor="true" nodatatext="검색결과 없음" oncellclick="Div01_Grid00_oncellclick" cellsizingtype="col">
                 <Formats>
                   <Format id="default">
                     <Columns>
                       <Column size="40" band="left"/>
                       <Column size="100"/>
-                      <Column size="100"/>
+                      <Column size="150"/>
                       <Column size="70"/>
                       <Column size="130"/>
                       <Column size="100"/>
                       <Column size="150"/>
                       <Column size="130"/>
-                      <Column size="150"/>
+                      <Column size="100"/>
                       <Column size="120"/>
                       <Column size="100"/>
                       <Column size="80"/>
                       <Column size="120"/>
-                      <Column size="150"/>
+                      <Column size="200"/>
                       <Column size="90"/>
                       <Column size="120"/>
                       <Column size="130"/>
@@ -130,7 +130,7 @@
                       <Cell col="5" text="사은품 수령여부"/>
                       <Cell col="6" text="사은품 지급담당자"/>
                       <Cell col="7" text="사은품 수령일"/>
-                      <Cell col="8" text="신청자 이름(ID)"/>
+                      <Cell col="8" text="신청자 이름"/>
                       <Cell col="9" text="휴대번호"/>
                       <Cell col="10" text="주문번호"/>
                       <Cell col="11" text="강좌코드"/>
@@ -149,7 +149,7 @@
                       <Cell col="5" color="#666666" displaytype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'normal' : 'buttoncontrol'" edittype="expr:recpYn == 'Y' || wdwYn == 'Y' ? 'none' : 'buttoncontrol'" cssclass="gridBtn_Medium" expr="recpYn == 'Y' ? 'O' : (wdwYn == 'Y' ? '-' : '지급하기')" suppress="2" suppressalign="middle"/>
                       <Cell col="6" expr="ppayChrgprId ? ppayChrgprNm + '(' +ppayChrgprId+ ')' : ''" suppress="2" suppressalign="middle"/>
                       <Cell col="7" text="bind:recpDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" calendardisplayinvalidtype="none" suppressalign="middle" suppress="2"/>
-                      <Cell col="8" color="blue" cursor="pointer" textDecoration="underline" expr="appMbrNm + '(' +appMbrId+ ')'" suppress="2" suppressalign="middle"/>
+                      <Cell col="8" color="blue" cursor="pointer" textDecoration="underline" suppress="2" suppressalign="middle" text="expr:comp.parent.parent.parent.gfn_setMasking(appMbrNm, 1, 1)"/>
                       <Cell col="9" displaytype="normal" text="bind:hpNo" expr="comp.parent.parent.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover" suppressalign="middle" suppress="2"/>
                       <Cell col="10" text="bind:atlctRsvNo" color="blue" cursor="pointer" textDecoration="underline"/>
                       <Cell col="11" text="bind:lectCd"/>
@@ -522,7 +522,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	switch(svcID)
 	{
 		case "detail":    
-			this.fn_set_detail();
+			this.Div01.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_promotion_list.getCount()) + "개)");
 			break;
 		case "cancel" :
 			alert("취소/회수 되었습니다.");

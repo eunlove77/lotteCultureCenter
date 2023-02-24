@@ -11,7 +11,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이름(ID)" left="0" top="0" width="120" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Static id="Static01" taborder="1" left="Static00:10" top="0" textAlign="left" width="243" bottom="0"/>
+                    <Static id="Static01" taborder="1" left="Static00:10" top="0" textAlign="left" width="243" bottom="0" textDecoration="underline" color="blue" cursor="pointer" onclick="Div00_Div00_Static01_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -232,11 +232,24 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.close();
 			break;
 	}
-};]]></Script>
+};
+this.Div00_Div00_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	//회원상세 이동
+	this.popCnt ++;
+	var oArg = {
+			mbrNo : this.ds_detail.getColumn(0, "mbrNo"),
+			menuId : this.menuId
+			};
+
+	this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null);	
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_detail">
         <ColumnInfo>
           <Column id="fgftAppNo" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="appMbrId" type="STRING" size="256"/>
           <Column id="appMbrNm" type="STRING" size="256"/>
           <Column id="appChnlNm" type="STRING" size="256"/>
