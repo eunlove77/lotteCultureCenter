@@ -24,7 +24,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연령" left="0" top="0" width="90" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hp" taborder="1" left="Static00:5" top="5" height="21" inputtype="digit" maxlength="3" width="100"/>
+                    <Edit id="hp" taborder="1" left="Static00:5" top="5" height="21" inputtype="digit" maxlength="3" width="100" onkeyup="com_searchEdit_onkeyup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -67,7 +67,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:7" right="btnSearch:15" onkeyup="searchQuery_onkeyup"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:7" right="btnSearch:15" onkeyup="com_searchEdit_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -134,7 +134,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사명" left="0" top="0" width="90" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="tcNm" taborder="1" left="Static00:5" top="5" height="20" maxlength="50" right="10"/>
+                    <Edit id="tcNm" taborder="1" left="Static00:5" top="5" height="20" maxlength="50" right="10" onkeyup="com_searchEdit_onkeyup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -142,9 +142,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴대전화" left="0" top="0" width="90" height="100%" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="hpStNo" taborder="1" left="Static00:10" top="5" height="20" maxlength="4" inputtype="digit" width="17%" maxwidth=""/>
-                    <Edit id="hpMidNo" taborder="2" left="hpStNo:7" top="5" height="20" maxlength="4" inputtype="digit" width="25%"/>
-                    <Edit id="hpLastNo" taborder="3" top="5" height="20" maxlength="4" inputtype="digit" width="25%" left="hpMidNo:7"/>
+                    <Edit id="hpStNo" taborder="1" left="Static00:10" top="5" height="20" maxlength="4" inputtype="digit" width="17%" maxwidth="" onkeyup="com_searchEdit_onkeyup"/>
+                    <Edit id="hpMidNo" taborder="2" left="hpStNo:7" top="5" height="20" maxlength="4" inputtype="digit" width="25%" onkeyup="com_searchEdit_onkeyup"/>
+                    <Edit id="hpLastNo" taborder="3" top="5" height="20" maxlength="4" inputtype="digit" width="25%" left="hpMidNo:7" onkeyup="com_searchEdit_onkeyup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -244,12 +244,6 @@ this.fn_search = function(){
 	this.set_search_info();
 	this.select_teacher_list();
 }
-this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
-{
-	if(e.keycode == 13){
-		this.fn_search();
-  }
-};
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.fn_search();

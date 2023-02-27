@@ -348,6 +348,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	  if(errorCode != 0)
 	  {
 		this.alert(errorCode+"\n"+errorMsg);
+		if(svcID == "payment"){
+			this.submitFlag = false;
+		}
 		return;
 	  }
 
@@ -434,18 +437,23 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			if(this.ds_err_info.getRowCount() > 0){
 				if(this.ds_err_info.getColumn(0, "errCd") == "CAPA_CNT"){
 					alert("강좌명 : " + this.ds_err_info.getColumn(0, "errLectNm") + "\n정원이 마감된 강좌가 있어 결제 하실 수 없습니다.");
+					this.submitFlag = false;
 					return;
 				}else if(this.ds_err_info.getColumn(0, "errCd") == "EXIST_CMPLT"){
 					alert("강좌명 : " + this.ds_err_info.getColumn(0, "errLectNm") + "\n수강자 : " + this.ds_err_info.getColumn(0, "errActlAtlctNpleNm") + "\n수강신청 내역이 존재합니다.");
+					this.submitFlag = false;
 					return;
 				}else if(this.ds_err_info.getColumn(0, "errCd") == "EXIST_WAITING"){
 					alert("강좌명 : " + this.ds_err_info.getColumn(0, "errLectNm") + "\n대기자 : " + this.ds_err_info.getColumn(0, "errActlAtlctNpleNm") + "\n대기신청 내역이 존재합니다.");
+					this.submitFlag = false;
 					return;
 				}else if(this.ds_err_info.getColumn(0, "errCd") == "LECT_STAT_CD"){
 					alert("강좌명 : " + this.ds_err_info.getColumn(0, "errLectNm") + "\n접수 불가 강좌가 있어 결제 하실 수 없습니다.");
+					this.submitFlag = false;
 					return;
 				}else if(this.ds_err_info.getColumn(0, "errCd") == "CPN_USE_FAILED"){
 					alert(this.ds_err_info.getColumn(0, "errMsg"));
+					this.submitFlag = false;
 					return;
 				}
 			}
@@ -489,6 +497,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.Div00.form.Div03.form.Static00.set_text("▶ 에누리 전체 사용횟수: " + this.ds_all_dc_dtl.getColumn(0, "allUseCnt") + "/" + this.ds_all_dc_dtl.getColumn(0, "allDcCnt"));
 			
 			this.resetScroll();
+			this.submitFlag = false;
 			
 			break;
 		case "setWaitAtlct":
@@ -946,6 +955,7 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	
 	if(this.Div00.form.Div04.form.CheckBox00.value == 0){
 		alert("환불 규정확인을 받아야 결제가 가능합니다. 환불규정 확인 후 서명을 해주세요.");
+		this.submitFlag = false;
 		return;
 	}
 
@@ -996,6 +1006,7 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	
 	if(duplYn){
 		alert('강좌명 : ' + lectNm + '\n같은 강좌에 중복된 실수강자가 있어 결제 하실 수 없습니다.');
+		this.submitFlag = false;
 		return;
 	}
 	
@@ -1014,18 +1025,21 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	if(gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
 		if(chngAmt == 0){
 			alert("초과 된 총 결제예정금액 만큼 거스름돈을 입력하세요.");
+			this.submitFlag = false;
 			return;
 		}else{
 			if(gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
 				alert("입력된 금액이 총 결제금액보다 초과되어 결제 할 수 없습니다.");
-				this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
-				this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
+				this.submitFlag = false;
+				//결제예정금액을 초과하거나 적게 입력 후 결제 > 노출된 alert [확인] 후 입력된 금액이 유지 되지 않습니다. 유지하도록 해주세요. 
+// 				this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+// 				this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
 				return;
 			}
 		}
@@ -1033,14 +1047,16 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	
 	if(gsStlmAmt > crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
 		alert("총 결제금액 만큼 결제수단별 금액을 입력하세요.");
-		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
-		this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
+		this.submitFlag = false;
+		//결제예정금액을 초과하거나 적게 입력 후 결제 > 노출된 alert [확인] 후 입력된 금액이 유지 되지 않습니다. 유지하도록 해주세요. 
+// 		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+// 		this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
 		return;
 	}
 	
@@ -1048,6 +1064,7 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	// 2023.02.21 조건 변경
  	if(chngAmt > 0 && cshStlmAmt == 0 && ltteGiftStlmAmt == 0 && otgiftStlmAmt == 0){
  		alert("카드, L.Point, 기타 결제금액과 거스름돈을 같이 입력 할 수 없습니다.");
+		this.submitFlag = false;
  		this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
  		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
  		this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
@@ -1058,12 +1075,14 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	// 카드사 미선택
 	if(crdcoCd == "" && crdStlmAmt > 0){
 		alert("카드사를 선택하세요.");
+		this.submitFlag = false;
 		return;
 	}
 	
 	// 거스름돈 지급방식 미선택
 	if(chngMthdCd == "" && chngAmt > 0){
 		alert("거스름돈 지급 방식을 선택하세요.");
+		this.submitFlag = false;
 		this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
 		return;
 	}
@@ -1130,6 +1149,8 @@ this.Div00_Div04_Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 		};
 
 		this.gfn_transaction(tranObj);
+	}else{
+		this.submitFlag = false;
 	}
 };
 
