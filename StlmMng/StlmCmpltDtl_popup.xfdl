@@ -199,6 +199,17 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 				stlmInfoDtlFrm.Static01.set_visible(true);
 				stlmInfoDtlFrm.Div01.set_visible(true);
 				
+				if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 5){
+					stlmInfoDtlFrm.Div01.form.Div01.set_height(94 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.Div01.form.Static01.set_height(92 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.Div01.form.Static00.set_height(92 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.Div02.set_top(125 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.Div02.set_height(94 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_height(92 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.Div02.form.Static00.set_height(92 + ((this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() - 1) * 15));
+					stlmInfoDtlFrm.Div01.form.resetScroll();
+				}
+
 				stlmInfoDtlFrm.Div01.form.Div00.form.Static01.set_text(this.gfn_setComma(totGsRfndScheAmt) + "원");
 				stlmInfoDtlFrm.Div01.form.Div01.form.Static01.set_text(rfndScheLectAmtText);
 				stlmInfoDtlFrm.Div01.form.Div02.form.Static01.set_text(rfndScheAddAmtText == "" ? "-" : rfndScheAddAmtText);
