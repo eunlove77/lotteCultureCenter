@@ -118,7 +118,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="com_searchEdit_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -127,20 +127,20 @@
             <Format id="default">
               <Columns>
                 <Column size="100"/>
+                <Column size="150"/>
+                <Column size="50"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="170"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="200"/>
                 <Column size="100"/>
                 <Column size="100"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
               </Columns>
               <Rows>
                 <Row size="30" band="head"/>
@@ -297,13 +297,10 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
-{
-	if(e.keycode == 13){
-    this.set_search_info();
-	  this.get_teacher_evaluation_list();
-  }
-};
+this.fn_search = function(){
+  this.set_search_info();
+	this.get_teacher_evaluation_list();
+}
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.set_search_info();	//검색 데이터 세팅

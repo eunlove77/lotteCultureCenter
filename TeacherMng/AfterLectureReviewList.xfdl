@@ -104,7 +104,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="searchQuery_onkeyup"/>
+              <Edit id="searchQuery" taborder="2" top="5" height="21" left="searchField:10" right="btnSearch:5" maxlength="20" onkeyup="com_searchEdit_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -249,15 +249,12 @@ this.set_dataset = function(){
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
-{
-	if(e.keycode == 13){
-    this.get_afterLectureReview_list();
-  }
-};
+this.fn_search = function(){
+  this.get_afterLectureReview_list();
+}
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.get_afterLectureReview_list();
+	this.fn_search();
 };
 //초기화 버튼 
 this.reset_search_form = function(){
