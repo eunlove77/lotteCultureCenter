@@ -467,13 +467,14 @@ this.Div03_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 		this.ds_stlm_rfnd_list.setColumn(e.row, this.targetColumn, e.value);
 		this.ds_stlm_rfnd_list.set_enableevent(true);
 		
-		// 중복된 실수강자 체크 (실수강자가 동일 강좌에 중복)
+		// 결제완료 실수강자 체크 (실수강자가 동일 강좌에 중복)
 		var duplYn = false;
 		for(var i=0;i<this.ds_stlm_rfnd_list.getRowCount();i++){
 			if(i != e.row && (this.ds_stlm_rfnd_list.getColumn(i, this.targetColumn) == e.value) && (this.ds_stlm_rfnd_list.getColumn(i, "lectCd") == this.ds_stlm_rfnd_list.getColumn(e.row, "lectCd"))){
 				duplYn = true;
 			}
 		}
+		
 		if(duplYn){
 			alert("해당 실수강자는 수강신청 내역이 존재합니다.");
 			this.ds_stlm_rfnd_list.set_enableevent(false);
@@ -520,7 +521,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
+		if(svcID == "updateStlmRfndList"){
+			if(errorCode != -1){
+				this.alert(errorMsg);
+			}
+		}else{
+			this.alert(errorCode+"\n"+errorMsg);
+		}
 		this.ds_stlm_rfnd_list.set_enableevent(false);
 		this.ds_stlm_rfnd_list.setColumn(this.ds_stlm_rfnd_list.rowposition, this.targetColumn, this.oldValue);
 		this.ds_stlm_rfnd_list.set_enableevent(true);
@@ -555,7 +562,7 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	var oArg = {
 			title : "엑셀 다운로드 사유"
-			};
+	};
 	this.gfn_showModal("excelPopupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "excelPopupCallBack", this, 400, 250, true, false, null);
 };]]></Script>
   </Form>

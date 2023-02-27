@@ -452,16 +452,30 @@ this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 		this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, e.value);
 		this.ds_stlm_cmplt_list.set_enableevent(true);
 		
-		// 중복된 실수강자 체크 (실수강자가 동일 강좌에 중복)
-		var duplYn = false;
+		// 결제완료 실수강자 체크 (실수강자가 동일 강좌에 중복)
+		var cmpltDuplYn = false;
 		for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
 			if(i != e.row && (this.ds_stlm_cmplt_list.getColumn(i, this.targetColumn) == e.value) && (this.ds_stlm_cmplt_list.getColumn(i, "lectCd") == this.ds_stlm_cmplt_list.getColumn(e.row, "lectCd"))){
-				duplYn = true;
+				cmpltDuplYn = true;
 			}
 		}
 		
-		if(duplYn){
+		// 취소/환불 실수강자 체크
+		var rfndDuplYn = false;
+		for(var i=0;i<this.parent.parent.parent.parent.parent.form.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+			if(this.parent.parent.parent.parent.parent.form.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, this.targetColumn) == e.value){
+				rfndDuplYn = true;
+			}
+		}
+		
+		if(cmpltDuplYn){
 			alert("해당 실수강자는 수강신청 내역이 존재합니다.");
+		}
+		if(rfndDuplYn){
+			alert("해당 실수강자는 취소/환불 내역이 존재합니다.");
+		}
+		
+		if(cmpltDuplYn || rfndDuplYn){
 			this.ds_stlm_cmplt_list.set_enableevent(false);
 			this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, this.oldValue);
 			this.ds_stlm_cmplt_list.set_enableevent(true);
