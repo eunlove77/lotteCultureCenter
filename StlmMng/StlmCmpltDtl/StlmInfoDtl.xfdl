@@ -275,6 +275,7 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+this.ds_stlm_rfnd_list = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -287,56 +288,51 @@ this.StlmInfoDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 // 환불삭제 버튼 클릭
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var atlctRsvNo = this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.rowposition, "atlctRsvNo");
-	var actlAtlctNpleSeqno = this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.rowposition, "actlAtlctNpleSeqno");
-	if(confirm("취소(환불)하시겠습니까? (결제완료 상태로 변경 됩니다.)")){
-		var strSvcId    = "update";
-		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
-		var inData      = "";
-		var outData     = "";
-		var strArg      = "updateType=cmplt atlctRsvNo="+atlctRsvNo+" actlAtlctNpleSeqno="+actlAtlctNpleSeqno;
-		var callBackFnc = "fnCallback";
-		var isAsync     = true;
-		var tranObj = {
-			strSvcId : strSvcId,
-			strSvcUrl : strSvcUrl,
-			inData : inData,
-			outData : outData,
-			strArg : strArg,
-			callBackFnc : callBackFnc,
-			isAsync : isAsync,
-			isPopup : true,
-			menuSeq : this.menuSeq
-		};
-		
-		this.gfn_transaction(tranObj);
+	this.ds_stlm_rfnd_list = this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list;
+	var chkYn = false;
+	var atlctRsvNo = "";
+	var actlAtlctNpleSeqno = "";
+	for(var i=0; i<this.ds_stlm_rfnd_list.getRowCount(); i++){
+		if(this.ds_stlm_rfnd_list.checkarray[i] > 0){
+			chkYn = true;
+			atlctRsvNo = this.ds_stlm_rfnd_list.getColumn(i, "atlctRsvNo");
+			actlAtlctNpleSeqno = this.ds_stlm_rfnd_list.getColumn(i, "actlAtlctNpleSeqno");
+		}
+	}
+	
+	if(!chkYn){
+		alert("실수강자를 선택해주세요.");
+	}else{
+		if(confirm("취소(환불)하시겠습니까? (결제완료 상태로 변경 됩니다.)")){
+			var strSvcId    = "update";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
+			var inData      = "";
+			var outData     = "";
+			var strArg      = "updateType=cmplt atlctRsvNo="+atlctRsvNo+" actlAtlctNpleSeqno="+actlAtlctNpleSeqno;
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.menuSeq
+			};
+			
+			this.gfn_transaction(tranObj);
+		}
 	}
 };
 
 this.fnCallback = function(svcID, errorCode, errorMsg)
 {
-	// 에러 시 화면 처리 내역
-	if(errorCode == -2)
+	if(errorCode != 0)
 	{
-		// 총 정원 0인 경우
-		alert(errorMsg);
-		return;
-	}
-	else if(errorCode == -3)
-	{
-		// 강좌상태 : 접수마감, 강의종료, 폐강, 대기신청, 접수불가인 경우
-		alert(errorMsg);
-		return;
-	}
-	else if(errorCode == -4)
-	{
-		// 쿠폰 사용처리 실패
-		alert(errorMsg);
-		return;
-	}
-	else if(errorCode != 0)
-	{
-		this.alert(errorCode+"\n"+errorMsg);
+		this.alert(errorMsg);
 		return;
 	}
 	
