@@ -142,7 +142,7 @@
                     </Band>
                     <Band id="body">
                       <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox" suppress="2" suppressalign="middle"/>
-                      <Cell col="1" color="blue" cursor="pointer" textDecoration="underline" suppress="1" text="bind:fgftAppNo" suppressalign="middle"/>
+                      <Cell col="1" suppress="1" text="bind:fgftAppNo" suppressalign="middle"/>
                       <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" text="bind:fgftNm" suppressalign="middle" suppress="2"/>
                       <Cell col="3" text="bind:appChnlNm" suppressalign="middle" suppress="2"/>
                       <Cell col="4" color="#666666" text="bind:appDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" displaytype="date" suppressalign="middle" suppress="2"/>
@@ -329,7 +329,7 @@ this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.Click
 
 this.Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 1 || (e.col == 5 && e.clickitem == "control"))
+	if(e.col == 5 && e.clickitem == "control")
 	{
 		this.popCnt ++;
 		var oArg = {
@@ -521,8 +521,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	
 	switch(svcID)
 	{
-		case "detail":    
-			this.Div01.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_promotion_list.getCount()) + "개)");
+		case "list":    
+			this.Div01.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_app_list.getCount()) + "개)");
 			break;
 		case "cancel" :
 			alert("취소/회수 되었습니다.");
