@@ -148,7 +148,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="사진" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" left="130" top="0" bottom="0" right="10" color="blue" textDecoration="underline" fittocontents="width" onclick="Div01_Div10_00_Static01_onclick" visible="false"/>
+                    <Static id="Static01" taborder="1" left="130" top="0" bottom="0" right="10" color="blue" textDecoration="underline" onclick="Div01_Div10_00_Static01_onclick" visible="false"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -218,6 +218,7 @@
           <Column id="inqCnt" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="rvwCont" type="STRING" size="256"/>
+          <Column id="realFileNm" type="STRING" size="256"/>
           <Column id="bestRvwYn" type="STRING" size="256"/>
           <Column id="bestRvwCd" type="STRING" size="256"/>
           <Column id="dsplyYn" type="STRING" size="256"/>
@@ -409,11 +410,11 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	else if(svcId == "get_fileDtl"){
 		var obj = this.Div01.form.Div10_00.form.Static01;
-		var fileNm = this.ds_lectPlan_dtl.getColumn(0, 'realFileNm');
+		var fileNm = this.ds_atch_file_dtl.getColumn(0, 'realFileNm');
 		if(fileNm){
 			this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
 			
-			obj.set_text(realFileNm);
+			obj.set_text(fileNm);
 			obj.set_visible(true);
 		} else {
 			obj.set_text("실제 파일이 존재하지 않습니다.");
@@ -456,7 +457,8 @@ this.set_info_dtl = function(){
  **************************************************************************/
 this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.close();
+	//this.close();
+	this.get_file_detail(this.ds_atch_file_dtl);
 };
 
 this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -494,8 +496,8 @@ this.get_file_detail = function(ds, svcId){
 	var tranObj = {};
 	tranObj.strSvcId	= svcId ? svcId : "get_fileDtl";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/selectFileDtl.do";
-	tranObj.inData      = "file_detail=" + ds;
-	tranObj.outData     = ds + "=file_detail";
+	tranObj.inData      = "file_detail=" + ds.name;
+	tranObj.outData     = ds.name + "=file_detail";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -507,6 +509,8 @@ this.get_file_detail = function(ds, svcId){
 }
 this.Div01_Div10_00_Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
 {
+	this.ds_atch_file_dtl.addColumn("chk", "STRING");
+	this.ds_atch_file_dtl.setColumn(0, "chk", "Y");
 	this.gfn_fileDown(this.ds_atch_file_dtl, this.FileDownTransfer00);
 };
 
