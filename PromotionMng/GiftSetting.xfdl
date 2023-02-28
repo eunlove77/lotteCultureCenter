@@ -158,10 +158,10 @@
                           </Band>
                           <Band id="body">
                             <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
-                            <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combocontrol" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
-                            <Cell col="2" color="#666666" displaytype="editcontrol" edittype="text" text="bind:fgftNm" editmaxlength="200"/>
-                            <Cell col="3" displaytype="maskeditcontrol" edittype="mask" maskeditformat="!99,999" text="bind:onlnStkCnt" maskeditpostfixtext="개" expr="onlnStkCnt ? onlnStkCnt : ' '" editinputtype="normal" maskeditlimitbymask="integer"/>
-                            <Cell col="4" displaytype="maskeditcontrol" edittype="mask" maskeditformat="!99,999" text="bind:oflnStkCnt" maskeditpostfixtext="개" expr="oflnStkCnt ? oflnStkCnt : ' '" maskeditlimitbymask="integer"/>
+                            <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'combocontrol'" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
+                            <Cell col="2" color="#666666" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'editcontrol'" edittype="text" text="bind:fgftNm" editmaxlength="200"/>
+                            <Cell col="3" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'maskeditcontrol'" edittype="mask" maskeditformat="!99,999" maskeditpostfixtext="개" expr="(appCnt &gt; 0 ? (onlnStkCnt-onlnAppCnt + '/' + onlnStkCnt + ' 개') : onlnStkCnt)" editinputtype="normal" maskeditlimitbymask="integer" textAlign="right"/>
+                            <Cell col="4" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'maskeditcontrol'" edittype="mask" maskeditformat="!99,999" maskeditpostfixtext="개" expr="(appCnt &gt; 0 ? (oflnStkCnt-oflnAppCnt + '/' + oflnStkCnt + ' 개') : oflnStkCnt) " maskeditlimitbymask="integer" textAlign="right"/>
                           </Band>
                         </Format>
                       </Formats>

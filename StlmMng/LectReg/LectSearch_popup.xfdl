@@ -71,6 +71,9 @@ this.mvgBlstrCd = null;
 this.checkedYn = false;
 this.selectedIndex;
 
+// 시간 겹치는지 여부
+this.lectDtDuplYn = "N";
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -97,7 +100,7 @@ this.fn_data_list = function()
 	var strSvcId    = "dataList";
 	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectPopDataList.do";
 	var inData      = "";
-	var outData     = "this.ds_fmly_list=output1 this.ds_atlct_list=output2";
+	var outData     = "this.ds_fmly_list=output1";
 	var strArg      = "mbrNo=" + this.mbrNo + " yy=" + this.yy + " lectSmsterCd=" + this.lectSmsterCd;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
@@ -359,16 +362,22 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 {
 	var actlAtlctCnt = 0;
 	var fmlyChkYn = false;
-	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlyRelCdNm = [], arrBday = [];
+//	var arrActlAtlctNpleNm = [], arrSexCd = [], arrFmlyRelCd = [], arrFmlyRelCdNm = [], arrBday = [];
+	
+	this.ds_param_fmly_list.clearData();
 	for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 		if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
 			fmlyChkYn = true;
-			arrActlAtlctNpleNm.push(this.ds_fmly_list.getColumn(i, "korNm"));
-			arrSexCd.push(this.ds_fmly_list.getColumn(i, "sexCd"));
-			arrFmlyRelCd.push(this.ds_fmly_list.getColumn(i, "fmlyRelCd"));
-			arrFmlyRelCdNm.push(this.ds_fmly_list.getColumn(i, "fmlyRelCdNm"));
-			arrBday.push(this.ds_fmly_list.getColumn(i, "bday"));
-			actlAtlctCnt++;
+			
+			this.ds_param_fmly_list.addRow();
+			this.ds_param_fmly_list.copyRow(this.ds_param_fmly_list.getRowCount()-1, this.ds_fmly_list, i);
+			
+//  			arrActlAtlctNpleNm.push(this.ds_fmly_list.getColumn(i, "korNm"));
+//  			arrSexCd.push(this.ds_fmly_list.getColumn(i, "sexCd"));
+//  			arrFmlyRelCd.push(this.ds_fmly_list.getColumn(i, "fmlyRelCd"));
+//  			arrFmlyRelCdNm.push(this.ds_fmly_list.getColumn(i, "fmlyRelCdNm"));
+//  			arrBday.push(this.ds_fmly_list.getColumn(i, "bday"));
+// 			actlAtlctCnt++;
 		}
 	}
 	
@@ -408,69 +417,99 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	optnAmt = this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnAmt");
 	
 	// 기존 수강내역과 비교
-	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;
-	for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
-		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
-			if(this.ds_atlct_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
-				&& this.ds_atlct_list.getColumn(i, "sexCd") == arrSexCd[j]
-				&& this.ds_atlct_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
-				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
-				tgtLectStDtm = this.ds_atlct_list.getColumn(i, "lectStDtm");
-				tgtLectEndDtm = this.ds_atlct_list.getColumn(i, "lectEndDtm");
-				tgtLectStHhCd = this.ds_atlct_list.getColumn(i, "lectStHhCd");
-				tgtLectStMiCd = this.ds_atlct_list.getColumn(i, "lectStMiCd");
-				tgtLectEndHhCd = this.ds_atlct_list.getColumn(i, "lectEndHhCd");
-				tgtLectEndMiCd = this.ds_atlct_list.getColumn(i, "lectEndMiCd");
-				tgtLectStDtmNm = this.ds_atlct_list.getColumn(i, "lectStDtmNm");
-				
-				// 강의시작일, 강의종료일
-				var tgtLectStDtm = nexacro.replaceAll(tgtLectStDtm, ".", "");
-				var tgtLectEndDtm = nexacro.replaceAll(tgtLectEndDtm, ".", "");
-				if((Number(lectStDtm) >= Number(tgtLectStDtm) && Number(lectStDtm) <= Number(tgtLectEndDtm))
-					|| (Number(lectEndDtm) >= Number(tgtLectStDtm) && Number(lectEndDtm) <= Number(tgtLectEndDtm))){
-					overlapYn = true;
-				}
-				
-				// 강의시작시간
-				var aftStTime, aftEndTime;
-				if(Number(lectStMiCd) >= 30){
-					aftStTime = lectStHhCd + ((Number(lectStMiCd) - 30).toString().length < 2 ? "0" + (Number(lectStMiCd) - 30) : (Number(lectStMiCd) - 30));
-				}else{
-					aftStTime = ((Number(lectStHhCd) -1).toString().length < 2 ? "0"+(Number(lectStHhCd) -1).toString() : (Number(lectStHhCd) -1).toString()) + ((60 + (Number(lectStMiCd) - 30)) == 60 ? "00" : ((60 + (Number(lectStMiCd) - 30)).toString().length < 2 ? "0"+(60 + (Number(lectStMiCd) - 30)).toString() : (60 + (Number(lectStMiCd) - 30)).toString()));
-				}
-				
-				if(Number(lectEndMiCd) <= 30){
-					aftEndTime = lectEndHhCd + ((Number(lectEndMiCd) + 30).toString().length < 2 ? "0"+(Number(lectEndMiCd) + 30) : (Number(lectEndMiCd) + 30));
-				}else{
-					aftEndTime = ((Number(lectEndHhCd) +1).toString().length < 2 ? "0"+(Number(lectEndHhCd) +1).toString() : (Number(lectEndHhCd) +1).toString()) + ((Number(lectEndMiCd) + 30) == 60 ? "00" : ((Number(lectEndMiCd) + 30) - 60).toString().length < 2 ? "0"+((Number(lectEndMiCd) + 30) - 60).toString() : ((Number(lectEndMiCd) + 30) - 60).toString());
-				}
-				
-				if((Number(aftStTime) >= Number(tgtLectStHhCd + tgtLectStMiCd) && Number(aftStTime) <= Number(tgtLectEndHhCd + tgtLectEndMiCd))
-				|| (Number(aftEndTime) >= Number(tgtLectStHhCd + tgtLectStMiCd) && Number(aftEndTime) <= Number(tgtLectEndHhCd + tgtLectEndMiCd))){
-					overlapYn = true;
-				}
-				
-				// 요일
- 				var arrTgtLectStDtmNm = tgtLectStDtmNm.split(",");
- 				var arrLectStDtmNm = stringStDaywNm.split(",");
- 				
- 				for(var k=0;k<arrTgtLectStDtmNm.length;k++){
- 					for(var l=0;l<arrLectStDtmNm.length;l++){
- 						if(arrTgtLectStDtmNm[k].trim() == arrLectStDtmNm[l].trim()){
- 							overlapYn = true;
- 						}
- 					}
- 				}
-			}
-		}
-	}
+	var strSvcId    = "getDtmDuplYn";
+	var strSvcUrl   = this.application.Admin_svc + "::lectReg/getDtmDuplYn.do";
+	var inData      = "classInfo=this.ds_class_dtl fmlyList=this.ds_param_fmly_list";
+	var outData     = "";
+	var strArg      = "mbrNo=" + this.mbrNo + " yy=" + this.yy + " lectSmsterCd=" + this.lectSmsterCd;
+	var callBackFnc = function(svcID, errorCode, errorMsg){};
+	var isAsync     = false;
 	
-	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04") && overlapYn){
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync,
+		isPopup : false,
+		menuSeq : this.menuSeq
+	};
+	
+	this.gfn_transaction(tranObj);
+	
+	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04") && this.lectDtDuplYn == "Y"){
 		// 기존 결제내역의 강좌와 시간이 겹치는경우
 		if(!confirm("강의기간(시간, 요일)이 중복되는 강좌가 있습니다. 그래도 결제하시겠습니까?")){
 			return;
 		}
 	}
+	
+	
+// 	var tgtLectStDtm, tgtLectEndDtm, tgtLectStHhCd, tgtLectStMiCd, tgtLectEndHhCd, tgtLectEndMiCd, tgtLectStDtmNm;
+// 	for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
+// 		for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+// 			if(this.ds_atlct_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
+// 				&& this.ds_atlct_list.getColumn(i, "sexCd") == arrSexCd[j]
+// 				&& this.ds_atlct_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
+// 				&& this.ds_atlct_list.getColumn(i, "bday") == arrBday[j]){
+// 				tgtLectStDtm = this.ds_atlct_list.getColumn(i, "lectStDtm");
+// 				tgtLectEndDtm = this.ds_atlct_list.getColumn(i, "lectEndDtm");
+// 				tgtLectStHhCd = this.ds_atlct_list.getColumn(i, "lectStHhCd");
+// 				tgtLectStMiCd = this.ds_atlct_list.getColumn(i, "lectStMiCd");
+// 				tgtLectEndHhCd = this.ds_atlct_list.getColumn(i, "lectEndHhCd");
+// 				tgtLectEndMiCd = this.ds_atlct_list.getColumn(i, "lectEndMiCd");
+// 				tgtLectStDtmNm = this.ds_atlct_list.getColumn(i, "lectStDtmNm");
+// 				
+// 				// 강의시작일, 강의종료일
+// 				//var tgtLectStDtm = nexacro.replaceAll(tgtLectStDtm, ".", "");
+// 				//var tgtLectEndDtm = nexacro.replaceAll(tgtLectEndDtm, ".", "");
+// 				if((Number(lectStDtm) >= Number(tgtLectStDtm) && Number(lectStDtm) <= Number(tgtLectEndDtm))
+// 					|| (Number(lectEndDtm) >= Number(tgtLectStDtm) && Number(lectEndDtm) <= Number(tgtLectEndDtm))){
+// 					overlapYn = true;
+// 				}
+// 				
+// 				// 강의시작시간
+// 				var aftStTime, aftEndTime;
+// 				if(Number(lectStMiCd) >= 30){
+// 					aftStTime = lectStHhCd + ((Number(lectStMiCd) - 30).toString().length < 2 ? "0" + (Number(lectStMiCd) - 30) : (Number(lectStMiCd) - 30));
+// 				}else{
+// 					aftStTime = ((Number(lectStHhCd) -1).toString().length < 2 ? "0"+(Number(lectStHhCd) -1).toString() : (Number(lectStHhCd) -1).toString()) + ((60 + (Number(lectStMiCd) - 30)) == 60 ? "00" : ((60 + (Number(lectStMiCd) - 30)).toString().length < 2 ? "0"+(60 + (Number(lectStMiCd) - 30)).toString() : (60 + (Number(lectStMiCd) - 30)).toString()));
+// 				}
+// 				
+// 				if(Number(lectEndMiCd) <= 30){
+// 					aftEndTime = lectEndHhCd + ((Number(lectEndMiCd) + 30).toString().length < 2 ? "0"+(Number(lectEndMiCd) + 30) : (Number(lectEndMiCd) + 30));
+// 				}else{
+// 					aftEndTime = ((Number(lectEndHhCd) +1).toString().length < 2 ? "0"+(Number(lectEndHhCd) +1).toString() : (Number(lectEndHhCd) +1).toString()) + ((Number(lectEndMiCd) + 30) == 60 ? "00" : ((Number(lectEndMiCd) + 30) - 60).toString().length < 2 ? "0"+((Number(lectEndMiCd) + 30) - 60).toString() : ((Number(lectEndMiCd) + 30) - 60).toString());
+// 				}
+// 				
+// 				if((Number(aftStTime) >= Number(tgtLectStHhCd + tgtLectStMiCd) && Number(aftStTime) <= Number(tgtLectEndHhCd + tgtLectEndMiCd))
+// 				|| (Number(aftEndTime) >= Number(tgtLectStHhCd + tgtLectStMiCd) && Number(aftEndTime) <= Number(tgtLectEndHhCd + tgtLectEndMiCd))){
+// 					overlapYn = true;
+// 				}
+// 				
+// 				// 요일
+//  				var arrTgtLectStDtmNm = tgtLectStDtmNm.split(",");
+//  				var arrLectStDtmNm = stringStDaywNm.split(",");
+//  				
+//  				for(var k=0;k<arrTgtLectStDtmNm.length;k++){
+//  					for(var l=0;l<arrLectStDtmNm.length;l++){
+//  						if(arrTgtLectStDtmNm[k].trim() == arrLectStDtmNm[l].trim()){
+//  							overlapYn = true;
+//  						}
+//  					}
+//  				}
+// 			}
+// 		}
+// 	}
+	
+// 	if((lectStatCd == "02" || lectStatCd == "03" || lectStatCd == "04") && overlapYn){
+// 		// 기존 결제내역의 강좌와 시간이 겹치는경우
+// 		if(!confirm("강의기간(시간, 요일)이 중복되는 강좌가 있습니다. 그래도 결제하시겠습니까?")){
+// 			return;
+// 		}
+// 	}
 	
 	// 기존회원여부
 	var strSvcId    = "memberDtl";
@@ -517,15 +556,15 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 // 		}
 // 	}
 // && this.initWaitMemberYn == "Y" 2023.02.20 최초 대기자만이 아닌 모든 회원들에게 컨펌창 띄움
-	if(lectStatCd == "05" && (this.ds_tot_stlm_list.getRowCount() + actlAtlctCnt) > Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt"))){
+	if(lectStatCd == "05" && (this.ds_tot_stlm_list.getRowCount() + this.ds_param_fmly_list.getRowCount()) > Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt"))){
 		if(confirm("정원이 마감된 강좌입니다. 대기자 접수를 하시겠습니까?")){
 			var strSvcId    = "saveWait";
 			var strSvcUrl   = this.application.Admin_svc + "::lectReg/insertWaitList.do";
-			var inData      = "classList=this.opener.divWork.form.ds_class_list";
+			var inData      = "classList=this.opener.divWork.form.ds_class_list fmlyList=this.ds_param_fmly_list";
 			var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
 			var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
 			strArg			+= " pblPmprcustBrchCd=" + this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") + " pblPmprcustLectCd=" + this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd");
-			strArg			+= " actlAtlctNpleNm=" + nexacro.wrapQuote(arrActlAtlctNpleNm.join()) + " sexCd=" + nexacro.wrapQuote(arrSexCd.join()) + " fmlyRelCd=" + nexacro.wrapQuote(arrFmlyRelCd.join()) + " fmlyRelCdNm=" + nexacro.wrapQuote(arrFmlyRelCdNm.join()) + " bday=" + nexacro.wrapQuote(arrBday.join())
+			//strArg			+= " actlAtlctNpleNm=" + nexacro.wrapQuote(arrActlAtlctNpleNm.join()) + " sexCd=" + nexacro.wrapQuote(arrSexCd.join()) + " fmlyRelCd=" + nexacro.wrapQuote(arrFmlyRelCd.join()) + " fmlyRelCdNm=" + nexacro.wrapQuote(arrFmlyRelCdNm.join()) + " bday=" + nexacro.wrapQuote(arrBday.join())
 			if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
 				strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
 				strArg			+= " optnNm=" + nexacro.wrapQuote(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnNm"));
@@ -553,13 +592,13 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		var arrStlmActlAtlctNpleNm = [];
 		var stlmYn = false;
 		for(var i=0;i<this.ds_stlm_list.getRowCount();i++){
-			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
-				if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
-					&& this.ds_stlm_list.getColumn(i, "sexCd") == arrSexCd[j]
-					&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]
-					&& this.ds_stlm_list.getColumn(i, "bday") == arrBday[j]){
+			for(var j=0;j<this.ds_param_fmly_list.getRowCount();j++){
+				if(this.ds_stlm_list.getColumn(i, "actlAtlctNpleNm") == this.ds_param_fmly_list.getColumn(j, "korNm")
+					&& this.ds_stlm_list.getColumn(i, "sexCd") == this.ds_param_fmly_list.getColumn(j, "sexCd")
+					&& this.ds_stlm_list.getColumn(i, "fmlyRelCd") == this.ds_param_fmly_list.getColumn(j, "fmlyRelCd")
+					&& this.ds_stlm_list.getColumn(i, "bday") == this.ds_param_fmly_list.getColumn(j, "bday")){
 					stlmYn = true;
-					arrStlmActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+					arrStlmActlAtlctNpleNm.push(this.ds_param_fmly_list.getColumn(j, "korNm"));
 				}
 			}
 		}
@@ -567,12 +606,12 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		var arrWitActlAtlctNpleNm = [];
 		var witYn = false;
 		for(var i=0;i<this.ds_wit_list.getRowCount();i++){
-			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
-				if(this.ds_wit_list.getColumn(i, "actlAtlctNpleNm") == arrActlAtlctNpleNm[j]
-					&& this.ds_wit_list.getColumn(i, "sexCd") == arrSexCd[j]
-					&& this.ds_wit_list.getColumn(i, "fmlyRelCd") == arrFmlyRelCd[j]){
+			for(var j=0;j<this.ds_param_fmly_list.getRowCount();j++){
+				if(this.ds_wit_list.getColumn(i, "actlAtlctNpleNm") == this.ds_param_fmly_list.getColumn(j, "korNm")
+					&& this.ds_wit_list.getColumn(i, "sexCd") == this.ds_param_fmly_list.getColumn(j, "sexCd")
+					&& this.ds_wit_list.getColumn(i, "fmlyRelCd") == this.ds_param_fmly_list.getColumn(j, "fmlyRelCd")){
 					witYn = true;
-					arrWitActlAtlctNpleNm.push(arrActlAtlctNpleNm[j]);
+					arrWitActlAtlctNpleNm.push(this.ds_param_fmly_list.getColumn(j, "korNm"));
 				}
 			}
 		}
@@ -623,7 +662,7 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		}
 		
 		// 인원 수 체크
-		if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < actlAtlctCnt + Number(this.ds_tot_stlm_list.getRowCount())){
+		if(Number(this.ds_class_dtl.getColumn(0, "gsCapaCnt")) < this.ds_param_fmly_list.getRowCount() + Number(this.ds_tot_stlm_list.getRowCount())){
 			alert("강좌명 : " + lectNm + "\n정원이 마감된 강좌가 있어 결제 하실 수 없습니다.");
 			for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 				if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
@@ -687,12 +726,12 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 			}
 			
 			// 동일한 강좌의 동일한 실수강자가 있을때
-			for(var j=0;j<arrActlAtlctNpleNm.length;j++){
+			for(var j=0;j<this.ds_param_fmly_list.getRowCount();j++){
 				if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")
 					&& yy == this.opener.divWork.form.ds_class_list.getColumn(i, "yy")
 					&& lectSmsterCd == this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")
 					&& (this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" ? this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd") : lectCd) == this.opener.divWork.form.ds_class_list.getColumn(i, "lectCd")
-					&& arrActlAtlctNpleNm[j] == this.opener.divWork.form.ds_class_list.getColumn(i, "actlAtlctNpleNm")){
+					&& this.ds_param_fmly_list.getColumn(j, "korNm") == this.opener.divWork.form.ds_class_list.getColumn(i, "actlAtlctNpleNm")){
 					alert("강좌명: " + lectNm + "\n같은 강좌에 중복된 실수강자가 있어 결제 하실 수 없습니다.");
 					for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
 						if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
@@ -711,10 +750,10 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		// 저장
 		var strSvcId    = "save";
 		var strSvcUrl   = this.application.Admin_svc + "::lectReg/setLectReg.do";
-		var inData      = "classList=this.opener.divWork.form.ds_class_list";
+		var inData      = "classList=this.opener.divWork.form.ds_class_list fmlyList=this.ds_param_fmly_list";
 		var outData     = "this.opener.divWork.form.ds_class_list=output1 this.opener.divWork.form.ds_fmly_list=output2 this.opener.divWork.form.ds_atlct_list=output3 this.opener.divWork.form.ds_crdco_list=output4 this.opener.divWork.form.ds_chngmthd_list=output5";
 		var strArg      = "mbrNo=" + this.mbrNo + " brchCd =" + brchCd + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " lectCd=" + lectCd;
-		strArg			+= " actlAtlctNpleNm=" + nexacro.wrapQuote(arrActlAtlctNpleNm.join()) + " sexCd=" + nexacro.wrapQuote(arrSexCd.join()) + " fmlyRelCd=" + nexacro.wrapQuote(arrFmlyRelCd.join()) + " fmlyRelCdNm=" + nexacro.wrapQuote(arrFmlyRelCdNm.join()) + " bday=" + nexacro.wrapQuote(arrBday.join());
+		//strArg			+= " actlAtlctNpleNm=" + nexacro.wrapQuote(arrActlAtlctNpleNm.join()) + " sexCd=" + nexacro.wrapQuote(arrSexCd.join()) + " fmlyRelCd=" + nexacro.wrapQuote(arrFmlyRelCd.join()) + " fmlyRelCdNm=" + nexacro.wrapQuote(arrFmlyRelCdNm.join()) + " bday=" + nexacro.wrapQuote(arrBday.join());
 		strArg			+= " pblPmprcustBrchCd=" + this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") + " pblPmprcustLectCd=" + this.ds_class_dtl.getColumn(0, "pblPmprcustLectCd");
 		if(this.gfn_nvl(this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno")) != ""){
 			strArg			+= " optnSeqno=" + this.ds_optn_list.getColumn(this.Div01.form.Div01.form.Div00.form.Combo00.index, "optnSeqno");
@@ -888,6 +927,21 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="bday" type="STRING" size="256"/>
           <Column id="stlmChnlCd" type="STRING" size="256"/>
           <Column id="atlctStlmSubChnlCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_param_fmly_list">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="fmlySeqno" type="INT" size="256"/>
+          <Column id="fmlyMbrNo" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="lscCd" type="STRING" size="256"/>
+          <Column id="memoCont" type="STRING" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

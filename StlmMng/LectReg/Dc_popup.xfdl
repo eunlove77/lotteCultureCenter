@@ -1001,9 +1001,12 @@ this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(!this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.readonly && this.gfn_nvl(this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.value) == "0"){
-		alert("할인금액을 입력하세요.");
-		this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.setFocus();
-		return;
+		// 2023-02-28 재료비만 할인할 수 있어야함
+		if(this.Div00.form.Div00.form.Div05.form.editAdd.readonly || this.gfn_nvl(this.Div00.form.Div00.form.Div05.form.editAdd.value) == "0"){
+			alert("할인금액을 입력하세요.");
+			this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.setFocus();
+			return;
+		}
 	}
 	
 	if(!this.Div00.form.Div00.form.Div05.form.editAdd.readonly && this.gfn_nvl(this.Div00.form.Div00.form.Div05.form.editAdd.value) == "0"){
