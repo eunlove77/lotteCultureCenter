@@ -625,7 +625,7 @@ this.fn_searchValueInit = function(){
 		if(this.row02.form.Div00.form.chkStat08.value == true) arrLectStatCd.push("08");
 		if(this.row02.form.Div00.form.chkStat09.value == true) arrLectStatCd.push("09");
 	}
-	
+	console.log(arrTcTpCd);
 	if(this.row04.form.Div00.form.chkTcTp1.value == false 
 	&& this.row04.form.Div00.form.chkTcTp2.value == false
 	&& this.row04.form.Div00.form.chkTcTp3.value == false
@@ -638,7 +638,16 @@ this.fn_searchValueInit = function(){
 		if(this.row04.form.Div00.form.chkTcTp1.value == true) arrTcTpCd.push("1");
 		if(this.row04.form.Div00.form.chkTcTp2.value == true) arrTcTpCd.push("2");
 		if(this.row04.form.Div00.form.chkTcTp3.value == true) arrTcTpCd.push("3");
-		if(this.row04.form.Div00.form.chkTcTp4.value == true) arrTcTpCd.push("4");
+		if(this.row04.form.Div00.form.chkTcTp4.value == true){
+			
+			if(this.row04.form.Div00.form.chkTcTp2.value == false 
+			&& this.row04.form.Div00.form.chkTcTp3.value == false){
+				arrTcTpCd.push("2");
+				arrTcTpCd.push("3");
+			}
+			
+			arrTcTpCd.push("4");
+		}
 	}
 	
  	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
@@ -647,7 +656,7 @@ this.fn_searchValueInit = function(){
  	this.ds_search.setColumn(0, "chkLectCl", arrLectClCd.join(","));
  	this.ds_search.setColumn(0, "chkLectStat", arrLectStatCd.join(","));
  	this.ds_search.setColumn(0, "chkTcTp", arrTcTpCd.join(",")); 	
-	
+	console.log(arrTcTpCd);
  	this.ds_search.setColumn(0, "f", this.row03.form.Div00.form.searchField.value);
  	this.ds_search.setColumn(0, "q", this.row03.form.Div00.form.searchQuery.value);
 }
@@ -720,6 +729,7 @@ this.fn_sesterInfo = function(_brchCd)
 this.row01_Div00_brchCd_canitemchange = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_sesterInfo(e.postvalue);
+	this.txtTotal.set_text("( 0개 )");					
 	this.ds_list.clearData();
 };
 
