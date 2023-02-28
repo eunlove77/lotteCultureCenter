@@ -180,7 +180,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="Button00" taborder="3" text="환불삭제" top="0" height="21" cssclass="btn_WF_Medium" right="0" width="84" visible="false" onclick="Button00_onclick"/>
+        <Button id="Button00" taborder="3" text="취소(환불) 삭제" top="0" height="21" cssclass="btn_WF_Medium" right="0" width="120" visible="false" onclick="Button00_onclick"/>
         <Static id="Static01" taborder="4" text="▶ 환불금액" left="615" top="0" width="120" height="21" visible="false"/>
         <Div id="Div01" taborder="5" text="Div01" left="615" top="25" cssclass="div_WF_TableComp" right="0" height="220">
           <Layouts>
@@ -196,15 +196,15 @@
               <Div id="Div01" taborder="1" text="Div01" left="0" top="32" height="94" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="강좌료 환불금액" left="0" top="0" width="200" height="92" cssclass="sta_WF_TableLabel" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-                    <Static id="Static01" taborder="1" left="200" top="0" height="92" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                    <Static id="Static00" taborder="0" text="· 강좌료 환불금액" left="0" top="0" width="200" height="92" cssclass="sta_WF_TableLabel" font="bold 12px/normal &quot;Noto Sans KR&quot;" verticalAlign="middle"/>
+                    <Static id="Static01" taborder="1" left="200" top="0" height="92" right="0" rtl="true"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Div id="Div02" taborder="2" text="Div02" left="0" top="125" height="94" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="재료비/대여료 환불금액" left="0" top="0" width="200" height="92" cssclass="sta_WF_TableLabel" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+                    <Static id="Static00" taborder="0" text="· 재료비/대여료 환불금액" left="0" top="0" width="200" height="92" cssclass="sta_WF_TableLabel" font="bold 12px/normal &quot;Noto Sans KR&quot;" verticalAlign="middle"/>
                     <Static id="Static01" taborder="1" left="200" top="0" height="92" cssclass="sta_WF_CompText" right="0" textAlign="right" text=""/>
                   </Layout>
                 </Layouts>
@@ -275,6 +275,7 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+this.ds_stlm_rfnd_list = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -287,56 +288,51 @@ this.StlmInfoDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 // 환불삭제 버튼 클릭
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var atlctRsvNo = this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.rowposition, "atlctRsvNo");
-	var actlAtlctNpleSeqno = this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list.rowposition, "actlAtlctNpleSeqno");
-	if(confirm("취소(환불)하시겠습니까? (결제완료 상태로 변경 됩니다.)")){
-		var strSvcId    = "update";
-		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
-		var inData      = "";
-		var outData     = "";
-		var strArg      = "updateType=cmplt atlctRsvNo="+atlctRsvNo+" actlAtlctNpleSeqno="+actlAtlctNpleSeqno;
-		var callBackFnc = "fnCallback";
-		var isAsync     = true;
-		var tranObj = {
-			strSvcId : strSvcId,
-			strSvcUrl : strSvcUrl,
-			inData : inData,
-			outData : outData,
-			strArg : strArg,
-			callBackFnc : callBackFnc,
-			isAsync : isAsync,
-			isPopup : true,
-			menuSeq : this.menuSeq
-		};
-		
-		this.gfn_transaction(tranObj);
+	this.ds_stlm_rfnd_list = this.parent.parent.parent.form.Div03.form.ds_stlm_rfnd_list;
+	var chkYn = false;
+	var atlctRsvNo = "";
+	var actlAtlctNpleSeqno = "";
+	for(var i=0; i<this.ds_stlm_rfnd_list.getRowCount(); i++){
+		if(this.ds_stlm_rfnd_list.checkarray[i] > 0){
+			chkYn = true;
+			atlctRsvNo = this.ds_stlm_rfnd_list.getColumn(i, "atlctRsvNo");
+			actlAtlctNpleSeqno = this.ds_stlm_rfnd_list.getColumn(i, "actlAtlctNpleSeqno");
+		}
+	}
+	
+	if(!chkYn){
+		alert("실수강자를 선택해주세요.");
+	}else{
+		if(confirm("취소(환불)하시겠습니까? (결제완료 상태로 변경 됩니다.)")){
+			var strSvcId    = "update";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
+			var inData      = "";
+			var outData     = "";
+			var strArg      = "updateType=cmplt atlctRsvNo="+atlctRsvNo+" actlAtlctNpleSeqno="+actlAtlctNpleSeqno;
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.menuSeq
+			};
+			
+			this.gfn_transaction(tranObj);
+		}
 	}
 };
 
 this.fnCallback = function(svcID, errorCode, errorMsg)
 {
-	// 에러 시 화면 처리 내역
-	if(errorCode == -2)
+	if(errorCode != 0)
 	{
-		// 총 정원 0인 경우
-		alert(errorMsg);
-		return;
-	}
-	else if(errorCode == -3)
-	{
-		// 강좌상태 : 접수마감, 강의종료, 폐강, 대기신청, 접수불가인 경우
-		alert(errorMsg);
-		return;
-	}
-	else if(errorCode == -4)
-	{
-		// 쿠폰 사용처리 실패
-		alert(errorMsg);
-		return;
-	}
-	else if(errorCode != 0)
-	{
-		this.alert(errorCode+"\n"+errorMsg);
+		this.alert(errorMsg);
 		return;
 	}
 	

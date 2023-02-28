@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid id="GridInquiryList" taborder="2" left="10" top="240" binddataset="inquiryDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="데이터가 없습니다." oncellclick="GridInquiryList_oncellclick" cellsizingtype="col">
+        <Grid id="GridInquiryList" taborder="2" left="10" top="240" binddataset="inquiryDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridInquiryList_oncellclick" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -40,8 +40,8 @@
                 <Cell text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
                 <Cell col="1" text="expr:clCd? clNm : ''"/>
                 <Cell col="2" text="bind:brchNm"/>
-                <Cell col="3" expr="comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1) + &quot;(&quot; + comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrId&quot;), 3) + &quot;)&quot;" tooltiptype="hover" tooltiptext="expr:mbrNm + &quot;(&quot; + mbrId + &quot;)&quot;"/>
-                <Cell col="4" expr="email ? comp.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd : ''" tooltiptext="expr:email + &quot;@&quot; + emailAddrCd" tooltiptype="hover"/>
+                <Cell col="3" expr="comp.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" tooltiptype="hover" tooltiptext="expr:mbrNm"/>
+                <Cell col="4" expr="email ? comp.parent.gfn_setMasking(email, 3) + &quot;@&quot; + emailAddrCd : ''" tooltiptext="expr: email ?  email  + &quot;@&quot; + emailAddrCd : ''" tooltiptype="hover"/>
                 <Cell col="5" expr="comp.parent.gfn_setMaskingTel(hpNo)" tooltiptext="bind:hpNo" tooltiptype="hover"/>
                 <Cell col="6" text="bind:rgprDtm" edittype="none" displaytype="expr:rgprId ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="7" text="expr:admId ? admNm + '('  + admId + ')' : '--'"/>
@@ -234,7 +234,7 @@ this.InquiryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
-	this.gfnSetCheckBoxNoDataset(this.inquiryDs, this.GridInquiryList, 0);
+	//this.gfnSetCheckBoxNoDataset(this.inquiryDs, this.GridInquiryList, 0);
 	
 	//지점코드 세팅
 	this.fn_set_spotCd();
@@ -244,7 +244,7 @@ this.InquiryList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 //삭제버튼
 this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var check_array = this.inquiryDs.checkarray;
+	/*var check_array = this.inquiryDs.checkarray;
 	var checked_array = new Array();
 	for(var i = 0; i < check_array.length; i++){
 		if(check_array[i] > 0) checked_array.push(i);
@@ -264,7 +264,7 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 		check_array[i] = 0;
 	}
 
-	this.fn_delete();
+	this.fn_delete();*/
 	
 };
 

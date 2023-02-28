@@ -28,9 +28,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="주문구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkDisAll" taborder="3" text="전체" left="Static00:10" top="5" width="60" height="20"/>
-                    <CheckBox id="chkDis0" taborder="1" text="온라인" left="chkDisAll:10" top="5" width="60" height="20" truevalue="ON" falsevalue="false"/>
-                    <CheckBox id="chkDis1" taborder="2" text="오프라인" left="chkDis0:10" top="5" width="72" height="20" truevalue="OFF" minwidth="350" maxwidth="" falsevalue="false"/>
+                    <CheckBox id="chkDisAll" taborder="3" text="전체" left="Static00:10" top="5" width="60" height="20" onclick="fn_checkboxAll" truevalue="true"/>
+                    <CheckBox id="chkDis0" taborder="1" text="온라인" left="chkDisAll:10" top="5" width="60" height="20" truevalue="ON" falsevalue="false" onclick="fn_checkbox"/>
+                    <CheckBox id="chkDis1" taborder="2" text="오프라인" left="chkDis0:10" top="5" width="72" height="20" truevalue="OFF" minwidth="350" maxwidth="" falsevalue="false" onclick="fn_checkbox"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -142,7 +142,7 @@
                     </Band>
                     <Band id="body">
                       <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox" suppress="2" suppressalign="middle"/>
-                      <Cell col="1" color="blue" cursor="pointer" textDecoration="underline" suppress="1" text="bind:fgftAppNo" suppressalign="middle"/>
+                      <Cell col="1" suppress="1" text="bind:fgftAppNo" suppressalign="middle"/>
                       <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="normal" text="bind:fgftNm" suppressalign="middle" suppress="2"/>
                       <Cell col="3" text="bind:appChnlNm" suppressalign="middle" suppress="2"/>
                       <Cell col="4" color="#666666" text="bind:appDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" calendardisplaynulltype="none" displaytype="date" suppressalign="middle" suppress="2"/>
@@ -277,6 +277,78 @@ this.GiftStatus_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.gfnSetCheckBoxNoDataset(this.ds_app_list, this.Div01.form.Grid00, 0); 
 };
 
+//전체 체크박스 이벤트
+this.fn_checkboxAll = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{		
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]")
+			{
+				arrObj[i].set_value(arrObj[i].truevalue);
+			}
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{				
+				arrObj[i].set_value(arrObj[i].falsevalue);
+			}
+		}
+	}
+}
+
+//개별 체크박스 이벤트
+this.fn_checkbox = function(pObj) 
+{
+	var arrObj = pObj.parent.components;
+		
+	if(pObj.isChecked())
+	{
+		var len = 0;
+		var chkLen = 0;
+		var chkAll;
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				chkAll = arrObj[i];
+			}
+			
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") == -1)
+			{
+				len++;
+				if(arrObj[i].isChecked())
+				{
+					chkLen++;
+				}
+			}
+		}
+		
+		if(len == chkLen) 
+		{
+			chkAll.set_value(true);
+		}
+	}
+	else 
+	{
+		for(var i=0; i<arrObj.length; i++)
+		{
+			if(arrObj[i] == "[object CheckBox]" && arrObj[i].name.indexOf("All") > -1)
+			{				
+				arrObj[i].set_value(false);	
+				return;
+			}			
+		}
+	}
+}
+
 /**************************************************************************
  * 초기화버튼
  **************************************************************************/
@@ -329,7 +401,7 @@ this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.Click
 
 this.Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 1 || (e.col == 5 && e.clickitem == "control"))
+	if(e.col == 5 && e.clickitem == "control")
 	{
 		this.popCnt ++;
 		var oArg = {
@@ -387,7 +459,6 @@ this.Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 			this.fn_cancel(obj.getBindDataset().getColumn(e.row, "fgftAppNo"));
 		}
 	}
-	
 };
 
 /**************************************************************************
@@ -411,7 +482,7 @@ this.fn_cancel_btn = function()
 	
 	if(chkCnt == 0)
 	{
-		alert("항목을 선택하세요.");
+		alert("취소/회수할 항목을 선택하세요.");
 	}
 	else if(chkCnt > 1)
 	{
@@ -521,8 +592,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	
 	switch(svcID)
 	{
-		case "detail":    
-			this.Div01.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_promotion_list.getCount()) + "개)");
+		case "list":    
+			this.Div01.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_app_list.getCount()) + "개)");
 			break;
 		case "cancel" :
 			alert("취소/회수 되었습니다.");

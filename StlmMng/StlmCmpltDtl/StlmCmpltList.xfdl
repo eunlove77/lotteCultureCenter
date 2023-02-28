@@ -343,49 +343,75 @@ this.PayCmpltList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 // 관리자 취소 버튼 클릭
 this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.lookup("admCnclDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
-		this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno");
-		this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 470);
-		this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 470);
-		this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 470);
-		var divObj = new Div("admCnclDiv");
-		divObj.set_left(0);
-		divObj.set_right(0);
-		divObj.set_top(495);
-		divObj.set_height(470);
-		divObj.set_url("StlmMng::StlmCmpltDtl/AdmCncl.xfdl");
-		
-		this.parent.parent.parent.form.addChild("admCnclDiv", divObj);
-		divObj.show();
-		
-		this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 470); // div
-		this.parent.parent.parent.parent.resetScroll(); // form
+	var chkYn = false;
+	var index = -1;
+	for(var i=0; i<this.ds_stlm_cmplt_list.getRowCount(); i++){
+		if(this.ds_stlm_cmplt_list.checkarray[i] > 0){
+			chkYn = true;
+			index = i;
+		}
 	}
 	
-	
+	if(!chkYn){
+		alert("실수강자를 선택해주세요.");
+		return;
+	}else{
+		if(this.lookup("admCnclDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
+			this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(index, "actlAtlctNpleSeqno");
+			this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 470);
+			this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 470);
+			this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() + 470);
+			var divObj = new Div("admCnclDiv");
+			divObj.set_left(0);
+			divObj.set_right(0);
+			divObj.set_top(495);
+			divObj.set_height(470);
+			divObj.set_url("StlmMng::StlmCmpltDtl/AdmCncl.xfdl");
+			
+			this.parent.parent.parent.form.addChild("admCnclDiv", divObj);
+			divObj.show();
+			
+			this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() + 470); // div
+			this.parent.parent.parent.parent.resetScroll(); // form
+		}
+	}
 };
 
 // 주문정보 수정 버튼 클릭
 this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.lookup("orderInfoModifyDiv") === undefined && this.lookup("admCnclDiv") === undefined){
-		this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno");
-		
-		this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 610);
-		this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 610);
-		this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 610);
-		var divObj = new Div("orderInfoModifyDiv");
-		divObj.set_left(0);
-		divObj.set_right(0);
-		divObj.set_top(495);
-		divObj.set_height(610);
-		divObj.set_url("StlmMng::StlmCmpltDtl/OrderInfoModify.xfdl");
-		
-		this.parent.parent.parent.form.addChild("orderInfoModifyDiv", divObj);
-		divObj.show();
-		
-		this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 610); // div
-		this.parent.parent.parent.parent.resetScroll(); // form
+	var chkYn = false;
+	var index = -1;
+	for(var i=0; i<this.ds_stlm_cmplt_list.getRowCount(); i++){
+		if(this.ds_stlm_cmplt_list.checkarray[i] > 0){
+			chkYn = true;
+			index = i;
+		}
+	}
+	
+	if(!chkYn){
+		alert("실수강자를 선택해주세요.");
+		return;
+	}else{
+		if(this.lookup("orderInfoModifyDiv") === undefined && this.lookup("admCnclDiv") === undefined){
+			this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(index, "actlAtlctNpleSeqno");
+			
+			this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 610);
+			this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 610);
+			this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 610);
+			var divObj = new Div("orderInfoModifyDiv");
+			divObj.set_left(0);
+			divObj.set_right(0);
+			divObj.set_top(495);
+			divObj.set_height(610);
+			divObj.set_url("StlmMng::StlmCmpltDtl/OrderInfoModify.xfdl");
+			
+			this.parent.parent.parent.form.addChild("orderInfoModifyDiv", divObj);
+			divObj.show();
+			
+			this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 610); // div
+			this.parent.parent.parent.parent.resetScroll(); // form
+		}
 	}
 };
 
@@ -394,40 +420,59 @@ this.Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	// 실수강자 카운트(동일강좌 한꺼번에 이강할때 사용)
 	var actlAtlctNpleCnt = 0;
-	for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
-		if(this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "brchCd") == this.ds_stlm_cmplt_list.getColumn(i, "brchCd")
-			&& this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "yy") == this.ds_stlm_cmplt_list.getColumn(i, "yy")
-			&& Number(this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectSmsterCd")) == Number(this.ds_stlm_cmplt_list.getColumn(i, "lectSmsterCd"))
-			&& this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectCd") == this.ds_stlm_cmplt_list.getColumn(i, "lectCd")){
-			actlAtlctNpleCnt++;
+	var chkYn = false;
+	var brchCd = "", yy = "", lectSmsterCd = "", lectCd = "";
+	var index = -1;
+	for(var i=0; i<this.ds_stlm_cmplt_list.getRowCount(); i++){
+		if(this.ds_stlm_cmplt_list.checkarray[i] > 0){
+			chkYn = true;
+			index = i;
+			brchCd = this.ds_stlm_cmplt_list.getColumn(i, "brchCd");
+			yy = this.ds_stlm_cmplt_list.getColumn(i, "yy");
+			lectSmsterCd = this.ds_stlm_cmplt_list.getColumn(i, "lectSmsterCd");
+			lectCd = this.ds_stlm_cmplt_list.getColumn(i, "lectCd");
 		}
 	}
-	trace(this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "brchCd"));
-	var oArg = {
-		menuSeq : this.menuSeq
-		, atlctRsvNo : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "atlctRsvNo")
-		, actlAtlctNpleSeqno : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "actlAtlctNpleSeqno")
-		, brchCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "brchCd")
-		, yy : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "yy")
-		, lectSmsterCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectSmsterCd")
-		, lectCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectCd")
-		, lectStatCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStatCd")
-		, lectAmt : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectAmt")
-		, lectAddAmt : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectAddAmt")
-		, lectNbcnt : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectNbcnt")
-		, lectStDtm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStDtm")
-		, lectEndDtm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectEndDtm")
-		, lectStHhCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStHhCd")
-		, lectStMiCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectStMiCd")
-		, lectEndHhCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectEndHhCd")
-		, lectEndMiCd : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "lectEndMiCd")
-		, stringStDaywNm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "stringStDaywNm")
-		, optnUseYn : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "optnUseYn")
-		, optnTypCdNm : this.ds_stlm_cmplt_list.getColumn(this.ds_stlm_cmplt_list.rowposition, "optnTypCdNm")
-		, actlAtlctNpleCnt : actlAtlctNpleCnt
-	};
 	
-	this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/MoveLect_popup.xfdl", this, 1280, 800, true, true, null);
+	if(!chkYn){
+		alert("실수강자를 선택해주세요.");
+		return;
+	}else{
+		for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
+			if(i != index && brchCd == this.ds_stlm_cmplt_list.getColumn(i, "brchCd")
+				&& yy == this.ds_stlm_cmplt_list.getColumn(i, "yy")
+				&& lectSmsterCd == Number(this.ds_stlm_cmplt_list.getColumn(i, "lectSmsterCd"))
+				&& lectCd == this.ds_stlm_cmplt_list.getColumn(i, "lectCd")){
+				actlAtlctNpleCnt++;
+			}
+		}
+		var oArg = {
+			menuSeq : this.menuSeq
+			, atlctRsvNo : this.ds_stlm_cmplt_list.getColumn(index, "atlctRsvNo")
+			, actlAtlctNpleSeqno : this.ds_stlm_cmplt_list.getColumn(index, "actlAtlctNpleSeqno")
+			, brchCd : this.ds_stlm_cmplt_list.getColumn(index, "brchCd")
+			, yy : this.ds_stlm_cmplt_list.getColumn(index, "yy")
+			, lectSmsterCd : this.ds_stlm_cmplt_list.getColumn(index, "lectSmsterCd")
+			, lectCd : this.ds_stlm_cmplt_list.getColumn(index, "lectCd")
+			, lectStatCd : this.ds_stlm_cmplt_list.getColumn(index, "lectStatCd")
+			, lectAmt : this.ds_stlm_cmplt_list.getColumn(index, "lectAmt")
+			, lectAddAmt : this.ds_stlm_cmplt_list.getColumn(index, "lectAddAmt")
+			, lectNbcnt : this.ds_stlm_cmplt_list.getColumn(index, "lectNbcnt")
+			, lectStDtm : this.ds_stlm_cmplt_list.getColumn(index, "lectStDtm")
+			, lectEndDtm : this.ds_stlm_cmplt_list.getColumn(index, "lectEndDtm")
+			, lectStHhCd : this.ds_stlm_cmplt_list.getColumn(index, "lectStHhCd")
+			, lectStMiCd : this.ds_stlm_cmplt_list.getColumn(index, "lectStMiCd")
+			, lectEndHhCd : this.ds_stlm_cmplt_list.getColumn(index, "lectEndHhCd")
+			, lectEndMiCd : this.ds_stlm_cmplt_list.getColumn(index, "lectEndMiCd")
+			, stringStDaywNm : this.ds_stlm_cmplt_list.getColumn(index, "stringStDaywNm")
+			, optnUseYn : this.ds_stlm_cmplt_list.getColumn(index, "optnUseYn")
+			, optnTypCdNm : this.ds_stlm_cmplt_list.getColumn(index, "optnTypCdNm")
+			, actlAtlctNpleCnt : actlAtlctNpleCnt
+		};
+		
+		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/MoveLect_popup.xfdl", this, 1280, 800, true, true, null);
+		this.cnt++;
+	}
 };
 
 this.popupCallBack = function(sFormId, sArg)
@@ -452,16 +497,30 @@ this.Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 		this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, e.value);
 		this.ds_stlm_cmplt_list.set_enableevent(true);
 		
-		// 중복된 실수강자 체크 (실수강자가 동일 강좌에 중복)
-		var duplYn = false;
+		// 결제완료 실수강자 체크 (실수강자가 동일 강좌에 중복)
+		var cmpltDuplYn = false;
 		for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
 			if(i != e.row && (this.ds_stlm_cmplt_list.getColumn(i, this.targetColumn) == e.value) && (this.ds_stlm_cmplt_list.getColumn(i, "lectCd") == this.ds_stlm_cmplt_list.getColumn(e.row, "lectCd"))){
-				duplYn = true;
+				cmpltDuplYn = true;
 			}
 		}
 		
-		if(duplYn){
+		// 취소/환불 실수강자 체크
+		var rfndDuplYn = false;
+		for(var i=0;i<this.parent.parent.parent.parent.parent.form.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
+			if(this.parent.parent.parent.parent.parent.form.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, this.targetColumn) == e.value){
+				rfndDuplYn = true;
+			}
+		}
+		
+		if(cmpltDuplYn){
 			alert("해당 실수강자는 수강신청 내역이 존재합니다.");
+		}
+		if(rfndDuplYn){
+			alert("해당 실수강자는 취소/환불 내역이 존재합니다.");
+		}
+		
+		if(cmpltDuplYn || rfndDuplYn){
 			this.ds_stlm_cmplt_list.set_enableevent(false);
 			this.ds_stlm_cmplt_list.setColumn(e.row, this.targetColumn, this.oldValue);
 			this.ds_stlm_cmplt_list.set_enableevent(true);
