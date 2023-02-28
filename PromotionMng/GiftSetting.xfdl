@@ -371,27 +371,31 @@ this.fn_detail = function ()
 
 this.fn_set_detail = function()
 {
-	//적용강좌
 	this.Div00.form.Div00.form.Div00.form.ComboSpot.set_value(this.prmtnMst.ds_detail.getColumn(0, "brchCd"));
 	this.Div00.form.Div01.form.Div03.form.radioTrgtCd.set_value(this.prmtnMst.ds_detail.getColumn(0, "prmtnClCd"));
-	this.Div00.form.Div00.form.Div00.form.ComboSpot.set_readonly(true);				//지점선택 불가능
-	this.Div00.form.Div01.form.Div03.form.radioTrgtCd.set_visible(false);			//라디오버튼 숨김
-	this.Div00.form.Div01.form.Div03.form.Div01.form.searchBtn.set_visible(false);	//강좌검색버튼 숨김
-	this.Div00.form.Div01.form.Div03.form.Div00.form.Combo00.set_visible(false);	//콤보숨김
-	this.Div00.form.Div01.form.Div03.form.Div00.form.Combo01.set_visible(false);	//콤보숨김
-	this.Div00.form.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);	//콤보숨김
 	
-	//적용그리드 삭제버튼 제거
-	this.Div00.form.Div01.form.Div03.form.Div00.form.Grid00.set_top(10);
-	this.Div00.form.Div01.form.Div03.form.Div01.form.Grid00.set_top(10);
-	this.Div00.form.Div01.form.Div03.form.Div00.form.Grid00.deleteContentsCol("body", 3)
-	this.Div00.form.Div01.form.Div03.form.Div01.form.Grid00.deleteContentsCol("body", 5)
-	
-	//사은품그리드
-	this.Div00.form.Div02.form.Grid00.set_readonly(true);
-	this.Div00.form.Div02.form.Grid00.setRealColSize("left", 0, 0 )	//체크박스 사이즈 0처리(삭제하면 이상하게 동작함)
-	this.Div00.form.Div02.form.btnReg.set_visible(false);			//버튼 숨김
-	this.Div00.form.Div02.form.btnDel.set_visible(false);			//버튼 숨김
+	if(this.prmtnMst.ds_detail.getColumn(0, "appCnt") > 0)
+	{
+		//적용강좌
+		this.Div00.form.Div00.form.Div00.form.ComboSpot.set_readonly(true);				//지점선택 불가능
+		this.Div00.form.Div01.form.Div03.form.radioTrgtCd.set_visible(false);			//라디오버튼 숨김
+		this.Div00.form.Div01.form.Div03.form.Div01.form.searchBtn.set_visible(false);	//강좌검색버튼 숨김
+		this.Div00.form.Div01.form.Div03.form.Div00.form.Combo00.set_visible(false);	//콤보숨김
+		this.Div00.form.Div01.form.Div03.form.Div00.form.Combo01.set_visible(false);	//콤보숨김
+		this.Div00.form.Div01.form.Div03.form.Div00.form.Combo02.set_visible(false);	//콤보숨김
+		
+		//적용그리드 삭제버튼 제거
+		this.Div00.form.Div01.form.Div03.form.Div00.form.Grid00.set_top(10);
+		this.Div00.form.Div01.form.Div03.form.Div01.form.Grid00.set_top(10);
+		this.Div00.form.Div01.form.Div03.form.Div00.form.Grid00.deleteContentsCol("body", 3)
+		this.Div00.form.Div01.form.Div03.form.Div01.form.Grid00.deleteContentsCol("body", 5)
+		
+		//사은품그리드
+		this.Div00.form.Div02.form.Grid00.set_readonly(true);
+		this.Div00.form.Div02.form.Grid00.setRealColSize("left", 0, 0 )	//체크박스 사이즈 0처리(삭제하면 이상하게 동작함)
+		this.Div00.form.Div02.form.btnReg.set_visible(false);			//버튼 숨김
+		this.Div00.form.Div02.form.btnDel.set_visible(false);			//버튼 숨김
+	}
 	
 	var itmChngInf = new nexacro.ItemChangeEventInfo();
 	itmChngInf.postvalue = this.prmtnMst.ds_detail.getColumn(0, "prmtnClCd");
@@ -644,6 +648,7 @@ this.Div00_Div02_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEve
 	else
 	{
 		this.ds_gift_list.deleteMultiRows(checked_array);
+		this.Div00.form.Div02.form.Grid00.setCellProperty("head", 0, "text", 0); 
 	}
 };
 

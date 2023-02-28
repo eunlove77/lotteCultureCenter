@@ -713,7 +713,7 @@ this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx)
 	objDs.checkarray = new Array(); 
 
 	//데이터셋 온로드이벤트 추가
-	objDs.addEventHandler("onload", this.gfnDataset_onload); 
+	objDs.addEventHandler("onload", () => this.gfnDataset_onload(objDs, objGrd, nCheckCellIdx)); 	
 
 	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
 	objGrd.checkcell = nCheckCellIdx; 
@@ -731,7 +731,7 @@ this.gfnSetRadioNoDataset = function(objDs, objGrd, nCheckCellIdx)
 	objDs.checkarray = new Array(); 
 
 	//데이터셋 온로드이벤트 추가
-	objDs.addEventHandler("onload", this.gfnDataset_onload); 
+	objDs.addEventHandler("onload", () => this.gfnDataset_onload(objDs, objGrd, nCheckCellIdx)); 
 
 	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
 	objGrd.checkcell = nCheckCellIdx; 
@@ -746,13 +746,11 @@ this.gfnSetRadioNoDataset = function(objDs, objGrd, nCheckCellIdx)
 /**
 * @description 	   : 데이터셋 onload 이벤트
 */
-this.gfnDataset_onload = function(obj:nexacro.NormalDataset,e:nexacro.DSLoadEventInfo) 
+this.gfnDataset_onload = function(objDs, objGrd, nCheckCellIdx) 
 { 
-	if(e.reason==0) 
-	{ 
-		//데이터셋이 로드되면 checkarray 초기화
-		obj.checkarray = new Array(); 
-	} 
+	//데이터셋이 로드되면 checkarray 초기화
+	objDs.checkarray = new Array(); 
+	objGrd.setCellProperty("head", nCheckCellIdx, "text", 0); 
 }; 
 
 /**
@@ -774,6 +772,16 @@ this.gfnGrid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		{ 
 			//체크 설정
 			objDs.checkarray[e.row] = 1; 
+		}
+		
+		//체크 수와 row수가 같으면 전체 체크 
+		if(objDs.checkarray.filter(value => 1 === value).length == objDs.getRowCount())
+		{
+			obj.setCellProperty("head", e.col, "text", 1); 
+		}
+		else
+		{
+			obj.setCellProperty("head", e.col, "text", 0); 
 		}
 		
 		//Expr이 바로 반영되도록 실행

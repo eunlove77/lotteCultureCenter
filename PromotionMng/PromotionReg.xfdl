@@ -93,7 +93,7 @@
             <Tabpage id="Tabpage2" text="사은품 신청자 현황" url="PromotionMng::GiftStatus.xfdl"/>
           </Tabpages>
         </Tab>
-        <Div id="Div04" taborder="5" text="Div04" left="45" top="Tab00:10" height="100" right="45" url="FrameBase::include/mdf_info.xfdl" visible="true" minwidth="720" maxwidth=""/>
+        <Div id="Div04" taborder="5" text="Div04" left="45" top="Tab00:10" height="0" right="45" url="FrameBase::include/mdf_info.xfdl" visible="true" minwidth="720" maxwidth=""/>
         <Div id="Div01" taborder="3" text="Div01" left="45" top="Div04:15" height="60" right="45">
           <Layouts>
             <Layout>
@@ -182,7 +182,8 @@ this.fn_set_detail = function()
 	this.Div02.set_visible(true);	//수정버튼
 	this.Div01.set_visible(false);	//등록버튼
 	this.Tab00.set_top("Div02:20");	//탭 위치조정
-	this.Div04.set_height(95);		//등록정보
+	this.Div04.set_height(150);		//등록정보
+	this.resetScroll();
 	
 	//등록자, 수정자 정보
 	var rgprNm = this.gfn_isNull(this.ds_detail.getColumn(0, "rgprNm")) ? "" : "(" + this.ds_detail.getColumn(0, "rgprNm") + ")";
@@ -381,7 +382,12 @@ this.fn_set_fileId = function(_this)
 
 this.Div02_delBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("삭제하시겠습니까?"))
+	if(this.ds_detail.getColumn(0, "appCnt") > 0)
+	{
+		alert("신청자가 있는 프로모션은 삭제할 수 없습니다.");
+		return;
+	}
+	else if(this.confirm("삭제하시겠습니까?"))
 	{
 		this.fn_delete();
 	}
@@ -461,6 +467,7 @@ this.fn_close = function()
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="prmtnClCd" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprNm" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
