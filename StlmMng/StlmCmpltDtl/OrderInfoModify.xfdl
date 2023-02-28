@@ -445,7 +445,6 @@ this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 // 금액필드 입력 포맷
 this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 {
-	trace(obj.value);
 	var num = nexacro.replaceAll(obj.value.toString(), ",", "");
 	if(num.startsWith("0") && num.length > 1){
 		num = num.substring(1);
@@ -484,7 +483,6 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(this.initGsStlmAmt == this.gsStlmAmt){
 		this.gsStlmAmt = this.gsStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt;
 	}
-	trace(this.gsStlmAmt);
 	
 	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
 		if(chngAmt == 0){
@@ -530,8 +528,11 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	if(!this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.readonly && this.gfn_nvl(this.dcMthdFrm.Div00.form.Div04.form.Div00.form.editOfln.value) == "0"){
 		//강좌료 오프라인 할인금액 공백인 경우
-		alert("할인금액을 입력하세요.");
-		return;
+		// 2023-02-28 재료비만 할인할 수 있어야함
+		if(this.dcMthdFrm.Div00.form.Div05.form.editAdd.readonly || this.gfn_nvl(this.dcMthdFrm.Div00.form.Div05.form.editAdd.value) == "0"){
+			alert("할인금액을 입력하세요.");
+			return;
+		}
 	}
 	
 	if(!this.dcMthdFrm.Div00.form.Div05.form.editAdd.readonly && this.dcMthdFrm.Div00.form.Div05.form.Radio00.value == "Y" && this.gfn_nvl(this.dcMthdFrm.Div00.form.Div05.form.editAdd.value) == "0"){
