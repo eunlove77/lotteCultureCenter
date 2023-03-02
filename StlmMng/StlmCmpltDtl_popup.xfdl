@@ -128,7 +128,7 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 			stlmRfndListFrm.Static06.set_text("(" + this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() + "개)");
 			
 			// 결제취소/환불 목록 첫 번째 행 데이터가 채널이 데스크면 환불삭제 버튼 노출
-			if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.Div00.form.Div03.form.ds_stlm_rfnd_list.rowposition, "rfndChnlCd") == "D"){
+			if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.Div00.form.Div03.form.ds_stlm_rfnd_list.rowposition, "stlmChnlCd") == "D"){
 				stlmInfoDtlFrm.Button00.set_visible(true);
 			}
 			
@@ -935,11 +935,11 @@ this.fn_stlm_mthd_info = function()
 		etcRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "etcRfndAmt"));
 	}
 	
-	// 거스름돈
 	var cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt;
 	var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
 	var otgiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt"));
 	
+	// 거스름돈
 	if(ltteGiftRfndAmt > ltteGiftStlmAmt){
 		ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
 		ltteGiftStlmAmt = 0;
