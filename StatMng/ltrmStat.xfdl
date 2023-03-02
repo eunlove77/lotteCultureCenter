@@ -76,15 +76,15 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:strNm" suppress="1"/>
-                <Cell col="1" text="bind:ltrmNm"/>
-                <Cell col="2" text="expr:sqm + '평'"/>
+                <Cell col="1" text="bind:ltrmNm" expr="dataset.getRowLevel(currow)==1?'소     계':ltrmNm"/>
+                <Cell col="2" text="bind:sqm"/>
                 <Cell col="3" text="expr:slngAmt + '원'" displaytype="normal" edittype="none" maskeditformat="###,###"/>
                 <Cell col="4" text="expr:tcPaidSlngAmt + '원'"/>
                 <Cell col="5" text="expr:tcUnpaidSlngAmt + '원'"/>
                 <Cell col="6" text="expr:mbrCnt + '명'"/>
                 <Cell col="7" text="expr:atlctCnt + '명'"/>
                 <Cell col="8" text="expr:lectCnt + '명'"/>
-                <Cell col="9" text="expr:lectEstRate + '%'"/>
+                <Cell col="9" text="expr:lectEstRate"/>
               </Band>
             </Format>
           </Formats>
@@ -138,19 +138,19 @@
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_list">
+      <Dataset id="ds_list" keystring="G:+strNm">
         <ColumnInfo>
           <Column id="strCd" type="STRING" size="256"/>
-          <Column id="strNm" type="STRING" size="256"/>
+          <Column id="strNm" type="STRING" size="256" sumtext=""/>
           <Column id="ltrmNm" type="STRING" size="256"/>
-          <Column id="sqm" type="STRING" size="256"/>
-          <Column id="slngAmt" type="STRING" size="256"/>
-          <Column id="tcPaidSlngAmt" type="STRING" size="256"/>
-          <Column id="tcUnpaidSlngAmt" type="STRING" size="256"/>
-          <Column id="mbrCnt" type="STRING" size="256"/>
-          <Column id="atlctCnt" type="STRING" size="256"/>
-          <Column id="lectCnt" type="STRING" size="256"/>
-          <Column id="lectEstRate" type="STRING" size="256"/>
+          <Column id="sqm" type="INT" size="256" prop="AVG"/>
+          <Column id="slngAmt" type="STRING" size="256" prop="SUM"/>
+          <Column id="tcPaidSlngAmt" type="STRING" size="256" prop="SUM"/>
+          <Column id="tcUnpaidSlngAmt" type="STRING" size="256" prop="SUM"/>
+          <Column id="mbrCnt" type="STRING" size="256" prop="SUM"/>
+          <Column id="atlctCnt" type="STRING" size="256" prop="SUM"/>
+          <Column id="lectCnt" type="STRING" size="256" prop="SUM"/>
+          <Column id="lectEstRate" type="INT" size="256" prop="AVG"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
