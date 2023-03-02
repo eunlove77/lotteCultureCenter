@@ -44,7 +44,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
-                    <Combo id="spotCd" taborder="1" text="" left="119" top="5" width="140" height="20" index="-1" value="" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
+                    <Combo id="spotCd" taborder="1" text="" left="119" top="5" width="140" height="20" index="-1" value="" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -263,6 +263,12 @@
           <Column id="chgDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
 /**************************************************************************
@@ -285,6 +291,12 @@ this.AdminMngDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.param = this.parent.param;
 	
 	this.ds_detail.setColumn(0, "id", this.param.id);
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	
+	//L.Point 지급여부는 슈퍼관리자만 노출
+	if(this.param.athrCd != "99"){
+		this.Div00.form.Div12.set_visible(false);
+	}
 	
 	this.fn_detail("detail");
 };
@@ -383,6 +395,9 @@ this.fn_detail = function (strSvcId)
  		isAsync : isAsync,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
+	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){return;}
+
 	this.gfn_transaction(tranObj);
 };
 
@@ -421,6 +436,19 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			if(!this.gfn_isNull(this.ds_detail.getColumn(0, "athrCd"))){
 				this.fn_athr_menu( this.ds_detail.getColumn(0, "athrCd") );
 			}
+			var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+			//본사는 슈퍼 관리자의 권한 , 지점 선택 불가
+			if(brchCd == "0000" && this.param.brchCd =="0000")
+			{
+				this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+			}
+			if(this.param.brchCd !="0000"){
+				//본사 관리자 아닌경우
+				this.ds_gdsSpotCd_list.deleteRow(0);
+				this.ds_athr_list.deleteRow(9);
+			}
+			
 		break;
 		
 		case "modify":
