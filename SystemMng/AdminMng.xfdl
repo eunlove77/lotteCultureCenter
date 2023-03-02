@@ -48,8 +48,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="spotCd" taborder="1" text="" left="116" top="5" width="160" height="20" innerdataset="gdsSpotCdList" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
-                    <Combo id="deptList" taborder="0" text="" left="9" top="71" width="150" height="30" innerdataset="ds_dept_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="deptList_onitemchanged" index="0" value=""/>
+                    <Combo id="spotCd" taborder="1" text="" left="116" top="5" width="160" height="20" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -88,7 +87,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="720" cellsizingtype="col">
+        <Grid id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="720" cellmovingtype="col" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -175,7 +174,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Static id="txtTotal" taborder="8" left="10" height="21" text="총 0개" width="80" top="249"/>
+        <Static id="txtTotal" taborder="8" left="10" height="21" text="목록 (0)개" width="80" top="249"/>
         <Grid id="Grid_Excel" taborder="9" left="10" top="1014" binddataset="ds_admin_excel" autofittype="col" right="10" height="100" visible="false">
           <Formats>
             <Format id="default">
@@ -299,6 +298,33 @@
           <Column id="rgprDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_admin_list_format">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="athrCd" type="STRING" size="256"/>
+          <Column id="athrNm" type="STRING" size="256"/>
+          <Column id="fnm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchNm" type="STRING" size="256"/>
+          <Column id="dptNm" type="STRING" size="256"/>
+          <Column id="acntStatYn" type="STRING" size="256"/>
+          <Column id="apvlStatYn" type="STRING" size="256"/>
+          <Column id="apvlDtm" type="DATE" size="256"/>
+          <Column id="fnlLoginDtm" type="STRING" size="256"/>
+          <Column id="prmtIpAddr" type="STRING" size="256"/>
+          <Column id="prmtIpAddrVdi" type="STRING" size="256"/>
+          <Column id="lpntPpayPsblYn" type="STRING" size="256"/>
+          <Column id="rgprDtm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[
 /**************************************************************************
@@ -329,7 +355,9 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	// 그리드 개인화
 	this.fn_personalization("getPsnlztn");	
-
+	
+	//지점코드 세팅
+	this.fn_set_spotCd();
 	//this.fn_list(1);
 };
 
@@ -367,7 +395,7 @@ this.Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	this.Div06.form.searchQuery.set_value('');
 	
 	this.ds_admin_list.clearData();
-	this.txtTotal.set_text("총 0개");	
+	this.txtTotal.set_text("목록 (0)개");	
 	
 	this.row02.form.statusDiv.form.chkAcntStatAll.set_value(0);
 	this.row02.form.statusDiv.form.chkAcntStatY.set_value(0);
@@ -495,6 +523,33 @@ this.Div01_btnExlDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 /**************************************************************************
  * 사용자 FUNCTION 영역
  **************************************************************************/
+
+//지점 세팅
+this.fn_set_spotCd = function()
+{
+	var brchCd = nexacro.getPrivateProfile("brchCd");
+	
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	//this.ds_gdsSpotCd_list.deleteRow(0);
+	
+	if(brchCd != "0000")
+	{
+		this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+	}
+	else
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	
+	this.row02.form.spotDiv.form.spotCd.set_index(0);
+	this.row02.form.spotDiv.form.spotCd.updateToDataset();
+	
+	//this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
+	//this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.updateToDataset();
+	
+}
 
 this.fn_list = function (page)
 {	
@@ -688,10 +743,17 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   switch(svcID)
   {
     case "list":
-      if(this.ds_admin_list.rowcount < 1){
-        this.alert("조회된 결과가 없습니다.");
-      }else{
-		this.txtTotal.set_text("총 " + this.ds_admin_list.rowcount  + "개");
+      //if(this.ds_admin_list.rowcount < 1){
+      //  this.alert("조회된 결과가 없습니다.");
+      //}else{
+		//this.txtTotal.set_text("총 " + this.ds_admin_list.rowcount  + "개");
+		this.txtTotal.set_text("목록("+this.ds_admin_list.rowcount+")개");
+		
+		
+	  //}
+	  if(!this.ds_admin_list.getColCount())
+	  {
+		this.ds_admin_list.copyData(this.ds_admin_list_format);
 	  }
 	  break;
 	case "dataList":		
@@ -709,6 +771,13 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	case "setPsnlztn":
 		this.alert("저장되었습니다.");
 		break;
+	case "getPsnlztn":
+		var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+		
+		if(format !== undefined){			
+			this.GridAdminList.set_formats(format);
+		}
+		break;	
   }
 };
 
@@ -717,12 +786,16 @@ this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEv
 	var objDs = obj.getBindDataset();
 	//var seq = objDs.getColumn(e.row, "admSeq");
 	var id = objDs.getColumn(e.row, "id");
+	var athrCd = objDs.getColumn(e.row, "athrCd");
+	var brchCd = objDs.getColumn(e.row, "brchCd");
 	
 	if(e.cell >0)
 	{
 		this.parent.param  = {
 		// admSeq : seq
-			id : id
+			id : id ,
+			athrCd : athrCd ,
+			brchCd : brchCd
 		};
 		
 		this.parent.parent.parent.param.TAB_CLOSE = false;

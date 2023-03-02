@@ -144,6 +144,8 @@
                             <Column size="200"/>
                             <Column size="150"/>
                             <Column size="150"/>
+                            <Column size="150"/>
+                            <Column size="150"/>
                           </Columns>
                           <Rows>
                             <Row size="40" band="head"/>
@@ -155,13 +157,17 @@
                             <Cell col="2" text="사은품명"/>
                             <Cell col="3" text="온라인 재고"/>
                             <Cell col="4" text="오프라인 재고"/>
+                            <Cell col="5" text="온라인 재고"/>
+                            <Cell col="6" text="오프라인 재고"/>
                           </Band>
                           <Band id="body">
                             <Cell expr="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
-                            <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'combocontrol'" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
-                            <Cell col="2" color="#666666" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'editcontrol'" edittype="text" text="bind:fgftNm" editmaxlength="200"/>
-                            <Cell col="3" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'maskeditcontrol'" edittype="mask" maskeditformat="!99,999" maskeditpostfixtext="개" expr="(appCnt &gt; 0 ? (onlnStkCnt-onlnAppCnt + '/' + onlnStkCnt + ' 개') : onlnStkCnt)" editinputtype="normal" maskeditlimitbymask="integer" textAlign="right"/>
-                            <Cell col="4" displaytype="expr:appCnt &gt; 0 ? 'normal' : 'maskeditcontrol'" edittype="mask" maskeditformat="!99,999" maskeditpostfixtext="개" expr="(appCnt &gt; 0 ? (oflnStkCnt-oflnAppCnt + '/' + oflnStkCnt + ' 개') : oflnStkCnt) " maskeditlimitbymask="integer" textAlign="right"/>
+                            <Cell col="1" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666" displaytype="combocontrol" edittype="combo" combodataset="ds_pch_cndt_cd" combodatacol="cdNm" combocodecol="cd" combodisplaynulltext="선택" combodisplaynulltype="nulltext" text="bind:pchCndtCnt"/>
+                            <Cell col="2" color="#666666" displaytype="editcontrol" edittype="text" text="bind:fgftNm" editmaxlength="200"/>
+                            <Cell col="3" displaytype="maskeditcontrol" edittype="mask" maskeditformat="!99,999" maskeditpostfixtext="개" editinputtype="normal" maskeditlimitbymask="integer" textAlign="right" text="bind:onlnStkCnt" maskedittype="number"/>
+                            <Cell col="4" displaytype="maskeditcontrol" edittype="mask" maskeditformat="!99,999" maskeditpostfixtext="개" maskeditlimitbymask="integer" textAlign="right" text="bind:oflnStkCnt"/>
+                            <Cell col="5" displaytype="editcontrol" edittype="none" textAlign="right" verticalAlign="middle" expr="onlnStkCnt-onlnAppCnt + '/' + onlnStkCnt + ' 개'"/>
+                            <Cell col="6" displaytype="editcontrol" expr="oflnStkCnt-oflnAppCnt + '/' + oflnStkCnt + ' 개'" textAlign="right"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -283,6 +289,7 @@
           <Column id="fgftSeqno" type="STRING" size="256"/>
           <Column id="pchCndtCnt" type="STRING" size="256"/>
           <Column id="fgftNm" type="STRING" size="256"/>
+          <Column id="appCnt" type="STRING" size="256"/>
           <Column id="onlnStkCnt" type="STRING" size="256"/>
           <Column id="oflnStkCnt" type="STRING" size="256"/>
         </ColumnInfo>
@@ -339,6 +346,12 @@ this.GiftSetting_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.ds_detail.setColumn(0, "prmtnSeqno", this.prmtnSeqno);
 		this.fn_detail();
 	}
+	else
+	{
+		//재고 컬럼 (신청자가 있는 경우에만 노출)
+		this.Div00.form.Div02.form.Grid00.setRealColSize("body", 5, 0 )	
+		this.Div00.form.Div02.form.Grid00.setRealColSize("body", 6, 0 )	
+	}
 	this.gfnSetCheckBoxNoDataset(this.ds_gift_list, this.Div00.form.Div02.form.Grid00, 0); 
 	
 	var brchCd = nexacro.getPrivateProfile("brchCd");
@@ -393,8 +406,16 @@ this.fn_set_detail = function()
 		//사은품그리드
 		this.Div00.form.Div02.form.Grid00.set_readonly(true);
 		this.Div00.form.Div02.form.Grid00.setRealColSize("left", 0, 0 )	//체크박스 사이즈 0처리(삭제하면 이상하게 동작함)
+		this.Div00.form.Div02.form.Grid00.setRealColSize("body", 3, 0 )	//재고 컬럼을 노출하고 에디트 컬럼 미노출
+		this.Div00.form.Div02.form.Grid00.setRealColSize("body", 4, 0 )	//재고 컬럼을 노출하고 에디트 컬럼 미노출
 		this.Div00.form.Div02.form.btnReg.set_visible(false);			//버튼 숨김
 		this.Div00.form.Div02.form.btnDel.set_visible(false);			//버튼 숨김
+	}
+	else
+	{
+		//재고 컬럼 (신청자가 있는 경우에만 노출)
+		this.Div00.form.Div02.form.Grid00.setRealColSize("body", 5, 0 )	
+		this.Div00.form.Div02.form.Grid00.setRealColSize("body", 6, 0 )	
 	}
 	
 	var itmChngInf = new nexacro.ItemChangeEventInfo();

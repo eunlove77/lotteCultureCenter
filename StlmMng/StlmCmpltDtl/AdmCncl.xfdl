@@ -268,7 +268,6 @@ this.fn_set_rfnd_amt = function()
 	var cshStlmAmt = this.ds_update_info.getColumn(0, "cshStlmAmt");
 	var giftStlmAmt = this.ds_update_info.getColumn(0, "giftStlmAmt");
 	var etcStlmAmt = this.ds_update_info.getColumn(0, "etcStlmAmt");
-	
 	// 기존 카드 결제금액이 0원이면 카드사 영역 숨김 
 	if(crdStlmAmt == 0){
 		this.Div01.form.Div00.form.Static01.set_visible(false);
@@ -287,6 +286,8 @@ this.fn_set_rfnd_amt = function()
 				this.ds_update_info.setColumn(0, "crdRfndAmt", this.gfn_setComma(gsRfndScheAmt));
 				gsRfndScheAmt = 0;
 			}
+		}else{
+			this.ds_update_info.setColumn(0, "crdRfndAmt", 0);
 		}
 		if(lpntUseAmt > 0){
 			if(gsRfndScheAmt >= lpntUseAmt){
@@ -296,6 +297,8 @@ this.fn_set_rfnd_amt = function()
 				this.ds_update_info.setColumn(0, "lpntRfndAmt", this.gfn_setComma(gsRfndScheAmt));
 				gsRfndScheAmt = 0;
 			}
+		}else{
+			this.ds_update_info.setColumn(0, "lpntRfndAmt", 0);
 		}
 		if(cshStlmAmt > 0){
 			if(gsRfndScheAmt >= cshStlmAmt){
@@ -305,6 +308,8 @@ this.fn_set_rfnd_amt = function()
 				this.ds_update_info.setColumn(0, "cshRfndAmt", this.gfn_setComma(gsRfndScheAmt));
 				gsRfndScheAmt = 0;
 			}
+		}else{
+			this.ds_update_info.setColumn(0, "cshRfndAmt", 0);
 		}
 		if(giftStlmAmt > 0){
 			if(gsRfndScheAmt >= giftStlmAmt){
@@ -314,6 +319,8 @@ this.fn_set_rfnd_amt = function()
 				this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", this.gfn_setComma(gsRfndScheAmt));
 				gsRfndScheAmt = 0;
 			}
+		}else{
+			this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", 0);
 		}
 		if(etcStlmAmt > 0){
 			if(gsRfndScheAmt >= etcStlmAmt){
@@ -323,7 +330,15 @@ this.fn_set_rfnd_amt = function()
 				this.ds_update_info.setColumn(0, "etcRfndAmt", this.gfn_setComma(gsRfndScheAmt));
 				gsRfndScheAmt = 0;
 			}
+		}else{
+			this.ds_update_info.setColumn(0, "etcRfndAmt", 0);
 		}
+	}else{
+		this.ds_update_info.setColumn(0, "crdRfndAmt", 0);
+		this.ds_update_info.setColumn(0, "lpntRfndAmt", 0);
+		this.ds_update_info.setColumn(0, "cshRfndAmt", 0);
+		this.ds_update_info.setColumn(0, "ltteGiftRfndAmt", 0);
+		this.ds_update_info.setColumn(0, "etcRfndAmt", 0);
 	}
 };
 
@@ -556,29 +571,27 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	
 	if(crdRfndAmt > crdStlmAmt){
-		alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
 		return;
 	}
 	
 	if(lpntRfndAmt > lpntUseAmt){
-		alert("L.Point 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		alert("L.Point 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
 		return;
 	}
 	
-	// 상품권 결제금액만큼 현금으로 환불 가능
-	if(cshRfndAmt > cshStlmAmt && (cshRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+ltteGiftRfndAmt) > giftStlmAmt)){
-		alert("현금 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+	if(cshRfndAmt > cshStlmAmt){
+		alert("현금 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
 		return;
 	}
 	
 	if(ltteGiftRfndAmt > giftStlmAmt){
-		alert("상품권 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+		alert("상품권 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
 		return;
 	}
 	
-	// 상품권 결제금액만큼 기타로 환불 가능
-	if(etcRfndAmt > etcStlmAmt && (etcRfndAmt > 0 && (cshRfndAmt+etcRfndAmt+ltteGiftRfndAmt) > giftStlmAmt)){
-		alert("기타 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.");
+	if(etcRfndAmt > etcStlmAmt){
+		alert("기타 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
 		return;
 	}
 	

@@ -8,7 +8,7 @@
         <Div id="Div02" taborder="2" text="Div02" left="0" top="31" height="160" cssclass="div_WF_TableComp" right="0">
           <Layouts>
             <Layout>
-              <Grid id="Grid00" taborder="0" left="0" top="0" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="데이터가 없습니다." right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" oncloseup="Div02_Grid00_oncloseup" selecttype="row" readonly="false" oninput="Div02_Grid00_oninput" oncellclick="Div02_Grid00_oncellclick">
+              <Grid id="Grid00" taborder="0" left="0" top="0" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="검색결과 없음" right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" oncloseup="Div02_Grid00_oncloseup" selecttype="row" readonly="false" oninput="Div02_Grid00_oninput" oncellclick="Div02_Grid00_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -138,7 +138,7 @@
                       <Cell col="27" text="expr:dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
                       <Cell col="28" text="expr:dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원" suppress="2" suppressalign="middle"/>
                       <Cell col="29" text="expr:dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;etcStlmAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
-                      <Cell col="30" text="expr:dataset.getColumn(currow, &quot;chngAmt&quot;) == null || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;chngAmt&quot;)" maskeditformat="'(-) '###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;chngAmt&quot;) == null || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" suppress="2" suppressalign="middle"/>
+                      <Cell col="30" text="expr:dataset.getColumn(currow, &quot;chngAmt&quot;) == null || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;0&quot; ? '-' : comp.parent.parent.parent.fn_set_chngAmt(dataset.getColumn(currow, &quot;chngAmt&quot;))" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="normal" suppress="2" suppressalign="middle"/>
                       <Cell col="31" text="bind:stlmDtm" suppress="2" suppressalign="middle" displaytype="expr:dataset.getColumn(currow, &quot;stlmChnlCd&quot;) == &quot;D&quot; ? 'date' : 'normal'" edittype="expr:dataset.getColumn(currow, &quot;stlmChnlCd&quot;) == &quot;D&quot; ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
                       <Cell col="32" text="bind:stlmChnlCdNm" suppress="2" suppressalign="middle"/>
                       <Cell col="33" text="bind:stlmStatCdNm"/>
@@ -164,7 +164,7 @@
         <Button id="Button04" taborder="5" text="관리자 취소" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="0" onclick="Button04_onclick" visible="false"/>
         <Button id="btnModify" taborder="6" text="주문정보 수정" top="180" width="100" height="21" cssclass="btn_WF_Medium" right="94" onclick="Button05_onclick" visible="false"/>
         <Button id="Button06" taborder="7" text="강좌이강" top="180" width="84" height="21" cssclass="btn_WF_Medium" right="204" onclick="Button06_onclick" visible="false"/>
-        <Grid id="Grid_Excel" taborder="8" left="0" top="210" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="데이터가 없습니다." right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" selecttype="row" readonly="false" visible="false">
+        <Grid id="Grid_Excel" taborder="8" left="0" top="210" height="140" binddataset="ds_stlm_cmplt_list" nodatatext="검색결과 없음" right="0" autofittype="none" autosizingtype="none" autosizebandtype="body" selecttype="row" readonly="false" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -705,6 +705,11 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return;
 	}
 };
+
+this.fn_set_chngAmt = function(chngAmt)
+{	
+	return "(-) " + this.gfn_setComma(chngAmt) + "원";
+}
 ]]></Script>
     <Objects>
       <Dataset id="ds_fmly_cd_list">

@@ -81,8 +81,21 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="btnCancel" taborder="4" text="취소" top="Div02:5" height="21" width="115" wordWrap="char" cssclass="btn_WF_Weak" onclick="btnCancel_onclick" left="38.00%"/>
-        <Button id="btnUpdate" taborder="3" text="답변완료" top="Div02:5" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" onclick="btnUpdate_onclick" left="btnCancel:15"/>
+        <Div id="Div00" taborder="3" text="Div00" left="10" top="Div02:5" height="21" right="10" minwidth="660" maxwidth="" visible="false">
+          <Layouts>
+            <Layout>
+              <Button id="btnCancel2" taborder="0" text="취소" top="0" height="21" width="115" wordWrap="char" cssclass="btn_WF_Weak" onclick="btnCancel_onclick" right="45%"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="Div00_00" taborder="4" text="Div00" left="10" top="Div02:5" height="21" right="10" minwidth="660" maxwidth="" visible="true">
+          <Layouts>
+            <Layout>
+              <Button id="btnUpdate" taborder="1" text="답변완료" top="0" height="21" width="115" wordWrap="char" cssclass="btn_WF_Medium" onclick="btnUpdate_onclick" right="36.22%"/>
+              <Button id="btnCancel" taborder="0" text="취소" top="0" height="21" wordWrap="char" cssclass="btn_WF_Weak" onclick="btnCancel_onclick" right="btnUpdate:15" width="114"/>
+            </Layout>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
     <Objects>
@@ -221,9 +234,10 @@ this.set_info_dtl = function(){
 	//답변완료 버튼
 	var answrYn = ds.getColumn(0, 'answrYn');
 	if(answrYn == 'Y'){
-		this.btnUpdate.set_visible(false);
+		this.Div00_00.set_visible(false);
+		this.Div00.set_visible(true);
 	}
-	
+
 	this.resetScroll();
 }
 
