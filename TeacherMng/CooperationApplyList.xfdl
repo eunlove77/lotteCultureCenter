@@ -29,7 +29,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="답변여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="Combo00" taborder="1" text="Combo01" left="121" top="5" width="130" height="20" innerdataset="ds_answrCd_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <CheckBox id="chkAll" taborder="1" left="Static00:6" top="5" width="41" height="20" onclick="com_fn_checkboxAll" text="전체"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -152,16 +152,35 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
-
+	
+	//체크박스 세팅
+	this.set_dynamic_checkbox();
+	
 	this.reset_search_form();
 };
+
+//동적 체크박스 추가
+this.set_dynamic_checkbox = function()
+{
+	this.com_set_dynamic_checkbox_from_dataset(this.ds_answrCd_list, this.Div01.form.Div02);		//답변여부
+	
+	//클릭 이벤트 추가
+	this.com_fn_click_add(this);
+}
+
+this.set_search_info = function(){
+	//검색조건 - 체크박스 세팅 - 답변여부
+	var answrYn = this.com_set_checkbox_to_string(this.Div01.form.Div02);
+	this.ds_search.setColumn(0, "answrYn", answrYn);
+	
+}
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
 this.fn_search = function(){
-  //유효성 검사
-  var msg = "개인정보는 2개 이상 조합하여 검색해주세요.\n예시) 담당자명+휴대전화";
+	var msg = "개인정보는 2개 이상 조합하여 검색해주세요.\n예시) 담당자명+휴대전화";
 	if(!this.com_check_private_search(this.ds_search.getColumn(0, "chrgprNm"), msg)) return;
+	this.set_search_info();
 	this.get_cooperationApply_list();
 }
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -310,10 +329,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="cdNm">전체</Col>
-            <Col id="cd"> </Col>
-          </Row>
-          <Row>
             <Col id="cd">Y</Col>
             <Col id="cdNm">답변완료</Col>
           </Row>
@@ -325,7 +340,6 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
       </Dataset>
     </Objects>
     <Bind>
-      <BindItem id="item3" compid="Div01.form.Div02.form.Combo00" propid="value" datasetid="ds_search" columnid="answrYn"/>
       <BindItem id="item4" compid="Div05.form.searchField" propid="value" datasetid="ds_search" columnid="f"/>
       <BindItem id="item5" compid="Div05.form.searchQuery" propid="value" datasetid="ds_search" columnid="q"/>
       <BindItem id="item2" compid="Div01.form.Div00.form.Edit00" propid="accessibilityaction" datasetid="ds_search" columnid="chrgprNm"/>
