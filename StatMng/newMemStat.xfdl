@@ -10,7 +10,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="160" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
+              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="160" height="20" index="0" value="1" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm" canitemchange="fn_init"/>
             </Layout>
           </Layouts>
         </Div>
@@ -18,8 +18,8 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="학기 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="yy" taborder="1" text="Combo00" left="116" top="5" width="100" height="20"/>
-              <Combo id="smsterCd" taborder="2" text="학기" left="221" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+              <Combo id="yy" taborder="1" text="Combo00" left="116" top="5" width="100" height="20" canitemchange="fn_init"/>
+              <Combo id="smsterCd" taborder="2" text="학기" left="221" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value="" canitemchange="fn_init"/>
             </Layout>
           </Layouts>
         </Div>
@@ -28,8 +28,8 @@
             <Layout>
               <Static id="Static00" taborder="0" text="기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
               <Static id="Static01" taborder="1" text="~" left="218" top="3" width="9" height="20"/>
-              <Calendar id="strtDtm" taborder="2" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd"/>
-              <Calendar id="endDtm" taborder="3" left="229" top="5" width="100" height="21"/>
+              <Calendar id="strtDtm" taborder="2" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd" canchange="fn_init"/>
+              <Calendar id="endDtm" taborder="3" left="229" top="5" width="100" height="21" canchange="fn_init"/>
             </Layout>
           </Layouts>
         </Div>
@@ -40,8 +40,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="포함여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="CheckBox00" taborder="1" text="재료비/대여비(강사지급) 제외" left="116" top="5" width="170" height="20"/>
-                    <CheckBox id="CheckBox00_00" taborder="2" text="재료비/대여비(강사미지급) 제외" left="CheckBox00:10" top="5" width="180" height="20"/>
+                    <CheckBox id="lectOptnTypeCd02" taborder="1" text="재료비/대여비(강사지급) 제외" left="116" top="5" width="170" height="20" canchange="fn_init"/>
+                    <CheckBox id="lectOptnTypeCd01" taborder="2" text="재료비/대여비(강사미지급) 제외" left="lectOptnTypeCd02:10" top="5" width="180" height="20" canchange="fn_init"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -64,13 +64,13 @@
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="총 합"/>
+                <Cell text="구분"/>
                 <Cell col="1" text="매출금액"/>
                 <Cell col="2" text="회원 수"/>
                 <Cell col="3" text="수강 고객수"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:newMemType" expr="newMemType == 'GB1'  ?  '첫회원' : '신규회원'"/>
+                <Cell text="bind:newMemType"/>
                 <Cell col="1" text="bind:slngAmt"/>
                 <Cell col="2" text="bind:mbrCnt"/>
                 <Cell col="3" text="bind:atlctCnt"/>
@@ -95,14 +95,14 @@
               </Rows>
               <Band id="head">
                 <Cell text="지점명"/>
-                <Cell col="1" text="연속학기"/>
+                <Cell col="1" text="구분"/>
                 <Cell col="2" text="매출금액"/>
                 <Cell col="3" text="회원 수"/>
                 <Cell col="4" text="수강 고객수"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:strNm" suppress="1"/>
-                <Cell col="1" text="bind:newMemType" expr="newMemType == 'GB1' ? '첫회원' : '신규회원'"/>
+                <Cell col="1" text="bind:newMemType"/>
                 <Cell col="2" text="bind:slngAmt"/>
                 <Cell col="3" text="bind:mbrCnt"/>
                 <Cell col="4" text="bind:atlctCnt"/>
@@ -120,6 +120,7 @@
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
           <Column id="strCd" type="STRING" size="256"/>
+          <Column id="chkLectOptnTypeCd" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
@@ -205,7 +206,7 @@ this.newMemStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		
 	var data = new Date();
 	var strtYy = data.getFullYear();
-	var endYy = 2017
+	var endYy = 2018
 	
 	var comboYyObj = this.Div02.form.yy;
 	
@@ -214,14 +215,26 @@ this.newMemStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 this.Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	var arrLectOptnTypeCd = new Array();
+	
 	var yy = this.Div02.form.yy.value;
 	var smsterCd = this.Div02.form.smsterCd.value;
+
+	if(this.Div04.form.Div00.form.lectOptnTypeCd02.value == true){
+		arrLectOptnTypeCd.push("01");
+	}
+	if(this.Div04.form.Div00.form.lectOptnTypeCd01.value == true){
+		arrLectOptnTypeCd.push("02");
+	}
+	
+
 
 	this.ds_search.setColumn(0, "year", yy);
 	this.ds_search.setColumn(0, "lectSmsterCd", smsterCd);
 	this.ds_search.setColumn(0, "strtDtm", this.Div03.form.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", this.Div03.form.endDtm.value);
 	this.ds_search.setColumn(0, "strCd", this.Div01.form.ComboSpot.value);
+	this.ds_search.setColumn(0, "chkLectOptnTypeCd", arrLectOptnTypeCd.join(",")); 	
 	
 	if(this.gfn_isNull(yy)){
 		this.alert("년도를 선택해주세요.");
@@ -270,6 +283,12 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			
 		break; 		
 	}
+}
+
+// 컴포넌트 변경시 필터 및 목록 초기화
+this.fn_init = function(){
+	this.ds_total.clearData();
+	this.ds_list.clearData();
 }
 
 ]]></Script>
