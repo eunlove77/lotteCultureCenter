@@ -281,6 +281,7 @@ include "Base::libCommon.xjs";
  **************************************************************************/
 this.application = null;
 this.param = null
+this.strCd = nexacro.getPrivateProfile("brchCd");
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -361,6 +362,13 @@ this.Div03_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 this.Div00_Div00_roleCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_athr_menu(obj.value);
+	
+	if(obj.value == "99" ){
+		this.ds_gdsSpotCd_list.filter("cd=='"+this.strCd+"'");
+	}else{
+		this.ds_gdsSpotCd_list.filter("");
+	}
+	
 };
 
 /**************************************************************************
@@ -436,15 +444,12 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			if(!this.gfn_isNull(this.ds_detail.getColumn(0, "athrCd"))){
 				this.fn_athr_menu( this.ds_detail.getColumn(0, "athrCd") );
 			}
-			var brchCd = nexacro.getPrivateProfile("brchCd");
-	
 			//본사는 슈퍼 관리자의 권한 , 지점 선택 불가
-			if(brchCd == "0000" && this.param.brchCd =="0000")
-			{
-				this.ds_gdsSpotCd_list.filter("cd=='"+brchCd+"'");
+			if(this.strCd == "0000" && this.param.brchCd =="0000" && this.Div00.form.Div00.form.roleCd.value =="99" ){
+				this.ds_gdsSpotCd_list.filter("cd=='"+this.strCd+"'");
 			}
+			
 			if(this.param.brchCd !="0000"){
-				//본사 관리자 아닌경우
 				this.ds_gdsSpotCd_list.deleteRow(0);
 				this.ds_athr_list.deleteRow(9);
 			}
