@@ -942,11 +942,12 @@ this.fn_stlm_mthd_info = function()
 	
 	var gsStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "gsStlmAmt"));
 	var cshStlmAmt = 0;
-	if(gsStlmAmt == lectStlmAmt){
-		cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt;
-	}else{
-		cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt"));
-	}
+// 	if(gsStlmAmt == lectStlmAmt){
+// 		cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt;
+// 	}else{
+// 		cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt"));
+// 	}
+	cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt"));
 	
 	//var cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt"));
 	var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
@@ -991,18 +992,18 @@ this.fn_stlm_mthd_info = function()
 		}
 	}
 	
-	if(gsStlmAmt == lectStlmAmt){
-		if(ltteGiftRfndAmt > ltteGiftStlmAmt){
-			ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
-			ltteGiftStlmAmt = 0;
-		}else{
-			ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
-			ltteGiftRfndAmt = 0;
-		}
-		if(ltteGiftRfndAmt != 0){
-			otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
-		}
-	}
+// 	if(gsStlmAmt == lectStlmAmt){
+// 		if(ltteGiftRfndAmt > ltteGiftStlmAmt){
+// 			ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
+// 			ltteGiftStlmAmt = 0;
+// 		}else{
+// 			ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
+// 			ltteGiftRfndAmt = 0;
+// 		}
+// 		if(ltteGiftRfndAmt != 0){
+// 			otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
+// 		}
+// 	}
 	
 	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt") > 0){
 		var crdStlmAmtDiv = new Div("div_crd_stlm_amt");
@@ -1034,11 +1035,12 @@ this.fn_stlm_mthd_info = function()
 		crdStlmAmtStatic.set_bottom(0);
 		crdStlmAmtStatic.set_right(0);
 		crdStlmAmtStatic.set_textAlign("right");
-		if(gsStlmAmt == lectStlmAmt){
-			crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) - crdRfndAmt) + "원");
-		}else{
-			crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt"))) + "원");
-		}
+// 		if(gsStlmAmt == lectStlmAmt){
+// 			crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) - crdRfndAmt) + "원");
+// 		}else{
+// 			crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt"))) + "원");
+// 		}
+crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt"))) + "원");
 		
 		//crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt"))) + "원");
 		crdStlmAmtStatic.set_cssclass("sta_WF_CompText");
@@ -1070,11 +1072,12 @@ this.fn_stlm_mthd_info = function()
 		lpntUseAmtStatic.set_bottom(0);
 		lpntUseAmtStatic.set_right(0);
 		lpntUseAmtStatic.set_textAlign("right");
-		if(gsStlmAmt == lectStlmAmt){
-			lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) - lpntRfndAmt) + "원");
-		}else{
-			lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt"))) + "원");
-		}
+// 		if(gsStlmAmt == lectStlmAmt){
+// 			lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) - lpntRfndAmt) + "원");
+// 		}else{
+// 			lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt"))) + "원");
+// 		}
+lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt"))) + "원");
 		
 		//lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt"))) + "원");
 		lpntUseAmtStatic.set_cssclass("sta_WF_CompText");
@@ -1202,11 +1205,12 @@ this.fn_stlm_mthd_info = function()
 		etcStlmAmtStatic.set_bottom(0);
 		etcStlmAmtStatic.set_right(0);
 		etcStlmAmtStatic.set_textAlign("right");
-		if(gsStlmAmt == lectStlmAmt){
-			etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) - etcRfndAmt) + "원");
-		}else{
-			etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt"))) + "원");
-		}
+// 		if(gsStlmAmt == lectStlmAmt){
+// 			etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) - etcRfndAmt) + "원");
+// 		}else{
+// 			etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt"))) + "원");
+// 		}
+etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt"))) + "원");
 		
 		//etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt"))) + "원");
 		etcStlmAmtStatic.set_cssclass("sta_WF_CompText");

@@ -356,7 +356,37 @@ this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		alert("실수강자를 선택해주세요.");
 		return;
 	}else{
-		if(this.lookup("admCnclDiv") === undefined && this.lookup("orderInfoModifyDiv") === undefined){
+		var cfmYn = false;
+		if(this.lookup("orderInfoModifyDiv") !== undefined || this.lookup("admCnclDiv") !== undefined){
+			if(confirm("입력된 내용은 초기화됩니다.")){
+				cfmYn = true;
+			}
+		}else{
+			cfmYn = true;
+		}
+		
+		if(cfmYn){
+			if(this.lookup("orderInfoModifyDiv") !== undefined){
+				this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() - 600);
+				this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() - 600);
+				this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() - 600);
+				
+				this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() - 600); // div
+				this.parent.parent.parent.parent.resetScroll(); // form
+
+				this.parent.parent.parent.form.removeChild("orderInfoModifyDiv");
+			}
+			if(this.lookup("admCnclDiv") !== undefined){
+				this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() - 470);
+				this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() - 470);
+				this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() - 470);
+				
+				this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() - 470); // div
+				this.parent.parent.parent.parent.resetScroll(); // form
+
+				this.parent.parent.parent.form.removeChild("admCnclDiv");
+			}
+			
 			this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(index, "actlAtlctNpleSeqno");
 			this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() + 470);
 			this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() + 470);
@@ -393,23 +423,53 @@ this.Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		alert("실수강자를 선택해주세요.");
 		return;
 	}else{
-		if(this.lookup("orderInfoModifyDiv") === undefined && this.lookup("admCnclDiv") === undefined){
+		var cfmYn = false;
+		if(this.lookup("orderInfoModifyDiv") !== undefined || this.lookup("admCnclDiv") !== undefined){
+			if(confirm("입력된 내용은 초기화됩니다.")){
+				cfmYn = true;
+			}
+		}else{
+			cfmYn = true;
+		}
+		
+		if(cfmYn){
+			if(this.lookup("orderInfoModifyDiv") !== undefined){
+				this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() - 600);
+				this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() - 600);
+				this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() - 600);
+				
+				this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() - 600); // div
+				this.parent.parent.parent.parent.resetScroll(); // form
+
+				this.parent.parent.parent.form.removeChild("orderInfoModifyDiv");
+			}
+			if(this.lookup("admCnclDiv") !== undefined){
+				this.parent.parent.parent.form.Div03.setOffsetTop(this.parent.parent.parent.form.Div03.getOffsetTop() - 470);
+				this.parent.parent.parent.form.Div04.setOffsetTop(this.parent.parent.parent.form.Div04.getOffsetTop() - 470);
+				this.parent.parent.parent.form.Div05.setOffsetTop(this.parent.parent.parent.form.Div05.getOffsetTop() - 470);
+				
+				this.parent.parent.parent.setOffsetHeight(this.parent.parent.parent.getOffsetHeight() - 470); // div
+				this.parent.parent.parent.parent.resetScroll(); // form
+
+				this.parent.parent.parent.form.removeChild("admCnclDiv");
+			}
+		
 			this.parent.parent.parent.parent.actlAtlctNpleSeqno = this.ds_stlm_cmplt_list.getColumn(index, "actlAtlctNpleSeqno");
-			
-			this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 610);
-			this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 610);
-			this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 610);
+				
+			this.parent.parent.parent.form.Div03.set_top(this.parent.parent.parent.form.Div03.getPixelTop() + 600);
+			this.parent.parent.parent.form.Div04.set_top(this.parent.parent.parent.form.Div04.getPixelTop() + 600);
+			this.parent.parent.parent.form.Div05.set_top(this.parent.parent.parent.form.Div05.getPixelTop() + 600);
 			var divObj = new Div("orderInfoModifyDiv");
 			divObj.set_left(0);
 			divObj.set_right(0);
 			divObj.set_top(495);
-			divObj.set_height(610);
+			divObj.set_height(600);
 			divObj.set_url("StlmMng::StlmCmpltDtl/OrderInfoModify.xfdl");
 			
 			this.parent.parent.parent.form.addChild("orderInfoModifyDiv", divObj);
 			divObj.show();
 			
-			this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 610); // div
+			this.parent.parent.parent.set_height(this.parent.parent.parent.getPixelHeight() + 600); // div
 			this.parent.parent.parent.parent.resetScroll(); // form
 		}
 	}
