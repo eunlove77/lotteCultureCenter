@@ -128,7 +128,7 @@ this.fn_callback = function(svcID, errorCode, errorMsg)
 			stlmRfndListFrm.Static06.set_text("(" + this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() + "개)");
 			
 			// 결제취소/환불 목록 첫 번째 행 데이터가 채널이 데스크면 환불삭제 버튼 노출
-			if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.Div00.form.Div03.form.ds_stlm_rfnd_list.rowposition, "rfndChnlCd") == "D"){
+			if(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(this.Div00.form.Div03.form.ds_stlm_rfnd_list.rowposition, "stlmChnlCd") == "D"){
 				stlmInfoDtlFrm.Button00.set_visible(true);
 			}
 			
@@ -927,33 +927,36 @@ this.fn_stlm_mthd_info = function()
 	var arrStlmMthd = [];
 	
 	var crdRfndAmt = 0, lpntRfndAmt = 0, cshRfndAmt = 0, ltteGiftRfndAmt = 0, etcRfndAmt = 0;
+	var lectStlmAmt = 0;
 	for(var i=0;i<this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount();i++){
 		crdRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "crdRfndAmt"));
 		lpntRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lpntRfndAmt"));
 		cshRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "cshRfndAmt"));
 		ltteGiftRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "ltteGiftRfndAmt"));
 		etcRfndAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "etcRfndAmt"));
+		lectStlmAmt += Number(this.Div00.form.Div03.form.ds_stlm_rfnd_list.getColumn(i, "lectStlmAmt"));
+	}
+	for(var i=0;i<this.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount();i++){
+		lectStlmAmt += Number(this.Div00.form.Div02.form.ds_stlm_cmplt_list.getColumn(i, "lectStlmAmt"));
 	}
 	
-	// 거스름돈
-	var cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt;
+	var gsStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "gsStlmAmt"));
+	var cshStlmAmt = 0;
+	if(gsStlmAmt == lectStlmAmt){
+		cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt")) - cshRfndAmt;
+	}else{
+		cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt"));
+	}
+	
+	//var cshStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "cshStlmAmt"));
 	var ltteGiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "ltteGiftStlmAmt"));
 	var otgiftStlmAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "otgiftStlmAmt"));
 	
-	if(ltteGiftRfndAmt > ltteGiftStlmAmt){
-		ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
-		ltteGiftStlmAmt = 0;
-	}else{
-		ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
-		ltteGiftRfndAmt = 0;
-	}
-	if(ltteGiftRfndAmt != 0){
-		otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
-	}
 	
 	var chngAmt = Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngAmt"));
 	var chngMthdCd = stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "chngMthdCd");
 	
+	// 거스름돈
 	if(chngAmt > 0 && this.Div00.form.Div03.form.ds_stlm_rfnd_list.getRowCount() > 0){
 		if(chngMthdCd == "10" && chngAmt < cshStlmAmt){
 			cshStlmAmt = cshStlmAmt - chngAmt;
@@ -988,6 +991,19 @@ this.fn_stlm_mthd_info = function()
 		}
 	}
 	
+	if(gsStlmAmt == lectStlmAmt){
+		if(ltteGiftRfndAmt > ltteGiftStlmAmt){
+			ltteGiftRfndAmt = ltteGiftRfndAmt - ltteGiftStlmAmt;
+			ltteGiftStlmAmt = 0;
+		}else{
+			ltteGiftStlmAmt = ltteGiftStlmAmt - ltteGiftRfndAmt;
+			ltteGiftRfndAmt = 0;
+		}
+		if(ltteGiftRfndAmt != 0){
+			otgiftStlmAmt = otgiftStlmAmt - ltteGiftRfndAmt;
+		}
+	}
+	
 	if(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt") > 0){
 		var crdStlmAmtDiv = new Div("div_crd_stlm_amt");
 		crdStlmAmtDiv.set_left(200);
@@ -1018,7 +1034,13 @@ this.fn_stlm_mthd_info = function()
 		crdStlmAmtStatic.set_bottom(0);
 		crdStlmAmtStatic.set_right(0);
 		crdStlmAmtStatic.set_textAlign("right");
-		crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) - crdRfndAmt) + "원");
+		if(gsStlmAmt == lectStlmAmt){
+			crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt")) - crdRfndAmt) + "원");
+		}else{
+			crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt"))) + "원");
+		}
+		
+		//crdStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "crdStlmAmt"))) + "원");
 		crdStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		crdStlmAmtDiv.addChild("static_crd_stlm_amt", crdStlmAmtStatic);
 
@@ -1048,7 +1070,13 @@ this.fn_stlm_mthd_info = function()
 		lpntUseAmtStatic.set_bottom(0);
 		lpntUseAmtStatic.set_right(0);
 		lpntUseAmtStatic.set_textAlign("right");
-		lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) - lpntRfndAmt) + "원");
+		if(gsStlmAmt == lectStlmAmt){
+			lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt")) - lpntRfndAmt) + "원");
+		}else{
+			lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt"))) + "원");
+		}
+		
+		//lpntUseAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntUseAmt"))) + "원");
 		lpntUseAmtStatic.set_cssclass("sta_WF_CompText");
 		lpntUseAmtDiv.addChild("static_lpnt_use_amt", lpntUseAmtStatic);
 
@@ -1174,7 +1202,13 @@ this.fn_stlm_mthd_info = function()
 		etcStlmAmtStatic.set_bottom(0);
 		etcStlmAmtStatic.set_right(0);
 		etcStlmAmtStatic.set_textAlign("right");
-		etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) - etcRfndAmt) + "원");
+		if(gsStlmAmt == lectStlmAmt){
+			etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt")) - etcRfndAmt) + "원");
+		}else{
+			etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt"))) + "원");
+		}
+		
+		//etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "etcStlmAmt"))) + "원");
 		etcStlmAmtStatic.set_cssclass("sta_WF_CompText");
 		etcStlmAmtDiv.addChild("static_etc_stlm_amt", etcStlmAmtStatic);
 

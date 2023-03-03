@@ -418,12 +418,15 @@ this.fn_btnSearch_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventIn
 {
  	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
  	
- 	var mbrNm = this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm"), "");
- 	var hpStNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpStNo"), "");
- 	var hpMidNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpMidNo"), "");
- 	var hpLastNo = this.gfn_nvl(this.ds_search.getColumn(0, "hpLastNo"), "");
+	var mbrNm = this.gfn_nvl(this.ds_search.getColumn(0, "mbrNm"), "");
+	var hpStNo = this.ds_search.getColumn(0, "hpStNo");
+	var hpMidNo = this.ds_search.getColumn(0, "hpMidNo");
+	var hpLastNo = this.ds_search.getColumn(0, "hpLastNo");
 	
-	if(!this.gfn_isNull(this.ds_search.getColumn(0, "strtSmsterCd")) && this.gfn_isNull(this.ds_search.getColumn(0, "strtYy")))
+	var isMbrNm = this.gfn_isNull(mbrNm);
+	var isHpNo = (this.gfn_isNull(hpStNo) && this.gfn_isNull(hpMidNo) && this.gfn_isNull(hpLastNo));
+	
+ 	if(!this.gfn_isNull(this.ds_search.getColumn(0, "strtSmsterCd")) && this.gfn_isNull(this.ds_search.getColumn(0, "strtYy")))
 	{
 		alert("연도를 선택해주세요.");
 		return;
@@ -435,11 +438,11 @@ this.fn_btnSearch_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventIn
 		return;
 	}
  	
- 	if((mbrNm == "" && (hpStNo != "" || hpMidNo != "" || hpLastNo != ""))
- 		|| (mbrNm != "" && (hpStNo == "" && hpMidNo == "" && hpLastNo == ""))){
- 		alert("개인정보 검색은 회원명+연락처 조합으로 가능합니다.");
- 		return;
- 	}
+ 	if((!isMbrNm || !isHpNo) && (((nexacro.trim(mbrNm)).length < 2) || ((this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)))
+	{
+		alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+		return false;
+	}
  	
  	this.fn_searchValueInit();
  	parentFrm.fn_list();
