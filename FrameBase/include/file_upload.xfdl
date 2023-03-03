@@ -73,6 +73,7 @@
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -89,6 +90,8 @@ this.atchFileId = "";
 this.callbackFunc = null;
 this._this = null;
 this.mode = 1;
+
+this.editor = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -141,6 +144,12 @@ this.fn_init = function(atchFileObj)
 		{
 			this.mode = atchFileObj.mode;
 		}
+		
+		if(!this.gfn_isNull(atchFileObj.editor) && atchFileObj.editor != "")
+		{
+			this.editor = atchFileObj.editor;
+		}
+		
 		this._this = atchFileObj._this;
 		this.callbackFunc = atchFileObj.callbackFunc;
 		
@@ -227,7 +236,19 @@ this.fn_upload = function()
 
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.FileDialog00.open("Nexacro N", FileDialog.MULTILOAD);
+	if(this.editor == "") 
+	{
+		this.FileDialog00.open("Nexacro N", FileDialog.MULTILOAD);
+	} 
+	else 
+	{
+		var oArg = {
+			title : "crossphoto",
+			_this : this
+		};
+		
+		this.gfn_openPopup("photoPopup", oArg, "FrameBase::include/photoPopup.xfdl", this, 1280, 720, true, true, null);
+	}
 };
 
 this.FileDialog00_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
