@@ -209,9 +209,27 @@ this.Div01_Div00_chkAdmtPrcsStatAll_onclick = function(obj:nexacro.CheckBox,e:ne
 
 
 this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.Div01.form.Div00.form.chkAdmtPrcsStatAll.set_value(0);
+	var chkboxLen = 0, checkedLen = 0;
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkAdmtPrcsStatAll' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1){
+			chkboxLen++;
+		}
+		
 	}
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkAdmtPrcsStatAll' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1
+			&& obj.parent.components[i].value == true){
+			checkedLen++;
+			if(chkboxLen == checkedLen){
+				this.Div01.form.Div00.form.chkAdmtPrcsStatAll.set_value(1);
+			}else{
+				this.Div01.form.Div00.form.chkAdmtPrcsStatAll.set_value(0);
+			}
+		}			
+	}
+	
 }
 
 

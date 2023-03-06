@@ -312,6 +312,10 @@ this.btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	var sndPhoneNumber = this.row01.form.Div00.form.sndPhoneNumber.value;
 	var sndTempCont = this.Div00.form.Div00.form.sndTempCont.value;
 	
+	if(this.ds_rcv_obj.rowcount == 0){
+		this.alert("수신 대상자가 없습니다.");
+		return;
+	}
 	if(radioRsvSndYn == "Y"){
 		if(this.gfn_isNull(sndDt)){
 			this.alert("발송일을 설정하세요.");

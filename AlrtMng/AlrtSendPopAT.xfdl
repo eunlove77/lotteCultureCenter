@@ -429,6 +429,11 @@ this.Div01_btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	var sndPhoneNumber = this.row01.form.Div00.form.sndPhoneNumber.value;
 	var sndAtclCd = this.row02.form.Div00.form.tempRadioListDiv.form.templateRadioObj.value;
 	
+	if(this.ds_rcv_obj.rowcount == 0){
+		this.alert("수신 대상자가 없습니다.");
+		return;
+	}
+	
 	if(radioRsvSndYn == "Y"){
 		if(this.gfn_isNull(sndDt)){
 			this.alert("발송일을 설정하세요.");
@@ -457,7 +462,7 @@ this.Div01_btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 			this.ds_replace_val_list.setColumn(i, "replaceEditVal", this.row03.form.Div00.form.tempEditListDiv.form.components[i].value);
 		}		
 	}
-
+	
 	if(this.confirm("전송 하시겠습니까?")){
 	
 		for(var i = 0 ; i < this.ds_alrt_list.rowcount ; i++){

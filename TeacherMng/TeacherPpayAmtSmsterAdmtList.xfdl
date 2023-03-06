@@ -315,9 +315,9 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <CheckBox id="chkTcTpAll" taborder="1" text="전체" left="116" top="5" width="50" height="20" onclick="row04_Div00_chkTcTpAll_onclick"/>
-                    <CheckBox id="chkTcTp1" taborder="2" text="개인" left="chkTcTpAll:0" top="5" width="70" height="20"/>
-                    <CheckBox id="chkTcTp2" taborder="3" text="개인사업자" left="chkTcTp1:0" top="5" width="95" height="20"/>
-                    <CheckBox id="chkTcTp3" taborder="4" text="법인사업자" left="chkTcTp2:0" top="5" width="90" height="20"/>
+                    <CheckBox id="chkTcTp1" taborder="2" text="개인" left="chkTcTpAll:0" top="5" width="70" height="20" onclick="fn_checkbox_click3"/>
+                    <CheckBox id="chkTcTp2" taborder="3" text="개인사업자" left="chkTcTp1:0" top="5" width="95" height="20" onclick="fn_checkbox_click3"/>
+                    <CheckBox id="chkTcTp3" taborder="4" text="법인사업자" left="chkTcTp2:0" top="5" width="90" height="20" onclick="fn_checkbox_click3"/>
                     <Static id="Static01" taborder="6" text="(" left="chkTcTp3:-10" top="5" width="5" height="21"/>
                     <CheckBox id="chkTcTp4" taborder="5" text="면세사업자만" left="Static01:1" top="5" width="90" height="20"/>
                     <Static id="Static01_00" taborder="7" text=")" left="chkTcTp4:1" top="5" width="5" height="21"/>
@@ -432,25 +432,84 @@ this.row04_Div00_chkTcTpAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.Cl
 		obj.parent.chkTcTp1.set_value(1);
 		obj.parent.chkTcTp2.set_value(1);
 		obj.parent.chkTcTp3.set_value(1);		
-		obj.parent.chkTcTp4.set_value(1);				
+		
 	}else{
 		obj.parent.chkTcTp1.set_value(0);
 		obj.parent.chkTcTp2.set_value(0);
 		obj.parent.chkTcTp3.set_value(0);		
-		obj.parent.chkTcTp4.set_value(0);				
+		
 	}
 };
 
 this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.row01.form.Div02.form.chkLectClAll.set_value(0);
+	var chkboxLen = 0, checkedLen = 0;
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkLectClAll' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1){
+			chkboxLen++;
+		}
+		
+	}
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkLectClAll' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1
+			&& obj.parent.components[i].value == true){
+			checkedLen++;
+			if(chkboxLen == checkedLen){
+				this.row01.form.Div02.form.chkLectClAll.set_value(1);
+			}else{
+				this.row01.form.Div02.form.chkLectClAll.set_value(0);
+			}
+		}			
 	}
 }
 
 
 this.fn_checkbox_click2 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
-	if(!obj.isChecked()){
-		this.row02.form.Div00.form.chkStatAll.set_value(0);
+	var chkboxLen = 0, checkedLen = 0;
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkStatAll' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1){
+			chkboxLen++;
+		}
+		
+	}
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkStatAll' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1
+			&& obj.parent.components[i].value == true){
+			checkedLen++;
+			if(chkboxLen == checkedLen){
+				this.row02.form.Div00.form.chkStatAll.set_value(1);
+			}else{
+				this.row02.form.Div00.form.chkStatAll.set_value(0);
+			}
+		}			
+	}
+}
+
+this.fn_checkbox_click3 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
+	var chkboxLen = 0, checkedLen = 0;
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkTcTpAll' 
+			&& obj.parent.components[i].name != 'chkTcTp4' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1){
+			chkboxLen++;
+		}
+		
+	}
+	for(var i = 0 ; i < obj.parent.components.length ; i++){
+		if(obj.parent.components[i].name != 'chkTcTpAll' 
+			&& obj.parent.components[i].name != 'chkTcTp4' 
+			&& obj.parent.components[i].name.indexOf("chk") > -1
+			&& obj.parent.components[i].value == true){
+			checkedLen++;
+			if(chkboxLen == checkedLen){
+				this.row04.form.Div00.form.chkTcTpAll.set_value(1);
+			}else{
+				this.row04.form.Div00.form.chkTcTpAll.set_value(0);
+			}
+		}			
 	}
 }
 
@@ -625,7 +684,7 @@ this.fn_searchValueInit = function(){
 		if(this.row02.form.Div00.form.chkStat08.value == true) arrLectStatCd.push("08");
 		if(this.row02.form.Div00.form.chkStat09.value == true) arrLectStatCd.push("09");
 	}
-	console.log(arrTcTpCd);
+	
 	if(this.row04.form.Div00.form.chkTcTp1.value == false 
 	&& this.row04.form.Div00.form.chkTcTp2.value == false
 	&& this.row04.form.Div00.form.chkTcTp3.value == false

@@ -3,10 +3,10 @@
   <Form id="LectSearch_popup" width="1280" height="1000" titletext="강좌검색" onload="LectSearch_popup_onload">
     <Layouts>
       <Layout height="1000" width="1280">
-        <Div id="Div01" taborder="1" text="Div01" left="0" top="0" height="920" right="0">
+        <Div id="Div01" taborder="1" text="Div01" left="0" top="0" height="970" right="0">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" text="Div00" left="10" top="640" height="130" right="10" visible="false">
+              <Div id="Div00" taborder="0" text="Div00" left="10" top="690" height="130" right="10" visible="false">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="▶ 동반 수강자 정보" left="0" top="0" width="130" height="17" cssclass="sta_WF_TitGray"/>
@@ -22,8 +22,8 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="divLectReg" taborder="1" text="Div01" left="0" top="0" height="630" right="0" url="ClassMng::ClassListPopup.xfdl"/>
-              <Div id="Div01" taborder="2" text="Div01" left="10" top="780" height="120" right="10" visible="false">
+              <Div id="divLectReg" taborder="1" text="Div01" left="0" top="0" height="680" right="0" url="ClassMng::ClassListPopup.xfdl"/>
+              <Div id="Div01" taborder="2" text="Div01" left="10" top="830" height="60" right="10" visible="false">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="▶ 재료비/대여료" left="0" top="0" width="130" height="17" cssclass="sta_WF_TitGray"/>
@@ -69,7 +69,7 @@ this.mvgBlstrCd = null;
 
 // 이미 체크된 라디오버튼 다시 체크하는 행동 막기위한 변수
 this.checkedYn = false;
-this.selectedIndex;
+this.selectedIndex = -1;
 
 // 시간 겹치는지 여부
 this.lectDtDuplYn = "N";
@@ -264,14 +264,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 
 // 그리드 라디오버튼 선택이벤트
 this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo){
-	this.ds_class_dtl.clearData();
-
 	var objDs = obj.getBindDataset();
 	
 	for(var i=0; i<objDs.getRowCount(); i++)
 	{
 		if(objDs.checkarray[i] == 1){
 			if(this.selectedIndex != i){
+				this.ds_class_dtl.clearData();
 				var rowIndex = this.ds_class_dtl.addRow();
 				this.ds_class_dtl.copyRow(rowIndex, objDs, i);
 				this.checkedYn = false;
@@ -302,6 +301,12 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		}
 
 		// 동반 수강자 정보
+		// 체크박스 초기화
+		for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
+			if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
+				this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
+			}
+		}
 		this.Div01.set_height(920);
 		this.Div01.form.Div00.set_visible(true);
 		
@@ -680,29 +685,35 @@ this.Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		for(var i=0;i<this.opener.divWork.form.ds_class_list.getRowCount();i++){
 			if((this.ds_class_dtl.getColumn(0, "lectTpCd") == "04" && this.gfn_nvl(this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd")) != "" ? this.ds_class_dtl.getColumn(0, "pblPmprcustBrchCd") : brchCd) != this.opener.divWork.form.ds_class_list.getColumn(i, "brchCd")){
 				alert("같은 지점의 강좌만 선택 가능합니다.");
-				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
-					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
-						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
-					}
+				for(var i=0; i<this.ds.getRowCount(); i++)
+				{
+					this.ds.checkarray[i] = 0;
 				}
-				if(this.Div01.form.Div01.visible){
-					this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
-					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
-				}
+				this.grid.redrawExprCell();
+				this.checkedYn = false;
+				this.Div01.set_height(640);
+				this.Div01.form.Div00.set_visible(false);
+				this.Div01.form.Div01.set_visible(false);
+				this.Div01.form.Button00.set_visible(false);
+				this.Div01.form.Button01.set_visible(false);
+				this.resetScroll();
 				return;
 			}
 			
 			if(yy != this.opener.divWork.form.ds_class_list.getColumn(i, "yy") || lectSmsterCd != this.opener.divWork.form.ds_class_list.getColumn(i, "lectSmsterCd")){
 				alert("동일 학기의 강좌만 수강신청 하실 수 있습니다.");
-				for(var i=0;i<this.ds_fmly_list.getRowCount();i++){
-					if(this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].value){
-						this.Div01.form.Div00.form.Div00.form.Div00.form["chk_fmly_"+this.ds_fmly_list.getColumn(i, "fmlySeqno")].set_value(0);
-					}
+				for(var i=0; i<this.ds.getRowCount(); i++)
+				{
+					this.ds.checkarray[i] = 0;
 				}
-				if(this.Div01.form.Div01.visible){
-					this.Div01.form.Div01.form.Div00.form.Combo00.set_index(0);
-					this.Div01.form.Div01.form.Div00.form.Static01.set_text("");
-				}
+				this.grid.redrawExprCell();
+				this.checkedYn = false;
+				this.Div01.set_height(640);
+				this.Div01.form.Div00.set_visible(false);
+				this.Div01.form.Div01.set_visible(false);
+				this.Div01.form.Button00.set_visible(false);
+				this.Div01.form.Button01.set_visible(false);
+				this.resetScroll();
 				return;
 			}
 			

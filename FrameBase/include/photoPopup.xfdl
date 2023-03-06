@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="photoPopup" width="1280" height="720" titletext="crossphoto" onload="photoPopup_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <WebBrowser id="WebBrowser00" taborder="0" left="0" top="0" right="0" bottom="0"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "Base::libCommon.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.application = null;
+this.domain = "";
+
+this.photoPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+	this.domain = this.application.Domain;
+	
+	this.WebBrowser00.set_url(this.domain + "/namo-photo/index.html");
+	this.WebBrowser00.insertEventHandler("onusernotify", 0, this.fn_set_img, this);	
+};
+
+this.fn_set_img = function(obj:nexacro.WebBrowser,e:nexacro.WebUserNotifyEventInfo)
+{
+
+	if(e.userdata != "") 
+	{
+		this.parent._this.atchFileId = e.userdata;
+		this.parent._this.fn_getAtchFileList(e.userdata)
+	}
+	this.close();
+}]]></Script>
+  </Form>
+</FDL>
