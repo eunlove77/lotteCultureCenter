@@ -26,7 +26,7 @@
                       <Row size="24"/>
                     </Rows>
                     <Band id="head">
-                      <Cell edittype="normal" displaytype="normal"/>
+                      <Cell edittype="none" displaytype="none"/>
                       <Cell col="1" text="번호"/>
                       <Cell col="2" text="이름"/>
                       <Cell col="3" text="관계"/>
@@ -61,7 +61,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이름 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="160" height="21" readonly="false" maxlength="50"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="160" height="21" readonly="false" maxlength="50" inputfilter="sign,symbol"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -290,7 +290,10 @@ this.fnCallback_pop = function(_this, chkDs)
 
 this.Div01_initBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_init();
+	if(this.confirm("입력한 내용을 초기화하시겠습니까?"))
+	{
+		this.fn_init();
+	}
 };
 
 this.fn_init = function(){
