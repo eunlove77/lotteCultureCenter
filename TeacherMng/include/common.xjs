@@ -215,7 +215,11 @@ this.com_reset_search_form2 = function(pObj){
 			arrObj[i].set_value("");
 			arrObj[i].calendaredit.set_readonly(true); 
 		}
-	}	
+	}
+
+	if(pObj.brchCd){
+		this.ds_search.setColumn(0, pObj.brchColNm, this.brchCd);
+	}
 }
 /**************************************************************************
  * 카테고리
@@ -379,9 +383,12 @@ this.fnCallback_smster =  function(svcID, errorCode, errorMsg)
 /**************************************************************************
  * 지점명 콤보박스 세팅
  **************************************************************************/
-this.com_set_branch_list = function(){
+this.com_set_branch = function(otps){
 	//지점초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	return nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+}
+this.com_set_branch_list = function(){
+
 	this.ds_spot_list.copyData(this.application.gdsSpotCdList);
 	this.ds_spot_list.deleteRow(0);
 
