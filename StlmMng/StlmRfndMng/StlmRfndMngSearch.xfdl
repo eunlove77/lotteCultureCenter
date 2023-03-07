@@ -213,9 +213,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		chkboxFrm = this.Div00.form.Div05.form;
  		for(var i=0;i<this.ds_rfnd_chnl_list.getRowCount();i++){
 			if(i > 0){
-				objCheckbox = new CheckBox("rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i, "cd"), chkboxFrm["rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.rfndChnlAll.getOffsetTop(), 105, 20, null, null);
+				objCheckbox = new CheckBox("rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i, "cd"), chkboxFrm["rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i-1, "cd")].getOffsetRight(), chkboxFrm.rfndChnlAll.getOffsetTop(), 105, 29, null, null);
 			}else{
-				objCheckbox = new CheckBox("rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i, "cd"), chkboxFrm.rfndChnlAll.getOffsetRight(), chkboxFrm.rfndChnlAll.getOffsetTop(), 105, 20, null, null);
+				objCheckbox = new CheckBox("rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i, "cd"), chkboxFrm.rfndChnlAll.getOffsetRight(), chkboxFrm.rfndChnlAll.getOffsetTop(), 105, 29, null, null);
 			}
  			
  			objCheckbox.set_text(this.ds_rfnd_chnl_list.getColumn(i, "cdNm"));
@@ -505,21 +505,21 @@ this.fn_searchValueInit = function()
 	// 결제채널
 	for(var i=0;i<this.ds_rfnd_chnl_list.getRowCount();i++){
 		if(this.Div00.form.Div05.form["rfndChnlStatus" + this.ds_rfnd_chnl_list.getColumn(i, "cd")].value){
-			arrRfndChnl.push("'"+ this.ds_rfnd_chnl_list.getColumn(i, "cd") +"'");
+			arrRfndChnl.push(this.ds_rfnd_chnl_list.getColumn(i, "cd"));
 		}
 	}
 	
 	// 결제수단
 	for(var i=0;i<this.ds_rfnd_mthd_list.getRowCount();i++){
 		if(this.Div00.form.Div02.form["rfndMthdStatus" + this.ds_rfnd_mthd_list.getColumn(i, "cd")].value){
-			arrRfndMthd.push("'"+ this.ds_rfnd_mthd_list.getColumn(i, "cd") +"'");
+			arrRfndMthd.push(this.ds_rfnd_mthd_list.getColumn(i, "cd"));
 		}
 	}
 	
 	// 결제상태
 	for(var i=0;i<this.arrRfndStat.length;i++){
 		if(this.Div00.form.Div04.form["rfndStatStatus" + this.arrRfndStat[i].cd].value){
-			arrRfndStat.push("'"+ this.arrRfndStat[i].cd +"'");
+			arrRfndStat.push(this.arrRfndStat[i].cd);
 		}
 	}
 	

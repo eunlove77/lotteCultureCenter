@@ -220,8 +220,14 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
-		return;
+		// 잘못된 접근일때는 얼럿 후 리프레시
+		if(errorCode == -11){
+			this.alert(errorMsg);
+			this.parent.parent.parent.parent.reload();
+		}else{
+			this.alert(errorCode+"\n"+errorMsg);
+			return;
+		}
 	}
 	
 	switch(svcID)

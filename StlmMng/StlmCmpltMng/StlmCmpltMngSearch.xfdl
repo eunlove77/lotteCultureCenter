@@ -469,20 +469,20 @@ this.fn_searchValueInit = function()
 	// 결제채널
 	for(var i=0;i<this.ds_stlm_chnl_list.getRowCount();i++){
 		if(this.Div00.form.Div02.form["stlmChnlStatus" + this.ds_stlm_chnl_list.getColumn(i, "cd")].value == true){
-			arrStlmChnl.push("'"+ this.ds_stlm_chnl_list.getColumn(i, "cd") +"'");
+			arrStlmChnl.push(this.ds_stlm_chnl_list.getColumn(i, "cd"));
 		}
 	}
 	
 	// 결제수단
 	for(var i=0;i<this.ds_stlm_mthd_list.getRowCount();i++){
 		if(this.Div00.form.Div03.form["stlmMthdStatus" + this.ds_stlm_mthd_list.getColumn(i, "cd")].value == true){
-			arrStlmMthd.push("'"+ this.ds_stlm_mthd_list.getColumn(i, "cd") +"'");
+			arrStlmMthd.push(this.ds_stlm_mthd_list.getColumn(i, "cd"));
 		}
 	}
 	
 	// 사은품 수령여부
-	if(this.Div00.form.Div05.form.fgftRecpStatusY.value == true) arrFgftRecpYn.push("'Y'");
-	if(this.Div00.form.Div05.form.fgftRecpStatusN.value == true) arrFgftRecpYn.push("'N'");
+	if(this.Div00.form.Div05.form.fgftRecpStatusY.value == true) arrFgftRecpYn.push("Y");
+	if(this.Div00.form.Div05.form.fgftRecpStatusN.value == true) arrFgftRecpYn.push("N");
 	
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
