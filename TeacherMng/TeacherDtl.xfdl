@@ -593,6 +593,7 @@ this.age = 0;
 this.menuSeq = 0;
 
 this.isRrnoDupChk = false; //지급정보 중복체크
+this.rrno_ori = ""; //기존 rrno
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -610,6 +611,9 @@ this.TeacherDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//강사정보 세팅
 	this.ds_teacher_info.setColumn(0, 'tcCdNo', this.parent.tcCdNo);
 	this.ds_memo.setColumn(0, 'tcCdNo', this.parent.tcCdNo);
+	
+	//기존 지급정보 세팅
+	this.rrno_ori = this.ds_teacher_info.getColumn(0, 'rrno');
 	
 	this.select_teacher_info();
 	
@@ -801,8 +805,7 @@ this.Div_PayInfo_Div_p_Div00_juminChk_onclick = function(obj:nexacro.Button,e:ne
 	}
 	
 	//기존이랑 다른경우 중복체크
-	var rrno_ori = this.ds_teacher_info.getColumn(0, 'rrno');
-	if(rrno_ori != tJuminID){
+	if(this.rrno_ori != tJuminID){
 		this.check_duplication_rrno(tJuminID);
 	} else {
 		alert("사용 가능한 주민번호입니다.");
@@ -820,8 +823,7 @@ this.Div_PayInfo_Div_b_Div00_btnCheck_onclick = function(obj:nexacro.Button,e:ne
 	}
 	
 	//기존이랑 다른경우 중복체크
-	var rrno_ori = this.ds_teacher_info.getColumn(0, 'rrno');
-	if(rrno_ori != rrno){
+	if(this.rrno_ori != rrno){
 		this.check_duplication_rrno(rrno);
 	} else {
 		alert("사용 가능한 사업자번호입니다.");
