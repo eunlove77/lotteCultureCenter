@@ -223,6 +223,8 @@ include "TeacherMng::include/common.xjs";
 this.application = null;
 this.popCnt = 0;
 this.menuSeq = 0;
+this.brchCd = "";
+this.brchColNm = "hopeBrchCd";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -236,8 +238,8 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
-  //지점 콤보박스 세팅
-	this.com_set_branch_list();
+  //지점초기화
+	this.brchCd = this.com_set_branch();
   
 	// 코드 데이터
 	this.set_dataset();
@@ -275,6 +277,9 @@ this.set_dataset = function(){
     ];
 	this.com_set_combobox_default(ds_list);
 	
+  //지점명 콤보박스 세팅
+	this.com_set_branch_list();
+  
 }
 //동적 체크박스 추가
 this.set_dynamic_checkbox = function()
