@@ -185,6 +185,7 @@ include "TeacherMng::include/common.xjs";
  **************************************************************************/
 this.application = null;
 this.brchCd = "";
+this.brchColNm = "brchCd";
 this.popCnt = 0;
 this.menuSeq = "";
 this.yy = "";
@@ -204,9 +205,9 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
-	//지점초기화
-	this.brchCd = nexacro.getPrivateProfile("brchCd");
-	
+  //지점초기화
+	this.brchCd = this.com_set_branch();
+
 	// 코드 데이터
 	this.set_dataset();
 
@@ -227,9 +228,6 @@ this.set_dataset = function(){
 	//코드 데이터셋 설정
 	this.com_set_code_dataset(ds_codes_list);
 	
-	//지점 콤보박스 세팅
-	this.com_set_branch_list();
-	
 	//년도
 	var startYear = new nexacro.Date().getFullYear() - 15;
 	this.com_set_dataset_year(this.ds_year_list, startYear);
@@ -245,6 +243,9 @@ this.set_dataset = function(){
 	];
 	this.com_set_combobox_default(ds_list);
 	
+  //지점 콤보박스 세팅
+	this.com_set_branch_list();
+
 }
 /**************************************************************************
  * 검색, 초기화
