@@ -20,7 +20,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="실수강자" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Static id="Static01" taborder="1" top="5" width="120" height="20" cssclass="sta_WF_CompText" right="0" textAlign="right"/>
+                    <Static id="Static01" taborder="1" top="5" height="20" cssclass="sta_WF_CompText" textAlign="right" left="Static00:0" right="0"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -273,12 +273,12 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.dcMthdFrm.ds_select_grde_list.copyData(this.dcMthdFrm.ds_grde_amt_cl_cd_list);
 				for(var i=this.dcMthdFrm.ds_grde_amt_cl_cd_list.getRowCount()-1;i>0;i--){
 					// 등급할인 사용 횟수 초과해서 사용못하는 등급할인 제거
-					if(this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "grdeUseYn") == "N" && (this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == "" || this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "cd") != dsDcDtl.getColumn(0, "grdeDcAmtClCd"))){
+					if(this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "grdeUseYn") == "N" && (this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == "" || (dsDcDtl.getColumn(0, "grdeDcSubtrYn") == "N" || this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "cd") != dsDcDtl.getColumn(0, "grdeDcAmtClCd")))){
 						this.dcMthdFrm.ds_select_grde_list.deleteRow(i);
 						continue;
 					}
 					// 전체할인 사용 횟수 초과해서 사용못하는 등급할인 제거
-					if(this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "allUseYn") == "N" && (this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == "" || this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "cd") != dsDcDtl.getColumn(0, "grdeDcAmtClCd"))){
+					if(this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "allUseYn") == "N" && (this.gfn_nvl(dsDcDtl.getColumn(0, "grdeDcAmtClCd")) == "" || (dsDcDtl.getColumn(0, "grdeDcSubtrYn") == "N" || this.dcMthdFrm.ds_grde_amt_cl_cd_list.getColumn(i, "cd") != dsDcDtl.getColumn(0, "grdeDcAmtClCd")))){
 						this.dcMthdFrm.ds_select_grde_list.deleteRow(i);
 						continue;
 					}
