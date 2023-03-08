@@ -714,6 +714,7 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.addChild("ds_fgft_list", dsFgftList);
 	var arrPrmtnSeqno = [];
 	var fgftIndex = 0;
+	var brchCd = "";
 	for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
 		if(this.gfn_nvl(this.ds_stlm_cmplt_list.getColumn(i, "fgftAppNo")) == "" && this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno").length > 0){
 			fgftApplYn = true;
@@ -744,9 +745,10 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 					arrPrmtnSeqno.push(this.ds_stlm_cmplt_list.getColumn(i, "prmtnSeqno").split(",")[j]);
 				}
 			}
-			
-			
 			fgftIndex++;
+			if(brchCd == ""){
+				brchCd = this.ds_stlm_cmplt_list.getColumn(i, "brchCd");
+			}
 		}
 	}
 	
@@ -757,6 +759,7 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 			, ds_stlm_cmplt_list : this.ds_stlm_cmplt_list
 			, parent_list_form : this.parent.parent.parent.parent.parent.opener.divWork.form
 			, arrPrmtnSeqno : arrPrmtnSeqno
+			, brchCd : brchCd
 		};
 		this.cnt++;
 		this.gfn_openPopup("FgftAppPopupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/FgftApp_popup.xfdl", this, 1280, 720, true, true, null);

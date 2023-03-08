@@ -724,6 +724,23 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 				lectStlmAmt -= this.ds_class_list.getColumn(i, "optnDcAmt");
 			}
 			this.Div00.form.Div04.form.Static02.set_text(this.gfn_setComma(lectStlmAmt) + "원");
+			
+			// 실수강자 목록 다 비워지면 결제정보 숨김
+			if(this.ds_class_list.getRowCount() == 0){
+				this.Div00.form.Div04.set_visible(false);
+				this.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);
+				this.Div00.form.Div04.form.Div03.form.Combo00.set_index(0);
+				this.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
+				this.Div00.form.Div04.form.Static03.set_text("");
+				this.Div00.form.Div04.form.CheckBox00.set_value(0);
+			}
 			alert("삭제되었습니다.");
 		}
 	}else if(e.col == 8){

@@ -12,6 +12,7 @@
                 <Formats>
                   <Format id="default">
                     <Columns>
+                      <Column size="48" band="left"/>
                       <Column size="80"/>
                       <Column size="80"/>
                       <Column size="80"/>
@@ -24,20 +25,22 @@
                       <Row size="24"/>
                     </Rows>
                     <Band id="head">
-                      <Cell text="실수강자"/>
-                      <Cell col="1" text="지점명"/>
-                      <Cell col="2" text="강좌유형"/>
-                      <Cell col="3" text="강좌코드"/>
-                      <Cell col="4" text="강좌명"/>
-                      <Cell col="5" text="강사명"/>
+                      <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell col="1" text="실수강자"/>
+                      <Cell col="2" text="지점명"/>
+                      <Cell col="3" text="강좌유형"/>
+                      <Cell col="4" text="강좌코드"/>
+                      <Cell col="5" text="강좌명"/>
+                      <Cell col="6" text="강사명"/>
                     </Band>
                     <Band id="body">
-                      <Cell text="bind:actlAtlctNpleNm"/>
-                      <Cell col="1" text="bind:brchCdNm"/>
-                      <Cell col="2" text="bind:lectTpCdNm"/>
-                      <Cell col="3" text="bind:lectCd"/>
-                      <Cell col="4" text="bind:lectNm"/>
-                      <Cell col="5" text="bind:tcNm"/>
+                      <Cell text="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell col="1" text="bind:actlAtlctNpleNm"/>
+                      <Cell col="2" text="bind:brchCdNm"/>
+                      <Cell col="3" text="bind:lectTpCdNm"/>
+                      <Cell col="4" text="bind:lectCd"/>
+                      <Cell col="5" text="bind:lectNm"/>
+                      <Cell col="6" text="bind:tcNm"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -69,6 +72,7 @@ include "Base::libCommon.xjs";
 this.application = null;
 this.menuSeq = null;
 this.arrPrmtnSeqno = null;
+this.brchCd = null;
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -78,6 +82,7 @@ this.FgftApp_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.menuSeq = this.parent.menuId
 	this.arrPrmtnSeqno = this.parent.arrPrmtnSeqno;
+	this.brchCd = this.parent.brchCd;
 	
 	this.ds_atlct_list.set_enableevent(false);
 	for(var i=0;i<this.parent.ds_fgft_list.getRowCount();i++){
@@ -98,8 +103,6 @@ this.FgftApp_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.ds_atlct_list.set_enableevent(true);
 	
 	this.fn_data_list();
-	
-	//this.gfnSetCheckBoxNoDataset(this.ds_atlct_list, this.Div00.form.Grid00, 0);
 };
 
 this.fn_data_list = function()
@@ -108,7 +111,7 @@ this.fn_data_list = function()
 	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/getFgftPopDataList.do";
 	var inData      = "";
 	var outData     = "this.ds_fgft_list=output1";
-	var strArg      = "arrPrmtnSeqno=" + this.arrPrmtnSeqno.join();
+	var strArg      = "arrPrmtnSeqno=" + this.arrPrmtnSeqno.join() + " brchCd=" + this.brchCd;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	
@@ -145,6 +148,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	  {
 		case "dataList":
 			this.Div00.form.Div00.form.Combo00.set_index(0);
+			this.gfnSetCheckBoxNoDataset(this.ds_atlct_list, this.Div00.form.Grid00, 0);
 			break;
 		case "insert":
 			for(var i=0;i<this.parent.ds_stlm_cmplt_list.getRowCount();i++){
@@ -178,6 +182,18 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 {
 	if(this.Div00.form.Div00.form.Combo00.value == ""){
 		alert("사은품을 선택하세요.");
+		return;
+	}
+	
+	var chkYn = false;
+	for(var i=0; i<this.ds_atlct_list.getRowCount(); i++){
+		if(this.ds_atlct_list.checkarray[i] == "1"){
+			chkYn = true;
+		}
+	}
+	
+	if(!chkYn){
+		alert("실수강자를 선택해주세요.");
 		return;
 	}
 
