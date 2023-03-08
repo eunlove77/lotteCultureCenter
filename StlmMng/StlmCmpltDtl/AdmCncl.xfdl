@@ -221,9 +221,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	if(errorCode != 0)
 	{
 		// 잘못된 접근일때는 얼럿 후 리프레시
-		if(errorCode == -11){
+		if(errorCode == -11 || errorCode == -12 || errorCode == -13){
 			this.alert(errorMsg);
 			this.parent.parent.parent.parent.reload();
+			return;
 		}else{
 			this.alert(errorCode+"\n"+errorMsg);
 			return;
