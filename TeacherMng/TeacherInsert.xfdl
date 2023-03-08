@@ -677,40 +677,18 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	
 	//submit
 	if(confirm("강사정보를 등록 하시겠습니까?")){
-		this.delete_empty_row();
 		this.submit_teacher_info();
 	}
 };
-this.delete_empty_row = function(){
-	//필수값이 아닌 그리드 데이터 로우 삭제
-	var ds_list = [this.ds_tcedu_list, this.ds_tchist_list, this.ds_tcawrd_list, this.ds_tcathctf_list];
-	for(var ds of ds_list)
-		this.delete_empty_row_2(ds);
-}
-this.delete_empty_row_2 = function(ds){
-	var isInput = false;
-	var isEmpty = false;
-	
-	var i = ds.rowcount - 1;	//마지막 로우만 체크
-	for(var j = 1; j < ds.colcount; j++){ //키값 제외
-		if(this.gfn_nvl(ds.getColumn(i, j)) == "" || nexacro.trim(ds.getColumn(i, j)) == ""){
-			isEmpty = true;
-		} else {
-			isInput = true;
-		}
-	}
-	if(isEmpty){
-		ds.deleteRow(i);
-	}
-}
+
 this.submit_teacher_info = function(){
 
 	var inData = "";
 	inData += "teacherDtl=ds_teacher_info";
-	inData += " tceduList=ds_tcedu_list";
-	inData += " tchistList=ds_tchist_list";
-	inData += " tcawrdList=ds_tcawrd_list";
-	inData += " tcathctfList=ds_tcathctf_list";
+	inData += " tceduList=ds_trans_edu";
+	inData += " tchistList=ds_trans_hist";
+	inData += " tcawrdList=ds_trans_awrd";
+	inData += " tcathctfList=ds_trans_athctf";
 	
 	var tranObj = {};
 	tranObj.strSvcId	= "insert_teacher";
@@ -810,28 +788,28 @@ this.validate_teacher_basic = function(){
 //학력
 this.validate_teacher_edu = function(type){
 	var vali_arr= [['schlClCd', '학교구분을'], ['grdtClCd', '졸업구분을'], ['yy', '연도를'], ['schlNm', '학교명을'], ['mjrNm', '전공을']];
-	return this.validate_teacher_ds_list("ds_tcedu_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tcedu_list", this.ds_trans_edu, vali_arr, type);
 }
 //경력
 this.validate_teacher_hist = function(type){
 	var vali_arr= [['histStDt', '기간을'], ['histEndDt', '기간을'], ['histPlcNm', '기관명을']]
-	return this.validate_teacher_ds_list("ds_tchist_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tchist_list", this.ds_trans_hist, vali_arr, type);
 }
 //수상
 this.validate_teacher_awrd = function(type){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '수상내역을']]
-	return this.validate_teacher_ds_list("ds_tcawrd_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tcawrd_list", this.ds_trans_awrd, vali_arr, type);
 }
 //자격
 this.validate_teacher_athctf = function(type){
 	var vali_arr= [['issueDt', '기간을'], ['issueAgncNm', '기관명을'], ['issueNm', '자격증명을']];
-	return this.validate_teacher_ds_list("ds_tcathctf_list", vali_arr, type);
+	return this.validate_teacher_ds_list("ds_tcathctf_list", this.ds_trans_athctf, vali_arr, type);
 }
 
-this.validate_teacher_ds_list = function(ds, vali_arr, type){
+this.validate_teacher_ds_list = function(dsNm, transDs, vali_arr, type){
 	var isInput = false;
 	var msg = "";
-	var ds = this[ds];
+	var ds = this[dsNm];
 	for(var i = 0; i < ds.rowcount; i++){
 		for(var vali of vali_arr){
 			if(vali && (this.gfn_nvl(ds.getColumn(i, vali[0])) == "" || nexacro.trim(ds.getColumn(i, vali[0])) == "")){
@@ -868,8 +846,19 @@ this.validate_teacher_ds_list = function(ds, vali_arr, type){
 		//항목 추가시 입력값 없다면
 		alert(vali_arr[0][1]  + " 입력하세요.");
 		return false;
-	}
+	} else if(type == "addRow"){
+    return true;
+  }
 	
+  //학력 및 경력정보 깜빡임 수정
+	transDs.clearData();
+	transDs.copyData(ds);
+	
+	if(ds.rowcount == 1 && !isInput) {
+		//저장시 입력값 전혀 없을 경우 로우 삭제
+		transDs.deleteRow(0);
+	}
+  
 	return true;
 }
 /**************************************************************************
@@ -1264,6 +1253,10 @@ this.Div01_Div05_Div00_Edit00_00_onchanged = function(obj:nexacro.Edit,e:nexacro
           <Row/>
         </Rows>
       </Dataset>
+      <Dataset id="ds_trans_edu"/>
+      <Dataset id="ds_trans_hist"/>
+      <Dataset id="ds_trans_awrd"/>
+      <Dataset id="ds_trans_athctf"/>
     </Objects>
     <Bind>
       <BindItem id="item1" compid="Div01.form.Div01.form.txfpBizprYn" propid="value" datasetid="ds_teacher_info" columnid="txfrBizprYn"/>
