@@ -1318,7 +1318,10 @@ this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexa
 	{
 		this.Div01.form.Div04.form.MaskEdit00.set_format("!###,###,##9");	//9자리 입력 제한
 		this.Div01.form.Div04.form.Static01.set_text("원");
-		this.Div01.form.Div04.form.MaskEdit00.set_value(0);
+		if(this.parent.type != "copy")
+		{
+			this.Div01.form.Div04.form.MaskEdit00.set_value(0);
+		}
 	}
 };
 
@@ -1571,7 +1574,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 		case "save":
 			this.alert("저장되었습니다.");
-			if(this.opener.components[0].form.fn_list)
+			if(this.opener.components[0].form)
 			{
 				this.opener.components[0].form.fn_list();
 			}
@@ -1583,7 +1586,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			break;
 		case "end":
 			this.alert("발급종료 되었습니다.");
-			console.log(this.opener);
 			this.opener.components[0].form.fn_list();
 			this.close();
 			break;
