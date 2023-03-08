@@ -346,7 +346,7 @@ this.get_teacher_evaluation_list = function()
 		strSvcId : "teacher_evaluation_list",
 		strSvcUrl : this.application.Admin_svc + "::teacherMng/tceval/list.do",
 		inData : "search=ds_search",
-		outData : "ds_list=output1",
+		outData : "rtn_list=output1",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		isAsync : true,
@@ -365,6 +365,8 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	}
 	
 	if(svcId == "teacher_evaluation_list"){
+		this.set_avg_point();
+		
 		this.ds_list.filter("tcCdNo != '총점'");
 		this.ds_list.filter("");
 	}
@@ -404,6 +406,61 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 	}
 };
 
+//평균 계산
+this.set_avg_point = function(){
+	this.ds_list.clearData();
+	if(this.rtn_list.rowcount == 0){
+		return;
+	}
+	
+	let i, j, pnt = 0;
+	let item_n, item;
+	let tcCdNo_n, tcCdNo;
+
+  this.ds_list.set_enableevent(false);
+  tcCdNo = this.rtn_list.getColumn(0, "tcCdNo");
+  pnt += this.rtn_list.getColumn(0, "evlPnt");
+
+  this.ds_list.addRow();
+  this.ds_list.copyRow(0, this.rtn_list, 0);
+
+  this.ds_list.setColumn(0, "evlPnt", pnt);
+  this.ds_list.setColumn(0, "tcCdNo", tcCdNo);
+
+	for (i = 1, j = 1; i < this.rtn_list.rowcount; i++, j++) {
+		tcCdNo_n = this.rtn_list.getColumn(i, "tcCdNo");
+
+		if (tcCdNo === tcCdNo_n) {
+      let row = this.ds_list.addRow();
+      this.ds_list.copyRow(row, this.rtn_list, i);
+      this.ds_list.setColumn(row, "tcCdNo", "");
+      this.ds_list.setColumn(row, "tcNm", "");
+
+			pnt += Number(this.ds_list.getColumn(row, "evlPnt"));
+		}
+    else {
+      let row = this.ds_list.addRow();
+      this.ds_list.setColumn(row, "tcCdNo", "총점");
+      this.ds_list.setColumn(row, "evlPnt", Math.round(pnt * 10 / j) / 10);
+
+      row = this.ds_list.addRow();
+      this.ds_list.copyRow(row, this.rtn_list, i);
+
+			tcCdNo = this.ds_list.getColumn(row, "tcCdNo");
+			pnt = Number(this.ds_list.getColumn(row, "evlPnt"));
+			j = 0;
+		}
+	}
+
+	const rowcount = this.ds_list.rowcount;
+	if (this.ds_list.getColumn(rowcount-1, "tcCdNo") !== "총점") {
+    let row = this.ds_list.addRow();
+    this.ds_list.setColumn(row, "tcCdNo", "총점");
+    this.ds_list.setColumn(row, "evlPnt", Math.round(pnt * 10 / j) / 10);
+	}
+  this.ds_list.set_enableevent(true);
+
+}
 /**************************************************************************
  * UTIL
  **************************************************************************/
@@ -540,6 +597,7 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_gdsSpotCd_list"/>
+      <Dataset id="rtn_list"/>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.brchCd" propid="value" datasetid="ds_search" columnid="brchCd"/>
