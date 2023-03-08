@@ -61,7 +61,7 @@
         <Static id="Static00" taborder="1" text="▶ 목록" left="0" top="0" width="45" height="17" cssclass="sta_WF_TitGray"/>
         <Static id="Static01" taborder="2" text="(0개)" left="45" top="0" width="55" height="17" cssclass="sta_WF_TitGray"/>
         <Button id="Button02" taborder="3" text="엑셀" top="0" height="20" cssclass="btn_WF_High" width="100" right="0" onclick="Button02_onclick"/>
-        <Grid id="Grid_Excel" taborder="4" left="0" top="360" binddataset="ds_stlm_fail_list" nodatatext="검색결과 없음" right="0" autofittype="col" autosizebandtype="body" autosizingtype="none" bottom="-333" visible="false">
+        <Grid id="Grid_Excel" taborder="4" left="0" top="700" binddataset="ds_stlm_fail_list" nodatatext="검색결과 없음" right="0" autofittype="col" autosizebandtype="body" autosizingtype="none" bottom="-673" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -70,7 +70,7 @@
                 <Column size="80"/>
                 <Column size="80"/>
                 <Column size="150"/>
-                <Column size="200"/>
+                <Column size="250"/>
                 <Column size="150"/>
                 <Column size="100"/>
                 <Column size="150"/>
@@ -95,17 +95,17 @@
                 <Cell col="10" text="강좌명"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:rnum"/>
-                <Cell col="1" text="bind:stlmClCdNm" suppress="2" suppressalign="middle"/>
-                <Cell col="2" text="bind:stlmChnlCdNm" suppress="2" suppressalign="middle"/>
-                <Cell col="3" text="bind:stlmStatCdNm" suppress="2" suppressalign="middle"/>
-                <Cell col="4" text="bind:rsltFailDtm" suppress="2"/>
-                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;rsltCd&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;rsltMsgCont&quot;) + &quot;)&quot;" suppress="2" suppressalign="middle"/>
-                <Cell col="6" text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
-                <Cell col="7" text="bind:mbrNo" suppressalign="middle" suppress="2"/>
-                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;mbrNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;mbrId&quot;) + &quot;)&quot;" suppress="2" suppressalign="middle"/>
-                <Cell col="9" text="bind:lectCd"/>
-                <Cell col="10" text="bind:lectNm"/>
+                <Cell text="bind:rnum" suppress="2" suppressalign="middle"/>
+                <Cell col="1" text="bind:replCdNm" suppressalign="first" suppress="2"/>
+                <Cell col="2" text="bind:stlmChnlCdNm" suppressalign="first" suppress="2"/>
+                <Cell col="3" text="bind:atlctStatCdNm" suppressalign="first" suppress="2"/>
+                <Cell col="4" text="bind:rsltFailDtm" suppress="2" suppressalign="first"/>
+                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;replCd&quot;) + ((dataset.getColumn(currow, &quot;replMsgCont&quot;) == undefined || dataset.getColumn(currow, &quot;replMsgCont&quot;) == &quot;&quot;) ? &quot;&quot; : &quot;(&quot; + dataset.getColumn(currow, &quot;replMsgCont&quot;) + &quot;)&quot;)" suppressalign="first" suppress="2"/>
+                <Cell col="6" text="bind:atlctRsvNo" suppressalign="first" suppress="1"/>
+                <Cell col="7" text="bind:mbrNo" suppressalign="first" textDecoration="underline" color="blue" cursor="pointer" suppress="2"/>
+                <Cell col="8" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" suppressalign="first" textDecoration="underline" tooltiptext="expr:dataset.getColumn(currow, &quot;mbrNm&quot;)" tooltiptype="hover" color="blue" cursor="pointer" suppress="2"/>
+                <Cell col="9" text="bind:lectCd" color="blue" cursor="pointer" textDecoration="underline"/>
+                <Cell col="10" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
               </Band>
             </Format>
           </Formats>
@@ -218,6 +218,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 // 엑셀 다운로드
 this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
 	var oArg = {
 			title : "엑셀 다운로드 사유"
 	};
