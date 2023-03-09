@@ -273,7 +273,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="POS 영수증 번호" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="false"/>
-                          <Edit id="Edit00" taborder="1" left="210" top="5" height="20" maxlength="4" textAlign="right" inputtype="number,alpha,digit" right="31" imemode="alpha" inputfilter="space,dot,sign,comma,symbol"/>
+                          <Edit id="Edit00" taborder="1" left="210" top="5" height="20" maxlength="20" textAlign="right" inputtype="alpha,number" right="31" imemode="alpha" inputfilter="space,dot,sign,comma,symbol"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -773,7 +773,7 @@ this.Div00_Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 // 강좌목록 실수강자 변경
 this.Div00_Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 {
-	if(e.col == 3){
+	if(e.col == 2){
 		var oldValue = this.ds_class_list.getColumn(e.row, "fmlyCd");
 		this.ds_class_list.set_enableevent(false);
 		this.ds_class_list.setColumn(e.row, "fmlyCd", e.value);
@@ -802,13 +802,20 @@ this.Div00_Div02_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEdit
 		var fmlyRelCd = e.value.substring(0, 2);
 		var actlAtlctNpleNm = e.value.substring(2);
 		lectNm = "";
+		var atlctStatCd = "";
 		for(var i=0;i<this.ds_atlct_list.getRowCount();i++){
 			if(this.ds_atlct_list.getColumn(i, "actlAtlctNpleNm") == actlAtlctNpleNm && this.ds_atlct_list.getColumn(i, "fmlyRelCd") == fmlyRelCd){
 				lectNm = this.ds_atlct_list.getColumn(i, "lectNm");
+				atlctStatCd = this.ds_atlct_list.getColumn(i, "atlctStatCd");
 			}
 		}
 		if(lectNm != ""){
-			alert("강좌명 : " + lectNm + "\n해당 실수강자는 수강신청 내역이 존재합니다.");
+			if(atlctStatCd == "20"){
+				alert("강좌명 : " + lectNm + "\n해당 실수강자는 수강신청 내역이 존재합니다.");
+			}else{
+				alert("강좌명 : " + lectNm + "\n해당 실수강자는 대기신청 내역이 존재합니다.");
+			}
+			
 			this.ds_class_list.set_enableevent(false);
 			this.ds_class_list.setColumn(e.row, "fmlyCd", oldValue);
 			this.ds_class_list.set_enableevent(true);
@@ -836,10 +843,10 @@ this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++){
 		if(this.ds_class_list.checkarray[i] == "1"){
 			chkYn = true;
-			brchCd = this.ds_class_list.getColumn(i, "brchCd");
+			brchCd = this.gfn_nvl(this.ds_class_list.getColumn(i, "pblPmprcustParntBrchCd")) == "" ? this.ds_class_list.getColumn(i, "brchCd") : this.ds_class_list.getColumn(i, "pblPmprcustParntBrchCd");
 			yy = this.ds_class_list.getColumn(i, "yy");
 			lectSmsterCd = this.ds_class_list.getColumn(i, "lectSmsterCd");
-			lectCd = this.ds_class_list.getColumn(i, "lectCd");
+			lectCd = this.gfn_nvl(this.ds_class_list.getColumn(i, "pblPmprcustParntLectCd")) == "" ? this.ds_class_list.getColumn(i, "lectCd") : this.ds_class_list.getColumn(i, "pblPmprcustParntLectCd");
 			optnSeqno = this.ds_class_list.getColumn(i, "optnSeqno");
 			optnTypNm = this.ds_class_list.getColumn(i, "optnTypNm");
 			break;
@@ -853,8 +860,8 @@ this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 	
 	var lectCnt = 0;
 	for(var i=0; i<this.ds_class_list.getRowCount(); i++){
-		if(this.ds_class_list.getColumn(i, "brchCd") == brchCd && this.ds_class_list.getColumn(i, "yy") == yy
-		&& this.ds_class_list.getColumn(i, "lectSmsterCd") == Number(lectSmsterCd) && this.ds_class_list.getColumn(i, "lectCd") == lectCd){
+		if(this.gfn_nvl(this.ds_class_list.getColumn(i, "pblPmprcustParntBrchCd")) == "" ? this.ds_class_list.getColumn(i, "brchCd") : this.ds_class_list.getColumn(i, "pblPmprcustParntBrchCd") == brchCd && this.ds_class_list.getColumn(i, "yy") == yy
+		&& this.ds_class_list.getColumn(i, "lectSmsterCd") == Number(lectSmsterCd) && this.gfn_nvl(this.ds_class_list.getColumn(i, "pblPmprcustParntLectCd")) == "" ? this.ds_class_list.getColumn(i, "lectCd") : this.ds_class_list.getColumn(i, "pblPmprcustParntLectCd") == lectCd){
 			lectCnt++;
 		}
 	}
@@ -867,8 +874,8 @@ this.Div00_Div02_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 				alert("재료비 또는 대여료 옵션이 없는 강좌입니다.");
 				return;
 			}
-			if(this.ds_class_list.getColumn(i, "brchCd") == brchCd && this.ds_class_list.getColumn(i, "yy") == yy
-				&& this.ds_class_list.getColumn(i, "lectSmsterCd") == Number(lectSmsterCd) && this.ds_class_list.getColumn(i, "lectCd") == lectCd){
+			if(this.gfn_nvl(this.ds_class_list.getColumn(i, "pblPmprcustParntBrchCd")) == "" ? this.ds_class_list.getColumn(i, "brchCd") : this.ds_class_list.getColumn(i, "pblPmprcustParntBrchCd") == brchCd && this.ds_class_list.getColumn(i, "yy") == yy
+				&& this.ds_class_list.getColumn(i, "lectSmsterCd") == Number(lectSmsterCd) && this.gfn_nvl(this.ds_class_list.getColumn(i, "pblPmprcustParntLectCd")) == "" ? this.ds_class_list.getColumn(i, "lectCd") : this.ds_class_list.getColumn(i, "pblPmprcustParntLectCd") == lectCd){
 				cmpCnt++;
 			}else{
 				// 서론 다른 강좌 체크
@@ -1411,6 +1418,7 @@ this.LectReg_onsetfocus = function(obj:nexacro.Form,e:nexacro.SetFocusEventInfo)
           <Column id="sexCd" type="STRING" size="256"/>
           <Column id="fmlyRelCd" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="atlctStatCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_ex_grde_list">

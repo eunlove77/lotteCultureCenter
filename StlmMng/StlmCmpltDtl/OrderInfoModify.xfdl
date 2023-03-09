@@ -484,23 +484,43 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.gsStlmAmt = this.gsStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt;
 	}
 	
-	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
-		if(chngAmt == 0){
-			alert("초과 된 총 결제예정금액 만큼 거스름돈을 입력하세요.");
-			return;
+	if(crdStlmAmt > 0 && this.Div01.form.Div00.form.Combo00.value == ""){
+		alert("카드사를 선택하세요.");
+		return;
+	}
+	
+// 	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt){
+// 		if(chngAmt == 0){
+// 			alert("초과 된 총 결제예정금액 만큼 거스름돈을 입력하세요.");
+// 			return;
+// 		}else{
+// 			if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
+// 				alert("입력된 금액이 총 결제금액보다 초과되어 결제 할 수 없습니다.");
+// 				this.Div01.form.Div00.form.Edit00.set_value("");
+// 				this.Div01.form.Div01.form.Edit00.set_value("");
+// 				this.Div01.form.Div02.form.Edit00.set_value("");
+// 				this.Div01.form.Div03.form.Edit00.set_value("");
+// 				this.Div01.form.Div04.form.Edit00.set_value("");
+// 				this.Div01.form.Div05.form.Edit00.set_value("");
+// 				this.Div01.form.Div06.form.Edit00.set_value("");
+// 				return;
+// 			}
+// 		}
+// 	}
+	if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
+		if(cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt == 0){
+			alert("입력된 금액이 총 결제금액보다 초과되어 결제 할 수 없습니다.");
 		}else{
-			if(this.gsStlmAmt < crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
-				alert("입력된 금액이 총 결제금액보다 초과되어 결제 할 수 없습니다.");
-				this.Div01.form.Div00.form.Edit00.set_value("");
-				this.Div01.form.Div01.form.Edit00.set_value("");
-				this.Div01.form.Div02.form.Edit00.set_value("");
-				this.Div01.form.Div03.form.Edit00.set_value("");
-				this.Div01.form.Div04.form.Edit00.set_value("");
-				this.Div01.form.Div05.form.Edit00.set_value("");
-				this.Div01.form.Div06.form.Edit00.set_value("");
-				return;
-			}
+			alert("초과 된 총 결제예정금액 만큼 거스름돈을 입력하세요.");
 		}
+		return;
+// 		this.Div01.form.Div00.form.Edit00.set_value("");
+// 		this.Div01.form.Div01.form.Edit00.set_value("");
+// 		this.Div01.form.Div02.form.Edit00.set_value("");
+// 		this.Div01.form.Div03.form.Edit00.set_value("");
+// 		this.Div01.form.Div04.form.Edit00.set_value("");
+// 		this.Div01.form.Div05.form.Edit00.set_value("");
+// 		this.Div01.form.Div06.form.Edit00.set_value("");
 	}
 	
 	if(this.gsStlmAmt > crdStlmAmt + lpntUseAmt + cshStlmAmt + ltteGiftStlmAmt + otgiftStlmAmt + etcStlmAmt - chngAmt){
