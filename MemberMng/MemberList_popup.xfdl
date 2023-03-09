@@ -246,7 +246,7 @@
                     </Band>
                     <Band id="body">
                       <Cell displaytype="expr:comp.type == 1 ? 'checkboxcontrol' : 'radioitemcontrol' " edittype="expr:comp.type == 1 ? 'checkbox' : 'radioitemitem' " radioitemcodevalue="1" expr="dataset.checkarray[currow]"/>
-                      <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                      <Cell col="1" text="bind:rnum"/>
                       <Cell col="2" text="bind:mbrNo" font="12px/normal &quot;Noto Sans KR&quot;" color="#666666"/>
                       <Cell col="3" expr="comp.parent.parent.parent.gfn_setMasking(korNm, 1, 1)" tooltiptype="hover" tooltiptext="bind:korNm"/>
                       <Cell col="4" color="#666666" expr="comp.parent.parent.parent.gfn_setMasking(mbrId, 3)" tooltiptext="bind:mbrId" tooltiptype="hover"/>
@@ -267,6 +267,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Div id="pageingDiv" taborder="5" text="Div00" left="10" top="Div02:5" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -294,6 +295,8 @@ this.MemberList_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 {
 	this.application = nexacro.getApplication();
 	this.baseSvrUrl = this.application.Admin_svc + "::member/";
+	this.objPageingDs = this.application.gdsPageing;		
+	this.pageingDiv.form.pageingCallObj = this;
 	this._this = this.parent._this;
 	
 	if(this.parent.type)
@@ -356,6 +359,9 @@ this.fn_init_code = function ()
 	this.ds_spot_cd.setColumn(0, "cd", "");
 	this.ds_spot_cd.setColumn(0, "cdNm", "전체");
 	
+	var excptRow = this.ds_spot_cd.findRow("cd", "0000");
+	this.ds_spot_cd.deleteRow(excptRow);
+	
 	this.ds_grade_cd.insertRow(0);
 	this.ds_grade_cd.setColumn(0, "cd", "");
 	this.ds_grade_cd.setColumn(0, "cdNm", "전체");
@@ -365,7 +371,7 @@ this.fn_init_code = function ()
 	this.ds_join_cd.setColumn(0, "cdNm", "전체");
 }
 
-this.fn_list = function (srchYn)
+this.fn_list = function (page, srchYn)
 {	
 	if(srchYn == "Y")
 	{
@@ -383,12 +389,14 @@ this.fn_list = function (srchYn)
 			return false;
 		}
 	}	
+	
+	this.objPageingDs.setColumn(0, "pageIndex", page);
 
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.baseSvrUrl + "list.do",
-		inData : "search=ds_search",
-		outData : "ds_member_list=memberList",
+		inData : "search=ds_search paging=gdsPageing",
+		outData : "ds_member_list=memberList gdsPageing=paging",
 		strArg : "",
 		callBackFnc : "fnCallback",
 		menuSeq : this.menuId,
@@ -405,7 +413,7 @@ this.fn_list = function (srchYn)
 
 this.Div01_Div06_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_list("Y");
+	this.fn_list(1, "Y");
 };
 
 /**************************************************************************
@@ -503,12 +511,33 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	switch(svcID)
 	{
 		case "list":
-			this.Div02.form.txtTotal.set_text("목록 (" + this.gfn_setComma(this.ds_member_list.getCount()) + "개)");
+			this.Div02.form.txtTotal.set_text("목록 (" + this.objPageingDs.getColumn(0, "totCnt") + "개)")
+			
+			if(this.ds_member_list.getRowCount() > 0)
+			{
+				var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+				var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+				var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+				
+				this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+				this.pageingDiv.form.setPage(pageIndex);
+				this.pageingDiv.set_visible(true);
+				
+				for(var i = 0 ; i < this.ds_alrt_snd_list.rowcount ; i++){
+					this.ds_log.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+				}	
+			}
+			else
+			{
+				this.pageingDiv.set_visible(false);
+			}
+		
 			if(this.parent.excptMbrNo)
 			{
 				var excptRow = this.ds_member_list.findRow("mbrNo", this.parent.excptMbrNo);
 				this.ds_member_list.deleteRow(excptRow);
 			}
+			
 			break;
 		case "code":
 			var excptRow = this.ds_grade_cd.findRow("cd", "91");
@@ -524,7 +553,7 @@ this.fn_searchEnter = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 	if(e.keycode == 13)
 	{
 		obj.updateToDataset();
-		this.fn_list("Y");
+		this.fn_list(1, "Y");
 	}
 };
 
