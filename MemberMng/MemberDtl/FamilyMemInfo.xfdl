@@ -38,7 +38,7 @@
                     </Band>
                     <Band id="body">
                       <Cell displaytype="radioitemcontrol" edittype="radioitem" expr="expr:dataset.checkarray[currow]" radioitemcodevalue="0"/>
-                      <Cell col="1" expr="dataset.getRowCount() - currow"/>
+                      <Cell col="1" expr="currow+1"/>
                       <Cell col="2" font="12px/normal &quot;Noto Sans KR&quot;" textDecoration="none" color="#666666" text="bind:korNm"/>
                       <Cell col="3" combodataset="ds_rel_cd" combodatacol="cdNm" text="bind:fmlyRelCd" displaytype="combotext" combocodecol="cd"/>
                       <Cell col="4" text="bind:sexCd" displaytype="combotext" combodataset="ds_sex_cd" combocodecol="cd" combodatacol="cdNm"/>
@@ -61,7 +61,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="이름 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="160" height="21" readonly="false" maxlength="50" inputfilter="sign,symbol"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" width="160" height="21" readonly="false" maxlength="50" oninput="Div01_Div00_Edit00_oninput"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -450,6 +450,15 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				break;
 		}
 	}
+};
+
+this.Div01_Div00_Edit00_oninput = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
+{
+	var replaceStr = obj.value.replace(/[^ㄱ-ㅎ가-힣\w\s]/g, '');
+	
+	obj.set_value(replaceStr)
+	obj.updateToDataset();
+	this.ds_fmly_info.setColumn(0, "korNm", replaceStr);
 };
 ]]></Script>
     <Objects>
