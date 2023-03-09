@@ -757,11 +757,18 @@ this.fgftAppl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}
 	
 	if(fgftApplYn){
+		var parentListForm = '';
+		
+		if(this.parent.parent.parent.parent.parent.opener.divWork)
+		{
+			parentListForm = this.parent.parent.parent.parent.parent.opener.divWork.form;
+		}
+		
 		var oArg = {
 			menuId : this.menuSeq
 			, ds_fgft_list : this.ds_fgft_list
 			, ds_stlm_cmplt_list : this.ds_stlm_cmplt_list
-			, parent_list_form : this.parent.parent.parent.parent.parent.opener.divWork.form
+			, parent_list_form : parentListForm
 			, arrPrmtnSeqno : arrPrmtnSeqno
 			, brchCd : brchCd
 			, mbrNo : mbrNo
