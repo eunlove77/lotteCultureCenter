@@ -12,11 +12,14 @@
               <Columns>
                 <Column size="40" band="left"/>
                 <Column size="50"/>
+                <Column size="0"/>
                 <Column size="470"/>
                 <Column size="214"/>
                 <Column size="124"/>
                 <Column size="100"/>
                 <Column size="100"/>
+                <Column size="0"/>
+                <Column size="0"/>
               </Columns>
               <Rows>
                 <Row size="35" band="head"/>
@@ -25,20 +28,26 @@
               <Band id="head">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
                 <Cell col="1" text="번호"/>
-                <Cell col="2" text="제목"/>
-                <Cell col="3" text="이미지"/>
-                <Cell col="4" text="노출여부"/>
-                <Cell col="5" text="파일ID"/>
-                <Cell col="6" text="임시파일ID"/>
+                <Cell col="2" text="지점"/>
+                <Cell col="3" text="제목"/>
+                <Cell col="4" text="이미지"/>
+                <Cell col="5" text="노출여부"/>
+                <Cell col="6" text="등록자"/>
+                <Cell col="7" text="등록일시"/>
+                <Cell col="8" text="파일ID"/>
+                <Cell col="9" text="임시파일ID"/>
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:rowidx+1"/>
-                <Cell col="2" text="bind:tit" displaytype="editcontrol" edittype="text" editmaxlength="50" textareamaxlength="50"/>
-                <Cell col="3" displaytype="buttoncontrol" edittype="button" text="이미지 관리" cursor="pointer"/>
-                <Cell col="4" text="bind:expsrYn" combodataset="ds_use_yn_cd" combocodecol="cd" combodatacol="cdNm" edittype="combo" displaytype="combocontrol"/>
-                <Cell col="5" text="bind:webImgFleNo"/>
-                <Cell col="6" text="bind:tempFleNo"/>
+                <Cell col="2" text="bind:brchCd"/>
+                <Cell col="3" text="bind:tit" displaytype="editcontrol" edittype="text" editmaxlength="50" textareamaxlength="50"/>
+                <Cell col="4" displaytype="buttoncontrol" edittype="button" text="이미지 관리" cursor="pointer"/>
+                <Cell col="5" text="bind:expsrYn" combodataset="ds_use_yn_cd" combocodecol="cd" combodatacol="cdNm" edittype="combo" displaytype="combocontrol"/>
+                <Cell col="6" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
+                <Cell col="7" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
+                <Cell col="8" text="bind:webImgFleNo"/>
+                <Cell col="9" text="bind:tempFleNo"/>
               </Band>
             </Format>
           </Formats>
@@ -53,12 +62,14 @@
             </Layout>
           </Layouts>
         </Div>
+        <Combo id="Combo00" taborder="7" text="특강" left="Static00:5" top="74" width="150" height="30" innerdataset="ds_gdsSpotCd_list" codecolumn="cd" datacolumn="cdNm" index="0" onitemchanged="Combo00_onitemchanged"/>
       </Layout>
     </Layouts>
     <Objects>
       <Dataset id="dualBannerDs">
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
           <Column id="webImgFleNo" type="STRING" size="256"/>
           <Column id="tempFleNo" type="STRING" size="256"/>
@@ -95,8 +106,10 @@
       <Dataset id="dualBannerDs_format">
         <ColumnInfo>
           <Column id="seqno" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
           <Column id="tit" type="STRING" size="256"/>
           <Column id="webImgFleNo" type="STRING" size="256"/>
+          <Column id="tempFleNo" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprDtm" type="STRING" size="256"/>
@@ -106,6 +119,20 @@
         </ColumnInfo>
       </Dataset>
       <FileUpTransfer id="FileUpTransfer00" onsuccess="FileUpTransfer00_onsuccess"/>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="brchCd" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_gdsSpotCd_list">
+        <ColumnInfo>
+          <Column id="cd" type="STRING" size="256"/>
+          <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -117,6 +144,7 @@ include "Base::popup.xjs";
  **************************************************************************/
 this.application = null;
 this.popCnt = 0;
+this.brchCd ="";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -129,10 +157,8 @@ this.DualBannerMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
 	this.gfnSetCheckBoxNoDataset(this.dualBannerDs, this.Grid00, 0);
 	
-	//this.ds_use_yn_cd.insertRow(0);
-	//this.ds_use_yn_cd.setColumn(0, "cd", "");
-	//this.ds_use_yn_cd.setColumn(0, "cdNm", "선택");
-	
+	//지점코드 세팅
+	this.fn_set_spotCd();
 	this.fn_list();
 };
 
@@ -144,6 +170,7 @@ this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	}else{	
 		var n_row = this.dualBannerDs.addRow();
 		this.dualBannerDs.setColumn(n_row, "expsrYn", "N");
+		this.dualBannerDs.setColumn(n_row, "brchCd", this.Combo00.value); 
 	}
 };
 
@@ -180,7 +207,7 @@ this.Div01_btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 //취소 버튼
 this.Div01_btnCnl_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(this.confirm("취소하시겠습니까"))
+	if(this.confirm("취소하시겠습니까?"))
 	{
 		this.reload();
 	}
@@ -219,12 +246,22 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 * 트랜잭션 callback
 **************************************************************************/
 
+//지점 세팅
+this.fn_set_spotCd = function()
+{
+	this.ds_gdsSpotCd_list.copyData(this.application.gdsSpotCdList);
+	
+	this.Combo00.set_index(0);
+	this.Combo00.updateToDataset();
+	
+}
+
 //리스트 조회
 this.fn_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "list";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::main/dualBannerList.do";
-	tranObj.inData      = "dualBannerDs";
+	tranObj.inData      = "search=ds_search";
 	tranObj.outData     = "dualBannerDs=dualBannerList";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
@@ -236,7 +273,7 @@ this.fn_list = function(){
 
 //유효성 체크
 this.fn_checkValidation = function()
-{
+{	
 	if(this.dualBannerDs.findRowExpr("tit == null || tit == ''") > -1)
 	{
 		alert("제목을 입력하세요");
@@ -310,10 +347,20 @@ this.fnCallback = function(svcID, errorCode, errorMsg, rtnCode)
 			
 			case "update":
 				this.alert("저장 완료");
-				this.reload();
+				//this.reload();
+				this.reset();
 			break;
 		}
 	}
-};]]></Script>
+};
+this.Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	this.brchCd = e.postvalue;
+	this.fn_list();
+};
+]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
+    </Bind>
   </Form>
 </FDL>

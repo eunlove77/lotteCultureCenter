@@ -3,7 +3,7 @@
   <Form id="DualBanner_popup" width="1000" height="420" titletext="이미지 관리" onload="DualBanner_popup_onload">
     <Layouts>
       <Layout height="420" width="1000">
-        <Static id="ctegryInfo" taborder="0" left="10" top="10" width="250" height="21" text=""/>
+        <Static id="bannerInfo" taborder="0" left="10" top="10" width="250" height="21" text=""/>
         <ListView id="ListView00" taborder="1" left="10" top="210" right="10" binddataset="ds_atchFileList" oncellclick="ListView00_oncellclick" height="200">
           <Formats>
             <Format id="default">
@@ -58,7 +58,18 @@ this.DualBanner_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	
 	this.seqno = this.parent.seqno;
 	this.rowIdx = this.parent.rowIdx;
+	this.sortNo = this.parent.rowIdx +1;
 	this.expsrYn = this.getOwnerFrame().expsrYn;
+	
+	if(this.parent.tit != null){
+		this.tit = this.parent.tit;
+	}else{
+		this.tit ="";
+	}	
+	
+	var bannerInfoTxt = "[" + this.sortNo + "] " + this.tit;
+	
+	this.bannerInfo.set_text(bannerInfoTxt)
 	
 	this.FileUpTransfer00.removePostData("delFileSeq");
 	this.FileUpTransfer00.clearFileList();
@@ -71,8 +82,18 @@ this.DualBanner_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 		}
 		this.fn_list();
 	}
+	else
+	{
+		if(!this.gfn_isNull(this.parent.tempFleNo))
+		{
+			this.tempFileId = this.parent.tempFleNo;
+		}
+		this.fn_list();
+	}
 }
-
+/**************************************************************************
+ * DROPZONE 영역
+ **************************************************************************/
 this.dropZone_ondragenter = function(obj:nexacro.Grid,e:nexacro.DragEventInfo)
 {
 	if(e.datatype == "file")
@@ -95,7 +116,6 @@ this.dropZone_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
 		this.addFileList(e.filelist);
 	}
 };
-
 
 this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -134,8 +154,10 @@ this.btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 			this.updateType = "delete";
 			this.parent.dataset.setColumn(this.rowIdx, "tempFleNo", null);
 			this.alert("삭제되었습니다.");
-			//this.reload();
-			this.close();
+			this.ds_atchFileList.deleteRow(e.row);
+			this.FileUpTransfer00.removePostData("delFileSeq");
+			//this.ds_atchFileList.clear();
+			//this.ds_atchFileList.reset();
 		}
 	}
 	
@@ -148,17 +170,14 @@ this.FileUpTransfer00_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.
 	if(this.updateType == "save"){
 		//여기에서는 임시 파일에 저장
 		this.parent.dataset.setColumn(this.rowIdx, "tempFleNo", this.atchFileId);
-		//this.parent.dataset.setColumn(this.rowIdx, "webImgFleNo", this.atchFileId);
 		this.alert("저장되었습니다.");
 		this.close();
 	}else if(this.updateType == "delete"){
-		//this.parent.dataset.setColumn(this.rowIdx, "webImgFleNo", null);
 		this.parent.dataset.setColumn(this.rowIdx, "tempFleNo", null);
-		this.alert("삭제되었습니다.");
 	}
 	this.FileUpTransfer00.removePostData("delFileSeq");
 	this.FileUpTransfer00.clearFileList();
-	//this.close();
+	//this.reload();
 	
 };
 
@@ -199,9 +218,6 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 	switch(svcID)
 	{    
 		case "list":		
-			/*if(this.ds_info.rowcount > 0){
-				this.atchFileId = this.ds_info.getColumn(0, "imgFileId");
-			}*/
 			
 			if(this.ds_atchFileList.rowcount < 1){
 				this.ds_atchFileList.addColumn("atchFileId", "STRING", 256);
@@ -215,20 +231,17 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			}
 
 		break; 		
+		
 		case "save":
 		case "delete":
 			if(svcID == "save"){
-				//this.parent.dataset.set_column(0, "webImgFleNo", this.atchFileId);
 				this.alert("저장되었습니다.");
 			}else if(svcID == "delete"){
-				//this.parent.dataset.set_column(0, "webImgFleNo", this.atchFileId);
 				this.alert("삭제되었습니다.");
 			}
 			this.FileUpTransfer00.removePostData("delFileSeq");
 			this.FileUpTransfer00.clearFileList();
 			this.fn_list();
-			
-			
 		break;
 	}
 	
@@ -236,7 +249,6 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 
 this.addFileList = function(filelist)
 {
-	//this.alert("추가 개수[" + filelist.length+"] 기존파일개수" + this.ds_atchFileList.rowcount); 
 	if(filelist.length + this.ds_atchFileList.rowcount > this.fileMaxCnt)
 	{
 		alert("파일은 최대 "+this.fileMaxCnt+"개 등록 가능합니다.");
@@ -318,9 +330,6 @@ this.FileList_onerror = function(obj:nexacro.VirtualFile, e:nexacro.VirtualFileE
 	trace("statuscode: "+e.statuscode);
 }
 
-
-
-
 this.ListView00_oncellclick = function(obj:nexacro.ListView,e:nexacro.ListViewClickEventInfo)
 {	
 	var ds = obj.getBindDataset();
@@ -331,7 +340,8 @@ this.ListView00_oncellclick = function(obj:nexacro.ListView,e:nexacro.ListViewCl
 		var fileId = ds.getColumn(e.row, "atchFileId");
 		var fileName = ds.getColumn(e.row, "realFileNm");
 		
- 		if(ds.getColumn(e.row, "chk") == 0){
+		if(ds.getColumn(e.row, "chk") == 0){
+				
  			e.fromreferenceobject.set_value(1);
  			ds.setColumn(e.row, "chk", 1);
 			
@@ -350,16 +360,12 @@ this.ListView00_oncellclick = function(obj:nexacro.ListView,e:nexacro.ListViewCl
 				
 			}else{
 				delResult = this.FileUpTransfer00.removeFile(fileName);
-				if(delResult > -1){
-					this.ds_atchFileList.deleteRow(e.row);
-				}
 			}		
 			
  		}else{
- 			e.fromreferenceobject.set_value(0);
+			e.fromreferenceobject.set_value(0);
  			ds.setColumn(e.row, "chk", 0);
  		}
-		
 	}
 	
 };]]></Script>
