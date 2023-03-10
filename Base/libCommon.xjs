@@ -16,7 +16,6 @@ this.gfn_transaction = function(tranObj)
 	this.isPopup = this.gfn_nvl(tranObj.isPopup);
 	//세션 체크
 	this.gfn_sessionCheck(false);
-	
 	if(nexacro.getApplication().isAuth)
 	{		
 		if(this.gfn_nvl(tranObj.menuSeq) != ""){
@@ -34,7 +33,9 @@ this.gfn_transaction = function(tranObj)
             this.gfn_nvl(tranObj.outData) ,          // 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
             this.gfn_nvl(tranObj.strArg),            // 입력값으로 보낼 arguments, a=b
             this.gfn_nvl(tranObj.callBackFnc),       // transaction의 결과를 받을 Function 이름
-            this.gfn_nvl(tranObj.isAsync) 			 // 비동기통신 여부 [생략가능]
+            this.gfn_nvl(tranObj.isAsync), 			 // 비동기통신 여부 [생략가능]
+			2,										 //전송 타입				
+			true								     //압축여부
 		);   
 	}	      		
 }
