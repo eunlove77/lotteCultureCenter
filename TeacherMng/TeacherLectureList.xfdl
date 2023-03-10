@@ -458,6 +458,8 @@ this.selectCertificate_lect_hist = function(index){
 }
 this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+  this.fn_talk_check();
+
 	var column_obj = {
 		mbrNo : "tcCdNo"
 	,	korNm : "tcNm"
@@ -478,6 +480,22 @@ this.btnSms_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		this.alert("발송대상을 선택하세요.");
 	}
 };
+// 톡발송 유효성 함수
+this.fn_talk_check = function()
+{
+  var tcCdNoArr = new Array();
+  var checkarray = this.ds_list.checkarray;
+  for(var i = 0; i < checkarray.length; i++){
+    var tcCdNo = this.ds_list.getColumn(i, "tcCdNo");
+    if(checkarray[i] > 0 && tcCdNoArr.indexOf(tcCdNo) == -1){	
+			tcCdNoArr.push(tcCdNo);
+		}
+    else{
+      checkarray[i] = 0;
+    }
+  }
+  
+}
 /************************************************************************
  * 그리드
  ************************************************************************/
