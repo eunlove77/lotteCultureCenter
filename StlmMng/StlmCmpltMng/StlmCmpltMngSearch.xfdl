@@ -43,11 +43,11 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="55" cssclass="sta_WF_TableLabel"/>
-                    <Combo id="strtYy" taborder="1" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_yy_lectSmsterCd_change"/>
-                    <Combo id="strtSmsterCd" taborder="2" text="Combo01" left="strtYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_yy_lectSmsterCd_change"/>
+                    <Combo id="strtYy" taborder="1" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_strtYy_change"/>
+                    <Combo id="strtSmsterCd" taborder="2" text="Combo01" left="strtYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_strtSmsterCd_change"/>
                     <Static id="Static01" taborder="3" text="~" left="strtSmsterCd:4" top="12" width="9" height="20"/>
-                    <Combo id="endYy" taborder="4" text="Combo02" left="Static01:4" top="12" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_yy_lectSmsterCd_change"/>
-                    <Combo id="endSmsterCd" taborder="5" text="Combo03" left="endYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_yy_lectSmsterCd_change"/>
+                    <Combo id="endYy" taborder="4" text="Combo02" left="Static01:4" top="12" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_endYy_change"/>
+                    <Combo id="endSmsterCd" taborder="5" text="Combo03" left="endYy:1" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_endSmsterCd_change"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -646,24 +646,54 @@ this.Div00_Div06_searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEv
 	}
 };
 
-this.fn_yy_lectSmsterCd_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+this.fn_strtYy_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-// 	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
-// 	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
-// 	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
-// 	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
-// 	
-// 	if(strtSmsterCd == 0 && endSmsterCd == 0){
-// 		if(endYy > 0 && strtYy > endYy){
-// 			this.ds_search.setColumn(0, "endYy", strtYy);
-// 			this.ds_search.setColumn(0, "endSmsterCd", "");
-// 		}
-// 	}else{
-// 		if(endSmsterCd > 0 && strtYy + strtSmsterCd > endYy + endSmsterCd){
-// 			this.ds_search.setColumn(0, "endYy", strtYy);
-// 			this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
-// 		}
-// 	}
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(strtYy != 0 && endYy != 0 && strtYy > endYy){
+		this.ds_search.setColumn(0, "strtYy", endYy);
+	}
+	if(strtYy == endYy && strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd){
+		this.ds_search.setColumn(0, "strtSmsterCd", endSmsterCd);
+	}
+};
+
+this.fn_strtSmsterCd_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd && strtYy == endYy){
+		this.ds_search.setColumn(0, "strtSmsterCd", endSmsterCd);
+	}
+};
+
+this.fn_endYy_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(endYy != 0 && strtYy != 0 && strtYy > endYy){
+		this.ds_search.setColumn(0, "endYy", strtYy);
+	}
+	if(strtYy == endYy && strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd){
+		this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
+	}
+};
+
+this.fn_endSmsterCd_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(endSmsterCd != 0 && strtSmsterCd != 0 && strtSmsterCd > endSmsterCd && strtYy == endYy){
+		this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
+	}
 };
 ]]></Script>
     <Objects>

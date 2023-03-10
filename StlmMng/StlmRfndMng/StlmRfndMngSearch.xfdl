@@ -36,10 +36,10 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" height="46" cssclass="sta_WF_TableLabel"/>
                     <Static id="Static01" taborder="2" text="~" left="323" top="12" width="9" height="20"/>
-                    <Combo id="endYy" taborder="5" text="Combo02" left="Static01:2" top="12" width="100" height="20" readonly="false" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="endSmsterCd" taborder="1" text="Combo03" left="endYy:2" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
-                    <Combo id="strtYy" taborder="3" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown" readonly="false" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="strtSmsterCd" taborder="4" text="" left="strtYy:2" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" readonly="false"/>
+                    <Combo id="endYy" taborder="5" text="Combo02" left="Static01:2" top="12" width="100" height="20" readonly="false" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_endYy_change"/>
+                    <Combo id="endSmsterCd" taborder="1" text="Combo03" left="endYy:2" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" readonly="false" onitemchanged="fn_endSmsterCd_change"/>
+                    <Combo id="strtYy" taborder="3" text="Combo00" left="Static00:10" top="12" width="100" height="20" type="dropdown" readonly="false" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="fn_strtYy_change"/>
+                    <Combo id="strtSmsterCd" taborder="4" text="" left="strtYy:2" top="12" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" readonly="false" onitemchanged="fn_strtSmsterCd_change"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -54,7 +54,7 @@
               <Div id="Div05" taborder="5" text="Div05" left="0" top="126" height="31" cssclass="div_WF_CompWrap" width="580" formscrolltype="none">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="취소(환불)채널" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel" onclick="Div00_Div05_Static00_onclick"/>
+                    <Static id="Static00" taborder="0" text="취소(환불)채널" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
                     <CheckBox id="rfndChnlAll" taborder="1" text="전체" left="Static00:10" top="0" width="105" bottom="0"/>
                   </Layout>
                 </Layouts>
@@ -662,9 +662,55 @@ this.fn_classBrch_set = function()
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
 }
-this.Div00_Div05_Static00_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+
+this.fn_strtYy_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
-	
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(strtYy != 0 && endYy != 0 && strtYy > endYy){
+		this.ds_search.setColumn(0, "strtYy", endYy);
+	}
+	if(strtYy == endYy && strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd){
+		this.ds_search.setColumn(0, "strtSmsterCd", endSmsterCd);
+	}
+};
+
+this.fn_strtSmsterCd_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd && strtYy == endYy){
+		this.ds_search.setColumn(0, "strtSmsterCd", endSmsterCd);
+	}
+};
+
+this.fn_endYy_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(endYy != 0 && strtYy != 0 && strtYy > endYy){
+		this.ds_search.setColumn(0, "endYy", strtYy);
+	}
+	if(strtYy == endYy && strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd){
+		this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
+	}
+};
+
+this.fn_endSmsterCd_change = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(endSmsterCd != 0 && strtSmsterCd != 0 && strtSmsterCd > endSmsterCd && strtYy == endYy){
+		this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
+	}
 };
 ]]></Script>
     <Objects>
