@@ -16,7 +16,7 @@
                         <Layout>
                           <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
                           <Combo id="Combo00" taborder="1" text="Combo00" left="Static00:10" top="5" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:10" top="5" width="150" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                          <Combo id="Combo01" taborder="2" text="Combo01" left="Combo00:10" top="5" width="150" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div00_Div00_Combo01_onitemchanged"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -273,7 +273,7 @@
                       <Layouts>
                         <Layout>
                           <Static id="Static00" taborder="0" text="POS 영수증 번호" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel" usedecorate="false"/>
-                          <Edit id="Edit00" taborder="1" left="210" top="5" height="20" maxlength="20" textAlign="right" inputtype="alpha,number" right="31" imemode="alpha" inputfilter="space,dot,sign,comma,symbol"/>
+                          <Edit id="Edit00" taborder="1" left="210" top="5" height="20" maxlength="20" textAlign="right" inputtype="normal" right="31" imemode="alpha" inputfilter="space,dot,sign,comma"/>
                         </Layout>
                       </Layouts>
                     </Div>
@@ -575,13 +575,16 @@ this.memberCallback = function(_this, chkDs)
 	_this.ds_grde_list.clearData();
 	_this.ds_ex_grde_list.clearData();
 	_this.ds_all_dc_dtl.clearData();
+	_this.ds_member_chk.clearData();
+	
+	_this.ds_member_chk.copyData(chkDs);
 	
 	// 등급할인 목록
 	var strSvcId    = "setMember";
 	var strSvcUrl   = _this.application.Admin_svc + "::lectReg/setMember.do";
 	var inData      = "";
 	var outData     = "this.ds_grde_list=output1 this.ds_ex_grde_list=output2 this.ds_all_dc_dtl=output3 this.ds_member_info=output4";
-	var strArg      = "mbrNo=" + chkDs.getColumn(0, "mbrNo") + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " mbrGrdeCd=" + chkDs.getColumn(0, "mbrGrdeCd");
+	var strArg      = "mbrNo=" + _this.ds_member_chk.getColumn(0, "mbrNo") + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " mbrGrdeCd=" + _this.ds_member_chk.getColumn(0, "mbrGrdeCd");
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	
@@ -1329,6 +1332,42 @@ this.LectReg_onsetfocus = function(obj:nexacro.Form,e:nexacro.SetFocusEventInfo)
 	}
  
 };
+
+// 회원정보 로드 후 학기 변경 시 회원정보 갱신
+this.Div00_Div00_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	if(obj.value != "" && this.ds_member_chk.getRowCount() > 0){
+		var yy = this.Div00.form.Div00.form.Div00.form.Combo00.value;
+		var lectSmsterCd = this.Div00.form.Div00.form.Div00.form.Combo01.value;
+		
+		this.ds_grde_list.clearData();
+		this.ds_ex_grde_list.clearData();
+		this.ds_all_dc_dtl.clearData();
+		
+		// 등급할인 목록
+		var strSvcId    = "setMember";
+		var strSvcUrl   = this.application.Admin_svc + "::lectReg/setMember.do";
+		var inData      = "";
+		var outData     = "this.ds_grde_list=output1 this.ds_ex_grde_list=output2 this.ds_all_dc_dtl=output3 this.ds_member_info=output4";
+		var strArg      = "mbrNo=" + this.ds_member_chk.getColumn(0, "mbrNo") + " yy=" + yy + " lectSmsterCd=" + lectSmsterCd + " mbrGrdeCd=" + this.ds_member_chk.getColumn(0, "mbrGrdeCd");
+		var callBackFnc = "fnCallback";
+		var isAsync     = true;
+		
+		var tranObj = {
+			strSvcId : strSvcId,
+			strSvcUrl : strSvcUrl,
+			inData : inData,
+			outData : outData,
+			strArg : strArg,
+			callBackFnc : callBackFnc,
+			isAsync : isAsync,
+			isPopup : false,
+			menuSeq : this.getOwnerFrame().param.MENU_ID
+		};
+		
+		this.gfn_transaction(tranObj);
+	}
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_smster_list">
@@ -1515,6 +1554,26 @@ this.LectReg_onsetfocus = function(obj:nexacro.Form,e:nexacro.SetFocusEventInfo)
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_member_chk">
+        <ColumnInfo>
+          <Column id="mbrNo" type="STRING" size="256"/>
+          <Column id="korNm" type="STRING" size="256"/>
+          <Column id="mbrId" type="STRING" size="256"/>
+          <Column id="sexCd" type="STRING" size="256"/>
+          <Column id="bday" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
+          <Column id="email" type="STRING" size="256"/>
+          <Column id="emailAddrCd" type="STRING" size="256"/>
+          <Column id="mbrGrdeCd" type="STRING" size="256"/>
+          <Column id="mvgBlstrVal" type="STRING" size="256"/>
+          <Column id="itrstBrchCd" type="STRING" size="256"/>
+          <Column id="exsfObjYn" type="STRING" size="256"/>
+          <Column id="smsRcvAgrYn" type="STRING" size="256"/>
+          <Column id="joinCorsCd" type="STRING" size="256"/>
+          <Column id="joinDtm" type="STRING" size="256"/>
+          <Column id="lastLoginDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
