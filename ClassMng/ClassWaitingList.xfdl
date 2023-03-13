@@ -276,13 +276,24 @@ this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var chkYn = false;
 	var atlctRsvNo = "";
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
-		if(this.ds_waiting_list.checkarray[i] > 0){
-			chkYn = true;
-			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
-			this.ds_waiting_param.addRow();
-			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
-			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "41");
-			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "41")
+		if(this.ds_waiting_list.checkarray[i] > 0 && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "31" && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "41"){
+			 if(i == 0){
+					chkYn = true;
+					atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+					this.ds_waiting_param.addRow();
+					this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+					this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "41");
+					//this.ds_waiting_list.setColumn(i, "stlmStatCd", "41")
+			 }else{
+				 if(this.ds_waiting_list.getColumn(i-1, "atlctRsvNo") != this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
+					chkYn = true;
+					atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+					this.ds_waiting_param.addRow();
+					this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+					this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "41");
+					//this.ds_waiting_list.setColumn(i, "stlmStatCd", "41")
+				 }
+			 }
 		}else{
 			if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
 				this.ds_waiting_param.addRow();
@@ -294,14 +305,15 @@ this.Div00_Button05_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	
 	if(!chkYn){
 		alert("대상을 선택하세요.");
-		this.ds_waiting_list.set_enableevent(false);
-		for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
-			if(this.ds_waiting_list.checkarray[i] > 0){
-				chkYn = true;
-				this.ds_waiting_list.setColumn(i, "stlmStatCd", "11")
-			}
-		}
-		this.ds_waiting_list.set_enableevent(true);
+		this.fn_init();
+// 		this.ds_waiting_list.set_enableevent(false);
+// 		for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
+// 			if(this.ds_waiting_list.checkarray[i] > 0){
+// 				chkYn = true;
+// 				this.ds_waiting_list.setColumn(i, "stlmStatCd", "11")
+// 			}
+// 		}
+// 		this.ds_waiting_list.set_enableevent(true);
 		return;
 	}else{
 		if(confirm("대기상태를 취소로 변경하시겠습니까?")){
@@ -351,17 +363,32 @@ this.Div00_Button03_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEven
 	var atlctLimitYn = true;
 	var atlctRsvNo = "";
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
-		if(this.ds_waiting_list.checkarray[i] > 0){
- 			checkarray.push(i);
-			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
- 			if(this.ds_waiting_list.getColumn(i, "waitingStatCd") == "30"){
- 				// 시간초과 시
- 				atlctLimitYn = false;
- 			}
- 			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "70");
-			this.ds_waiting_param.addRow();
-			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
-			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "70");
+		if(this.ds_waiting_list.checkarray[i] > 0 && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "31" && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "41"){
+ 			if(i == 0){
+				checkarray.push(i);
+				atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+				if(this.ds_waiting_list.getColumn(i, "waitingStatCd") == "30"){
+					// 시간초과 시
+					atlctLimitYn = false;
+				}
+				//this.ds_waiting_list.setColumn(i, "stlmStatCd", "70");
+				this.ds_waiting_param.addRow();
+				this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+				this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "70");
+			}else{
+				if(this.ds_waiting_list.getColumn(i-1, "atlctRsvNo") != this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
+					checkarray.push(i);
+					atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+					if(this.ds_waiting_list.getColumn(i, "waitingStatCd") == "30"){
+						// 시간초과 시
+						atlctLimitYn = false;
+					}
+					//this.ds_waiting_list.setColumn(i, "stlmStatCd", "70");
+					this.ds_waiting_param.addRow();
+					this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+					this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "70");
+				}
+			}
 		}else{
 			if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
 				this.ds_waiting_param.addRow();
@@ -409,13 +436,24 @@ this.Div00_Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var checkarray = [];
 	var atlctRsvNo = "";
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
-		if(this.ds_waiting_list.checkarray[i] > 0){
-			checkarray.push(i);
-			atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
-			//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
-			this.ds_waiting_param.addRow();
-			this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
-			this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
+		if(this.ds_waiting_list.checkarray[i] > 0 && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "31" && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "41"){
+			 if(i == 0){
+				checkarray.push(i);
+				atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+				//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+				this.ds_waiting_param.addRow();
+				this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+				this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
+			 }else{
+				 if(this.ds_waiting_list.getColumn(i-1, "atlctRsvNo") != this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
+					checkarray.push(i);
+					atlctRsvNo = this.ds_waiting_list.getColumn(i, "atlctRsvNo");
+					//this.ds_waiting_list.setColumn(i, "stlmStatCd", "20");
+					this.ds_waiting_param.addRow();
+					this.ds_waiting_param.copyRow(this.ds_waiting_param.getRowCount()-1, this.ds_waiting_list, i);
+					this.ds_waiting_param.setColumn(this.ds_waiting_param.getRowCount()-1, "stlmStatCd", "20");
+				 }
+			 }
 		}else{
 			// 동반회원
 			if(atlctRsvNo == this.ds_waiting_list.getColumn(i, "atlctRsvNo")){
@@ -454,7 +492,7 @@ this.fn_init = function()
 {
 	this.ds_waiting_list.set_enableevent(false);
 	for(var i=0; i<this.ds_waiting_list.getRowCount(); i++){
-		if(this.ds_waiting_list.checkarray[i] > 0){
+		if(this.ds_waiting_list.checkarray[i] > 0 && this.ds_waiting_list.getColumn(i, "stlmStatCd") != "41"){
 			this.ds_waiting_list.setColumn(i, "stlmStatCd", "11");
 		}
 	}

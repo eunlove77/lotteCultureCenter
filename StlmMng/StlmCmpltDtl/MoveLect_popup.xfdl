@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="MoveLect_popup" width="1280" height="800" titletext="강좌이강" onload="MoveLect_popup_onload">
+  <Form id="MoveLect_popup" width="1280" height="850" titletext="강좌이강" onload="MoveLect_popup_onload">
     <Layouts>
-      <Layout height="800" width="1280">
+      <Layout height="850" width="1280">
         <Div id="divMoveLect" taborder="0" text="Div00" left="0" top="0" right="0" url="ClassMng::ClassListPopup.xfdl" height="720"/>
-        <Static id="Static00" taborder="1" text="▶ 재료비/대여료" left="10" top="630" width="120" height="21" cssclass="sta_WF_TitGray" visible="false"/>
-        <Div id="Div01" taborder="2" text="Div01" left="10" top="660" height="33" cssclass="div_WF_CompWrap" right="10" visible="false">
+        <Static id="Static00" taborder="1" text="▶ 재료비/대여료" left="10" top="700" width="120" height="21" cssclass="sta_WF_TitGray" visible="false"/>
+        <Div id="Div01" taborder="2" text="Div01" left="10" top="720" height="33" cssclass="div_WF_CompWrap" right="10" visible="false">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" left="0" top="0" width="200" height="31" cssclass="sta_WF_TableLabel"/>
@@ -30,6 +30,7 @@ this.application = null;
 this.grid = null;
 this.ds = null;
 this.menuSeq = this.parent.menuSeq;
+this.ds_cmplt = null;
 
 // 이미 체크된 라디오버튼 다시 체크하는 행동 막기위한 변수
 this.checkedYn = false;
@@ -42,6 +43,7 @@ this.MoveLect_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.grid = this.divMoveLect.form.Div00.form.Div01.form.Grid00;
 	this.ds = this.divMoveLect.form.ds_class_list;
+	this.ds_cmplt = this.parent.ds_cmplt;
 
 	// 라디오 버튼
 	this.grid.type = 2;
@@ -54,7 +56,7 @@ this.MoveLect_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	}
 	
 	// classlistpopup 지점 설정 시 후처리
-	this.divMoveLect.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_value(this.parent.brchCd);
+	this.divMoveLect.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_value(this.ds_cmplt.getColumn(0, "brchCd"));
 	this.divMoveLect.form.Div00.form.Div00.form.Div00.form.Div00.form.Combo00.set_readonly(true);
 	this.divMoveLect.form.brchCd = this.divMoveLect.form.ds_search.getColumn(0, "brchCd");
 	this.divMoveLect.form.fn_sesterInfo();
@@ -71,7 +73,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		this.Div01.set_visible(false);
 		this.checkedYn = true;
 		
-		if(this.ds.getColumn(e.row, "brchCd") != this.parent.brchCd){
+		if(this.ds.getColumn(e.row, "brchCd") != this.ds_cmplt.getColumn(0, "brchCd")){
 			alert("강좌 이강을 하실 수 없습니다.\n지점이 동일하지 않습니다.");
 			for(var i=0; i<objDs.getRowCount(); i++)
  			{
@@ -81,9 +83,8 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			this.checkedYn = false;
 			return;
 		}
-		trace(Number(this.ds.getColumn(e.row, "lectAmt")));
-		trace(this.parent.lectAmt);
-		if(Number(this.ds.getColumn(e.row, "lectAmt")) != this.parent.lectAmt){
+		
+		if(Number(this.ds.getColumn(e.row, "lectAmt")) != this.ds_cmplt.getColumn(0, "lectAmt")){
 			alert("강좌 이강을 하실 수 없습니다.\n강좌료가 동일하지 않습니다.");
 			for(var i=0; i<objDs.getRowCount(); i++)
  			{
@@ -106,7 +107,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			return;
 		}
 		
-		if(Number(this.ds.getColumn(e.row, "lectNbcnt")) != this.parent.lectNbcnt){
+		if(Number(this.ds.getColumn(e.row, "lectNbcnt")) != this.ds_cmplt.getColumn(0, "lectNbcnt")){
 			alert("강좌 이강을 하실 수 없습니다.\n강의횟수가 동일하지 않습니다.");
 			for(var i=0; i<objDs.getRowCount(); i++)
  			{
@@ -117,10 +118,10 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			return;
 		}
 		
-		if(this.ds.getColumn(e.row, "brchCd") == this.parent.brchCd
-			&& this.ds.getColumn(e.row, "yy") == this.parent.yy
-			&& Number(this.ds.getColumn(e.row, "lectSmsterCd")) == this.parent.lectSmsterCd
-			&& this.ds.getColumn(e.row, "lectCd") == this.parent.lectCd){
+		if(this.ds.getColumn(e.row, "brchCd") == this.ds_cmplt.getColumn(0, "brchCd")
+			&& this.ds.getColumn(e.row, "yy") == this.ds_cmplt.getColumn(0, "yy")
+			&& Number(this.ds.getColumn(e.row, "lectSmsterCd")) == this.ds_cmplt.getColumn(0, "lectSmsterCd")
+			&& this.ds.getColumn(e.row, "lectCd") == this.ds_cmplt.getColumn(0, "lectCd")){
 			alert("수강신청 내역이 존재합니다.");
 			for(var i=0; i<objDs.getRowCount(); i++)
  			{
@@ -135,8 +136,8 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		var overlapYn = false;
 		
 		// 강의시작일, 강의종료일
-		var befLectStDtm = nexacro.replaceAll(this.parent.lectStDtm, ".", "");
-		var befLectEndDtm = nexacro.replaceAll(this.parent.lectEndDtm, ".", "");
+		var befLectStDtm = nexacro.replaceAll(this.ds_cmplt.getColumn(0, "lectStDtm"), ".", "");
+		var befLectEndDtm = nexacro.replaceAll(this.ds_cmplt.getColumn(0, "lectEndDtm"), ".", "");
 		var aftLectStDtm = this.ds.getColumn(e.row, "lectStDtm");
 		var aftLectEndDtm = this.ds.getColumn(e.row, "lectEndDtm");
 		if((Number(aftLectStDtm) >= Number(befLectStDtm) && Number(aftLectStDtm) <= Number(befLectEndDtm))
@@ -145,10 +146,10 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		}
 		
 		// 강의시작시간
-		var befLectStHhCd = this.parent.lectStHhCd;
-		var befLectStMiCd = this.parent.lectStMiCd;
-		var befLectEndHhCd = this.parent.lectEndHhCd;
-		var befLectEndMiCd = this.parent.lectEndMiCd;
+		var befLectStHhCd = this.ds_cmplt.getColumn(0, "lectStHhCd");
+		var befLectStMiCd = this.ds_cmplt.getColumn(0, "lectStMiCd");
+		var befLectEndHhCd = this.ds_cmplt.getColumn(0, "lectEndHhCd");
+		var befLectEndMiCd = this.ds_cmplt.getColumn(0, "lectEndMiCd");
 		var aftLectStHhCd = this.ds.getColumn(e.row, "lectStHhCd");
 		var aftLectStMiCd = this.ds.getColumn(e.row, "lectStMiCd");
 		var aftLectEndHhCd = this.ds.getColumn(e.row, "lectEndHhCd");
@@ -172,8 +173,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		}
 
 		// 요일
-		var befLectStDtmNm = this.parent.stringStDaywNm;
-		trace(befLectStDtmNm);
+		var befLectStDtmNm = this.ds_cmplt.getColumn(0, "stringStDaywNm");
 		var arrBefLectStDtmNm = befLectStDtmNm.split(",");
 		var aftLectStDtmNm = this.ds.getColumn(e.row, "stringStDaywNm");
 		var arrAftLectStDtmNm = aftLectStDtmNm.split(",");
@@ -199,6 +199,33 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		}
 		
 		// 이강 대상 강좌가 옵션이 있고, 이강 전 강좌 추가결제금액이 있는경우
+		// 1. 이강 전 강좌가 추가금액이 있는지
+		// 1-1. 추가금액이 없다면 옵션 종류에 상관없이 0원짜리 옵션 이강 강좌 선택 가능
+		// 2. 이강 전 강좌가 추가금액이 있다면
+		// 2-1. 이강 전 강좌와 이강 후 강좌의 옵션타입이 같아야함(강사 지급/미지급)
+		// 2-2. 이강 전 강좌와 이강 후 강좌의 옵션타입이 강사 지급이라면 구매형인지 1/N인지도 같아야함
+		var befLectAddAmt = Number(this.ds_cmplt.getColumn(0, "lectAddAmt"));
+		if(befLectAddAmt > 0){
+			if(this.gfn_nvl(this.ds.getColumn(e.row, "optnTypCd")) != this.gfn_nvl(this.ds_cmplt.getColumn(e.row, "optnTypCd"))){
+				if(this.gfn_nvl(this.ds_cmplt.getColumn(e.row, "optnTypCd")) == "01"){
+					alert("이강 전 강좌와 동일한 금액에 재료비/대여료(강사미지급) 옵션만 선택 할 수 있습니다.");
+				}else(this.gfn_nvl(this.ds_cmplt.getColumn(e.row, "optnTypCd")) == "02"){
+					if(this.gfn_nvl(this.ds_cmplt.getColumn(e.row, "partRfndPsblYn")) == "Y"){
+						alert("이강 전 강좌와 동일한 금액에 재료비/대여료(강사지급) 부분환불 N/1 옵션만 선택 할 수 있습니다.");
+					}else{
+						alert("이강 전 강좌와 동일한 금액에 재료비/대여료(강사지급) 부분환불 구매형 옵션만 선택 할 수 있습니다.");
+					}
+				}
+				for(var i=0; i<objDs.getRowCount(); i++)
+				{
+					objDs.checkarray[i] = 0;
+				}
+				obj.redrawExprCell();
+				this.checkedYn = false;
+				return;
+			}
+		}
+		
 		if(this.gfn_nvl(this.ds.getColumn(e.row, "optnUseYn")) == "Y"){
 			this.removeChild("ds_class_info");
 			var dsClassInfo = new Dataset();
@@ -216,7 +243,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			var strSvcUrl   = this.application.Admin_svc + "::lectReg/getLectOptnList.do";
 			var inData      = "classInfo=this.ds_class_info";
 			var outData     = "this.ds_optn_list=output1";
-			var strArg      = "atlctRsvNo=" + this.parent.atlctRsvNo + " actlAtlctNpleSeqno=" + this.parent.actlAtlctNpleSeqno;
+			var strArg      = "atlctRsvNo=" + this.ds_cmplt.getColumn(0, "atlctRsvNo") + " actlAtlctNpleSeqno=" + this.ds_cmplt.getColumn(0, "actlAtlctNpleSeqno");
 			var callBackFnc = "fnCallback";
 			var isAsync     = true;
 			var tranObj = {
@@ -237,6 +264,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 			this.Div01.set_visible(false);
 		}
 		
+		
 		this.checkedYn = false;
 	}
 };
@@ -248,7 +276,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	{
 		if(errorCode == -2){
 			// 리스트에서 강좌 선택 시 옵션 목록 가져올때 옵션금액이 달라서 발생하는 에러
-			this.alert("강좌 이강을 하실 수 없습니다.\n(사유: 이강 전 강좌: "+ this.parent.optnTypCdNm +" / 이강 후 강좌: "+ this.ds.getColumn(this.ds.rowposition, "optnTypNm") +"가 동일 하지 않습니다.)");
+			this.alert("강좌 이강을 하실 수 없습니다.\n(사유: 이강 전 강좌: "+ this.ds_cmplt.getColumn(0, "optnTypCdNm") +" / 이강 후 강좌: "+ this.ds.getColumn(this.ds.rowposition, "optnTypNm") +"가 동일 하지 않습니다.)");
 			for(var i=0; i<this.ds.getRowCount(); i++)
  			{
  				this.ds.checkarray[i] = 0;
@@ -256,14 +284,20 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
  			this.grid.redrawExprCell();
 			this.checkedYn = false;
 		}else if(errorCode == -3){
-			// 이강할때 정원이 없어서 발생하는 에러
-			this.alert("신청 정원이 0명으로 이강 할 수 없습니다.");
+			// 온라인 정원 부족
+			this.alert("해당 강좌는 온라인 재고가 없습니다. 강좌 재고여부 확인 후 재신청 하시기 바랍니다.");
 		}else if(errorCode == -4){
 			// 전체이강할때 이강 대상목록들이 옵션비용이 하나라도 다를 때
-			this.alert("강좌 이강을 하실 수 없습니다.\n(사유: 이강 전 강좌: "+ this.parent.optnTypCdNm +" / 이강 후 강좌: "+ this.ds.getColumn(this.ds.rowposition, "optnTypNm") +"가 동일 하지 않습니다.)");
+			this.alert("강좌 이강을 하실 수 없습니다.\n(사유: 이강 전 강좌: "+ this.ds_cmplt.getColumn(0, "optnTypCdNm") +" / 이강 후 강좌: "+ this.ds.getColumn(this.ds.rowposition, "optnTypNm") +"가 동일 하지 않습니다.)");
 		}else if(errorCode == -5){
 			// 이강 후 강좌 상태가 기존회원접수, 접수중, 지점문의가 아닐때
 			this.alert("이강이 불가능한 강좌가 포함돼있습니다. 강좌상태를 확인 후 강좌이강 바랍니다.");
+		}else if(errorCode == -6){
+			// 오프라인 정원 부족
+			this.alert("이강이 불가능한 강좌가 포함돼있습니다. 강좌상태를 확인 후 강좌이강 바랍니다.");
+		}else if(errorCode == -7){
+			// 사은품 신청/수령 후 미반납
+			this.alert("사은품 신청/수령 강좌 건이 있어 이강 하실수 없습니다.\n(수령하신 사은품은 데스크에 회수 후 이강 가능 합니다.)");
 		}else{
 			this.alert(errorCode+"\n"+errorMsg);
 		}
@@ -322,7 +356,7 @@ this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 };
 
 this.fn_update = function(multipleYn)
-{
+{	
 	this.removeChild("ds_update_info");
 	var dsUpdateInfo = new Dataset();
 	dsUpdateInfo.name = "ds_update_info";
@@ -335,6 +369,12 @@ this.fn_update = function(multipleYn)
 	dsUpdateInfo.copyRow(0, this.ds, this.ds.rowposition);
 	dsUpdateInfo.set_enableevent(true);
 	
+	if(dsUpdateInfo.getColumn(0, "mvgDsplyUseYn") == "Y" && (this.gfn_nvl(this.ds_cmplt.getColumn(0, "excllCustGrdeCd")) == "" || dsUpdateInfo.getColumn(0, "brchCd") != this.gfn_nvl(this.ds_cmplt.getColumn(0, "selstrCd")))){
+		if(!confirm("MVG 회원이 아닌 경우 컨펌 노출 : MVG 회원등급이 아닌 수강자입니다.  그래도 이강하시겠습니까?")){
+			return;
+		}
+	}
+	
 	var optnSeqno = 0;
 	if(this.Div01.visible){
 		optnSeqno = this.Div01.form.Combo00.value;
@@ -342,10 +382,10 @@ this.fn_update = function(multipleYn)
 	
 	var strSvcId    = "update";
 	var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateLect.do";
-	var inData      = "updateInfo=this.ds_update_info";
+	var inData      = "updateInfo=this.ds_update_info cmpltInfo=this.ds_cmplt";
 	var outData     = "";
-	var strArg      = "atlctRsvNo=" + this.parent.atlctRsvNo + " actlAtlctNpleSeqno=" + this.parent.actlAtlctNpleSeqno;
-	strArg			+= " optnSeqno=" + optnSeqno + " multipleYn=" + multipleYn;
+	//var strArg      = "atlctRsvNo=" + this.parent.atlctRsvNo + " actlAtlctNpleSeqno=" + this.parent.actlAtlctNpleSeqno;
+	var strArg		= "multipleYn=" + multipleYn;
 	var callBackFnc = "fnCallback";
 	var isAsync     = true;
 	var tranObj = {

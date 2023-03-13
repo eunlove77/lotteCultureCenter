@@ -275,6 +275,8 @@ this.fn_save = function()
 {
 	if(confirm(this.Div00.form.Div00.form.Div02.form.Combo00.text + "으로 강좌 폐강을 신청하셨습니다. 저장하시겠습니까?"))
 	{
+		this.ds_class_dtl.addColumn("lectClosedRsnCdNm", "string", "256");
+		this.ds_class_dtl.setColumn(0, "lectClosedRsnCdNm", this.Div00.form.Div00.form.Div01.form.Combo00.text);
 		var tranObj = {
 			strSvcId : "updateClassClose",
 			strSvcUrl : this.application.Admin_svc + "::class/updateClassClose.do",

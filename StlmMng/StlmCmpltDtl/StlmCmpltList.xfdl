@@ -506,31 +506,19 @@ this.Button06_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 				actlAtlctNpleCnt++;
 			}
 		}
+		
+		this.ds_movelect_param.clearData();
+		this.ds_movelect_param.addRow();
+		this.ds_movelect_param.copyRow(0, this.ds_stlm_cmplt_list, index);
+
+		
 		var oArg = {
 			menuSeq : this.menuSeq
-			, atlctRsvNo : this.ds_stlm_cmplt_list.getColumn(index, "atlctRsvNo")
-			, actlAtlctNpleSeqno : this.ds_stlm_cmplt_list.getColumn(index, "actlAtlctNpleSeqno")
-			, brchCd : this.ds_stlm_cmplt_list.getColumn(index, "brchCd")
-			, yy : this.ds_stlm_cmplt_list.getColumn(index, "yy")
-			, lectSmsterCd : this.ds_stlm_cmplt_list.getColumn(index, "lectSmsterCd")
-			, lectCd : this.ds_stlm_cmplt_list.getColumn(index, "lectCd")
-			, lectStatCd : this.ds_stlm_cmplt_list.getColumn(index, "lectStatCd")
-			, lectAmt : this.ds_stlm_cmplt_list.getColumn(index, "lectAmt")
-			, lectAddAmt : this.ds_stlm_cmplt_list.getColumn(index, "lectAddAmt")
-			, lectNbcnt : this.ds_stlm_cmplt_list.getColumn(index, "lectNbcnt")
-			, lectStDtm : this.ds_stlm_cmplt_list.getColumn(index, "lectStDtm")
-			, lectEndDtm : this.ds_stlm_cmplt_list.getColumn(index, "lectEndDtm")
-			, lectStHhCd : this.ds_stlm_cmplt_list.getColumn(index, "lectStHhCd")
-			, lectStMiCd : this.ds_stlm_cmplt_list.getColumn(index, "lectStMiCd")
-			, lectEndHhCd : this.ds_stlm_cmplt_list.getColumn(index, "lectEndHhCd")
-			, lectEndMiCd : this.ds_stlm_cmplt_list.getColumn(index, "lectEndMiCd")
-			, stringStDaywNm : this.ds_stlm_cmplt_list.getColumn(index, "stringStDaywNm")
-			, optnUseYn : this.ds_stlm_cmplt_list.getColumn(index, "optnUseYn")
-			, optnTypCdNm : this.ds_stlm_cmplt_list.getColumn(index, "optnTypCdNm")
+			, ds_cmplt : this.ds_movelect_param
 			, actlAtlctNpleCnt : actlAtlctNpleCnt
 		};
 		
-		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/MoveLect_popup.xfdl", this, 1280, 800, true, true, null);
+		this.gfn_openPopup("popupOpen" + this.cnt, oArg, "StlmMng::StlmCmpltDtl/MoveLect_popup.xfdl", this, 1280, 850, true, true, null);
 		this.cnt++;
 	}
 };
@@ -869,6 +857,95 @@ this.fn_set_chngAmt = function(chngAmt)
           <Column id="atlctStatCd" type="STRING" size="256"/>
           <Column id="atlctStatCdNm" type="STRING" size="256"/>
           <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="excllCustGrdeCd" type="STRING" size="256"/>
+          <Column id="selstrCd" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_movelect_param">
+        <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256" description="번호"/>
+          <Column id="atlctRsvNo" type="STRING" size="256" description="주문번호"/>
+          <Column id="mbrNo" type="STRING" size="256" description="회원번호"/>
+          <Column id="mbrNm" type="STRING" size="256" description="회원명"/>
+          <Column id="mbrId" type="STRING" size="256" description="회원아이디"/>
+          <Column id="hpNo" type="STRING" size="256" description="휴대전화"/>
+          <Column id="email" type="STRING" size="256" description="이메일"/>
+          <Column id="rfndRuleCfmSignYn" type="STRING" size="256" description="실수강자"/>
+          <Column id="rfndRuleCfmSignFileId" type="STRING" size="256"/>
+          <Column id="rfndRuleAgrDtm" type="STRING" size="256"/>
+          <Column id="gsStlmAmt" type="INT" size="256"/>
+          <Column id="crdStlmAmt" type="INT" size="256"/>
+          <Column id="lpntUseAmt" type="INT" size="256"/>
+          <Column id="cshStlmAmt" type="INT" size="256"/>
+          <Column id="ltteGiftStlmAmt" type="INT" size="256"/>
+          <Column id="otgiftStlmAmt" type="INT" size="256"/>
+          <Column id="etcStlmAmt" type="INT" size="256"/>
+          <Column id="chngAmt" type="INT" size="256"/>
+          <Column id="stlmDtm" type="STRING" size="256"/>
+          <Column id="stlmChnlCd" type="STRING" size="256"/>
+          <Column id="stlmChnlCdNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleNm" type="STRING" size="256"/>
+          <Column id="fmlyRelCd" type="STRING" size="256"/>
+          <Column id="fmlyRelCdNm" type="STRING" size="256"/>
+          <Column id="brchCd" type="STRING" size="256"/>
+          <Column id="brchCdNm" type="STRING" size="256"/>
+          <Column id="yy" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="lectSmsterCdNm" type="STRING" size="256"/>
+          <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectAmt" type="INT" size="256"/>
+          <Column id="lectAddAmt" type="INT" size="256"/>
+          <Column id="lectStlmAmt" type="INT" size="256"/>
+          <Column id="stringStDaywNm" type="STRING" size="256"/>
+          <Column id="fgftRecpYn" type="STRING" size="256"/>
+          <Column id="fgftAppNo" type="STRING" size="256"/>
+          <Column id="optnNm" type="STRING" size="256"/>
+          <Column id="lectTpCd" type="STRING" size="256"/>
+          <Column id="lectTpCdNm" type="STRING" size="256"/>
+          <Column id="lectNm" type="STRING" size="256"/>
+          <Column id="tcCdNo" type="STRING" size="256"/>
+          <Column id="lectClCd" type="STRING" size="256"/>
+          <Column id="lectClCdNm" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
+          <Column id="lectEndDtm" type="STRING" size="256"/>
+          <Column id="lectStHhCd" type="STRING" size="256"/>
+          <Column id="lectStMiCd" type="STRING" size="256"/>
+          <Column id="lectEndHhCd" type="STRING" size="256"/>
+          <Column id="lectEndMiCd" type="STRING" size="256"/>
+          <Column id="lectNbcnt" type="INT" size="256"/>
+          <Column id="lectStatCd" type="STRING" size="256"/>
+          <Column id="tcNm" type="STRING" size="256"/>
+          <Column id="grdeDcNm" type="STRING" size="256"/>
+          <Column id="grdeDcAmt" type="INT" size="256"/>
+          <Column id="cpnDcNm" type="STRING" size="256"/>
+          <Column id="cpnDcAmt" type="INT" size="256"/>
+          <Column id="oflnDcNm" type="STRING" size="256"/>
+          <Column id="oflnDcAmt" type="INT" size="256"/>
+          <Column id="optnDcNm" type="STRING" size="256"/>
+          <Column id="optnDcAmt" type="INT" size="256"/>
+          <Column id="prmtnSeqno" type="STRING" size="256"/>
+          <Column id="optnTypCd" type="STRING" size="256"/>
+          <Column id="optnTypCdNm" type="STRING" size="256"/>
+          <Column id="stlmStatCd" type="STRING" size="256"/>
+          <Column id="stlmStatCdNm" type="STRING" size="256"/>
+          <Column id="fmlyCd" type="STRING" size="256"/>
+          <Column id="optnUseYn" type="STRING" size="256"/>
+          <Column id="lectAddOptnNm" type="STRING" size="256"/>
+          <Column id="atlctStlmSubChnlCd" type="STRING" size="256"/>
+          <Column id="atlctStlmSubChnlCdNm" type="STRING" size="256"/>
+          <Column id="atlctStatCd" type="STRING" size="256"/>
+          <Column id="atlctStatCdNm" type="STRING" size="256"/>
+          <Column id="actlAtlctNpleSeqno" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntBrchCd" type="STRING" size="256"/>
+          <Column id="pblPmprcustParntLectCd" type="STRING" size="256"/>
+          <Column id="partRfndPsblYn" type="STRING" size="256"/>
+          <Column id="optnSeqno" type="STRING" size="256"/>
+          <Column id="excllCustGrdeCd" type="STRING" size="256"/>
+          <Column id="selstrCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
