@@ -351,9 +351,11 @@ this.fn_talk_check = function()
 	
 	for(var i=0; i<this.ds_attendance_list.getRowCount(); i++)
 	{
-		if(this.ds_attendance_list.checkarray[i] == 1 && this.ds_attendance_list.getColumn(i, "rfndDtm") === undefined && checkArr.indexOf(this.ds_attendance_list.getColumn(i, "mbrNo")) < 0)
+		var setString = this.ds_attendance_list.getColumn(i, "mbrNo") + "_" + this.ds_attendance_list.getColumn(i, "brchCd") + "_" + this.ds_attendance_list.getColumn(i, "yy") + "_" + this.ds_attendance_list.getColumn(i, "lectSmsterCd") + "_" + this.ds_attendance_list.getColumn(i, "lectCd"); 
+		if(this.ds_attendance_list.checkarray[i] == 1 && this.ds_attendance_list.getColumn(i, "rfndDtm") === undefined && checkArr.indexOf(setString) < 0)
 		{
-			checkArr.push(this.ds_attendance_list.getColumn(i, "mbrNo"));
+			var checkString = this.ds_attendance_list.getColumn(i, "mbrNo") + "_" + this.ds_attendance_list.getColumn(i, "brchCd") + "_" + this.ds_attendance_list.getColumn(i, "yy") + "_" + this.ds_attendance_list.getColumn(i, "lectSmsterCd") + "_" + this.ds_attendance_list.getColumn(i, "lectCd"); 
+			checkArr.push(checkString);
 			flag = true;
 			var rowIndex = this.ds_attendanceUpdate_list.addRow();
 			this.ds_attendanceUpdate_list.copyRow(rowIndex, this.ds_attendance_list, i);
@@ -403,6 +405,7 @@ this.fn_talk_check = function()
           <Column id="stDaywNm" type="STRING" size="256"/>
           <Column id="lectSt" type="STRING" size="256"/>
           <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
           <Column id="lectEndDtm" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="rfndDtm" type="STRING" size="256"/>
@@ -410,6 +413,7 @@ this.fn_talk_check = function()
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="pblPmprcustBrchCd" type="STRING" size="256"/>
           <Column id="pblPmprcustLectCd" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_attendanceUpdate_list">
@@ -445,11 +449,13 @@ this.fn_talk_check = function()
           <Column id="stDaywNm" type="STRING" size="256"/>
           <Column id="lectSt" type="STRING" size="256"/>
           <Column id="lectEnd" type="STRING" size="256"/>
+          <Column id="lectStDtm" type="STRING" size="256"/>
           <Column id="lectEndDtm" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
           <Column id="rfndDtm" type="STRING" size="256"/>
           <Column id="memoCont" type="STRING" size="256"/>
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
+          <Column id="lectRmNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>

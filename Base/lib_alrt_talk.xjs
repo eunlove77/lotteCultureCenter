@@ -21,6 +21,11 @@ this.gfn_create_ds_for_rcv_talk = function(targetForm, targetDs, target_obj){
 		nIndex = ds.addColumn( "hpNo", "string" );
 		nIndex = ds.addColumn( "smsRcvAgrYn", "string" );
 		
+		nIndex = ds.addColumn( "lectNm", "string" );
+		nIndex = ds.addColumn( "lectStDtm", "string" );
+		nIndex = ds.addColumn( "lectRmNm", "string" );
+		nIndex = ds.addColumn( "optnNm", "string" );
+		
 		targetForm.addChild(dsId, ds);
 	}else{
 		this[dsId].clearData();
@@ -33,6 +38,11 @@ this.gfn_create_ds_for_rcv_talk = function(targetForm, targetDs, target_obj){
 			this[dsId].setColumn(nRow, "korNm", targetDs.getColumn(i, target_obj.korNm));
 			this[dsId].setColumn(nRow, "smsRcvAgrYn", targetDs.getColumn(i, target_obj.smsRcvAgrYn));
 			this[dsId].setColumn(nRow, "hpNo", targetDs.getColumn(i, target_obj.hpNo));
+			
+			this[dsId].setColumn(nRow, "lectNm", new String(this.gfn_nvl(targetDs.getColumn(i, "lectNm"))));
+			this[dsId].setColumn(nRow, "lectStDtm", new String(this.gfn_nvl(targetDs.getColumn(i, "lectStDtm"))));
+			this[dsId].setColumn(nRow, "lectRmNm", new String(this.gfn_nvl(targetDs.getColumn(i, "lectRmNm"))));
+			this[dsId].setColumn(nRow, "optnNm", new String(this.gfn_nvl(targetDs.getColumn(i, "optnNm"))));
 		}		
 	}
 	

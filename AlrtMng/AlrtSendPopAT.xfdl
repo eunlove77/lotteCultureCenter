@@ -455,12 +455,14 @@ this.Div01_btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	}
 
 	for(var i = 0 ; i < this.ds_replace_val_list.rowcount ; i++){
-		if(this.gfn_isNull(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)){
-			this.alert( "치환코드[" + this.ds_replace_val_list.getColumn(i, "replaceEditCd") + "] 을 입력해주세요." );
-			return;
-		}else{
-			this.ds_replace_val_list.setColumn(i, "replaceEditVal", this.row03.form.Div00.form.tempEditListDiv.form.components[i].value);
-		}		
+// 		if(this.gfn_isNull(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)){
+// 			this.alert( "치환코드[" + this.ds_replace_val_list.getColumn(i, "replaceEditCd") + "] 을 입력해주세요." );
+// 			return;
+// 		}else{
+// 			this.ds_replace_val_list.setColumn(i, "replaceEditVal", this.row03.form.Div00.form.tempEditListDiv.form.components[i].value);
+// 		}		
+
+		this.ds_replace_val_list.setColumn(i, "replaceEditVal", new String(this.gfn_nvl(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)));
 	}
 	
 	if(this.confirm("전송 하시겠습니까?")){
@@ -471,6 +473,7 @@ this.Div01_btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 			
 				this.ds_alrt_snd.setColumn(0, "sndTpCd", this.ds_alrt_list.getColumn(i, "sndTpCd"));
 				this.ds_alrt_snd.setColumn(0, "sndTempCont", this.ds_alrt_list.getColumn(i, "sndTempCont"));
+				this.ds_alrt_snd.setColumn(0, "dupSndPsblYn", this.ds_alrt_list.getColumn(i, "dupSndPsblYn"));
 			}
 		}
 	
@@ -606,6 +609,7 @@ this.Div01_btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
           <Column id="sndTelno" type="STRING" size="256"/>
           <Column id="sndTempCont" type="STRING" size="256"/>
           <Column id="msgType" type="STRING" size="256"/>
+          <Column id="dupSndPsblYn" type="STRING" size="256"/>
         </ColumnInfo>
         <Rows>
           <Row/>
