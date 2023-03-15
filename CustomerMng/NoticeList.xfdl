@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid oncolresized="gfn_oncolresized" id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" cellmovingtype="col" oncellclick="GridNoticeList_oncellclick" cellsizingtype="col">
+        <Grid oncolresized="gfn_oncolresized" id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" cellmovingtype="col" oncellclick="GridNoticeList_oncellclick" cellsizingtype="col" onheadclick="GridNoticeList_onheadclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -148,6 +148,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Div id="ContextPop" taborder="5" left="10" top="811" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -225,6 +226,15 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
 * include 영역 
@@ -239,6 +249,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.rowcount = 0;
 this.popCnt = 0;
+
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -251,6 +262,9 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.gfnSetCheckBoxNoDataset(this.noticeDs, this.GridNoticeList, 0);
+	
+	// 그리드 개인화
+	this.fn_personalization("getPsnlztn");
 	
 	//지점코드 세팅
 	this.fn_set_spotCd();
@@ -458,6 +472,8 @@ this.fn_list = function ()
 	this.gfn_transaction(tranObj);		
 };
 
+this.orderType = "desc";
+
 // 검색 데이터 세팅
 this.fn_searchValueInit = function()
 {					 
@@ -466,18 +482,18 @@ this.fn_searchValueInit = function()
 	var arrTopYn = new Array();
 	var arrClCd = new Array();
 	
-	if(this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrY.value == true) arrExpsrYn.push("'Y'");
-	if(this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrN.value == true) arrExpsrYn.push("'N'");
+	if(this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrY.value == true) arrExpsrYn.push("Y");
+	if(this.Div00_00.form.conDiv.form.useDiv.form.chkExpsrN.value == true) arrExpsrYn.push("N");
 	
-	if(this.Div00_00.form.conDiv.form.topDiv.form.chkTopY.value == true) arrTopYn.push("'Y'");
-	if(this.Div00_00.form.conDiv.form.topDiv.form.chkTopN.value == true) arrTopYn.push("'N'");
+	if(this.Div00_00.form.conDiv.form.topDiv.form.chkTopY.value == true) arrTopYn.push("Y");
+	if(this.Div00_00.form.conDiv.form.topDiv.form.chkTopN.value == true) arrTopYn.push("N");
 	
 	// 구분코드
 	for(var i=0;i<this.categoryDs.getRowCount();i++){
 			
 		if(this.Div00_00.form.conDiv.form.ctgyDiv.form["chkClCdStatus" + this.categoryDs.getColumn(i, "cd")].value == true)
 		{
-			arrClCd.push("'"+ this.categoryDs.getColumn(i, "cd") +"'");
+			arrClCd.push(this.categoryDs.getColumn(i, "cd"));
 		}
 	}
 	
@@ -608,6 +624,40 @@ this.fn_chkClCdAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventI
 	}
 };
 
+// 그리드 개인화
+this.fn_personalization = function(strSvcId){
+	
+	var strSvcUrl   = this.application.Admin_svc;
+	var inData      = "";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	if(strSvcId == "getPsnlztn"){		
+		
+		this.ds_grid_psnlztn.setColumn(0, "gridId", "notice_list_grid");
+		
+		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
+		inData = "data=ds_grid_psnlztn";
+		outData = "ds_grid_psnlztn=output1";
+	}else if(strSvcId == "setPsnlztn"){
+		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
+		inData = "data=ds_grid_psnlztn";
+	}
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync
+	}
+	this.gfn_transaction(tranObj);
+}
+
 //콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
@@ -673,8 +723,73 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			this.alert("삭제 완료되었습니다");
 			this.reload();
 		break;
+		
+		case "setPsnlztn":
+			this.alert("저장되었습니다.");
+		break;
+		
+		case "getPsnlztn":
+			var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+			if(format !== undefined){			
+				this.GridNoticeList.set_formats(format);
+			}
+		break;
+		
 	}
 	
-};]]></Script>
+};
+this.GridNoticeList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.row != 0)
+	{
+		var ds = obj.getBindDataset();
+		var columnId = "";
+		var txt = obj.getCellText(e.row, e.cell);
+		
+		for(var i = 1; i < ds.getColCount(); i++){
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+		columnId = ds.getColID(e.cell);
+		//columnId2 = obj.getCellValue(e.row, e.cell);
+		columnId2 = this.noticeDs.getColID();
+		//columnId3 = this.noticeDs.getColumn(e.row , e.cell);
+		//columnId4 = this.noticeDs.getColumnInfo(e.cell);
+		//columnId5 = obj.getCellValue(e.row, e.cell);
+		//columnId6 = obj.getBindDataset()
+		
+		//columnId2 = obj.getBindCellIndex("head")
+		//this.alert("컬럼ID->" + columnId + "컬럼명->" + txt + "=======셀" + e.cell + "컬럼ID222222222->" + columnId2);
+		
+		if(this.orderType == "desc"){
+			
+			this.noticeDs.set_keystring("S:" + columnId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			this.noticeDs.set_keystring("S:-" + columnId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+	}
+};
+
+/*this.GridNoticeList_onrbuttondown = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{	//현재 클릭 셀 기준
+	var objDs2 = this.ContextPop.form;
+	objDs2.popupMenu.trackPopupByComponent(obj, e.clientx, e.clienty);
+};
+
+this.popupMenu_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
+{
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.GridNoticeList.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", "notice_list_grid");
+	objDs.setColumn(0, "format", format);
+	
+	this.fn_personalization("setPsnlztn");
+};*/]]></Script>
   </Form>
 </FDL>
