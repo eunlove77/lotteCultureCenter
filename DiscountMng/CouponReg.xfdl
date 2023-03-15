@@ -1310,7 +1310,7 @@ this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexa
 // 	
 	if(e.postvalue == '01')
 	{
-		this.Div01.form.Div04.form.MaskEdit00.set_format("!##");	//2자리 입력 제한
+		this.Div01.form.Div04.form.MaskEdit00.set_format("!###");		//3자리 입력 제한
 		this.Div01.form.Div04.form.Static01.set_text("%");
 		this.Div01.form.Div04.form.MaskEdit00.set_value();
 	}
@@ -1327,7 +1327,17 @@ this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexa
 
 this.Div01_Div04_MaskEdit00_oninput = function(obj:nexacro.MaskEdit,e:nexacro.InputEventInfo)
 {
-	if(this.Div01.form.Div04.form.radioDiscount.value == '02')
+	if(this.Div01.form.Div04.form.radioDiscount.value == '01')
+	{
+		if(obj.value > 100)
+		{
+			obj.set_value("");
+			obj.updateToDataset();
+			this.ds_detail.setColumn(0, "dcAmt");
+			alert("할인율은 최대 100까지 입력할 수 있습니다.");
+		}
+	}
+	else
 	{
 		var num = obj.value;
 		
