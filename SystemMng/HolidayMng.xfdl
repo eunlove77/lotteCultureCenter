@@ -41,10 +41,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="휴일구분" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="chkAll" taborder="1" text="전체" left="116" top="4" width="45" height="20" truevalue="Y" onclick="row02_Div03_chkAll_onclick" value="false"/>
-                    <CheckBox id="chkClCd1" taborder="2" text="평일" left="chkAll:3" top="4" width="45" height="20" onclick="classified_holiday_checkbox_onclick" value="false" truevalue="A"/>
-                    <CheckBox id="chkClCd2" taborder="3" text="공휴일" left="chkClCd1:3" top="4" width="57" height="20" onclick="classified_holiday_checkbox_onclick" truevalue="C"/>
-                    <CheckBox id="chkClCd3" taborder="4" text="휴일" left="chkClCd2:3" top="4" width="45" height="20" onclick="classified_holiday_checkbox_onclick" truevalue="B"/>
+                    <CheckBox id="chkAll" taborder="1" text="전체" left="115" top="5" width="41" height="20" onclick="com_fn_checkboxAll"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -52,7 +49,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="170" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" onitemchanged="row02_Div04_ComboSpot_onitemchanged" innerdataset="spotCdList" datacolumn="cdNm" codecolumn="cd"/>
+                    <Combo id="ComboSpot" taborder="1" text="" left="116" top="5" width="170" height="20" index="0" value="1" innerdataset="ds_spot_list" datacolumn="cdNm" codecolumn="cd"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -95,7 +92,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="4" left="10" top="230" binddataset="holidayDs" autofittype="col" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" cellsizingtype="col">
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="4" left="10" top="230" binddataset="ds_list" autofittype="col" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -128,8 +125,8 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:hlidyDt" displaytype="date" edittype="expr:rgprId ? 'none' : 'date'" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:hlidyNm" edittype="expr:rgprId ? 'none' : 'text'" displaytype="expr:rgprId ? 'normar' : 'editcontrol'"/>
-                <Cell col="3" text="bind:hlidyClCd" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
-                <Cell col="4" text="bind:brchCd" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
+                <Cell col="3" text="bind:hlidyClCd" combodataset="holidayType" combocodecol="cd" combodatacol="cdNm" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'" combodisplaynulltype="nulltext" combodisplaynulltext="선택"/>
+                <Cell col="4" text="bind:brchCd" combodataset="ds_spot_list" combodatacol="cdNm" combocodecol="cd" edittype="expr:rgprId ? 'none' : 'combo'" displaytype="expr:rgprId ? 'combotext' : 'combocontrol'"/>
                 <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
                 <Cell col="6" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="7" text="expr:mdfId ? mdfNm + '('  + mdfId + ')' : ''"/>
@@ -152,7 +149,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid oncolresized="gfn_oncolresized" id="Grid_Excel" taborder="7" left="0" top="820" binddataset="holidayDs_excel" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="false">
+        <Grid oncolresized="gfn_oncolresized" id="Grid_Excel" taborder="7" left="0" top="820" binddataset="ds_list_excel" autofittype="col" right="858" bottom="-220" treeinitstatus="expand,all" treeusecheckbox="false" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -226,6 +223,7 @@ this.application = null;
 this.excelImportExport = "";
 this.rowcount = 0;
 this.excelFileName = "휴일_관리_";
+this.brchCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -238,26 +236,62 @@ this.holidayMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
+	//그리드 체크박스 세팅
+	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
+
 	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
-	this.gfnSetCheckBoxNoDataset(this.holidayDs, this.Grid00, 0);
-	
-	//검색영역 DS 초기화
-	this.reset_search_form();
-	this.spotCdList.copyData(this.application.gdsSpotCdList);
-	this.spotCdList.insertRow(0);
-	this.spotCdList.setColumn(0, "cd", "");
-	this.spotCdList.setColumn(0, "cdNm", "전체");
-	
-	//row 영역 초기화
-	this.spotCdList_row.copyData(this.application.gdsSpotCdList);
-	this.spotCdList_row.insertRow(0);
-	this.spotCdList_row.setColumn(0, "cd", "");
-	this.spotCdList_row.setColumn(0, "cdNm", "선택");
+	//this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
 	//파일 다운로드경로
 	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
+
+	//지점초기화
+	this.brchCd = this.com_set_branch();
+	
+	//코드 데이터
+	this.set_dataset();
+
+	//체크박스 세팅
+	this.set_dynamic_checkbox();
+	
+	//검색폼 초기화
+	this.reset_search_form();
 	
 };
+
+/**************************************************************************
+ * 데이터 세팅
+ **************************************************************************/
+this.set_dataset = function(){
+ 
+	var ds_codes_list = [
+		{ds : this.holidayType,		cd: "'051'"},	//휴일구분
+	];
+	//코드 데이터셋 설정
+	this.com_set_code_dataset(ds_codes_list);
+
+	//지점 데이터셋 세팅
+	this.set_branch_list();
+	
+}
+this.set_branch_list = function(){
+  this.ds_spot_list.copyData(this.application.gdsSpotCdList);
+  this.ds_spot_list.insertRow(0);
+  this.ds_spot_list.setColumn(0, "cd", "");
+  this.ds_spot_list.setColumn(0, "cdNm", "전체");
+}
+//동적 체크박스 추가
+this.set_dynamic_checkbox = function()
+{
+	this.com_set_dynamic_checkbox_from_dataset(this.holidayType, this.row02.form.Div03);//휴일구분
+	
+	//클릭 이벤트 추가
+	this.com_fn_click_add(this);
+}
+
+/**************************************************************************
+ * 검색, 초기화
+ **************************************************************************/
 this.fn_search = function(){
   var strtDt = this.Div02.form.Div00.form.strtDtm.value;
 	var endDt = this.Div02.form.Div00.form.endDtm.value;
@@ -277,7 +311,7 @@ this.fn_list = function(){
 	tranObj.strSvcId	= "select_holiday";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::holiday/list.do";
 	tranObj.inData      = "search=searchDs";
-	tranObj.outData     = "holidayDs=output1";
+	tranObj.outData     = "ds_list=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_holiday_list";
 	tranObj.isAsync     = true;
@@ -290,8 +324,8 @@ this.fnCallback_holiday_list = function(svcID, errorCode, errorMsg){
 	
 	this.Div01.form.txtTotal.set_text("목록 (" + this.rowcount + ") 개");
 	
-	if(!this.holidayDs.getColCount()){
-		this.holidayDs.copyData(this.holidayDs_format);
+	if(!this.ds_list.getColCount()){
+		this.ds_list.copyData(this.ds_list_format);
 	}
 	if(errorCode != 0){
 		// 에러 시 화면 처리 내역
@@ -318,14 +352,14 @@ this.excel_import = function(){
 
 this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var n_row = this.holidayDs.insertRow(0);
-	this.holidayDs.setColumn(0, "hlidyDt", this.gfnGetToDay());
-	this.holidayDs.setColumn(0, "hlidyClCd", "");
-	this.holidayDs.setColumn(0, "brchCd", "");
+	var n_row = this.ds_list.insertRow(0);
+	this.ds_list.setColumn(0, "hlidyDt", this.gfnGetToDay());
+	this.ds_list.setColumn(0, "hlidyClCd", "");
+	this.ds_list.setColumn(0, "brchCd", "");
 };
 this.btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var check_array = this.holidayDs.checkarray;
+	var check_array = this.ds_list.checkarray;
 	var checked_array = new Array();
 	for(var i = 0; i < check_array.length; i++){
 		if(check_array[i] > 0) checked_array.push(i);
@@ -339,7 +373,7 @@ this.btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return false;
 	}
 	
-	this.holidayDs.deleteMultiRows(checked_array);
+	this.ds_list.deleteMultiRows(checked_array);
 	for(i of checked_array){
 		check_array[i] = 0;
 	}
@@ -359,15 +393,19 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return false;
 	}
 	
-	this.update_holiday(this.holidayDs);
+	this.update_holiday(this.ds_list);
 };
 
 this.update_holiday = function(ds){
+  var svcId = "update_holiday";
+  if(ds.name == "excelupdateDs"){
+    svcId = "update_holiday_excel";
+  }
 	var tranObj = {};
-	tranObj.strSvcId	= "update_holiday";
+	tranObj.strSvcId	= svcId;
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::holiday/update.do";
 	tranObj.inData      = "holidayList="+ ds.name +":U";
-	tranObj.outData     = "holidayDs=output1";
+	tranObj.outData     = "ds_list=output1";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_holiday";
 	tranObj.isAsync     = true;
@@ -381,8 +419,13 @@ this.fnCallback_holiday = function(svcID, errorCode, errorMsg){
 		this.fn_list(1);
 	} 
 	else if(errorCode == -3){
-		//키중복
-		this.alert("업로드한 엑셀에 문제가 있습니다.\n"+errorMsg);
+    //키중복
+    if(svcID == "update_holiday_excel"){
+      this.alert("업로드한 엑셀에 문제가 있습니다.\n"+errorMsg);  
+    }
+    else {
+      this.alert(errorMsg);  
+    }
 		return;
 	}
 	else{
@@ -396,23 +439,19 @@ this.validation_check = function(){
 	var result ={};
 	var msg = "";
 	
-	var rowcount = this.holidayDs.rowcount;
+	var rowcount = this.ds_list.rowcount;
 	var comma = "";
 	for(var i = 0, j = 1; i < rowcount; i++, j++){
-		if(this.holidayDs.getRowType(i) == 2){
+		if(this.ds_list.getRowType(i) == 2){
 			//추가된 행에 한해서
-			var hlidyDt = this.holidayDs.getColumn(i, "hlidyDt");
-			var hlidyNm = this.holidayDs.getColumn(i, "hlidyNm");
-			var brchCd = this.holidayDs.getColumn(i, "brchCd");
-			var hlidyClCd = this.holidayDs.getColumn(i, "hlidyClCd");
+			var hlidyDt = this.ds_list.getColumn(i, "hlidyDt");
+			var hlidyNm = this.ds_list.getColumn(i, "hlidyNm");
+			var brchCd = this.ds_list.getColumn(i, "brchCd");
+			var hlidyClCd = this.ds_list.getColumn(i, "hlidyClCd");
 			
 			hlidyNm = hlidyNm ? hlidyNm.replace(/\s/g, '') : '';					
 			if(!hlidyNm){
 				msg = j + "행의 휴일명을 입력하세요.\n";
-				break;
-			}
-			if(!brchCd){
-				msg = j + "행의 지점을 입력하세요.\n";
 				break;
 			}
 			if(!hlidyClCd){
@@ -422,7 +461,7 @@ this.validation_check = function(){
 		}
 	}
 	
-	this.holidayDs.filter("");
+	this.ds_list.filter("");
 	
 	result.tf = msg.length > 0 ? false : true;
 	result.msg = msg;
@@ -433,23 +472,13 @@ this.validation_check = function(){
 /**************************************************************************
  * 검색 영역
  **************************************************************************/
-this.Div02_searchField_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
-{
-	console.log('콤보');
-};
-
-this.row02_Div04_ComboSpot_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
-{
-	
-};
-
 //엑셀 다운로드 버튼
 this.Div01_btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	//if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
 
-	var list = this.holidayDs;
-	var excelList = this.holidayDs_excel;
+	var list = this.ds_list;
+	var excelList = this.ds_list_excel;
 	var chkCnt = 0;
 	
 	excelList.deleteAll();
@@ -541,44 +570,13 @@ this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 };
 
 this.reset_search_form = function(){
-	//캘린더
-	objCalendar = this.Div02.form.Div00.form;
-	objCalendar.strtDtm.set_value('');
-	objCalendar.endDtm.set_value('');
-	
-	this.row02.form.Div03.form.chkAll.set_value(false);
-	this.row02.form.Div03.form.chkClCd1.set_value(false);
-	this.row02.form.Div03.form.chkClCd2.set_value(false);
-	this.row02.form.Div03.form.chkClCd3.set_value(false);
-	
-	this.searchDs.setColumn(0, "clDt", "1");
-	this.searchDs.setColumn(0, "strtDt", "");
-	this.searchDs.setColumn(0, "endDt", "");
-	this.searchDs.setColumn(0, "clHlidyAll", "");
-	this.searchDs.setColumn(0, "clHlidyCdList", "");
-	this.searchDs.setColumn(0, "brchCd", "");
-	this.searchDs.setColumn(0, "f", 0);
-	this.searchDs.setColumn(0, "q", "");
-	
-	this.holidayDs.deleteAll();
+  
+	//공통
+	this.com_reset_search_form(this);
+
+	this.ds_list.deleteAll();
 }
 
-this.row02_Div03_chkAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	if(obj.isChecked()){
-		var trueVal1 = this.row02.form.Div03.form.chkClCd1.truevalue;
-		var trueVal2 = this.row02.form.Div03.form.chkClCd2.truevalue;
-		var trueVal3 = this.row02.form.Div03.form.chkClCd3.truevalue;
-
-		this.row02.form.Div03.form.chkClCd1.set_value(trueVal1);
-		this.row02.form.Div03.form.chkClCd2.set_value(trueVal2);
-		this.row02.form.Div03.form.chkClCd3.set_value(trueVal3);
-	} else {
-		this.row02.form.Div03.form.chkClCd1.set_value(false);
-		this.row02.form.Div03.form.chkClCd2.set_value(false);
-		this.row02.form.Div03.form.chkClCd3.set_value(false);
-	}
-};
 
 /* 엑셀 업로드 유효성 검사 */
 this.excel_import_validation_check = function(){
@@ -588,7 +586,6 @@ this.excel_import_validation_check = function(){
 	this.excelupdateDs.clearData();
 	
 	var rowcount = this.excelImportDs.rowcount;
-	var gdsSpotCdList = this.application.gdsSpotCdList;
 	for(var i = 0, j = 2; i < rowcount; i++, j++){
 		var hlidyDt = this.excelImportDs.getColumn(i, "휴일날짜");
 		var hlidyNm = this.excelImportDs.getColumn(i, "휴일명");
@@ -607,8 +604,9 @@ this.excel_import_validation_check = function(){
 		if(!hlidyNm){
 		  msg = j + "행의 휴일명을 입력하세요.\n";
 		}
-		if(!brchCdNm){
-		  msg = j + "행의 지점을 입력하세요.\n";
+    brchCdNm = brchCdNm ? brchCdNm.replace(/\s/g, '') : '';			
+		if(brchCdNm == "전체"){
+		  brchCdNm = "";
 		}
 		if(!hlidyTypeNm){
 		  msg = j + "행의 휴일구분을 입력하세요.\n";
@@ -619,11 +617,13 @@ this.excel_import_validation_check = function(){
 		if(!this.com_vali_date_format(hlidyDt)){
 		  msg += j + "행의 날짜가 올바르지 않습니다.\n";
 		}
-
-		var brchCd_row = gdsSpotCdList.findRow("cdNm", brchCdNm);
-		var brchCd = brchCd_row > -1 ? gdsSpotCdList.getColumn(brchCd_row, "cd") : false;
-		if(!brchCd){
-		  msg += j + "행의 지점정보가 올바르지 않습니다.\n";
+		
+		if(brchCdNm){
+			var brchCd_row = this.ds_spot_list.findRow("cdNm", brchCdNm);
+			var brchCd = brchCd_row > -1 ? this.ds_spot_list.getColumn(brchCd_row, "cd") : false;
+			if(!brchCd){
+			  msg += j + "행의 지점정보가 올바르지 않습니다.\n";
+			}
 		}
 		
 		var hlidyType_row = this.holidayType.findRow("cdNm", hlidyTypeNm);
@@ -655,7 +655,7 @@ this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 };
 ]]></Script>
     <Objects>
-      <Dataset id="holidayDs">
+      <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="hlidyDt" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
@@ -674,24 +674,6 @@ this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="cd"> </Col>
-            <Col id="cdNm">선택</Col>
-          </Row>
-          <Row>
-            <Col id="cd">A</Col>
-            <Col id="cdNm">평일</Col>
-          </Row>
-          <Row>
-            <Col id="cd">B</Col>
-            <Col id="cdNm">휴일</Col>
-          </Row>
-          <Row>
-            <Col id="cd">C</Col>
-            <Col id="cdNm">공휴일</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <ExcelImportObject id="ExcelImportObject00" onsuccess="ExcelImportObject00_onsuccess" onerror="ExcelImportObject00_onerror"/>
       <ExcelExportObject id="ExcelExportObject00"/>
@@ -719,13 +701,13 @@ this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="spotCdList">
+      <Dataset id="ds_spot_list">
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="holidayDs_format">
+      <Dataset id="ds_list_format">
         <ColumnInfo>
           <Column id="hlidyDt" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
@@ -777,7 +759,7 @@ this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="holidayDs_excel">
+      <Dataset id="ds_list_excel">
         <ColumnInfo>
           <Column id="hlidyDt" type="STRING" size="256"/>
           <Column id="brchCd" type="STRING" size="256"/>
@@ -793,7 +775,6 @@ this.Div01_btnSampleDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
       </Dataset>
     </Objects>
     <Bind>
-      <BindItem id="item1" compid="row02.form.Div03.form.chkAll" propid="value" datasetid="searchDs" columnid="clHlidyAll"/>
       <BindItem id="item5" compid="row02.form.Div04.form.ComboSpot" propid="value" datasetid="searchDs" columnid="brchCd"/>
       <BindItem id="item6" compid="Div05.form.searchField" propid="value" datasetid="searchDs" columnid="f"/>
       <BindItem id="item7" compid="Div05.form.searchQuery" propid="value" datasetid="searchDs" columnid="q"/>
