@@ -202,7 +202,12 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	// 에러 시 화면 처리 내역
 	if(errorCode != 0)
 	{
-		this.alert(errorCode+"\n"+errorMsg);
+		if(errorCode == -1){
+			this.alert(errorCode+"\n"+errorMsg);
+		}else{
+			this.alert(errorMsg);
+		}
+		
 		return;
 	}
 	
@@ -236,7 +241,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			
 			this.dcMthdFrm.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt) +"원</fc></b>");
 			this.Div01.form.Static00.set_text("<b v='true'>총 결제금액 : <fc v ='#ED5757'>"+ this.gfn_setComma(this.gsStlmAmt - this.dcMthdFrm.oflnDcAmt - this.dcMthdFrm.grdeDcAmt - this.dcMthdFrm.cpnDcAmt - this.dcMthdFrm.addDcAmt) +"</fc>원</b>");
-			
+			trace(dsDcDtl.getColumn(0, "oflnDcAmtClCd"));
 			if(this.gfn_nvl(dsDcDtl.getColumn(0, "oflnDcAmtClCd")) == ""){
 				// 기존에 오프라인 할인을 먹이지 않았으면 오프라인 할인 콤보박스 선택으로 세팅
 				this.dcMthdFrm.Div00.form.Div04.form.Div00.form.Combo00.set_index(0);

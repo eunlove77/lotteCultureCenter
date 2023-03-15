@@ -54,6 +54,7 @@ this.MoveLect_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfnSetRadioNoDataset(this.ds, this.grid, 0);
 	this.grid.addEventHandler("oncellclick", this.fn_grid_oncellclick, this);
+	
 	if(this.parent.actlAtlctNpleCnt > 1){
 		this.Button02.set_visible(true);
 	}
@@ -215,7 +216,7 @@ this.fn_grid_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInf
 		// 2-2. 이강 전 강좌와 이강 후 강좌의 옵션타입이 강사 지급이라면 구매형인지 1/N인지도 같아야함
 		var befLectAddAmt = Number(this.ds_cmplt.getColumn(0, "lectAddAmt"));
 		if(befLectAddAmt > 0){
-			if(this.gfn_nvl(this.ds.getColumn(e.row, "optnTypCd")) != this.gfn_nvl(this.ds_cmplt.getColumn(0, "optnTypCd"))){
+			if(this.gfn_nvl(this.ds.getColumn(e.row, "optnUseYn")) == "N" || this.gfn_nvl(this.ds.getColumn(e.row, "optnTypCd")) != this.gfn_nvl(this.ds_cmplt.getColumn(0, "optnTypCd"))){
 				if(this.gfn_nvl(this.ds_cmplt.getColumn(0, "optnTypCd")) == "01"){
 					alert("이강 전 강좌와 동일한 금액에 재료비/대여료(강사미지급) 옵션만 선택 할 수 있습니다.");
 				}else{
@@ -317,6 +318,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		}else if(errorCode == -7){
 			// 사은품 신청/수령 후 미반납
 			this.alert("사은품 신청/수령 강좌 건이 있어 이강 하실수 없습니다.\n(수령하신 사은품은 데스크에 회수 후 이강 가능 합니다.)");
+		}else if(errorCode == -8){
+			// 할인 조건 안맞음
+			this.alert("강좌 이강을 하실 수 없습니다.\n할인조건이 동일 하지 않습니다.");
 		}else{
 			this.alert(errorCode+"\n"+errorMsg);
 		}
