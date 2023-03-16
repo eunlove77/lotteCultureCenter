@@ -1300,6 +1300,7 @@ etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.g
 	stlmInfoDtlFrm.Div00.form.Div05.set_top(stlmInfoDtlFrm.Div00.form.Div04.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div04.getPixelHeight() - 1);
 	stlmInfoDtlFrm.Div00.form.Div06.set_top(stlmInfoDtlFrm.Div00.form.Div05.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div05.getPixelHeight() - 1);
 	stlmInfoDtlFrm.Div00.form.Div07.set_top(stlmInfoDtlFrm.Div00.form.Div06.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div06.getPixelHeight() - 1);
+	stlmInfoDtlFrm.Div00.form.Div09.set_top(stlmInfoDtlFrm.Div00.form.Div07.getPixelTop() + stlmInfoDtlFrm.Div00.form.Div07.getPixelHeight() - 1);
 	
 	// 결제채널
 	stlmInfoDtlFrm.Div00.form.Div00.set_height(stlmInfoDtlFrm.Div00.form.Div00.getPixelHeight());
@@ -1335,7 +1336,15 @@ etcStlmAmtStatic.set_text(this.gfn_setComma(Number(stlmInfoDtlFrm.ds_stlm_mthd.g
 	if(this.gfn_nvl(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumDt")) == ""){
 		stlmInfoDtlFrm.Div00.form.Div07.form.Static01.set_text("-");
 	}else{
-		stlmInfoDtlFrm.Div00.form.Div07.form.Static01.set_text(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumDt") + " (적립금 " + stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumAmt") + "원)");
+		stlmInfoDtlFrm.Div00.form.Div07.form.Static01.set_text(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumDt") + " (적립금 " + this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "lpntAcumAmt")) + "원)");
+	}
+	
+	// 수강후기 L.point 적립금
+	stlmInfoDtlFrm.Div00.form.Div09.set_height(stlmInfoDtlFrm.Div00.form.Div09.getPixelHeight());
+	if(this.gfn_nvl(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "reviewLpntAcumAmt")) == ""){
+		stlmInfoDtlFrm.Div00.form.Div09.form.Static01.set_text("-");
+	}else{
+		stlmInfoDtlFrm.Div00.form.Div09.form.Static01.set_text("적립금 " + this.gfn_setComma(stlmInfoDtlFrm.ds_stlm_mthd.getColumn(0, "reviewLpntAcumAmt")) + "원");
 	}
 };]]></Script>
   </Form>
