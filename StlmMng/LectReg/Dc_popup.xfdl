@@ -390,21 +390,21 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 				this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.set_value(this.classList.getColumn(0, "oflnDcCd"));
 				this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_readonly(false);
 				this.Div00.form.Div00.form.Div04.form.Div00.form.editOfln.set_value(this.gfn_setComma(this.classList.getColumn(0, "oflnDcAmt")));
-				
+			}
+			
+			if(this.addDcAmt > 0){
+				this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.set_value(this.classList.getColumn(0, "optnDcCd"));
 				this.Div00.form.Div00.form.Div05.form.Radio00.set_visible(true);
 				this.Div00.form.Div00.form.Div05.form.Static03.set_top(24);
 				this.Div00.form.Div00.form.Div05.form.editAdd.set_top(25);
 				this.Div00.form.Div00.form.Div05.form.Static04.set_top(25);
 				this.Div00.form.Div00.form.Div05.form.Static02.set_visible(true);
 				this.Div00.form.Div00.form.Div05.form.Static02.set_text(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.text);
-				
-				if(this.addDcAmt > 0){
-					this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);				
-					this.Div00.form.Div00.form.Div05.form.Radio00.set_value("Y");
-					this.Div00.form.Div00.form.Div05.form.editAdd.set_value(this.gfn_setComma(this.classList.getColumn(0, "optnDcAmt")));
-				}else{
-					this.Div00.form.Div00.form.Div05.form.Radio00.set_value("N");
-				}
+				this.Div00.form.Div00.form.Div05.form.editAdd.set_readonly(false);				
+				this.Div00.form.Div00.form.Div05.form.Radio00.set_value("Y");
+				this.Div00.form.Div00.form.Div05.form.editAdd.set_value(this.gfn_setComma(this.classList.getColumn(0, "optnDcAmt")));
+			}else{
+				this.Div00.form.Div00.form.Div05.form.Radio00.set_value("N");
 			}
 			
 			if(this.grdeDcAmt > 0){
@@ -991,8 +991,10 @@ this.Div00_Div05_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexacro.It
 	}
 	
 	if(e.preindex != e.postindex){
-		this.optnAmt = this.optnAmt + this.addDcAmt;
+		//this.optnAmt = this.optnAmt + this.addDcAmt;
 		this.addDcAmt = 0;
+		
+		this.Div00.form.Div00.form.Div06.form.Static01.set_text("<b v='true'><fc v ='#ED5757'>"+ this.gfn_setComma(this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt) +"원</fc></b>");
 	}
 };
 
@@ -1024,7 +1026,7 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		
 		this.opener.divWork.form.ds_class_list.set_enableevent(false);
 		// 오프라인 할인 적용
-		if(this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value != ''){
+		if(this.oflnDcAmt > 0){
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcCd", this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.value);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcNm", this.Div00.form.Div00.form.Div04.form.Div00.form.Combo00.text);
 			this.opener.divWork.form.ds_class_list.setColumn(this.row, "oflnDcAmt", this.oflnDcAmt);
