@@ -223,7 +223,6 @@ this.application = null;
 this.excelImportExport = "";
 this.rowcount = 0;
 this.excelFileName = "휴일_관리_";
-this.brchCd = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -244,9 +243,6 @@ this.holidayMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//파일 다운로드경로
 	this.FileDownTransfer00.set_url(this.domain + "/admin/file/filedownload.do");
-
-	//지점초기화
-	this.brchCd = this.com_set_branch();
 	
 	//코드 데이터
 	this.set_dataset();
@@ -293,18 +289,26 @@ this.set_dynamic_checkbox = function()
  * 검색, 초기화
  **************************************************************************/
 this.fn_search = function(){
-  var strtDt = this.Div02.form.Div00.form.strtDtm.value;
-	var endDt = this.Div02.form.Div00.form.endDtm.value;
-	
-	this.searchDs.setColumn(0, 'strtDt', strtDt);
-	this.searchDs.setColumn(0, 'endDt', endDt);
-	
+	this.set_search_info();
 	this.fn_list();
 }
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.fn_search();
 };
+
+this.set_search_info = function(){
+	//날짜 세팅
+	var strtDt = this.Div02.form.Div00.form.strtDtm.value;
+	var endDt = this.Div02.form.Div00.form.endDtm.value;
+	
+	this.searchDs.setColumn(0, 'strtDt', strtDt);
+	this.searchDs.setColumn(0, 'endDt', endDt);
+
+	//검색조건 - 체크박스 세팅 - 휴일구분
+	var clHlidyCdList = this.com_set_checkbox_to_string(this.row02.form.Div03);
+	this.searchDs.setColumn(0, "clHlidyCdList", clHlidyCdList);
+}
 
 this.fn_list = function(){
 	var tranObj = {};
@@ -535,34 +539,6 @@ this.ExcelImportObject00_onsuccess = function(obj:nexacro.ExcelImportObject,e:ne
 this.ExcelImportObject00_onerror = function(obj:nexacro.ExcelImportObject,e:nexacro.ExcelImportErrorEventInfo)
 {
 	alert("엑셀 업로드 실패했습니다.\n" + e.errormsg);
-};
-
-this.classified_holiday_checkbox_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
-{
-	var clHlidyCdList = '';
-	var comma = '';
-	var chkCnt = 0;
-	
-	for(var i = 1; i <= 3; i++){
-		var item = obj.parent['chkClCd' + i];
-		if(item.isChecked()){
-			clHlidyCdList += comma + "'" + item.value + "'";
-			comma = ',';
-			chkCnt++;
-		}
-	}
-	
-	//전체 체크 
-	if(chkCnt == 3)
-	{
-		this.row02.form.Div03.form.chkAll.set_value("Y");
-	}
-	else
-	{
-		this.row02.form.Div03.form.chkAll.set_value(false);
-	}
-	
-	this.searchDs.setColumn(0, "clHlidyCdList", clHlidyCdList);
 };
 
 this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
