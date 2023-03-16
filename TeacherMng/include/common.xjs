@@ -739,4 +739,67 @@ this.com_vali_date_format = function(str){
 
 	return true;
 }
+
+// 그리드 개인화 (ds_grid_psnlztn)
+this.com_get_peronalization = function(){
+	this.com_fn_personalization("getPsnlztn");
+}
+this.com_set_peronalization = function(){
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.Grid00.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", "ds_admin_list");
+	objDs.setColumn(0, "format", format);
+
+	this.com_fn_personalization("setPsnlztn");
+}
+// 로드|저장 
+this.com_fn_personalization = function(strSvcId){
+	
+	var strSvcUrl   = this.application.Admin_svc;
+	var inData      = "";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback_psnlztn";
+	var isAsync     = true;
+	
+	if(strSvcId == "getPsnlztn"){		
+		
+		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_admin_list");
+		
+		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
+		inData = "data=ds_grid_psnlztn";
+		outData = "ds_grid_psnlztn=output1";
+	}else if(strSvcId == "setPsnlztn"){
+		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
+		inData = "data=ds_grid_psnlztn";
+	}
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync
+	}
+	this.gfn_transaction(tranObj);
+}
+this.fnCallback_psnlztn = function(svcID,errorCode,errorMsg){
+	if(errorCode != 0){
+    	this.alert(errorCode+"\n"+errorMsg);
+		return;
+	}
+	if(svcID == "getPsnlztn"){
+		var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+		
+		if(format !== undefined){			
+			this.Grid00.set_formats(format);
+		}
+	}
+	else if(svcID == "setPsnlztn"){
+		this.alert("저장되었습니다.");
+	}
+}
 ]]></Script>
