@@ -398,12 +398,14 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 this.update_holiday = function(ds){
   var svcId = "update_holiday";
+  var url = "::holiday/update.do";
   if(ds.name == "excelupdateDs"){
     svcId = "update_holiday_excel";
+    url = "::holiday/update_excel.do";
   }
 	var tranObj = {};
 	tranObj.strSvcId	= svcId;
-	tranObj.strSvcUrl   = this.application.Admin_svc + "::holiday/update.do";
+	tranObj.strSvcUrl   = this.application.Admin_svc + url;
 	tranObj.inData      = "holidayList="+ ds.name +":U";
 	tranObj.outData     = "ds_list=output1";
 	tranObj.strArg      = "";
