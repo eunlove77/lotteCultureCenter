@@ -1303,22 +1303,20 @@ this.Div01_Div03_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 
 this.Div01_Div04_radioDiscount_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemChangeEventInfo)
 {
-// 	if(e.postindex != null)
-// 	{
-// 		this.Div01.form.Div04.form.MaskEdit00.set_value();
-// 	}
-// 	
 	if(e.postvalue == '01')
 	{
 		this.Div01.form.Div04.form.MaskEdit00.set_format("!###");		//3자리 입력 제한
 		this.Div01.form.Div04.form.Static01.set_text("%");
-		this.Div01.form.Div04.form.MaskEdit00.set_value();
+		if(e.postindex != null)
+		{
+			this.Div01.form.Div04.form.MaskEdit00.set_value();
+		}
 	}
 	else
 	{
 		this.Div01.form.Div04.form.MaskEdit00.set_format("!###,###,##9");	//9자리 입력 제한
 		this.Div01.form.Div04.form.Static01.set_text("원");
-		if(this.parent.type != "copy")
+		if(e.postindex != null)
 		{
 			this.Div01.form.Div04.form.MaskEdit00.set_value(0);
 		}
@@ -1531,6 +1529,8 @@ this.fn_checkValidation = function(){
 			alert("사용 종료일은 사용 시작일 이후로 설정하세요.");
 			return;
 		}
+		
+		
 	}
 	else if(this.gfn_nvl(this.Div01.form.Div05.form.Div01.form.Edit00.value) == "")
 	{
@@ -1538,8 +1538,15 @@ this.fn_checkValidation = function(){
 		this.Div01.form.Div05.form.Div01.form.Edit00.setFocus();
 		return;
 	}
+	
+	var cfmMsg = "저장하시겠습니까?";
+	
+	if(this.Div01.form.Div05.form.radioPeriod.value == 'DEADLINE' || this.gfnGetToDay() >= this.Div01.form.Div05.form.Div00.form.strtDtm.value)
+	{
+		var cfmMsg = "쿠폰이 즉시 발급됩니다. \n저장하시겠습니까?";
+	}
 	 
-	if(this.confirm("저장하시겠습니까?"))
+	if(this.confirm(cfmMsg))
 	{
 		this.fn_save();
 	}
