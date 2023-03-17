@@ -558,6 +558,7 @@ this.reset_search_form = function(){
 
 /* 엑셀 업로드 유효성 검사 */
 this.excel_import_validation_check = function(){
+  //형식) yyyy-MM-dd, text, 휴일구분코드명, [0005] 부산본점
 	var result = {};
 	var msg = "";
 	
@@ -597,6 +598,10 @@ this.excel_import_validation_check = function(){
 		}
 		
 		if(brchCdNm){
+      var ni = brchCdNm.indexOf(']') + 1;
+      if(brchCdNm.slice(ni).length > 0){
+        brchCdNm = brchCdNm.slice(0, ni) + " " + brchCdNm.slice(ni);
+      }
 			var brchCd_row = this.ds_spot_list.findRow("cdNm", brchCdNm);
 			var brchCd = brchCd_row > -1 ? this.ds_spot_list.getColumn(brchCd_row, "cd") : false;
 			if(!brchCd){
