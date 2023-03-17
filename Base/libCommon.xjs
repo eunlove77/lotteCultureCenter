@@ -989,6 +989,60 @@ this.gfn_set_month = function(form, targetObj, combo_year, combo_month){
 	targetObj.set_datacolumn("data");
 	targetObj.set_index(0);
 }
+
+/**
+* @description 	   : 그리드 컨텍스트 메뉴 세팅
+*/
+this.gfn_onContextMenu = function(obj , personalId)
+{
+	this.gfn_personalization("getPsnlztn" , personalId);	
+	obj.addEventHandler("onrbuttondown", this.gfn_onrbuttondown , this);
+}
+
+/**
+* @description 	   : 그리드 우클릭 처리
+*/
+this.gfn_onrbuttondown = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{	
+	var contextObj = this.ContextPop.form;
+	contextObj.popupMenu.trackPopupByComponent(obj, e.clientx, e.clienty);
+};
+
+/**
+* @description 	   : 그리드 컬럼 개인화
+*/
+this.gfn_personalization = function(strSvcId , personalId){
+	
+	var strSvcUrl   = this.application.Admin_svc;
+	var inData      = "";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	if(strSvcId == "getPsnlztn"){		
+		
+		this.ds_grid_psnlztn.setColumn(0, "gridId", personalId);
+		
+		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
+		inData = "data=ds_grid_psnlztn";
+		outData = "ds_grid_psnlztn=output1";
+	}else if(strSvcId == "setPsnlztn"){
+		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
+		inData = "data=ds_grid_psnlztn";
+	}
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync
+	}
+	this.gfn_transaction(tranObj);
+}
 /**
 * @description 	   : 그리드 컬럼 width 최소값 설정
 */
