@@ -365,6 +365,7 @@ this.lectTpCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
 this.apvlStatCd = "";
+this.lectClCd = "";
 this.only = "";
 this.repOn = "";
 this.pblOn = "";
@@ -395,6 +396,11 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.gfn_nvl(this.parent.apvlStatCd) != "") 
 	{
 		this.apvlStatCd = this.parent.apvlStatCd;
+	}
+	
+	if(this.gfn_nvl(this.parent.lectClCd) != "") 
+	{
+		this.lectClCd = this.parent.lectClCd;
 	}
 	
 	if(this.gfn_nvl(this.parent.only) != "") 
@@ -588,9 +594,16 @@ this.fn_search = function()
 //강좌구분 설정
 this.fn_classGb_set = function()
 {
-	this.ds_classGb_list.insertRow(0);
-	this.ds_classGb_list.setColumn(0, "cd", "");
-	this.ds_classGb_list.setColumn(0, "cdNm", "전체");
+	if(this.lectClCd != "") 
+	{
+		this.ds_classGb_list.filter("cd==" + this.lectClCd);
+	}
+	else 
+	{
+		this.ds_classGb_list.insertRow(0);
+		this.ds_classGb_list.setColumn(0, "cd", "");
+		this.ds_classGb_list.setColumn(0, "cdNm", "전체");
+	}
 	this.Div00.form.Div00.form.Div00.form.Div01.form.Combo00.set_index(0);
 }
 
