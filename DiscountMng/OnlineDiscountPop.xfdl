@@ -155,6 +155,11 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 	}	
 	else if(obj.getCellPos() == 4)
 	{
+		if(e.value == 'N')
+		{
+			this.ds_discount_list.setColumn(e.row, "applStDt", "");
+			this.ds_discount_list.setColumn(e.row, "applEndDt", "");
+		}
 		obj.updateToDataset();
 	}
 };
@@ -178,6 +183,11 @@ this.fn_checkValidation = function()
 	if(this.ds_discount_list.findRowExpr("dcRt == null || dcRt == ''") > -1)
 	{
 		alert("할인율을 입력하세요.");
+		return;
+	}
+	if(this.ds_discount_list.findRowExpr("useYn == 'Y' && ((applStDt != '' && applEndDt == '') || (applStDt == '' && applEndDt != '')) ") > -1)
+	{
+		alert("적용기간은 시작일과 종료일을 모두 입력하세요.");
 		return;
 	}
 	else
