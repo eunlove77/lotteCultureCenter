@@ -6,7 +6,7 @@
         <Div id="Div02" taborder="0" text="Div02" left="0" top="27" cssclass="div_WF_TableComp" right="0" bottom="0">
           <Layouts>
             <Layout>
-              <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="0" left="0" top="10" binddataset="ds_stlm_cmplt_list" nodatatext="검색결과 없음" right="0" autofittype="none" autosizebandtype="body" autosizingtype="row" oncellclick="Div02_Grid00_oncellclick" bottom="0" extendsizetype="row">
+              <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="0" left="0" top="10" binddataset="ds_stlm_cmplt_list" nodatatext="검색결과 없음" right="0" autofittype="none" autosizebandtype="body" autosizingtype="row" oncellclick="Div02_Grid00_oncellclick" bottom="0" extendsizetype="row" cellmovingtype="col" cssclass="grd_WF_TableType">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -309,6 +309,7 @@
           </Formats>
         </Grid>
         <Div id="Div03" taborder="5" text="Div03" top="0" width="390" height="40" url="FrameBase::include/talk_btn.xfdl" formscrolltype="none" left="Static01:10"/>
+        <Button id="Button00" taborder="6" text="그리드 포맷 저장" top="0" height="30" cssclass="btn_WF_Medium" visible="true" right="Button02:10" width="120" onclick="Button00_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -335,7 +336,10 @@ this.StlmCmpltMngList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	this.application = nexacro.getApplication();
 	this.excelImportExport = this.application.getVariable("excelImportExport");
 	
-	this.gfnSetCheckBoxNoDataset(this.ds_stlm_cmplt_list, this.Div02.form.Grid00, 0); 
+	this.gfnSetCheckBoxNoDataset(this.ds_stlm_cmplt_list, this.Div02.form.Grid00, 0);
+	
+	// 그리드 개인화
+	//this.fn_personalization("getPsnlztn");
 	
 	//톡전송 버튼 세팅
 	var talkObj = {
@@ -392,14 +396,12 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
   {
 	case "list":
 		this.Static01.set_text("(" + this.ds_stlm_cmplt_list.getRowCount() + "개)");
-// 		for(var i=0;i<this.ds_stlm_cmplt_list.getRowCount();i++){
-// 			if(this.ds_stlm_cmplt_list.getColumn(i, "rfndRuleCfmSignYn") == "Y"){
-// 				
-// 			}else{
-// 			
-// 			}
-// 		}
-		
+		break;
+	case "getPsnlztn":
+		var format = this.ds_grid_psnlztn.getColumn(0, "format");
+		if(format !== undefined){
+			this.Div02.form.Grid00.set_formats(format);
+		}
 		break;
   }
 }
@@ -502,7 +504,52 @@ this.fn_talk_check = function()
 			}
 		}
 	}
-};]]></Script>
+};
+
+// 그리드 포맷 저장
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.Div02.form.Grid00.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", "ds_stlm_cmplt_list");
+	objDs.setColumn(0, "format", format);
+	
+	this.fn_personalization("setPsnlztn");
+};
+
+this.fn_personalization = function(strSvcId){
+	
+	var strSvcUrl   = this.application.Admin_svc;
+	var inData      = "";
+	var outData     = "";
+	var strArg      = "";
+	var callBackFnc = "fnCallback";
+	var isAsync     = true;
+	
+	if(strSvcId == "getPsnlztn"){		
+		
+		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_stlm_cmplt_list");
+		
+		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
+		inData = "data=ds_grid_psnlztn";
+		outData = "ds_grid_psnlztn=output1";
+	}else if(strSvcId == "setPsnlztn"){
+		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
+		inData = "data=ds_grid_psnlztn";
+	}
+	
+	var tranObj = {
+		strSvcId : strSvcId,
+		strSvcUrl : strSvcUrl,
+		inData : inData,
+		outData : outData,
+		strArg : strArg,
+		callBackFnc : callBackFnc,
+		isAsync : isAsync
+	}
+	this.gfn_transaction(tranObj);
+}]]></Script>
     <Objects>
       <Dataset id="ds_stlm_cmplt_list">
         <ColumnInfo>
@@ -592,6 +639,15 @@ this.fn_talk_check = function()
           <Column id="lectRmNm" type="STRING" size="256"/>
           <Column id="optnNm" type="STRING" size="256"/>
         </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
   </Form>

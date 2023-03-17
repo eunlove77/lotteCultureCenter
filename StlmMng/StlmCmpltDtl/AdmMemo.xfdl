@@ -104,6 +104,10 @@ this.AdmMemo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 // 관리자 메모 등록
 this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_nvl(this.Div06.form.Div01.form.memoCont.value) == ""){
+		alert("관리자 메모 내용을 입력해주세요.");
+		return;
+	}
 	if(confirm("저장하시겠습니까?")){
 		this.ds_insert_memo.set_enableevent(false);
 		this.ds_insert_memo.insertRow(0);
