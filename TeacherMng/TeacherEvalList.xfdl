@@ -376,8 +376,9 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
  **************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	//강사정보
-	if(e.cell == 0 || e.cell == 1){
+	var headText = obj.getCellProperty('head', e.cell, 'text');
+  //강사 상세
+	if(headText == "강사코드" || headText == "강사명"){
 		var tcCdNo = obj.getBindDataset().getColumn(e.row, "tcCdNo");
 		if(!tcCdNo || tcCdNo == "총점"){
 			return;
@@ -392,7 +393,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 	//강좌정보
-	else if(e.cell == 6 || e.cell == 7){	
+	else if(headText == "강좌코드" || headText == "강좌명"){	
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",

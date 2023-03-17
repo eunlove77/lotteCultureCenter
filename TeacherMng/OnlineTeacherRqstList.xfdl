@@ -453,7 +453,9 @@ this.confirm_online_teacher_rqst = function(){
  ************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 2 || e.cell == 3){	
+	var headText = obj.getCellProperty('head', e.cell, 'text');
+  //강사 상세
+	if(headText == "강사코드" || headText == "강사명"){
 		this.popCnt ++;
 		var oArg = {
 				type : "online_request",

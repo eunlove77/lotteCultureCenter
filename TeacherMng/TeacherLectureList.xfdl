@@ -501,8 +501,9 @@ this.fn_talk_check = function()
  ************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
+  var headText = obj.getCellProperty('head', e.cell, 'text');
 	//강사 상세
-	if(e.cell == 2 || e.cell == 3){	
+	if(headText == "강사코드" || headText == "강사명"){	
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
@@ -512,7 +513,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
 	//강좌 상세
-	else if(e.cell == 9){
+	else if(headText == "강좌코드"){
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",

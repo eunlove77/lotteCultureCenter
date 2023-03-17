@@ -748,7 +748,7 @@ this.com_set_peronalization = function(){
 	var objDs = this.ds_grid_psnlztn;
 	var format = this.Grid00.getCurFormatString();
 	
-	objDs.setColumn(0, "gridId", "ds_admin_list");
+	objDs.setColumn(0, "gridId", "ds_teacher_list");
 	objDs.setColumn(0, "format", format);
 
 	this.com_fn_personalization("setPsnlztn");
@@ -761,11 +761,11 @@ this.com_fn_personalization = function(strSvcId){
 	var outData     = "";
 	var strArg      = "";
 	var callBackFnc = "fnCallback_psnlztn";
-	var isAsync     = true;
+	var isAsync     = false;
 	
 	if(strSvcId == "getPsnlztn"){		
 		
-		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_admin_list");
+		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_teacher_list");
 		
 		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
 		inData = "data=ds_grid_psnlztn";

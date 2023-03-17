@@ -323,7 +323,8 @@ this.update_list = function(){
  ************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 2 || e.cell == 3){	
+  var headText = obj.getCellProperty('head', e.cell, 'text');
+	if(headText == "강사코드" || headText == "강사명"){	
 		this.popCnt ++;
 		var oArg = {
 				type : "teacher_dtl",
@@ -332,7 +333,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 				};
 		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
 	}
-	else if(e.cell == 10){
+	else if(headText == "파일보기"){
 		if(obj.getCellText(e.row, e.col)){
 			//파일 다운로드
 			this.ds_atch_file_dtl.setColumn(0, "atchFileId", this.ds_list.getColumn(e.row, "athctfFleNo"));

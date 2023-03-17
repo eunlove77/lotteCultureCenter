@@ -246,7 +246,7 @@
                 <Cell col="15" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="expr:secMdclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" text="bind:secMdclsCtegryCd"/>
                 <Cell col="16" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="expr:secSmclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:secSmclsCtegryCd"/>
                 <Cell col="17" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:hopeDaywVal"/>
-                <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
+                <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +':'+ hopeStMi +'~'+ hopeEndHh +':'+ hopeEndMi : '"/>
                 <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" expr="comp.parent.com_setMasking(pbrltnChrgprNm, 'name')"/>
                 <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
@@ -579,8 +579,9 @@ this.modify_request_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBox
  ************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
+  var headText = obj.getCellProperty('head', e.cell, 'text');
 	//강사 상세
-	if(e.cell == 2 || e.cell == 3){
+	if(headText == "강사코드" || headText == "강사명"){
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",

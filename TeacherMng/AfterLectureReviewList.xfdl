@@ -362,8 +362,9 @@ this.btnLcthistConf_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
  **************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
+  var headText = obj.getCellProperty('head', e.cell, 'text');
 	//후기정보
-	if(e.cell == 7){	
+	if(headText == "제목"){	
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
@@ -374,7 +375,7 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.gfn_openPopup("AfterLectureReviewDtl"+this.popCnt, oArg, "TeacherMng::AfterLectureReviewDtl.xfdl", this, 1300, 850, true, true, null, "수강후기 상세");
 	}
 	//강좌정보
-	else if(e.cell == 5){
+	else if(headText == "강좌코드"){
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
@@ -391,8 +392,9 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 
 this.Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 {
+  var headText = obj.getCellProperty('head', e.cell, 'text');
 	//베스트댓글 수정
-	if(e.cell == this.Grid00.getFormatColCount() - 1){
+	if(headText == "BEST후기"){
 		
 		//중복체크
 		if(!this.validate_duplication(e.row, e.value)){
