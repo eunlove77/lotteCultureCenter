@@ -5,7 +5,7 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid oncolresized="gfn_oncolresized" id="GridBranchExhibitionList" taborder="2" left="10" top="270" binddataset="branchExbDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridBranchExhibitionList_oncellclick" ondrag="GridBranchExhibitionList_ondrag" ondrop="GridBranchExhibitionList_ondrop" cellsizingtype="col">
+        <Grid oncolresized="gfn_oncolresized" id="GridBranchExhibitionList" taborder="2" left="10" top="270" binddataset="branchExbDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" oncellclick="GridBranchExhibitionList_oncellclick" ondrag="GridBranchExhibitionList_ondrag" ondrop="GridBranchExhibitionList_ondrop" cellsizingtype="col" onheadclick="GridBranchExhibitionList_onheadclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -36,14 +36,14 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:exhSeqno" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="bind:rnum"/>
-                <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textDecoration="underline" color="blue" cursor="pointer" textAlign="center"/>
-                <Cell col="3" text="bind:mainTitNm"/>
-                <Cell col="4" text="bind:subTitNm" calendardateformat="expr:yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="5" text="expr:evntStDt+' ~ ' +evntEndDt"/>
-                <Cell col="6" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
-                <Cell col="7" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="8" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
+                <Cell col="1" text="bind:rnum" subsumtext="bind:rnum"/>
+                <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textDecoration="underline" color="blue" cursor="pointer" textAlign="center" subsumtext="bind:brchCd"/>
+                <Cell col="3" text="bind:mainTitNm" subsumtext="bind:mainTitNm"/>
+                <Cell col="4" text="bind:subTitNm" calendardateformat="expr:yyyy-MM-dd HH:mm:ss" subsumtext="bind:subTitNm"/>
+                <Cell col="5" text="expr:evntStDt+' ~ ' +evntEndDt" subsumtext="bind:evntStDt"/>
+                <Cell col="6" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;" subsumtext="bind:expsrYn"/>
+                <Cell col="7" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''" subsumtext="bind:rgprId"/>
+                <Cell col="8" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date" subsumtext="bind:rgprDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -342,7 +342,9 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 2)
+	var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
+	
+	if(rColId[1] == "brchCd")
 	{
 		this.popCnt ++;
 		var oArg = {
@@ -350,6 +352,38 @@ this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.
 		};
 		
 		this.gfn_openPopup("branchExhibitionDtlPop"+this.popCnt, oArg, "BranchMng::BranchExhibitionDtl.xfdl", this, null, null, true, true, null);	
+	}
+};
+
+
+//그리드 컬럼 정렬
+this.orderType = "desc";
+this.GridBranchExhibitionList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.row == -1 && e.cell != 0)
+	{
+		var dsObj = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+		
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
+		
+		if(this.orderType == "desc"){
+			
+			dsObj.set_keystring("S:" + sColId[1]);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			dsObj.set_keystring("S:-" + sColId[1]);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+			
 	}
 };
 
