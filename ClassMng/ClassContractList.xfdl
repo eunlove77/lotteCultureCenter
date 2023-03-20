@@ -435,7 +435,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
   {
 	 switch(svcID)
 	  {
-		
+		case "classList":
+			this.Div00.form.Div01.form.Static00.set_text("강좌계약 목록(" + this.ds_class_list.getRowCount() + "개)");
+		break;
 	  }
   }
 };
@@ -477,12 +479,11 @@ this.fn_search = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : false,
+		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
 
 	this.gfn_transaction(tranObj);
-	this.Div00.form.Div01.form.Static00.set_text("강좌계약 목록(" + this.ds_class_list.getRowCount() + "개)");
 }
  
  //계약상태 추가

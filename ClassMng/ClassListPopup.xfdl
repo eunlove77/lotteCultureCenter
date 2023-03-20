@@ -539,6 +539,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_classState_set();
 			this.fn_classGb_set();
 		break;
+		
+		case "classList":
+			this.Div00.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
+		break;
 	  }
   }
 };
@@ -582,12 +586,11 @@ this.fn_search = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : false,
+		isAsync : true,
 		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
-	this.Div00.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
 }
 
 

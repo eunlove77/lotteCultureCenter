@@ -901,6 +901,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_classDispIcon_set();
 		break;
 		
+		case "classList":
+			this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
+			this.searchFlag = 1;
+			this.ds_classRoom.copyData(this.ds_classRoom_list);
+			this.ds_classRoomTemp.copyData(this.ds_classRoom_list);		
+		break;
+		
 		case "classUpdateList":
 			alert("저장되었습니다.");
 			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();			
@@ -914,6 +921,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		case "classSaveApvlList":
 			alert("승인 되었습니다.");
 			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+		break;
 	  }
   }
 };
@@ -958,15 +966,11 @@ this.fn_search = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : false,
+		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
 
 	this.gfn_transaction(tranObj);
-	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
-	this.searchFlag = 1;
-	this.ds_classRoom.copyData(this.ds_classRoom_list);
-	this.ds_classRoomTemp.copyData(this.ds_classRoom_list);
 }
 
 //지점 세팅

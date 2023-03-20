@@ -272,7 +272,6 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		break;
 		
 		case "sesterInfo":
-		
 			this.ds_search.setColumn(0, "yy", this.yy);
 			this.ds_search.setColumn(0, "lectSmsterCd", this.lectSmsterCd);
 			
@@ -287,6 +286,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		case "insertClassTransfer":
 			alert("이관등록 되었습니다.");
+		break;
+		
+		case "classList":
+			this.Div00.form.Div01.form.Static00.set_text("강좌이관 목록 (" + this.ds_class_list.getRowCount() + "개)");
 		break;
 	  }
   }
@@ -333,7 +336,7 @@ this.fn_search = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : false,
+		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
 	
@@ -341,7 +344,6 @@ this.fn_search = function()
 	{
 		this.gfn_transaction(tranObj);
 	}
-	this.Div00.form.Div01.form.Static00.set_text("강좌이관 목록 (" + this.ds_class_list.getRowCount() + "개)");
 }
 
 
