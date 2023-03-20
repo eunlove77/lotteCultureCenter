@@ -110,7 +110,11 @@ this.SystemPsnlViewLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 	this.application = nexacro.getApplication();
 	this.objPageingDs = this.application.gdsPageing;	
 	
-	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);	
+	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
+	
+	//캘린더 기본(한 달)세팅
+	var objCalendar = this.Div02.form.Div00.form;
+	objCalendar.btnDay1_onclick();
 	
 	this.pageingDiv.form.pageingCallObj = this;
 };
@@ -135,8 +139,9 @@ this.Div05_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventI
 this.Div05_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	var objCalendar = this.Div02.form.Div00.form;
-	objCalendar.strtDtm.set_value('');
-	objCalendar.endDtm.set_value('');
+	objCalendar.btnDay1_onclick();
+	//objCalendar.strtDtm.set_value('');
+	//objCalendar.endDtm.set_value('');
 		
 	this.Div05.form.searchField.set_value('');
 	this.Div05.form.searchQuery.set_value('');
@@ -183,8 +188,8 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			this.txtTotal.set_text("총 " + this.objPageingDs.getColumn(0, "totCnt")  + "개");					
 			
 			if(this.ds_log.rowcount < 1){
-				//this.alert("조회된 결과가 없습니다.");
-				this.Grid00.set_nodatatext("조회된 결과가 없습니다.")
+				//this.alert("검색결과 없음");
+				this.Grid00.set_nodatatext("검색결과 없음")
 				this.pageingDiv.set_visible(false);
 			}else{
 			  

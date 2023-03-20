@@ -5,7 +5,7 @@
       <Layout height="790" width="1280">
         <Static id="txtTotal" taborder="0" left="10" top="16" width="80" height="21" text="총 0개"/>
         <Div id="pageingDiv" taborder="1" text="Div00" left="10" top="760" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl"/>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="10" top="40" right="10" binddataset="ds_summary" autofittype="col" bottom="40">
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="10" top="40" right="10" binddataset="ds_summary" autofittype="col" bottom="40" nodatatext="검색결과 없음">
           <Formats>
             <Format id="default">
               <Columns>
@@ -103,7 +103,10 @@ this.SummaryTab_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.pageingDiv.form.pageingCallObj = this;
 	
-	this.fn_list(1);
+	//this.objCalendar = this.parent.parent.parent.Div02.form.Div00.form;
+	
+	//this.objCalendar.btnDay1_onclick();
+	//this.fn_list(1);
 };
 
 this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -131,6 +134,7 @@ this.fn_list = function(page){
 	
 	this.objPageingDs.setColumn(0, "pageIndex", page);
 	
+	//this.alert("시작일-> "  + this.objCalendar.strtDtm.value+ "종료일->"  + this.objCalendar.endDtm.value);
 	if(this.gfn_nvl(this.objCalendar) != ""){
 		this.ds_search.setColumn(0, "strtDtm", this.objCalendar.strtDtm.value);
 		this.ds_search.setColumn(0, "endDtm", this.objCalendar.endDtm.value);
@@ -163,8 +167,8 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			this.txtTotal.set_text("총 " + this.objPageingDs.getColumn(0, "totCnt")  + "개");					
 			
 			if(this.ds_summary.rowcount < 1){
-				//this.alert("조회된 결과가 없습니다.");
-				this.Grid00.set_nodatatext("조회된 결과가 없습니다.")
+				//this.alert("검색결과 없음");
+				this.Grid00.set_nodatatext("검색결과 없음")
 				this.pageingDiv.set_visible(false);
 			}else{
 			 

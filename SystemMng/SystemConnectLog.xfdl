@@ -168,6 +168,9 @@ this.SystemConnectLog_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo
 	
 	// 코드 데이터
 	//this.fn_data_list();
+	//캘린더 기본(한 달)세팅
+	var objCalendar = this.Div02.form.Div00.form;
+	objCalendar.btnDay1_onclick();
 	
 	this.row02.form.Div04.form.ComboSpot.set_index(0);
 
@@ -254,8 +257,8 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 			this.txtTotal.set_text("총 " + this.objPageingDs.getColumn(0, "totCnt")  + "개");					
 			
 			if(this.ds_log.rowcount < 1){
-				//this.alert("조회된 결과가 없습니다.");
-				this.Grid00.set_nodatatext("조회된 결과가 없습니다.")
+				//this.alert("검색결과 없음");
+				this.Grid00.set_nodatatext("검색결과 없음")
 				this.pageingDiv.set_visible(false);
 			}else{
 			  
