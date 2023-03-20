@@ -229,7 +229,7 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="1" calendardateformat="yyyy-MM-dd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:rnum"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="3" expr="comp.parent.com_setMasking(tcNm, 'name')" textDecoration="underline" color="blue" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="4" text="bind:tcTpCdNm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
@@ -491,7 +491,7 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 			this.pageingDiv.set_visible(true);
 			
 			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
-				this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 			}
 
 			//목록 개수
@@ -718,6 +718,7 @@ this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
       </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
           <Column id="tcTpCdNm" type="STRING" size="256"/>

@@ -182,7 +182,7 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="1" calendardateformat="yyyy-MM-dd" text="bind:rnum"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
                 <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')"/>
                 <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
@@ -490,7 +490,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 			this.pageingDiv.set_visible(true);
 			
 			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
-				this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 			}
 			
 			//목록 개수
@@ -602,6 +602,7 @@ this.Div02_Div01_hopeEnd_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeE
       </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
           <Column id="tcTpCdNm" type="STRING" size="256"/>
