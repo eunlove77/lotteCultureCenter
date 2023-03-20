@@ -170,7 +170,7 @@
           </Layouts>
         </Div>
         <Div id="Div07" taborder="8" left="10" top="301" url="TeacherMng::include/ListRowcount.xfdl" width="80" text="" height="19"/>
-        <Grid id="Grid00" taborder="7" left="10" top="Div07:5" binddataset="ds_list" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col" oncolresized="gfn_oncolresized" onheadclick="Grid00_onheadclick" cellmovingtype="col">
+        <Grid id="Grid00" taborder="7" left="10" top="Div07:5" binddataset="ds_list" right="10" bottom="40" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col" oncolresized="gfn_oncolresized" onheadclick="Grid00_onheadclick" cellmovingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -265,6 +265,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Div id="pageingDiv" taborder="10" text="Div00" left="10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl" bottom="15"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -294,6 +295,10 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+	
+  //페이징
+	this.objPageingDs = this.application.gdsPageing;		
+  this.pageingDiv.form.pageingCallObj = this;
 
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
@@ -383,14 +388,17 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.fn_search = function(){
+this.fn_list = function(page){
   if(!this.com_check_private_search(this.ds_search.getColumn(0, "tcNm"))) return;
   this.set_search_info();
+
+  this.objPageingDs.setColumn(0, "pageIndex", page);
+
   this.select_teacher_list();
 }
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_search();
+	this.fn_list(1);
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -420,8 +428,8 @@ this.select_teacher_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_teacher";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
-	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_list=output1";
+	tranObj.inData      = "search=ds_search pageing=gdsPageing";
+	tranObj.outData     = "ds_list=output1 gdsPageing=output2";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -473,7 +481,25 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 	}
 	
 	if(svcId == "select_teacher"){
-		//this.txtTotal.set_text("강사목록 (" + this.ds_list.rowcount + ")개");
+		if(this.ds_list.rowcount > 0){
+			var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+			var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+			var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+			
+			this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+			this.pageingDiv.form.setPage(pageIndex);
+			this.pageingDiv.set_visible(true);
+			
+			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
+				this.ds_list.setColumn(i, 0, ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+			}
+
+			//목록 개수
+			this.Div07.form.Static01.set_text(nAllRowCount);
+		}
+		else{
+			this.pageingDiv.set_visible(false);
+		}
 		this.process_teacher_list();
 	}
 	

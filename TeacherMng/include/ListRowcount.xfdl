@@ -14,7 +14,17 @@
 };
 
 this.ds_list_onvaluechanged= function(obj:nexacro.NormalDataset,e:nexacro.DSRowPosChangeEventInfo){
-	this.Static01.set_text(this.parent.parent.ds_list.rowcount);
+  var rowcount = this.parent.parent.ds_list.rowcount;
+  if(rowcount == 0){
+    this.Static01.set_text(0);
+    return;
+  }
+
+	var objPageingDs = this.parent.parent.objPageingDs;
+	if(!objPageingDs){
+		this.Static01.set_text(this.parent.parent.ds_list.rowcount);
+	}
+  
 }]]></Script>
   </Form>
 </FDL>
