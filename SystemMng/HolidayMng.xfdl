@@ -222,7 +222,7 @@ include "TeacherMng::include/common.xjs";
 this.application = null;
 this.excelImportExport = "";
 this.rowcount = 0;
-this.excelFileName = "휴일_관리_";
+this.excelFileName = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -234,7 +234,8 @@ this.holidayMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.domain = this.application.Domain;
 	
 	this.excelImportExport = this.application.getVariable("excelImportExport");
-	
+	this.excelFileName = this.parent.parent.fvMenuNM.replace(' ', '_') + '_';
+
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 
