@@ -976,13 +976,7 @@ this.fn_search = function()
 //지점 세팅
 this.fn_classBrch_set = function()
 {	
-	if(nexacro.getPrivateProfile("brchCd") == "0000")
-	{
-		this.ds_gdsSpotCd_list.insertRow(0);
-		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
-		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
-	}
-	else
+	if(nexacro.getPrivateProfile("brchCd") != "0000")
 	{
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
