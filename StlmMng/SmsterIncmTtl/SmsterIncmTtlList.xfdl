@@ -40,6 +40,37 @@
           </Layouts>
         </Div>
         <Static id="Static00" taborder="0" text="▶ 목록" left="0" top="0" width="45" height="21" cssclass="sta_WF_TitGray"/>
+        <Button id="btnExcelDown" taborder="2" text="엑셀 다운로드" top="0" height="21" cssclass="btn_WF_Medium" width="100" right="0" onclick="Div01_btnExcelDown_onclick"/>
+        <Grid oncolresized="gfn_oncolresized" id="Grid_Excel" taborder="3" left="0" top="542" right="530" binddataset="ds_list" autofittype="col" nodatatext="검색결과 없음" bottom="-340" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80" band="left"/>
+                <Column size="80" band="left"/>
+                <Column size="200"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell rowspan="2" text="지점"/>
+                <Cell col="1" rowspan="2" text="강좌 구분"/>
+                <Cell col="2" colspan="2" text="구분"/>
+                <Cell row="1" col="2" text="이전학기"/>
+                <Cell row="1" col="3" text="현재학기"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:brchNm" displaytype="normal" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" suppress="1"/>
+                <Cell col="1" text="bind:lectClNm"/>
+                <Cell col="2" displaytype="number" text="bind:befStlmAmt"/>
+                <Cell col="3" displaytype="number" text="bind:nowStlmAmt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
@@ -57,6 +88,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -64,6 +96,8 @@ include "Base::lib_base.xjs";
 this.application = null;
 this.search_form = this.parent.parent.Div00.form;
 this.ds_search = null;
+this.excelImportExport = "";
+this.excelFileName = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -73,6 +107,9 @@ this.SmsterIncmTtlList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 {
 	this.application = nexacro.getApplication();
 	this.ds_search = this.parent.parent.Div00.form.ds_search;
+	
+	this.excelImportExport = this.application.getVariable("excelImportExport");
+	this.excelFileName = this.parent.parent.parent.parent.fvMenuNM.replace(' ', '_') + '_';
 };
 
 
@@ -143,6 +180,20 @@ this.fn_searchValueInit = function(){
 	
 }
 
+
+this.Div01_btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.ds_list.rowcount == 0){
+		alert("데이터가 없습니다.");
+		return;
+	}
+	
+	var oArg = {
+		logId : this.logId,
+		title : "엑셀 다운로드 사유"
+		};
+	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
+};
 ]]></Script>
   </Form>
 </FDL>
