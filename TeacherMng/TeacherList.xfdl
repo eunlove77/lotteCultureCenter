@@ -460,12 +460,12 @@ this.process_teacher_list = function(){
 		var str = this.ds_list.getColumn(i, "hopeDaywVal");
 		if(str){
 			var arr = str.split(",");
-			var resStr = "", comma = "";
+			var resStr = "", sptr = "";
 			for(var item of arr){
 				row = this.ds_day_cdList.findRow("cd", item);
 				var dayNm = this.ds_day_cdList.getColumn(row, "cdNm");
-				resStr += comma + dayNm;
-				comma = ",";
+				resStr += sptr + dayNm;
+				sptr = "|";
 			}
 			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
