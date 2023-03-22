@@ -342,16 +342,18 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridBranchExhibitionList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
-	
-	if(rColId[1] == "brchCd")
-	{
-		this.popCnt ++;
-		var oArg = {
-			exhSeqno : obj.getBindDataset().getColumn(e.row, "exhSeqno")
-		};
+	if(e.cell != 0){
+		var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
 		
-		this.gfn_openPopup("branchExhibitionDtlPop"+this.popCnt, oArg, "BranchMng::BranchExhibitionDtl.xfdl", this, null, null, true, true, null);	
+		if(rColId[1] == "brchCd")
+		{
+			this.popCnt ++;
+			var oArg = {
+				exhSeqno : obj.getBindDataset().getColumn(e.row, "exhSeqno")
+			};
+			
+			this.gfn_openPopup("branchExhibitionDtlPop"+this.popCnt, oArg, "BranchMng::BranchExhibitionDtl.xfdl", this, null, null, true, true, null);	
+		}
 	}
 };
 
