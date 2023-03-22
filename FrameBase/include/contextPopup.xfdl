@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="contextPopup" width="140" height="40" titletext="New Form" onrbuttondown="contextPopup_onrbuttondown" onload="contextPopup_onload">
+    <Layouts>
+      <Layout height="40" mobileorientation="landscape" width="140">
+        <PopupMenu id="popupMenu" left="6" top="8" width="124" height="25" innerdataset="innerdataset" captioncolumn="captioncolumn" checkboxcolumn="checkboxcolumn" enablecolumn="enablecolumn" hotkeycolumn="hotkeycolumn" iconcolumn="iconcolumn" idcolumn="idcolumn" levelcolumn="levelcolumn" userdatacolumn="userdatacolumn" onmenuclick="contextPop_onmenuclick">
+          <Dataset id="innerdataset">
+            <ColumnInfo>
+              <Column id="captioncolumn" size="256"/>
+              <Column id="checkboxcolumn" size="256"/>
+              <Column id="enablecolumn" size="256"/>
+              <Column id="hotkeycolumn" size="256"/>
+              <Column id="iconcolumn" size="256"/>
+              <Column id="idcolumn" size="256"/>
+              <Column id="levelcolumn" size="256"/>
+              <Column id="userdatacolumn" size="256"/>
+            </ColumnInfo>
+            <Rows>
+              <Row>
+                <Col id="captioncolumn">그리드 포멧 저장</Col>
+                <Col id="levelcolumn">0</Col>
+              </Row>
+            </Rows>
+          </Dataset>
+        </PopupMenu>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[include "Base::libCommon.xjs";
+this.application = null;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.contextPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.application = nexacro.getApplication();
+};
+
+//그리드 저장버튼 클릭
+this.contextPop_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
+{
+	this.parent.parent.popupMenu_onmenuclick(obj, e);
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

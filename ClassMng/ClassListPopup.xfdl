@@ -365,6 +365,7 @@ this.lectTpCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
 this.apvlStatCd = "";
+this.lectClCd = "";
 this.only = "";
 this.repOn = "";
 this.pblOn = "";
@@ -395,6 +396,11 @@ this.ClassListPopup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	if(this.gfn_nvl(this.parent.apvlStatCd) != "") 
 	{
 		this.apvlStatCd = this.parent.apvlStatCd;
+	}
+	
+	if(this.gfn_nvl(this.parent.lectClCd) != "") 
+	{
+		this.lectClCd = this.parent.lectClCd;
 	}
 	
 	if(this.gfn_nvl(this.parent.only) != "") 
@@ -533,6 +539,10 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_classState_set();
 			this.fn_classGb_set();
 		break;
+		
+		case "classList":
+			this.Div00.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
+		break;
 	  }
   }
 };
@@ -576,21 +586,27 @@ this.fn_search = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : false,
+		isAsync : true,
 		menuSeq : this.parent.menuSeq,
 		isPopup : true
 	}
 	this.gfn_transaction(tranObj);
-	this.Div00.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
 }
 
 
 //강좌구분 설정
 this.fn_classGb_set = function()
 {
-	this.ds_classGb_list.insertRow(0);
-	this.ds_classGb_list.setColumn(0, "cd", "");
-	this.ds_classGb_list.setColumn(0, "cdNm", "전체");
+	if(this.lectClCd != "") 
+	{
+		this.ds_classGb_list.filter("cd==" + this.lectClCd);
+	}
+	else 
+	{
+		this.ds_classGb_list.insertRow(0);
+		this.ds_classGb_list.setColumn(0, "cd", "");
+		this.ds_classGb_list.setColumn(0, "cdNm", "전체");
+	}
 	this.Div00.form.Div00.form.Div00.form.Div01.form.Combo00.set_index(0);
 }
 

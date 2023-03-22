@@ -3,9 +3,50 @@
   <Form id="LPointMngList" width="1280" height="390" titletext="New Form" onload="LPointMngList_onload">
     <Layouts>
       <Layout height="390" width="1280">
-        <Static id="Static00_00" taborder="0" text="▶ 목록" left="0" top="0" width="110" height="21" cssclass="sta_WF_TitGray"/>
-        <Static id="txtTotal" taborder="1" left="52" height="21" text="( 0개 )" width="50" top="0" cssclass="sta_WF_TitGray"/>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="0" top="25" right="0" bottom="0" binddataset="ds_list" autofittype="col" nodatatext="검색결과 없음" oncellclick="Grid00_oncellclick" cellsizingtype="col">
+        <Static id="Static00_00" taborder="0" text="▶ 목록" left="0" top="5" width="110" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="txtTotal" taborder="1" left="52" height="21" text="( 0개 )" width="50" top="5" cssclass="sta_WF_TitGray"/>
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="0" top="35" right="0" bottom="0" binddataset="ds_list" autofittype="col" nodatatext="검색결과 없음" oncellclick="Grid00_oncellclick" cellsizingtype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50" band="left"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="구분"/>
+                <Cell col="2" text="L.Point 승인코드"/>
+                <Cell col="3" text="일시"/>
+                <Cell col="4" text="지점명"/>
+                <Cell col="5" text="회원번호"/>
+                <Cell col="6" text="회원명"/>
+                <Cell col="7" text="포인트 금액"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:rnum"/>
+                <Cell col="1" text="bind:clNm"/>
+                <Cell col="2" text="bind:apvlNo"/>
+                <Cell col="3" text="bind:apvlDtm"/>
+                <Cell col="4" text="bind:brchNm"/>
+                <Cell col="5" text="bind:mbrNo" color="blue" cursor="pointer" textDecoration="underline"/>
+                <Cell col="6" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" color="blue" cursor="pointer" textDecoration="underline"/>
+                <Cell col="7" expr="comp.parent.fn_set_point(acumUseClCd+trnsClCd, lpntAmt )"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button02" taborder="3" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" width="100" right="0" onclick="Button02_onclick"/>
+        <Grid id="Grid_Excel" taborder="4" left="0" top="345" right="0" bottom="-310" binddataset="ds_list" autofittype="col" nodatatext="검색결과 없음" cellsizingtype="col" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -79,6 +120,7 @@
           <Row/>
         </Rows>
       </Dataset>
+      <ExcelExportObject id="ExcelExportObject00"/>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -93,12 +135,15 @@ include "Base::popup.xjs";
 this.application = null;
 this.search_form = this.parent.parent.Div00.form;
 this.popCnt = 0;
+this.excelFileName = "L.Point내역_관리_";
+
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
 this.LPointMngList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
+	this.excelImportExport = this.application.getVariable("excelImportExport");
 	this.objPageingDs = this.application.gdsPageing;	
 	
 	var objCalendar = this.search_form.Div00.form.Div00.form.Div00.form;
@@ -195,6 +240,15 @@ this.fn_set_point = function(cd, point)
 		return "-" +this.gfn_setComma(point)+ " P";
 	}
 }
+
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
+	var oArg = {
+			title : "엑셀 다운로드 사유"
+	};
+	this.gfn_showModal("excelPopupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "excelPopupCallBack", this, 400, 250, true, false, null);
+};
 ]]></Script>
   </Form>
 </FDL>

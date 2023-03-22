@@ -87,7 +87,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid oncolresized="gfn_oncolresized" id="GridAdminList" taborder="5" left="10" top="270" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="데이터가 없습니다." onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="720" cellmovingtype="col" cellsizingtype="col">
+        <Grid oncolresized="gfn_oncolresized" id="GridAdminList" taborder="5" left="10" top="256" binddataset="ds_admin_list" autofittype="col" right="10" nodatatext="검색결과 없음" onheadclick="GridAdminList_onheadclick" oncellclick="GridAdminList_oncellclick" cssclass="grd_WF_TableType" height="730" cellmovingtype="col" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -124,17 +124,17 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="bind:athrNm"/>
-                <Cell col="2" text="bind:id"/>
-                <Cell col="3" text="bind:fnm"/>
-                <Cell col="4" text="bind:hpNo"/>
-                <Cell col="5" text="bind:brchNm"/>
-                <Cell col="6" text="bind:dptNm"/>
-                <Cell col="7" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="8" text="bind:apvlDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="9" text="bind:fnlLoginDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss"/>
-                <Cell col="10" text="bind:acntStatYn" textAlign="center"/>
-                <Cell col="11" text="bind:apvlStatYn"/>
+                <Cell col="1" text="bind:athrNm" subsumtext="bind:athrCd"/>
+                <Cell col="2" text="bind:id" subsumtext="bind:id"/>
+                <Cell col="3" text="bind:fnm" subsumtext="bind:fnm"/>
+                <Cell col="4" text="bind:hpNo" subsumtext="bind:hpNo"/>
+                <Cell col="5" text="bind:brchNm" subsumtext="bind:brchCd"/>
+                <Cell col="6" text="bind:dptNm" subsumtext="bind:dptNm"/>
+                <Cell col="7" text="bind:rgprDtm" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" subsumtext="bind:rgprDtm"/>
+                <Cell col="8" text="expr:apvlDtm ?  apvlDtm  : ''" displaytype="expr:apvlDtm ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" subsumtext="bind:apvlDtm"/>
+                <Cell col="9" text="bind:fnlLoginDtm" displaytype="expr:fnlLoginDtm ? 'date' : 'none'" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" subsumtext="bind:fnlLoginDtm"/>
+                <Cell col="10" text="bind:acntStatYn" textAlign="center" subsumtext="bind:acntStatYn"/>
+                <Cell col="11" text="bind:apvlStatYn" subsumtext="bind:apvlStatYn"/>
               </Band>
             </Format>
           </Formats>
@@ -170,11 +170,10 @@
               <Button id="btnDel" taborder="2" text="삭제" top="0" height="30" cssclass="btn_WF_High" width="50" onclick="Div01_btnDel_onclick" right="0"/>
               <Button id="btnPerminN" taborder="1" text="미승인" top="0" height="30" cssclass="btn_WF_Low" right="btnDel:5" width="60" onclick="Div01_btnPerminN_onclick"/>
               <Button id="btnExlDown" taborder="0" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" right="btnPerminN:5" width="100" onclick="Div01_btnExlDown_onclick"/>
-              <Button id="Button00" taborder="3" text="그리드 포맷 저장" left="0.2%" top="0" width="120" height="30" cssclass="btn_WF_Medium" onclick="btnFomatSave_onclick" visible="true"/>
             </Layout>
           </Layouts>
         </Div>
-        <Static id="txtTotal" taborder="8" left="10" height="21" text="목록 (0)개" width="80" top="249"/>
+        <Static id="txtTotal" taborder="8" left="10" height="21" text="목록 (0)개" width="80" top="221"/>
         <Grid oncolresized="gfn_oncolresized" id="Grid_Excel" taborder="9" left="10" top="1014" binddataset="ds_admin_excel" autofittype="col" right="10" height="100" visible="false">
           <Formats>
             <Format id="default">
@@ -221,6 +220,7 @@
             </Format>
           </Formats>
         </Grid>
+        <Div id="ContextPop" taborder="10" left="10" top="1131" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -267,15 +267,6 @@
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
-      </Dataset>
-      <Dataset id="ds_grid_psnlztn">
-        <ColumnInfo>
-          <Column id="gridId" type="STRING" size="256"/>
-          <Column id="format" type="STRING" size="256"/>
-        </ColumnInfo>
-        <Rows>
-          <Row/>
-        </Rows>
       </Dataset>
       <Dataset id="ds_admin_excel">
         <ColumnInfo>
@@ -325,9 +316,17 @@
           <Column id="rgprDtm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
-    <Script type="xscript5.1"><![CDATA[
-/**************************************************************************
+    <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
  **************************************************************************/
 include "Base::libCommon.xjs";
@@ -340,9 +339,11 @@ this.application = null;
 this.excelImportExport = "";
 this.excelFileName = "관리자_목록_";
 this.popCnt = 0;
+this.personalId = "ds_admin_list";
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
+ 
 this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
@@ -353,12 +354,11 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	this.gfnSetCheckBoxNoDataset(this.ds_admin_list, this.GridAdminList, 0);
 	
-	// 그리드 개인화
-	this.fn_personalization("getPsnlztn");	
 	
+	//개인화 세팅
+	this.gfn_onContextMenu(this.GridAdminList, this.personalId);
 	//지점코드 세팅
 	this.fn_set_spotCd();
-	//this.fn_list(1);
 };
 
 //리스트 검색버튼
@@ -479,6 +479,8 @@ this.Div01_btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 //엑셀 다운로드 버튼
 this.Div01_btnExlDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")) return;
+	
 	var list = this.ds_admin_list;
 	var excelList = this.ds_admin_excel;
 	var chkCnt = 0;
@@ -504,21 +506,74 @@ this.Div01_btnExlDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 	{
 		this.gfn_showModal("popupModal", {}, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
 	}
-	/*if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")){return;}
 	
-	if(this.GridAdminList.rowcount > 1)
-	{
-		this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
-		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.GridAdminList, "Sheet1!A1");  	
-		this.ExcelExportObj.set_exportfilename("ExcelExport_Sample");
-		this.ExcelExportObj.exportData(); 
-	}
-	else
-	{
-		this.alert("출력할 데이터가 없습니다");
-	}*/
 };
 
+//그리드 상세 페이지 이동
+this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objDs = obj.getBindDataset();
+	var id = objDs.getColumn(e.row, "id");
+	var athrCd = objDs.getColumn(e.row, "athrCd");
+	var brchCd = objDs.getColumn(e.row, "brchCd");
+	
+	var rColId = (obj.getCellProperty("body", e.col,"text")).toString().split(":");
+	
+	if(rColId[1] == "id"){
+	
+		this.parent.param  = {
+			id : id ,
+			athrCd : athrCd ,
+			brchCd : brchCd
+		};
+		
+		this.parent.parent.parent.param.TAB_CLOSE = false;
+		this.parent.set_url("SystemMng::AdminMngDtl.xfdl");	
+	}
+};
+
+//그리드 컬럼 정렬
+this.orderType = "desc";
+this.GridAdminList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{	
+	if(e.row == -1 && e.cell != 0)
+	{
+		var dsObj = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+		
+		var sColId = (obj.getCellProperty("body", e.col,"text")).toString().split(":");
+		
+		if(this.orderType == "desc"){
+			
+			dsObj.set_keystring("S:" + sColId[1]);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			dsObj.set_keystring("S:-" + sColId[1]);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+			
+	}
+};
+
+//그리드 개인화 저장
+this.popupMenu_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
+{
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.GridAdminList.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", this.personalId);
+	objDs.setColumn(0, "format", format);
+	
+	this.gfn_personalization("setPsnlztn");
+};
 
 /**************************************************************************
  * 사용자 FUNCTION 영역
@@ -546,18 +601,14 @@ this.fn_set_spotCd = function()
 	this.row02.form.spotDiv.form.spotCd.set_index(0);
 	this.row02.form.spotDiv.form.spotCd.updateToDataset();
 	
-	//this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.set_index(0);
-	//this.Div00_00.form.conDiv.form.spotDiv.form.ComboSpot.updateToDataset();
-	
 }
 
+//조회
 this.fn_list = function (page)
 {	
 	// 버튼별 권한 제한시
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 
-	//this.ds_search.setColumn(0, "f", this.searchDiv.form.searchField.value);
-	
 	var tranObj = {
 		strSvcId : "list",
 		strSvcUrl : this.application.Admin_svc + "::adminMngList.do",
@@ -572,7 +623,7 @@ this.fn_list = function (page)
 	this.gfn_transaction(tranObj);
 };
 
-
+//승인처리
 this.fn_approval = function(gb, apvlStatYn){
 	var check_array = this.ds_admin_list.checkarray;
 	var checked_array = new Array();
@@ -608,7 +659,7 @@ this.fn_approval = function(gb, apvlStatYn){
 	}	
 }
 
-
+//삭제
 this.fn_delete = function ()
 {	
 	// 버튼별 권한 제한시
@@ -628,6 +679,7 @@ this.fn_delete = function ()
 	this.gfn_transaction(tranObj);
 };
 
+//저장
 this.fn_save = function (strSvcId)
 {		
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSaveYn")){ this.ds_admin_list.reset(); return; }
@@ -657,6 +709,7 @@ this.fn_save = function (strSvcId)
 	this.gfn_transaction(tranObj);
 };
 
+//검색 조건 초기화
 this.fn_searchValueInit = function() {
 
 	//this.alert("검색조건초기화");
@@ -670,11 +723,11 @@ this.fn_searchValueInit = function() {
 	this.ds_search.setColumn(0, "strtDtm", objCalendar.strtDtm.value);
 	this.ds_search.setColumn(0, "endDtm", objCalendar.endDtm.value);
 	
-	if(this.row02.form.statusDiv.form.chkAcntStatY.value ==true) arrAcntStatYn.push("'Y'");
-	if(this.row02.form.statusDiv.form.chkAcntStatN.value ==true) arrAcntStatYn.push("'N'");
+	if(this.row02.form.statusDiv.form.chkAcntStatY.value ==true) arrAcntStatYn.push("Y");
+	if(this.row02.form.statusDiv.form.chkAcntStatN.value ==true) arrAcntStatYn.push("N");
 	
-	if(this.row03.form.permitDiv.form.chkApvlStatY.value == true) arrApvlStatYn.push("'Y'");
-	if(this.row03.form.permitDiv.form.chkApvlStatN.value == true) arrApvlStatYn.push("'N'");
+	if(this.row03.form.permitDiv.form.chkApvlStatY.value == true) arrApvlStatYn.push("Y");
+	if(this.row03.form.permitDiv.form.chkApvlStatN.value == true) arrApvlStatYn.push("N");
 	
 	if(this.row03.form.roleTypeDiv.form.chkAthrCd99.value == true && this.row03.form.roleTypeDiv.form.chkAthrCd.value == true){
 		athrGb = 3;
@@ -701,9 +754,6 @@ this.fn_checkbox_click = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
 	else{
 		obj.parent.chkAcntStatAll.set_value(0);
 	}
-	/*if(!obj.isChecked()){		
-		this.row02.form.statusDiv.form.chkAcntStatAll.set_value(0);
-	}*/
 }
 
 this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo){	
@@ -714,11 +764,9 @@ this.fn_checkbox_click02 = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInf
 	else{
 		obj.parent.chkApvlStatAll.set_value(0);
 	}
-	/*if(!obj.isChecked()){
-		this.row03.form.permitDiv.form.chkApvlStatAll.set_value(0);
-	}*/
 }
 
+//콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
   // 에러 시 화면 처리 내역
@@ -743,14 +791,8 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
   switch(svcID)
   {
     case "list":
-      //if(this.ds_admin_list.rowcount < 1){
-      //  this.alert("조회된 결과가 없습니다.");
-      //}else{
-		//this.txtTotal.set_text("총 " + this.ds_admin_list.rowcount  + "개");
-		this.txtTotal.set_text("목록("+this.ds_admin_list.rowcount+")개");
+      this.txtTotal.set_text("목록("+this.ds_admin_list.rowcount+")개");
 		
-		
-	  //}
 	  if(!this.ds_admin_list.getColCount())
 	  {
 		this.ds_admin_list.copyData(this.ds_admin_list_format);
@@ -776,85 +818,10 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 		
 		if(format !== undefined){			
 			this.GridAdminList.set_formats(format);
+			this.GridAdminList.set_for
 		}
 		break;	
   }
-};
-
-this.GridAdminList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{
-	var objDs = obj.getBindDataset();
-	//var seq = objDs.getColumn(e.row, "admSeq");
-	var id = objDs.getColumn(e.row, "id");
-	var athrCd = objDs.getColumn(e.row, "athrCd");
-	var brchCd = objDs.getColumn(e.row, "brchCd");
-	
-	if(e.cell >0)
-	{
-		this.parent.param  = {
-		// admSeq : seq
-			id : id ,
-			athrCd : athrCd ,
-			brchCd : brchCd
-		};
-		
-		this.parent.parent.parent.param.TAB_CLOSE = false;
-		
-		this.parent.set_url("SystemMng::AdminMngDtl.xfdl");
-	}	
-};
-
-
-this.fn_personalization = function(strSvcId){
-	
-	var strSvcUrl   = this.application.Admin_svc;
-	var inData      = "";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-	
-	if(strSvcId == "getPsnlztn"){		
-		
-		this.ds_grid_psnlztn.setColumn(0, "gridId", "ds_admin_list");
-		
-		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
-		inData = "data=ds_grid_psnlztn";
-		outData = "ds_grid_psnlztn=output1";
-	}else if(strSvcId == "setPsnlztn"){
-		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
-		inData = "data=ds_grid_psnlztn";
-	}
-	
-	var tranObj = {
-		strSvcId : strSvcId,
-		strSvcUrl : strSvcUrl,
-		inData : inData,
-		outData : outData,
-		strArg : strArg,
-		callBackFnc : callBackFnc,
-		isAsync : isAsync
-	}
-	this.gfn_transaction(tranObj);
-}
-
-
-
-this.GridAdminList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
-{	
-	this.gfn_headCheckBox(obj, e.cell, "chk");	
-};
-
-this.btnFomatSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
-{	
-	var objDs = this.ds_grid_psnlztn;
-	var format = this.GridAdminList.getCurFormatString();
-	
-	objDs.setColumn(0, "gridId", "ds_admin_list");
-	objDs.setColumn(0, "format", format);
-	
-	this.fn_personalization("setPsnlztn");
-};
-]]></Script>
+};]]></Script>
   </Form>
 </FDL>

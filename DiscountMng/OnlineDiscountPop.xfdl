@@ -17,6 +17,7 @@
                       <Column size="150"/>
                       <Column size="150"/>
                       <Column size="150"/>
+                      <Column size="150"/>
                     </Columns>
                     <Rows>
                       <Row size="40" band="head"/>
@@ -24,17 +25,19 @@
                     </Rows>
                     <Band id="head">
                       <Cell text="등급할인(에누리)"/>
-                      <Cell col="1" text="할인율(%)" displaytype="expr:useYn == 'Y' ? 'normal': 'none'"/>
-                      <Cell col="2" text="적용시작일"/>
-                      <Cell col="3" text="적용종료일"/>
-                      <Cell col="4" text="사용여부"/>
+                      <Cell col="1" text="세부등급 "/>
+                      <Cell col="2" text="할인율(%)" displaytype="expr:useYn == 'Y' ? 'normal': 'none'"/>
+                      <Cell col="3" text="적용시작일"/>
+                      <Cell col="4" text="적용종료일"/>
+                      <Cell col="5" text="사용여부"/>
                     </Band>
                     <Band id="body">
-                      <Cell suppress="0" text="bind:cdNm" expr="cdNm + &quot; 할인&quot;"/>
-                      <Cell col="1" suppress="0" maskeditpostfixtext="%" displaytype="expr:useYn == 'Y' ? 'maskeditcontrol' : 'readonly'" edittype="expr:useYn == 'Y' ? 'mask' : 'readonly'" text="bind:dcRt" maskeditformat="!999" maskeditlimitbymask="integer" expr="useYn == 'Y' &amp;&amp;  dcRt  ? dcRt : ' '"/>
-                      <Cell col="2" displaytype="expr:useYn == 'Y' ? 'calendarcontrol' : 'none'" edittype="expr:useYn == 'Y' ? 'date' : 'readonly'" text="bind:applStDt" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
-                      <Cell col="3" displaytype="expr:useYn == 'Y' ? 'calendarcontrol' : 'none'" edittype="expr:useYn == 'Y' ? 'date' : 'readonly'" text="bind:applEndDt" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
-                      <Cell col="4" suppress="0" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_use_cd" combodatacol="cdNm" combocodecol="cd"/>
+                      <Cell suppress="1" text="bind:cdNm" expr="cdNm + &quot; 할인&quot;" suppressalign="middle"/>
+                      <Cell col="1" text="bind:subNm"/>
+                      <Cell col="2" suppress="0" maskeditpostfixtext="%" displaytype="expr:useYn == 'Y' ? 'maskeditcontrol' : 'readonly'" edittype="expr:useYn == 'Y' ? 'mask' : 'readonly'" text="bind:dcRt" maskeditformat="!999" maskeditlimitbymask="integer" expr="useYn == 'Y' &amp;&amp;  dcRt  ? dcRt : ' '"/>
+                      <Cell col="3" displaytype="expr:useYn == 'Y' ? 'calendarcontrol' : 'none'" edittype="expr:useYn == 'Y' ? 'date' : 'readonly'" text="bind:applStDt" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
+                      <Cell col="4" displaytype="expr:useYn == 'Y' ? 'calendarcontrol' : 'none'" edittype="expr:useYn == 'Y' ? 'date' : 'readonly'" text="bind:applEndDt" calendardisplaynulltype="none" calendardisplayinvalidtype="none"/>
+                      <Cell col="5" suppress="0" text="bind:useYn" displaytype="combocontrol" edittype="combo" combodataset="ds_use_cd" combodatacol="cdNm" combocodecol="cd"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -129,9 +132,9 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 	{  
 		var endDt = this.ds_discount_list.getColumn(curRow,"applEndDt");
 		
-		if(endDt && endDt <= e.value)
+		if(endDt && endDt < e.value)
 		{
-			alert("적용시작일 < 적용종료일로 설정하세요.");
+			alert("적용시작일 <= 적용종료일로 설정하세요.");
 			obj.setEditValue("");
 		}
 		else
@@ -143,9 +146,9 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 	{  
 		var stDt = this.ds_discount_list.getColumn(curRow,"applStDt");
 		
-		if(stDt && stDt >= e.value)
+		if(stDt && stDt > e.value)
 		{
-			alert("적용시작일 < 적용종료일로 설정하세요.");
+			alert("적용시작일 <= 적용종료일로 설정하세요.");
 			obj.setEditValue("")
 		}
 		else
@@ -155,6 +158,11 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 	}	
 	else if(obj.getCellPos() == 4)
 	{
+		if(e.value == 'N')
+		{
+			this.ds_discount_list.setColumn(e.row, "applStDt", "");
+			this.ds_discount_list.setColumn(e.row, "applEndDt", "");
+		}
 		obj.updateToDataset();
 	}
 };
@@ -178,6 +186,11 @@ this.fn_checkValidation = function()
 	if(this.ds_discount_list.findRowExpr("dcRt == null || dcRt == ''") > -1)
 	{
 		alert("할인율을 입력하세요.");
+		return;
+	}
+	if(this.ds_discount_list.findRowExpr("useYn == 'Y' && ((applStDt != '' && applEndDt == '') || (applStDt == '' && applEndDt != '')) ") > -1)
+	{
+		alert("적용기간은 시작일과 종료일을 모두 입력하세요.");
 		return;
 	}
 	else
@@ -247,6 +260,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
         <ColumnInfo>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="subNm" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
           <Column id="applBrchRngCd" type="STRING" size="256"/>
           <Column id="dcNbcnt" type="STRING" size="256"/>

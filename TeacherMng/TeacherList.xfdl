@@ -169,7 +169,8 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="Grid00" taborder="9" left="10" top="300" binddataset="ds_list" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col" oncolresized="gfn_oncolresized" onheadclick="Grid00_onheadclick">
+        <Div id="Div07" taborder="8" left="10" url="TeacherMng::include/ListRowcount.xfdl" text="" height="30" width="80" top="268"/>
+        <Grid id="Grid00" taborder="7" left="10" top="300" binddataset="ds_list" right="10" bottom="50" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col" oncolresized="gfn_oncolresized" onheadclick="Grid00_onheadclick" cellmovingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -228,7 +229,7 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
-                <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
+                <Cell col="1" calendardateformat="yyyy-MM-dd" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:rnum"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="3" expr="comp.parent.com_setMasking(tcNm, 'name')" textDecoration="underline" color="blue" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="4" text="bind:tcTpCdNm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
@@ -245,7 +246,7 @@
                 <Cell col="15" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="expr:secMdclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" text="bind:secMdclsCtegryCd"/>
                 <Cell col="16" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="expr:secSmclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:secSmclsCtegryCd"/>
                 <Cell col="17" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:hopeDaywVal"/>
-                <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
+                <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +':'+ hopeStMi +'~'+ hopeEndHh +':'+ hopeEndMi : '"/>
                 <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" expr="comp.parent.com_setMasking(pbrltnChrgprNm, 'name')"/>
                 <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
@@ -255,9 +256,9 @@
           </Formats>
         </Grid>
         <Div id="Div00" taborder="0" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Button id="btnNewTeacher" taborder="7" text="신규강사" top="270" height="21" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="105" onclick="btnNewTeacher_onclick"/>
-        <Button id="btnSms" taborder="8" text="안내메시지" top="270" height="21" cssclass="btn_WF_Low" fittocontents="width" width="90" right="10" onclick="btnSms_onclick"/>
-        <Div id="Div06" taborder="10" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="pageingDiv" taborder="9" text="Div00" left="10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl" bottom="15"/>
+        <Button id="btnSms" taborder="10" text="안내메시지" cssclass="btn_WF_Low" fittocontents="width" width="90" right="10" onclick="btnSms_onclick" bottom="Grid00:10" height="21"/>
+        <Button id="btnNewTeacher" taborder="11" text="신규강사" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="110" onclick="btnNewTeacher_onclick" bottom="Grid00:10" height="21"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -287,10 +288,17 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+	
+  //페이징
+	this.objPageingDs = this.application.gdsPageing;		
+  this.pageingDiv.form.pageingCallObj = this;
 
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
 	
+  //그리드 개인화
+  this.com_get_peronalization();
+
   //지점초기화
 	this.brchCd = this.com_set_branch();
 	
@@ -373,14 +381,17 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.fn_search = function(){
+this.fn_list = function(page){
   if(!this.com_check_private_search(this.ds_search.getColumn(0, "tcNm"))) return;
   this.set_search_info();
+
+  this.objPageingDs.setColumn(0, "pageIndex", page);
+
   this.select_teacher_list();
 }
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_search();
+	this.fn_list(1);
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -410,8 +421,8 @@ this.select_teacher_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_teacher";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
-	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_list=output1";
+	tranObj.inData      = "search=ds_search pageing=gdsPageing";
+	tranObj.outData     = "ds_list=output1 gdsPageing=output2";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -441,13 +452,13 @@ this.process_teacher_list = function(){
 		//hopeDaywVal 파싱
 		var str = this.ds_list.getColumn(i, "hopeDaywVal");
 		if(str){
-			var arr = str.split(",");
-			var resStr = "", comma = "";
+			var arr = str.split("|");
+			var resStr = "", sptr = "";
 			for(var item of arr){
 				row = this.ds_day_cdList.findRow("cd", item);
 				var dayNm = this.ds_day_cdList.getColumn(row, "cdNm");
-				resStr += comma + dayNm;
-				comma = ",";
+				resStr += sptr + dayNm;
+				sptr = ",";
 			}
 			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
@@ -463,7 +474,25 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 	}
 	
 	if(svcId == "select_teacher"){
-		//this.txtTotal.set_text("강사목록 (" + this.ds_list.rowcount + ")개");
+		if(this.ds_list.rowcount > 0){
+			var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+			var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+			var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+			
+			this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+			this.pageingDiv.form.setPage(pageIndex);
+			this.pageingDiv.set_visible(true);
+			
+			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
+				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+			}
+
+			//목록 개수
+			this.Div07.form.Static01.set_text(nAllRowCount);
+		}
+		else{
+			this.pageingDiv.set_visible(false);
+		}
 		this.process_teacher_list();
 	}
 	
@@ -569,8 +598,9 @@ this.modify_request_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBox
  ************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
+  var headText = obj.getCellProperty('head', e.cell, 'text');
 	//강사 상세
-	if(e.cell == 2 || e.cell == 3){
+	if(headText == "강사코드" || headText == "강사명"){
 		this.popCnt ++;
 		var oArg = {
 				type : "detail",
@@ -626,8 +656,7 @@ this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 {
 	//정렬용
 	console.log(obj);
-};
-]]></Script>
+};]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
@@ -682,6 +711,7 @@ this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
       </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
           <Column id="tcTpCdNm" type="STRING" size="256"/>
@@ -850,6 +880,15 @@ this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
     <Bind>

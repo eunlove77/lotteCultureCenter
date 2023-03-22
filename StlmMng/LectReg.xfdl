@@ -69,7 +69,7 @@
                             <Column size="60" band="left"/>
                             <Column size="150"/>
                             <Column size="80"/>
-                            <Column size="80"/>
+                            <Column size="140"/>
                             <Column size="120"/>
                             <Column size="80"/>
                             <Column size="80"/>
@@ -100,32 +100,24 @@
                           </Rows>
                           <Band id="head">
                             <Cell rowspan="2" displaytype="checkboxcontrol" edittype="checkbox"/>
-                            <Cell col="1"/>
-                            <Cell col="2"/>
-                            <Cell col="3"/>
-                            <Cell col="4"/>
-                            <Cell col="5"/>
-                            <Cell col="6"/>
-                            <Cell col="7"/>
-                            <Cell col="8"/>
+                            <Cell col="1" rowspan="2" text="삭제"/>
+                            <Cell col="2" rowspan="2" text="실수강자"/>
+                            <Cell col="3" rowspan="2" text="강좌코드"/>
+                            <Cell col="4" rowspan="2" text="강좌명"/>
+                            <Cell col="5" rowspan="2" text="강좌옵션"/>
+                            <Cell col="6" rowspan="2" text="강좌상태"/>
+                            <Cell col="7" rowspan="2" text="옵션명"/>
+                            <Cell col="8" rowspan="2" text="할인수단"/>
                             <Cell col="9" colspan="7" text="강좌료"/>
                             <Cell col="16" colspan="3" text="재료비/대여료"/>
-                            <Cell col="19"/>
-                            <Cell col="20"/>
-                            <Cell col="21"/>
-                            <Cell col="22"/>
-                            <Cell col="23"/>
-                            <Cell col="24"/>
-                            <Cell col="25"/>
-                            <Cell col="26"/>
-                            <Cell row="1" col="1" text="삭제"/>
-                            <Cell row="1" col="2" text="실수강자"/>
-                            <Cell row="1" col="3" text="강좌코드"/>
-                            <Cell row="1" col="4" text="강좌명"/>
-                            <Cell row="1" col="5" text="강좌옵션"/>
-                            <Cell row="1" col="6" text="강좌상태"/>
-                            <Cell row="1" col="7" text="옵션명"/>
-                            <Cell row="1" col="8" text="할인수단"/>
+                            <Cell col="19" rowspan="2" text="주문금액"/>
+                            <Cell col="20" rowspan="2" text="지점명"/>
+                            <Cell col="21" rowspan="2" text="강사명"/>
+                            <Cell col="22" rowspan="2" text="강좌구분"/>
+                            <Cell col="23" rowspan="2" text="강좌요일"/>
+                            <Cell col="24" rowspan="2" text="강의기간"/>
+                            <Cell col="25" rowspan="2" text="강의시간"/>
+                            <Cell col="26" rowspan="2" text="강의횟수"/>
                             <Cell row="1" col="9" text="강좌료"/>
                             <Cell row="1" col="10" text="할인"/>
                             <Cell row="1" col="11" text="할인금액"/>
@@ -136,14 +128,6 @@
                             <Cell row="1" col="16" text="재료비/대여료"/>
                             <Cell row="1" col="17" text="할인"/>
                             <Cell row="1" col="18" text="할인금액"/>
-                            <Cell row="1" col="19" text="주문금액"/>
-                            <Cell row="1" col="20" text="지점명"/>
-                            <Cell row="1" col="21" text="강사명"/>
-                            <Cell row="1" col="22" text="강좌구분"/>
-                            <Cell row="1" col="23" text="강좌요일"/>
-                            <Cell row="1" col="24" text="강의기간"/>
-                            <Cell row="1" col="25" text="강의시간"/>
-                            <Cell row="1" col="26" text="강의횟수"/>
                           </Band>
                           <Band id="body">
                             <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
@@ -538,6 +522,8 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 // 회원검색 버튼 클릭
 this.Div00_Div01_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
 	if(this.gfn_nvl(this.Div00.form.Div01.form.Div00.form.Static01.text) != ""){
 		if(confirm("수강등록 회원을 변경하시겠습니까?")){
 			this.Div00_Div01_Button00_onclick();

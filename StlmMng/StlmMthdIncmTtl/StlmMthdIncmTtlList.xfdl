@@ -83,6 +83,80 @@
             </Layout>
           </Layouts>
         </Div>
+        <Button id="btnExcelDown" taborder="2" text="엑셀 다운로드" top="0" height="21" cssclass="btn_WF_Medium" width="100" right="0" onclick="Div01_btnExcelDown_onclick"/>
+        <Grid oncolresized="gfn_oncolresized" id="Grid_Excel" taborder="3" left="0" top="544" right="20" binddataset="ds_list" autofittype="col" nodatatext="검색결과 없음" bottom="-340" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80" band="left"/>
+                <Column size="80" band="left"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell rowspan="2" text="지점"/>
+                <Cell col="1" rowspan="2" text="구분"/>
+                <Cell col="2" colspan="8" text="당일"/>
+                <Cell col="10" colspan="8" text="누계"/>
+                <Cell row="1" col="2" text="신용카드"/>
+                <Cell row="1" col="3" text="LPoint"/>
+                <Cell row="1" col="4" text="현금"/>
+                <Cell row="1" col="5" text="자사상품권"/>
+                <Cell row="1" col="6" text="타사상품권"/>
+                <Cell row="1" col="7" text="거스름돈"/>
+                <Cell row="1" col="8" text="기타"/>
+                <Cell row="1" col="9" text="소계"/>
+                <Cell row="1" col="10" text="신용카드"/>
+                <Cell row="1" col="11" text="LPoint"/>
+                <Cell row="1" col="12" text="현금"/>
+                <Cell row="1" col="13" text="자사상품권"/>
+                <Cell row="1" col="14" text="타사상품권"/>
+                <Cell row="1" col="15" text="거스름돈"/>
+                <Cell row="1" col="16" text="기타"/>
+                <Cell row="1" col="17" text="소계"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:brchNm" suppress="1"/>
+                <Cell col="1" text="bind:stlmChnlNm"/>
+                <Cell col="2" text="bind:todayCrdStlmAmt"/>
+                <Cell col="3" text="bind:todayLpntUseAmt"/>
+                <Cell col="4" text="bind:todayCshStlmAmt"/>
+                <Cell col="5" text="bind:todayLtteGiftStlmAmt"/>
+                <Cell col="6" text="bind:todayOtgiftStlmAmt"/>
+                <Cell col="7" text="bind:todayChngAmt"/>
+                <Cell col="8" text="bind:todayEtcStlmAmt"/>
+                <Cell col="9" text="bind:todayChnlTotal"/>
+                <Cell col="10" text="bind:agrgtCrdStlmAmt"/>
+                <Cell col="11" text="bind:agrgtLpntUseAmt"/>
+                <Cell col="12" text="bind:agrgtCshStlmAmt"/>
+                <Cell col="13" text="bind:agrgtLtteGiftStlmAmt"/>
+                <Cell col="14" text="bind:agrgtOtgiftStlmAmt"/>
+                <Cell col="15" text="bind:agrgtChngAmt"/>
+                <Cell col="16" text="bind:agrgtEtcStlmAmt"/>
+                <Cell col="17" text="bind:agrgtChnlTotal"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -90,6 +164,7 @@
  **************************************************************************/
 include "Base::libCommon.xjs";
 include "Base::lib_base.xjs";
+include "Base::popup.xjs";
 
 /**************************************************************************
  * FORM 변수 선언 영역
@@ -97,6 +172,8 @@ include "Base::lib_base.xjs";
 this.application = null;
 this.search_form = this.parent.parent.Div00.form;
 this.ds_search = null;
+this.excelImportExport = "";
+this.excelFileName = "";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -106,6 +183,9 @@ this.StlmMthdIncmTtlList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventI
 {
 	this.application = nexacro.getApplication();
 	this.ds_search = this.parent.parent.Div00.form.ds_search;
+	
+	this.excelImportExport = this.application.getVariable("excelImportExport");
+	this.excelFileName = this.parent.parent.parent.parent.fvMenuNM.replace(' ', '_') + '_';
 };
 
 /**************************************************************************
@@ -161,6 +241,20 @@ this.fn_searchValueInit = function(){
 	
 }
 
+
+this.Div01_btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.ds_list.rowcount == 0){
+		alert("데이터가 없습니다.");
+		return;
+	}
+	
+	var oArg = {
+		logId : this.logId,
+		title : "엑셀 다운로드 사유"
+		};
+	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "popupCallBack", this, 400, 250, true, false, null);
+};
 ]]></Script>
     <Objects>
       <Dataset id="ds_list">

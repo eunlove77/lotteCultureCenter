@@ -133,7 +133,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="10" top="300" binddataset="ds_list" autofittype="none" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col">
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="10" top="300" binddataset="ds_list" autofittype="none" right="10" bottom="40" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -182,7 +182,7 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="1" calendardateformat="yyyy-MM-dd" text="bind:rnum"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
                 <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')"/>
                 <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
@@ -206,6 +206,7 @@
         <Div id="Div00" taborder="0" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Button id="btnConfirm" taborder="6" text="강사승인" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
         <Div id="Div06" taborder="5" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="pageingDiv" taborder="9" text="Div00" left="10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl" bottom="15"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -234,6 +235,10 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
+
+  //페이징
+	this.objPageingDs = this.application.gdsPageing;		
+  this.pageingDiv.form.pageingCallObj = this;
 
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
@@ -309,14 +314,17 @@ this.Div02_Div00_Combo01_onitemchanged = function(obj:nexacro.Combo,e:nexacro.It
 /**************************************************************************
  * 검색, 초기화
  **************************************************************************/
-this.fn_search = function(){
+this.fn_list = function(page){
   if(!this.com_check_private_search(this.ds_search.getColumn(0, "tcNm"))) return;
   this.set_search_info();
+
+  this.objPageingDs.setColumn(0, "pageIndex", page);
+  
   this.select_teacher_list();
 }
 this.Div05_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.fn_search();
+	this.fn_list(1);
 };
 this.Div05_btnReset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -345,8 +353,8 @@ this.select_teacher_list = function(){
 	var tranObj = {};
 	tranObj.strSvcId	= "select_teacher";
 	tranObj.strSvcUrl   = this.application.Admin_svc + "::teacherMng/list.do";
-	tranObj.inData      = "search=ds_search";
-	tranObj.outData     = "ds_list=output1";
+	tranObj.inData      = "search=ds_search pageing=gdsPageing";
+	tranObj.outData     = "ds_list=output1 gdsPageing=output2";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback";
 	tranObj.isAsync     = true;
@@ -384,13 +392,13 @@ this.process_teacher_list = function(){
 		//hopeDaywVal 파싱
 		var str = this.ds_list.getColumn(i, "hopeDaywVal");
 		if(str){
-			var arr = str.split(",");
-			var resStr = "", comma = "";
+			var arr = str.split("|");
+			var resStr = "", sptr = "";
 			for(var item of arr){
 				row = this.ds_day_cdList.findRow("cd", item);
 				var dayNm = this.ds_day_cdList.getColumn(row, "cdNm");
-				resStr += comma + dayNm;
-				comma = ",";
+				resStr += sptr + dayNm;
+				sptr = ",";
 			}
 			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
@@ -453,7 +461,9 @@ this.confirm_online_teacher_rqst = function(){
  ************************************************************************/
 this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 2 || e.cell == 3){	
+	var headText = obj.getCellProperty('head', e.cell, 'text');
+  //강사 상세
+	if(headText == "강사코드" || headText == "강사명"){
 		this.popCnt ++;
 		var oArg = {
 				type : "online_request",
@@ -470,6 +480,25 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 		return;
 	}
 	if(svcId == "select_teacher"){
+		if(this.ds_list.rowcount > 0){
+			var nAllRowCount = this.objPageingDs.getColumn(0, "totCnt");
+			var nPageRowCount = this.objPageingDs.getColumn(0, "pageRowCnt");
+			var pageIndex = this.objPageingDs.getColumn(0, "pageIndex");
+			
+			this.pageingDiv.form.initPages(nAllRowCount, nPageRowCount);
+			this.pageingDiv.form.setPage(pageIndex);
+			this.pageingDiv.set_visible(true);
+			
+			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
+				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
+			}
+			
+			//목록 개수
+			this.Div06.form.Static01.set_text(nAllRowCount);
+		}
+		else{
+			this.pageingDiv.set_visible(false);
+		}
 		this.process_teacher_list();
 	}
 	else if(svcId == "confirm_teacher"){
@@ -573,6 +602,7 @@ this.Div02_Div01_hopeEnd_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeE
       </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
+          <Column id="rnum" type="STRING" size="256"/>
           <Column id="tcCdNo" type="STRING" size="256"/>
           <Column id="tcTpCd" type="STRING" size="256"/>
           <Column id="tcTpCdNm" type="STRING" size="256"/>

@@ -656,7 +656,7 @@
                                         <Cell col="1" text="내용"/>
                                       </Band>
                                       <Band id="body">
-                                        <Cell text="expr:comp.parent.parent.fnDay(lectDt, stDaywNm)"/>
+                                        <Cell text="expr:comp.parent.parent.fnDay(lectDt, stDaywNm) + &quot; &quot; + (currow + 1) + &quot;회차&quot;"/>
                                         <Cell col="1" displaytype="editcontrol" edittype="text" text="bind:planExpl"/>
                                       </Band>
                                     </Format>
@@ -863,11 +863,11 @@
                               </Layout>
                             </Layouts>
                           </Div>
-                          <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:-1" height="33" right="0" cssclass="div_WF_CompWrap">
+                          <Div id="Div01" taborder="1" text="Div01" left="0" top="Div00:-1" height="38" right="0" cssclass="div_WF_CompWrap">
                             <Layouts>
                               <Layout>
-                                <Static id="Static00" taborder="0" text="MVG관 전시설정" left="0" top="0" width="110" height="31" cssclass="sta_WF_TableLabel"/>
-                                <Radio id="Radio00" taborder="1" left="Static00:6" top="5" width="148" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
+                                <Static id="Static00" taborder="0" text="에비뉴엘 전용관&#13;&#10;전시설정" left="0" top="0" width="110" cssclass="sta_WF_TableLabel" bottom="0"/>
+                                <Radio id="Radio00" taborder="1" left="Static00:6" top="7" width="148" height="20" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" direction="vertical">
                                   <Dataset id="innerdataset">
                                     <ColumnInfo>
                                       <Column id="codecolumn" size="256"/>
@@ -1888,7 +1888,7 @@ this.fn_schedule_set_code = function(id, i, content, lectStDt)
 		arrRow = [];
 	}
 	
-	text += " (" + arrRow.length  + "/" + this.ds_schedule_list.getColumn(i, "lectNbcnt") + ")"
+	text += " (" + (arrRow.length || '0')  + "/" + (this.ds_schedule_list.getColumn(i, "lectNbcnt") || '0') + ")"
 	objStatic.set_text(text);
 	objStatic.show();
 		

@@ -260,11 +260,11 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="0" width="150" height="20" left="0"/>
-                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col">
+                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col" onheadclick="Div02_Div01_Grid00_onheadclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="48"/>
+                            <Column size="48" band="left"/>
                             <Column size="78"/>
                             <Column size="129"/>
                             <Column size="113"/>
@@ -294,7 +294,8 @@
                             <Column size="80"/>
                             <Column size="119"/>
                             <Column size="100"/>
-                            <Column size="130"/>
+                            <Column size="159"/>
+                            <Column size="145"/>
                             <Column size="130"/>
                             <Column size="130"/>
                             <Column size="130"/>
@@ -334,46 +335,48 @@
                             <Cell col="27" text="그룹여부"/>
                             <Cell col="28" text="강사수정요청"/>
                             <Cell col="29" text="전시아이콘"/>
-                            <Cell col="30" text="등록자"/>
-                            <Cell col="31" text="등록일시"/>
-                            <Cell col="32" text="수정자"/>
-                            <Cell col="33" text="수정일시"/>
+                            <Cell col="30" text="에비뉴엘 전용관 설정여부"/>
+                            <Cell col="31" text="등록자"/>
+                            <Cell col="32" text="등록일시"/>
+                            <Cell col="33" text="수정자"/>
+                            <Cell col="34" text="수정일시"/>
                           </Band>
                           <Band id="body">
                             <Cell displaytype="expr:pblPmprcustBrchCd == '' ? 'checkboxcontrol' : 'none'" edittype="checkbox" text="expr:dataset.checkarray[currow]" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
                             <Cell col="1" text="expr:currow + 1" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="3" text="bind:lectTpNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="50" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="6" text="bind:lectAddOptnNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" tooltiptext="bind:tcNm" tooltiptype="hover" displaytype="normal" maskeditlimitbymask="decimal" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="8" text="bind:gsCapaCnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="9" text="bind:appCnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="10" text="bind:stayCnt" textDecoration="underline" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="11" text="bind:lectAmt" displaytype="normal" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="12" text="bind:stringStDaywNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="13" text="bind:lectNbcnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="14" text="bind:lectSt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="15" text="bind:lectEnd" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="16" text="bind:lectStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="17" text="bind:apvlStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="18" text="bind:dsplyStatCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? dsplyStatCd : dsplyStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="19" text="bind:yy" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="20" text="bind:lectSmsterNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="21" text="expr:lectStDtm + ' ~ ' + lectEndDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="22" text="bind:lectClNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="23" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="24" text="expr:ppayStdCd == '01' ? '정률' : '정액'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="25" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="26" text="bind:optnTypNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="27" text="bind:groupYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="28" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="29" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="30" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="31" text="bind:regDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="32" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="33" text="bind:modDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
+                            <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:brchCd"/>
+                            <Cell col="3" text="bind:lectTpNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectTpNm"/>
+                            <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectCd"/>
+                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="50" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectNm"/>
+                            <Cell col="6" text="bind:lectAddOptnNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectAddOptnNm"/>
+                            <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" displaytype="normal" maskeditlimitbymask="decimal" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:tcNm"/>
+                            <Cell col="8" text="bind:gsCapaCnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:gsCapaCnt"/>
+                            <Cell col="9" text="bind:appCnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:appCnt"/>
+                            <Cell col="10" text="bind:stayCnt" textDecoration="underline" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:stayCnt"/>
+                            <Cell col="11" text="bind:lectAmt" displaytype="normal" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectAmt"/>
+                            <Cell col="12" text="bind:stringStDaywNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:stringStDaywNm"/>
+                            <Cell col="13" text="bind:lectNbcnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectNbcnt"/>
+                            <Cell col="14" text="bind:lectSt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectSt"/>
+                            <Cell col="15" text="bind:lectEnd" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectEnd"/>
+                            <Cell col="16" text="bind:lectStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectStatNm"/>
+                            <Cell col="17" text="bind:apvlStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:apvlStatNm"/>
+                            <Cell col="18" text="bind:dsplyStatCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? dsplyStatCd : dsplyStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyStatCd"/>
+                            <Cell col="19" text="bind:yy" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:yy"/>
+                            <Cell col="20" text="bind:lectSmsterNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectSmsterNm"/>
+                            <Cell col="21" text="expr:lectStDtm + ' ~ ' + lectEndDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectStDtm"/>
+                            <Cell col="22" text="bind:lectClNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectClNm"/>
+                            <Cell col="23" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectRmCd"/>
+                            <Cell col="24" text="expr:ppayStdCd == '01' ? '정률' : '정액'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:ppayStdCd"/>
+                            <Cell col="25" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:ppayAmt"/>
+                            <Cell col="26" text="bind:optnTypNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:optnTypNm"/>
+                            <Cell col="27" text="bind:groupYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:groupYn"/>
+                            <Cell col="28" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:mdfreqCnt"/>
+                            <Cell col="29" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyIconCd"/>
+                            <Cell col="30" text="bind:mvgDsplyUseYn" subsumtext="bind:mvgDsplyUseYn"/>
+                            <Cell col="31" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:regId"/>
+                            <Cell col="32" text="bind:regDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:regDtm"/>
+                            <Cell col="33" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:modId"/>
+                            <Cell col="34" text="bind:modDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:modDtm"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -417,6 +420,7 @@
                 <Column size="80"/>
                 <Column size="119"/>
                 <Column size="108"/>
+                <Column size="159"/>
                 <Column size="130"/>
                 <Column size="130"/>
                 <Column size="130"/>
@@ -456,10 +460,11 @@
                 <Cell col="26" text="그룹여부"/>
                 <Cell col="27" text="강사수정요청"/>
                 <Cell col="28" text="전시아이콘"/>
-                <Cell col="29" text="등록자"/>
-                <Cell col="30" text="등록일시"/>
-                <Cell col="31" text="수정자"/>
-                <Cell col="32" text="수정일시"/>
+                <Cell col="29" text="에비뉴엘 전용관 설정여부"/>
+                <Cell col="30" text="등록자"/>
+                <Cell col="31" text="등록일시"/>
+                <Cell col="32" text="수정자"/>
+                <Cell col="33" text="수정일시"/>
               </Band>
               <Band id="body">
                 <Cell text="expr:currow + 1"/>
@@ -491,10 +496,11 @@
                 <Cell col="26" text="bind:groupYn"/>
                 <Cell col="27" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
                 <Cell col="28" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm"/>
-                <Cell col="29" text="expr:regId + '(' + regNm + ')'"/>
-                <Cell col="30" text="bind:regDtm"/>
-                <Cell col="31" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
-                <Cell col="32" text="bind:modDtm"/>
+                <Cell col="29" text="bind:mvgDsplyUseYn"/>
+                <Cell col="30" text="expr:regId + '(' + regNm + ')'"/>
+                <Cell col="31" text="bind:regDtm"/>
+                <Cell col="32" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
+                <Cell col="33" text="bind:modDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -567,6 +573,7 @@
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="optnTypCd" type="STRING" size="256"/>
           <Column id="dsplyIconCd" type="STRING" size="256"/>
+          <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -769,6 +776,7 @@
           <Column id="lectAddOptnNm" type="STRING" size="256"/>
           <Column id="optnTypCd" type="STRING" size="256"/>
           <Column id="dsplyIconCd" type="STRING" size="256"/>
+          <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
@@ -893,6 +901,13 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			this.fn_classDispIcon_set();
 		break;
 		
+		case "classList":
+			this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
+			this.searchFlag = 1;
+			this.ds_classRoom.copyData(this.ds_classRoom_list);
+			this.ds_classRoomTemp.copyData(this.ds_classRoom_list);		
+		break;
+		
 		case "classUpdateList":
 			alert("저장되었습니다.");
 			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();			
@@ -906,6 +921,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		case "classSaveApvlList":
 			alert("승인 되었습니다.");
 			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+		break;
 	  }
   }
 };
@@ -950,15 +966,11 @@ this.fn_search = function()
 		outData : "ds_class_list=classList",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : false,
+		isAsync : true,
 		menuSeq : this.getOwnerFrame().param.MENU_ID
 	}
 
 	this.gfn_transaction(tranObj);
-	this.Div02.form.Div01.form.Static00.set_text("강좌목록 (" + this.ds_class_list.getRowCount() + "개)");
-	this.searchFlag = 1;
-	this.ds_classRoom.copyData(this.ds_classRoom_list);
-	this.ds_classRoomTemp.copyData(this.ds_classRoom_list);
 }
 
 //지점 세팅
@@ -1629,53 +1641,59 @@ this.Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup = function(obj:nexacro.Edit
 
 this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 4)
+
+	if(e.cell != 0 && e.cell !=1 )
 	{
-		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_class_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.getOwnerFrame().param.MENU_ID,
-			searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+		var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
+		
+		if(rColId[1] == "lectCd")
+		{
+			var arrArguments = {
+				brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+				yy : this.ds_class_list.getColumn(e.row, "yy"),
+				lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+				lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+			}
+			
+			this.popCnt++;
+			this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 		}
 		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
-	
-	if(e.col == 10)
-	{
-		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_class_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.getOwnerFrame().param.MENU_ID,
-			type : 'stay',
-			searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+		if(rColId[1] == "stayCnt")
+		{
+			var arrArguments = {
+				brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+				yy : this.ds_class_list.getColumn(e.row, "yy"),
+				lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+				lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				type : 'stay',
+				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+			}
+			
+			this.popCnt++;
+			this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 		}
 		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
-	
-	if(e.col == 7)
-	{
-		this.popCnt++;
-		var oArg = {
-				type : "detail",
-				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
-				menuSeq : this.getOwnerFrame().param.MENU_ID
-		};
-		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
-	}
-	
-	if(e.col == 23)
-	{
-		this.ds_classRoom.copyData(this.ds_classRoomTemp);
-		this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
-	}
+		if(rColId[1] == "tcNm")
+		{
+			this.popCnt++;
+			var oArg = {
+					type : "detail",
+					tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
+					menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+		}
+		
+		if(rColId[1] == "lectRmCd")
+		{
+			this.ds_classRoom.copyData(this.ds_classRoomTemp);
+			this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
+		}
+	}	
 };
 
 this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
@@ -2065,7 +2083,37 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		};
 	this.gfn_showModal("popupModal", oArg, "FrameBase::include/popup_exceldown.xfdl", "", this, 400, 250, true, false, null);
 };
-]]></Script>
+
+//그리드 컬럼 정렬
+this.orderType = "desc";
+this.Div02_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.row == -1 && e.cell != 0 && e.cell !=1)
+	{
+		var dsObj = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+		
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
+		
+		if(this.orderType == "desc"){
+			
+			dsObj.set_keystring("S:" + sColId[1]);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			dsObj.set_keystring("S:-" + sColId[1]);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+			
+	}
+};]]></Script>
     <Bind>
       <BindItem id="item7" compid="Div02.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
       <BindItem id="item0" compid="Div02.form.Div00.form.Div00.form.Div01.form.Combo00" propid="value" datasetid="ds_search" columnid="yy"/>

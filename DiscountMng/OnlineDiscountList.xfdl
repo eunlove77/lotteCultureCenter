@@ -3,7 +3,7 @@
   <Form id="OnlineDiscountList" width="1280" height="720" titletext="New Form" onload="OnlineDiscountList_onload">
     <Layouts>
       <Layout height="720" width="1280">
-        <Div id="Div00" taborder="0" text="Div00" left="7" top="66" height="225" formscrolltype="both" right="9" minwidth="1140" maxwidth="">
+        <Div id="Div00" taborder="0" text="Div00" left="7" top="66" height="260" formscrolltype="both" right="9" minwidth="1140" maxwidth="">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="검색" left="0" top="11" width="24" cssclass="sta_WF_TitGray" height="14"/>
@@ -77,15 +77,21 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div08" taborder="9" text="Div01" left="0" top="160" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div08" taborder="9" text="Div01" left="0" top="160" height="50" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="온라인할인" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
-                    <CheckBox id="chkMbrGrdeAll" taborder="1" text="전체" left="115" top="5" width="41" height="20" truevalue="true" onclick="fn_checkboxAll"/>
+                    <Static id="Static00" taborder="0" text="온라인할인" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" bottom="0"/>
+                    <Div id="Div00" taborder="1" text="Div00" left="114" top="0" right="0" height="48">
+                      <Layouts>
+                        <Layout type="horizontal" flexwrap="wrap" flexcrossaxisalign="start" horizontalgap="10" verticalgap="5">
+                          <CheckBox id="chkMbrGrdeAll" taborder="0" text="전체" left="5" top="5" width="41" height="20" truevalue="true"/>
+                        </Layout>
+                      </Layouts>
+                    </Div>
                   </Layout>
                 </Layouts>
               </Div>
-              <Div id="Div09" taborder="10" text="Div01" left="0" top="192" height="33" cssclass="div_WF_CompWrap" right="0">
+              <Div id="Div09" taborder="10" text="Div01" left="0" top="Div08:-1" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="검색어" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel"/>
@@ -148,7 +154,7 @@
                       <Column size="80"/>
                       <Column size="60"/>
                       <Column size="60"/>
-                      <Column size="200"/>
+                      <Column size="300"/>
                       <Column size="80"/>
                       <Column size="200"/>
                       <Column size="60"/>
@@ -405,9 +411,9 @@ this.fn_set_chkbox = function(ds, frm, idVal){
 	{
 		var id = idVal + i;
 		var objComp = new CheckBox();
-		objComp.init(id, content[i] + ":10", 5, 90, 20);
+		objComp.init(id, content[i] + ":10", 5, 100, 20);
 		frm.addChild(id, objComp);
-		objComp.set_text(ds.getColumn(i, "cdNm"));		
+		objComp.set_text(this.gfn_isNull(ds.getColumn(i, "cdVal2")) ? ds.getColumn(i, "cdNm") : ds.getColumn(i, "cdVal2"));		
 		objComp.set_truevalue(ds.getColumn(i, "cd"));
 		objComp.set_falsevalue(false);
 		objComp.set_fittocontents("width");
@@ -509,9 +515,10 @@ this.fn_add_grid_column = function()
 		var colNm = 9 + i;
 		var cd = this.ds_mbrGrade_list.getColumn(i, "cd");
 		var cdNm = this.ds_mbrGrade_list.getColumn(i, "cdNm");
+		var cdVal2 = this.ds_mbrGrade_list.getColumn(i, "cdVal2");
 		this.Div01.form.Grid00.insertContentsCol("body", colNm);
-		this.Div01.form.Grid00.setFormatColProperty(colNm,"size",100);
-		this.Div01.form.Grid00.setCellProperty("head", colNm, "text", cdNm+" 할인율");	
+		this.Div01.form.Grid00.setFormatColProperty(colNm,"size",120);
+		this.Div01.form.Grid00.setCellProperty("head", colNm, "text", (cdVal2 ? cdVal2 : cdNm)+" 할인율");	
 		this.Div01.form.Grid00.setCellProperty("body", colNm, "text", "bind:dc"+cd);
 	}
 	
@@ -824,7 +831,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		this.fn_set_chkbox(this.ds_classType_list, this.Div00.form.Div02, "chkType");	//강좌유형 추가
 		this.fn_set_chkbox(this.ds_classState_list,this.Div00.form.Div05, "chkState");	//강좌상태 추가
 		this.fn_set_chkbox(this.ds_classGb_list, this.Div00.form.Div04, "chkGb");		//강좌구분 추가
-		this.fn_set_chkbox(this.ds_mbrGrade_list,this.Div00.form.Div08, "chkMbrGrde");	//회원등급 추가
+		this.fn_set_chkbox(this.ds_mbrGrade_list,this.Div00.form.Div08.form.Div00, "chkMbrGrde");	//회원등급 추가
 		this.fn_sesterInfo();
 		this.fn_year_add();
 		this.fn_semester_set();
