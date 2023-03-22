@@ -574,6 +574,7 @@
           <Column id="optnTypCd" type="STRING" size="256"/>
           <Column id="dsplyIconCd" type="STRING" size="256"/>
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
+          <Column id="srchLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -879,6 +880,8 @@ this.init = function()
 	this.searchFlag = 0;
 	this.Div02.form.Div01.form.Grid00.setCellProperty("head", 0, "text", 0);
 	this.ds_class_list.clearData();
+	
+	this.gridOrderInit(this.Div02.form.Div01.form.Grid00);
 }
 
 /**************************************************************************
@@ -1628,6 +1631,7 @@ this.Div02_Div00_Div00_Div00_00_00_00_Button00_onclick = function(obj:nexacro.Bu
 		}
 	}
 	
+	this.gridOrderInit(this.Div02.form.Div01.form.Grid00);
 	this.fn_search();
 };
 
@@ -2096,24 +2100,32 @@ this.Div02_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 		{	
 			obj.setCellProperty("head", i, "expandshow", "hide");
 		}
-		
-		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
-		
+	
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":")[1];
+		sColId = (sColId == "lectCd") ? "srchLectCd" : sColId;
 		if(this.orderType == "desc"){
-			
-			dsObj.set_keystring("S:" + sColId[1]);
+			dsObj.set_keystring("S:" + sColId);
 			obj.setCellProperty("head", e.cell, "expandshow", "show");
 			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
 			this.orderType="asc";
 		}else if(this.orderType == "asc"){
-			dsObj.set_keystring("S:-" + sColId[1]);
+			dsObj.set_keystring("S:-" + sColId);
 			obj.setCellProperty("head", e.cell, "expandshow", "show");
 			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
 			this.orderType="desc";
 		}
-			
 	}
-};]]></Script>
+};
+
+//그리드 컬럼 초기화
+this.gridOrderInit = function(obj) 
+{
+	this.orderType = "desc";
+	for (var i = 1; i < obj.getCellCount("head"); i++)
+	{	
+		obj.setCellProperty("head", i, "expandshow", "hide");
+	}
+}]]></Script>
     <Bind>
       <BindItem id="item7" compid="Div02.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
       <BindItem id="item0" compid="Div02.form.Div00.form.Div00.form.Div01.form.Combo00" propid="value" datasetid="ds_search" columnid="yy"/>
