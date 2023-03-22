@@ -45,8 +45,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원 등급 " left="0" top="0" width="120" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="99" fittocontents="none"/>
+                    <Static id="Static01" taborder="1" text="" left="Static00:10" top="0" bottom="0" width="100" fittocontents="none"/>
                     <Static id="Static01_00" taborder="2" text="" left="Static01:10" top="0" bottom="0" width="193" fittocontents="none" expr="comp.text == 'Y' ? '(멤버스 가족회원)' : ''"/>
+                    <Static id="Static02" taborder="3" left="Static01:0" top="0" width="100" fittocontents="none" bottom="0" expr="comp.text != '' ?  '(' + comp.text + ')' : ''"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -231,7 +232,9 @@ this.fn_set_detail = function()
 	}
 	
 	this.Div01.form.Div04.form.Static01.set_fittocontents("width");
+	this.Div01.form.Div04.form.Static02.set_fittocontents("width");
 	this.Div01.form.Div04.form.Static01_00.set_left("Static01:10");
+	
 }
 
 this.fn_save = function(){
@@ -370,6 +373,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="mbrGrdeCd" type="STRING" size="256"/>
           <Column id="mbrGrdeCdNm" type="STRING" size="256"/>
+          <Column id="mbrGrdeSubNm" type="STRING" size="256"/>
           <Column id="exsfObjYn" type="STRING" size="256"/>
           <Column id="lpntFmlyYn" type="STRING" size="256"/>
           <Column id="dcCnt" type="STRING" size="256"/>
@@ -410,6 +414,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
       <BindItem id="item13" compid="Div01.form.Div04.form.Static01_00" propid="text" datasetid="ds_detail" columnid="lpntFmlyYn"/>
       <BindItem id="item14" compid="Div01.form.Div05_01.form.Static01" propid="text" datasetid="ds_detail" columnid="exsfObjYn"/>
       <BindItem id="item15" compid="Div01.form.Div02.form.Edit00" propid="value" datasetid="ds_detail" columnid="mbrNo"/>
+      <BindItem id="item2" compid="Div01.form.Div04.form.Static02" propid="text" datasetid="ds_detail" columnid="mbrGrdeSubNm"/>
     </Bind>
   </Form>
 </FDL>
