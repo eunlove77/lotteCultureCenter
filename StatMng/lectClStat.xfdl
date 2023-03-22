@@ -24,7 +24,7 @@
                   <Layout>
                     <Static id="Static00_00" taborder="0" text="전년학기 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
                     <Combo id="yy" taborder="1" text="Combo00" left="116" top="5" width="100" height="20"/>
-                    <Combo id="Combo00" taborder="2" text="학기" left="yy:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+                    <Combo id="smsterCd" taborder="2" text="학기" left="yy:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -35,7 +35,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="지점" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="100" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
+              <Combo id="ComboSpot" taborder="1" left="116" top="5" width="160" height="20" index="0" value="1" ondropdown="Combo00_ondropdown" oncloseup="Combo00_oncloseup" text="" innerdataset="ds_brch_cd" codecolumn="cd" datacolumn="cdNm"/>
             </Layout>
           </Layouts>
         </Div>
@@ -46,8 +46,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="포함여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <CheckBox id="CheckBox00" taborder="1" text="재료비/대여비(강사지급) 제외" left="116" top="5" width="170" height="20"/>
-                    <CheckBox id="CheckBox00_00" taborder="2" text="재료비/대여비(강사미지급) 제외" left="CheckBox00:10" top="5" width="180" height="20"/>
+                    <CheckBox id="lectOptnTypeCd02" taborder="1" text="재료비/대여비(강사지급) 제외" left="116" top="5" width="170" height="20"/>
+                    <CheckBox id="lectOptnTypeCd01" taborder="2" text="재료비/대여비(강사미지급) 제외" left="lectOptnTypeCd02:10" top="5" width="180" height="20"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -71,8 +71,8 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00_00" taborder="0" text="금년학기 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
-                    <Combo id="yy2" taborder="1" text="Combo00" left="116" top="5" width="100" height="20"/>
-                    <Combo id="Combo00" taborder="2" text="학기" left="yy2:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
+                    <Combo id="yy" taborder="1" text="Combo00" left="116" top="5" width="100" height="20"/>
+                    <Combo id="smsterCd" taborder="2" text="학기" left="yy:5" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" index="0" value=""/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -98,16 +98,16 @@
                           <Row size="24"/>
                         </Rows>
                         <Band id="head">
-                          <Cell text="총합"/>
+                          <Cell text="구분"/>
                           <Cell col="1" text="전년소계"/>
                           <Cell col="2" text="금년소계"/>
                           <Cell col="3" text="신장률"/>
                         </Band>
                         <Band id="body">
-                          <Cell/>
-                          <Cell col="1" text="bind:pYear"/>
-                          <Cell col="2" text="bind:cYear"/>
-                          <Cell col="3" text="bind:rate"/>
+                          <Cell text="bind:lectClNm"/>
+                          <Cell col="1" text="bind:pyearVal"/>
+                          <Cell col="2" text="bind:yearVal"/>
+                          <Cell col="3" text="bind:elongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -152,15 +152,15 @@
                         <Band id="body">
                           <Cell text="bind:strNm"/>
                           <Cell col="1" text="bind:lectClNm"/>
-                          <Cell col="2" text="bind:pYearTtl"/>
-                          <Cell col="3" text="bind:cYearTtl"/>
-                          <Cell col="4" text="bind:increaseRate"/>
-                          <Cell col="5" text="bind:pYearAdult"/>
-                          <Cell col="6" text="bind:cYearAdult"/>
-                          <Cell col="7" text="bind:adultIncreaseRate"/>
-                          <Cell col="8" text="bind:pYearChild"/>
-                          <Cell col="9" text="bind:cYearChild"/>
-                          <Cell col="10" text="bind:childIncreaseRate"/>
+                          <Cell col="2" text="bind:pyearVal"/>
+                          <Cell col="3" text="bind:yearVal"/>
+                          <Cell col="4" text="bind:elongation"/>
+                          <Cell col="5" text="bind:pyearAdultVal"/>
+                          <Cell col="6" text="bind:yearAdultVal"/>
+                          <Cell col="7" text="bind:adultElongation"/>
+                          <Cell col="8" text="bind:pyearChildVal"/>
+                          <Cell col="9" text="bind:yearChildVal"/>
+                          <Cell col="10" text="bind:childElongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -185,16 +185,16 @@
                           <Row size="24"/>
                         </Rows>
                         <Band id="head">
-                          <Cell text="총합"/>
+                          <Cell text="구분"/>
                           <Cell col="1" text="전년소계"/>
                           <Cell col="2" text="금년소계"/>
                           <Cell col="3" text="신장률"/>
                         </Band>
                         <Band id="body">
-                          <Cell/>
-                          <Cell col="1" text="bind:pYear"/>
-                          <Cell col="2" text="bind:cYear"/>
-                          <Cell col="3" text="bind:rate"/>
+                          <Cell text="bind:lectClNm"/>
+                          <Cell col="1" text="bind:pyearVal"/>
+                          <Cell col="2" text="bind:yearVal"/>
+                          <Cell col="3" text="bind:elongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -239,15 +239,15 @@
                         <Band id="body">
                           <Cell text="bind:strNm"/>
                           <Cell col="1" text="bind:lectClNm"/>
-                          <Cell col="2" text="bind:pYearTtl"/>
-                          <Cell col="3" text="bind:cYearTtl"/>
-                          <Cell col="4" text="bind:increaseRate"/>
-                          <Cell col="5" text="bind:pYearAdult"/>
-                          <Cell col="6" text="bind:cYearAdult"/>
-                          <Cell col="7" text="bind:adultIncreaseRate"/>
-                          <Cell col="8" text="bind:pYearChild"/>
-                          <Cell col="9" text="bind:cYearChild"/>
-                          <Cell col="10" text="bind:childIncreaseRate"/>
+                          <Cell col="2" text="bind:pyearVal"/>
+                          <Cell col="3" text="bind:yearVal"/>
+                          <Cell col="4" text="bind:elongation"/>
+                          <Cell col="5" text="bind:pyearAdultVal"/>
+                          <Cell col="6" text="bind:yearAdultVal"/>
+                          <Cell col="7" text="bind:adultElongation"/>
+                          <Cell col="8" text="bind:pyearChildVal"/>
+                          <Cell col="9" text="bind:yearChildVal"/>
+                          <Cell col="10" text="bind:childElongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -272,16 +272,16 @@
                           <Row size="24"/>
                         </Rows>
                         <Band id="head">
-                          <Cell text="총합"/>
+                          <Cell text="구분"/>
                           <Cell col="1" text="전년소계"/>
                           <Cell col="2" text="금년소계"/>
                           <Cell col="3" text="신장률"/>
                         </Band>
                         <Band id="body">
-                          <Cell/>
-                          <Cell col="1" text="bind:pYear"/>
-                          <Cell col="2" text="bind:cYear"/>
-                          <Cell col="3" text="bind:rate"/>
+                          <Cell text="bind:lectClNm"/>
+                          <Cell col="1" text="bind:pyearVal"/>
+                          <Cell col="2" text="bind:yearVal"/>
+                          <Cell col="3" text="bind:elongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -326,15 +326,15 @@
                         <Band id="body">
                           <Cell text="bind:strNm"/>
                           <Cell col="1" text="bind:lectClNm"/>
-                          <Cell col="2" text="bind:pYearTtl"/>
-                          <Cell col="3" text="bind:cYearTtl"/>
-                          <Cell col="4" text="bind:increaseRate"/>
-                          <Cell col="5" text="bind:pYearAdult"/>
-                          <Cell col="6" text="bind:cYearAdult"/>
-                          <Cell col="7" text="bind:adultIncreaseRate"/>
-                          <Cell col="8" text="bind:pYearChild"/>
-                          <Cell col="9" text="bind:cYearChild"/>
-                          <Cell col="10" text="bind:childIncreaseRate"/>
+                          <Cell col="2" text="bind:pyearVal"/>
+                          <Cell col="3" text="bind:yearVal"/>
+                          <Cell col="4" text="bind:elongation"/>
+                          <Cell col="5" text="bind:pyearAdultVal"/>
+                          <Cell col="6" text="bind:yearAdultVal"/>
+                          <Cell col="7" text="bind:adultElongation"/>
+                          <Cell col="8" text="bind:pyearChildVal"/>
+                          <Cell col="9" text="bind:yearChildVal"/>
+                          <Cell col="10" text="bind:childElongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -359,16 +359,16 @@
                           <Row size="24"/>
                         </Rows>
                         <Band id="head">
-                          <Cell text="총합"/>
+                          <Cell text="구분"/>
                           <Cell col="1" text="전년소계"/>
                           <Cell col="2" text="금년소계"/>
                           <Cell col="3" text="신장률"/>
                         </Band>
                         <Band id="body">
-                          <Cell/>
-                          <Cell col="1" text="bind:pYear"/>
-                          <Cell col="2" text="bind:cYear"/>
-                          <Cell col="3" text="bind:rate"/>
+                          <Cell text="bind:lectClNm"/>
+                          <Cell col="1" text="bind:pyearVal"/>
+                          <Cell col="2" text="bind:yearVal"/>
+                          <Cell col="3" text="bind:elongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -413,15 +413,15 @@
                         <Band id="body">
                           <Cell text="bind:strNm"/>
                           <Cell col="1" text="bind:lectClNm"/>
-                          <Cell col="2" text="bind:pYearTtl"/>
-                          <Cell col="3" text="bind:cYearTtl"/>
-                          <Cell col="4" text="bind:increaseRate"/>
-                          <Cell col="5" text="bind:pYearAdult"/>
-                          <Cell col="6" text="bind:cYearAdult"/>
-                          <Cell col="7" text="bind:adultIncreaseRate"/>
-                          <Cell col="8" text="bind:pYearChild"/>
-                          <Cell col="9" text="bind:cYearChild"/>
-                          <Cell col="10" text="bind:childIncreaseRate"/>
+                          <Cell col="2" text="bind:pyearVal"/>
+                          <Cell col="3" text="bind:yearVal"/>
+                          <Cell col="4" text="bind:elongation"/>
+                          <Cell col="5" text="bind:pyearAdultVal"/>
+                          <Cell col="6" text="bind:yearAdultVal"/>
+                          <Cell col="7" text="bind:adultElongation"/>
+                          <Cell col="8" text="bind:pyearChildVal"/>
+                          <Cell col="9" text="bind:yearChildVal"/>
+                          <Cell col="10" text="bind:childElongation"/>
                         </Band>
                       </Format>
                     </Formats>
@@ -466,10 +466,10 @@ this.lectClStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		
 	var data = new Date();
 	var strtYy = data.getFullYear();
-	var endYy = 2017
+	var endYy = 2018
 	
 	var comboYyObj = this.Div01.form.Div00_00.form.yy;
-	var comboYyObj2 = this.Div02.form.Div00_00.form.yy2;
+	var comboYyObj2 = this.Div02.form.Div00_00.form.yy;
 	
 	
 	this.gfn_set_year(this, comboYyObj, endYy, strtYy, "년도", 1);	
@@ -486,16 +486,129 @@ this.Tab00_canchange = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInf
 		this.Div03.set_visible(false);
 	}
 	
-	//this.fn_list(e.postindex);
+	this.fn_list(e.postindex);		
 };
+
+
+
+this.Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_list(this.Tab00.tabindex);
+};
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+this.fn_list = function(tabIndex){
+
+
+	var _strSvcUrl = "";
+	
+	var arrLectOptnTypeCd = new Array();
+
+	if(this.Div03.form.Div00.form.lectOptnTypeCd02.value == true){
+		arrLectOptnTypeCd.push("02");
+	}
+	if(this.Div03.form.Div00.form.lectOptnTypeCd01.value == true){
+		arrLectOptnTypeCd.push("01");
+	}
+	
+	this.ds_search.setColumn(0, "pStrtDtm", this.Div01.form.Div00.form.strtDtm.value);
+	this.ds_search.setColumn(0, "pEndDtm", this.Div01.form.Div00.form.endDtm.value);
+	this.ds_search.setColumn(0, "pYear", this.Div01.form.Div00_00.form.yy.value);
+	this.ds_search.setColumn(0, "pLectSmsterCd", this.Div01.form.Div00_00.form.smsterCd.value);
+	this.ds_search.setColumn(0, "strtDtm", this.Div02.form.Div00.form.strtDtm.value);
+	this.ds_search.setColumn(0, "endDtm", this.Div02.form.Div00.form.endDtm.value);
+	this.ds_search.setColumn(0, "year", this.Div02.form.Div00_00.form.yy.value);
+	this.ds_search.setColumn(0, "lectSmsterCd", this.Div02.form.Div00_00.form.smsterCd.value);	
+	this.ds_search.setColumn(0, "strCd", this.Div04.form.ComboSpot.value);
+	this.ds_search.setColumn(0, "chkLectOptnTypeCd", arrLectOptnTypeCd.join(",")); 	
+	
+	if(this.gfn_isNull(this.Div01.form.Div00.form.strtDtm.value) || this.gfn_isNull(this.Div01.form.Div00.form.endDtm.value)){
+		this.alert("전년 기간을 선택해주세요.");
+	}
+	else if(this.gfn_isNull(this.Div01.form.Div00_00.form.yy.value)){
+		this.alert("전년도를 선택해주세요.");
+	}
+	else if(this.gfn_isNull(this.Div01.form.Div00_00.form.smsterCd.value)){
+		this.alert("전년학기를 선택해주세요.");
+	}
+	else if(this.gfn_isNull(this.Div02.form.Div00.form.strtDtm.value) || this.gfn_isNull(this.Div02.form.Div00.form.endDtm.value)){
+		this.alert("금년 기간을 입력해주세요.");
+	}
+	else if(this.gfn_isNull(this.Div02.form.Div00_00.form.yy.value)){
+		this.alert("금년도를 선택해주세요.");
+	}
+	else if(this.gfn_isNull(this.Div02.form.Div00_00.form.smsterCd.value)){
+		this.alert("금년학기를 선택해주세요.");
+	}else{
+	
+		if(tabIndex == 0){
+			_strSvcUrl = this.application.Admin_svc + "::stat/lectClSlngStat.do"
+		}else if(tabIndex == 1){
+			_strSvcUrl = this.application.Admin_svc + "::stat/lectClMbrCntStat.do"
+		}else if(tabIndex == 2){
+			_strSvcUrl = this.application.Admin_svc + "::stat/lectClAtlctCntStat.do"
+		}else if(tabIndex == 3){
+			_strSvcUrl = this.application.Admin_svc + "::stat/lectClLectCntStat.do"
+		}
+		
+		var tranObj = {
+			strSvcId : "list",
+			strSvcUrl : _strSvcUrl,
+			inData : "search=ds_search",
+			outData : "ds_list=output1 ds_total=output2", 
+			strArg : "",
+			callBackFnc : "fn_callback",
+			isAsync : true		
+		};
+		
+		this.gfn_transaction(tranObj);
+	}
+}
+
+this.fn_callback = function(svcID,errorCode,errorMsg){
+	
+	if(errorCode != 0)
+	{    
+		this.alert(errorCode+"\n"+errorMsg);
+		this.ds_total.clearData();
+		this.ds_list.clearData();
+		return;
+	}
+
+	switch(svcID)
+	{    
+		case "list":	
+			
+		break; 		
+	}
+}
+
+// 컴포넌트 변경시 필터 및 목록 초기화
+this.fn_init = function(){	
+	this.ds_list.clearData();
+}
 ]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
+          <Column id="pStrtDtm" type="STRING" size="256"/>
+          <Column id="pEndDtm" type="STRING" size="256"/>
+          <Column id="pYear" type="STRING" size="256"/>
+          <Column id="pLectSmsterCd" type="STRING" size="256"/>
           <Column id="strtDtm" type="STRING" size="256"/>
           <Column id="endDtm" type="STRING" size="256"/>
-          <Column id="spotCd" type="STRING" size="256"/>
+          <Column id="year" type="STRING" size="256"/>
+          <Column id="lectSmsterCd" type="STRING" size="256"/>
+          <Column id="strCd" type="STRING" size="256"/>
+          <Column id="chkLectOptnTypeCd" type="STRING" size="256"/>
         </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
       <Dataset id="ds_brch_cd">
         <ColumnInfo>
@@ -532,46 +645,25 @@ this.Tab00_canchange = function(obj:nexacro.Tab,e:nexacro.TabIndexChangeEventInf
       </Dataset>
       <Dataset id="ds_total">
         <ColumnInfo>
-          <Column id="pYear" type="STRING" size="256"/>
-          <Column id="cYear" type="STRING" size="256"/>
-          <Column id="rate" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="pyearVal" type="STRING" size="256"/>
+          <Column id="yearVal" type="STRING" size="256"/>
+          <Column id="elongation" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="pYear">0</Col>
-            <Col id="cYear">0</Col>
-            <Col id="rate">0</Col>
-          </Row>
-          <Row>
-            <Col id="pYear">0</Col>
-            <Col id="cYear">0</Col>
-            <Col id="rate">0</Col>
-          </Row>
-          <Row>
-            <Col id="pYear">0</Col>
-            <Col id="cYear">0</Col>
-            <Col id="rate">0</Col>
-          </Row>
-          <Row>
-            <Col id="pYear">0</Col>
-            <Col id="cYear">0</Col>
-            <Col id="rate">0</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_list">
         <ColumnInfo>
           <Column id="strNm" type="STRING" size="256"/>
           <Column id="lectClNm" type="STRING" size="256"/>
-          <Column id="pYearTtl" type="STRING" size="256"/>
-          <Column id="cYearTtl" type="STRING" size="256"/>
-          <Column id="increaseRate" type="STRING" size="256"/>
-          <Column id="pYearAdult" type="STRING" size="256"/>
-          <Column id="cYearAdult" type="STRING" size="256"/>
-          <Column id="adultIncreaseRate" type="STRING" size="256"/>
-          <Column id="pYearChild" type="STRING" size="256"/>
-          <Column id="cYearChild" type="STRING" size="256"/>
-          <Column id="childIncreaseRate" type="STRING" size="256"/>
+          <Column id="pyearVal" type="STRING" size="256"/>
+          <Column id="yearVal" type="STRING" size="256"/>
+          <Column id="elongation" type="STRING" size="256"/>
+          <Column id="pyearChildVal" type="STRING" size="256"/>
+          <Column id="yearChildVal" type="STRING" size="256"/>
+          <Column id="childElongation" type="STRING" size="256"/>
+          <Column id="pyearAdultVal" type="STRING" size="256"/>
+          <Column id="yearAdultVal" type="STRING" size="256"/>
+          <Column id="adultElongation" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
