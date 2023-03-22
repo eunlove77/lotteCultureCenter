@@ -43,7 +43,7 @@
                 <Cell col="3" text="bind:bareaNm" subsumtext="bind:brchAreaCd"/>
                 <Cell col="4" text="bind:addr" subsumtext="bind:addr"/>
                 <Cell col="5" text="bind:telno" calendardateformat="expr:yyyy-MM-dd HH:mm:ss" subsumtext="bind:telno"/>
-                <Cell col="6" text="bind:lectRmCnt" subsumtext="bind:lectRmCnt"/>
+                <Cell col="6" text="bind:lectRmCnt" subsumtext="bind:lectRmCnt" displaytype="normal"/>
                 <Cell col="7" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;" subsumtext="bind:expsrYn"/>
                 <Cell col="8" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''" subsumtext="bind:rgprId"/>
                 <Cell col="9" text="bind:rgprDtm" edittype="none" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date" subsumtext="bind:rgprDtm"/>
@@ -152,7 +152,7 @@
           <Column id="dtlAddr" type="STRING" size="256"/>
           <Column id="addr" type="STRING" size="256"/>
           <Column id="telno" type="STRING" size="256"/>
-          <Column id="lectRmCnt" type="INT" size="256"/>
+          <Column id="lectRmCnt" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprIp" type="STRING" size="256"/>
@@ -192,7 +192,7 @@
           <Column id="dtlAddr" type="STRING" size="256"/>
           <Column id="addr" type="STRING" size="256"/>
           <Column id="telno" type="STRING" size="256"/>
-          <Column id="lectRmCnt" type="INT" size="256"/>
+          <Column id="lectRmCnt" type="STRING" size="256"/>
           <Column id="expsrYn" type="STRING" size="256"/>
           <Column id="rgprId" type="STRING" size="256"/>
           <Column id="rgprIp" type="STRING" size="256"/>
@@ -333,18 +333,21 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridBranchList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
-	
-	if(rColId[1] == "brchCd")
-	{	
-		this.popCnt ++;
+	if(e.cell != 0)
+	{
+		var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
 		
-		var oArg = {
-			  brchCd : obj.getBindDataset().getColumn(e.row, "brchCd")
-			, brchAreaCd : obj.getBindDataset().getColumn(e.row, "brchAreaCd") 
-		};
-		
-		this.gfn_openPopup("branchDtlPop"+this.popCnt, oArg, "BranchMng::BranchDtl.xfdl", this, null, null, true, true, null);	
+		if(rColId[1] == "brchCd")
+		{	
+			this.popCnt ++;
+			
+			var oArg = {
+				  brchCd : obj.getBindDataset().getColumn(e.row, "brchCd")
+				, brchAreaCd : obj.getBindDataset().getColumn(e.row, "brchAreaCd") 
+			};
+			
+			this.gfn_openPopup("branchDtlPop"+this.popCnt, oArg, "BranchMng::BranchDtl.xfdl", this, null, null, true, true, null);	
+		}
 	}
 };
 

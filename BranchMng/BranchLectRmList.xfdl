@@ -41,7 +41,7 @@
                 <Cell col="11" text="등록일"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:brchCd" displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="bind:rnum" subsumtext="bind:rnum"/>
                 <Cell col="2" text="expr:brchCd ? '['+brchCd+']' + brchNm : ''" textAlign="center" subsumtext="bind:brchCd"/>
                 <Cell col="3" text="bind:lectRmCd" subsumtext="bind:lectRmCd"/>
@@ -352,16 +352,18 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridBranchLectRmList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {	
-	var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
-	if(rColId[1] == "lectRmNm")
-	{
-		this.popCnt ++;
-		var oArg = {
-			brchCd 	 : obj.getBindDataset().getColumn(e.row, "brchCd") ,
-			lectRmCd : obj.getBindDataset().getColumn(e.row, "lectRmCd")
-		};
-		
-		this.gfn_openPopup("branchLectRmDtlPop"+this.popCnt, oArg, "BranchMng::BranchLectRmDtl.xfdl", this, null, null, true, true, null);	
+	if(e.cell != 0){
+		var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
+		if(rColId[1] == "lectRmNm")
+		{
+			this.popCnt ++;
+			var oArg = {
+				brchCd 	 : obj.getBindDataset().getColumn(e.row, "brchCd") ,
+				lectRmCd : obj.getBindDataset().getColumn(e.row, "lectRmCd")
+			};
+			
+			this.gfn_openPopup("branchLectRmDtlPop"+this.popCnt, oArg, "BranchMng::BranchLectRmDtl.xfdl", this, null, null, true, true, null);	
+		}
 	}
 };
 

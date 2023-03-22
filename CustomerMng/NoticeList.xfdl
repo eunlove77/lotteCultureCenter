@@ -5,11 +5,11 @@
       <Layout height="800" width="1280">
         <Static id="txtMenuNm" taborder="0" text="메뉴명" left="10" top="30" height="32" right="10" cssclass="stc_WF_TxtMenu"/>
         <Div id="Div00" taborder="1" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
-        <Grid oncolresized="gfn_oncolresized" id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" cellmovingtype="col" oncellclick="GridNoticeList_oncellclick" cellsizingtype="col" onheadclick="GridNoticeList_onheadclick">
+        <Grid oncolresized="gfn_oncolresized" id="GridNoticeList" taborder="2" left="10" top="270" binddataset="noticeDs" autofittype="col" right="10" bottom="10" cssclass="grd_WF_TableType" nodatatext="검색결과 없음" cellmovingtype="col,band" oncellclick="GridNoticeList_oncellclick" cellsizingtype="col" onheadclick="GridNoticeList_onheadclick">
           <Formats>
             <Format id="default">
               <Columns>
-                <Column size="40"/>
+                <Column size="40" band="left"/>
                 <Column size="88"/>
                 <Column size="100"/>
                 <Column size="350"/>
@@ -38,15 +38,15 @@
               </Band>
               <Band id="body">
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" expr="expr:dataset.checkarray[currow]"/>
-                <Cell col="1" text="bind:cdNm"/>
-                <Cell col="2" text="bind:brchNm"/>
-                <Cell col="3" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer"/>
-                <Cell col="4" text="expr:postStDt? postStDt + ' ~ ' + postEndDt : ''"/>
-                <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''"/>
-                <Cell col="6" text="bind:rgprDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date"/>
-                <Cell col="7" text="bind:inqCnt"/>
-                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;fixYn&quot;) == &quot;Y&quot; ? &quot;고정&quot; : &quot;미고정&quot;"/>
-                <Cell col="9" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
+                <Cell col="1" text="bind:cdNm" subsumtext="bind:clCd"/>
+                <Cell col="2" text="bind:brchNm" subsumtext="bind:brchCd"/>
+                <Cell col="3" text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer" subsumtext="bind:titNm"/>
+                <Cell col="4" text="expr:postStDt? postStDt + ' ~ ' + postEndDt : ''" subsumtext="bind:postStDt"/>
+                <Cell col="5" text="expr:rgprId ? rgprNm + '('  + rgprId + ')' : ''" subsumtext="bind:rgprId"/>
+                <Cell col="6" text="bind:rgprDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" displaytype="date" subsumtext="bind:rgprDtm"/>
+                <Cell col="7" text="bind:inqCnt" subsumtext="bind:inqCnt"/>
+                <Cell col="8" subsumtext="bind:fixYn" text="expr:dataset.getColumn(currow, &quot;fixYn&quot;) == &quot;Y&quot; ? &quot;고정&quot; : &quot;미고정&quot;"/>
+                <Cell col="9" subsumtext="bind:expsrYn" text="expr:dataset.getColumn(currow, &quot;expsrYn&quot;) == &quot;Y&quot; ? &quot;노출&quot; : &quot;미노출&quot;"/>
               </Band>
             </Format>
           </Formats>
@@ -249,7 +249,7 @@ include "Base::popup.xjs";
 this.application = null;
 this.rowcount = 0;
 this.popCnt = 0;
-
+this.personalId = "noticeDs";
 /**************************************************************************
 * FORM EVENT 영역(onload)
 **************************************************************************/
@@ -264,7 +264,10 @@ this.NoticeList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.gfnSetCheckBoxNoDataset(this.noticeDs, this.GridNoticeList, 0);
 	
 	// 그리드 개인화
-	this.fn_personalization("getPsnlztn");
+	//this.fn_personalization("getPsnlztn");
+	
+	//this.alert(this.personalId);
+	this.gfn_onContextMenu(this.GridNoticeList, this.personalId);
 	
 	//지점코드 세팅
 	this.fn_set_spotCd();
@@ -384,21 +387,24 @@ this.Div00_00_conDiv_searchDiv_btnInit_onclick = function(obj:nexacro.Button,e:n
 //그리드 상세 페이지 이동
 this.GridNoticeList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.cell == 3){
-	
-		this.popCnt ++;
-		var oArg = {
-			notcSeqno : obj.getBindDataset().getColumn(e.row, "notcSeqno")
-		};
+	if(e.cell != 0){
+		this.colId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
 		
-		this.gfn_openPopup("noticeDtlPop"+this.popCnt, oArg, "CustomerMng::NoticeDtl.xfdl", this, null, null, true, true, null);		
+		if(this.colId[1] == "titNm"){
+		
+			this.popCnt ++;
+			var oArg = {
+				notcSeqno : obj.getBindDataset().getColumn(e.row, "notcSeqno")
+			};
+			
+			this.gfn_openPopup("noticeDtlPop"+this.popCnt, oArg, "CustomerMng::NoticeDtl.xfdl", this, null, null, true, true, null);		
+		}
 	}
 };
 
 /**************************************************************************
 * 사용자 FUNCTION 영역
 **************************************************************************/
-
 
 //지점 세팅
 this.fn_set_spotCd = function()
@@ -624,40 +630,6 @@ this.fn_chkClCdAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventI
 	}
 };
 
-// 그리드 개인화
-this.fn_personalization = function(strSvcId){
-	
-	var strSvcUrl   = this.application.Admin_svc;
-	var inData      = "";
-	var outData     = "";
-	var strArg      = "";
-	var callBackFnc = "fnCallback";
-	var isAsync     = true;
-	
-	if(strSvcId == "getPsnlztn"){		
-		
-		this.ds_grid_psnlztn.setColumn(0, "gridId", "notice_list_grid");
-		
-		strSvcUrl   = strSvcUrl + "::getGridPersonalization.do";		
-		inData = "data=ds_grid_psnlztn";
-		outData = "ds_grid_psnlztn=output1";
-	}else if(strSvcId == "setPsnlztn"){
-		strSvcUrl   = strSvcUrl + "::setGridPersonalization.do";
-		inData = "data=ds_grid_psnlztn";
-	}
-	
-	var tranObj = {
-		strSvcId : strSvcId,
-		strSvcUrl : strSvcUrl,
-		inData : inData,
-		outData : outData,
-		strArg : strArg,
-		callBackFnc : callBackFnc,
-		isAsync : isAsync
-	}
-	this.gfn_transaction(tranObj);
-}
-
 //콜백
 this.fnCallback = function(svcID,errorCode,errorMsg)
 {
@@ -738,58 +710,50 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 	}
 	
 };
+
 this.GridNoticeList_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.row != 0)
+	if(e.row == -1 && e.cell != 0)
 	{
-		var ds = obj.getBindDataset();
-		var columnId = "";
-		var txt = obj.getCellText(e.row, e.cell);
-		
-		for(var i = 1; i < ds.getColCount(); i++){
+		var objDs = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
 			obj.setCellProperty("head", i, "expandshow", "hide");
 		}
-		columnId = ds.getColID(e.cell);
-		//columnId2 = obj.getCellValue(e.row, e.cell);
-		columnId2 = this.noticeDs.getColID();
-		//columnId3 = this.noticeDs.getColumn(e.row , e.cell);
-		//columnId4 = this.noticeDs.getColumnInfo(e.cell);
-		//columnId5 = obj.getCellValue(e.row, e.cell);
-		//columnId6 = obj.getBindDataset()
+		var qq = obj.getCellProperty("body", e.col,"subsumtext");
+		var bb = obj.getCellProperty("head", e.col,"text");
+		var bb22 = obj.getCellProperty("body", e.col,"text");
+		var bb33 = obj.getCellProperty("head", e.col,"subsumtext");
 		
-		//columnId2 = obj.getBindCellIndex("head")
-		//this.alert("컬럼ID->" + columnId + "컬럼명->" + txt + "=======셀" + e.cell + "컬럼ID222222222->" + columnId2);
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
 		
 		if(this.orderType == "desc"){
 			
-			this.noticeDs.set_keystring("S:" + columnId);
+			this.noticeDs.set_keystring("S:" + sColId[1]);
 			obj.setCellProperty("head", e.cell, "expandshow", "show");
 			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
 			this.orderType="asc";
 		}else if(this.orderType == "asc"){
-			this.noticeDs.set_keystring("S:-" + columnId);
+			this.noticeDs.set_keystring("S:-" + sColId[1]);
 			obj.setCellProperty("head", e.cell, "expandshow", "show");
 			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
 			this.orderType="desc";
 		}
+			
 	}
 };
 
-/*this.GridNoticeList_onrbuttondown = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
-{	//현재 클릭 셀 기준
-	var objDs2 = this.ContextPop.form;
-	objDs2.popupMenu.trackPopupByComponent(obj, e.clientx, e.clienty);
-};
-
+//그리드 개인화 저장
 this.popupMenu_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
 {
 	var objDs = this.ds_grid_psnlztn;
 	var format = this.GridNoticeList.getCurFormatString();
 	
-	objDs.setColumn(0, "gridId", "notice_list_grid");
+	objDs.setColumn(0, "gridId", this.personalId);
 	objDs.setColumn(0, "format", format);
 	
-	this.fn_personalization("setPsnlztn");
-};*/]]></Script>
+	this.gfn_personalization("setPsnlztn");
+};]]></Script>
   </Form>
 </FDL>

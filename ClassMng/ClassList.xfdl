@@ -976,7 +976,13 @@ this.fn_search = function()
 //지점 세팅
 this.fn_classBrch_set = function()
 {	
-	if(nexacro.getPrivateProfile("brchCd") != "0000")
+	if(nexacro.getPrivateProfile("brchCd") == "0000")
+	{
+		this.ds_gdsSpotCd_list.insertRow(0);
+		this.ds_gdsSpotCd_list.setColumn(0, "cd", "");
+		this.ds_gdsSpotCd_list.setColumn(0, "cdNm", "전체");
+	}
+	else
 	{
 		this.ds_gdsSpotCd_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
 	}
@@ -1636,55 +1642,58 @@ this.Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup = function(obj:nexacro.Edit
 this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 
-	var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
-	
-	if(rColId[1] == "lectCd")
+	if(e.cell != 0 && e.cell !=1 )
 	{
-		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_class_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.getOwnerFrame().param.MENU_ID,
-			searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+		var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
+		
+		if(rColId[1] == "lectCd")
+		{
+			var arrArguments = {
+				brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+				yy : this.ds_class_list.getColumn(e.row, "yy"),
+				lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+				lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+			}
+			
+			this.popCnt++;
+			this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 		}
 		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
-	
-	if(rColId[1] == "stayCnt")
-	{
-		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_class_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.getOwnerFrame().param.MENU_ID,
-			type : 'stay',
-			searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+		if(rColId[1] == "stayCnt")
+		{
+			var arrArguments = {
+				brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+				yy : this.ds_class_list.getColumn(e.row, "yy"),
+				lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+				lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				type : 'stay',
+				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+			}
+			
+			this.popCnt++;
+			this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 		}
 		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
-	
-	if(rColId[1] == "tcNm")
-	{
-		this.popCnt++;
-		var oArg = {
-				type : "detail",
-				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
-				menuSeq : this.getOwnerFrame().param.MENU_ID
-		};
-		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
-	}
-	
-	if(rColId[1] == "lectRmCd")
-	{
-		this.ds_classRoom.copyData(this.ds_classRoomTemp);
-		this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
-	}
+		if(rColId[1] == "tcNm")
+		{
+			this.popCnt++;
+			var oArg = {
+					type : "detail",
+					tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
+					menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+		}
+		
+		if(rColId[1] == "lectRmCd")
+		{
+			this.ds_classRoom.copyData(this.ds_classRoomTemp);
+			this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
+		}
+	}	
 };
 
 this.ds_class_list_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
