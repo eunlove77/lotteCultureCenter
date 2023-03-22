@@ -77,42 +77,49 @@ this.Application_onload = function(obj:nexacro.Application,e:nexacro.LoadEventIn
 	this.LoginFrame = this.mainframe.VFrameSet00.HFrameSet00.VFrameSet01.LoginFrame;
 	this.BottomFrame = this.mainframe.VFrameSet00.BottomFrame;
 	this.MainFrame	= this.mainframe.VFrameSet00.HFrameSet00.VFrameSet01.MainFrame;
+
+	var domain_realse = new Array("http://cul.dpt.co.kr", "http://culture.dpt.co.kr");
+	var domain_dev = new Array("http://culdev.dpt.co.kr");
+	var domain_local = new Array("http://localhost:8082");
+	var domainArr = new Array(domain_realse, domain_dev, domain_local);
 	
+	var domain = "";
 	var _domain = window.location.host;
-	if(_domain.indexOf("cul.dpt.co.kr") > -1 || _domain.indexOf("culture.dpt.co.kr") > -1 ) {
-		this.Loing_svc = "Login_svc_rel";
-		this.Session_svc = "Session_svc_rel";
-		this.Menu_svc = "Menu_svc_rel";
-		this.Admin_svc = "Admin_svc_rel";
-		this.Domain = this.getVariable("domain_rel");		
-	}else if(_domain.indexOf("culdev.dpt.co.kr") > -1){
-		this.Loing_svc = "Login_svc_dev";
-		this.Session_svc = "Session_svc_dev";
-		this.Menu_svc = "Menu_svc_dev";
-		this.Admin_svc = "Admin_svc_dev";
-		this.Domain = this.getVariable("domain_dev");
-	}else{
-		this.Loing_svc = "Login_svc";
-		this.Session_svc = "Session_svc";
-		this.Menu_svc = "Menu_svc";
-		this.Admin_svc = "Admin_svc";
-		this.Domain = this.getVariable("domain");
+	for(var arr of domainArr){
+		for(var dm of arr){
+			if(dm.indexOf(_domain) > -1){
+				domain = dm;
+				break;
+			}
+		}
+		if(domain) break;
+	}
+	this.Domain = domain;
+	var _typedef_url = domain + "/admin/typedefinition.xml";
+	
+	var serviceArr = new Array("Login_svc", "Session_svc", "Menu_svc", "Admin_svc");
+	var service;
+	for(var svc of serviceArr){
+		this[svc] = svc;
+		//서비스 url 세팅
+		service = nexacro._getService(svc, _typedef_url);
+		service.set_url(this.Domain + service.url.slice(1));
 	}
 	
 	/*if(this.resources_type == "release"){
-		this.Loing_svc = "Login_svc_release";
+		this.Login_svc = "Login_svc_release";
 		this.Session_svc = "Session_svc_release";
 		this.Menu_svc = "Menu_svc_release";
 		this.Admin_svc = "Admin_svc_release";
 		this.Domain = this.getVariable("domain_release");		
 	}else if(this.resources_type == "dev"){
-		this.Loing_svc = "Login_svc_dev";
+		this.Login_svc = "Login_svc_dev";
 		this.Session_svc = "Session_svc_dev";
 		this.Menu_svc = "Menu_svc_dev";
 		this.Admin_svc = "Admin_svc_dev";
 		this.Domain = this.getVariable("domain_dev");
 	}else{
-		this.Loing_svc = "Login_svc";
+		this.Login_svc = "Login_svc";
 		this.Session_svc = "Session_svc";
 		this.Menu_svc = "Menu_svc";
 		this.Admin_svc = "Admin_svc";
