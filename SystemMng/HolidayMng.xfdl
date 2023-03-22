@@ -382,7 +382,8 @@ this.btnDel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	for(i of checked_array){
 		check_array[i] = 0;
 	}
-	 this.Grid00.redrawExprCell();
+	
+  this.delete_holiday();
 };
 this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
@@ -398,21 +399,37 @@ this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		return false;
 	}
 	
-	this.update_holiday(this.ds_list);
+	this.insert_holiday(this.ds_list);
 };
 
-this.update_holiday = function(ds){
-  var svcId = "update_holiday";
-  var url = "::holiday/update.do";
+this.insert_holiday = function(ds){
+  var svcId = "insert_holiday";
+  var url = "::holiday/insert.do";
   if(ds.name == "excelupdateDs"){
-    svcId = "update_holiday_excel";
-    url = "::holiday/update_excel.do";
+    svcId = "insert_holiday_excel";
+    url = "::holiday/insert_excel.do";
   }
-	var tranObj = {};
-	tranObj.strSvcId	= svcId;
-	tranObj.strSvcUrl   = this.application.Admin_svc + url;
-	tranObj.inData      = "holidayList="+ ds.name +":U";
-	tranObj.outData     = "ds_list=output1";
+  var pObj = {
+    svcId: svcId,
+    url: url,
+    dsNm: ds.name
+  }
+  this.transaction_holidy(pObj);
+}
+this.delete_holiday = function(){
+  var pObj = {
+    svcId: "delete_holiday",
+    url: "::holiday/delete.do",
+    dsNm: "ds_list"
+  }
+  this.transaction_holidy(pObj);
+}
+this.transaction_holidy = function(pObj){
+  var tranObj = {};
+	tranObj.strSvcId	= pObj.svcId;
+	tranObj.strSvcUrl   = this.application.Admin_svc + pObj.url;
+	tranObj.inData      = "holidayList="+ pObj.dsNm +":U";
+	tranObj.outData     = "";
 	tranObj.strArg      = "";
 	tranObj.callBackFnc = "fnCallback_holiday";
 	tranObj.isAsync     = true;
@@ -421,13 +438,9 @@ this.update_holiday = function(ds){
 	this.gfn_transaction(tranObj);
 }
 this.fnCallback_holiday = function(svcID, errorCode, errorMsg){
-	if(errorCode == 0){
-		alert("저장 완료");
-		this.fn_list(1);
-	} 
-	else if(errorCode == -3){
+	if(errorCode == -3){
     //키중복
-    if(svcID == "update_holiday_excel"){
+    if(svcID == "insert_holiday_excel"){
       this.alert("업로드한 엑셀에 문제가 있습니다.\n"+errorMsg);  
     }
     else {
@@ -435,6 +448,18 @@ this.fnCallback_holiday = function(svcID, errorCode, errorMsg){
     }
 		return;
 	}
+  else if(errorCode == 0){
+    if(svcID == "insert_holiday"){
+      alert("저장 완료");
+    }
+    else if(svcID == "insert_holiday_excel"){
+      alert("업로드 완료");
+    }
+    else if(svcID == "delete_holiday"){
+      alert("삭제 완료");
+    }
+	this.fn_list(1);
+  }
 	else{
 		// 에러 시 화면 처리 내역
 		this.alert(errorCode+"\n"+errorMsg);
@@ -533,7 +558,7 @@ this.ExcelImportObject00_onsuccess = function(obj:nexacro.ExcelImportObject,e:ne
 		return false;
 	}
 	
-	this.update_holiday(this.excelupdateDs);
+	this.insert_holiday(this.excelupdateDs);
 
 };
 
