@@ -138,6 +138,14 @@ this.TeacherInfoCheckWindow_popup_onload = function(obj:nexacro.Form,e:nexacro.L
 		this.Div00.form.Div03.form.Static01.set_text(no1 + '-' + no2 + '-' + no3);
 	}
 	
+	var pstno = ds.getColumn(0, 'pstno');
+	var addr = ds.getColumn(0, 'addr');
+	var dtlAddr = ds.getColumn(0, 'dtlAddr');
+	pstno = pstno ? "("+pstno+")" : "";
+	addr = addr ? addr : "";
+	dtlAddr = dtlAddr ? dtlAddr : "";
+	this.Div00.form.Div04.form.Static01.set_text(pstno + " " + addr + " " + dtlAddr);
+	
 	var agree1 = ds.getColumn(0, 'prinfClctAgrYn') == 'Y' ? "동의함" : "미동의";
 	var agree2 = ds.getColumn(0, 'carrInfoClctAgrYn') == 'Y' ? "동의함" : "미동의";
 	this.Div02.form.Div00_01_00.form.agree1.set_text(agree1);
@@ -152,7 +160,9 @@ this.TeacherInfoCheckWindow_popup_onload = function(obj:nexacro.Form,e:nexacro.L
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
+          <Column id="pstno" type="STRING" size="256"/>
           <Column id="addr" type="STRING" size="256"/>
+          <Column id="dtlAddr" type="STRING" size="256"/>
           <Column id="prinfClctAgrYn" type="STRING" size="256"/>
           <Column id="carrInfoClctAgrYn" type="STRING" size="256"/>
         </ColumnInfo>
