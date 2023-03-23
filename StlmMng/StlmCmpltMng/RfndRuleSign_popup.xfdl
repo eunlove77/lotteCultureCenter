@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="RfndRuleSign_popup" width="460" height="380" titletext="환불규정 확인서명" onload="RfndRuleSign_popup_onload">
+  <Form id="RfndRuleSign_popup" width="460" height="380" titletext="환불규정 확인서명" onload="RfndRuleSign_popup_onload" scrolltype="vertical">
     <Layouts>
       <Layout height="380" mobileorientation="landscape" width="460">
-        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10">
+        <Div id="Div00" taborder="0" text="Div00" left="10" top="10" right="10" bottom="10" formscrolltype="vertical">
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="▶ 환불규정 확인정보" left="0" top="0" width="120" height="21" cssclass="sta_WF_TitGray"/>
@@ -79,6 +79,7 @@ this.RfndRuleSign_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.menuSeq = this.parent.menuSeq;
 	
 	this.fn_data_list();
+	
 };
 
 this.fn_data_list = function()
@@ -143,7 +144,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 					this.Div00.form.Div00.form.Div01.form.Static00.set_height(this.Div00.form.Div00.form.Div01.form.Static00.getPixelHeight() + add + 10);
 				}
 			}
-			
+			this.Div00.form.resetScroll();
 			break;
 	  }
 };
