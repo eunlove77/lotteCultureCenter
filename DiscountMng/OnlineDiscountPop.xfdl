@@ -99,8 +99,8 @@ this.fn_discount_list = function()
 this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
 {
 	var curRow = obj.getSelectedDatasetRows();
-  
-	if(e.cell == 1)
+	
+	if(e.cell == 2)
 	{
 		if(obj.getEditingValue() != "" && (obj.getEditingValue() > 100 || obj.getEditingValue() == 0))
 		{
@@ -108,14 +108,14 @@ this.Div00_Grid00_oninput = function(obj:nexacro.Grid,e:nexacro.InputEventInfo)
 			alert("할인율는 최소 1 ~ 최대 100까지 입력할 수 있습니다.");
 		}
 	}
-	else if(obj.getCellPos() == 2)
+	else if(obj.getCellPos() == 3)
 	{  
 		var oriValue = this.ds_discount_list.getColumn(curRow, "applStDt");
 		
 		this.ds_discount_list.setColumn(curRow,"applStDt",oriValue);
 		obj.setEditingValue(oriValue);
 	}
-	else if(obj.getCellPos() == 3)
+	else if(obj.getCellPos() == 4)
 	{
 		var oriValue = this.ds_discount_list.getColumn(curRow, "applEndDt");
 
@@ -128,7 +128,7 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 {
 	var curRow = obj.getSelectedDatasetRows();
 	
-	if(obj.getCellPos() == 2)
+	if(obj.getCellPos() == 3)
 	{  
 		var endDt = this.ds_discount_list.getColumn(curRow,"applEndDt");
 		
@@ -142,7 +142,7 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			obj.moveToNextCell();
 		}
 	}
-	else if(obj.getCellPos() == 3)
+	else if(obj.getCellPos() == 4)
 	{  
 		var stDt = this.ds_discount_list.getColumn(curRow,"applStDt");
 		
@@ -156,7 +156,7 @@ this.Div00_Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventI
 			obj.moveToNextCell();
 		}
 	}	
-	else if(obj.getCellPos() == 4)
+	else if(obj.getCellPos() == 5)
 	{
 		if(e.value == 'N')
 		{
