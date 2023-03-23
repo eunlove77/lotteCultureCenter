@@ -63,19 +63,19 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:dayw"/>
-                <Cell col="1" text="bind:lectAmt"/>
-                <Cell col="2" text="bind:etcAmt1"/>
-                <Cell col="3" text="bind:etcAmt2"/>
-                <Cell col="4" text="bind:memCnt"/>
+                <Cell col="1" text="bind:slngAmt"/>
+                <Cell col="2" text="bind:tcPaidSlngAmt"/>
+                <Cell col="3" text="bind:tcUnpaidSlngAmt"/>
+                <Cell col="4" text="bind:mbrCnt"/>
                 <Cell col="5" text="bind:atlctCnt"/>
               </Band>
               <Band id="summary">
                 <Cell text="소계"/>
-                <Cell col="1" expr="dataset.getSum('parseInt(lectAmt)')"/>
-                <Cell col="2"/>
-                <Cell col="3"/>
-                <Cell col="4"/>
-                <Cell col="5"/>
+                <Cell col="1" expr="dataset.getSum('parseInt(slngAmt)')"/>
+                <Cell col="2" expr="dataset.getSum('parseInt(tcPaidSlngAmt)')"/>
+                <Cell col="3" expr="dataset.getSum('parseInt(tcUnpaidSlngAmt)')"/>
+                <Cell col="4" expr="dataset.getSum('parseInt(mbrCnt)')"/>
+                <Cell col="5" expr="dataset.getSum('parseInt(atlctCnt)')"/>
               </Band>
             </Format>
           </Formats>
@@ -85,6 +85,7 @@
           <Formats>
             <Format id="default">
               <Columns>
+                <Column size="110" band="left"/>
                 <Column size="110" band="left"/>
                 <Column size="110" band="left"/>
                 <Column size="80"/>
@@ -101,21 +102,23 @@
               <Band id="head">
                 <Cell rowspan="2" text="지점명"/>
                 <Cell col="1" rowspan="2" text="요일"/>
-                <Cell col="2" colspan="3" text="매출금액"/>
-                <Cell col="5" rowspan="2" text="회원 수"/>
-                <Cell col="6" rowspan="2" text="수강 고객수"/>
-                <Cell row="1" col="2" text="강좌료"/>
-                <Cell row="1" col="3" text="재료비/대여료(강사지급)"/>
-                <Cell row="1" col="4" text="재료비/대여료(강사미지급)"/>
+                <Cell col="2" rowspan="2" text="시간"/>
+                <Cell col="3" colspan="3" text="매출금액"/>
+                <Cell col="6" rowspan="2" text="회원 수"/>
+                <Cell col="7" rowspan="2" text="수강 고객수"/>
+                <Cell row="1" col="3" text="강좌료"/>
+                <Cell row="1" col="4" text="재료비/대여료(강사지급)"/>
+                <Cell row="1" col="5" text="재료비/대여료(강사미지급)"/>
               </Band>
               <Band id="body">
-                <Cell/>
-                <Cell col="1"/>
-                <Cell col="2"/>
-                <Cell col="3"/>
-                <Cell col="4"/>
-                <Cell col="5"/>
-                <Cell col="6"/>
+                <Cell text="bind:strNm"/>
+                <Cell col="1" text="bind:dayw"/>
+                <Cell col="2" text="bind:timerng"/>
+                <Cell col="3" text="bind:slngAmt"/>
+                <Cell col="4" text="bind:tcPaidSlngAmt"/>
+                <Cell col="5" text="bind:tcUnpaidSlngAmt"/>
+                <Cell col="6" text="bind:mbrCnt"/>
+                <Cell col="7" text="bind:atlctCnt"/>
               </Band>
             </Format>
           </Formats>
@@ -171,9 +174,9 @@
       <Dataset id="ds_total">
         <ColumnInfo>
           <Column id="dayw" type="STRING" size="256"/>
-          <Column id="lectAmt" type="STRING" size="256"/>
-          <Column id="etcAmt1" type="STRING" size="256"/>
-          <Column id="etcAmt2" type="STRING" size="256"/>
+          <Column id="slngAmt" type="STRING" size="256"/>
+          <Column id="tcPaidSlngAmt" type="STRING" size="256"/>
+          <Column id="tcUnpaidSlngAmt" type="STRING" size="256"/>
           <Column id="mbrCnt" type="STRING" size="256"/>
           <Column id="atlctCnt" type="STRING" size="256"/>
         </ColumnInfo>
@@ -183,9 +186,10 @@
           <Column id="strCd" type="STRING" size="256"/>
           <Column id="strNm" type="STRING" size="256"/>
           <Column id="dayw" type="STRING" size="256"/>
-          <Column id="lectAmt" type="STRING" size="256"/>
-          <Column id="etcAmt1" type="STRING" size="256"/>
-          <Column id="etcAmt2" type="STRING" size="256"/>
+          <Column id="timerng" type="STRING" size="256"/>
+          <Column id="slngAmt" type="STRING" size="256"/>
+          <Column id="tcPaidSlngAmt" type="STRING" size="256"/>
+          <Column id="tcUnpaidSlngAmt" type="STRING" size="256"/>
           <Column id="mbrCnt" type="STRING" size="256"/>
           <Column id="atlctCnt" type="STRING" size="256"/>
         </ColumnInfo>
