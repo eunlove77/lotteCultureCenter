@@ -104,7 +104,7 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌계약 목록 (0개)" top="16" width="150" height="20" left="0"/>
                     <Button id="Button00" taborder="1" text="계약서 생성" top="0" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div01_Button00_onclick"/>
-                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick" cellsizingtype="col">
+                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick" cellsizingtype="col" onheadclick="Div00_Div01_Grid00_onheadclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -160,25 +160,25 @@
                           <Band id="body">
                             <Cell displaytype="expr:cntrNo == null ? 'checkboxcontrol' : 'none'" text="expr:dataset.checkarray[currow]" edittype="checkbox"/>
                             <Cell col="1" text="expr:dataset.getRowCount() - currow"/>
-                            <Cell col="2" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm"/>
-                            <Cell col="3" text="bind:cntrNo" color="blue" cursor="pointer" textDecoration="underline"/>
-                            <Cell col="4" text="expr:cntrStatCd == '01' ? '계약완료' : '미계약'"/>
-                            <Cell col="5" text="bind:tcCdNo"/>
-                            <Cell col="6" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" color="blue" cursor="pointer"/>
-                            <Cell col="7" text="bind:lectCd" textDecoration="underline" color="blue" cursor="pointer"/>
-                            <Cell col="8" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
-                            <Cell col="9" text="bind:lectAddOptnNm"/>
-                            <Cell col="10" text="bind:lectTpNm"/>
-                            <Cell col="11" text="bind:lectClNm"/>
-                            <Cell col="12" text="bind:lectSmsterNm"/>
-                            <Cell col="13" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
-                            <Cell col="14" text="bind:tcGrdeCd"/>
-                            <Cell col="15" text="expr:comp.parent.parent.setMasking(hpNo,4,4, '')"/>
-                            <Cell col="16" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'"/>
-                            <Cell col="17" text="expr:comp.parent.parent.setMasking(regId,4,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'"/>
-                            <Cell col="18" text="bind:cntrChnlNm"/>
-                            <Cell col="19" text="bind:regDtm"/>
-                            <Cell col="20" text="bind:cntrApvlDt"/>
+                            <Cell col="2" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" subsumtext="bind:brchCd"/>
+                            <Cell col="3" text="bind:cntrNo" color="blue" cursor="pointer" textDecoration="underline" subsumtext="bind:cntrNo"/>
+                            <Cell col="4" text="expr:cntrStatCd == '01' ? '계약완료' : '미계약'" subsumtext="bind:cntrStatCd"/>
+                            <Cell col="5" text="bind:tcCdNo" subsumtext="bind:tcCdNo"/>
+                            <Cell col="6" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" color="blue" cursor="pointer" subsumtext="bind:tcNm"/>
+                            <Cell col="7" text="bind:lectCd" textDecoration="underline" color="blue" cursor="pointer" subsumtext="bind:lectCd"/>
+                            <Cell col="8" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline" subsumtext="bind:lectNm"/>
+                            <Cell col="9" text="bind:lectAddOptnNm" subsumtext="bind:lectAddOptnNm"/>
+                            <Cell col="10" text="bind:lectTpNm" subsumtext="bind:lectTpNm"/>
+                            <Cell col="11" text="bind:lectClNm" subsumtext="bind:lectClNm"/>
+                            <Cell col="12" text="bind:lectSmsterNm" subsumtext="bind:lectSmsterNm"/>
+                            <Cell col="13" text="expr:lectStDtm + ' ~ ' + lectEndDtm" subsumtext="bind:lectStDtm"/>
+                            <Cell col="14" text="bind:tcGrdeCd" subsumtext="bind:tcGrdeCd"/>
+                            <Cell col="15" text="expr:comp.parent.parent.setMasking(hpNo,4,4, '')" subsumtext="bind:hpNo"/>
+                            <Cell col="16" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'" subsumtext="bind:ppayAmt"/>
+                            <Cell col="17" text="expr:comp.parent.parent.setMasking(regId,4,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" subsumtext="bind:regId"/>
+                            <Cell col="18" text="bind:cntrChnlNm" subsumtext="bind:cntrChnlNm"/>
+                            <Cell col="19" text="bind:regDtm" subsumtext="bind:regDtm"/>
+                            <Cell col="20" text="bind:cntrApvlDt" subsumtext="bind:cntrApvlDt"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -419,6 +419,8 @@ this.init = function()
 	
 	this.Div00.form.Div01.form.Grid00.setCellProperty("head", 0, "text", 0);
 	this.ds_class_list.clearData();
+	
+	this.gridOrderInit(this.Div00.form.Div01.form.Grid00);
 }
 
 /**************************************************************************
@@ -732,6 +734,8 @@ this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:ne
 	else
 	{
 		this.ds_search.setColumn(0, "hpNo", hpStNo + hpMidNo + hpLastNo);
+		
+		this.gridOrderInit(this.Div00.form.Div01.form.Grid00);
 		this.fn_search();
 	}
 };
@@ -934,6 +938,45 @@ this.Div00_Div00_Div00_Div05_Edit00_01_onkeyup = function(obj:nexacro.Edit,e:nex
 		this.Div00.form.Div00.form.Div00.form.Div03.form.Button00.click();
 	}
 };
+
+//그리드 컬럼 정렬
+this.orderType = "desc";
+this.Div00_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.row == -1 && e.cell != 0 && e.cell !=1)
+	{
+		var dsObj = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+	
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":")[1];
+
+		if(this.orderType == "desc"){
+			dsObj.set_keystring("S:" + sColId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			dsObj.set_keystring("S:-" + sColId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+	}
+};
+
+//그리드 컬럼 초기화
+this.gridOrderInit = function(obj) 
+{
+	this.orderType = "desc";
+	for (var i = 1; i < obj.getCellCount("head"); i++)
+	{	
+		obj.setCellProperty("head", i, "expandshow", "hide");
+	}
+}
 ]]></Script>
   </Form>
 </FDL>

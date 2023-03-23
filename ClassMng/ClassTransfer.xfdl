@@ -60,7 +60,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌이관 목록 (0개)" left="0" top="16" width="150" height="20"/>
-                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" autofittype="col" nodatatext="검색결과 없음" cellsizingtype="col">
+                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" autofittype="col" nodatatext="검색결과 없음" cellsizingtype="col" onheadclick="Div00_Div01_Grid00_onheadclick">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -90,12 +90,12 @@
                           <Band id="body">
                             <Cell text="expr:dataset.checkarray[currow]" displaytype="expr:trfrLectCd == null ? 'checkboxcontrol' : 'none' " edittype="checkbox"/>
                             <Cell col="1" text="expr:currow + 1"/>
-                            <Cell col="2" text="expr:trfrLectCd == null ? '이관대기' : '이관완료'"/>
-                            <Cell col="3" text="bind:lectCd"/>
-                            <Cell col="4" text="bind:lectClNm"/>
-                            <Cell col="5" text="bind:lectNm"/>
-                            <Cell col="6" text="bind:trfrLectCd"/>
-                            <Cell col="7" text="bind:trfrLectNm"/>
+                            <Cell col="2" text="expr:trfrLectCd == null ? '이관대기' : '이관완료'" subsumtext="bind:trfrLectCd"/>
+                            <Cell col="3" text="bind:lectCd" subsumtext="bind:lectCd"/>
+                            <Cell col="4" text="bind:lectClNm" subsumtext="bind:lectClNm"/>
+                            <Cell col="5" text="bind:lectNm" subsumtext="bind:lectNm"/>
+                            <Cell col="6" text="bind:trfrLectCd" subsumtext="bind:trfrLectCd"/>
+                            <Cell col="7" text="bind:trfrLectNm" subsumtext="bind:trfrLectNm"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -251,6 +251,8 @@ this.init = function()
 	
 	this.Div00.form.Div01.form.Grid00.setCellProperty("head", 0, "text", 0);
 	this.ds_class_list.clearData();
+	
+	this.gridOrderInit(this.Div00.form.Div01.form.Grid00);
 }
 
 /**************************************************************************
@@ -673,8 +675,49 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
+	
+	this.gridOrderInit(this.Div00.form.Div01.form.Grid00);
 	this.fn_search();
 };
+
+//그리드 컬럼 정렬
+this.orderType = "desc";
+this.Div00_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	if(e.row == -1 && e.cell != 0 && e.cell !=1)
+	{
+		var dsObj = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+	
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":")[1];
+
+		if(this.orderType == "desc"){
+			dsObj.set_keystring("S:" + sColId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			dsObj.set_keystring("S:-" + sColId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+	}
+};
+
+//그리드 컬럼 초기화
+this.gridOrderInit = function(obj) 
+{
+	this.orderType = "desc";
+	for (var i = 1; i < obj.getCellCount("head"); i++)
+	{	
+		obj.setCellProperty("head", i, "expandshow", "hide");
+	}
+}
 ]]></Script>
   </Form>
 </FDL>

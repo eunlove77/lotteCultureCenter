@@ -53,7 +53,7 @@
         <Button id="btnInit" taborder="6" text="초기화" top="185" height="21" cssclass="btn_WF_Low" fittocontents="width" right="10" width="80" onclick="btnInit_onclick"/>
         <Button id="btnSearch" taborder="5" text="검색" top="185" height="21" cssclass="btn_WF_Medium" fittocontents="width" right="btnInit:5" width="80" onclick="btnSearch_onclick"/>
         <Static id="Static00_00" taborder="7" text="▶ 목록" left="10" top="219" width="50" height="21" cssclass="sta_WF_TitGray"/>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="10" top="250" right="10" bottom="10" binddataset="ds_list" autofittype="col" oncellclick="Grid00_oncellclick">
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="10" top="250" right="10" bottom="10" binddataset="ds_list" autofittype="col" oncellclick="Grid00_oncellclick" onheadclick="Grid00_onheadclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -78,10 +78,10 @@
               </Band>
               <Band id="body">
                 <Cell text="expr:rowidx+1"/>
-                <Cell col="1" text="bind:corpClNm"/>
-                <Cell col="2" text="bind:imgClsfNm"/>
-                <Cell col="3" text="bind:lrclsCtegryNm"/>
-                <Cell col="4" text="bind:mdclsCtegryNm"/>
+                <Cell col="1" text="bind:corpClNm" subsumtext="bind:corpClNm"/>
+                <Cell col="2" text="bind:imgClsfNm" subsumtext="bind:imgClsfNm"/>
+                <Cell col="3" text="bind:lrclsCtegryNm" subsumtext="bind:lrclsCtegryNm"/>
+                <Cell col="4" text="bind:mdclsCtegryNm" subsumtext="bind:mdclsCtegryNm"/>
                 <Cell col="5" displaytype="buttoncontrol" edittype="button" text="이미지 관리" cursor="pointer"/>
               </Band>
             </Format>
@@ -154,7 +154,6 @@ this.btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 		filter += "mdclsCtegryCd == '" + srchMdclsCtegryCd + "'";
 	}
 	
-	console.log(filter);
 	
 	this.ds_list.filter(filter);	
 };
@@ -283,6 +282,37 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
 		this.gfn_openPopup("popup", oArg, "SystemMng::popup/LectImgGroup_popup.xfdl", this, 0, 0, true, true, null);
 	}
 };
+
+//그리드 컬럼 정렬
+this.orderType = "desc";
+this.Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	console.log
+	if(e.row == -1 && e.cell != 0 && e.cell !=5)
+	{
+		var dsObj = this.objects[obj.binddataset];
+ 										
+		for (var i = 1; i < obj.getCellCount("head"); i++)
+		{	
+			obj.setCellProperty("head", i, "expandshow", "hide");
+		}
+	
+		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":")[1];
+		sColId = (sColId == "lectCd") ? "srchLectCd" : sColId;
+		if(this.orderType == "desc"){
+			dsObj.set_keystring("S:" + sColId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown.png");
+			this.orderType="asc";
+		}else if(this.orderType == "asc"){
+			dsObj.set_keystring("S:-" + sColId);
+			obj.setCellProperty("head", e.cell, "expandshow", "show");
+			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
+			this.orderType="desc";
+		}
+	}
+};
+
 ]]></Script>
     <Objects>
       <Dataset id="ds_list">
