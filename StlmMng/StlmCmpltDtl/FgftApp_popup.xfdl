@@ -34,7 +34,7 @@
                       <Cell col="6" text="강사명"/>
                     </Band>
                     <Band id="body">
-                      <Cell text="expr:dataset.checkarray[currow]" displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell text="expr:dataset.checkarray[currow]" displaytype="expr:fgftYn == 'Y' ? 'checkboxcontrol' : 'none'" edittype="checkbox"/>
                       <Cell col="1" text="bind:actlAtlctNpleNm"/>
                       <Cell col="2" text="bind:brchCdNm"/>
                       <Cell col="3" text="bind:lectTpCdNm"/>
@@ -100,6 +100,8 @@ this.FgftApp_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		this.ds_atlct_list.setColumn(i, "brchCd", this.parent.ds_fgft_list.getColumn(i, "brchCd"));
 		this.ds_atlct_list.setColumn(i, "yy", this.parent.ds_fgft_list.getColumn(i, "yy"));
 		this.ds_atlct_list.setColumn(i, "lectSmsterCd", this.parent.ds_fgft_list.getColumn(i, "lectSmsterCd"));
+		this.ds_atlct_list.setColumn(i, "prmtnSeqno", this.parent.ds_fgft_list.getColumn(i, "prmtnSeqno"));
+		this.ds_atlct_list.setColumn(i, "fgftYn", "N");
 	}
 	this.ds_atlct_list.set_enableevent(true);
 	
@@ -153,6 +155,18 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			//this.parent.parent.parent.reload();
 			this.Div00.form.Div00.form.Combo00.set_index(0);
 			this.gfnSetCheckBoxNoDataset(this.ds_atlct_list, this.Div00.form.Grid00, 0);
+			
+			//사은품 해당없는 구매강좌 체크박스 제거 	
+			for(var i = 0; i < this.ds_atlct_list.rowcount; i++){
+				var prmtnSeqno = this.ds_atlct_list.getColumn(i, "prmtnSeqno");
+				for(var j = 1; j < this.ds_fgft_list.rowcount; j++){
+					if(prmtnSeqno.indexOf(this.ds_fgft_list.getColumn(j, "prmtnSeqno")) > -1){
+						this.ds_atlct_list.setColumn(i, "fgftYn", "Y");
+						break;
+					}
+				}
+			}
+			
 			break;
 		case "insert":
 			for(var i=0;i<this.parent.ds_stlm_cmplt_list.getRowCount();i++){
@@ -181,9 +195,9 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 // 취소 버튼 클릭
 this.Div00_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	if(confirm("취소하시면 사은품을 신청 하실 수 없습니다. 그래도 취소하시겠습니까?")){
-		this.close();
-	}
+ 	if(confirm("취소하시면 사은품을 신청 하실 수 없습니다. 그래도 취소하시겠습니까?")){
+ 		this.close();
+ 	}
 };
 
 // 신청 버튼 클릭
@@ -197,7 +211,7 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 	var chkYn = false;
 	this.ds_param_list.clearData();
 	for(var i=0; i<this.ds_atlct_list.getRowCount(); i++){
-		if(this.ds_atlct_list.checkarray[i] == "1"){
+		if(this.ds_atlct_list.checkarray[i] == "1" && this.ds_atlct_list.getColumn(i, "fgftYn") == "Y"){
 			chkYn = true;
 			this.ds_param_list.addRow();
 			this.ds_param_list.copyRow(this.ds_param_list.getRowCount() -1, this.ds_atlct_list, i);
@@ -251,6 +265,8 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
           <Column id="brchCd" type="STRING" size="256"/>
           <Column id="yy" type="STRING" size="256"/>
           <Column id="lectSmsterCd" type="INT" size="256"/>
+          <Column id="prmtnSeqno" type="STRING" size="256"/>
+          <Column id="fgftYn" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_fgft_list">
