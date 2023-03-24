@@ -44,7 +44,7 @@
                               </Rows>
                             </Dataset>
                           </Radio>
-                          <Combo id="Combo00" taborder="1" text="Combo00" left="10" top="30" width="200" height="20" innerdataset="ds_select_grde_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div04_Div01_Combo00_onitemchanged"/>
+                          <Combo id="Combo00" taborder="1" text="Combo00" left="10" top="30" width="200" height="20" innerdataset="ds_select_grde_list" codecolumn="cd" datacolumn="admCdNm" onitemchanged="Div00_Div04_Div01_Combo00_onitemchanged"/>
                           <Static id="Static00" taborder="2" left="Combo00:0" top="30" width="120" height="21" cssclass="sta_WF_CompText"/>
                           <Static id="Static01" taborder="3" left="0" width="120" height="20" cssclass="sta_WF_CompText" bottom="3"/>
                           <Combo id="Combo01" taborder="4" text="Combo01" left="Combo00:0" top="30" width="120" height="20" readonly="false" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" visible="false" onitemchanged="Div00_Div04_Div01_Combo01_onitemchanged">
@@ -228,6 +228,7 @@
           <Column id="oflnDcAmt" type="INT" size="256"/>
           <Column id="addDcAmt" type="INT" size="256"/>
           <Column id="grdeDcSubtrYn" type="STRING" size="256"/>
+          <Column id="admGrdeDcNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_cpn_amt_cl_cd_list">
@@ -249,6 +250,7 @@
           <Column id="dmcmUseYn" type="STRING" size="256"/>
           <Column id="grdeUseYn" type="STRING" size="256"/>
           <Column id="ltlmUseYn" type="STRING" size="256"/>
+          <Column id="admCdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_grde_amt_cl_cd_list">
@@ -265,6 +267,7 @@
           <Column id="applBrchRngCd" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="admCdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_select_grde_list">
@@ -281,6 +284,7 @@
           <Column id="applBrchRngCd" type="STRING" size="256"/>
           <Column id="cd" type="STRING" size="256"/>
           <Column id="cdNm" type="STRING" size="256"/>
+          <Column id="admCdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -365,7 +369,7 @@ this.Div00_Div04_Div00_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	this.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
 	this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 	this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-	this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+	this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("admCdNm");
 	this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 	this.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
 	this.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
@@ -820,7 +824,7 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 		this.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("admCdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 		this.Div00.form.Div04.form.Div01.form.Static00.set_text("");
 		this.Div00.form.Div04.form.Div01.form.Static00.set_visible(false);
@@ -896,7 +900,7 @@ this.fn_common_confirm = function()
 		this.Div00.form.Div04.form.Div01.form.Radio00.set_value("Y");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("admCdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 		this.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
 		this.Div00.form.Div04.form.Div01.form.Combo01.set_visible(false);
@@ -992,7 +996,7 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 		this.Div00.form.Div04.form.Div01.form.Static00.set_text("");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_select_grde_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("admCdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 	}else if(obj.value == "N"){
 		// 관리자 수기
@@ -1000,7 +1004,7 @@ this.Div00_Div04_Div01_Radio00_onitemchanged = function(obj:nexacro.Radio,e:nexa
 		
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_innerdataset(this.ds_adm_grde_amt_cl_cd_list);
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_codecolumn("cd");
-		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("cdNm");
+		this.Div00.form.Div04.form.Div01.form.Combo00.set_datacolumn("admCdNm");
 		this.Div00.form.Div04.form.Div01.form.Combo00.set_index(0);
 	}
 	
