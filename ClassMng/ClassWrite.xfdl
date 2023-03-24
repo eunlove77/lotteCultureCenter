@@ -1027,6 +1027,7 @@ this.extngMbrRceptPrdEndDt = "";
 
 this.updateCode = "";
 
+this.saveFlag = false;
 
 this.initDtl = function()
 {
@@ -1344,6 +1345,7 @@ this.contentInit = function(type)
 **************************************************************************/
 this.fnCallback = function(svcID, errorCode, errorMsg)
 {
+  this.saveFlag = false;
   // 에러 시 화면 처리 내역
   if(errorCode != 0)
   {
@@ -2517,6 +2519,7 @@ this.fn_save_validation = function()
 {
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "yy")))) == "")
 	{
+		this.saveFlag = false;
 		alert("학기를 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div01.form.Combo00.setFocus();
 		return;
@@ -2544,6 +2547,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lrclsCtegryCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("대분류 카테고리를 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_02.form.Combo00.setFocus();
 		return;
@@ -2551,6 +2555,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "mdclsCtegryCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("중분류 카테고리를 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_02.form.Combo01.setFocus();
 		return;
@@ -2558,6 +2563,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectNm")))) == "")
 	{
+		this.saveFlag = false;
 		alert("강좌명을 입력하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_03.form.Edit00.setFocus();
 		return;
@@ -2565,6 +2571,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "rceptPrdStDt")))) == "")
 	{
+		this.saveFlag = false;
 		alert("접수기간 시작일을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar00.setFocus();
 		return;
@@ -2572,6 +2579,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "rceptPrdEndDt")))) == "")
 	{
+		this.saveFlag = false;
 		alert("접수기간 종료일을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_05.form.Calendar01.setFocus();
 		return;
@@ -2581,6 +2589,7 @@ this.fn_save_validation = function()
 	{
 		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "extngMbrRceptPrdStDt")))) == "")
 		{
+			this.saveFlag = false;
 			alert("기존회원 접수기간 시작일을 선택하세요.");
 			this.Div00.form.Div00.form.Div00.form.Div01_05.form.Calendar00.setFocus();
 			return;
@@ -2588,6 +2597,7 @@ this.fn_save_validation = function()
 		
 		if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "extngMbrRceptPrdEndDt")))) == "")
 		{
+			this.saveFlag = false;
 			alert("기존회원 접수기간 종료일을 선택하세요.");
 			this.Div00.form.Div00.form.Div00.form.Div01_05.form.Calendar01.setFocus();
 			return;
@@ -2596,6 +2606,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectRmCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("강의실을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div01_08.form.Combo00.setFocus();
 		return;
@@ -2603,6 +2614,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStHhCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("강의시간 시작시간을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo00.setFocus();
 		return;
@@ -2610,6 +2622,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectStMiCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("강의시간 시작분을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo01.setFocus();
 		return;
@@ -2617,6 +2630,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndHhCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("강의시간 종료시간을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo02.setFocus();
 		return;
@@ -2624,6 +2638,7 @@ this.fn_save_validation = function()
 	
 	if(nexacro.trim(new String(this.gfn_nvl(this.ds_class_dtl.getColumn(0, "lectEndMiCd")))) == "")
 	{
+		this.saveFlag = false;
 		alert("강의시간 종료분을 선택하세요.");
 		this.Div00.form.Div00.form.Div00.form.Div00_09.form.Combo03.setFocus();
 		return;
@@ -2631,6 +2646,7 @@ this.fn_save_validation = function()
 	
 	if(parseInt(this.ds_class_dtl.getColumn(0, "lectStHhCd") + "" + this.ds_class_dtl.getColumn(0, "lectStMiCd")) > parseInt(this.ds_class_dtl.getColumn(0, "lectEndHhCd") + "" + this.ds_class_dtl.getColumn(0, "lectEndMiCd"))) 
 	{
+		this.saveFlag = false;
 		alert("강의시간을 확인하세요.");
 		this.ds_class_dtl.setColumn(0, "lectEndHhCd", "");
 		this.ds_class_dtl.setColumn(0, "lectEndMiCd", "");
@@ -2650,6 +2666,7 @@ this.fn_save_validation = function()
 	}
 	else
 	{
+		this.saveFlag = false;
 		alert("강사정보를 등록해주세요.");
 		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div00.form.Grid00.setFocus();
 		return;
@@ -2657,6 +2674,7 @@ this.fn_save_validation = function()
 	
 	if(this.ds_schedulePlan_list.getRowCount() == 0)
 	{
+		this.saveFlag = false;
 		alert("강의스케줄을 생성하세요.");	
 		this.Div00.form.Div00_00_00_00_00.form.Div00.form.Div03.form.Grid00.setFocus();
 		return;
@@ -2668,6 +2686,7 @@ this.fn_save_validation = function()
 		{
 			if(nexacro.trim(new String(this.gfn_nvl(this.ds_option_list.getColumn(i, "optnNm")))) == "")
 			{
+				this.saveFlag = false;
 				alert("옵션명을 입력하세요.");
 				this.Div00.form.Div00_00_00_00_01.form.Div00.form.Div02.form.Grid00.setFocus();
 				return;
@@ -2719,6 +2738,8 @@ this.fn_save_validation = function()
 		{
 			this.atchfileArr[i].fn_upload();
 		}
+	} else {
+		this.saveFlag = false;
 	}
 }
 
@@ -3373,27 +3394,34 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 {
 	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	
-	for(var i=0; i < this.contentArr.length; i++)
-	{		
-		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
-		this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
-		this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
+	if(!this.saveFlag) {
+		this.saveFlag = true;
+		for(var i=0; i < this.contentArr.length; i++)
+		{		
+			this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
+			this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
+			this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
+		}
+		
+		this.fn_save_validation();
 	}
-	
-	this.fn_save_validation();
 };
 this.Div00_Button00_00_02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_btn_auth(this.menuSeq, "accSaveYn")) return;
 	
-	for(var i=0; i < this.contentArr.length; i++)
-	{		
-		this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
-		this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
-		this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
+	if(!this.saveFlag) {
+		this.saveFlag = true;
+		for(var i=0; i < this.contentArr.length; i++)
+		{		
+			this.ds_content_list.setColumn(i, "lectContClVal", this.contentArr[i].contentType.value);
+			this.ds_content_list.setColumn(i, "tempCont", this.contentArr[i].content.value);
+			this.ds_content_list.setColumn(i, "webCont", this.fn_get_edit_body(this.editorArr[i].divPcObj));
+		}
+		
+		this.fn_save_validation();
 	}
 	
-	this.fn_save_validation();
 };
 
 this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
