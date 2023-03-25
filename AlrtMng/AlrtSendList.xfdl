@@ -69,7 +69,7 @@
                   </Rows>
                 </Dataset>
               </Combo>
-              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="273" height="21" text="123123" onkeydown="Div02_searchQuery_onkeydown"/>
+              <Edit id="searchQuery" taborder="2" left="searchField:5" top="5" width="273" height="21" text="123123" onkeyup="Div02_searchQuery_onkeyup"/>
               <Button id="btnSearch" taborder="3" text="검색" left="searchQuery:5" top="5" height="21" cssclass="btn_WF_Medium" fittocontents="width" width="80" onclick="Div02_btnSearch_onclick"/>
               <Button id="btnInit" taborder="4" text="초기화" left="btnSearch:5" top="5" height="21" cssclass="btn_WF_Low" fittocontents="width" width="80" onclick="Div02_btnInit_onclick"/>
             </Layout>
@@ -124,7 +124,7 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-              <Edit id="Edit00" taborder="1" left="Static00:10" top="6" width="100" height="21"/>
+              <Edit id="Edit00" taborder="1" left="Static00:10" top="6" width="100" height="21" onkeyup="Div02_searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -132,9 +132,9 @@
           <Layouts>
             <Layout>
               <Static id="Static00" taborder="0" text="연락처" left="0" top="0" width="109" bottom="0" cssclass="sta_WF_TableLabel"/>
-              <Edit id="Edit00" taborder="1" left="Static00:10" top="6" width="50" height="21" imeaction="none" inputtype="digit" maxlength="4"/>
-              <Edit id="Edit01" taborder="2" left="Edit00:10" top="6" width="50" height="21" inputtype="digit" maxlength="4"/>
-              <Edit id="Edit02" taborder="3" left="Edit01:10" top="6" width="50" height="21" inputtype="digit" maxlength="4"/>
+              <Edit id="Edit00" taborder="1" left="Static00:10" top="6" width="50" height="21" imeaction="none" inputtype="digit" maxlength="4" onkeyup="Div02_searchQuery_onkeyup"/>
+              <Edit id="Edit01" taborder="2" left="Edit00:10" top="6" width="50" height="21" inputtype="digit" maxlength="4" onkeyup="Div02_searchQuery_onkeyup"/>
+              <Edit id="Edit02" taborder="3" left="Edit01:10" top="6" width="50" height="21" inputtype="digit" maxlength="4" onkeyup="Div02_searchQuery_onkeyup"/>
             </Layout>
           </Layouts>
         </Div>
@@ -190,7 +190,7 @@ this.Div02_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 };
 
 //엔터키 검색
-this.Div02_searchQuery_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+this.Div02_searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
 	if(e.keycode ==13)
 	{
