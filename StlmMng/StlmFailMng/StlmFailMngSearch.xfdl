@@ -80,7 +80,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="회원명" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="20" maxlength="100" width="120"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="20" maxlength="100" width="120" onkeyup="Div00_Div06_searchQuery_onkeyup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -88,9 +88,9 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="연락처" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
-                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="20" width="60" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="20" width="60" inputtype="digit" maxlength="4"/>
-                    <Edit id="Edit02" taborder="3" left="Edit01:5" top="5" height="20" width="60" inputtype="digit" maxlength="4"/>
+                    <Edit id="Edit00" taborder="1" left="Static00:10" top="5" height="20" width="60" inputtype="digit" maxlength="4" onkeyup="Div00_Div06_searchQuery_onkeyup"/>
+                    <Edit id="Edit01" taborder="2" left="Edit00:5" top="5" height="20" width="60" inputtype="digit" maxlength="4" onkeyup="Div00_Div06_searchQuery_onkeyup"/>
+                    <Edit id="Edit02" taborder="3" left="Edit01:5" top="5" height="20" width="60" inputtype="digit" maxlength="4" onkeyup="Div00_Div06_searchQuery_onkeyup"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -282,11 +282,9 @@ this.Div00_Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEv
 // 검색어 입력필드 키 다운이벤트
 this.Div00_Div06_searchQuery_onkeyup = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
 {
-	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accSrchYn")) return;
 	if(e.keycode ==13)
 	{
-		this.fn_searchValueInit();
-		parentFrm.fn_list();
+		this.fn_btnSearch_onclick();
 	}
 };
 ]]></Script>
