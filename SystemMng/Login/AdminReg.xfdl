@@ -82,12 +82,12 @@
                         </Layout>
                       </Layouts>
                     </Div>
-                    <Button id="cnclBtn" taborder="7" text="취소" left="38.93%" width="80" cssclass="btn_WF_Weak" fittocontents="none" bottom="5" height="30" onclick="AdminRegDiv_Div01_cnclBtn_onclick"/>
-                    <Button id="insBtn" taborder="8" text="계정 사용요청" width="99" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:12.988" bottom="5" height="30" onclick="AdminRegDiv_Div01_insBtn_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
               <Static id="Static01" taborder="3" text="&lt;fc v ='#ED5757'&gt;*&lt;/fc&gt; 표시 항목은 필수 입력 항목입니다." top="61" cssclass="sta_WF_TitGray" height="17" usedecorate="true" right="10" width="200"/>
+              <Button id="cnclBtn" taborder="4" text="취소" left="39.19%" width="80" cssclass="btn_WF_Weak" fittocontents="none" bottom="30" height="30" onclick="AdminRegDiv_cnclBtn_onclick"/>
+              <Button id="insBtn" taborder="5" text="계정 사용요청" width="98" cssclass="btn_WF_Medium" fittocontents="none" left="cnclBtn:10" bottom="30" height="30" onclick="AdminRegDiv_insBtn_onclick" visible="false"/>
             </Layout>
           </Layouts>
         </Div>
@@ -146,7 +146,7 @@ this.AdminRegDiv_Div00_Div00_btnSearch_onclick = function(obj:nexacro.Button,e:n
  * 계정생성 버튼
  **************************************************************************/
 
-this.AdminRegDiv_Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.AdminRegDiv_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	if(this.gfn_isNull(this.AdminRegDiv.form.Div01.form.Div02.form.Edit00.value))
 	{
@@ -173,7 +173,7 @@ this.AdminRegDiv_Div01_insBtn_onclick = function(obj:nexacro.Button,e:nexacro.Cl
  * 취소버튼
  **************************************************************************/
 
-this.AdminRegDiv_Div01_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+this.AdminRegDiv_cnclBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.parent.set_formurl("FrameBase::Form_Login.xfdl");
 };
@@ -209,6 +209,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 			//사번입력창 readonly, 하단 정보입력창 노출
 			this.AdminRegDiv.form.Div00.form.Div00.form.Edit00.set_readonly(true);
 			this.AdminRegDiv.form.Div01.set_visible(true);
+			this.AdminRegDiv.form.insBtn.set_visible(true);
 
 			break;
 		case "join":
