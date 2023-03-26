@@ -320,10 +320,6 @@ this.brchCd = "";
 this.ppayYear = "";
 this.ppayMonth = "";
 this.wthdtaxCd = "";
-this.acntGsamt_5331157921 = "";
-this.acntGsamt_2133030301 = "";
-this.acntGsamt_2133050301 = "";
-this.acntGsamt_5331157923 = "";
 this.newData = "Y";					// 정산목록 가져오기 버튼 실행 체크 용도
 
 /**************************************************************************
@@ -642,8 +638,8 @@ this.fn_check = function(gb){
 		this.alert("구매처(수령부서)를 선택해주세요.");	
 	}else if(this.gfn_isNull(hopeRecpDt)){
 		this.alert("희망수령일/지급일을 선택해주세요.");
-	}else if(accountDay != sapzpDay){
-		this.alert("지급년,지급월과 지급일의 달이 맞지 않습니다.");		
+	/*}else if(accountDay != sapzpDay){
+		this.alert("지급년,지급월과 지급일의 달이 맞지 않습니다.");		*/
 	}else if(isEmptyAcntDptCd){
 		this.alert("부서코드를 입력해주세요.");		
 	}else if(!equalAcntDptCd){
@@ -683,17 +679,7 @@ this.Div01_Div02_Div06_hopeRecpDt_oncloseup = function(obj:nexacro.Calendar,e:ne
 		}
 	}
 	
-	if(parseInt(this.ppayYear) > parseInt(obj.getYear())){
-		this.alert("잘못된 년도 선택입니다.");
-		this.Div01.form.Div02.form.Div06.form.hopeRecpDt.set_value(_baseDate);
-		return;
-	}
 	
-	if(parseInt(this.ppayYear) == parseInt(obj.getYear()) && parseInt(this.ppayMonth) >= parseInt(obj.getMonth())){
-		this.alert("잘못된 월 선택입니다.");
-		this.Div01.form.Div02.form.Div06.form.hopeRecpDt.set_value(_baseDate);
-		return;
-	}
 };
 ]]></Script>
   </Form>
