@@ -328,7 +328,7 @@ this.Div03_btnModify_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 	}	
 	//var matchIpVdi = ipVdiAddr.match(ipRegExpr);
 	
-	if(this.gfn_isNull(athrCd)){
+	if(this.gfn_isNull(athrCd) || athrCd == ""){
 		this.alert("권한(직무)를 선택해주세요.");
 	}else if(this.gfn_isNull(brchCd)){
 		this.alert("지점을 선택해주세요.");
@@ -362,11 +362,18 @@ this.Div03_btnDelete_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventI
 this.Div00_Div00_roleCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
 {
 	this.fn_athr_menu(obj.value);
-	
-	if(obj.value == "99" ){
+	if(this.strCd =="0000" && obj.value == "99" ){
+		//슈퍼관리자이면 본사만
 		this.ds_gdsSpotCd_list.filter("cd=='"+this.strCd+"'");
+		this.Div00.form.Div06.form.spotCd.set_index(0);
+	}else if(this.strCd =="0000" && obj.value != "99" ){
+		this.ds_gdsSpotCd_list.filter("cd!='0000'");
+		this.Div00.form.Div06.form.spotCd.set_index(0);
+		this.ds_athr_list.filter("");
 	}else{
-		this.ds_gdsSpotCd_list.filter("");
+		this.ds_gdsSpotCd_list.filter("cd!='0000'");
+		this.Div00.form.Div06.form.spotCd.set_index(0);
+		this.ds_athr_list.filter("cd!='99'");
 	}
 	
 };
@@ -447,11 +454,13 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 			//본사는 슈퍼 관리자의 권한 , 지점 선택 불가
 			if(this.strCd == "0000" && this.param.brchCd =="0000" && this.Div00.form.Div00.form.roleCd.value =="99" ){
 				this.ds_gdsSpotCd_list.filter("cd=='"+this.strCd+"'");
-			}
-			
-			if(this.param.brchCd !="0000"){
-				this.ds_gdsSpotCd_list.deleteRow(0);
-				this.ds_athr_list.deleteRow(9);
+			}else if(this.strCd =="0000" && this.param.brchCd !="0000"){
+				this.ds_gdsSpotCd_list.filter("cd!='0000'");
+				this.ds_athr_list.filter("");
+			}else if(this.strCd !="0000" && this.param.brchCd !="0000"){
+				this.ds_gdsSpotCd_list.filter("cd!='0000'");
+				this.ds_athr_list.filter("cd!='99'");
+				
 			}
 			
 		break;
