@@ -482,6 +482,16 @@ this.fn_list = function ()
 
 this.orderType = "desc";
 
+//그리드 컬럼 초기화
+this.gridOrderInit = function(obj) 
+{
+	this.orderType = "desc";
+	for (var i = 1; i < obj.getCellCount("head"); i++)
+	{	
+		obj.setCellProperty("head", i, "expandshow", "hide");
+	}
+}
+
 // 검색 데이터 세팅
 this.fn_searchValueInit = function()
 {					 
@@ -513,6 +523,9 @@ this.fn_searchValueInit = function()
 	this.searchDs.setColumn(0, "fixYn", arrTopYn.join(","));
 	this.searchDs.setColumn(0, "f", this.Div00_00.form.conDiv.form.searchDiv.form.searchField.value);
 	this.searchDs.setColumn(0, "q", this.Div00_00.form.conDiv.form.searchDiv.form.searchQuery.value);
+	
+	this.gridOrderInit(this.GridNoticeList);
+	
 };
 
 //노출여부 전체 선택 체크 박스 
