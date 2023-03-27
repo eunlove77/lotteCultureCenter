@@ -385,23 +385,28 @@ this.fnCallback_smster =  function(svcID, errorCode, errorMsg)
  **************************************************************************/
 this.com_set_branch = function(otps){
 	//지점초기화
-	return nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
+	return nexacro.getPrivateProfile("brchCd") == "0000" ? "" : nexacro.getPrivateProfile("brchCd");
 }
 this.com_set_branch_list = function(){
 
 	this.ds_spot_list.copyData(this.application.gdsSpotCdList);
-	this.ds_spot_list.deleteRow(0);
+	this.ds_spot_list.deleteRow(0);	//본사 제외
 
-	if(nexacro.getPrivateProfile("brchCd") == "0000")
-	{
-		this.ds_spot_list.insertRow(0);
-		this.ds_spot_list.setColumn(0, "cd", "");
-		this.ds_spot_list.setColumn(0, "cdNm", "전체");
-	}
-	else
-	{
-		this.ds_spot_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
-	}
+	//if(nexacro.getPrivateProfile("brchCd") == "0000")
+	//{
+	//	this.ds_spot_list.insertRow(0);
+	//	this.ds_spot_list.setColumn(0, "cd", "");
+	//	this.ds_spot_list.setColumn(0, "cdNm", "전체");
+	//}
+	//else
+	//{
+	//	this.ds_spot_list.filter("cd=='" + nexacro.getPrivateProfile("brchCd") + "'");
+	//}
+
+	//모든지점 검색 가능	
+	this.ds_spot_list.insertRow(0);
+	this.ds_spot_list.setColumn(0, "cd", "");
+	this.ds_spot_list.setColumn(0, "cdNm", "전체");
 }
 
 /**************************************************************************
