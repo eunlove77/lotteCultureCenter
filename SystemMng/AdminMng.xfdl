@@ -359,6 +359,8 @@ this.AdminMng_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.gfn_onContextMenu(this.GridAdminList, this.personalId);
 	//지점코드 세팅
 	this.fn_set_spotCd();
+	
+	this.gridOrderInit(this.GridAdminList);
 };
 
 //리스트 검색버튼
@@ -407,6 +409,9 @@ this.Div06_btnInit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	this.row03.form.permitDiv.form.chkApvlStatN.set_value(0);
 	this.row03.form.roleTypeDiv.form.chkAthrCd99.set_value(0);
 	this.row03.form.roleTypeDiv.form.chkAthrCd.set_value(0);
+	
+	this.gridOrderInit(this.GridAdminList);
+	
 };
 
 this.row02_statusDiv_chkAcntStatAll_onclick = function(obj:nexacro.CheckBox,e:nexacro.ClickEventInfo)
@@ -623,6 +628,16 @@ this.fn_list = function (page)
 	this.gfn_transaction(tranObj);
 };
 
+//그리드 컬럼 초기화
+this.gridOrderInit = function(obj) 
+{
+	this.orderType = "desc";
+	for (var i = 1; i < obj.getCellCount("head"); i++)
+	{	
+		obj.setCellProperty("head", i, "expandshow", "hide");
+	}
+}
+
 //승인처리
 this.fn_approval = function(gb, apvlStatYn){
 	var check_array = this.ds_admin_list.checkarray;
@@ -743,6 +758,8 @@ this.fn_searchValueInit = function() {
 	this.ds_search.setColumn(0, "athrGb", athrGb); 
 	this.ds_search.setColumn(0, "q", this.Div06.form.searchQuery.value);
 	this.ds_search.setColumn(0, "f", this.Div06.form.searchField.value);
+	
+	this.gridOrderInit(this.GridAdminList);
 
 }
 
