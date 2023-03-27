@@ -742,7 +742,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
 	
 	this.cpnDcAmt = 0;
-
+	console.log(this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.value);
 	if(this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.value == "Y"){
 		// 고객보유
 		if(obj.value == ""){
@@ -814,6 +814,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.grdeDcAmt = 0;
 			//this.cpnDcAmt = 0;
 		}else{
+			console.log(obj.value);
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(true);
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
 			var dcRt = this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.value;
@@ -824,6 +825,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			memberUseYn = "N";
 			for(var i=0;i<this.ds_grde_list.getRowCount();i++){
 				if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
+					console.log(this.ds_grde_list.getColumn(i, "cd"));
 					memberUseYn = "Y";
 					grdeUseYn = "Y";
 					allUseYn = "Y";
@@ -835,15 +837,6 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					}
 				}
 			}
-			
-// 				for(var i=0;i<this.ds_adm_grde_list.getRowCount();i++){
-//  					if(obj.value == this.ds_adm_grde_list.getColumn(i, "cd")){
-//  						grdeUseYn = this.ds_adm_grde_list.getColumn(i, "grdeUseYn");
-//  						allUseYn = this.ds_adm_grde_list.getColumn(i, "allUseYn");
-//  						memberUseYn = this.ds_adm_grde_list.getColumn(i, "memberUseYn");
-//  						applBrchRngCdNm = this.ds_adm_grde_list.getColumn(i, "applBrchRngCdNm");
-//  					}
-// 				}
 
 			if(this.lectAmt - this.oflnDcAmt == 0){
 				alert("강좌료 금액이 0원에서는 추가로 할인을 적용 할 수 없습니다.");
@@ -859,7 +852,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					skipAllUseYn = true;
 				}
 				
-				if(allUseYn == "Y" && memberUseYn == "N"){
+				if(skipAllUseYn && memberUseYn == "N"){
 					if(confirm("고객이 보유하지 않은 등급할인 유형입니다. 그래도 사용하시겠습니까?")){
 						skipMemberUseYn = true;
 						memberUseYn = "Y";
@@ -868,7 +861,7 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 					skipMemberUseYn = true;
 				}
 				
-				if(allUseYn == "Y" && memberUseYn == "Y" && grdeUseYn == "N"){
+				if(skipMemberUseYn && grdeUseYn == "N"){
 					if(confirm("할인횟수를 초과하셨습니다. 그래도 사용하시겠습니까?")){
 						skipGrdeUseYn = true;
 						grdeUseYn = "Y";
