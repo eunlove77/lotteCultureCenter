@@ -742,7 +742,6 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 	this.Div00.form.Div00.form.Div04.form.Div02.form.Static01.set_visible(false);
 	
 	this.cpnDcAmt = 0;
-	console.log(this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.value);
 	if(this.Div00.form.Div00.form.Div04.form.Div01.form.Radio00.value == "Y"){
 		// 고객보유
 		if(obj.value == ""){
@@ -814,7 +813,6 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			this.grdeDcAmt = 0;
 			//this.cpnDcAmt = 0;
 		}else{
-			console.log(obj.value);
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_visible(true);
 			this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.set_index(0);
 			var dcRt = this.Div00.form.Div00.form.Div04.form.Div01.form.Combo01.value;
@@ -825,7 +823,6 @@ this.Div00_Div04_Div01_Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexa
 			memberUseYn = "N";
 			for(var i=0;i<this.ds_grde_list.getRowCount();i++){
 				if(obj.value == this.ds_grde_list.getColumn(i, "cd")){
-					console.log(this.ds_grde_list.getColumn(i, "cd"));
 					memberUseYn = "Y";
 					grdeUseYn = "Y";
 					allUseYn = "Y";
@@ -1109,6 +1106,17 @@ this.Div00_Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventIn
 		//this.opener.divWork.form.ds_class_list.setColumn(this.row, "lectStlmAmt", this.lectAmt - this.oflnDcAmt - this.grdeDcAmt - this.cpnDcAmt + this.optnAmt - this.addDcAmt);
 		
 		this.opener.divWork.form.ds_class_list.set_enableevent(true);
+		
+		// 2023.03.28 결제금액필드 빈값처리
+		this.opener.divWork.form.Div00.form.Div04.form.Div00.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div01.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div02.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div03.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div04.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div05.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div06.form.Edit00.set_value("");
+		this.opener.divWork.form.Div00.form.Div04.form.Div07.form.Edit00.set_value("");
+		
 		alert("저장되었습니다.");
 		this.close();
 	}
