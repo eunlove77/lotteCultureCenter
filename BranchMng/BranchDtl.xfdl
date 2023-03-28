@@ -294,7 +294,7 @@ this.BranchDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 		//첨부파일 초기화
 		this.atchFileUpload.fn_init(atchFileObj);
 		
-		this.fn_checkDupe();
+		//this.fn_checkDupe();
 	}
 };
 
@@ -343,8 +343,16 @@ this.fn_save = function (_this)
 
 this.fn_checkValidation = function(){
 
+	var strCd = this.row02.form.spotDiv.form.ComboSpot.value;
+	
 	if(this.parent.brchCd == ""){
-		if(!this.parent.brchCd && this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
+		
+		
+		this.ds_detail.setColumn(0, "brchCd", strCd);
+		
+		this.fn_checkDupe();
+		
+		if(this.ds_dupeCnt.getColumn(0, "dupeCode") == "99")
 		{
 			this.alert("해당 지점은 이미 등록되었습니다.");
 			this.row02.form.spotDiv.form.ComboSpot.setFocus();
@@ -425,7 +433,7 @@ this.fn_checkDupe = function(){
 		outData : "ds_dupeCnt=dupeCode",
 		strArg : "",
 		callBackFnc : "fnCallback",
-		isAsync : true,
+		isAsync : false,
 		menuSeq : this.menuId
 	}
 	
