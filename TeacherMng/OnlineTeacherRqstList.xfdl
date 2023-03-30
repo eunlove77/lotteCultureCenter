@@ -387,7 +387,8 @@ this.reset_search_form = function(){
 }
 //강사 리스트 데이터 가공
 this.process_teacher_list = function(){
-
+  
+  this.ds_list.set_enableevent(false);
 	for(var i = 0; i < this.ds_list.rowcount; i++){
     //희망요일
 		//hopeDaywVal 파싱
@@ -404,7 +405,8 @@ this.process_teacher_list = function(){
 			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
 	}
-	
+	this.ds_list.set_enableevent(true);
+
 }
 /**************************************************************************
  * 강사승인
@@ -490,12 +492,14 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 			this.pageingDiv.form.setPage(pageIndex);
 			this.pageingDiv.set_visible(true);
 			
+      this.ds_list.set_enableevent(false);
 			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
 				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 			}
-			
+			this.ds_list.set_enableevent(true);
+
 			//목록 개수
-			this.Div06.form.Static01.set_text(nAllRowCount);
+			this.Div06.form.Static01.set_text("목록 " + nAllRowCount + "개");
 		}
 		else{
 			this.pageingDiv.set_visible(false);

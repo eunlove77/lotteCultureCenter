@@ -403,8 +403,11 @@ this.Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 			//그리드 내부 변경값 롤백
 			var oriValue = this.ds_list.getColumn(e.row, "bestRvwCd");
 			obj.updateToDataset();
+      
+      this.ds_list.set_enableevent(false);
 			this.ds_list.setColumn(e.row, "bestRvwCd", oriValue);
-			
+			this.ds_list.set_enableevent(true);
+
 			return;
 		}
 		

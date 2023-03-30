@@ -3,9 +3,7 @@
   <Form id="ListRowcount" width="80" height="30" titletext="New Form" oninit="ListRowcount_oninit" left="0">
     <Layouts>
       <Layout height="30" mobileorientation="landscape" width="80">
-        <Static id="Static00" taborder="0" text="목록" left="0" top="0" width="23" bottom="0" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-        <Static id="Static01" taborder="1" left="Static00:0" top="0" width="30" bottom="0" text="0" textAlign="right" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
-        <Static id="Static03" taborder="2" left="Static01:3" top="0" bottom="0" text="개" right="0" font="bold 12px/normal &quot;Noto Sans KR&quot;"/>
+        <Static id="Static01" taborder="1" left="0" top="0" bottom="0" text="목록 0개" textAlign="left" font="12px/normal &quot;Noto Sans KR&quot;" right="0"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[this.ListRowcount_oninit = function(obj:nexacro.Form,e:nexacro.EventInfo)
@@ -22,9 +20,10 @@ this.ds_list_onvaluechanged= function(obj:nexacro.NormalDataset,e:nexacro.DSRowP
 
 	var objPageingDs = this.parent.parent.objPageingDs;
 	if(!objPageingDs){
-		this.Static01.set_text(this.parent.parent.ds_list.rowcount);
+		this.Static01.set_text("목록 " + this.parent.parent.ds_list.rowcount + "개");
 	}
   
-}]]></Script>
+}
+]]></Script>
   </Form>
 </FDL>

@@ -433,6 +433,8 @@ this.select_teacher_list = function(){
 }
 this.process_teacher_list = function(){
 	//강사 목록 데이터 가공
+
+  this.ds_list.set_enableevent(false);
 	this.ds_list.addColumn("tcTpCdNm", "STRING");
 	this.ds_list.addColumn("smsRcvAgrYn", "STRING");
 	
@@ -466,6 +468,8 @@ this.process_teacher_list = function(){
 		
 		this.ds_list.setColumn(i, "smsRcvAgrYn", "Y");	//SMS 발송 Y
 	}
+  this.ds_list.set_enableevent(true);
+
 }
 this.fnCallback= function(svcId, errorCode, errorMsg){
 	if(errorCode != 0){
@@ -484,12 +488,14 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 			this.pageingDiv.form.setPage(pageIndex);
 			this.pageingDiv.set_visible(true);
 			
+      this.ds_list.set_enableevent(false);
 			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
 				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 			}
+      this.ds_list.set_enableevent(true);
 
 			//목록 개수
-			this.Div07.form.Static01.set_text(nAllRowCount);
+			this.Div07.form.Static01.set_text("목록 " + nAllRowCount + "개");
 		}
 		else{
 			this.pageingDiv.set_visible(false);

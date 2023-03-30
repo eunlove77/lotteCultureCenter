@@ -300,9 +300,11 @@ this.select_teacher_list_callback = function(svcID, errorCode, errorMsg){
     this.pageingDiv.form.setPage(pageIndex);
     this.pageingDiv.set_visible(true);
     
+    this.ds_list.set_enableevent(false);
     for(var i = 0 ; i < this.ds_list.rowcount ; i++){
       this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
     }
+    this.ds_list.set_enableevent(true);
 
     //목록 개수
     this.Div06.form.Static01.set_text(nAllRowCount);
