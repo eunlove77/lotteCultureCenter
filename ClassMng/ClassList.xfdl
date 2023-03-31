@@ -260,7 +260,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌목록 (0개)" top="0" width="150" height="20" left="0"/>
-                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col" onheadclick="Div02_Div01_Grid00_onheadclick">
+                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="Static00:10" right="0" bottom="0" binddataset="ds_class_list" nodatatext="검색결과 없음" oncellclick="Div02_Div01_Grid00_oncellclick" autoenter="select" cellsizingtype="col" onheadclick="Div02_Div01_Grid00_onheadclick" cellmovingtype="col,band">
                       <Formats>
                         <Format id="default">
                           <Columns>
@@ -515,6 +515,7 @@
         <Button id="Button01" taborder="10" text="일괄변경" top="25" height="30" width="70" cssclass="btn_WF_Medium" right="Button02:10" onclick="Button01_onclick"/>
         <Button id="Button06" taborder="11" text="일괄승인" top="25" height="30" cssclass="btn_WF_Medium" right="Button01:10" width="70" onclick="Button06_onclick"/>
         <Button id="Button00_01" taborder="12" text="저장" top="25" height="30" width="50" right="Button06:10" cssclass="btn_WF_Medium" onclick="Button00_01_onclick"/>
+        <Div id="ContextPop" taborder="13" left="1320" top="390" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -794,6 +795,15 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -812,6 +822,7 @@ this.lectSmsterCd = "";
 this.excelImportExport = "";
 this.excelFileName = "강좌목록_관리_";
 this.searchFlag = 0;
+this.personalId = "ds_class_list";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -836,7 +847,7 @@ this.ClassList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//그리드초기화
 	this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div02.form.Div01.form.Grid00, 0); 
-	
+	this.gfn_onContextMenu(this.Div02.form.Div01.form.Grid00, this.personalId);
 	this.init();	
 	
 	//체크박스 추가
@@ -924,6 +935,17 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		case "classSaveApvlList":
 			alert("승인 되었습니다.");
 			this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00.click();
+		break;
+		
+		case "setPsnlztn":
+			this.alert("저장되었습니다.");
+		break;
+		
+		case "getPsnlztn":
+			var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+			if(format !== undefined){			
+				this.Div02.form.Div01.form.Grid00.set_formats(format);
+			}
 		break;
 	  }
   }
@@ -1639,11 +1661,9 @@ this.Div02_Div00_Div00_Div00_00_00_00_Edit00_onkeyup = function(obj:nexacro.Edit
 
 this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-
-	if(e.cell != 0 && e.cell !=1 )
+	var rColId = obj.getCellProperty("body", e.col,"subsumtext") != null ? (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":") : '';
+	if(rColId != "")
 	{
-		var rColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":");
-		
 		if(rColId[1] == "lectCd")
 		{
 			var arrArguments = {
@@ -2086,7 +2106,8 @@ this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 this.orderType = "desc";
 this.Div02_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.row == -1 && e.cell != 0 && e.cell !=1)
+	var rColId = obj.getCellProperty("body", e.col,"subsumtext") != null ? (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":") : '';
+	if(e.row == -1 && rColId != "")
 	{
 		var dsObj = this.objects[obj.binddataset];
  										
@@ -2095,7 +2116,6 @@ this.Div02_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 			obj.setCellProperty("head", i, "expandshow", "hide");
 		}
 	
-		var sColId = (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":")[1];
 		sColId = (sColId == "lectCd") ? "srchLectCd" : sColId;
 		if(this.orderType == "desc"){
 			dsObj.set_keystring("S:" + sColId);
@@ -2119,7 +2139,19 @@ this.gridOrderInit = function(obj)
 	{	
 		obj.setCellProperty("head", i, "expandshow", "hide");
 	}
-}]]></Script>
+}
+
+//그리드 개인화 저장
+this.popupMenu_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
+{
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.Div02.form.Div01.form.Grid00.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", this.personalId);
+	objDs.setColumn(0, "format", format);
+	
+	this.gfn_personalization("setPsnlztn");
+};]]></Script>
     <Bind>
       <BindItem id="item7" compid="Div02.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
       <BindItem id="item0" compid="Div02.form.Div00.form.Div00.form.Div01.form.Combo00" propid="value" datasetid="ds_search" columnid="yy"/>
