@@ -67,6 +67,14 @@ this.btnDay5_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	this.endDtm.set_value(this.gfnGetToDay());
 };
 
+// 결제완료관리, 취소/환불관리를 위한 60일 기간 설정
+this.day60 = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var day = -60;
+	this.strtDtm.set_value(this.gfnAddDate(this.gfnGetToDay(), day));
+	this.endDtm.set_value(this.gfnGetToDay());
+};
+
 this.strtDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
 {
 	var endValue = this.endDtm.value;
