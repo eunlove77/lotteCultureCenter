@@ -113,11 +113,11 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:currow + 1" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:buenNm" color="blue" textDecoration="underline"/>
-                <Cell col="3" expr="comp.parent.com_setMasking(chrgprNm, 'name')"/>
-                <Cell col="4" expr="comp.parent.com_setMasking(hpNo, 'tel')"/>
-                <Cell col="5" expr="comp.parent.com_setMasking(email, 'email')"/>
+                <Cell col="3" expr="comp.parent.com_setMasking(chrgprNm, 'name')" text="bind:chrgprNm"/>
+                <Cell col="4" expr="comp.parent.com_setMasking(hpNo, 'tel')" text="bind:hpNo"/>
+                <Cell col="5" expr="comp.parent.com_setMasking(email, 'email')" text="bind:email"/>
                 <Cell col="6" text="bind:mbrNo"/>
-                <Cell col="7" expr="comp.parent.com_setMasking(mbrNm, 'name')"/>
+                <Cell col="7" expr="comp.parent.com_setMasking(mbrNm, 'name')" text="bind:mbrNm"/>
                 <Cell col="8" text="bind:appDtm" calendardateformat="yyyy-MM-dd hh:mm:ss"/>
                 <Cell col="9" text="bind:answrYn" displaytype="combotext" combodataset="ds_answrCd_list" combodatacol="cdNm" combocodecol="cd"/>
               </Band>
@@ -125,6 +125,7 @@
           </Formats>
         </Grid>
         <Div id="Div06" taborder="6" left="10" top="198" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="ContextPop" taborder="7" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -140,6 +141,7 @@ include "TeacherMng::include/common.xjs";
 this.application = null;
 this.popCnt = 0;
 this.menuSeq = 0;
+this.personalId = "cooperApplyList"
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -148,6 +150,9 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+  
   this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
@@ -284,6 +289,16 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	else if(svcId == "delete_cooperation_apply"){
 		alert("삭제되었습니다.");
 	}
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.GridInquiryList.set_formats(format);
+    }
+  }
+
 };
 ]]></Script>
     <Objects>
@@ -313,6 +328,7 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
           <Column id="coprAppSeqno" type="STRING" size="256"/>
           <Column id="buenNm" type="STRING" size="256"/>
           <Column id="chrgprNm" type="STRING" size="256"/>
+          <Column id="hpNo" type="STRING" size="256"/>
           <Column id="hpStNo" type="STRING" size="256"/>
           <Column id="hpMidNo" type="STRING" size="256"/>
           <Column id="hpLastNo" type="STRING" size="256"/>
@@ -337,6 +353,15 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
             <Col id="cd">N</Col>
             <Col id="cdNm">미답변</Col>
           </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
         </Rows>
       </Dataset>
     </Objects>

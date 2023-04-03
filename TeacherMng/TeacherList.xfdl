@@ -246,8 +246,8 @@
                 <Cell col="15" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="expr:secMdclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" text="bind:secMdclsCtegryCd"/>
                 <Cell col="16" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" displaytype="expr:secSmclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:secSmclsCtegryCd"/>
                 <Cell col="17" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:hopeDaywVal"/>
-                <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="expr:hopeStHh ? hopeStHh +':'+ hopeStMi +'~'+ hopeEndHh +':'+ hopeEndMi : ''"/>
-                <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" expr="comp.parent.com_setMasking(pbrltnChrgprNm, 'name')"/>
+                <Cell col="18" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:hopeStHh" expr="hopeStHh ? hopeStHh +':'+ hopeStMi +'~'+ hopeEndHh +':'+ hopeEndMi : ''"/>
+                <Cell col="19" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" expr="comp.parent.com_setMasking(pbrltnChrgprNm, 'name')" text="bind:pbrltnChrgprNm"/>
                 <Cell col="20" text="bind:rgprDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="21" text="bind:mdfDtm" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''"/>
                 <Cell col="22" cssclass="expr:mdfReqCount &gt; 0 ? 'yellow' : ''" text="bind:appDt" displaytype="expr:appDt ? 'date' : 'none'" calendardateformat="yyyy-MM-dd"/>
@@ -259,6 +259,7 @@
         <Div id="pageingDiv" taborder="9" text="Div00" left="10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl" bottom="15"/>
         <Button id="btnSms" taborder="10" text="안내메시지" cssclass="btn_WF_Low" fittocontents="width" width="90" right="10" onclick="btnSms_onclick" bottom="Grid00:10" height="21"/>
         <Button id="btnNewTeacher" taborder="11" text="신규강사" width="90" wordWrap="char" cssclass="btn_WF_Medium" right="110" onclick="btnNewTeacher_onclick" bottom="Grid00:10" height="21"/>
+        <Div id="ContextPop" taborder="12" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -279,6 +280,7 @@ this.popCnt = 0;
 this.menuSeq = 0;
 this.brchCd = "";
 this.brchColNm = "hopeBrchCd";
+this.personalId = "teacherList"
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -287,6 +289,9 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 	
   //페이징
@@ -295,9 +300,6 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 
 	//그리드 체크박스 세팅
 	this.gfnSetCheckBoxNoDataset(this.ds_list, this.Grid00, 0);
-	
-  //그리드 개인화
-  this.com_get_peronalization();
 
   //지점초기화
 	this.brchCd = this.com_set_branch();
@@ -502,8 +504,18 @@ this.fnCallback= function(svcId, errorCode, errorMsg){
 		}
 		this.process_teacher_list();
 	}
-	
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.Grid00.set_formats(format);
+    }
+  }
+
 }
+
 //검색폼 초기화
 this.reset_search_form = function(){
 	
