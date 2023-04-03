@@ -222,6 +222,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Button id="btnExcelDown" taborder="3" text="엑셀 다운로드" top="460" width="100" height="21" cssclass="btn_WF_Medium" right="210" onclick="btnExcelDown_onclick"/>
       </Layout>
     </Layouts>
     <Bind>
@@ -302,6 +303,7 @@
           <Column id="addr" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <ExcelExportObject id="ExcelExportObj"/>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
  * include 영역 
@@ -314,6 +316,7 @@ include "Base::popup.xjs";
  * FORM 변수 선언 영역
  **************************************************************************/
 this.application = null;
+this.excelImportExport = "";
 this.admtNo	= "";
 this.menuId = "";
 this.brchCd = "";
@@ -328,6 +331,7 @@ this.newData = "Y";					// 정산목록 가져오기 버튼 실행 체크 용도
 this.SAPDtl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
+	this.excelImportExport = this.application.getVariable("excelImportExport");
 	this.admtNo = this.getOwnerFrame().admtNo;
 	this.menuId = this.getOwnerFrame().menuId;
 	this.brchCd = this.getOwnerFrame().brchCd;
@@ -666,20 +670,43 @@ this.Div01_Div02_Div06_hopeRecpDt_oncloseup = function(obj:nexacro.Calendar,e:ne
 	var _baseDate = "";
 	var _month = "";
 	
-	if(parseInt(this.ppayMonth) == 12){
-		_baseDate = (parseInt(this.ppayYear) + 1) + '0101';
-	}else{
+	if(parseInt(this.ppayYear) > obj.getYear() || ( parseInt(this.ppayYear) == obj.getYear() && parseInt(this.ppayMonth) >= obj.getMonth())){
 	
-		_month = (parseInt(this.ppayMonth) + 1);
-		
-		if(_month < 10 ){
-			_baseDate = this.ppayYear + "0" + (parseInt(this.ppayMonth) + 1) + '01';
+		if(parseInt(this.ppayMonth) == 12){
+			_baseDate = (parseInt(this.ppayYear) + 1) + '0101';
 		}else{
-			_baseDate = this.ppayYear + (parseInt(this.ppayMonth) + 1) + '01';
+		
+			_month = (parseInt(this.ppayMonth) + 1);
+			
+			if(_month < 10 ){
+				_baseDate = this.ppayYear + "0" + (parseInt(this.ppayMonth) + 1) + '01';
+			}else{
+				_baseDate = this.ppayYear + (parseInt(this.ppayMonth) + 1) + '01';
+			}
 		}
+		
+		this.alert("지급월 이후 일자를 선택해주세요.");
+		
+		obj.set_value(_baseDate);
 	}
+};
+
+this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(this.gfn_btn_auth(this.menuId, "accXlsDwldYn")){return;}
 	
-	
+	if(this.ds_mtrl_list.rowcount > 1)
+	{	
+		this.ExcelExportObj.clear();
+		this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
+		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Div02.form.Grid01, "Sheet1!A1");  	
+		this.ExcelExportObj.set_exportfilename("강사별 강사료정산 목록");
+		this.ExcelExportObj.exportData(); 
+	}
+	else
+	{
+		this.alert("출력할 데이터가 없습니다");
+	}
 };
 ]]></Script>
   </Form>

@@ -21,6 +21,7 @@
               <Rows>
                 <Row size="24" band="head"/>
                 <Row size="24"/>
+                <Row size="24" band="summ"/>
               </Rows>
               <Band id="head">
                 <Cell text="번호"/>
@@ -41,6 +42,16 @@
                 <Cell col="5" text="bind:mbrNo" color="blue" cursor="pointer" textDecoration="underline"/>
                 <Cell col="6" text="expr:comp.parent.parent.parent.gfn_setMasking(dataset.getColumn(currow, &quot;mbrNm&quot;), 1, 1)" color="blue" cursor="pointer" textDecoration="underline"/>
                 <Cell col="7" expr="comp.parent.fn_set_point(acumUseClCd+trnsClCd, lpntAmt )"/>
+              </Band>
+              <Band id="summary">
+                <Cell/>
+                <Cell col="1" text="소계"/>
+                <Cell col="2"/>
+                <Cell col="3"/>
+                <Cell col="4"/>
+                <Cell col="5"/>
+                <Cell col="6"/>
+                <Cell col="7" expr="comp.parent.fn_sum_point( )"/>
               </Band>
             </Format>
           </Formats>
@@ -233,12 +244,33 @@ this.fn_set_point = function(cd, point)
 {
 	if(cd == '1001' || cd == '2002') //적립 / 사용취소
 	{
-		return "+" +this.gfn_setComma(point)+ " P";
+		return "-" +this.gfn_setComma(point)+ " P";
 	}
 	else 
 	{
-		return "-" +this.gfn_setComma(point)+ " P";
+		return "+" +this.gfn_setComma(point)+ " P";
 	}
+}
+
+this.fn_sum_point = function()
+{
+	var sumPoint = 0;
+	
+	for(var i = 0; i < this.ds_list.getRowCount(); i++)
+	{
+		var cd = this.ds_list.getColumn(i, "acumUseClCd") + this.ds_list.getColumn(i, "trnsClCd");
+		
+		if(cd == '1001' || cd == '2002')
+		{
+			sumPoint -= this.ds_list.getColumn(i, "lpntAmt");
+		}
+		else
+		{
+			sumPoint += this.ds_list.getColumn(i, "lpntAmt");
+		}
+	}
+	
+	return this.gfn_setComma(sumPoint)+ " P";
 }
 
 this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)

@@ -79,7 +79,7 @@
         <Div id="Div01" taborder="10" text="Div01" left="10" top="164" height="33" right="10" formscrolltype="none">
           <Layouts>
             <Layout>
-              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="0">
+              <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" formscrolltype="none" right="1000" minwidth="540" maxwidth="">
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강사유형" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
@@ -90,6 +90,14 @@
                     <Static id="Static01" taborder="6" text="(" left="chkTcTp3:-10" top="5" width="5" height="21"/>
                     <CheckBox id="chkTcTp4" taborder="5" text="면세사업자만" left="Static01:1" top="5" width="90" height="20"/>
                     <Static id="Static01_00" taborder="7" text=")" left="chkTcTp4:1" top="5" width="5" height="21"/>
+                  </Layout>
+                </Layouts>
+              </Div>
+              <Div id="Div01" taborder="1" left="Div00:-1" top="0" width="340" height="33" cssclass="div_WF_CompWrap">
+                <Layouts>
+                  <Layout>
+                    <Static id="Static00" taborder="0" text="폐강여부" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
+                    <CheckBox id="chkClose" taborder="1" text="폐강만 보기" left="116" top="5" width="80" height="20" onclick="row02_Div01_chkPpayInfoAll_onclick"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -143,7 +151,7 @@
         </Div>
         <Static id="Static00_00" taborder="6" text="▶ 강사료정산 목록" left="10" top="239" width="110" height="21" cssclass="sta_WF_TitGray"/>
         <Static id="txtTotal" taborder="7" left="Static00_00:0" height="21" text="( 0개 )" width="50" top="239" cssclass="sta_WF_TitGray"/>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="10" top="260" bottom="10" autofittype="none" binddataset="ds_list" right="10" autosizingtype="row" extendsizetype="row">
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="10" top="260" bottom="10" autofittype="none" binddataset="ds_list" right="10" autosizingtype="row" extendsizetype="row" summarytype="top">
           <Formats>
             <Format id="default">
               <Columns>
@@ -155,8 +163,10 @@
                 <Column size="60"/>
                 <Column size="0"/>
                 <Column size="60"/>
-                <Column size="60"/>
+                <Column size="80"/>
                 <Column size="150"/>
+                <Column size="60"/>
+                <Column size="60"/>
                 <Column size="60"/>
                 <Column size="350"/>
                 <Column size="100"/>
@@ -166,7 +176,7 @@
                 <Column size="60"/>
                 <Column size="80"/>
                 <Column size="60"/>
-                <Column size="80"/>
+                <Column size="120"/>
                 <Column size="90"/>
                 <Column size="90"/>
               </Columns>
@@ -174,6 +184,7 @@
                 <Row size="24" band="head"/>
                 <Row size="40" band="head"/>
                 <Row size="24"/>
+                <Row size="24" band="summ"/>
               </Rows>
               <Band id="head">
                 <Cell rowspan="2" text="번호"/>
@@ -187,18 +198,20 @@
                 <Cell col="8" rowspan="2" text="지점명"/>
                 <Cell col="9" rowspan="2" text="학기"/>
                 <Cell col="10" rowspan="2" text="강좌코드"/>
-                <Cell col="11" rowspan="2" text="강좌명" wordWrap="char"/>
-                <Cell col="12" rowspan="2" text="강좌옵션"/>
-                <Cell col="13" rowspan="2" text="수강료"/>
-                <Cell col="14" rowspan="2" text="지급율/액"/>
-                <Cell col="15" rowspan="2" text="신청건수"/>
-                <Cell col="16" rowspan="2" text="강의횟수"/>
-                <Cell col="17" rowspan="2" text="총 강사료"/>
-                <Cell col="18" rowspan="2" text="진행횟수"/>
-                <Cell col="19" colspan="3" text="지급월 비용"/>
-                <Cell row="1" col="19" text="강사료"/>
-                <Cell row="1" col="20" text="재료비/대여료&#13;&#10;(구매형)"/>
-                <Cell row="1" col="21" text="재료비/대여료&#13;&#10;(1/N형)"/>
+                <Cell col="11" rowspan="2" text="강좌구분"/>
+                <Cell col="12" rowspan="2" text="폐강여부"/>
+                <Cell col="13" rowspan="2" text="강좌명" wordWrap="char"/>
+                <Cell col="14" rowspan="2" text="강좌옵션"/>
+                <Cell col="15" rowspan="2" text="수강료"/>
+                <Cell col="16" rowspan="2" text="지급율/액"/>
+                <Cell col="17" rowspan="2" text="신청건수"/>
+                <Cell col="18" rowspan="2" text="강의횟수"/>
+                <Cell col="19" rowspan="2" text="총 강사료"/>
+                <Cell col="20" rowspan="2" text="진행횟수"/>
+                <Cell col="21" colspan="3" text="지급월 비용"/>
+                <Cell row="1" col="21" text="강사료"/>
+                <Cell row="1" col="22" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell row="1" col="23" text="재료비/대여료&#13;&#10;(1/N형)"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
@@ -212,17 +225,26 @@
                 <Cell col="8" text="bind:brchNm"/>
                 <Cell col="9" text="bind:yySmster"/>
                 <Cell col="10" text="bind:lectCd"/>
-                <Cell col="11" text="bind:lectNm" wordWrap="char"/>
-                <Cell col="12" text="bind:lectOptn" wordWrap="char"/>
-                <Cell col="13" text="bind:lectAmt" textAlign="right"/>
-                <Cell col="14" text="bind:rto"/>
-                <Cell col="15" text="bind:actlCnt"/>
-                <Cell col="16" text="bind:lectNbcnt"/>
-                <Cell col="17" text="bind:calcTcPpayAmt"/>
-                <Cell col="18" text="bind:prgrsNbcnt"/>
-                <Cell col="19" text="bind:admtYmPpayAmt" textAlign="right"/>
-                <Cell col="20" text="bind:mtrlPchAmt" textAlign="right"/>
-                <Cell col="21" text="bind:mtrlNpchAmt" textAlign="right"/>
+                <Cell col="11" text="bind:lectClNm"/>
+                <Cell col="12" text="bind:lectEstCnclYn"/>
+                <Cell col="13" text="bind:lectNm" wordWrap="char"/>
+                <Cell col="14" text="bind:lectOptn" wordWrap="char"/>
+                <Cell col="15" text="bind:lectAmt" textAlign="right"/>
+                <Cell col="16" text="bind:rto"/>
+                <Cell col="17" text="bind:actlCnt"/>
+                <Cell col="18" text="bind:lectNbcnt"/>
+                <Cell col="19" text="bind:calcTcPpayAmt"/>
+                <Cell col="20" text="bind:prgrsNbcnt"/>
+                <Cell col="21" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="22" text="bind:mtrlPchAmt" textAlign="right"/>
+                <Cell col="23" text="bind:mtrlNpchAmt" textAlign="right"/>
+              </Band>
+              <Band id="summary">
+                <Cell colspan="3" text="소계"/>
+                <Cell col="3" colspan="18"/>
+                <Cell col="21" expr="dataset.getSum('parseInt(admtYmPpayAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="22" expr="dataset.getSum('parseInt(mtrlPchAmt)')" maskeditformat="###,##0" displaytype="mask"/>
+                <Cell col="23" expr="dataset.getSum('parseInt(mtrlNpchAmt)')" displaytype="mask" maskeditformat="###,##0"/>
               </Band>
             </Format>
           </Formats>
@@ -236,6 +258,7 @@
                 <Column size="80" band="left"/>
                 <Column size="70" band="left"/>
                 <Column size="90"/>
+                <Column size="60"/>
                 <Column size="104"/>
                 <Column size="164"/>
                 <Column size="60"/>
@@ -266,51 +289,53 @@
                 <Cell col="1" rowspan="2" text="강사코드"/>
                 <Cell col="2" rowspan="2" text="강사명"/>
                 <Cell col="3" rowspan="2" text="강사유형"/>
-                <Cell col="4" rowspan="2" text="은행명"/>
-                <Cell col="5" rowspan="2" text="계좌번호"/>
-                <Cell col="6" rowspan="2" text="계약상태"/>
-                <Cell col="7" rowspan="2" text="지급정보"/>
-                <Cell col="8" rowspan="2" text="계좌번호"/>
-                <Cell col="9" rowspan="2" text="SAP&#13;&#10;정산"/>
-                <Cell col="10" rowspan="2" text="지점명"/>
-                <Cell col="11" rowspan="2" text="학기"/>
-                <Cell col="12" rowspan="2" text="강좌코드"/>
-                <Cell col="13" rowspan="2" text="강좌명" wordWrap="char"/>
-                <Cell col="14" rowspan="2" text="강좌옵션"/>
-                <Cell col="15" rowspan="2" text="수강료"/>
-                <Cell col="16" rowspan="2" text="지급율/액"/>
-                <Cell col="17" rowspan="2" text="신청건수"/>
-                <Cell col="18" rowspan="2" text="강의횟수"/>
-                <Cell col="19" rowspan="2" text="총 강사료"/>
-                <Cell col="20" rowspan="2" text="진행횟수"/>
-                <Cell col="21" colspan="2" text="지급월 비용"/>
-                <Cell row="1" col="21" text="강사료"/>
-                <Cell row="1" col="22" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell col="4" rowspan="2" text="은행코드"/>
+                <Cell col="5" rowspan="2" text="은행명"/>
+                <Cell col="6" rowspan="2" text="계좌번호"/>
+                <Cell col="7" rowspan="2" text="계약상태"/>
+                <Cell col="8" rowspan="2" text="지급정보"/>
+                <Cell col="9" rowspan="2" text="계좌번호"/>
+                <Cell col="10" rowspan="2" text="SAP&#13;&#10;정산"/>
+                <Cell col="11" rowspan="2" text="지점명"/>
+                <Cell col="12" rowspan="2" text="학기"/>
+                <Cell col="13" rowspan="2" text="강좌코드"/>
+                <Cell col="14" rowspan="2" text="강좌명" wordWrap="char"/>
+                <Cell col="15" rowspan="2" text="강좌옵션"/>
+                <Cell col="16" rowspan="2" text="수강료"/>
+                <Cell col="17" rowspan="2" text="지급율/액"/>
+                <Cell col="18" rowspan="2" text="신청건수"/>
+                <Cell col="19" rowspan="2" text="강의횟수"/>
+                <Cell col="20" rowspan="2" text="총 강사료"/>
+                <Cell col="21" rowspan="2" text="진행횟수"/>
+                <Cell col="22" colspan="2" text="지급월 비용"/>
+                <Cell row="1" col="22" text="강사료"/>
+                <Cell row="1" col="23" text="재료비/대여료&#13;&#10;(구매형)"/>
               </Band>
               <Band id="body">
                 <Cell text="bind:rnum"/>
                 <Cell col="1" text="bind:tchCdNo" suppress="1"/>
                 <Cell col="2" suppress="2" expr="comp.parent.com_setMasking(tchNm, 'name')"/>
                 <Cell col="3" text="bind:tchTpNm" suppress="3"/>
-                <Cell col="4" text="bind:bankName" suppress="4"/>
-                <Cell col="5" text="bind:accno" suppress="5"/>
-                <Cell col="6" text="bind:cntrStat"/>
-                <Cell col="7" text="bind:ppayInfo"/>
-                <Cell col="8" text="bind:accno"/>
-                <Cell col="9" text="bind:sapAdmtPrcsStat"/>
-                <Cell col="10" text="bind:brchNm"/>
-                <Cell col="11" text="bind:yySmster"/>
-                <Cell col="12" text="bind:lectCd"/>
-                <Cell col="13" text="bind:lectNm" wordWrap="char"/>
-                <Cell col="14" text="bind:lectOptn" wordWrap="char"/>
-                <Cell col="15" text="bind:lectAmt" textAlign="right"/>
-                <Cell col="16" text="bind:rto"/>
-                <Cell col="17" text="bind:actlCnt"/>
-                <Cell col="18" text="bind:lectNbcnt"/>
-                <Cell col="19" text="bind:calcTcPpayAmt"/>
-                <Cell col="20" text="bind:prgrsNbcnt"/>
-                <Cell col="21" text="bind:admtYmPpayAmt" textAlign="right"/>
-                <Cell col="22" text="bind:mtrlPchAmt" textAlign="right"/>
+                <Cell col="4" text="bind:bankCd"/>
+                <Cell col="5" text="bind:bankName" suppress="4"/>
+                <Cell col="6" text="bind:accno" suppress="5"/>
+                <Cell col="7" text="bind:cntrStat"/>
+                <Cell col="8" text="bind:ppayInfo"/>
+                <Cell col="9" text="bind:accno"/>
+                <Cell col="10" text="bind:sapAdmtPrcsStat"/>
+                <Cell col="11" text="bind:brchNm"/>
+                <Cell col="12" text="bind:yySmster"/>
+                <Cell col="13" text="bind:lectCd"/>
+                <Cell col="14" text="bind:lectNm" wordWrap="char"/>
+                <Cell col="15" text="bind:lectOptn" wordWrap="char"/>
+                <Cell col="16" text="bind:lectAmt" textAlign="right"/>
+                <Cell col="17" text="bind:rto"/>
+                <Cell col="18" text="bind:actlCnt"/>
+                <Cell col="19" text="bind:lectNbcnt"/>
+                <Cell col="20" text="bind:calcTcPpayAmt"/>
+                <Cell col="21" text="bind:prgrsNbcnt"/>
+                <Cell col="22" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="23" text="bind:mtrlPchAmt" textAlign="right"/>
               </Band>
             </Format>
           </Formats>
@@ -659,7 +684,7 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 	switch(svcID)
 	{    
 		case "list":			
-			this.txtTotal.set_text("( " + this.objPageingDs.getColumn(0, "totCnt")  + "개 )");					
+			this.txtTotal.set_text("( " +  this.ds_list.rowcount + "개 )");					
 			
 			if(this.ds_list.rowcount < 1){
 				this.Grid00.set_nodatatext("검색 결과 없습니다.")
@@ -699,6 +724,7 @@ this.fn_searchValueInit = function(){
 	var arrCntrStatCd = new Array();	
 	var arrPpayInfoCd = new Array();	
 	var arrSapAdmtCd = new Array();	
+	var arrClose = new Array();	
 	
 	if(this.row01.form.Div02.form.chkLectCl01.value == false
 	&& this.row01.form.Div02.form.chkLectCl02.value == false
@@ -739,7 +765,7 @@ this.fn_searchValueInit = function(){
 	}
 	
 	if(this.row02.form.Div00.form.chkCntrY.value == false
-	&& this.row02.form.Div00.form.chkCntrY.value == false	
+	&& this.row02.form.Div00.form.chkCntrN.value == false	
 	){
 		arrCntrStatCd.push("Y");
 		arrCntrStatCd.push("N");
@@ -768,6 +794,12 @@ this.fn_searchValueInit = function(){
 		if(this.row02.form.Div02.form.chkSapAdmtN.value == true) arrSapAdmtCd.push("N");		
 	}
 	
+	if(this.Div01.form.Div01.form.chkClose.value == true){
+		arrClose.push("Y");		
+	}else{
+		arrClose.push("N");		
+		arrClose.push("Y");		
+	}
 		
  	this.ds_search.setColumn(0, "brchCd", this.row01.form.Div00.form.brchCd.value);
  	this.ds_search.setColumn(0, "admtYm", this.row01.form.Div01.form.yy.value + this.row01.form.Div01.form.mm.value); 	
@@ -776,6 +808,7 @@ this.fn_searchValueInit = function(){
  	this.ds_search.setColumn(0, "chkCntrStat", arrCntrStatCd.join(",")); 	
 	this.ds_search.setColumn(0, "chkPpayInfo", arrPpayInfoCd.join(",")); 	
 	this.ds_search.setColumn(0, "chkSapAdmt", arrSapAdmtCd.join(",")); 	
+	this.ds_search.setColumn(0, "chkClose", arrClose.join(",")); 	
 	
  	this.ds_search.setColumn(0, "f", this.row03.form.Div00.form.searchField.value);
  	this.ds_search.setColumn(0, "q", this.row03.form.Div00.form.searchQuery.value);	
@@ -856,6 +889,8 @@ this.row01_Div01_mm_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemCha
           <Column id="lectSmsterCd" type="STRING" size="256"/>
           <Column id="yySmster" type="STRING" size="256"/>
           <Column id="lectCd" type="STRING" size="256"/>
+          <Column id="lectClNm" type="STRING" size="256"/>
+          <Column id="lectEstCnclYn" type="STRING" size="256"/>
           <Column id="lectNm" type="STRING" size="256"/>
           <Column id="lectOptn" type="STRING" size="256"/>
           <Column id="tchCdNo" type="STRING" size="256"/>
@@ -863,6 +898,7 @@ this.row01_Div01_mm_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemCha
           <Column id="tchTpNm" type="STRING" size="256"/>
           <Column id="cntrStat" type="STRING" size="256"/>
           <Column id="ppayInfo" type="STRING" size="256"/>
+          <Column id="bankCd" type="STRING" size="256"/>
           <Column id="bankName" type="STRING" size="256"/>
           <Column id="accno" type="STRING" size="256"/>
           <Column id="sapAdmtPrcsStat" type="STRING" size="256"/>
@@ -889,6 +925,7 @@ this.row01_Div01_mm_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemCha
           <Column id="chkCntrStat" type="STRING" size="256"/>
           <Column id="chkPpayInfo" type="STRING" size="256"/>
           <Column id="chkSapAdmt" type="STRING" size="256"/>
+          <Column id="chkClose" type="STRING" size="256"/>
           <Column id="f" type="STRING" size="256"/>
           <Column id="q" type="STRING" size="256"/>
         </ColumnInfo>

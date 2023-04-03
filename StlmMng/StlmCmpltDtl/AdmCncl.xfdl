@@ -179,7 +179,15 @@ this.oldLectAddAmt = "";
 this.AdmCncl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
-	this.ds_stlm_cmplt_list.copyData(this.parent.parent.parent.parent.parent.form.Div00.form.Div02.form.ds_stlm_cmplt_list);
+	
+	this.ds_stlm_cmplt_list.clearData();
+	this.ds_stlm_cmplt_list.addRow();
+	for(var i=0;i<this.parent.parent.parent.parent.parent.form.Div00.form.Div02.form.ds_stlm_cmplt_list.getRowCount();i++){
+		if(this.parent.parent.parent.parent.parent.form.Div00.form.Div02.form.ds_stlm_cmplt_list.checkarray[i] > 0){
+			this.ds_stlm_cmplt_list.copyRow(0, this.parent.parent.parent.parent.parent.form.Div00.form.Div02.form.ds_stlm_cmplt_list, i);
+		}
+	}
+	//this.ds_stlm_cmplt_list.copyData(this.parent.parent.parent.parent.parent.form.Div00.form.Div02.form.ds_stlm_cmplt_list);
 	
 	// 코드성 데이터 세팅
 	this.fn_data_list();
