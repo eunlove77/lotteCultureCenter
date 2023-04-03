@@ -32,10 +32,10 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="학기" left="0" top="0" width="109" cssclass="sta_WF_TableLabel" height="31"/>
                     <Static id="Static01" taborder="1" text="~" left="324" top="5" width="9" height="20"/>
-                    <Combo id="strtYy" taborder="2" text="Combo00" left="119" top="5" width="100" height="20" type="dropdown" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="strtSmsterCd" taborder="3" text="Combo01" left="220" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="endYy" taborder="4" text="Combo02" left="337" top="5" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm"/>
-                    <Combo id="endSmsterCd" taborder="5" text="Combo03" left="438" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm"/>
+                    <Combo id="strtYy" taborder="2" text="Combo00" left="119" top="5" width="100" height="20" type="dropdown" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div01_strtYy_onitemchanged"/>
+                    <Combo id="strtSmsterCd" taborder="3" text="Combo01" left="220" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div01_strtSmsterCd_onitemchanged"/>
+                    <Combo id="endYy" taborder="4" text="Combo02" left="337" top="5" width="100" height="20" innerdataset="ds_year_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div01_endYy_onitemchanged"/>
+                    <Combo id="endSmsterCd" taborder="5" text="Combo03" left="438" top="5" width="100" height="20" innerdataset="ds_smster_list" codecolumn="cd" datacolumn="cdNm" onitemchanged="Div00_Div01_endSmsterCd_onitemchanged"/>
                   </Layout>
                 </Layouts>
               </Div>
@@ -265,6 +265,56 @@ this.Div00_Div02_endDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.Cale
 	if(this.gfn_nvl(this.Div00.form.Div02.form.strtDtm.value) != "" && obj.value < this.Div00.form.Div02.form.strtDtm.value)
 	{
 		this.Div00.form.Div02.form.strtDtm.set_value(obj.value);
+	}
+};
+
+this.Div00_Div01_strtYy_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(strtYy != 0 && endYy != 0 && strtYy > endYy){
+		this.ds_search.setColumn(0, "strtYy", endYy);
+	}
+	if(strtYy == endYy && strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd){
+		this.ds_search.setColumn(0, "strtSmsterCd", endSmsterCd);
+	}
+};
+
+this.Div00_Div01_strtSmsterCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd && strtYy == endYy){
+		this.ds_search.setColumn(0, "strtSmsterCd", endSmsterCd);
+	}
+};
+
+this.Div00_Div01_endYy_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(endYy != 0 && strtYy != 0 && strtYy > endYy){
+		this.ds_search.setColumn(0, "endYy", strtYy);
+	}
+	if(strtYy == endYy && strtSmsterCd != 0 && endSmsterCd != 0 && strtSmsterCd > endSmsterCd){
+		this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
+	}
+};
+
+this.Div00_Div01_endSmsterCd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	var strtYy = this.gfn_nvl(this.ds_search.getColumn(0, "strtYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtYy"));
+	var endYy = this.gfn_nvl(this.ds_search.getColumn(0, "endYy")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endYy"));
+	var strtSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "strtSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "strtSmsterCd"));
+	var endSmsterCd = this.gfn_nvl(this.ds_search.getColumn(0, "endSmsterCd")) == "" ? 0 : Number(this.ds_search.getColumn(0, "endSmsterCd"));
+	if(endSmsterCd != 0 && strtSmsterCd != 0 && strtSmsterCd > endSmsterCd && strtYy == endYy){
+		this.ds_search.setColumn(0, "endSmsterCd", strtSmsterCd);
 	}
 };
 ]]></Script>
