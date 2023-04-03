@@ -38,7 +38,7 @@
                 <Cell text="bind:titNm" textDecoration="underline" color="blue" cursor="pointer" subsumtext="bind:titNm"/>
                 <Cell col="1" text="expr:clCd? clNm : ''" subsumtext="bind:clCd"/>
                 <Cell col="2" text="bind:brchNm" subsumtext="bind:brchCd"/>
-                <Cell col="3" expr="comp.parent.gfn_setMasking(dataset.getColumn(currow, 'mbrNm'), 1, 1)" subsumtext="bind:mbrNm"/>
+                <Cell col="3" textDecoration="underline" color="blue" cursor="pointer" subsumtext="bind:mbrNm" text="expr:comp.parent.gfn_setMasking(dataset.getColumn(currow, 'mbrNm'), 1, 1)"/>
                 <Cell col="4" expr="comp.parent.gfn_setMaskingTel(hpNo)" subsumtext="bind:hpNo"/>
                 <Cell col="5" text="bind:rgprDtm" edittype="none" displaytype="date" calendardateformat="yyyy-MM-dd HH:mm:ss" calendareditformat="yyyy-MM-dd HH:mm:ss" subsumtext="bind:rgprDtm"/>
                 <Cell col="6" text="expr:admId ? admNm + '('  + admId + ')' : '--'" subsumtext="bind:admId"/>
@@ -147,6 +147,7 @@
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
           <Column id="emailAddrCd" type="STRING" size="256"/>
@@ -182,6 +183,7 @@
           <Column id="brchNm" type="STRING" size="256"/>
           <Column id="titNm" type="STRING" size="256"/>
           <Column id="mbrNm" type="STRING" size="256"/>
+          <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="mbrId" type="STRING" size="256"/>
           <Column id="email" type="STRING" size="256"/>
           <Column id="emailAddrCd" type="STRING" size="256"/>
@@ -347,6 +349,17 @@ this.GridInquiryList_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClick
 		
 		this.gfn_openPopup("inquiryDtlPop"+this.popCnt, oArg, "CustomerMng::InquiryDtl.xfdl", this, null, null, true, true, null);
 	}
+	if(this.colId[1] == "mbrNm")
+	{
+		this.popCnt ++;
+		
+		var oArg = {
+			mbrNo : obj.getBindDataset().getColumn(e.row, "mbrNo")
+		};
+		
+		this.gfn_openPopup("mbrDtlPop"+this.popCnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, "회원 상세");
+	}
+	
 };
 
 this.orderType = "desc";
