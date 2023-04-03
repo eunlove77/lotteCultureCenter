@@ -52,6 +52,8 @@ this.gfn_transaction = function(tranObj)
 
 this.isLoginPage = false;
 this.gfn_sessionCheck = function(isLoginPage){
+
+	nexacro.setHTTPHeaderVariable("Authorization" , "Bearer " + nexacro.getPrivateProfile("token"));
 	//로그인페이지 여부
 	this.isLoginPage = isLoginPage !== undefined ? isLoginPage : false;
 
@@ -146,6 +148,7 @@ this.gfn_removeLgnInfo = function()
 	nexacro.removePrivateProfile("athrCd");
 	nexacro.removePrivateProfile("vdiYn");
 	nexacro.removePrivateProfile("coprMemstrNo");
+	nexacro.removePrivateProfile("token");
 	
 	window.location.href=window.location.href;
 };
