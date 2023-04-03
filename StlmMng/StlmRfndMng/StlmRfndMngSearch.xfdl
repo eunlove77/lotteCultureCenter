@@ -10,7 +10,7 @@
               <Div id="Div00" taborder="0" text="Div00" left="0" top="0" height="33" cssclass="div_WF_CompWrap" right="0">
                 <Layouts>
                   <Layout>
-                    <Static id="Static00" taborder="0" text="결제일" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
+                    <Static id="Static00" taborder="0" text="환불일시" left="0" top="0" width="109" height="31" cssclass="sta_WF_TableLabel"/>
                     <Div id="rfndDtmDiv" taborder="1" text="Div00" left="Static00:10" top="5" height="25" right="0" url="FrameBase::include/date_type01.xfdl" formscrolltype="none"/>
                   </Layout>
                 </Layouts>
@@ -198,7 +198,7 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		//캘린더
 		var objCalendar = this.Div00.form.Div00.form.rfndDtmDiv.form;
-		objCalendar.btnDay5_onclick();
+		objCalendar.day60();
 		
 		// 지점선택
 		this.brchCd = nexacro.getPrivateProfile("brchCd") == "0000" ? "0001" : nexacro.getPrivateProfile("brchCd");
@@ -475,7 +475,7 @@ this.fn_btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	
 	if((!isMbrNm || !isHpNo) && (((nexacro.trim(mbrNm)).length < 2) || ((this.gfn_nvl(hpStNo) + this.gfn_nvl(hpMidNo) + this.gfn_nvl(hpLastNo)).length < 4)))
 	{
-		alert("개인정보 검색은 회원명(2자 이상)+연락처(4자리 이상) 조합으로 가능합니다.");
+		alert("개인정보 검색은 회원명(전체)+연락처(4자리 이상) 조합으로 가능합니다.");
 		return false;
 	}
 	

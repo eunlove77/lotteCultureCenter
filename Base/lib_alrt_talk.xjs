@@ -14,6 +14,8 @@ this.gfn_create_ds_for_rcv_talk = function(targetForm, targetDs, target_obj){
 	var nIndex = -1;
 	var nRow = -1;
 	
+	var rsvrType = target_obj.rsvrType;
+
 	if(this[dsId] == undefined){
 		ds = new Dataset;
 		nIndex = ds.addColumn( "mbrNo", "string" );
@@ -25,6 +27,8 @@ this.gfn_create_ds_for_rcv_talk = function(targetForm, targetDs, target_obj){
 		nIndex = ds.addColumn( "lectStDtmVal", "string" );
 		nIndex = ds.addColumn( "lectRmNm", "string" );
 		nIndex = ds.addColumn( "lectEndDtmVal", "string" );
+
+		nIndex = ds.addColumn( "rsvrType", "string" );
 		
 		targetForm.addChild(dsId, ds);
 	}else{
@@ -43,6 +47,8 @@ this.gfn_create_ds_for_rcv_talk = function(targetForm, targetDs, target_obj){
 			this[dsId].setColumn(nRow, "lectStDtmVal", new String(this.gfn_nvl(targetDs.getColumn(i, "lectStDtmVal"))));
 			this[dsId].setColumn(nRow, "lectRmNm", new String(this.gfn_nvl(targetDs.getColumn(i, "lectRmNm"))));
 			this[dsId].setColumn(nRow, "lectEndDtmVal", new String(this.gfn_nvl(targetDs.getColumn(i, "lectEndDtmVal"))));
+
+			this[dsId].setColumn(nRow, "rsvrType", target_obj.rsvrType);
 		}		
 	}
 	

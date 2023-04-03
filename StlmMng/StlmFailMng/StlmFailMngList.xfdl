@@ -95,15 +95,15 @@
                 <Cell col="10" text="강좌명"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:rnum" suppress="0" suppressalign="middle"/>
-                <Cell col="1" text="bind:replCdNm" suppressalign="first" suppress="0"/>
-                <Cell col="2" text="bind:stlmChnlCdNm" suppressalign="first" suppress="0"/>
-                <Cell col="3" text="bind:atlctStatCdNm" suppressalign="first" suppress="0"/>
-                <Cell col="4" text="bind:rsltFailDtm" suppress="0" suppressalign="first"/>
-                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;replCd&quot;) + ((dataset.getColumn(currow, &quot;replMsgCont&quot;) == undefined || dataset.getColumn(currow, &quot;replMsgCont&quot;) == &quot;&quot;) ? &quot;&quot; : &quot;(&quot; + dataset.getColumn(currow, &quot;replMsgCont&quot;) + &quot;)&quot;)" suppressalign="first" suppress="0"/>
-                <Cell col="6" text="bind:atlctRsvNo" suppressalign="first" suppress="0"/>
-                <Cell col="7" text="bind:mbrNo" suppressalign="first" textDecoration="underline" color="blue" cursor="pointer" suppress="0"/>
-                <Cell col="8" text="bind:mbrNm" suppressalign="first" textDecoration="underline" color="blue" cursor="pointer" suppress="0"/>
+                <Cell text="bind:rnum" suppress="2" suppressalign="middle"/>
+                <Cell col="1" text="bind:replCdNm" suppressalign="first" suppress="2"/>
+                <Cell col="2" text="bind:stlmChnlCdNm" suppressalign="first" suppress="2"/>
+                <Cell col="3" text="bind:atlctStatCdNm" suppressalign="first" suppress="2"/>
+                <Cell col="4" text="bind:rsltFailDtm" suppress="2" suppressalign="first"/>
+                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;replCd&quot;) + ((dataset.getColumn(currow, &quot;replMsgCont&quot;) == undefined || dataset.getColumn(currow, &quot;replMsgCont&quot;) == &quot;&quot;) ? &quot;&quot; : &quot;(&quot; + dataset.getColumn(currow, &quot;replMsgCont&quot;) + &quot;)&quot;)" suppressalign="first" suppress="2"/>
+                <Cell col="6" text="bind:atlctRsvNo" suppressalign="first" suppress="1"/>
+                <Cell col="7" text="bind:mbrNo" suppressalign="first" textDecoration="underline" color="blue" cursor="pointer" suppress="2"/>
+                <Cell col="8" text="bind:mbrNm" suppressalign="first" textDecoration="underline" color="blue" cursor="pointer" suppress="2"/>
                 <Cell col="9" text="bind:lectCd" color="blue" cursor="pointer" textDecoration="underline"/>
                 <Cell col="10" text="bind:lectNm" color="blue" cursor="pointer" textDecoration="underline"/>
               </Band>
@@ -233,6 +233,7 @@ this.Div02_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEve
 		this.cnt++;
 		var oArg = {
 				mbrNo : this.ds_stlm_fail_list.getColumn(e.row, "mbrNo")
+				, menuId : this.getOwnerFrame().param.MENU_ID
 				};
 	
 		this.gfn_openPopup("mbrDtlPop" + this.cnt, oArg, "MemberMng::MemberDtl.xfdl", this, null, null, true, true, null, "회원 상세");

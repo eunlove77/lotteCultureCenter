@@ -104,11 +104,11 @@
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌계약 목록 (0개)" top="16" width="150" height="20" left="0"/>
                     <Button id="Button00" taborder="1" text="계약서 생성" top="0" width="100" height="30" cssclass="btn_WF_Medium" right="0" onclick="Div00_Div01_Button00_onclick"/>
-                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick" cellsizingtype="col" onheadclick="Div00_Div01_Grid00_onheadclick">
+                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="2" left="0" top="40" right="0" bottom="0" nodatatext="검색결과 없음" binddataset="ds_class_list" oncellclick="Div00_Div01_Grid00_oncellclick" cellsizingtype="col" onheadclick="Div00_Div01_Grid00_onheadclick" cellmovingtype="col,band">
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="48"/>
+                            <Column size="48" band="left"/>
                             <Column size="48"/>
                             <Column size="130"/>
                             <Column size="203"/>
@@ -190,6 +190,7 @@
           </Layouts>
         </Div>
         <Div id="Div00_00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="ContextPop" taborder="3" left="1330" top="214" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -328,6 +329,15 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
@@ -354,6 +364,7 @@ this.popCnt = 0;
 this.brchCd = "";
 this.yy = "";
 this.lectSmsterCd = "";
+this.personalId = "ds_contract_list";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -381,6 +392,7 @@ this.ClassContractList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInf
 	
 	//그리드초기화
 	this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div00.form.Div01.form.Grid00, 0); 
+	this.gfn_onContextMenu(this.Div00.form.Div01.form.Grid00, this.personalId);
 	
 	this.init();	
 	
@@ -439,6 +451,17 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 	  {
 		case "classList":
 			this.Div00.form.Div01.form.Static00.set_text("강좌계약 목록(" + this.ds_class_list.getRowCount() + "개)");
+		break;
+		
+		case "setPsnlztn":
+			this.alert("저장되었습니다.");
+		break;
+		
+		case "getPsnlztn":
+			var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+			if(format !== undefined){			
+				this.Div00.form.Div01.form.Grid00.set_formats(format);
+			}
 		break;
 	  }
   }
@@ -794,44 +817,48 @@ this.Div00_Div01_Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickE
 
 this.Div00_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.col == 7 || e.col == 8)
+	var rColId = obj.getCellProperty("body", e.col,"subsumtext") != null ? (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":") : '';
+	if(rColId != '')
 	{
-		var arrArguments = {
-			brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
-			yy : this.ds_class_list.getColumn(e.row, "yy"),
-			lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
-			lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
-			menuSeq : this.getOwnerFrame().param.MENU_ID,
-			searchButton : this.Div00.form.Div00.form.Div00.form.Div03.form.Button00
+		if(rColId[1] == "lectNm" || rColId[1] == "lectCd")
+		{
+			var arrArguments = {
+				brchCd : this.ds_class_list.getColumn(e.row, "brchCd"),
+				yy : this.ds_class_list.getColumn(e.row, "yy"),
+				lectSmsterCd : this.ds_class_list.getColumn(e.row, "lectSmsterCd"),
+				lectCd : this.ds_class_list.getColumn(e.row, "lectCd"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				searchButton : this.Div00.form.Div00.form.Div00.form.Div03.form.Button00
+			}
+			
+			this.popCnt++;
+			this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 		}
 		
-		this.popCnt++;
-		this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
-	}
-	
-	if(e.col == 6)
-	{
-		this.popCnt++;
-		var oArg = {
-				type : "detail",
-				tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
+		if(rColId[1] == "tcNm")
+		{
+			this.popCnt++;
+			var oArg = {
+					type : "detail",
+					tcCdNo : this.ds_class_list.getColumn(e.row, "tcCdNo"),
+					menuSeq : this.getOwnerFrame().param.MENU_ID
+			};
+			this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
+		}
+		
+		if(this.gfn_nvl(this.ds_class_list.getColumn(e.row, "cntrNo")) != "" && rColId[1] == "cntrNo")
+		{
+			this.ds_classInsert_list.clearData();
+			var rowIndex = this.ds_classInsert_list.addRow();
+			this.ds_classInsert_list.copyRow(rowIndex, this.ds_class_list, e.row);
+			
+			this.popCnt++;
+			var arrArguments = {
+				dataset : this.ds_classInsert_list,
 				menuSeq : this.getOwnerFrame().param.MENU_ID
-		};
-		this.gfn_openPopup("TeacherDtlPop"+this.popCnt, oArg, "TeacherMng::TeacherDtl.xfdl", this, 1300, 850, true, true, null, "강사 상세");
-	}
-	
-	if(this.gfn_nvl(this.ds_class_list.getColumn(e.row, "cntrNo")) != "" && e.col == 3)
-	{
-		this.ds_classInsert_list.clearData();
-		var rowIndex = this.ds_classInsert_list.addRow();
-		this.ds_classInsert_list.copyRow(rowIndex, this.ds_class_list, e.row);
-		
-		this.popCnt++;
-		var arrArguments = {
-			dataset : this.ds_classInsert_list,
-			menuSeq : this.getOwnerFrame().param.MENU_ID
+			}
+			this.gfn_openPopup("ClassContractDtlPopup" + this.popCnt, arrArguments, "ClassMng::ClassContractDtl.xfdl", this, 1280, 850, true, true, null);
 		}
-		this.gfn_openPopup("ClassContractDtlPopup" + this.popCnt, arrArguments, "ClassMng::ClassContractDtl.xfdl", this, 1280, 850, true, true, null);
 	}
 };
 
@@ -943,7 +970,8 @@ this.Div00_Div00_Div00_Div05_Edit00_01_onkeyup = function(obj:nexacro.Edit,e:nex
 this.orderType = "desc";
 this.Div00_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.row == -1 && e.cell != 0 && e.cell !=1)
+	var rColId = obj.getCellProperty("body", e.col,"subsumtext") != null ? (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":") : '';
+	if(e.row == -1 && rColId != '')
 	{
 		var dsObj = this.objects[obj.binddataset];
  										
@@ -977,6 +1005,18 @@ this.gridOrderInit = function(obj)
 		obj.setCellProperty("head", i, "expandshow", "hide");
 	}
 }
+
+//그리드 개인화 저장
+this.popupMenu_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
+{
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.Div00.form.Div01.form.Grid00.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", this.personalId);
+	objDs.setColumn(0, "format", format);
+	
+	this.gfn_personalization("setPsnlztn");
+};
 ]]></Script>
   </Form>
 </FDL>

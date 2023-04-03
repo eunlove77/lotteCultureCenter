@@ -60,11 +60,11 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="강좌이관 목록 (0개)" left="0" top="16" width="150" height="20"/>
-                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" autofittype="col" nodatatext="검색결과 없음" cellsizingtype="col" onheadclick="Div00_Div01_Grid00_onheadclick">
+                    <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="1" left="0" top="40" right="0" bottom="0" binddataset="ds_class_list" autofittype="col" nodatatext="검색결과 없음" cellsizingtype="col" onheadclick="Div00_Div01_Grid00_onheadclick" cellmovingtype="col,band">
                       <Formats>
                         <Format id="default">
                           <Columns>
-                            <Column size="48"/>
+                            <Column size="48" band="left"/>
                             <Column size="72"/>
                             <Column size="80"/>
                             <Column size="80"/>
@@ -108,6 +108,7 @@
           </Layouts>
         </Div>
         <Div id="Div00_00" taborder="2" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
+        <Div id="ContextPop" taborder="3" left="1330" top="214" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -182,6 +183,15 @@
           <Column id="cdNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div00.form.Div00.form.Div00.form.Div00.form.Combo00" propid="value" datasetid="ds_search" columnid="brchCd"/>
@@ -203,6 +213,7 @@ this.lectSmsterCd = "";
 this.yy = "";
 
 this.lectSmsterArr = ["봄학기", "여름학기", "가을학기", "겨울학기"];
+this.personalId = "ds_transfer_list";
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -222,6 +233,7 @@ this.ClassTransfer_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	//그리드초기화
 	this.gfnSetCheckBoxNoDataset(this.ds_class_list, this.Div00.form.Div01.form.Grid00, 0); 
+	this.gfn_onContextMenu(this.Div00.form.Div01.form.Grid00, this.personalId);
 	
 	this.init();
 	
@@ -292,6 +304,17 @@ this.fnCallback = function(svcID, errorCode, errorMsg)
 		
 		case "classList":
 			this.Div00.form.Div01.form.Static00.set_text("강좌이관 목록 (" + this.ds_class_list.getRowCount() + "개)");
+		break;
+		
+		case "setPsnlztn":
+			this.alert("저장되었습니다.");
+		break;
+		
+		case "getPsnlztn":
+			var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+			if(format !== undefined){			
+				this.Div00.form.Div01.form.Grid00.set_formats(format);
+			}
 		break;
 	  }
   }
@@ -684,7 +707,8 @@ this.Div00_Div00_Div00_Div03_Button00_onclick = function(obj:nexacro.Button,e:ne
 this.orderType = "desc";
 this.Div00_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
-	if(e.row == -1 && e.cell != 0 && e.cell !=1)
+	var rColId = obj.getCellProperty("body", e.col,"subsumtext") != null ? (obj.getCellProperty("body", e.col,"subsumtext")).toString().split(":") : '';
+	if(e.row == -1 && rColId != '')
 	{
 		var dsObj = this.objects[obj.binddataset];
  										
@@ -718,6 +742,18 @@ this.gridOrderInit = function(obj)
 		obj.setCellProperty("head", i, "expandshow", "hide");
 	}
 }
+
+//그리드 개인화 저장
+this.popupMenu_onmenuclick = function(obj:nexacro.PopupMenu,e:nexacro.MenuClickEventInfo)
+{
+	var objDs = this.ds_grid_psnlztn;
+	var format = this.Div00.form.Div01.form.Grid00.getCurFormatString();
+	
+	objDs.setColumn(0, "gridId", this.personalId);
+	objDs.setColumn(0, "format", format);
+	
+	this.gfn_personalization("setPsnlztn");
+};
 ]]></Script>
   </Form>
 </FDL>
