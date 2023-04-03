@@ -159,7 +159,7 @@
                 <Cell col="6" calendardateformat="yyyy-MM-dd HH:mm:ss" text="bind:lectNm"/>
                 <Cell col="7" textDecoration="underline" color="blue" text="bind:titNm"/>
                 <Cell col="8" calendardateformat="yyyy-MM-dd HH:mm:ss" text="bind:mbrNo"/>
-                <Cell col="9" expr="comp.parent.com_setMasking(mbrNm, 'name')"/>
+                <Cell col="9" expr="comp.parent.com_setMasking(mbrNm, 'name')" text="bind:mbrNm"/>
                 <Cell col="10" text="bind:rgprDtm" calendardateformat="yyyy-MM-dd HH:mm:ss"/>
                 <Cell col="11" text="bind:stfdgPnt"/>
                 <Cell col="12" text="bind:inqCnt"/>
@@ -169,6 +169,7 @@
           </Formats>
         </Grid>
         <Div id="Div06" taborder="6" left="10" top="198" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="ContextPop" taborder="7" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -190,6 +191,7 @@ this.popCnt = 0;
 this.menuSeq = "";
 this.yy = "";
 this.lectSmsterCd = "";
+this.personalId = "atlctRvwList"
 
 this.dupObj = null;
 /**************************************************************************
@@ -200,6 +202,9 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
@@ -301,6 +306,16 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 		this.get_afterLectureReview_list();
 		return;
 	}
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.GridInquiryList.set_formats(format);
+    }
+  }
+
 };
 /**************************************************************************
  * 목록 출력 내용 가공
@@ -403,8 +418,11 @@ this.Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
 			//그리드 내부 변경값 롤백
 			var oriValue = this.ds_list.getColumn(e.row, "bestRvwCd");
 			obj.updateToDataset();
+      
+      this.ds_list.set_enableevent(false);
 			this.ds_list.setColumn(e.row, "bestRvwCd", oriValue);
-			
+			this.ds_list.set_enableevent(true);
+
 			return;
 		}
 		
@@ -549,6 +567,15 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
           <Column id="mbrNo" type="STRING" size="256"/>
           <Column id="bestRvwCd" type="STRING" size="256"/>
         </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
     <Bind>

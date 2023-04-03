@@ -138,6 +138,7 @@
         <Div id="Div00" taborder="0" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Button id="btnConfirm" taborder="4" text="증명서발급(승인)" top="210" height="21" width="125" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
         <Div id="Div06" taborder="7" left="10" top="208" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="ContextPop" taborder="8" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -156,6 +157,7 @@ this.application = null;
 this.popCnt = 0;
 this.domain = "";
 this.menuSeq = 0;
+this.personalId = "athctfList"
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -164,6 +166,9 @@ this.AuthCertificateIssueList_onload = function(obj:nexacro.Form,e:nexacro.LoadE
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+
 	this.domain = this.application.Domain;
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
@@ -383,6 +388,16 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 			obj.set_text("실제 파일이 존재하지 않습니다.");
 		}
 	}
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.GridInquiryList.set_formats(format);
+    }
+  }
+
 }
 ]]></Script>
     <Objects>
@@ -456,6 +471,15 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
         </Rows>
       </Dataset>
       <FileDownTransfer id="FileDownTransfer00"/>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.year" propid="value" datasetid="ds_search" columnid="stdYy"/>

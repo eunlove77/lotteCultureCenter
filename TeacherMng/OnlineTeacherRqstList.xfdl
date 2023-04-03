@@ -184,10 +184,10 @@
                 <Cell displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" calendardateformat="yyyy-MM-dd" text="bind:rnum"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
-                <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')"/>
+                <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')" text="bind:tcNm"/>
                 <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:tcTpCd" displaytype="combotext"/>
-                <Cell col="5" expr="comp.parent.com_setMasking(hpNo, 'tel')"/>
-                <Cell col="6" expr="comp.parent.com_setMasking(email, 'email')"/>
+                <Cell col="5" expr="comp.parent.com_setMasking(hpNo, 'tel')" text="bind:hpNo"/>
+                <Cell col="6" expr="comp.parent.com_setMasking(email, 'email')" text="bind:email"/>
                 <Cell col="7" text="bind:frstHopeBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="8" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" text="bind:secHopeBrchCd"/>
                 <Cell col="9" text="bind:frstLrclsCtegryCd" displaytype="expr:frstLrclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgyLarge_list" combodatacol="cdNm" combocodecol="cd"/>
@@ -197,7 +197,7 @@
                 <Cell col="13" combodataset="ds_classCtgyMiddle_list" combodatacol="cdNm" combocodecol="cd" displaytype="expr:secMdclsCtegryCd ? 'combotext' : 'none'" text="bind:secMdclsCtegryCd"/>
                 <Cell col="14" displaytype="expr:secSmclsCtegryCd ? 'combotext' : 'none'" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" text="bind:secSmclsCtegryCd"/>
                 <Cell col="15" text="bind:hopeDaywVal"/>
-                <Cell col="16" text="expr:hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
+                <Cell col="16" text="bind:hopeStHh" expr="hopeStHh ? hopeStHh +&quot;:&quot;+ hopeStMi +&quot;~&quot;+ hopeEndHh +&quot;:&quot;+ hopeEndMi : &quot;&quot;"/>
                 <Cell col="17" text="bind:appDt" displaytype="date" calendardateformat="yyyy-MM-dd"/>
               </Band>
             </Format>
@@ -207,6 +207,7 @@
         <Button id="btnConfirm" taborder="6" text="강사승인" top="270" height="21" width="75" wordWrap="char" cssclass="btn_WF_Medium" right="12" onclick="btnConfirm_onclick"/>
         <Div id="Div06" taborder="5" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
         <Div id="pageingDiv" taborder="9" text="Div00" left="10" height="21" visible="false" width="320" url="FrameBase::pagging.xfdl" bottom="15"/>
+        <Div id="ContextPop" taborder="10" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -226,6 +227,7 @@ this.popCnt = 0;
 this.menuSeq = 0;
 this.brchCd = "";
 this.brchColNm = "hopeBrchCd";
+this.personalId = "onlnRqstList"
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -234,6 +236,9 @@ this.TeacherList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+  
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
   //페이징
@@ -387,7 +392,8 @@ this.reset_search_form = function(){
 }
 //강사 리스트 데이터 가공
 this.process_teacher_list = function(){
-
+  
+  this.ds_list.set_enableevent(false);
 	for(var i = 0; i < this.ds_list.rowcount; i++){
     //희망요일
 		//hopeDaywVal 파싱
@@ -404,7 +410,8 @@ this.process_teacher_list = function(){
 			this.ds_list.setColumn(i, "hopeDaywVal", resStr);
 		}
 	}
-	
+	this.ds_list.set_enableevent(true);
+
 }
 /**************************************************************************
  * 강사승인
@@ -490,12 +497,14 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 			this.pageingDiv.form.setPage(pageIndex);
 			this.pageingDiv.set_visible(true);
 			
+      this.ds_list.set_enableevent(false);
 			for(var i = 0 ; i < this.ds_list.rowcount ; i++){
 				this.ds_list.setColumn(i, "rnum", ( nAllRowCount - (( pageIndex - 1 ) * nPageRowCount)) - i );
 			}
-			
+			this.ds_list.set_enableevent(true);
+
 			//목록 개수
-			this.Div06.form.Static01.set_text(nAllRowCount);
+			this.Div06.form.Static01.set_text("목록 " + nAllRowCount + "개");
 		}
 		else{
 			this.pageingDiv.set_visible(false);
@@ -505,6 +514,15 @@ this.fnCallback = function(svcId, errorCode, errorMsg){
 	else if(svcId == "confirm_teacher"){
 		alert("승인 되었습니다.");
 	}
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.GridInquiryList.set_formats(format);
+    }
+  }
 	
 }
 
@@ -730,6 +748,15 @@ this.Div02_Div01_hopeEnd_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeE
         <ColumnInfo>
           <Column id="tcCdNo" type="STRING" size="256"/>
         </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
     <Bind>
