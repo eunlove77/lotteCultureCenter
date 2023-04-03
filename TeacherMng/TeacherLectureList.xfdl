@@ -223,7 +223,7 @@
                 <Cell col="16" combodataset="ds_classCtgySmall_list" combodatacol="cdNm" combocodecol="cd" displaytype="combotext" text="bind:smclsCtegryCd"/>
                 <Cell col="17" text="bind:ppayStdCd" displaytype="combotext" combodataset="ds_ppayStd_list" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="18" text="bind:ppayAmt"/>
-                <Cell col="19" text="expr:lectStDtm + &quot;~&quot; + lectEndDtm"/>
+                <Cell col="19" text="bind:lectStDtm" expr="lectStDtm + '~' + lectEndDtm"/>
                 <Cell col="20" text="bind:avgLctrvw"/>
                 <Cell col="21" text="bind:avgEvlpnt"/>
                 <Cell col="22" text="bind:rgprDtm"/>
@@ -236,6 +236,7 @@
         <Button id="btnLcthistConf" taborder="5" text="출강이력확인서" top="270" height="21" width="110" wordWrap="char" cssclass="btn_WF_Medium" right="105" onclick="btnLcthistConf_onclick"/>
         <Button id="btnSms" taborder="6" text="안내메시지" top="270" height="21" cssclass="btn_WF_Low" fittocontents="width" width="90" right="10" onclick="btnSms_onclick"/>
         <Div id="Div06" taborder="9" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="ContextPop" taborder="10" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -255,6 +256,7 @@ this.brchColNm = "brchCd";
 this.yy = "";
 this.lectSmsterCd = "";
 this.menuSeq = 0;
+this.personalId = "teacherLectList"
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -263,6 +265,9 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+
 	this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 	this.domain = this.application.Domain;
 	
@@ -417,14 +422,28 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 	if(svcId == "teacher_lecture_list"){
 		this.process_teacher_list();
 	}
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.GridInquiryList.set_formats(format);
+    }
+  }
+  
 };
 this.process_teacher_list = function(){
 	//강사 목록 데이터 가공
+  
+  this.ds_list.set_enableevent(false);
 	this.ds_list.addColumn("smsRcvAgrYn", "STRING");
 	
 	for(var i = 0; i < this.ds_list.rowcount; i++){		
 		this.ds_list.setColumn(i, "smsRcvAgrYn", "Y");	//SMS 발송 Y
 	}
+  this.ds_list.set_enableevent(true);
+
 }
 /**************************************************************************
  * 출강이력 확인서, SMS
@@ -670,6 +689,15 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
           <Column id="cd" type="STRING" size="20"/>
           <Column id="cdNm" type="STRING" size="100"/>
         </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
       </Dataset>
     </Objects>
     <Bind>

@@ -165,7 +165,7 @@
               </Band>
               <Band id="body">
                 <Cell text="bind:tcCdNo" color="blue" textDecoration="underline" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
-                <Cell col="1" textDecoration="underline" color="blue" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''" expr="comp.parent.com_setMasking(tcNm, 'name')"/>
+                <Cell col="1" textDecoration="underline" color="blue" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''" expr="comp.parent.com_setMasking(tcNm, 'name')" text="bind:tcNm"/>
                 <Cell col="2" combodataset="spotCdList_row" combodatacol="cdNm" combocodecol="cd" text="bind:evlPnt" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="3" text="bind:brchCd" displaytype="combotext" combodataset="gdsSpotCdList" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="4" text="bind:yy" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
@@ -175,7 +175,7 @@
                 <Cell col="8" text="bind:lectTpCd" displaytype="combotext" combodataset="ds_classCtgy_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="9" text="bind:lectClCd" displaytype="combotext" combodataset="ds_classGb_list" combodatacol="cdNm" combocodecol="cd" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="10" text="bind:mbrNo" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
-                <Cell col="11" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''" expr="comp.parent.com_setMasking(mbrNm, 'name')"/>
+                <Cell col="11" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''" expr="comp.parent.com_setMasking(mbrNm, 'name')" text="bind:mbrNm"/>
                 <Cell col="12" text="bind:memoCont" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="13" text="expr:rgprDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
                 <Cell col="14" text="bind:mdfDtm" calendardateformat="yyyy-MM-dd HH:mm:ss" cssclass="expr:tcCdNo == '총점' ? 'yellow' : ''"/>
@@ -185,6 +185,7 @@
         </Grid>
         <Div id="Div00" taborder="0" top="0" height="21" url="FrameBase::include/favorite.xfdl" right="0" width="21"/>
         <Div id="Div06" taborder="7" left="10" top="268" height="30" url="TeacherMng::include/ListRowcount.xfdl" width="80" text=""/>
+        <Div id="ContextPop" taborder="8" left="0" top="1036" width="140" height="49" url="FrameBase::include/contextPopup.xfdl" visible="false"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -203,6 +204,7 @@ this.popCnt = 0;
 this.menuSeq = 0;
 this.yy = "";
 this.lectSmsterCd = "";
+this.personalId = "teacherEvalList"
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -211,6 +213,9 @@ this.TeacherLectureList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventIn
 	this.application = nexacro.getApplication();
 	this.txtMenuNm.set_text(obj.parent.parent.fvMenuNM);
 	
+  //개인화 세팅
+	this.gfn_onContextMenu(this.Grid00, this.personalId);
+
   this.menuSeq = this.getOwnerFrame().param.MENU_ID;
 
 	//그리드 체크박스 세팅
@@ -370,6 +375,16 @@ this.fnCallback = function(svcId, errorCode, errorMsg)
 		this.ds_list.filter("tcCdNo != '총점'");
 		this.ds_list.filter("");
 	}
+  else if(svcId == "setPsnlztn"){
+    this.alert("저장되었습니다.");
+  }
+  else if(svcId == "getPsnlztn"){
+    var format = this.ds_grid_psnlztn.getColumn(0, "format");		
+    if(format !== undefined){			
+      this.GridInquiryList.set_formats(format);
+    }
+  }
+
 };
 /**************************************************************************
  * 그리드
@@ -599,6 +614,15 @@ this.ds_search_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DS
       </Dataset>
       <Dataset id="ds_gdsSpotCd_list"/>
       <Dataset id="rtn_list"/>
+      <Dataset id="ds_grid_psnlztn">
+        <ColumnInfo>
+          <Column id="gridId" type="STRING" size="256"/>
+          <Column id="format" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <Bind>
       <BindItem id="item0" compid="Div01.form.Div00.form.brchCd" propid="value" datasetid="ds_search" columnid="brchCd"/>
