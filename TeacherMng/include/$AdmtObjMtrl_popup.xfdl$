@@ -223,6 +223,77 @@
           </Layouts>
         </Div>
         <Button id="btnExcelDown" taborder="3" text="엑셀 다운로드" top="460" width="100" height="21" cssclass="btn_WF_Medium" right="210" onclick="btnExcelDown_onclick"/>
+        <Grid oncolresized="gfn_oncolresized" id="Grid02" taborder="4" left="0" right="0" autofittype="col" bottom="-175" top="730" binddataset="ds_mtrl_list" summarytype="top" visible="false">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="120"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+                <Column size="100"/>
+              </Columns>
+              <Rows>
+                <Row size="40" band="head"/>
+                <Row size="24"/>
+                <Row size="24" band="summ"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="지점명"/>
+                <Cell col="2" text="강사명"/>
+                <Cell col="3" text="은행코드"/>
+                <Cell col="4" text="은행명"/>
+                <Cell col="5" text="계좌번호"/>
+                <Cell col="6" text="지급액"/>
+                <Cell col="7" text="소득금액"/>
+                <Cell col="8" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell col="9" text="재료비/대여료&#13;&#10;(1/N형)"/>
+                <Cell col="10" text="소득세(3%)"/>
+                <Cell col="11" text="주민세(0.3%)"/>
+                <Cell col="12" text="세금합계"/>
+              </Band>
+              <Band id="body">
+                <Cell expr="dataset.getRowCount() - currow" text="bind:rnum"/>
+                <Cell col="1" text="bind:brchNm"/>
+                <Cell col="2" text="bind:tcNm" textDecoration="underline" cursor="pointer" color="#000dcc"/>
+                <Cell col="3" text="bind:bankCd"/>
+                <Cell col="4" text="bind:bankName"/>
+                <Cell col="5" text="bind:accNo"/>
+                <Cell col="6" displaytype="number" text="bind:actlPpayAmt" textAlign="right"/>
+                <Cell col="7" displaytype="number" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="8" displaytype="number" text="bind:pchOptnStlmAmt" textAlign="right"/>
+                <Cell col="9" displaytype="number" text="bind:npchOptnStlmAmt" textAlign="right"/>
+                <Cell col="10" displaytype="number" text="bind:incmtax" textAlign="right"/>
+                <Cell col="11" displaytype="number" text="bind:rsdttax" textAlign="right"/>
+                <Cell col="12" displaytype="number" text="bind:taxSmamt" textAlign="right"/>
+              </Band>
+              <Band id="summary">
+                <Cell/>
+                <Cell col="1" text="합계"/>
+                <Cell col="2" expr="dataset.rowcount + &quot;건&quot;"/>
+                <Cell col="3"/>
+                <Cell col="4"/>
+                <Cell col="5"/>
+                <Cell col="6" displaytype="number" expr="dataset.getSum(&quot;actlPpayAmt&quot;)" textAlign="right"/>
+                <Cell col="7" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;admtYmPpayAmt&quot;)"/>
+                <Cell col="8" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;pchOptnStlmAmt&quot;)"/>
+                <Cell col="9" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;npchOptnStlmAmt&quot;)"/>
+                <Cell col="10" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;incmtax&quot;)"/>
+                <Cell col="11" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;rsdttax&quot;)"/>
+                <Cell col="12" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;taxSmamt&quot;)"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Bind>
@@ -301,6 +372,9 @@
           <Column id="incmClCd" type="STRING" size="256"/>
           <Column id="juminno" type="STRING" size="256"/>
           <Column id="addr" type="STRING" size="256"/>
+          <Column id="bankCd" type="STRING" size="256"/>
+          <Column id="bankName" type="STRING" size="256"/>
+          <Column id="accNo" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObj"/>
@@ -550,6 +624,7 @@ this.fn_trans_sap = function(){
 
 this.fn_callback = function(svcID,errorCode,errorMsg){
 	var saveYn = "N";
+	var admtPrcsStatCd = "";
 	
 	if(errorCode != 0)
 	{    
@@ -578,6 +653,18 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 					this.ds_acntcd_list.setColumn(i, "acntDptCd", this.ds_admt_info.getColumn(0, "sapDptCd"));
 				}		
 				this.opener.divWork.form.fn_list(1);
+			}
+			
+			admtPrcsStatCd = this.ds_admt_info.getColumn(0, "admtPrcsStatCd");
+			
+			if(admtPrcsStatCd > 0){
+				this.Div01.form.btnSave.set_visible(false);
+				this.Div01.form.btnDelete.set_visible(false);
+				this.Div02.form.btnReAdmt.set_visible(false);
+				this.Div02.form.btnTransSap.set_visible(false);
+				this.btnExcelDown.set_right(10);
+			}else{
+				this.btnExcelDown.set_right(210);
 			}
 			
 			break;	
@@ -699,7 +786,7 @@ this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo
 	{	
 		this.ExcelExportObj.clear();
 		this.ExcelExportObj.set_exporturl(this.application.Domain + this.excelImportExport);
-		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Div02.form.Grid01, "Sheet1!A1");  	
+		this.ExcelExportObj.addExportItem(nexacro.ExportItemTypes.GRID, this.Grid02, "Sheet1!A1");  	
 		this.ExcelExportObj.set_exportfilename("강사별 강사료정산 목록");
 		this.ExcelExportObj.exportData(); 
 	}
