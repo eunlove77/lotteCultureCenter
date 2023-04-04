@@ -624,6 +624,7 @@ this.fn_trans_sap = function(){
 
 this.fn_callback = function(svcID,errorCode,errorMsg){
 	var saveYn = "N";
+	var admtPrcsStatCd = "";
 	
 	if(errorCode != 0)
 	{    
@@ -653,7 +654,18 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 				}		
 				this.opener.divWork.form.fn_list(1);
 			}
-
+			
+			admtPrcsStatCd = this.ds_admt_info.getColumn(0, "admtPrcsStatCd");
+			
+			if(admtPrcsStatCd > 0){
+				this.Div01.form.btnSave.set_visible(false);
+				this.Div01.form.btnDelete.set_visible(false);
+				this.Div02.form.btnReAdmt.set_visible(false);
+				this.Div02.form.btnTransSap.set_visible(false);
+				this.btnExcelDown.set_right(10);
+			}else{
+				this.btnExcelDown.set_right(210);
+			}
 			
 			break;	
 		case "admt_list":
