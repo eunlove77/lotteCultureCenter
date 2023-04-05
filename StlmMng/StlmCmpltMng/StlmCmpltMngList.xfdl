@@ -163,53 +163,56 @@
         <Static id="Static00" taborder="1" text="▶ 목록" left="0" top="0" width="45" height="17" cssclass="sta_WF_TitGray"/>
         <Static id="Static01" taborder="2" text="(0개)" left="Static00:0" top="0" width="55" height="17" cssclass="sta_WF_TitGray"/>
         <Button id="Button02" taborder="3" text="엑셀 다운로드" top="0" height="30" cssclass="btn_WF_Medium" width="100" right="0" onclick="Button02_onclick"/>
-        <Grid oncolresized="gfn_oncolresized" id="Grid_Excel" taborder="4" left="0" top="330" binddataset="ds_stlm_cmplt_list" nodatatext="검색결과 없음" right="0" autofittype="none" autosizebandtype="body" autosizingtype="none" bottom="-303" visible="false">
+        <Div id="Div03" taborder="4" text="Div03" top="0" width="390" height="40" url="FrameBase::include/talk_btn.xfdl" formscrolltype="none" left="Static01:10"/>
+        <Button id="Button00" taborder="5" text="그리드 포맷 저장" top="0" height="30" cssclass="btn_WF_Medium" visible="true" right="Button02:10" width="120" onclick="Button00_onclick"/>
+        <Grid id="Grid_Excel" taborder="6" left="0" top="740" binddataset="ds_stlm_cmplt_list" nodatatext="검색결과 없음" right="0" autofittype="none" autosizebandtype="body" autosizingtype="row" bottom="-703" extendsizetype="row" cellmovingtype="col" cssclass="grd_WF_TableType" visible="false" readonly="false">
           <Formats>
             <Format id="default">
               <Columns>
+                <Column size="120" band="left"/>
+                <Column size="120" band="left"/>
+                <Column size="120" band="left"/>
                 <Column size="120"/>
                 <Column size="120"/>
+                <Column size="80"/>
+                <Column size="80"/>
                 <Column size="120"/>
+                <Column size="80"/>
+                <Column size="200"/>
+                <Column size="120"/>
+                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="120"/>
+                <Column size="100"/>
+                <Column size="120"/>
+                <Column size="100"/>
+                <Column size="120"/>
+                <Column size="100"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
                 <Column size="120"/>
                 <Column size="200"/>
                 <Column size="120"/>
                 <Column size="80"/>
                 <Column size="80"/>
-                <Column size="120"/>
-                <Column size="80"/>
-                <Column size="200"/>
-                <Column size="80"/>
-                <Column size="120"/>
-                <Column size="150"/>
-                <Column size="80"/>
-                <Column size="120"/>
-                <Column size="120"/>
-                <Column size="100"/>
-                <Column size="120"/>
-                <Column size="100"/>
-                <Column size="120"/>
-                <Column size="100"/>
-                <Column size="150"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="150"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="120"/>
-                <Column size="200"/>
-                <Column size="120"/>
-                <Column size="80"/>
-                <Column size="80"/>
                 <Column size="150"/>
                 <Column size="150"/>
                 <Column size="100"/>
+                <Column size="120"/>
               </Columns>
               <Rows>
                 <Row size="24" band="head"/>
@@ -220,15 +223,15 @@
                 <Cell col="1" text="회원번호"/>
                 <Cell col="2" text="회원명"/>
                 <Cell col="3" text="휴대전화"/>
-                <Cell col="4" text="이메일"/>
-                <Cell col="5" text="실수강자"/>
-                <Cell col="6" text="지점명"/>
-                <Cell col="7" text="강좌유형"/>
-                <Cell col="8" text="학기"/>
-                <Cell col="9" text="강좌코드"/>
-                <Cell col="10" text="강좌명"/>
+                <Cell col="4" text="실수강자"/>
+                <Cell col="5" text="지점명"/>
+                <Cell col="6" text="강좌유형"/>
+                <Cell col="7" text="학기"/>
+                <Cell col="8" text="강좌코드"/>
+                <Cell col="9" text="강좌명"/>
+                <Cell col="10" text="강좌옵션"/>
                 <Cell col="11" text="강사명"/>
-                <Cell col="12" text="재료비/대여료"/>
+                <Cell col="12" text="재료비/대여료 유형"/>
                 <Cell col="13" text="재료비/대여료 옵션명"/>
                 <Cell col="14" text="강좌료"/>
                 <Cell col="15" text="재료비/대여료"/>
@@ -259,57 +262,57 @@
                 <Cell col="40" text="환불규정 확인서명"/>
                 <Cell col="41" text="사은품 신청번호"/>
                 <Cell col="42" text="재고차감"/>
+                <Cell col="43" text="상태"/>
               </Band>
               <Band id="body">
-                <Cell text="bind:atlctRsvNo" suppress="1" suppressalign="middle"/>
-                <Cell col="1" text="bind:mbrNo" suppress="2" suppressalign="middle"/>
-                <Cell col="2" text="expr:dataset.getColumn(currow, &quot;mbrNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;mbrId&quot;) + &quot;)&quot;" suppress="2" suppressalign="middle"/>
-                <Cell col="3" text="bind:hpNo" suppress="2" suppressalign="middle"/>
-                <Cell col="4" text="expr:dataset.getColumn(currow, &quot;email&quot;) + &quot;@&quot; + dataset.getColumn(currow, &quot;emailAddrCd&quot;)" suppress="2" suppressalign="middle"/>
-                <Cell col="5" text="expr:dataset.getColumn(currow, &quot;actlAtlctNpleNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) + &quot;)&quot;"/>
-                <Cell col="6" text="bind:brchCdNm"/>
-                <Cell col="7" text="bind:lectTpCdNm"/>
-                <Cell col="8" text="expr:dataset.getColumn(currow, &quot;yy&quot;) + &quot; &quot; + dataset.getColumn(currow, &quot;lectSmsterCdNm&quot;)"/>
-                <Cell col="9" text="bind:lectCd"/>
-                <Cell col="10" text="bind:lectNm"/>
+                <Cell text="bind:atlctRsvNo" suppress="1"/>
+                <Cell col="1" text="bind:mbrNo" suppress="2"/>
+                <Cell col="2" text="expr:dataset.getColumn(currow, &quot;mbrNm&quot;) " suppress="2"/>
+                <Cell col="3" text="bind:hpNo" suppress="2"/>
+                <Cell col="4" text="expr:dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) == null || dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) == &quot;&quot; ? &quot;&quot; :  dataset.getColumn(currow, &quot;actlAtlctNpleNm&quot;) + &quot;(&quot; + dataset.getColumn(currow, &quot;fmlyRelCdNm&quot;) + &quot;)&quot;"/>
+                <Cell col="5" text="bind:brchCdNm"/>
+                <Cell col="6" text="bind:lectTpCdNm"/>
+                <Cell col="7" text="expr:dataset.getColumn(currow, &quot;yy&quot;) == null || dataset.getColumn(currow, &quot;yy&quot;) == &quot;&quot; ? &quot;&quot; : dataset.getColumn(currow, &quot;yy&quot;) + &quot; &quot; + dataset.getColumn(currow, &quot;lectSmsterCdNm&quot;)"/>
+                <Cell col="8" text="bind:lectCd"/>
+                <Cell col="9" text="bind:lectNm"/>
+                <Cell col="10" text="bind:lectAddOptnNm"/>
                 <Cell col="11" text="bind:tcNm"/>
-                <Cell col="12" text="bind:optnTypCdNm"/>
-                <Cell col="13" text="expr:dataset.getColumn(currow, &quot;optnNm&quot;) == undefined ? '-' : dataset.getColumn(currow, &quot;optnNm&quot;) == &quot;&quot; ? '-' : dataset.getColumn(currow, &quot;optnNm&quot;)"/>
-                <Cell col="14" text="bind:lectAmt" displaytype="number" maskeditpostfixtext="원" maskeditformat="###,##0"/>
-                <Cell col="15" text="expr:dataset.getColumn(currow, &quot;lectAddAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;lectAddAmt&quot;)" displaytype="number" maskeditpostfixtext="원" maskeditformat="###,##0"/>
-                <Cell col="16" text="expr:dataset.getColumn(currow, &quot;oflnDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;oflnDcNm&quot;) == &quot;&quot; ? '-' : dataset.getColumn(currow, &quot;oflnDcNm&quot;)"/>
-                <Cell col="17" text="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;oflnDcAmt&quot;)" displaytype="number" maskeditpostfixtext="원" maskeditformat="###,##0"/>
-                <Cell col="18" text="expr:dataset.getColumn(currow, &quot;grdeDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;grdeDcNm&quot;) == '' ? '-' : dataset.getColumn(currow, &quot;grdeDcNm&quot;)"/>
-                <Cell col="19" text="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;grdeDcAmt&quot;)" displaytype="number" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                <Cell col="20" text="expr:dataset.getColumn(currow, &quot;cpnDcNm&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cpnDcNm&quot;)"/>
-                <Cell col="21" text="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cpnDcAmt&quot;)" displaytype="number" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                <Cell col="22" text="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;optnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null ? 'normal' : 'mask'"/>
-                <Cell col="23" text="bind:lectStlmAmt" displaytype="number" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                <Cell col="24" text="bind:gsStlmAmt" suppress="2" suppressalign="middle" maskeditpostfixtext="원" maskeditformat="###,##0" displaytype="number"/>
-                <Cell col="25" text="expr:dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;crdStlmAmt&quot;)" suppress="2" suppressalign="middle" displaytype="number" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                <Cell col="26" text="expr:dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;lpntUseAmt&quot;)" suppress="2" suppressalign="middle" displaytype="number" maskeditformat="###,##0" maskeditpostfixtext="원"/>
-                <Cell col="27" text="expr:dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;cshStlmAmt&quot;)" suppress="2" suppressalign="middle" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="number"/>
-                <Cell col="28" text="expr:dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;)" suppress="2" suppressalign="middle" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="number"/>
-                <Cell col="29" text="expr:dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;)" suppress="2" suppressalign="middle" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="number"/>
-                <Cell col="30" text="expr:dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;etcStlmAmt&quot;)" suppress="2" suppressalign="middle" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="number"/>
-                <Cell col="31" text="expr:dataset.getColumn(currow, &quot;chngAmt&quot;) == null ? '-' : dataset.getColumn(currow, &quot;chngAmt&quot;)" suppress="2" suppressalign="middle" maskeditformat="'(-) '###,##0" maskeditpostfixtext="원" displaytype="number"/>
-                <Cell col="32" text="bind:stlmDtm" suppress="2" suppressalign="middle"/>
-                <Cell col="33" text="bind:stlmChnlCdNm" suppress="2" suppressalign="middle"/>
+                <Cell col="12" text="expr:dataset.getColumn(currow, &quot;optnUseYn&quot;) == &quot;N&quot; ? &quot;-&quot; : dataset.getColumn(currow, &quot;optnTypCdNm&quot;)"/>
+                <Cell col="13" text="expr:dataset.getColumn(currow, &quot;optnNm&quot;) == undefined ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;optnNm&quot;) == &quot;&quot; ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;optnNm&quot;)"/>
+                <Cell col="14" text="bind:lectAmt" displaytype="mask" maskeditpostfixtext="원" maskeditformat="###,##0"/>
+                <Cell col="15" text="expr:dataset.getColumn(currow, &quot;lectAddAmt&quot;) == null || dataset.getColumn(currow, &quot;lectAddAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;lectAddAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;lectAddAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;lectAddAmt&quot;) == null || dataset.getColumn(currow, &quot;lectAddAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;lectAddAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditpostfixtext="원" maskeditformat="###,##0"/>
+                <Cell col="16" text="expr:dataset.getColumn(currow, &quot;oflnDcNm&quot;) == null ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;oflnDcNm&quot;) == &quot;&quot; ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;oflnDcNm&quot;)"/>
+                <Cell col="17" text="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null || dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;oflnDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == null || dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;oflnDcAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditpostfixtext="원" maskeditformat="###,##0"/>
+                <Cell col="18" text="expr:dataset.getColumn(currow, &quot;grdeDcNm&quot;) == null ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;grdeDcNm&quot;) == '' ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;grdeDcNm&quot;)"/>
+                <Cell col="19" text="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null || dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;grdeDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == null || dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;grdeDcAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="20" text="expr:dataset.getColumn(currow, &quot;cpnDcNm&quot;) == null ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;cpnDcNm&quot;)"/>
+                <Cell col="21" text="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null || dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;cpnDcAmt&quot;)" displaytype="expr:dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == null || dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;cpnDcAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="22" text="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null || dataset.getColumn(currow, &quot;optnDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;optnDcAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;optnDcAmt&quot;)" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;optnDcAmt&quot;) == null || dataset.getColumn(currow, &quot;optnDcAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;optnDcAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'"/>
+                <Cell col="23" text="bind:lectStlmAmt" displaytype="mask" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="24" text="bind:gsStlmAmt" suppress="2" maskeditpostfixtext="원" maskeditformat="###,##0" displaytype="mask"/>
+                <Cell col="25" text="expr:dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;crdStlmAmt&quot;)" suppress="2" displaytype="expr:dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;crdStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="26" text="expr:dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == null || dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;lpntUseAmt&quot;)" suppress="2" displaytype="expr:dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == null || dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;lpntUseAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'" maskeditformat="###,##0" maskeditpostfixtext="원"/>
+                <Cell col="27" text="expr:dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;cshStlmAmt&quot;)" suppress="2" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;cshStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'"/>
+                <Cell col="28" text="expr:dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;)" suppress="2" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;ltteGiftStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'"/>
+                <Cell col="29" text="expr:dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;)" suppress="2" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;otgiftStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'"/>
+                <Cell col="30" text="expr:dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;0&quot; ? '-' : dataset.getColumn(currow, &quot;etcStlmAmt&quot;)" suppress="2" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="expr:dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == null || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;etcStlmAmt&quot;) == &quot;0&quot; ? 'normal' : 'mask'"/>
+                <Cell col="31" text="expr:dataset.getColumn(currow, &quot;chngAmt&quot;) == null || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;&quot; || dataset.getColumn(currow, &quot;chngAmt&quot;) == &quot;0&quot; ? '-' : comp.parent.parent.parent.fn_set_chngAmt(dataset.getColumn(currow, &quot;chngAmt&quot;))" suppress="2" maskeditformat="###,##0" maskeditpostfixtext="원" displaytype="normal"/>
+                <Cell col="32" text="bind:stlmDtm" suppress="2"/>
+                <Cell col="33" text="bind:stlmChnlCdNm" suppress="2"/>
                 <Cell col="34" text="bind:lectClCdNm"/>
                 <Cell col="35" text="bind:stringStDaywNm"/>
-                <Cell col="36" text="expr:dataset.getColumn(currow, &quot;lectStDtm&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndDtm&quot;)"/>
-                <Cell col="37" text="expr:dataset.getColumn(currow, &quot;lectStHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectStMiCd&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectEndMiCd&quot;)"/>
+                <Cell col="36" text="expr:dataset.getColumn(currow, &quot;lectStDtm&quot;) == null || dataset.getColumn(currow, &quot;lectStDtm&quot;) == &quot;&quot; ? &quot;&quot; : dataset.getColumn(currow, &quot;lectStDtm&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndDtm&quot;)"/>
+                <Cell col="37" text="expr:dataset.getColumn(currow, &quot;lectStHhCd&quot;) == null || dataset.getColumn(currow, &quot;lectStHhCd&quot;) == &quot;&quot; ? &quot;&quot; : dataset.getColumn(currow, &quot;lectStHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectStMiCd&quot;) + &quot; ~ &quot; + dataset.getColumn(currow, &quot;lectEndHhCd&quot;) + &quot;:&quot; + dataset.getColumn(currow, &quot;lectEndMiCd&quot;)"/>
                 <Cell col="38" text="bind:lectNbcnt"/>
-                <Cell col="39" text="expr:dataset.getColumn(currow, &quot;lectStatCd&quot;) == &quot;09&quot; ? &quot;Y&quot; : &quot;N&quot;"/>
-                <Cell col="40" text="완료" suppress="2" suppressalign="middle"/>
-                <Cell col="41" text="expr:dataset.getColumn(currow, &quot;fgftAppNo&quot;) == null ? '-' : dataset.getColumn(currow, &quot;fgftAppNo&quot;)"/>
+                <Cell col="39" text="expr:dataset.getColumn(currow, &quot;lectStatCd&quot;) == null || dataset.getColumn(currow, &quot;lectStatCd&quot;) == &quot;&quot; ? &quot;&quot; : dataset.getColumn(currow, &quot;lectStatCd&quot;) == &quot;09&quot; ? &quot;Y&quot; : &quot;N&quot;"/>
+                <Cell col="40" text="expr:dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;완료&quot;" suppress="2"/>
+                <Cell col="41" text="expr:dataset.getColumn(currow, &quot;fgftAppNo&quot;) == null ? (dataset.getColumn(currow, &quot;atlctRsvNo&quot;) == &quot;소계&quot; ? &quot;&quot; : &quot;-&quot;) : dataset.getColumn(currow, &quot;fgftAppNo&quot;)"/>
                 <Cell col="42" text="bind:atlctStlmSubChnlCdNm"/>
+                <Cell col="43" text="bind:atlctStatCdNm"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
-        <Div id="Div03" taborder="5" text="Div03" top="0" width="390" height="40" url="FrameBase::include/talk_btn.xfdl" formscrolltype="none" left="Static01:10"/>
-        <Button id="Button00" taborder="6" text="그리드 포맷 저장" top="0" height="30" cssclass="btn_WF_Medium" visible="true" right="Button02:10" width="120" onclick="Button00_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
