@@ -22,11 +22,12 @@
                   </Layout>
                 </Layouts>
               </Div>
-              <Button id="LoginBtn" taborder="2" text="LOGIN" left="54" top="303" width="320" height="40" cssclass="btn_WF_Login" onclick="loginDiv_LoginBtn_onclick"/>
+              <Button id="LoginBtn" taborder="2" text="LOGIN" left="54" top="312" width="320" height="40" cssclass="btn_WF_Login" onclick="loginDiv_LoginBtn_onclick"/>
               <Static id="Static00" taborder="3" text="" left="156" top="70" width="115" height="42" background="url('theme://images/log_WF_Logo.png') no-repeat center center /115px 42px"/>
               <Static id="Static01" taborder="4" text="매일 새로움과 즐거운 경험을 제공합니다" left="120" top="122" width="215" height="20"/>
-              <Static id="StaticReg" taborder="5" text="계정 생성요청" left="55" top="351" width="120" height="21" textDecoration="underline" cursor="pointer" onclick="loginDiv_StaticReg_onclick"/>
-              <Static id="StaticFind" taborder="6" text="비밀번호 찾기" left="252" top="351" width="120" height="21" textDecoration="underline" textAlign="right" cursor="pointer" onclick="loginDiv_StaticFind_onclick"/>
+              <Static id="StaticReg" taborder="5" text="계정 생성요청" left="55" top="360" width="120" height="21" textDecoration="underline" cursor="pointer" onclick="loginDiv_StaticReg_onclick"/>
+              <Static id="StaticFind" taborder="6" text="비밀번호 찾기" left="252" top="360" width="120" height="21" textDecoration="underline" textAlign="right" cursor="pointer" onclick="loginDiv_StaticFind_onclick"/>
+              <Static id="CapsStatic" taborder="7" text="Caps Lock이 켜져 있습니다." left="60" top="284" width="200" height="21" color="#ff5050" visible="false"/>
             </Layout>
           </Layouts>
         </Div>
@@ -51,6 +52,21 @@ this.Form_Login_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
 	this.application = nexacro.getApplication();
 	this.fn_resizeCenter(this.loginDiv, obj.getOffsetWidth());
+	
+	var pwdId = document.getElementById("mainframe.VFrameSet00.HFrameSet00.VFrameSet01.LoginFrame.form.loginDiv.form.Div02_00.form.editPw:input");
+	
+	pwdId.addEventListener("keyup", function(event) {
+		var capsStatic = nexacro.getApplication().mainframe.VFrameSet00.HFrameSet00.VFrameSet01.LoginFrame.form.loginDiv.form.CapsStatic;
+		
+		if(event.getModifierState("CapsLock"))
+		{
+			capsStatic.set_visible(true);
+		}
+		else
+		{
+			capsStatic.set_visible(false);
+		}
+	});
 };
 
 this.editPw_onkeydown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
@@ -226,7 +242,8 @@ this.logOutSuccess = function()
 	}
 	this.application.gfn_initFrame();
 	
-}]]></Script>
+}
+]]></Script>
     <Objects>
       <Dataset id="ds_login">
         <ColumnInfo>
