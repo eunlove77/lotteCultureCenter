@@ -28,8 +28,8 @@
             <Layout>
               <Static id="Static00" taborder="0" text="기간 &lt;fc v ='#ED5757'&gt;*&lt;/fc&gt;" left="0" top="0" width="109" height="31" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick"/>
               <Static id="Static01" taborder="1" text="~" left="218" top="3" width="9" height="20"/>
-              <Calendar id="strtDtm" taborder="2" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd" canchange="fn_init"/>
-              <Calendar id="endDtm" taborder="3" left="229" top="5" width="100" height="21" canchange="fn_init"/>
+              <Calendar id="strtDtm" taborder="2" left="116" top="5" width="100" height="21" dateformat="yyyy-MM-dd" canchange="fn_init" oncloseup="Div03_strtDtm_oncloseup"/>
+              <Calendar id="endDtm" taborder="3" left="229" top="5" width="100" height="21" canchange="fn_init" oncloseup="Div03_endDtm_oncloseup" dateformat="yyyy-MM-dd"/>
             </Layout>
           </Layouts>
         </Div>
@@ -78,13 +78,13 @@
                 <Cell text="bind:strNm" suppress="1"/>
                 <Cell col="1" text="bind:ltrmNm" expr="dataset.getRowLevel(currow)==1?'소     계':ltrmNm"/>
                 <Cell col="2" text="bind:sqm"/>
-                <Cell col="3" text="expr:slngAmt + '원'" displaytype="normal" edittype="none" maskeditformat="###,###"/>
-                <Cell col="4" text="expr:tcPaidSlngAmt + '원'"/>
-                <Cell col="5" text="expr:tcUnpaidSlngAmt + '원'"/>
-                <Cell col="6" text="expr:mbrCnt + '명'"/>
-                <Cell col="7" text="expr:atlctCnt + '명'"/>
-                <Cell col="8" text="expr:lectCnt + '명'"/>
-                <Cell col="9" text="expr:lectEstRate"/>
+                <Cell col="3" text="bind:slngAmt" displaytype="normal" edittype="none" maskeditformat="###,###"/>
+                <Cell col="4" text="bind:tcPaidSlngAmt"/>
+                <Cell col="5" text="bind:tcUnpaidSlngAmt"/>
+                <Cell col="6" text="bind:mbrCnt"/>
+                <Cell col="7" text="bind:atlctCnt"/>
+                <Cell col="8" text="bind:lectCnt"/>
+                <Cell col="9" text="expr:nexacro.round(lectEstRate, 1)"/>
               </Band>
             </Format>
           </Formats>
@@ -143,14 +143,14 @@
           <Column id="strCd" type="STRING" size="256"/>
           <Column id="strNm" type="STRING" size="256" sumtext=""/>
           <Column id="ltrmNm" type="STRING" size="256"/>
-          <Column id="sqm" type="BIGDECIMAL" size="256" prop="AVG"/>
-          <Column id="slngAmt" type="BIGDECIMAL" size="256" prop="SUM"/>
+          <Column id="sqm" type="STRING" size="256" prop="AVG"/>
+          <Column id="slngAmt" type="STRING" size="256" prop="SUM"/>
           <Column id="tcPaidSlngAmt" type="STRING" size="256" prop="SUM"/>
           <Column id="tcUnpaidSlngAmt" type="STRING" size="256" prop="SUM"/>
           <Column id="mbrCnt" type="STRING" size="256" prop="SUM"/>
           <Column id="atlctCnt" type="STRING" size="256" prop="SUM"/>
           <Column id="lectCnt" type="STRING" size="256" prop="SUM"/>
-          <Column id="lectEstRate" type="INT" size="256" prop="AVG"/>
+          <Column id="lectEstRate" type="STRING" size="256" prop="AVG"/>
         </ColumnInfo>
       </Dataset>
     </Objects>
@@ -173,6 +173,7 @@ this.ltrmStat_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.baseSvrUrl = this.application.Admin_svc + "::stat/";
 
 	this.ds_brch_cd.copyData(this.application.gdsSpotCdList);
+	this.ds_brch_cd.deleteRow(0);
 	this.ds_brch_cd.insertRow(0);
 	this.ds_brch_cd.setColumn(0, "cd", "");
 	this.ds_brch_cd.setColumn(0, "cdNm", "전체");
@@ -259,6 +260,22 @@ this.fn_callback = function(svcID,errorCode,errorMsg){
 this.fn_init = function(){	
 	this.ds_list.clearData();
 }
+
+this.Div03_strtDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div03.form.endDtm.value) != "" && this.Div03.form.endDtm.value < obj.value)
+	{
+		obj.set_value(this.Div03.form.endDtm.value);
+	}
+};
+
+this.Div03_endDtm_oncloseup = function(obj:nexacro.Calendar,e:nexacro.CalendarCloseUpEventInfo)
+{
+	if(this.gfn_nvl(this.Div03.form.strtDtm.value) != "" && obj.value < this.Div03.form.strtDtm.value)
+	{
+		this.Div03.form.strtDtm.set_value(obj.value);
+	}
+};
 ]]></Script>
   </Form>
 </FDL>
