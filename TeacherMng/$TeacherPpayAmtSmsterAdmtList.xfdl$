@@ -135,7 +135,7 @@
         </Div>
         <Static id="Static00_00" taborder="6" text="▶ 강사료정산 목록" left="10" top="239" width="110" height="21" cssclass="sta_WF_TitGray"/>
         <Static id="txtTotal" taborder="7" left="Static00_00:0" height="21" text="( 0개 )" width="50" top="239" cssclass="sta_WF_TitGray"/>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="11" top="260" bottom="10" autofittype="none" binddataset="ds_list" right="9" autosizingtype="row" extendsizetype="row">
+        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="8" left="11" top="260" bottom="10" autofittype="none" binddataset="ds_list" right="9" autosizingtype="row" extendsizetype="row" summarytype="top">
           <Formats>
             <Format id="default">
               <Columns>
@@ -153,8 +153,8 @@
                 <Column size="60"/>
                 <Column size="60"/>
                 <Column size="90"/>
-                <Column size="70"/>
-                <Column size="60"/>
+                <Column size="90"/>
+                <Column size="90"/>
                 <Column size="70"/>
                 <Column size="80"/>
                 <Column size="70"/>
@@ -162,16 +162,8 @@
                 <Column size="70"/>
                 <Column size="70"/>
                 <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
                 <Column size="90"/>
                 <Column size="90"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
                 <Column size="90"/>
                 <Column size="90"/>
                 <Column size="70"/>
@@ -180,21 +172,30 @@
                 <Column size="70"/>
                 <Column size="90"/>
                 <Column size="90"/>
+                <Column size="90"/>
+                <Column size="90"/>
                 <Column size="70"/>
+                <Column size="90"/>
                 <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
-                <Column size="70"/>
+                <Column size="80"/>
+                <Column size="90"/>
+                <Column size="90"/>
+                <Column size="80"/>
                 <Column size="70"/>
                 <Column size="70"/>
                 <Column size="90"/>
                 <Column size="90"/>
                 <Column size="70"/>
+                <Column size="90"/>
+                <Column size="90"/>
+                <Column size="90"/>
+                <Column size="90"/>
               </Columns>
               <Rows>
                 <Row size="40" band="head"/>
                 <Row size="40" band="head"/>
                 <Row size="24"/>
+                <Row size="24" band="summ"/>
               </Rows>
               <Band id="head">
                 <Cell rowspan="2" text="번호"/>
@@ -309,10 +310,59 @@
                 <Cell col="49" textAlign="right" text="bind:fnlTcUnpaidAmt"/>
                 <Cell col="50" textAlign="right" text="bind:hqProf"/>
               </Band>
+              <Band id="summary">
+                <Cell colspan="5" text="소계"/>
+                <Cell col="5"/>
+                <Cell col="6"/>
+                <Cell col="7"/>
+                <Cell col="8"/>
+                <Cell col="9"/>
+                <Cell col="10"/>
+                <Cell col="11"/>
+                <Cell col="12"/>
+                <Cell col="13" expr="dataset.getSum('parseInt(gsStlmAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="14" expr="dataset.getSum('parseInt(gsLfee)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="15" expr="dataset.getSum('parseInt(grdeDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="16" expr="dataset.getSum('parseInt(cpnDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="17" expr="dataset.getSum('parseInt(oflnDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="18" expr="dataset.getSum('parseInt(tcPaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="19" expr="dataset.getSum('parseInt(tcPaidDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="20" expr="dataset.getSum('parseInt(tcUnpaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="21" expr="dataset.getSum('parseInt(tcUnpaidDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="22" expr="dataset.getSum('parseInt(allRfndCnt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="23" expr="dataset.getSum('parseInt(allRfndAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="24" expr="dataset.getSum('parseInt(allRfndLectAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="25" expr="dataset.getSum('parseInt(allRfndTcPaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="26" expr="dataset.getSum('parseInt(allRfndTcUnpaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="27" expr="dataset.getSum('parseInt(allRfndGrdeDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="28" expr="dataset.getSum('parseInt(allRfndCpnDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="29" expr="dataset.getSum('parseInt(allRfndOflnDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="30" expr="dataset.getSum('parseInt(partnRfndCnt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="31" expr="dataset.getSum('parseInt(partnRfndAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="32" expr="dataset.getSum('parseInt(partnRfndLectAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="33" expr="dataset.getSum('parseInt(partnRfndTcPaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="34" expr="dataset.getSum('parseInt(partnRfndTcUnpaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="35" expr="dataset.getSum('parseInt(gsRfndCnt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="36" expr="dataset.getSum('parseInt(gsRfndAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="37" expr="dataset.getSum('parseInt(actlCnt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="38" expr="dataset.getSum('parseInt(fnlLfee)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="39" expr="dataset.getSum('parseInt(fnlTcPaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="40" expr="dataset.getSum('parseInt(fnlTcUnpaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="41" expr="dataset.getSum('parseInt(fnlGrdeDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="42" expr="dataset.getSum('parseInt(fnlCpnDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="43" expr="dataset.getSum('parseInt(fnlOflnDcAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="44" expr="dataset.getSum('parseInt(actlImpoAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="45" expr="dataset.getSum('parseInt(slngAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="46"/>
+                <Cell col="47" expr="dataset.getSum('parseInt(calcTcPpayAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="48" expr="dataset.getSum('parseInt(fnlTcPaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="49" expr="dataset.getSum('parseInt(fnlTcUnpaidAmt)')" displaytype="mask" maskeditformat="###,##0"/>
+                <Cell col="50" expr="dataset.getSum('parseInt(hqProf)')" displaytype="mask" maskeditformat="###,##0"/>
+              </Band>
             </Format>
           </Formats>
         </Grid>
-        <Grid oncolresized="gfn_oncolresized" id="Grid01" taborder="8" left="0" top="730" bottom="-210" autofittype="none" binddataset="ds_list" right="20" autosizingtype="row" extendsizetype="row">
+        <Grid oncolresized="gfn_oncolresized" id="Grid01" taborder="8" left="0" top="730" bottom="-210" autofittype="none" binddataset="ds_list" right="20" autosizingtype="row" extendsizetype="row" visible="false">
           <Formats>
             <Format id="default">
               <Columns>
@@ -716,7 +766,7 @@ this.row02.form.Div00.form.btnInit_onclick = function(obj:nexacro.Button,e:nexac
 
 this.btnExcelDown_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	//if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")){return;}
+	if(this.gfn_btn_auth(this.getOwnerFrame().param.MENU_ID, "accXlsDwldYn")){return;}
 	
 	if(this.ds_list.rowcount > 1)
 	{		
