@@ -80,7 +80,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Button id="Button00" taborder="5" text="환불완료" top="437" height="21" cssclass="btn_WF_Medium" width="100" right="0" onclick="Button00_onclick"/>
+        <Button id="Button00" taborder="5" text="환불완료" top="437" height="21" cssclass="btn_WF_Medium" width="100" right="0" onclick="Button00_onclick" onlbuttondown="Button00_onlbuttondown" onlbuttonup="Button00_onlbuttonup" ondblclick="Button00_ondblclick"/>
         <Button id="Button01" taborder="6" text="취소" top="437" width="100" height="21" cssclass="btn_WF_Weak" right="Button00:10" onclick="Button01_onclick"/>
         <Static id="Static03" taborder="7" text="· 취소(환불) 예정 금액" left="0" top="114" width="120" height="17" cssclass="sta_WF_TitGray"/>
         <Div id="Div02" taborder="8" text="Div02" left="0" top="141" height="139" cssclass="div_WF_TableComp" right="0">
@@ -172,6 +172,9 @@ this.initLectAddAmt = "";
 this.oldLectAmt = "";
 this.oldLectAddAmt = "";
 
+// 관리자취소 버튼 더블클릭 방지
+this.dblClickFlag = null;
+
 
 /**************************************************************************
  * FORM EVENT 영역(onload)
@@ -191,6 +194,8 @@ this.AdmCncl_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	
 	// 코드성 데이터 세팅
 	this.fn_data_list();
+	
+	this.dblClickFlag = false;
 };
 
 // 코드성 데이터 세팅
@@ -559,136 +564,173 @@ this.fn_num_format = function(obj:nexacro.Edit,e:nexacro.InputEventInfo)
 // 환불완료 버튼 클릭
 this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {	
-	var crdRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "crdRfndAmt"), ",", "")));
-	var lpntRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "lpntRfndAmt"), ",", "")));
-	var cshRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "cshRfndAmt"), ",", "")));
-	var ltteGiftRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "ltteGiftRfndAmt"), ",", "")));
-	var etcRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "etcRfndAmt"), ",", "")));
-	var gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
-	var lectAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "lectAmtFee").substring(0, this.ds_update_info.getColumn(0, "lectAmtFee").length - 1), ",", ""));
-	var addAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "addAmtFee").substring(0, this.ds_update_info.getColumn(0, "addAmtFee").length - 1), ",", ""));
-	var gsRfndAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndAmtFee").substring(0, this.ds_update_info.getColumn(0, "gsRfndAmtFee").length - 1), ",", ""));
-	var rfndScheLectAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheLectAmt"), ",", "")));
-	var rfndScheAddAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheAddAmt"), ",", "")));
-	
-	var crdStlmAmt = this.ds_update_info.getColumn(0, "crdStlmAmt");
-	var lpntUseAmt = this.ds_update_info.getColumn(0, "lpntUseAmt");
-	var cshStlmAmt = this.ds_update_info.getColumn(0, "cshStlmAmt");
-	var giftStlmAmt = this.ds_update_info.getColumn(0, "giftStlmAmt");
-	var etcStlmAmt = this.ds_update_info.getColumn(0, "etcStlmAmt");
-	
-	if(this.ds_update_info.getColumn(0, "rfndLectTmsCd") != this.Div00.form.Div00.form.Combo00.value
-		|| this.initLectAmt != this.ds_update_info.getColumn(0, "rfndScheLectAmt")
-		|| this.initLectAddAmt != this.ds_update_info.getColumn(0, "rfndScheAddAmt")){
-		if(!confirm("환불 받을 수 있는 강좌의 회차 환불금액이 아닌 변경된 환불금액으로 취소(환불)하시겠습니까?")){
+	if(!this.dblClickFlag){
+		this.dblClickFlag = true;
+		
+		var crdRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "crdRfndAmt"), ",", "")));
+		var lpntRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "lpntRfndAmt"), ",", "")));
+		var cshRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "cshRfndAmt"), ",", "")));
+		var ltteGiftRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "ltteGiftRfndAmt"), ",", "")));
+		var etcRfndAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "etcRfndAmt"), ",", "")));
+		var gsRfndScheAmt = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndScheAmt").substring(0, this.ds_update_info.getColumn(0, "gsRfndScheAmt").length - 1), ",", ""));
+		var lectAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "lectAmtFee").substring(0, this.ds_update_info.getColumn(0, "lectAmtFee").length - 1), ",", ""));
+		var addAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "addAmtFee").substring(0, this.ds_update_info.getColumn(0, "addAmtFee").length - 1), ",", ""));
+		var gsRfndAmtFee = Number(nexacro.replaceAll(this.ds_update_info.getColumn(0, "gsRfndAmtFee").substring(0, this.ds_update_info.getColumn(0, "gsRfndAmtFee").length - 1), ",", ""));
+		var rfndScheLectAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheLectAmt"), ",", "")));
+		var rfndScheAddAmt = Number(this.gfn_nvl(nexacro.replaceAll(this.ds_update_info.getColumn(0, "rfndScheAddAmt"), ",", "")));
+		
+		var crdStlmAmt = this.ds_update_info.getColumn(0, "crdStlmAmt");
+		var lpntUseAmt = this.ds_update_info.getColumn(0, "lpntUseAmt");
+		var cshStlmAmt = this.ds_update_info.getColumn(0, "cshStlmAmt");
+		var giftStlmAmt = this.ds_update_info.getColumn(0, "giftStlmAmt");
+		var etcStlmAmt = this.ds_update_info.getColumn(0, "etcStlmAmt");
+		
+		if(this.ds_update_info.getColumn(0, "rfndLectTmsCd") != this.Div00.form.Div00.form.Combo00.value
+			|| this.initLectAmt != this.ds_update_info.getColumn(0, "rfndScheLectAmt")
+			|| this.initLectAddAmt != this.ds_update_info.getColumn(0, "rfndScheAddAmt")){
+			if(!confirm("환불 받을 수 있는 강좌의 회차 환불금액이 아닌 변경된 환불금액으로 취소(환불)하시겠습니까?")){
+				this.dblClickFlag = false;
+				return;
+			}
+		}
+		
+		if(crdRfndAmt > crdStlmAmt){
+			alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
+			this.dblClickFlag = false;
 			return;
 		}
-	}
-	
-	if(crdRfndAmt > crdStlmAmt){
-		alert("카드 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
-		return;
-	}
-	
-	if(lpntRfndAmt > lpntUseAmt){
-		alert("L.Point 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
-		return;
-	}
-	
-	if(cshRfndAmt > cshStlmAmt){
-		alert("현금 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
-		return;
-	}
-	
-	if(ltteGiftRfndAmt > giftStlmAmt){
-		alert("상품권 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
-		return;
-	}
-	
-	if(etcRfndAmt > etcStlmAmt){
-		alert("기타 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
-		return;
-	}
-	
- 	if(crdRfndAmt > gsRfndScheAmt){
-		alert("카드 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
-		return;
- 	}
-	
-	if(lpntRfndAmt > gsRfndScheAmt){
-		alert("L.Point 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
-		return;
- 	}
-	
-	if(cshRfndAmt > gsRfndScheAmt){
-		alert("현금 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
-		return;
- 	}
-	
-	if(ltteGiftRfndAmt > gsRfndScheAmt){
-		alert("상품권 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
-		return;
- 	}
-	
-	if(etcRfndAmt > gsRfndScheAmt){
-		alert("기타 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
-		return;
- 	}
-	
-	if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + ltteGiftRfndAmt + etcRfndAmt > gsRfndScheAmt){
-		alert("환불예정 금액 보다 환불금액을 초과하여 입력 할 수 없습니다.");
-		return;
-	}else if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + ltteGiftRfndAmt + etcRfndAmt < gsRfndScheAmt){
-		alert("환불예정 금액 만큼 환불금액을 입력하세요.");
-		return;
-	}
-	
-	if(confirm("결제 건을 취소(환불)하시겠습니까?")){
-		this.ds_param_info.clearData();
-		var rowIndex = this.ds_param_info.addRow();
-		this.ds_param_info.copyRow(rowIndex, this.ds_update_info, 0);
 		
-		this.ds_param_info.set_enableevent(false);
-		this.ds_param_info.setColumn(0, "rfndClCd", gsRfndAmtFee > 0 ? "20" : "10");
-		this.ds_param_info.setColumn(0, "rfndStatCd", "13");
-		this.ds_param_info.setColumn(0, "rfndChnlCd", "D");
-		this.ds_param_info.setColumn(0, "rfndLectTmsCd", this.Div00.form.Div00.form.Combo00.value);
-		this.ds_param_info.setColumn(0, "rfndRsnCd", this.Div00.form.Div01.form.Combo00.value);
-		this.ds_param_info.setColumn(0, "gsRfndScheAmt", gsRfndScheAmt);
-		this.ds_param_info.setColumn(0, "rfndScheLectAmt", rfndScheLectAmt);
-		this.ds_param_info.setColumn(0, "rfndScheAddAmt", rfndScheAddAmt);
-		this.ds_param_info.setColumn(0, "lectAmtFee", lectAmtFee);
-		this.ds_param_info.setColumn(0, "addAmtFee", addAmtFee);
-		this.ds_param_info.setColumn(0, "crdRfndAmt", crdRfndAmt);
-		this.ds_param_info.setColumn(0, "lpntRfndAmt", lpntRfndAmt);
-		this.ds_param_info.setColumn(0, "cshRfndAmt", cshRfndAmt);
-		this.ds_param_info.setColumn(0, "ltteGiftRfndAmt", ltteGiftRfndAmt);
-		this.ds_param_info.setColumn(0, "etcRfndAmt", etcRfndAmt);
+		if(lpntRfndAmt > lpntUseAmt){
+			alert("L.Point 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
+			this.dblClickFlag = false;
+			return;
+		}
 		
-		this.ds_param_info.set_enableevent(true);
-	
-		var strSvcId    = "update";
-		var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
-		var inData      = "updateInfo=this.ds_param_info stlmCmplt=this.ds_stlm_cmplt_list";
-		var outData     = "";
-		var strArg      = "updateType=rfnd";
-		var callBackFnc = "fnCallback";
-		var isAsync     = true;
-		var tranObj = {
-			strSvcId : strSvcId,
-			strSvcUrl : strSvcUrl,
-			inData : inData,
-			outData : outData,
-			strArg : strArg,
-			callBackFnc : callBackFnc,
-			isAsync : isAsync,
-			isPopup : true,
-			menuSeq : this.menuSeq
-		};
+		if(cshRfndAmt > cshStlmAmt){
+			alert("현금 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
+			this.dblClickFlag = false;
+			return;
+		}
 		
-		this.gfn_transaction(tranObj);
+		if(ltteGiftRfndAmt > giftStlmAmt){
+			alert("상품권 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(etcRfndAmt > etcStlmAmt){
+			alert("기타 결제금액을 초과하여 취소(환불) 금액을 입력할 수 없습니다.\n금액을 초과하여 취소(환불)하고 싶은 경우 전체 취소후 재결제 해주시기 바랍니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(crdRfndAmt > gsRfndScheAmt){
+			alert("카드 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(lpntRfndAmt > gsRfndScheAmt){
+			alert("L.Point 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(cshRfndAmt > gsRfndScheAmt){
+			alert("현금 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(ltteGiftRfndAmt > gsRfndScheAmt){
+			alert("상품권 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(etcRfndAmt > gsRfndScheAmt){
+			alert("기타 주문금액보다 환불금액을 초과하여 입력 할 수 없습니다.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + ltteGiftRfndAmt + etcRfndAmt > gsRfndScheAmt){
+			alert("환불예정 금액 보다 환불금액을 초과하여 입력 할 수 없습니다.");
+			this.dblClickFlag = false;
+			return;
+		}else if(crdRfndAmt + lpntRfndAmt + cshRfndAmt + ltteGiftRfndAmt + etcRfndAmt < gsRfndScheAmt){
+			alert("환불예정 금액 만큼 환불금액을 입력하세요.");
+			this.dblClickFlag = false;
+			return;
+		}
+		
+		if(confirm("결제 건을 취소(환불)하시겠습니까?")){
+			this.ds_param_info.clearData();
+			var rowIndex = this.ds_param_info.addRow();
+			this.ds_param_info.copyRow(rowIndex, this.ds_update_info, 0);
+			
+			this.ds_param_info.set_enableevent(false);
+			this.ds_param_info.setColumn(0, "rfndClCd", gsRfndAmtFee > 0 ? "20" : "10");
+			this.ds_param_info.setColumn(0, "rfndStatCd", "13");
+			this.ds_param_info.setColumn(0, "rfndChnlCd", "D");
+			this.ds_param_info.setColumn(0, "rfndLectTmsCd", this.Div00.form.Div00.form.Combo00.value);
+			this.ds_param_info.setColumn(0, "rfndRsnCd", this.Div00.form.Div01.form.Combo00.value);
+			this.ds_param_info.setColumn(0, "gsRfndScheAmt", gsRfndScheAmt);
+			this.ds_param_info.setColumn(0, "rfndScheLectAmt", rfndScheLectAmt);
+			this.ds_param_info.setColumn(0, "rfndScheAddAmt", rfndScheAddAmt);
+			this.ds_param_info.setColumn(0, "lectAmtFee", lectAmtFee);
+			this.ds_param_info.setColumn(0, "addAmtFee", addAmtFee);
+			this.ds_param_info.setColumn(0, "crdRfndAmt", crdRfndAmt);
+			this.ds_param_info.setColumn(0, "lpntRfndAmt", lpntRfndAmt);
+			this.ds_param_info.setColumn(0, "cshRfndAmt", cshRfndAmt);
+			this.ds_param_info.setColumn(0, "ltteGiftRfndAmt", ltteGiftRfndAmt);
+			this.ds_param_info.setColumn(0, "etcRfndAmt", etcRfndAmt);
+			
+			this.ds_param_info.set_enableevent(true);
+		
+			var strSvcId    = "update";
+			var strSvcUrl   = this.application.Admin_svc + "::stlmMng/updateStatCd.do";
+			var inData      = "updateInfo=this.ds_param_info stlmCmplt=this.ds_stlm_cmplt_list";
+			var outData     = "";
+			var strArg      = "updateType=rfnd";
+			var callBackFnc = "fnCallback";
+			var isAsync     = true;
+			var tranObj = {
+				strSvcId : strSvcId,
+				strSvcUrl : strSvcUrl,
+				inData : inData,
+				outData : outData,
+				strArg : strArg,
+				callBackFnc : callBackFnc,
+				isAsync : isAsync,
+				isPopup : true,
+				menuSeq : this.menuSeq
+			};
+			
+			this.gfn_transaction(tranObj);
+		}else{
+			this.dblClickFlag = false;
+		}
+	}else{
+		return;
 	}
-};]]></Script>
+	
+};
+this.Button00_onlbuttondown = function(obj:nexacro.Button,e:nexacro.MouseEventInfo)
+{
+	return;
+};
+
+this.Button00_onlbuttonup = function(obj:nexacro.Button,e:nexacro.MouseEventInfo)
+{
+	return;
+};
+
+this.Button00_ondblclick = function(obj:nexacro.Button,e:nexacro.MouseEventInfo)
+{
+	return;
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_rfnd_rsn_cd_list">
         <ColumnInfo>
