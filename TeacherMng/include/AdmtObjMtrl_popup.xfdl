@@ -232,6 +232,7 @@
                 <Column size="80"/>
                 <Column size="60"/>
                 <Column size="60"/>
+                <Column size="72"/>
                 <Column size="120"/>
                 <Column size="100"/>
                 <Column size="100"/>
@@ -252,14 +253,15 @@
                 <Cell col="2" text="강사명"/>
                 <Cell col="3" text="은행코드"/>
                 <Cell col="4" text="은행명"/>
-                <Cell col="5" text="계좌번호"/>
-                <Cell col="6" text="지급액"/>
-                <Cell col="7" text="소득금액"/>
-                <Cell col="8" text="재료비/대여료&#13;&#10;(구매형)"/>
-                <Cell col="9" text="재료비/대여료&#13;&#10;(1/N형)"/>
-                <Cell col="10" text="소득세(3%)"/>
-                <Cell col="11" text="주민세(0.3%)"/>
-                <Cell col="12" text="세금합계"/>
+                <Cell col="5" text="예금주명"/>
+                <Cell col="6" text="계좌번호"/>
+                <Cell col="7" text="지급액"/>
+                <Cell col="8" text="소득금액"/>
+                <Cell col="9" text="재료비/대여료&#13;&#10;(구매형)"/>
+                <Cell col="10" text="재료비/대여료&#13;&#10;(1/N형)"/>
+                <Cell col="11" text="소득세(3%)"/>
+                <Cell col="12" text="주민세(0.3%)"/>
+                <Cell col="13" text="세금합계"/>
               </Band>
               <Band id="body">
                 <Cell expr="dataset.getRowCount() - currow" text="bind:rnum"/>
@@ -267,14 +269,15 @@
                 <Cell col="2" text="bind:tcNm" textDecoration="underline" cursor="pointer" color="#000dcc"/>
                 <Cell col="3" text="bind:bankCd"/>
                 <Cell col="4" text="bind:bankName"/>
-                <Cell col="5" text="bind:accNo"/>
-                <Cell col="6" displaytype="number" text="bind:actlPpayAmt" textAlign="right"/>
-                <Cell col="7" displaytype="number" text="bind:admtYmPpayAmt" textAlign="right"/>
-                <Cell col="8" displaytype="number" text="bind:pchOptnStlmAmt" textAlign="right"/>
-                <Cell col="9" displaytype="number" text="bind:npchOptnStlmAmt" textAlign="right"/>
-                <Cell col="10" displaytype="number" text="bind:incmtax" textAlign="right"/>
-                <Cell col="11" displaytype="number" text="bind:rsdttax" textAlign="right"/>
-                <Cell col="12" displaytype="number" text="bind:taxSmamt" textAlign="right"/>
+                <Cell col="5" text="bind:dpstNm"/>
+                <Cell col="6" text="bind:accno"/>
+                <Cell col="7" displaytype="number" text="bind:actlPpayAmt" textAlign="right"/>
+                <Cell col="8" displaytype="number" text="bind:admtYmPpayAmt" textAlign="right"/>
+                <Cell col="9" displaytype="number" text="bind:pchOptnStlmAmt" textAlign="right"/>
+                <Cell col="10" displaytype="number" text="bind:npchOptnStlmAmt" textAlign="right"/>
+                <Cell col="11" displaytype="number" text="bind:incmtax" textAlign="right"/>
+                <Cell col="12" displaytype="number" text="bind:rsdttax" textAlign="right"/>
+                <Cell col="13" displaytype="number" text="bind:taxSmamt" textAlign="right"/>
               </Band>
               <Band id="summary">
                 <Cell/>
@@ -283,13 +286,14 @@
                 <Cell col="3"/>
                 <Cell col="4"/>
                 <Cell col="5"/>
-                <Cell col="6" displaytype="number" expr="dataset.getSum(&quot;actlPpayAmt&quot;)" textAlign="right"/>
-                <Cell col="7" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;admtYmPpayAmt&quot;)"/>
-                <Cell col="8" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;pchOptnStlmAmt&quot;)"/>
-                <Cell col="9" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;npchOptnStlmAmt&quot;)"/>
-                <Cell col="10" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;incmtax&quot;)"/>
-                <Cell col="11" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;rsdttax&quot;)"/>
-                <Cell col="12" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;taxSmamt&quot;)"/>
+                <Cell col="6"/>
+                <Cell col="7" displaytype="number" expr="dataset.getSum(&quot;actlPpayAmt&quot;)" textAlign="right"/>
+                <Cell col="8" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;admtYmPpayAmt&quot;)"/>
+                <Cell col="9" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;pchOptnStlmAmt&quot;)"/>
+                <Cell col="10" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;npchOptnStlmAmt&quot;)"/>
+                <Cell col="11" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;incmtax&quot;)"/>
+                <Cell col="12" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;rsdttax&quot;)"/>
+                <Cell col="13" displaytype="number" textAlign="right" expr="dataset.getSum(&quot;taxSmamt&quot;)"/>
               </Band>
             </Format>
           </Formats>
@@ -374,7 +378,8 @@
           <Column id="addr" type="STRING" size="256"/>
           <Column id="bankCd" type="STRING" size="256"/>
           <Column id="bankName" type="STRING" size="256"/>
-          <Column id="accNo" type="STRING" size="256"/>
+          <Column id="dpstNm" type="STRING" size="256"/>
+          <Column id="accno" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObj"/>

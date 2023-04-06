@@ -86,7 +86,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid oncolresized="gfn_oncolresized" id="Grid00" taborder="5" left="10" top="240" binddataset="ds_list" autofittype="col" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col">
+        <Grid id="Grid00" oncolresized="gfn_oncolresized" taborder="5" left="10" top="240" binddataset="ds_list" autofittype="col" right="10" bottom="10" treeinitstatus="expand,all" treeusecheckbox="false" nodatatext="검색결과 없음" autoenter="select" oncellclick="Grid00_oncellclick" cellsizingtype="col" cellmovingtype="col">
           <Formats>
             <Format id="default">
               <Columns>
@@ -123,13 +123,13 @@
                 <Cell displaytype="expr:apvlStatCd == '02' ? 'none' : 'checkboxcontrol'" edittype="checkbox" text="expr:dataset.checkarray[currow]"/>
                 <Cell col="1" text="expr:dataset.getRowCount() - currow" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="2" text="bind:tcCdNo" color="blue" textDecoration="underline"/>
-                <Cell col="3" textDecoration="underline" color="blue" expr="comp.parent.com_setMasking(tcNm, 'name')"/>
+                <Cell col="3" textDecoration="underline" color="blue" text="bind:tcNm" expr="tcNm ? tcNm : '휴면강사'"/>
                 <Cell col="4" combodataset="ds_tcTp_list" combodatacol="cdNm" combocodecol="cd" text="bind:stdYy"/>
                 <Cell col="5" text="bind:athctfTpCd" displaytype="combotext" combodataset="ds_athctfTp_cdList" combodatacol="cdNm" combocodecol="cd"/>
                 <Cell col="6" text="bind:apvlStatCd" displaytype="combotext" combodataset="ds_apvlStat_cdList" combocodecol="cd" combodatacol="cdNm"/>
                 <Cell col="7" text="bind:reqDtm" calendardateformat="yyyy-MM-dd"/>
                 <Cell col="8" displaytype="expr:apvlDtm ? &quot;date&quot; : &quot;none&quot;" text="bind:apvlDtm" calendardateformat="yyyy-MM-dd"/>
-                <Cell col="9" expr="comp.parent.com_setMasking(apprId, 'id')"/>
+                <Cell col="9" text="bind:apprId"/>
                 <Cell col="10" text="bind:athctfFileNm" color="blue" textDecoration="underline"/>
               </Band>
             </Format>
@@ -331,6 +331,11 @@ this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo
   var headText = obj.getCellProperty('head', e.cell, 'text');
 	if(headText == "강사코드" || headText == "강사명"){	
 		this.popCnt ++;
+		var tcNm = obj.getBindDataset().getColumn(e.row, "tcNm");
+		if(!tcNm){
+			alert("휴면강사입니다.");
+			return;
+		}
 		var oArg = {
 				type : "teacher_dtl",
 				tcCdNo : obj.getBindDataset().getColumn(e.row, "tcCdNo"),
