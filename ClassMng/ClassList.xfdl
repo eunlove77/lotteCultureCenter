@@ -289,6 +289,7 @@
                             <Column size="99"/>
                             <Column size="158"/>
                             <Column size="105"/>
+                            <Column size="95"/>
                             <Column size="149"/>
                             <Column size="146"/>
                             <Column size="80"/>
@@ -330,16 +331,17 @@
                             <Cell col="22" text="강좌구분"/>
                             <Cell col="23" text="강의실"/>
                             <Cell col="24" text="지급구분"/>
-                            <Cell col="25" text="지급율(%)/지급액(원)"/>
-                            <Cell col="26" text="옵션사용"/>
-                            <Cell col="27" text="그룹여부"/>
-                            <Cell col="28" text="강사수정요청"/>
-                            <Cell col="29" text="전시아이콘"/>
-                            <Cell col="30" text="에비뉴엘 전용관 설정여부"/>
-                            <Cell col="31" text="등록자"/>
-                            <Cell col="32" text="등록일시"/>
-                            <Cell col="33" text="수정자"/>
-                            <Cell col="34" text="수정일시"/>
+                            <Cell col="25" text="강사등급"/>
+                            <Cell col="26" text="지급율(%)/지급액(원)"/>
+                            <Cell col="27" text="옵션사용"/>
+                            <Cell col="28" text="그룹여부"/>
+                            <Cell col="29" text="강사수정요청"/>
+                            <Cell col="30" text="전시아이콘"/>
+                            <Cell col="31" text="에비뉴엘 전용관 설정여부"/>
+                            <Cell col="32" text="등록자"/>
+                            <Cell col="33" text="등록일시"/>
+                            <Cell col="34" text="수정자"/>
+                            <Cell col="35" text="수정일시"/>
                           </Band>
                           <Band id="body">
                             <Cell displaytype="expr:pblPmprcustBrchCd == '' ? 'checkboxcontrol' : 'none'" edittype="checkbox" text="expr:dataset.checkarray[currow]" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
@@ -360,23 +362,24 @@
                             <Cell col="15" text="bind:lectEnd" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectEnd"/>
                             <Cell col="16" text="bind:lectStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectStatNm"/>
                             <Cell col="17" text="bind:apvlStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:apvlStatNm"/>
-                            <Cell col="18" text="bind:dsplyStatCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? dsplyStatCd : dsplyStatNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyStatCd"/>
+                            <Cell col="18" text="bind:dsplyStatCd" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyStatCd" displaytype="combotext"/>
                             <Cell col="19" text="bind:yy" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:yy"/>
                             <Cell col="20" text="bind:lectSmsterNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectSmsterNm"/>
                             <Cell col="21" text="expr:lectStDtm + ' ~ ' + lectEndDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectStDtm"/>
                             <Cell col="22" text="bind:lectClNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectClNm"/>
-                            <Cell col="23" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectRmCd"/>
+                            <Cell col="23" text="bind:lectRmNm" edittype="none" displaytype="normal" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectRmCd"/>
                             <Cell col="24" text="expr:ppayStdCd == '01' ? '정률' : '정액'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:ppayStdCd"/>
-                            <Cell col="25" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:ppayAmt"/>
-                            <Cell col="26" text="bind:optnTypNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:optnTypNm"/>
-                            <Cell col="27" text="bind:groupYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:groupYn"/>
-                            <Cell col="28" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:mdfreqCnt"/>
-                            <Cell col="29" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyIconCd"/>
-                            <Cell col="30" text="bind:mvgDsplyUseYn" subsumtext="bind:mvgDsplyUseYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
-                            <Cell col="31" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:regId"/>
-                            <Cell col="32" text="bind:regDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:regDtm"/>
-                            <Cell col="33" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:modId"/>
-                            <Cell col="34" text="bind:modDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:modDtm"/>
+                            <Cell col="25" text="bind:tchGrdeNm" subsumtext="bind:tchGrdeNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
+                            <Cell col="26" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:ppayAmt"/>
+                            <Cell col="27" text="bind:optnTypNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:optnTypNm"/>
+                            <Cell col="28" text="bind:groupYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:groupYn"/>
+                            <Cell col="29" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:mdfreqCnt"/>
+                            <Cell col="30" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyIconCd"/>
+                            <Cell col="31" text="bind:mvgDsplyUseYn" subsumtext="bind:mvgDsplyUseYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
+                            <Cell col="32" text="expr:comp.parent.parent.setMasking(regId,3,'', '') + '(' + comp.parent.parent.setMasking(regNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:regId"/>
+                            <Cell col="33" text="bind:regDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:regDtm"/>
+                            <Cell col="34" text="expr:modDtm == '-' ? '-' :  comp.parent.parent.setMasking(modId,3,'', '') + '(' + comp.parent.parent.setMasking(modNm,1,1, '1') + ')'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:modId"/>
+                            <Cell col="35" text="bind:modDtm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:modDtm"/>
                           </Band>
                         </Format>
                       </Formats>
@@ -415,6 +418,7 @@
                 <Column size="99"/>
                 <Column size="158"/>
                 <Column size="105"/>
+                <Column size="95"/>
                 <Column size="149"/>
                 <Column size="156"/>
                 <Column size="80"/>
@@ -455,16 +459,17 @@
                 <Cell col="21" text="강좌구분"/>
                 <Cell col="22" text="강의실"/>
                 <Cell col="23" text="지급구분"/>
-                <Cell col="24" text="지급율(%)/지급액(원)"/>
-                <Cell col="25" text="옵션사용"/>
-                <Cell col="26" text="그룹여부"/>
-                <Cell col="27" text="강사수정요청"/>
-                <Cell col="28" text="전시아이콘"/>
-                <Cell col="29" text="에비뉴엘 전용관 설정여부"/>
-                <Cell col="30" text="등록자"/>
-                <Cell col="31" text="등록일시"/>
-                <Cell col="32" text="수정자"/>
-                <Cell col="33" text="수정일시"/>
+                <Cell col="24" text="강사등급"/>
+                <Cell col="25" text="지급율(%)/지급액(원)"/>
+                <Cell col="26" text="옵션사용"/>
+                <Cell col="27" text="그룹여부"/>
+                <Cell col="28" text="강사수정요청"/>
+                <Cell col="29" text="전시아이콘"/>
+                <Cell col="30" text="에비뉴엘 전용관 설정여부"/>
+                <Cell col="31" text="등록자"/>
+                <Cell col="32" text="등록일시"/>
+                <Cell col="33" text="수정자"/>
+                <Cell col="34" text="수정일시"/>
               </Band>
               <Band id="body">
                 <Cell text="expr:currow + 1"/>
@@ -484,23 +489,24 @@
                 <Cell col="14" text="bind:lectEnd"/>
                 <Cell col="15" text="bind:lectStatNm"/>
                 <Cell col="16" text="bind:apvlStatNm"/>
-                <Cell col="17" text="bind:dsplyStatCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none' " displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? dsplyStatCd : dsplyStatNm"/>
+                <Cell col="17" text="bind:dsplyStatCd" combodataset="ds_dis" combocodecol="cd" combodatacol="cdNm" displaytype="combotext"/>
                 <Cell col="18" text="bind:yy"/>
                 <Cell col="19" text="bind:lectSmsterNm"/>
                 <Cell col="20" text="expr:lectStDtm + ' ~ ' + lectEndDtm"/>
                 <Cell col="21" text="bind:lectClNm"/>
-                <Cell col="22" text="bind:lectRmCd" edittype="expr:pblPmprcustBrchCd == '' ? 'combo' : 'none'" displaytype="expr:pblPmprcustBrchCd == '' ? 'combocontrol' : 'normal'" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm" expr="pblPmprcustBrchCd == '' ? lectRmCd : lectRmNm"/>
+                <Cell col="22" text="bind:lectRmNm" combodataset="ds_classRoom" combocodecol="cd" combodatacol="cdNm"/>
                 <Cell col="23" text="expr:ppayStdCd == '01' ? '정률' : '정액'"/>
-                <Cell col="24" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##0' : '!##,###,###,##0'" maskeditlimitbymask="both" maskedittype="number"/>
-                <Cell col="25" text="bind:optnTypNm"/>
-                <Cell col="26" text="bind:groupYn"/>
-                <Cell col="27" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
-                <Cell col="28" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm"/>
-                <Cell col="29" text="bind:mvgDsplyUseYn"/>
-                <Cell col="30" text="expr:regId + '(' + regNm + ')'"/>
-                <Cell col="31" text="bind:regDtm"/>
-                <Cell col="32" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
-                <Cell col="33" text="bind:modDtm"/>
+                <Cell col="24" text="bind:tchGrdeNm"/>
+                <Cell col="25" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##0' : '!##,###,###,##0'" maskeditlimitbymask="both" maskedittype="number"/>
+                <Cell col="26" text="bind:optnTypNm"/>
+                <Cell col="27" text="bind:groupYn"/>
+                <Cell col="28" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''"/>
+                <Cell col="29" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm"/>
+                <Cell col="30" text="bind:mvgDsplyUseYn"/>
+                <Cell col="31" text="expr:regId + '(' + regNm + ')'"/>
+                <Cell col="32" text="bind:regDtm"/>
+                <Cell col="33" text="expr:modDtm == '-' ? '-' : modId + '(' + modNm + ')'"/>
+                <Cell col="34" text="bind:modDtm"/>
               </Band>
             </Format>
           </Formats>
@@ -576,6 +582,7 @@
           <Column id="dsplyIconCd" type="STRING" size="256"/>
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
           <Column id="srchLectCd" type="STRING" size="256"/>
+          <Column id="tchGrdeNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -779,6 +786,8 @@
           <Column id="optnTypCd" type="STRING" size="256"/>
           <Column id="dsplyIconCd" type="STRING" size="256"/>
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
+          <Column id="srchLectCd" type="STRING" size="256"/>
+          <Column id="tchGrdeNm" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
@@ -1709,7 +1718,7 @@ this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 		if(rColId[1] == "lectRmCd")
 		{
 			this.ds_classRoom.copyData(this.ds_classRoomTemp);
-			this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'")
+			this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'");
 		}
 	}	
 };
@@ -2129,12 +2138,16 @@ this.Div02_Div01_Grid00_onheadclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 			obj.setCellProperty("head", e.cell, "expandimage", "theme://images/cmb_WF_Dropdown_O.png");
 			this.orderType="desc";
 		}
+		
+		this.ds_classRoom.copyData(this.ds_classRoomTemp);
+		this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'");
 	}
 };
 
 //그리드 컬럼 초기화
 this.gridOrderInit = function(obj) 
 {
+	this.ds_class_list.set_keystring("");
 	this.orderType = "desc";
 	for (var i = 1; i < obj.getCellCount("head"); i++)
 	{	
