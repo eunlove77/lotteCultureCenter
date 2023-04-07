@@ -349,7 +349,7 @@
                             <Cell col="2" text="expr:pblPmprcustBrchCd == '' ? brchCd : pblPmprcustBrchCd" displaytype="combotext" combodataset="gdsSpotCdList" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:brchCd"/>
                             <Cell col="3" text="bind:lectTpNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectTpNm"/>
                             <Cell col="4" text="expr:pblPmprcustBrchCd == '' ? lectCd : pblPmprcustLectCd" textDecoration="underline" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectCd"/>
-                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="50" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectNm"/>
+                            <Cell col="5" text="bind:lectNm" edittype="expr:pblPmprcustBrchCd == '' ? 'text'  : 'none'" editmaxlength="40" displaytype="expr:pblPmprcustBrchCd == '' ? 'editcontrol' : 'normal'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectNm"/>
                             <Cell col="6" text="bind:lectAddOptnNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:lectAddOptnNm"/>
                             <Cell col="7" text="expr:comp.parent.parent.setMasking(tcNm,1,1, '1')" textDecoration="underline" displaytype="normal" maskeditlimitbymask="decimal" color="blue" cursor="pointer" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:tcNm"/>
                             <Cell col="8" text="bind:gsCapaCnt" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:gsCapaCnt"/>
@@ -372,7 +372,7 @@
                             <Cell col="25" text="bind:tchGrdeNm" subsumtext="bind:tchGrdeNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
                             <Cell col="26" text="bind:ppayAmt" displaytype="mask" maskeditpostfixtext="expr:ppayStdCd == '01' ? '%' : '원'" maskeditformat="expr:ppayStdCd == '01' ? '!##9' : '!##,###,###,##9'" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:ppayAmt"/>
                             <Cell col="27" text="bind:optnTypNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:optnTypNm"/>
-                            <Cell col="28" text="bind:groupYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:groupYn"/>
+                            <Cell col="28" text="bind:groupYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:groupYn" color="blue" cursor="pointer" textDecoration="underline"/>
                             <Cell col="29" text="expr:mdfreqCnt &gt; 0 ? '요청' : ''" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:mdfreqCnt"/>
                             <Cell col="30" displaytype="combotext" text="bind:dsplyIconCd" combodataset="ds_classDispIcon_list" combocodecol="cd" combodatacol="cdNm" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''" subsumtext="bind:dsplyIconCd"/>
                             <Cell col="31" text="bind:mvgDsplyUseYn" subsumtext="bind:mvgDsplyUseYn" cssclass="expr:((gsCapaCnt - appCnt) &gt; 0 &amp;&amp; stayCnt &gt; 0) ? 'yellow' : ''"/>
@@ -583,6 +583,10 @@
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
           <Column id="srchLectCd" type="STRING" size="256"/>
           <Column id="tchGrdeNm" type="STRING" size="256"/>
+          <Column id="groupBrchCd" type="STRING" size="256"/>
+          <Column id="groupYy" type="STRING" size="256"/>
+          <Column id="groupLectSmsterCd" type="STRING" size="256"/>
+          <Column id="groupLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <Dataset id="ds_dw_list">
@@ -788,6 +792,10 @@
           <Column id="mvgDsplyUseYn" type="STRING" size="256"/>
           <Column id="srchLectCd" type="STRING" size="256"/>
           <Column id="tchGrdeNm" type="STRING" size="256"/>
+          <Column id="groupBrchCd" type="STRING" size="256"/>
+          <Column id="groupYy" type="STRING" size="256"/>
+          <Column id="groupLectSmsterCd" type="STRING" size="256"/>
+          <Column id="groupLectCd" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
       <ExcelExportObject id="ExcelExportObject00"/>
@@ -1719,6 +1727,21 @@ this.Div02_Div01_Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridCl
 		{
 			this.ds_classRoom.copyData(this.ds_classRoomTemp);
 			this.ds_classRoom.filter("brchCd=='" + this.ds_class_list.getColumn(e.row, "brchCd") + "'");
+		}
+		
+		if(rColId[1] == "groupYn" && this.ds_class_list.getColumn(e.row, "groupYn") == 'Y')
+		{
+			var arrArguments = {
+				brchCd : this.ds_class_list.getColumn(e.row, "groupBrchCd"),
+				yy : this.ds_class_list.getColumn(e.row, "groupYy"),
+				lectSmsterCd : this.ds_class_list.getColumn(e.row, "groupLectSmsterCd"),
+				lectCd : this.ds_class_list.getColumn(e.row, "groupLectCd"),
+				menuSeq : this.getOwnerFrame().param.MENU_ID,
+				searchButton : this.Div02.form.Div00.form.Div00.form.Div00_00_00_00.form.Button00
+			}
+			
+			this.popCnt++;
+			this.gfn_openPopup("ClassDtl" + this.popCnt, arrArguments, "ClassMng::ClassDtl.xfdl", this, 1280, 720, true, true, null);
 		}
 	}	
 };
