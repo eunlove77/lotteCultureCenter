@@ -224,7 +224,7 @@
                 <Layouts>
                   <Layout>
                     <Static id="Static00" taborder="0" text="치환코드" left="0" top="0" width="109" usedecorate="true" cssclass="sta_WF_TableLabel" onclick="Div00_Div00_Static00_onclick" bottom="0"/>
-                    <Div id="tempEditListDiv" taborder="1" left="Static00:5" top="5" text="" right="0" bottom="0">
+                    <Div id="tempEditListDiv" taborder="1" left="Static00:5" top="5" text="" right="0" bottom="0" onkillfocus="row03_Div00_tempEditListDiv_onkillfocus">
                       <Layouts>
                         <Layout type="horizontal" flexwrap="wrap" horizontalgap="5" verticalgap="5" flexcrossaxisalign="start" flexcrossaxiswrapalign="start" flexmainaxisalign="start" spacing=""/>
                       </Layouts>
@@ -235,7 +235,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Static id="Static00_00_00" taborder="6" text="▶ 발송내용" left="10" top="296" width="70" height="21" cssclass="sta_WF_TitGray"/>
+        <Static id="Static00_00_00" taborder="6" text="▶ 발송내용" left="10" top="293" width="70" height="21" cssclass="sta_WF_TitGray"/>
         <Div id="Div00" taborder="7" text="Div00" left="10" top="317" height="304" right="10">
           <Layouts>
             <Layout>
@@ -292,6 +292,7 @@
             </Layout>
           </Layouts>
         </Div>
+        <Button id="btnTempView" taborder="13" text="미리보기" height="20" cssclass="btn_WF_Medium" right="16" width="101" top="293" onclick="btnTempView_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/**************************************************************************
@@ -305,7 +306,6 @@ include "Base::lib_base.xjs";
  **************************************************************************/
 this.application = null;
 this.msgType = "6";	// 알림톡
-
 /**************************************************************************
  * FORM EVENT 영역(onload)
  **************************************************************************/
@@ -322,6 +322,8 @@ this.AlrtSendPop_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.gfnSetCheckBoxNoDataset(this.ds_rcv_obj, this.gridRcvObjList, 0); 
 	
 	this.row00.form.Div00.form.sndDt.calendaredit.set_readonly(true);	//캘린더 키인 막기
+	
+	this.btnTempView.set_visible(false);
 };
 
 
@@ -334,6 +336,7 @@ this.templateRadioObj_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemC
 	var arrReplaceItem;
 	var arrUnique = [];
 	var exceptItem = ["#{이름}"];
+	this.btnTempView.set_visible(true);
 	
 	tempEditListDivObj = this.row03.form.Div00.form.tempEditListDiv;
 	
@@ -359,8 +362,6 @@ this.templateRadioObj_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemC
 			var row3Height = 33;
 			var nRow = -1;
 			
-			//this.row03.set_height( row3Height );
-						
 			arrReplaceItem.forEach((element) => {
 				if(!arrUnique.includes(element) && !exceptItem.includes(element)){
 					arrUnique.push(element);
@@ -374,14 +375,6 @@ this.templateRadioObj_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemC
 				nRow = this.ds_replace_val_list.addRow();
 				this.ds_replace_val_list.setColumn(nRow, "replaceEditCd", arrUnique[j]);
 				
-// 				if(j > 0 && j % 4 == 0){
-// 					editLeft = 5;
-// 					editTop += editHeight + 5;
-// 					
-// 					row3Height += editHeight + 5;
-// 					this.row03.set_height( row3Height );
-// 				}
-				
 				objComp = new Edit();
 				objComp.init("", editLeft, editTop, editWidth, editHeight );
 				objComp.set_displaynulltext(arrUnique[j]);
@@ -391,6 +384,11 @@ this.templateRadioObj_onitemchanged = function(obj:nexacro.Radio,e:nexacro.ItemC
 				objComp.show();
 				
 				editLeft += editWidth + 10;
+				
+				if(this.ds_replace_val_list.getColumn(j ,"replaceEditCd") == "#{강좌명}")
+				{
+					this.row03.form.Div00.form.tempEditListDiv.form.components[j].set_readonly(true);
+				}
 			}
 		}		
 	}	
@@ -455,13 +453,6 @@ this.Div01_btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInf
 	}
 
 	for(var i = 0 ; i < this.ds_replace_val_list.rowcount ; i++){
-// 		if(this.gfn_isNull(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)){
-// 			this.alert( "치환코드[" + this.ds_replace_val_list.getColumn(i, "replaceEditCd") + "] 을 입력해주세요." );
-// 			return;
-// 		}else{
-// 			this.ds_replace_val_list.setColumn(i, "replaceEditVal", this.row03.form.Div00.form.tempEditListDiv.form.components[i].value);
-// 		}		
-
 		this.ds_replace_val_list.setColumn(i, "replaceEditVal", new String(this.gfn_nvl(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)));
 	}
 	
@@ -568,6 +559,31 @@ this.fnCallback = function(svcID,errorCode,errorMsg)
 this.Div01_btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.close();
+};
+
+this.btnTempView_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+	var sndTempCont= this.Div00.form.Div00.form.TextArea00.value;
+	
+	for(var i = 0 ; i < this.ds_replace_val_list.rowcount ; i++){
+	
+		if(!this.gfn_isNull(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)){
+			
+			this.ds_replace_val_list.setColumn(i, "replaceEditVal", new String(this.gfn_nvl(this.row03.form.Div00.form.tempEditListDiv.form.components[i].value)));
+			
+			if(this.Div00.form.Div00.form.TextArea00.find(this.ds_replace_val_list.getColumn(i ,"replaceEditCd")))
+			{
+				if(this.ds_replace_val_list.getColumn(i, "replaceEditCd") != "#{강좌명}"){
+					sndTempCont = sndTempCont.toString().replace( this.ds_replace_val_list.getColumn(i ,"replaceEditCd") , this.row03.form.Div00.form.tempEditListDiv.form.components[i].value);
+				}
+				sndTempCont = sndTempCont.toString().replace( this.ds_replace_val_list.getColumn(i ,"replaceEditCd") , this.row03.form.Div00.form.tempEditListDiv.form.components[i].value);
+			}
+			sndTempCont = sndTempCont.toString().replace( "undefined" , "#{강좌명}");
+		}
+		
+	}
+	this.alert("발송내용 미리보기 : \n" + sndTempCont);
 };
 ]]></Script>
     <Objects>
